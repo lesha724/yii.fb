@@ -1,0 +1,44 @@
+AddDefaultCharset UTF-8
+
+Options +FollowSymLinks
+IndexIgnore */*
+
+# Make sure that only index.php is called
+DirectoryIndex index.php
+
+#php_value short_open_tag 1
+
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+
+    # Use gzipped static files if they exist
+    RewriteCond %{HTTP:Accept-encoding} gzip
+    RewriteCond %{HTTP_USER_AGENT} !Konqueror
+    RewriteCond %{REQUEST_FILENAME}.gz -f
+    RewriteRule ^(.*)\.(css|js)$ $1.$2.gz [QSA,L]
+    <FilesMatch \.css\.gz$>
+        ForceType text/css
+    </FilesMatch>
+    <FilesMatch \.js\.gz$>
+        ForceType text/javascript
+    </FilesMatch>
+    <IfModule mod_mime.c>
+        AddEncoding gzip .gz
+    </IfModule>
+
+    # if a directory or a file exists, use it directly
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # otherwise forward it to index.php
+    RewriteRule . index.php [L]
+
+
+    # Forward dangerous paths to index.php
+    RewriteCond %{REQUEST_FILENAME} (.*/)?\.svn/ [OR]
+    RewriteCond %{REQUEST_FILENAME} \.git/ [OR]
+    RewriteCond %{REQUEST_FILENAME} \.gitignore$ [OR]
+    RewriteCond %{REQUEST_FILENAME} protected/ [OR]
+    RewriteCond %{REQUEST_FILENAME} framework/
+    RewriteRule . index.php [L]
+</IfModule>

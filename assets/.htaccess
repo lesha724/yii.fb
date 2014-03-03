@@ -1,0 +1,9 @@
+<IfModule mod_expires.c>
+ ExpiresActive on
+
+ ExpiresDefault      "access plus 1 year"
+   
+ <IfModule mod_headers.c>
+  Header append Cache-Control "public"
+ </IfModule>
+</IfModule>

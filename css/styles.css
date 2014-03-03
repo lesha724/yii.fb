@@ -1,0 +1,13 @@
+.hide {
+    display: none;
+}
+.login-container {
+    width:auto !important;
+}
+#login-box {
+    font-size: 15px;
+}
+.authorization-header {
+    background-color: #2283C5 ;
+    color: white;
+}
