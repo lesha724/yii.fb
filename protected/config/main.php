@@ -18,6 +18,7 @@ $config = array(
 		'application.models.*',
 		'application.components.*',
 		'application.extensions.bootstrap.*',
+		'application.extensions.behaviors.*',
 
 		'ext.EScriptBoost.*',
 		'ext.LangPick.*',

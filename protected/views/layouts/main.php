@@ -7,31 +7,31 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->baseUrl; ?>/css/styles.css" />
+    <link rel="stylesheet" type="text/css" href="<?=Yii::app()->baseUrl?>/css/styles.css" />
 
     <title><?php echo CHtml::encode($this->pageTitle); ?></title>
 
     <?php Yii::app()->bootstrap->register(); ?>
 
-    <link rel="stylesheet" href="/theme/ace/assets/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="<?=Yii::app()->baseUrl?>/theme/ace/assets/css/font-awesome.min.css" />
     <!--[if IE 7]>
-    <link rel="stylesheet" href="/theme/ace/assets/css/font-awesome-ie7.min.css" />
+    <link rel="stylesheet" href="<?=Yii::app()->baseUrl?>/theme/ace/assets/css/font-awesome-ie7.min.css" />
     <![endif]-->
 
     <!-- fonts -->
-    <link rel="stylesheet" href="/theme/ace/assets/css/ace-fonts.css" />
+    <link rel="stylesheet" href="<?=Yii::app()->baseUrl?>/theme/ace/assets/css/ace-fonts.css" />
 
     <!-- ace styles -->
-    <link rel="stylesheet" href="/theme/ace/assets/css/ace.min.css" />
-    <link rel="stylesheet" href="/theme/ace/assets/css/ace-responsive.min.css" />
-    <link rel="stylesheet" href="/theme/ace/assets/css/ace-skins.min.css" />
+    <link rel="stylesheet" href="<?=Yii::app()->baseUrl?>/theme/ace/assets/css/ace.min.css" />
+    <link rel="stylesheet" href="<?=Yii::app()->baseUrl?>/theme/ace/assets/css/ace-responsive.min.css" />
+    <link rel="stylesheet" href="<?=Yii::app()->baseUrl?>/theme/ace/assets/css/ace-skins.min.css" />
 
     <!--[if lte IE 8]>
-    <link rel="stylesheet" href="/theme/ace/assets/css/ace-ie.min.css" />
+    <link rel="stylesheet" href="<?=Yii::app()->baseUrl?>/theme/ace/assets/css/ace-ie.min.css" />
     <![endif]-->
 
     <!-- ace settings handler -->
-    <script src="/theme/ace/assets/js/ace-extra.min.js"></script>
+    <script src="<?=Yii::app()->baseUrl?>/theme/ace/assets/js/ace-extra.min.js"></script>
     <script>
         tt = {} // object containing translations
         var loginUrl = "<?=Yii::app()->createAbsoluteUrl('/site/login')?>"
@@ -71,25 +71,25 @@
     <!--[if !IE]> -->
 
     <script type="text/javascript">
-        window.jQuery || document.write("<script src='/theme/ace/assets/js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+        window.jQuery || document.write("<script src='<?=Yii::app()->baseUrl?>/theme/ace/assets/js/jquery-2.0.3.min.js'>"+"<"+"/script>");
     </script>
 
     <!-- <![endif]-->
 
     <!--[if IE]>
     <script type="text/javascript">
-        window.jQuery || document.write("<script src='/theme/ace/assets/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+        window.jQuery || document.write("<script src='<?=Yii::app()->baseUrl?>/theme/ace/assets/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
     </script>
     <![endif]-->
 
     <script type="text/javascript">
-        if("ontouchend" in document) document.write("<script src='/theme/ace/assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+        if("ontouchend" in document) document.write("<script src='<?=Yii::app()->baseUrl?>/theme/ace/assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
     </script>
 
     <!-- ace scripts -->
-    <script src="/theme/ace/assets/js/ace-elements.min.js"></script>
-    <script src="/theme/ace/assets/js/ace.min.js"></script>
-    <script src="/theme/ace/assets/js/uncompressed/bootbox.js"></script>
+    <script src="<?=Yii::app()->baseUrl?>/theme/ace/assets/js/ace-elements.min.js"></script>
+    <script src="<?=Yii::app()->baseUrl?>/theme/ace/assets/js/ace.min.js"></script>
+    <script src="<?=Yii::app()->baseUrl?>/theme/ace/assets/js/uncompressed/bootbox.js"></script>
 
 </body>
 </html>

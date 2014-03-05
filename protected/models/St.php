@@ -163,6 +163,7 @@ class St extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+            'account' => array(self::HAS_ONE, 'Users', 'u6', 'on' => 'u6=st1 AND u5=0'),
 		);
 	}
 
@@ -173,9 +174,9 @@ class St extends CActiveRecord
 	{
 		return array(
 			'st1' => 'St1',
-			'st2' => 'St2',
-			'st3' => 'St3',
-			'st4' => 'St4',
+			'st2' => tt('Фамилия'),
+			'st3' => tt('Имя'),
+			'st4' => tt('Отчество'),
 			'st5' => 'St5',
 			'st6' => 'St6',
 			'st7' => 'St7',
@@ -427,4 +428,45 @@ class St extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+    public function getStudents()
+    {
+        $criteria=new CDbCriteria;
+
+        $criteria->select = 'st2, st3, st4';
+
+        $with = array(
+            'account' => array(
+                'select' => 'u2, u3, u4'
+            )
+        );
+
+        $criteria->addCondition("st2 <> ''");
+
+
+        $criteria->addSearchCondition('st2', $this->st2);
+        $criteria->addSearchCondition('st3', $this->st3);
+        $criteria->addSearchCondition('st4', $this->st4);
+
+        $criteria->addSearchCondition('account.u2', Yii::app()->request->getParam('login'));
+        $criteria->addSearchCondition('account.u3', Yii::app()->request->getParam('password'));
+        $criteria->addSearchCondition('account.u4', Yii::app()->request->getParam('email'));
+
+        $criteria->with = $with;
+
+        return new CActiveDataProvider($this, array(
+            'criteria'=>$criteria,
+            'sort' => array(
+                'defaultOrder' => 'st2',
+                'attributes' => array(
+                    'st2',
+                    'st3',
+                    'st4',
+                    'account.u2',
+                    'account.u3',
+                    'account.u4',
+                ),
+            )
+        ));
+    }
 }

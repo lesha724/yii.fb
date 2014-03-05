@@ -16,18 +16,13 @@ class ProgressController extends Controller
                 'actions' => array(
                     'journal',
                 ),
-                'expression' => "Yii::app()->user->isAdmin || Yii::app()->user->isTch",
+                'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
             array('deny',
                 'users' => array('*'),
             ),
         );
     }
-
-	public function actionIndex()
-	{
-		$this->render('index');
-	}
 
     public function actionJournal()
     {

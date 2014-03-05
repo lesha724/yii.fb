@@ -23,7 +23,7 @@
                         <?php if (Yii::app()->user->isGuest) : ?>
                             <i class="icon-user"></i><?=tt('Войти')?>
                         <?php else: ?>
-                            <img alt="Jason's Photo" src="/theme/ace/assets/avatars/user.jpg" class="nav-user-photo">
+                            <img alt="Jason's Photo" src="/theme/ace/assets/avatars/avatar2.png" class="nav-user-photo">
                             <span class="user-info">
                                 <small>Welcome,</small>
                                 <?=Yii::app()->user->name?>

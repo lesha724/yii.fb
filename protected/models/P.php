@@ -100,6 +100,10 @@
  * @property string $p108
  * @property string $p109
  * @property string $p110
+ *
+ * From ShortNameBehaviour:
+ * @method string getShortName() Returns default truncated name.
+ *
  */
 class P extends CActiveRecord
 {
@@ -145,6 +149,17 @@ class P extends CActiveRecord
 		);
 	}
 
+    public function behaviors()
+    {
+        return array(
+            'ShortNameBehaviour' => array(
+                'class'      => 'ShortNameBehaviour',
+                'surname'    => 'p3',
+                'name'       => 'p4',
+                'patronymic' => 'p5',
+            )
+        );
+    }
 	/**
 	 * @return array relational rules.
 	 */
@@ -153,6 +168,8 @@ class P extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+            'account' => array(self::HAS_ONE, 'Users', 'u6', 'on' => 'u6=p1 AND u5=1'),
+            'pd' => array(self::HAS_MANY, 'Pd', 'pd2'),
 		);
 	}
 
@@ -163,9 +180,9 @@ class P extends CActiveRecord
 	{
 		return array(
 			'p1' => 'P1',
-			'p3' => 'P3',
-			'p4' => 'P4',
-			'p5' => 'P5',
+			'p3' => tt('Фамилия'),
+			'p4' => tt('Имя'),
+			'p5' => tt('Отчество'),
 			'p6' => 'P6',
 			'p7' => 'P7',
 			'p8' => 'P8',
@@ -258,6 +275,7 @@ class P extends CActiveRecord
 			'p108' => 'P108',
 			'p109' => 'P109',
 			'p110' => 'P110',
+            'shortName' => tt('Ф.И.О.'),
 		);
 	}
 
@@ -391,4 +409,52 @@ class P extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+
+    public function getTeachersFor($chairId)
+    {
+        $criteria=new CDbCriteria;
+
+        $criteria->select = 'p3, p4, p5';
+
+        $with = array(
+            'account' => array(
+                'select' => 'u2, u3, u4'
+            )
+        );
+        if (! empty($chairId)) {
+            $with['pd'] = array(
+                'select' => false,
+                'together' => true
+            );
+            $criteria->compare('pd4', $chairId);
+        }
+
+        $criteria->addCondition("p3 <> ''");
+
+        $criteria->addSearchCondition('p3', $this->p3);
+        $criteria->addSearchCondition('p4', $this->p4);
+        $criteria->addSearchCondition('p5', $this->p5);
+
+        $criteria->addSearchCondition('account.u2', Yii::app()->request->getParam('login'));
+        $criteria->addSearchCondition('account.u3', Yii::app()->request->getParam('password'));
+        $criteria->addSearchCondition('account.u4', Yii::app()->request->getParam('email'));
+
+        $criteria->with = $with;
+
+        return new CActiveDataProvider($this, array(
+            'criteria'=>$criteria,
+            'sort' => array(
+                'defaultOrder' => 'p3',
+                'attributes' => array(
+                    'p3',
+                    'p4',
+                    'p5',
+                    'account.u2',
+                    'account.u3',
+                    'account.u4',
+                ),
+            )
+        ));
+    }
 }

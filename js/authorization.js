@@ -5,7 +5,7 @@ $(document).ready(function(){
         'headerClass' : 'authorization-header'
     }
     $("#sign-in").on('click', function() {
-        $.post(loginUrl, {}, function(response){
+        $.get(loginUrl, {}, function(response){
             bootbox.dialog($('#content', response).html(), '', options);
         });
     });

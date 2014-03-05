@@ -58,9 +58,9 @@ class Users extends CActiveRecord
 	{
 		return array(
 			'u1' => 'U1',
-			'u2' => 'U2',
-			'u3' => 'U3',
-			'u4' => 'U4',
+			'u2' => 'Login',
+			'u3' => 'Password',
+			'u4' => 'Email',
 			'u5' => 'U5',
 			'u6' => 'U6',
 			'u7' => 'U7',
