@@ -29,18 +29,31 @@ class WebUser extends CWebUser
 
     public function getIsTch()
     {
-        if ($this->isAdmin)
-            return true;
+        //if ($this->isAdmin)
+        //    return true;
 
         return !$this->isGuest && $this->model->isTeacher;
     }
 
     public function getIsStd()
     {
-        if ($this->isAdmin)
-            return true;
+        //if ($this->isAdmin)
+        //    return true;
 
         return !$this->isGuest && $this->model->isStudent;
     }
+
+    public function getDbModel()
+    {
+        $model = null;
+
+        if ($this->isTch)
+            $model = P::model()->findByPk($this->model->u6);
+        elseif ($this->isStd)
+            $model = St::model()->findByPk($this->model->u6);
+
+        return $model;
+    }
+
 }
 

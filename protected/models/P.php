@@ -170,6 +170,7 @@ class P extends CActiveRecord
 		return array(
             'account' => array(self::HAS_ONE, 'Users', 'u6', 'on' => 'u6=p1 AND u5=1'),
             'pd' => array(self::HAS_MANY, 'Pd', 'pd2'),
+            'grants' => array(self::HAS_ONE, 'Grants', 'grants2'),
 		);
 	}
 

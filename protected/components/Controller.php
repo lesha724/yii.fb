@@ -28,4 +28,27 @@ class Controller extends CController
         ELangPick::setLanguage();
         parent::init();
     }
+
+
+    public function beforeAction($action)
+    {
+        $year = Yii::app()->request->getParam('year', null);
+        if ($year === null)
+            $year = Yii::app()->session['year'];
+        if ($year === null)
+            $year = date('Y');
+
+        Yii::app()->session['year'] = $year;
+
+        $sem = Yii::app()->request->getParam('sem', null);
+
+        if ($sem === null)
+            $sem = Yii::app()->session['sem'];
+        if ($sem === null)
+            $sem = date('n')>=8 ? 0 : 1;
+
+        Yii::app()->session['sem']  = $sem;
+
+        return parent::beforeAction($action);
+    }
 }

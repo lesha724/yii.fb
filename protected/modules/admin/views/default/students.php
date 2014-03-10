@@ -12,7 +12,7 @@ $this->breadcrumbs=array(
 ?>
 
 <?php
-$provider = $model->getStudents();
+$provider = $model->getStudentsForAdmin();
 $this->widget('bootstrap.widgets.TbGridView', array(
     'id' => 'students',
     'dataProvider' => $provider,

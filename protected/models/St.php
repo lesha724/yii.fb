@@ -113,6 +113,10 @@
  * @property string $st146
  * @property string $st147
  * @property string $st148
+ *
+ * From ShortNameBehaviour:
+ * @method string getShortName() Returns default truncated name.
+ *
  */
 class St extends CActiveRecord
 {
@@ -429,7 +433,19 @@ class St extends CActiveRecord
 		return parent::model($className);
 	}
 
-    public function getStudents()
+    public function behaviors()
+    {
+        return array(
+            'ShortNameBehaviour' => array(
+                'class'      => 'ShortNameBehaviour',
+                'surname'    => 'st2',
+                'name'       => 'st3',
+                'patronymic' => 'st4',
+            )
+        );
+    }
+
+    public function getStudentsForAdmin()
     {
         $criteria=new CDbCriteria;
 
@@ -468,5 +484,26 @@ class St extends CActiveRecord
                 ),
             )
         ));
+    }
+
+    public function getStudentsForJournal($gr1, $uo1)
+    {
+        $sql = <<<SQL
+        select st1,st2,st3,st4
+        from st
+           inner join ucs on (st.st1 = ucs.ucs3)
+           inner join ucg on (ucs.ucs2 = ucg.ucg1)
+           inner join ucx on (ucg.ucg2 = ucx.ucx1)
+           inner join uo on (ucx.ucx1 = uo.uo19)
+        where ucg3=:GR1 and uo1=:UO1 and ucg4=0
+        order by st2, st3
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':GR1', $gr1);
+        $command->bindValue(':UO1', $uo1);
+        $students = $command->queryAll();
+
+        return $students;
     }
 }

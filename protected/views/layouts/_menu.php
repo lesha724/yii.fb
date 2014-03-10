@@ -25,7 +25,7 @@ $this->widget('zii.widgets.CMenu', array(
                 array(
                     'label' => '<i class="icon-double-angle-right"></i>'.tt('Преподаватели'),
                     'url' => Yii::app()->createUrl('/admin/default/teachers'),
-                    'active' => $action=='teachers'
+                    'active' => $action=='teachers' || $action=='grants'
                 ),
                 array(
                     'label' => '<i class="icon-double-angle-right"></i>'.tt('Студенты'),

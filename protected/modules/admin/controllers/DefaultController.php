@@ -31,4 +31,37 @@ class DefaultController extends AdminController
             'model' => $model,
         ));
     }
+
+    public function actionGrants($id)
+    {
+        if (empty($id))
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $model = $this->loadGrantsModel($id);
+
+        if (isset($_REQUEST['Grants'])) {
+            $model->attributes = $_REQUEST['Grants'];
+            $model->save();
+        }
+
+        $this->render('grants', array(
+            'model' => $model,
+        ));
+    }
+
+    public function loadGrantsModel($id)
+    {
+        $model = Grants::model()->findByAttributes(array(
+            'grants2' => $id,
+        ));
+
+        if (empty($model)) {
+            $model = new Grants();
+            $model->grants1 = new CDbExpression('GEN_ID(GEN_GRANTS, 1)');
+            $model->grants2 = $id;
+            $model->save(false);
+        }
+
+        return $model;
+    }
 }

@@ -142,10 +142,10 @@ class Users extends CActiveRecord
 
         if ($this->u5 == 0 && $this->u5 == 2) { // student or parent
             $model = St::model()->findByPk($id);
-            $name  = Users::getShortName($model->st2, $model->st3, $model->st4);
+            $name  = $model->getShortName();
         } elseif ($this->u5 == 1) {             // teacher
             $model = P::model()->findByPk($id);
-            $name  = Users::getShortName($model->p3, $model->p4, $model->p5);
+            $name  = $model->getShortName();
         } elseif (empty($this->u5) && empty($this->u6))
             $name = 'mkp';
         else
@@ -154,16 +154,4 @@ class Users extends CActiveRecord
         return $name;
     }
 
-    public static function getShortName($surname, $name, $patronymic)
-    {
-        $res = $surname;
-
-        if (! empty($name))
-            $res .= ' '.mb_substr($name, 0,1).'.';
-
-        if (! empty($patronymic))
-            $res .= ' '.mb_substr($patronymic, 0,1).'.';
-
-        return $res;
-    }
 }

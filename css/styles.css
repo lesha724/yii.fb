@@ -11,3 +11,27 @@
     background-color: #2283C5 ;
     color: white;
 }
+
+div.journal_div_table2 {
+    width:70%;
+    overflow-x:scroll
+}
+
+table.journal_table tr {
+    height:40px;
+}
+
+table.journal_table_1{
+    width: 15%;
+    float:left;
+}
+
+.journal_div_table2 table input {
+    float: left;
+    width: 28%;
+}
+
+.journal_div_table2 table th {
+    min-width: 100px;
+    text-align: center;
+}

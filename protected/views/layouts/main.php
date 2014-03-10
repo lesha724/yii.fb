@@ -40,8 +40,6 @@
 
 <body class="navbar-fixed breadcrumbs-fixed">
 
-<?php
-?>
     <?php require_once('_header.php')?>
 
     <div class="main-container container-fluid">

@@ -74,7 +74,12 @@ $config = array(
 					'baseUrl' => '/js/',
 					'js' => array(YII_DEBUG ? 'jquery-1.11.0.js' : 'jquery-1.11.0.min.js'),
 				),
-			),
+                'chosen' => array(
+                    'baseUrl' => '/theme/ace/assets/',
+                    'css' => array('css/chosen.css'),
+                    'js' => array('js/chosen.jquery.min.js'),
+                ),
+            ),
 			'behaviors' => array(
 				array(
 					'class' => 'ext.behaviors.localscripts.LocalScriptsBehavior',
@@ -114,6 +119,7 @@ $config = array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@example.com',
         'defaultLanguage'=>'ru',
+        'siteUrl' => '',
     ),
 );
 
