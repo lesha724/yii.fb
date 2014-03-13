@@ -97,6 +97,12 @@ class ProgressController extends Controller
         $criteria->compare('steg2', $steg2);
         $criteria->compare('steg3', $steg3);
 
-        Steg::model()->updateAll($attr, $criteria);
+        $model = Steg::model()->find($criteria);
+        if (empty($model))
+            $error = true;
+        else
+            $error = !$model->saveAttributes($attr);
+
+        Yii::app()->end(CJSON::encode(array('error' => $error)));
     }
 }

@@ -35,3 +35,7 @@ table.journal_table_1{
     min-width: 100px;
     text-align: center;
 }
+
+.journal_div_table2 table td.error {
+    border:1px solid red;
+}

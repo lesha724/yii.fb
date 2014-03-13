@@ -79,6 +79,11 @@ $config = array(
                     'css' => array('css/chosen.css'),
                     'js' => array('js/chosen.jquery.min.js'),
                 ),
+                'gritter' => array(
+                    'baseUrl' => '/theme/ace/assets/',
+                    'css' => array('css/jquery.gritter.css'),
+                    'js' => array('js/jquery.gritter.min.js'),
+                ),
             ),
 			'behaviors' => array(
 				array(

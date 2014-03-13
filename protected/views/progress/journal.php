@@ -9,13 +9,20 @@
 
 
     Yii::app()->clientScript->registerPackage('chosen');
+    Yii::app()->clientScript->registerPackage('gritter');
     Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/progress/journal.js', CClientScript::POS_HEAD);
 
     $getGroupUrl = Yii::app()->createAbsoluteUrl('/progress/getGroups');
+    $error   = tt('Ошибка. Проверьте правильность вводимых данных!');
+    $success = tt('Cохранено');
     Yii::app()->clientScript->registerScript('getGroupsUrl', <<<JS
         getGroupsUrl = "{$getGroupUrl}"
+        tt.error   = "{$error}"
+        tt.success = "{$success}"
 JS
     ,CClientScript::POS_READY);
+
+
 ?>
 
 <?php

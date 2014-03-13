@@ -3,12 +3,8 @@
  * @var $model JournalForm
  */
 
-
-
-
-
     $table_1_tr = <<<HTML
-<tr><td class="center">%s</td><td>%s</td></tr>
+<tr data-st1="%s"><td class="center">%s</td><td>%s</td></tr>
 HTML;
 
     $columnName = tt('ФИО');
@@ -66,7 +62,7 @@ if (! empty($model->group)):
         $name = mb_substr($name, 0, 10);
         $num  = $key+1;
 
-        $table_1_trs .= sprintf($table_1_tr, $num, $name);
+        $table_1_trs .= sprintf($table_1_tr, $st['st1'], $num, $name);
     }
     echo sprintf($table_1, $table_1_trs); // 1 table
 
