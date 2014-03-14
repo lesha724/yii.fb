@@ -8,42 +8,84 @@
         tt('Админ. панель'),
     );
 
-    $placeholder = tt('Название колонки');
+    $translate = tt('Колонка');
     $pattern = <<<HTML
         <div class="control-group">
-            <label class="control-label">%s</label>
-            <div class="controls">
-                <span class="span1">
+            <label class="span4">{$translate} %s</label>
+            <div class="span8">
+                <span>
                     <label>
-                        <input type="checkbox" name="%s" value="%s" class="ace ace-switch ace-switch-4">
+                        %s
                         <span class="lbl"></span>
+                        %s
                     </label>
                 </span>
                 <span>
-                   <input type="text" name="%s" value="%s" placeholder="{$placeholder}">
+                   %s
                 </span>
             </div>
         </div>
 HTML;
 
+    Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/admin/journal.js')
+?>
+<div class="span4">
+    <div class="widget-box">
+    <div class="widget-header">
+        <h4><?=tt('Дополнительные колонки')?></h4>
+        <span class="widget-toolbar">
+            <a data-action="collapse" href="#">
+                <i class="icon-chevron-up"></i>
+            </a>
+        </span>
+    </div>
+    <div class="widget-body">
+        <div class="widget-main">
+        <?php
+            $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+                'id'=>'ps-extra-columns',
+                'htmlOptions' => array('class' => 'form-horizontal'),
+                'action' => '#'
+            ));
 
-    $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-        'id'=>'portal-settings',
-        'htmlOptions' => array('class' => 'form-horizontal'),
-        'action' => '#'
 
-    ));
+            $checkboxStyle = array('class' => 'ace ace-switch ace-switch-4');
+            $inputStyle    = array('placeholder' => tt('Название колонки'), 'class' => 'span12');
 
-    $translate1 = tt('Колонка').' №1';
+            $num = '№1';
+            $checkbox = CHtml::checkBox('', PortalSettings::model()->findByPk(0)->ps2, $checkboxStyle);
+            $hidden   = CHtml::hiddenField('settings[0]', PortalSettings::model()->findByPk(0)->ps2);
+            $input    = CHtml::textField('settings[1]', PortalSettings::model()->findByPk(1)->ps2, $inputStyle);
+            echo sprintf($pattern, $num, $checkbox, $hidden, $input);
 
-    $chName     = 'settings[0]';
-    $chValue    = PortalSettings::model()->findByPk(0)->ps2;
-    $inputName  = 'settings[1]';
-    $inputValue = PortalSettings::model()->findByPk(1)->ps2;
+            $num = '№2';
+            $checkbox = CHtml::checkBox('', PortalSettings::model()->findByPk(2)->ps2, $checkboxStyle);
+            $hidden   = CHtml::hiddenField('settings[2]', PortalSettings::model()->findByPk(2)->ps2);
+            $input    = CHtml::textField('settings[3]', PortalSettings::model()->findByPk(3)->ps2, $inputStyle);
+            echo sprintf($pattern, $num, $checkbox, $hidden, $input);
 
-    echo sprintf($pattern, $translate1, $chName, $chValue, $inputName, $inputValue);
+            $num = '№3';
+            $checkbox = CHtml::checkBox('', PortalSettings::model()->findByPk(4)->ps2, $checkboxStyle);
+            $hidden   = CHtml::hiddenField('settings[4]', PortalSettings::model()->findByPk(4)->ps2);
+            $input    = CHtml::textField('settings[5]', PortalSettings::model()->findByPk(5)->ps2, $inputStyle);
+            echo sprintf($pattern, $num, $checkbox, $hidden, $input);
 
+            $num = '№4';
+            $checkbox = CHtml::checkBox('', PortalSettings::model()->findByPk(6)->ps2, $checkboxStyle);
+            $hidden   = CHtml::hiddenField('settings[6]', PortalSettings::model()->findByPk(6)->ps2);
+            $input    = CHtml::textField('settings[7]', PortalSettings::model()->findByPk(7)->ps2, $inputStyle);
+            echo sprintf($pattern, $num, $checkbox, $hidden, $input);
+        ?>
 
+            <div class="form-actions">
+                <button type="submit" class="btn btn-info btn-small">
+                    <i class="icon-ok bigger-110"></i>
+                    <?=tt('Сохранить')?>
+                </button>
+            </div>
 
-$this->endWidget();
+            <?php $this->endWidget();?>
+        </div>
+    </div>
+</div>
 

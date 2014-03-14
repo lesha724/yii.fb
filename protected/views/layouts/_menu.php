@@ -52,7 +52,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'label' => '<i class="icon-double-angle-right"></i>'.tt('Эл. журнал'),
                     'url' => Yii::app()->createUrl('/progress/journal'),
                     'visible' => Yii::app()->user->isTch,
-                    'active' => $action=='journal'
+                    'active' => $action=='journal' && $controller=='progress'
                 ),
             ),
         ),
