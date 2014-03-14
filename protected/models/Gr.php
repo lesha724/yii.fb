@@ -162,6 +162,8 @@ class Gr extends CActiveRecord
 
     public function getGroupsFor($discipline, $type = null)
     {
+        if (empty($discipline))
+            return array();
         $sql = <<<SQL
             select gr1,gr3,  sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28,gr7
             from sem

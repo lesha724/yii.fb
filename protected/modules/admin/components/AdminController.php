@@ -17,6 +17,7 @@ class AdminController extends Controller
                     'teachers',
                     'students',
                     'grants',
+                    'journal'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin',
             ),

@@ -35,7 +35,7 @@ JS
     ));
 
         $disciplines = CHtml::listData(D::model()->getDisciplines($type), 'd1', 'd2');
-        echo $form->label($model,'discipline');
+        echo $form->label($model, 'discipline');
         echo $form->dropDownList($model, 'discipline', $disciplines, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;')));
 
         $groups = CHtml::listData(Gr::model()->getGroupsFor($model->discipline, $type), 'gr1', 'name');

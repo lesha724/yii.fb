@@ -32,6 +32,11 @@ $this->widget('zii.widgets.CMenu', array(
                     'url' => Yii::app()->createUrl('/admin/default/students'),
                     'active' => $action=='students'
                 ),
+                array(
+                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Эл. журнал'),
+                    'url' => Yii::app()->createUrl('/admin/default/journal'),
+                    'active' => $action=='journal' && $module=='admin'
+                ),
             ),
             'visible' => Yii::app()->user->isAdmin,
         ),

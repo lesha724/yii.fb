@@ -64,4 +64,10 @@ class DefaultController extends AdminController
 
         return $model;
     }
+
+    public function actionJournal()
+    {
+        $this->render('journal', array(
+        ));
+    }
 }
