@@ -19,7 +19,7 @@
         echo CHtml::dropDownList('sem', Yii::app()->session['sem'], $options, array('class'=>'input-medium'));
     ?>
     <button class="btn btn-info btn-small" type="submit">
-        <i class="icon-key bigger-110"></i>
+        <i class="icon-ok bigger-110"></i>
         <?=tt('Ок')?>
     </button>
 </form>

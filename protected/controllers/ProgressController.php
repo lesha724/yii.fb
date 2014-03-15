@@ -16,7 +16,8 @@ class ProgressController extends Controller
                 'actions' => array(
                     'journal',
                     'getGroups',
-                    'insertMark'
+                    'insertStegMark',
+                    'insertDsejMark',
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -35,7 +36,7 @@ class ProgressController extends Controller
             $type = $grants->getGrantsFor(Grants::EL_JOURNAL);
 
 
-        $model=new JournalForm;
+        $model = new JournalForm;
 
         if (isset($_POST['JournalForm']))
             $model->attributes=$_POST['JournalForm'];
@@ -74,7 +75,7 @@ class ProgressController extends Controller
         Steg::model()->fillDataForGroup($gr1, $p1, $d1, $date, $year, $sem);
     }
 
-    public function actionInsertMark()
+    public function actionInsertStegMark()
     {
         if (! Yii::app()->request->isAjaxRequest)
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
@@ -98,6 +99,38 @@ class ProgressController extends Controller
         $criteria->compare('steg3', $steg3);
 
         $model = Steg::model()->find($criteria);
+        if (empty($model))
+            $error = true;
+        else
+            $error = !$model->saveAttributes($attr);
+
+        Yii::app()->end(CJSON::encode(array('error' => $error)));
+    }
+
+    public function actionInsertDsejMark()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $dsej2 = Yii::app()->request->getParam('st1', null);
+        $dsej3 = Yii::app()->request->getParam('nr1', null);
+        $field = Yii::app()->request->getParam('field', null);
+        $value = Yii::app()->request->getParam('value', null);
+
+        if ($field == 'dsej4')
+            $attr = array('dsej4' => $value);
+        elseif ($field == 'dsej5')
+            $attr = array('dsej5' => $value);
+        elseif ($field == 'dsej6')
+            $attr = array('dsej6' => $value);
+        elseif ($field == 'dsej7')
+            $attr = array('dsej7' => $value);
+
+        $criteria = new CDbCriteria();
+        $criteria->compare('dsej2', $dsej2);
+        $criteria->compare('dsej3', $dsej3);
+
+        $model = Dsej::model()->find($criteria);
         if (empty($model))
             $error = true;
         else

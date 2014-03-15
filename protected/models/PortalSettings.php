@@ -92,4 +92,33 @@ class PortalSettings extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+    public function getJournalExtraColumns()
+    {
+        $sql = <<<SQL
+        SELECT ps1, ps2
+        FROM PORTAL_SETTINGS
+        WHERE ps1 between 0 and 7
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $columns = $command->queryAll();
+
+        $res = array();
+        foreach ($columns as $column) {
+            if ($column['ps1'] == 0 && $column['ps2'] == 1)
+                $res[] = array('dsej4', $columns[1]['ps2']);
+
+            if ($column['ps1'] == 2 && $column['ps2'] == 1)
+                $res[] = array('dsej5', $columns[3]['ps2']);
+
+            if ($column['ps1'] == 4 && $column['ps2'] == 1)
+                $res[] = array('dsej6', $columns[5]['ps2']);
+
+            if ($column['ps1'] == 6 && $column['ps2'] == 1)
+                $res[] = array('dsej7', $columns[7]['ps2']);
+        }
+
+        return $res;
+    }
+
 }

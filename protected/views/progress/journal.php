@@ -10,6 +10,7 @@
 
     Yii::app()->clientScript->registerPackage('chosen');
     Yii::app()->clientScript->registerPackage('gritter');
+    Yii::app()->clientScript->registerPackage('spin');
     Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/progress/journal.js', CClientScript::POS_HEAD);
 
     $getGroupUrl = Yii::app()->createAbsoluteUrl('/progress/getGroups');
@@ -42,11 +43,13 @@ JS
         echo $form->label($model, 'group');
         echo $form->dropDownList($model, 'group', $groups, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;')));
 
+
+
         echo CHtml::hiddenField('type', $type);
 
     $this->endWidget();
-
-    $this->renderPartial('journal/_students', array('model' => $model, 'type' => $type));
+    echo '<span id="spinner"></span>';
+    $this->renderPartial('journal/_bottom', array('model' => $model, 'type' => $type));
 
 
 ?>

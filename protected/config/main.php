@@ -84,6 +84,10 @@ $config = array(
                     'css' => array('css/jquery.gritter.css'),
                     'js' => array('js/jquery.gritter.min.js'),
                 ),
+                'spin' => array(
+                    'baseUrl' => '/theme/ace/assets/',
+                    'js' => array('js/spin.min.js'),
+                ),
             ),
 			'behaviors' => array(
 				array(

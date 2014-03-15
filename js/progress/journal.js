@@ -2,15 +2,23 @@ $(document).ready(function(){
 
     initChosen();
 
+    initSpinner();
+
+    $spinner = $('#spinner');
+
     $(document).on('change', '#JournalForm_discipline', function() {
         var params = {
             type : $('#type').val(),
             discipline : $(this).val()
         }
+
+        $spinner.show();
+
         $.get(getGroupsUrl, params, function(data){
             $('[id*=JournalForm_group]').remove();
             $('#journal-form').append(data)
             initChosen();
+            $spinner.hide();
         })
     });
 
@@ -18,7 +26,7 @@ $(document).ready(function(){
         $(this).closest('form').submit();
     });
 
-    $('.journal_div_table2 table input').change(function(){
+    $('div[class*=journal_div_table] input').change(function(){
 
         $that = $(this);
 
@@ -50,7 +58,12 @@ $(document).ready(function(){
             return false;
         }
 
-        $.get(insertMarkUrl, params, function(data){
+        var url = $that.parents('[data-url]').data('url');
+
+        $spinner.show();
+
+        $.get(url, params, function(data){
+
             if (data.error) {
                 obj = {
                     title: title,
@@ -65,14 +78,30 @@ $(document).ready(function(){
                     class_name: 'gritter-success'
                 }
                 $td.removeClass('error')
-                $.gritter.add(obj)
             }
-        }, 'json')
+            $.gritter.add(obj)
 
+            $spinner.hide();
+        }, 'json')
     });
+
+
+
 });
 
 function initChosen()
 {
     $('.chosen-select').chosen();
+}
+
+function initSpinner()
+{
+    var opts = {
+        lines: 11, // The number of lines to draw
+        length: 7, // The length of each line
+        width: 4,  // The line thickness
+        radius: 5  // The radius of the inner circle
+    };
+    var target = document.getElementById('spinner');
+    var spinner = new Spinner(opts).spin(target);
 }
