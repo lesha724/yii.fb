@@ -27,6 +27,19 @@ HTML;
     return sprintf($pattern, $steg6, $steg5, $steg9);
 }
 
+function countSTEGTotal($marks)
+{
+
+    $total = 0;
+    foreach ($marks as $mark) {
+        $total += $mark['steg9'] != 0
+                    ? $mark['steg9']
+                    : $mark['steg5'];
+    }
+    return $total;
+}
+
+
     $url = Yii::app()->createUrl('/progress/insertStegMark');
     $table_2 = <<<HTML
 <div class="journal_div_table2" data-url="{$url}">
@@ -48,11 +61,12 @@ HTML;
     foreach($dates as $date)
         $table_2_th .= '<th>'.$date['formatted_date'].'</th>';
 
-
+    global $total;
     $table_2_tr = '';
     foreach($students as $st) {
 
         $marks = Steg::model()->getMarksForStudent($st['st1'], $nr1);
+        $total[$st['st1']] = countSTEGTotal($marks);
 
         $table_2_tr .= '<tr data-st1="'.$st['st1'].'">';
         foreach($dates as $date) {

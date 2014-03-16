@@ -32,6 +32,7 @@
 
     <!-- ace settings handler -->
     <script src="<?=Yii::app()->baseUrl?>/theme/ace/assets/js/ace-extra.min.js"></script>
+    <script src="<?=Yii::app()->baseUrl?>/js/main.js"></script>
     <script>
         tt = {} // object containing translations
         var loginUrl = "<?=Yii::app()->createAbsoluteUrl('/site/login')?>"

@@ -49,11 +49,7 @@ $(document).ready(function(){
         var $td    = $that.parent();
 
         if (isNaN(params.value)) {
-            $.gritter.add({
-                title: title,
-                text: tt.error,
-                class_name: 'gritter-error'
-            });
+            addGritter(title, tt.error, 'error')
             $td.addClass('error')
             return false;
         }
@@ -65,43 +61,44 @@ $(document).ready(function(){
         $.get(url, params, function(data){
 
             if (data.error) {
-                obj = {
-                    title: title,
-                    text: tt.error,
-                    class_name: 'gritter-error'
-                }
+                addGritter(title, tt.error, 'error')
                 $td.addClass('error');
             } else {
-                obj = {
-                    title: title,
-                    text: tt.success,
-                    class_name: 'gritter-success'
-                }
-                $td.removeClass('error')
+                addGritter(title, tt.success, 'success')
+                $td.removeClass('error');
+
+                recalculateTotal(st1);
             }
-            $.gritter.add(obj)
 
             $spinner.hide();
         }, 'json')
     });
 
-
-
 });
 
-function initChosen()
-{
-    $('.chosen-select').chosen();
-}
 
-function initSpinner()
+function recalculateTotal(st1)
 {
-    var opts = {
-        lines: 11, // The number of lines to draw
-        length: 7, // The length of each line
-        width: 4,  // The line thickness
-        radius: 5  // The radius of the inner circle
-    };
-    var target = document.getElementById('spinner');
-    var spinner = new Spinner(opts).spin(target);
+    var total = 0;
+    $('tr[data-st1='+st1+'] td').each(function(){
+        var mark;
+        if ($(this).children('input:text').length > 1) {
+
+            var $input_1 = $(this).children('input:text:first');
+            var $input_2 = $(this).children('input:text:last');
+
+            if ( parseFloat($input_2.val()) > 0 )
+                mark = $input_2.val();
+            else
+                mark = $input_1.val();
+
+        } else
+            mark = $(this).children('input:text').val();
+
+        mark = parseFloat(mark);
+        if (! isNaN(mark))
+            total += mark;
+    });
+
+    $('.journal_div_table3 tr[data-st1='+st1+'] td:last').text(total);
 }

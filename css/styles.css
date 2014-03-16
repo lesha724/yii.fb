@@ -34,7 +34,7 @@ table.journal_table_1{
 
 .journal_div_table2 th {
     min-width: 100px;
-    text-align: center;
+    text-align: center !important;
 }
 
 .journal_div_table2 td.error, .journal_div_table3 td.error  {
@@ -46,12 +46,12 @@ div.journal_div_table3 {
 }
 
 .journal_div_table3 th {
-    min-width: 50px;
-    text-align: center;
+    min-width: 45px;
+    text-align: center !important;
 }
 
 .journal_div_table3 td {
-    text-align: center;
+    text-align: center !important;
 }
 
 .journal_div_table3 table input {

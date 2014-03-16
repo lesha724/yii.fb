@@ -48,7 +48,11 @@ JS
         echo CHtml::hiddenField('type', $type);
 
     $this->endWidget();
-    echo '<span id="spinner"></span>';
+
+    echo <<<HTML
+    <span id="spinner"></span>
+HTML;
+
     $this->renderPartial('journal/_bottom', array('model' => $model, 'type' => $type));
 
 
