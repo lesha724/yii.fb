@@ -35,6 +35,9 @@ function countDSEJTotal($marks, $columns)
             <tr>
                 %s
             </tr>
+            <tr class="min-max">
+                %s
+            </tr>
         </thead>
         <tbody>
             %s
@@ -48,29 +51,35 @@ HTML;
     $columns = PortalSettings::model()->getJournalExtraColumns();
     $showTotal = !empty($columns);
 
-    $th = '<th>'.tt('Итого').'</th>';
+    $th = '<th colspan="2">'.tt('Итого').'</th>';
+    $th2 = '<td></td><td></td><td></td><td></td><td></td>';
     foreach($columns as $column) {
         list($field, $name) = $column;
         $th .= '<th>'.$name.'</th>';
     }
     $th .= '<th>'.tt('Всего').'</th>';
 
+
     global $total_1;// calculating in journal/table_2
     $tr = '';
     foreach ($students as $st) {
 
-        $marks = Dsej::model()->getMarksForStudent($st['st1'], $nr1);
-        $total_2[$st['st1']] = $total_1[$st['st1']] + countDSEJTotal($marks, $columns);
+        $st1 = $st['st1'];
 
-        $tr .= '<tr data-st1="'.$st['st1'].'">';
+        // TODO uncomment this
+        $marks = array('dsej4' => 0,'dsej5' => 0,'dsej6' => 0,'dsej7' => 0, );//Dsej::model()->getMarksForStudent($st['st1'], $nr1);
+        $total_2[$st1] = $total_1[$st1] + countDSEJTotal($marks, $columns);
 
-            $tr .= '<td data-total=1>'.$total_1[$st['st1']].'</td>'; // total 1
+        $tr .= '<tr data-st1="'.$st1.'">';
+
+            $tr .= '<td data-total=1 colspan="2">'.$total_1[$st1].'</td>'; // total 1
             foreach($columns as $column) {
                 $tr .= table3Tr($column, $marks);
             }
-            $tr .= '<td data-total=2>'.$total_2[$st['st1']].'</td>'; // total 2
+            $tr .= '<td data-total=2>'.$total_2[$st1].'</td>'; // total 2
 
         $tr .= '</tr>';
+
     }
 
-    echo sprintf($table, $th, $tr); // 3 table
+    echo sprintf($table, $th, $th2, $tr); // 3 table

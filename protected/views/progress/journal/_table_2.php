@@ -2,12 +2,15 @@
 function table2Tr($date, $marks)
 {
     if (strtotime($date['r2']) > strtotime('now'))
-        return null;
+        return '<td colspan="2"></td>';
 
+    $r2 = $date['r2'];
     $pattern= <<<HTML
-            <input type="checkbox" %s data-name="steg6">
-            <input value="%s" maxlength="3" data-name="steg5">
-            <input value="%s" maxlength="3" data-name="steg9">
+    <td colspan="2" data-r2="{$r2}">
+        <input type="checkbox" %s data-name="steg6">
+        <input value="%s" maxlength="3" data-name="steg5">
+        <input value="%s" maxlength="3" data-name="steg9">
+    </td>
 HTML;
 
     $key = $date['r2'].'/0'; // 0 - r3
@@ -41,7 +44,7 @@ function countSTEGTotal($marks)
 function generateTh2()
 {
     $pattern = <<<HTML
-            <th><input maxlength="3" placeholder="min"></th><th><input maxlength="3" placeholder="max"></th>
+<th><input maxlength="3" placeholder="min"></th><th><input maxlength="3" placeholder="max"></th>
 HTML;
 
     return sprintf($pattern);
@@ -77,12 +80,14 @@ HTML;
     $tr = '';
     foreach($students as $st) {
 
-        $marks = Steg::model()->getMarksForStudent($st['st1'], $nr1);
-        $total_1[$st['st1']] = countSTEGTotal($marks);
+        $st1 = $st['st1'];
 
-        $tr .= '<tr data-st1="'.$st['st1'].'">';
+        $marks = Steg::model()->getMarksForStudent($st1, $nr1);
+        $total_1[$st1] = countSTEGTotal($marks);
+
+        $tr .= '<tr data-st1="'.$st1.'">';
         foreach($dates as $date) {
-            $tr .= '<td colspan="2" data-r2="'.$date['r2'].'">'.table2Tr($date, $marks).'</td>';
+            $tr .= table2Tr($date, $marks).'</td>';
         }
         $tr .= '</tr>';
     }
