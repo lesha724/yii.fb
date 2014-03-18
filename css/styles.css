@@ -13,7 +13,7 @@
 }
 
 div.journal_div_table2 {
-    width:60%;
+    width:55%;
     overflow-x:scroll;
     float:left;
 }
@@ -22,23 +22,32 @@ table.journal_table tr {
     height:40px;
 }
 
+table.journal_table td {
+    padding: 4px;
+    vertical-align: middle;
+}
+
+
 table.journal_table_1{
     width: 15%;
     float:left;
 }
 
-.journal_div_table2 table input {
-    float: left;
+.journal_div_table2 table tr:not(.min-max) input {
     width: 28%;
 }
 
 .journal_div_table2 th {
-    min-width: 100px;
+    min-width: 60px;
     text-align: center !important;
 }
 
 .journal_div_table2 td.error, .journal_div_table3 td.error  {
     border:1px solid red;
+}
+
+.journal_div_table2 td.success, .journal_div_table3 td.success  {
+    border:1px solid green;
 }
 
 div.journal_div_table3 {
@@ -59,4 +68,20 @@ div.journal_div_table3 {
 }
 #spinner {
     display: none;
+}
+tr.min-max {
+    height: 28px !important;
+}
+
+tr.min-max input {
+    width: 28%;
+    font-size: 10px;
+ }
+
+tr.min-max th {
+    padding:1px 0
+}
+
+.journal_table_1 thead tr, .journal_div_table3 thead tr {
+    height: 68px;
 }

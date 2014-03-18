@@ -43,6 +43,18 @@ SQL;
         insert into PORTAL_SETTINGS(PS1, PS2) values(7, '');
 SQL;
         $this->execute($sql);
+
+
+/*
+	0-отображать dsej4
+	1-имя для dsej4
+	2-отображать dsej5
+	3-имя для dsej5
+	4-отображать dsej6
+	5-имя для dsej6
+	6-отображать dsej7
+	7-имя для dsej7
+*/
 	}
 
 	public function safeDown()

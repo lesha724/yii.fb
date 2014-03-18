@@ -26,7 +26,7 @@ $(document).ready(function(){
         $(this).closest('form').submit();
     });
 
-    $('div[class*=journal_div_table] input').change(function(){
+    $('div[class*=journal_div_table] tr:not(.min-max) input').change(function(){
 
         $that = $(this);
 
@@ -38,7 +38,7 @@ $(document).ready(function(){
             nr1   : nr1,
             st1   : st1,
             value : $that.is(':checkbox')
-                        ? $that.is(':checked') ? 1 : 0
+                        ? $that.is(':checked') ? 0 : 1
                         : parseFloat( $that.val().replace(',','.') )
         }
 
@@ -65,9 +65,11 @@ $(document).ready(function(){
                 $td.addClass('error');
             } else {
                 addGritter(title, tt.success, 'success')
-                $td.removeClass('error');
+                $td.removeClass('error').addClass('success');
 
-                recalculateTotal(st1);
+                setTimeout(function() { $td.removeClass('success') }, 1000)
+
+                recalculateBothTotal(st1);
             }
 
             $spinner.hide();
@@ -77,28 +79,51 @@ $(document).ready(function(){
 });
 
 
-function recalculateTotal(st1)
+function recalculateBothTotal(st1)
 {
-    var total = 0;
-    $('tr[data-st1='+st1+'] td').each(function(){
-        var mark;
-        if ($(this).children('input:text').length > 1) {
+    var total_1 = 0;
+    var total_2 = 0;
 
-            var $input_1 = $(this).children('input:text:first');
-            var $input_2 = $(this).children('input:text:last');
+    var table_2 = 'div.journal_div_table2 tr[data-st1='+st1+']';
+    var table_3 = 'div.journal_div_table3 tr[data-st1='+st1+']';
 
-            if ( parseFloat($input_2.val()) > 0 )
-                mark = $input_2.val();
-            else
-                mark = $input_1.val();
+    $(table_2 +' td').each(function(){
 
-        } else
-            mark = $(this).children('input:text').val();
+        var mark = calculateMarkFor(this);
 
-        mark = parseFloat(mark);
         if (! isNaN(mark))
-            total += mark;
+            total_1 += mark;
     });
 
-    $('.journal_div_table3 tr[data-st1='+st1+'] td:last').text(total);
+    $(table_3 +' td').each(function(){
+
+        var mark = calculateMarkFor(this);
+
+        if (! isNaN(mark))
+            total_2 += mark;
+    });
+
+    $(table_3 +' td[data-total=1]').text(total_1);
+    $(table_3 +' td[data-total=2]').text(total_1 + total_2);
+}
+
+function calculateMarkFor(el)
+{
+    var $that = $(el);
+
+    var mark;
+    if ($that.children('input:text').length > 1) {
+
+        var $input_1 = $that.children('input:text:first');
+        var $input_2 = $that.children('input:text:last');
+
+        if ( parseFloat($input_2.val()) > 0 )
+            mark = $input_2.val();
+        else
+            mark = $input_1.val();
+
+    } else
+        mark = $that.children('input:text').val();
+
+    return parseFloat(mark);
 }

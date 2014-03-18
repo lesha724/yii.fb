@@ -116,7 +116,7 @@ class R extends CActiveRecord
     public function getDatesForJournal($p1, $d1, $year, $sem, $gr1, $type = null)
     {
         $sql = <<<SQL
-        select r2,r3,nr1,us4,uo1
+        select r2,nr1,us4,uo1
         from sem
            inner join us on (sem1 = us12)
            inner join
@@ -134,7 +134,7 @@ class R extends CActiveRecord
            inner join u on (uo22 = u1)
            inner join sg on (u2 = sg1)
         where sg4=0 and sem3=:YEAR and sem5=:SEM and ug2=:GR1 and us4 in (2,3,4)
-        group by r2,r3,nr1,us4,uo1
+        group by r2,nr1,us4,uo1
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);

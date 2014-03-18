@@ -148,6 +148,7 @@ SQL;
             $key = $raw['steg3'].'/'.$raw['steg4'];
             $res[$key] = $raw;
         }
+
         return $res;
     }
 
