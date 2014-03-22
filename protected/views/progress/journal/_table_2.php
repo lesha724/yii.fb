@@ -41,16 +41,26 @@ function countSTEGTotal($marks)
     return $total;
 }
 
-function generateTh2()
+function generateTh2($minMax, $column)
 {
+    if (! isset($minMax[$column]))
+        return '<th></th><th></th>';
+
+    $marks = $minMax[$column];
+    $mmbj1 = $marks['mmbj1'];
+    $mmbj4 = round($marks['mmbj4'], 1);
+    $mmbj5 = round($marks['mmbj5'], 1);
+
     $pattern = <<<HTML
-<th><input maxlength="3" placeholder="min"></th><th><input maxlength="3" placeholder="max"></th>
+<th><input value="{$mmbj4}" maxlength="3" placeholder="min" data-name="mmbj4" data-mmbj1="{$mmbj1}"></th>
+<th><input value="{$mmbj5}" maxlength="3" placeholder="max" data-name="mmbj5" data-mmbj1="{$mmbj1}"></th>
 HTML;
 
     return sprintf($pattern);
 }
 
-    $url = Yii::app()->createUrl('/progress/insertStegMark');
+    $url       = Yii::app()->createUrl('/progress/insertStegMark');
+    $minMaxUrl = Yii::app()->createUrl('/progress/insertMmbjMark');
     $table = <<<HTML
 <div class="journal_div_table2" data-url="{$url}">
     <table class="table table-striped table-bordered table-hover journal_table">
@@ -58,7 +68,7 @@ HTML;
             <tr>
                 %s
             </tr>
-            <tr class="min-max">
+            <tr class="min-max" data-url="{$minMaxUrl}">
                 %s
             </tr>
         </thead>
@@ -69,11 +79,15 @@ HTML;
 </div>
 HTML;
 
+    $minMax = Mmbj::model()->getDataFor($nr1);
+
     /*** 2 table ***/
     $th = $th2 = '';
+    $column = 1;
     foreach($dates as $date) {
-        $th  .= '<th colspan="2">'.$date['formatted_date'].' '.SH::convertUS4($date['us4']).'</th>';
-        $th2 .= generateTh2();
+        $th    .= '<th colspan="2">'.$date['formatted_date'].' '.SH::convertUS4($date['us4']).'</th>';
+        $th2   .= generateTh2($minMax, $column);
+        $column++;
     }
 
     global $total_1;

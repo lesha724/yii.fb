@@ -14,12 +14,15 @@
     Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/progress/journal.js', CClientScript::POS_HEAD);
 
     $getGroupUrl = Yii::app()->createAbsoluteUrl('/progress/getGroups');
-    $error   = tt('Ошибка. Проверьте правильность вводимых данных!');
-    $success = tt('Cохранено');
+    $error       = tt('Ошибка! Проверьте правильность вводимых данных!');
+    $success     = tt('Cохранено!');
+    $minMaxError = tt('Оценка за пределами допустимого интервала!');
+
     Yii::app()->clientScript->registerScript('getGroupsUrl', <<<JS
-        getGroupsUrl = "{$getGroupUrl}"
-        tt.error   = "{$error}"
-        tt.success = "{$success}"
+        getGroupsUrl   = "{$getGroupUrl}"
+        tt.error       = "{$error}"
+        tt.success     = "{$success}"
+        tt.minMaxError = "{$minMaxError}"
 JS
     ,CClientScript::POS_READY);
 
@@ -54,7 +57,3 @@ JS
 HTML;
 
     $this->renderPartial('journal/_bottom', array('model' => $model, 'type' => $type));
-
-
-?>
-

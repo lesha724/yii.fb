@@ -45,13 +45,31 @@ $(document).ready(function(){
         var stName = $('table.journal_table_1 tr[data-st1='+st1+'] td:eq(1)').text();
         var index  = $that.parent().index();
         var date   = $that.parents('table').find('th:eq('+index+')').html();
-        var title  = stName+'<br>' +date+'<br>';
+        var title  = stName+'<br>'+date+'<br>';
         var $td    = $that.parent();
 
         if (isNaN(params.value)) {
             addGritter(title, tt.error, 'error')
             $td.addClass('error')
             return false;
+        }
+
+        // min max check
+        if ($that.parents('.journal_div_table2').length > 0) {
+
+            var $tr = $that.closest('table').find('.min-max');
+            var $th1 = $tr.find('th:eq('+(index*2)+')');
+            var $th2 = $th1.next();
+
+            var min = parseFloat( $th1.find('input').val() );
+            var max = parseFloat( $th2.find('input').val() );
+
+            if (! $that.is(':checkbox'))
+                if ( params.value < min || params.value > max ) {
+                    addGritter(title, tt.minMaxError, 'error')
+                    $td.addClass('error')
+                    return false;
+                }
         }
 
         var url = $that.parents('[data-url]').data('url');
@@ -76,6 +94,45 @@ $(document).ready(function(){
         }, 'json')
     });
 
+    $('tr.min-max input').change(function(){
+
+        var $that = $(this);
+
+        var params = {
+            value : parseFloat( $that.val().replace(',','.') ),
+            field : $that.data('name'),
+            mmbj1 : $that.data('mmbj1')
+        }
+
+        var $td = $that.parent();
+
+        if (isNaN(params.value)) {
+            addGritter('', tt.error, 'error')
+            $td.addClass('error')
+            return false;
+        }
+
+        var url = $that.parents('[data-url]').data('url');
+
+        $spinner.show()
+
+        $.get(url, params, function(data){
+
+            if (data.error) {
+                addGritter('', tt.error, 'error')
+                $td.addClass('error');
+            } else {
+                addGritter('', tt.success, 'success')
+                $td.removeClass('error').addClass('success');
+
+                setTimeout(function() { $td.removeClass('success') }, 1000)
+
+                recalculateValueFor(params.field);
+            }
+
+            $spinner.hide();
+        }, 'json')
+    });
 });
 
 
@@ -126,4 +183,22 @@ function calculateMarkFor(el)
         mark = $that.children('input:text').val();
 
     return parseFloat(mark);
+}
+
+function recalculateValueFor(name)
+{
+    var total = 0;
+
+    var table_2 = 'div.journal_div_table2 tr.min-max';
+    var table_3 = 'div.journal_div_table3 tr.min-max';
+
+    $(table_2 +' input[data-name='+name+']').each(function(){
+
+        var mark = parseFloat($(this).val());
+
+        if (! isNaN(mark))
+            total += mark;
+    });
+
+    $(table_3 +' th[data-total='+name+']').text(total);
 }

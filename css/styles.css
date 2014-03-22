@@ -13,7 +13,7 @@
 }
 
 div.journal_div_table2 {
-    width:55%;
+    width:50%;
     overflow-x:scroll;
     float:left;
 }
@@ -34,19 +34,19 @@ table.journal_table_1{
 }
 
 .journal_div_table2 table tr:not(.min-max) input {
-    width: 28%;
+    width: 22%;
 }
 
 .journal_div_table2 th {
-    min-width: 60px;
+    min-width: 55px;
     text-align: center !important;
 }
 
-.journal_div_table2 td.error, .journal_div_table3 td.error  {
+.journal_div_table2 td.error, .journal_div_table3 td.error, .journal_div_table2 th.error  {
     border:1px solid red;
 }
 
-.journal_div_table2 td.success, .journal_div_table3 td.success  {
+.journal_div_table2 td.success, .journal_div_table3 td.success, .journal_div_table2 th.success  {
     border:1px solid green;
 }
 
@@ -74,7 +74,7 @@ tr.min-max {
 }
 
 tr.min-max input {
-    width: 28%;
+    width: 40%;
     font-size: 10px;
  }
 

@@ -25,7 +25,16 @@ function countDSEJTotal($marks, $columns)
     return $total;
 }
 
+function table3Th2($nr1)
+{
+    $total = Mmbj::model()->getTotalFor($nr1);
+    $th2 = <<<HTML
+<th data-total='mmbj4'>%s</th>
+<th data-total='mmbj5'>%s</th>
+HTML;
 
+    return sprintf($th2, $total['min'], $total['max']);
+}
 
     $url = Yii::app()->createUrl('/progress/insertDsejMark');
     $table = <<<HTML
@@ -48,17 +57,19 @@ HTML;
 
 
 
-    $columns = PortalSettings::model()->getJournalExtraColumns();
-    $showTotal = !empty($columns);
+    $columns     = PortalSettings::model()->getJournalExtraColumns();
+    $showTotal   = !empty($columns);
 
-    $th = '<th colspan="2">'.tt('Итого').'</th>';
-    $th2 = '<td></td><td></td><td></td><td></td><td></td>';
+    $th  = '<th colspan="2">'.tt('Итого').'</th>';
+    $th2 = table3Th2($nr1);
+
     foreach($columns as $column) {
         list($field, $name) = $column;
-        $th .= '<th>'.$name.'</th>';
+        $th  .= '<th>'.$name.'</th>';
+        $th2 .= '<th></th>';
     }
-    $th .= '<th>'.tt('Всего').'</th>';
-
+    $th  .= '<th>'.tt('Всего').'</th>';
+    $th2 .= '<th></th>';
 
     global $total_1;// calculating in journal/table_2
     $tr = '';
@@ -66,8 +77,8 @@ HTML;
 
         $st1 = $st['st1'];
 
-        // TODO uncomment this
-        $marks = array('dsej4' => 0,'dsej5' => 0,'dsej6' => 0,'dsej7' => 0, );//Dsej::model()->getMarksForStudent($st['st1'], $nr1);
+
+        $marks = Dsej::model()->getMarksForStudent($st['st1'], $nr1);
         $total_2[$st1] = $total_1[$st1] + countDSEJTotal($marks, $columns);
 
         $tr .= '<tr data-st1="'.$st1.'">';

@@ -18,6 +18,7 @@ class ProgressController extends Controller
                     'getGroups',
                     'insertStegMark',
                     'insertDsejMark',
+                    'insertMmbjMark',
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -131,6 +132,32 @@ class ProgressController extends Controller
         $criteria->compare('dsej3', $dsej3);
 
         $model = Dsej::model()->find($criteria);
+        if (empty($model))
+            $error = true;
+        else
+            $error = !$model->saveAttributes($attr);
+
+        Yii::app()->end(CJSON::encode(array('error' => $error)));
+    }
+
+    public function actionInsertMmbjMark()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $mmbj1 = Yii::app()->request->getParam('mmbj1', null);
+        $field = Yii::app()->request->getParam('field', null);
+        $value = Yii::app()->request->getParam('value', null);
+
+        if ($field == 'mmbj4')
+            $attr = array('mmbj4' => $value);
+        elseif ($field == 'mmbj5')
+            $attr = array('mmbj5' => $value);
+
+        $criteria = new CDbCriteria();
+        $criteria->compare('mmbj1', $mmbj1);
+
+        $model = Mmbj::model()->find($criteria);
         if (empty($model))
             $error = true;
         else

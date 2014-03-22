@@ -20,6 +20,10 @@ if (! empty($model->group)):
 
     $students = St::model()->getStudentsForJournal($model->group, $uo1);
 
+echo <<<HTML
+<div class="journal-bottom">
+HTML;
+
     $this->renderPartial('journal/_table_1', array(
         'students' => $students
     ));
@@ -30,12 +34,21 @@ if (! empty($model->group)):
         'nr1' => $nr1
     ));
 
-
     $this->renderPartial('journal/_table_3', array(
         'students' => $students,
         'dates' => $dates,
         'nr1' => $nr1
     ));
+echo <<<HTML
+</div>
+HTML;
+
+    $journalType = PortalSettings::model()->findByPk(8)->ps2;
+    if ($journalType == 1)
+        $this->renderPartial('journal/_modules', array(
+            'dates' => $dates,
+            'nr1' => $nr1
+        ));
 
 
 
@@ -48,6 +61,3 @@ JS
 
 
 endif;
-
-
-

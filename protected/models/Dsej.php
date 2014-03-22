@@ -1,27 +1,25 @@
 <?php
 
 /**
- * This is the model class for table "steg".
+ * This is the model class for table "dsej".
  *
- * The followings are the available columns in table 'steg':
- * @property integer $steg1
- * @property integer $steg2
- * @property string $steg3
- * @property integer $steg4
- * @property double $steg5
- * @property integer $steg6
- * @property string $steg7
- * @property integer $steg8
- * @property double $steg9
+ * The followings are the available columns in table 'dsej':
+ * @property integer $dsej1
+ * @property integer $dsej2
+ * @property integer $dsej3
+ * @property double $dsej4
+ * @property double $dsej5
+ * @property double $dsej6
+ * @property double $dsej7
  */
-class Steg extends CActiveRecord
+class Dsej extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'steg';
+		return 'dsej';
 	}
 
 	/**
@@ -32,12 +30,12 @@ class Steg extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('steg1, steg2, steg4, steg6, steg8', 'numerical', 'integerOnly'=>true),
-			array('steg5, steg9', 'numerical'),
-			array('steg3, steg7', 'length', 'max'=>8),
+            array('dsej1', 'safe'),
+			array('dsej2, dsej3', 'numerical', 'integerOnly'=>true),
+			array('dsej4, dsej5, dsej6, dsej7', 'numerical', 'allowEmpty' => true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('steg1, steg2, steg3, steg4, steg5, steg6, steg7, steg8, steg9', 'safe', 'on'=>'search'),
+			array('dsej1, dsej2, dsej3, dsej4, dsej5, dsej6, dsej7', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,15 +56,13 @@ class Steg extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'steg1' => 'Steg1',
-			'steg2' => 'Steg2',
-			'steg3' => 'Steg3',
-			'steg4' => 'Steg4',
-			'steg5' => 'Steg5',
-			'steg6' => 'Steg6',
-			'steg7' => 'Steg7',
-			'steg8' => 'Steg8',
-			'steg9' => 'Steg9',
+			'dsej1' => 'Dsej1',
+			'dsej2' => 'Dsej2',
+			'dsej3' => 'Dsej3',
+			'dsej4' => 'Dsej4',
+			'dsej5' => 'Dsej5',
+			'dsej6' => 'Dsej6',
+			'dsej7' => 'Dsej7',
 		);
 	}
 
@@ -88,15 +84,13 @@ class Steg extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('steg1',$this->steg1);
-		$criteria->compare('steg2',$this->steg2);
-		$criteria->compare('steg3',$this->steg3,true);
-		$criteria->compare('steg4',$this->steg4);
-		$criteria->compare('steg5',$this->steg5);
-		$criteria->compare('steg6',$this->steg6);
-		$criteria->compare('steg7',$this->steg7,true);
-		$criteria->compare('steg8',$this->steg8);
-		$criteria->compare('steg9',$this->steg9);
+		$criteria->compare('dsej1',$this->dsej1);
+		$criteria->compare('dsej2',$this->dsej2);
+		$criteria->compare('dsej3',$this->dsej3);
+		$criteria->compare('dsej4',$this->dsej4);
+		$criteria->compare('dsej5',$this->dsej5);
+		$criteria->compare('dsej6',$this->dsej6);
+		$criteria->compare('dsej7',$this->dsej7);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -107,49 +101,38 @@ class Steg extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Steg the static model class
+	 * @return Dsej the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
 	}
 
-    public function fillDataForGroup($gr1, $p1, $d1, $date, $year, $sem)
-    {
-        $sql = <<<SQL
-        EXECUTE PROCEDURE PROC_EL_JURNAL(:GR1, :P1, :D1, :DATE, :YEAR, :SEM, 0);
-SQL;
-
-        $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':GR1', $gr1);
-        $command->bindValue(':P1', $p1);
-        $command->bindValue(':D1', $d1);
-        $command->bindValue(':DATE', $date);
-        $command->bindValue(':YEAR', $year);
-        $command->bindValue(':SEM', $sem);
-        $command->execute();
-    }
-
     public function getMarksForStudent($st1, $nr1)
     {
         $sql = <<<SQL
         SELECT *
-        FROM steg
-        WHERE steg1=:ST1 AND steg2=:NR1
+        FROM dsej
+        WHERE dsej2=:ST1 AND dsej3=:NR1
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':ST1', $st1);
         $command->bindValue(':NR1', $nr1);
-        $raws = $command->queryAll();
+        $res = $command->queryRow();
 
-        $res = array();
-        foreach($raws as $raw) {
-            $key = $raw['steg3'].'/'.$raw['steg4'];
-            $res[$key] = $raw;
+        if (empty($res)) {
+            $model = new Dsej();
+            $model->dsej1 = new CDbExpression('GEN_ID(GEN_DSEJ, 1)');
+            $model->dsej2 = $st1;
+            $model->dsej3 = $nr1;
+            $model->dsej4 = 0;
+            $model->dsej5 = 0;
+            $model->dsej6 = 0;
+            $model->dsej7 = 0;
+            $model->save();
+            $res = $command->queryRow();
         }
-
         return $res;
     }
-
 }

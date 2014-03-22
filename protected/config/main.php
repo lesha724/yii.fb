@@ -88,6 +88,11 @@ $config = array(
                     'baseUrl' => '/theme/ace/assets/',
                     'js' => array('js/spin.min.js'),
                 ),
+                'jqgrid' => array(
+                    'baseUrl' => '/theme/ace/assets/',
+                    'css' => array('css/ui.jqgrid.css'),
+                    'js' => array('js/jqGrid/jquery.jqGrid.min.js'),
+                ),
             ),
 			'behaviors' => array(
 				array(

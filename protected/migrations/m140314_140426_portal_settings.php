@@ -18,6 +18,7 @@ CREATE TABLE PORTAL_SETTINGS (
 	5-имя для dsej6
 	6-отображать dsej7
 	7-имя для dsej7
+	8-внешний вид журнала
 */
 SQL;
 		$this->execute($sql);
