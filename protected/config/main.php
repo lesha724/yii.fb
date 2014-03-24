@@ -93,6 +93,16 @@ $config = array(
                     'css' => array('css/ui.jqgrid.css'),
                     'js' => array('js/jqGrid/jquery.jqGrid.min.js'),
                 ),
+                'dataTables' => array(
+                    'baseUrl' => '/theme/ace/assets/',
+                    'js' => array('js/jquery.dataTables.min.js', 'js/jquery.dataTables.bootstrap.js'),
+                ),
+                'daterangepicker' => array(
+                    'baseUrl' => '/theme/ace/assets/',
+                    'css' => array('css/daterangepicker.css'),
+                    'js' => array('js/date-time/daterangepicker.min.js', 'js/date-time/moment.min.js'),
+                ),
+
             ),
 			'behaviors' => array(
 				array(
