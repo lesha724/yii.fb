@@ -47,9 +47,8 @@ HTML;
     if ($journalType == 1)
         $this->renderPartial('journal/_modules', array(
             'dates' => $dates,
-            'nr1' => $nr1
+            'nr1' => $nr1,
         ));
-
 
 
     $insertMarkUrl = Yii::app()->createAbsoluteUrl('/progress/insertMark');

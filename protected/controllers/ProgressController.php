@@ -19,6 +19,8 @@ class ProgressController extends Controller
                     'insertStegMark',
                     'insertDsejMark',
                     'insertMmbjMark',
+                    'insertMejModule',
+                    'deleteMejModule'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -38,9 +40,8 @@ class ProgressController extends Controller
 
 
         $model = new JournalForm;
-
-        if (isset($_POST['JournalForm']))
-            $model->attributes=$_POST['JournalForm'];
+        if (isset($_REQUEST['JournalForm']))
+            $model->attributes=$_REQUEST['JournalForm'];
 
 
         if (! empty($model->group))
@@ -165,4 +166,35 @@ class ProgressController extends Controller
 
         Yii::app()->end(CJSON::encode(array('error' => $error)));
     }
+
+    public function actionInsertMejModule()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $mej3 = Yii::app()->request->getParam('mej3', null);
+        $mej4 = Yii::app()->request->getParam('mej4', null);
+        $mej5 = Yii::app()->request->getParam('mej5', null);
+
+        $model = new Mej();
+        $model->mej1 = new CDbExpression('GEN_ID(GEN_MEJ, 1)');
+        $model->mej3 = $mej3;
+        $model->mej4 = $mej4;
+        $model->mej5 = $mej5;
+
+        $error = !$model->save();
+
+        Yii::app()->end(CJSON::encode(array('error' => $error, 'errors' => $model->getErrors())));
+    }
+
+    public function actionDeleteMejModule()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $mej1 = Yii::app()->request->getParam('mej1', null);
+
+        Mej::model()->deleteByPk($mej1);
+    }
+
 }

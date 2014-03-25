@@ -33,7 +33,6 @@ JS
     $this->renderPartial('/widget/year_sem');
 
 
-
     $form=$this->beginWidget('CActiveForm', array(
         'id'=>'journal-form',
     ));
@@ -45,8 +44,6 @@ JS
         $groups = CHtml::listData(Gr::model()->getGroupsFor($model->discipline, $type), 'gr1', 'name');
         echo $form->label($model, 'group');
         echo $form->dropDownList($model, 'group', $groups, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;')));
-
-
 
         echo CHtml::hiddenField('type', $type);
 

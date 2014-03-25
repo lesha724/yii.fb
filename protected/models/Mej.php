@@ -29,8 +29,8 @@ class Mej extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('mej1', 'required'),
-			array('mej1, mej2, mej3', 'numerical', 'integerOnly'=>true),
-			array('mej4, mej5', 'length', 'max'=>8),
+			array('mej2, mej3', 'numerical', 'integerOnly'=>true),
+			array('mej4, mej5', 'date', 'format'=>'yyyy-mm-dd', 'allowEmpty' => false),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('mej1, mej2, mej3, mej4, mej5', 'safe', 'on'=>'search'),
@@ -55,9 +55,9 @@ class Mej extends CActiveRecord
 	{
 		return array(
 			'mej1' => 'Mej1',
-			'mej2' => 'Mej2',
-			'mej3' => 'Mej3',
-			'mej4' => 'Mej4',
+			'mej2' => '№',
+			'mej3' => tt('Дата начала'),
+			'mej4' => tt('Дата окончания'),
 			'mej5' => 'Mej5',
 		);
 	}
@@ -101,4 +101,19 @@ class Mej extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+    public function getModulesFor($nr1)
+    {
+        $criteria=new CDbCriteria;
+
+        $criteria->compare('mej3', $nr1);
+        $criteria->limit = 100;
+
+        return new CActiveDataProvider($this, array(
+            'criteria'=>$criteria,
+            'sort' => array(
+                'defaultOrder' => 't.mej3 ASC',
+            ),
+        ));
+    }
 }
