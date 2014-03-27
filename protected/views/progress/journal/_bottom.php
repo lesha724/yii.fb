@@ -46,6 +46,7 @@ HTML;
     $journalType = PortalSettings::model()->findByPk(8)->ps2;
     if ($journalType == 1)
         $this->renderPartial('journal/_modules', array(
+            'students' => $students,
             'dates' => $dates,
             'nr1' => $nr1,
         ));

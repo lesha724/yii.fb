@@ -44,8 +44,10 @@ class ProgressController extends Controller
             $model->attributes=$_REQUEST['JournalForm'];
 
 
-        if (! empty($model->group))
+        if (! empty($model->group)) {
             $this->fillJournalFor($model);
+
+        }
 
         $this->render('journal', array(
             'model' => $model,
@@ -183,6 +185,17 @@ class ProgressController extends Controller
         $model->mej5 = $mej5;
 
         $error = !$model->save();
+
+        if (! $error) {
+            // todo recalculate vmp
+            // как пересчитывать?
+            // раньше для ведомости собирались все nr1 и по ним уже брались оценки, т.е.
+            // несколько журналов может вести на одну ведомость? создал модуль в журнале - смотрю оценки в модуле - а там другие числа
+            // как быть если модуль создан , а после оценка была изменена?
+            // или оценку в модуле ввели напрямую, а потом создали модуль череж журнал - ссответственно оценка изменилась
+            // поскольку модули можно удалять - при создании и удаление каждый раз придется пересчитывать ВСЕ модули.
+        }
+
 
         Yii::app()->end(CJSON::encode(array('error' => $error, 'errors' => $model->getErrors())));
     }

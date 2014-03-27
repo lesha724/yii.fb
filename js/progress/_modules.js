@@ -46,9 +46,10 @@ $(document).ready(function(){
         var url   = $that.closest('form').attr('action');
 
         params = {
-            mej3: nr1,
-            mej4: $('[name=mej4]').val(),
-            mej5: $('[name=mej5]').val()
+            mej3 : nr1,
+            mej4 : $('[name=mej4]').val(),
+            mej5 : $('[name=mej5]').val(),
+            vvmp1: vvmp1
         };
         $.get(url, params, function(data){
             if (data.error)
@@ -75,6 +76,7 @@ $(document).ready(function(){
                 $("#modules-list").yiiGridView("update", {
                     data: $("#journal-form").serialize()
                 });
+                addGritter('', tt.moduleDeleted, 'success')
             }
         })
         return false;
