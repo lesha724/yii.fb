@@ -7,7 +7,7 @@ $moduleError   = tt('Модуль не сохранен!');
 $moduleSuccess = tt('Модуль сохранен!');
 $confirmDeleteMsg = tt('Вы уверены, что хотите удалить модуль?');
 
-Yii::app()->clientScript->registerScript('getGroupsUrl', <<<JS
+Yii::app()->clientScript->registerScript('messages', <<<JS
         tt.moduleError      = '{$moduleError}';
         tt.moduleSuccess    = '{$moduleSuccess}'
         tt.confirmDeleteMsg = '{$confirmDeleteMsg}';

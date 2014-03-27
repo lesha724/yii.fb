@@ -23,9 +23,9 @@
         tt.error       = "{$error}"
         tt.success     = "{$success}"
         tt.minMaxError = "{$minMaxError}"
+        console.log(1);
 JS
-    ,CClientScript::POS_READY);
-
+    , CClientScript::POS_READY);
 
 ?>
 
