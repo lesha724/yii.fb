@@ -8,7 +8,7 @@
     $moduleDeleted = tt('Модуль удален!');
     $confirmDeleteMsg = tt('Вы уверены, что хотите удалить модуль?');
 
-    $vvmp  = Vvmp::model()->loadBillBy($nr1, $students);
+    $vvmp  = Vvmp::model()->loadBillBy($nr1[0], $students);
     $vvmp1 = $vvmp->vvmp1;
 
     Yii::app()->clientScript->registerScript('messages', <<<JS
@@ -28,7 +28,7 @@ JS
 
     <h3 class="header smaller lighter blue"><?=tt('Модули')?></h3>
     <?php
-        $provider = Mej::model()->getModulesFor($nr1);
+        $provider = Mej::model()->getModulesFor($nr1[0]);
         $this->widget('bootstrap.widgets.TbGridView', array(
             'id' => 'modules-list',
             'dataProvider' => $provider,
@@ -71,6 +71,7 @@ JS
 
 <div class="row-fluid span4"  style="margin-left:0">
     <form class="form-inline" action="<?=Yii::app()->createAbsoluteUrl('progress/insertMejModule')?>">
+        <input type="hidden" name="mej3" value="<?=$nr1[0]?>">
         <input type="hidden" name="mej4">
         <input type="hidden" name="mej5">
         <input class="span8" type="text" name="date-range-picker" id="id-date-range-picker-1" placeholder="<?=tt('Новый модуль')?>"/>

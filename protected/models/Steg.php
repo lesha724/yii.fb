@@ -132,20 +132,16 @@ SQL;
 
     public function getMarksForStudent($st1, $nr1)
     {
-        $sql = <<<SQL
-        SELECT *
-        FROM steg
-        WHERE steg1=:ST1 AND steg2=:NR1
-SQL;
-
-        $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':ST1', $st1);
-        $command->bindValue(':NR1', $nr1);
-        $raws = $command->queryAll();
+        $raws = Yii::app()->db->createCommand()
+            ->select('*')
+            ->from('steg')
+            ->where(array('in', 'steg2', $nr1))
+            ->andWhere('steg1 = :ST1', array(':ST1' => $st1))
+            ->queryAll();
 
         $res = array();
         foreach($raws as $raw) {
-            $key = $raw['steg3'].'/'.$raw['steg4'];
+            $key = $raw['steg2'].'/'.$raw['steg3'].'/'.$raw['steg4'];
             $res[$key] = $raw;
         }
 

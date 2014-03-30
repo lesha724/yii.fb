@@ -46,7 +46,7 @@ $(document).ready(function(){
         var url   = $that.closest('form').attr('action');
 
         params = {
-            mej3 : nr1,
+            mej3 : $('[name=mej3]').val(),
             mej4 : $('[name=mej4]').val(),
             mej5 : $('[name=mej5]').val(),
             vvmp1: vvmp1

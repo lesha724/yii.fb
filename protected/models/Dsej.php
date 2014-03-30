@@ -110,29 +110,13 @@ class Dsej extends CActiveRecord
 
     public function getMarksForStudent($st1, $nr1)
     {
-        $sql = <<<SQL
-        SELECT *
-        FROM dsej
-        WHERE dsej2=:ST1 AND dsej3=:NR1
-SQL;
+        $res = Yii::app()->db->createCommand()
+                    ->select('*')
+                    ->from('dsej')
+                    ->where(array('in', 'dsej3', $nr1))
+                    ->andWhere('dsej2 = :ST1', array(':ST1' => $st1))
+                    ->queryRow();
 
-        $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':ST1', $st1);
-        $command->bindValue(':NR1', $nr1);
-        $res = $command->queryRow();
-
-        if (empty($res)) {
-            $model = new Dsej();
-            $model->dsej1 = new CDbExpression('GEN_ID(GEN_DSEJ, 1)');
-            $model->dsej2 = $st1;
-            $model->dsej3 = $nr1;
-            $model->dsej4 = 0;
-            $model->dsej5 = 0;
-            $model->dsej6 = 0;
-            $model->dsej7 = 0;
-            $model->save();
-            $res = $command->queryRow();
-        }
         return $res;
     }
 }

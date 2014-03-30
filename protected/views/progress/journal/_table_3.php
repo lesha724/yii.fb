@@ -1,8 +1,9 @@
 <?php
 function table3Tr($column, $marks)
 {
+    $nr1 = $marks['dsej3'];
     $tr= <<<HTML
-<td><input value="%s" data-name="%s" maxlength="3"></td>
+<td data-nr1="{$nr1}"><input value="%s" data-name="%s" maxlength="3"></td>
 HTML;
 
     list($field, $name) = $column;
@@ -25,8 +26,11 @@ function countDSEJTotal($marks, $columns)
     return $total;
 }
 
-function table3Th2($nr1)
+function table3Th2($nr1, $ps9)
 {
+    if ($ps9 == '0')
+        return '<th></th><th></th>';
+
     $total = Mmbj::model()->getTotalFor($nr1);
     $th2 = <<<HTML
 <th data-total='mmbj4'>%s</th>
@@ -61,7 +65,7 @@ HTML;
     $showTotal   = !empty($columns);
 
     $th  = '<th colspan="2">'.tt('Итого').'</th>';
-    $th2 = table3Th2($nr1);
+    $th2 = table3Th2($nr1, $ps9);
 
     foreach($columns as $column) {
         list($field, $name) = $column;

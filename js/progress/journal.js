@@ -35,7 +35,7 @@ $(document).ready(function(){
         var params = {
             field : $that.data('name'),
             date  : $that.parent().data('r2'),
-            nr1   : nr1,
+            nr1   : $that.parent().data('nr1'),
             st1   : st1,
             value : $that.is(':checkbox')
                         ? $that.is(':checked') ? 0 : 1
@@ -55,9 +55,10 @@ $(document).ready(function(){
         }
 
         // min max check
-        if ($that.parents('.journal_div_table2').length > 0) {
+        // ps9 - portal settings
+        if (ps9 == '1' && $that.parents('.journal_div_table2').length > 0) {
 
-            var $tr = $that.closest('table').find('.min-max');
+            var $tr  = $that.closest('table').find('.min-max');
             var $th1 = $tr.find('th:eq('+(index*2)+')');
             var $th2 = $th1.next();
 

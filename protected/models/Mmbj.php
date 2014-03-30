@@ -103,19 +103,15 @@ class Mmbj extends CActiveRecord
 
     public function getDataFor($nr1)
     {
-        $sql = <<<SQL
-        SELECT *
-        FROM mmbj
-        WHERE mmbj2=:NR1
-SQL;
-
-        $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':NR1', $nr1);
-        $raws = $command->queryAll();
+        $raws = Yii::app()->db->createCommand()
+                ->select('*')
+                ->from('mmbj')
+                ->where(array('in', 'mmbj2', $nr1))
+                ->queryAll();
 
         $res = array();
         foreach ($raws as $raw) {
-            $res[$raw['mmbj3']] = $raw;
+            $res[ $raw['mmbj3'] ] = $raw;
         };
 
         return $res;
@@ -123,15 +119,11 @@ SQL;
 
     public function getTotalFor($nr1)
     {
-        $sql = <<<SQL
-        SELECT sum(mmbj4) as minValue, sum(mmbj5) as maxValue
-        FROM mmbj
-        WHERE mmbj2=:NR1
-SQL;
-
-        $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':NR1', $nr1);
-        $data = $command->queryRow();
+        $data = Yii::app()->db->createCommand()
+                    ->select('sum(mmbj4) as minValue, sum(mmbj5) as maxValue')
+                    ->from('mmbj')
+                    ->where(array('in', 'mmbj2', $nr1))
+                    ->queryRow();
 
         $res['min'] = round($data['minvalue'], 1);
         $res['max'] = round($data['maxvalue'], 1);

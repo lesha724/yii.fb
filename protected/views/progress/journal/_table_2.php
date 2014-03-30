@@ -4,16 +4,18 @@ function table2Tr($date, $marks)
     if (strtotime($date['r2']) > strtotime('now'))
         return '<td colspan="2"></td>';
 
-    $r2 = $date['r2'];
+    $r2  = $date['r2'];
+    $nr1 = $date['nr1'];
+
     $pattern= <<<HTML
-    <td colspan="2" data-r2="{$r2}">
+    <td colspan="2" data-r2="{$r2}" data-nr1="{$nr1}">
         <input type="checkbox" %s data-name="steg6">
         <input value="%s" maxlength="3" data-name="steg5">
         <input value="%s" maxlength="3" data-name="steg9">
     </td>
 HTML;
 
-    $key = $date['r2'].'/0'; // 0 - r3
+    $key = $date['nr1'].'/'.$date['r2'].'/0'; // 0 - r3
 
     $steg6 = isset($marks[$key]) && $marks[$key]['steg6'] == 0
                 ? 'checked'
@@ -41,9 +43,9 @@ function countSTEGTotal($marks)
     return $total;
 }
 
-function generateTh2($minMax, $column)
+function generateTh2($minMax, $column, $ps9)
 {
-    if (! isset($minMax[$column]))
+    if ($ps9 == '0' || !isset($minMax[$column]))
         return '<th></th><th></th>';
 
     $marks = $minMax[$column];
@@ -84,9 +86,10 @@ HTML;
     /*** 2 table ***/
     $th = $th2 = '';
     $column = 1;
+
     foreach($dates as $date) {
         $th    .= '<th colspan="2">'.$date['formatted_date'].' '.SH::convertUS4($date['us4']).'</th>';
-        $th2   .= generateTh2($minMax, $column);
+        $th2   .= generateTh2($minMax, $column, $ps9);
         $column++;
     }
 

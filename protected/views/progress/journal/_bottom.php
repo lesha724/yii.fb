@@ -16,7 +16,14 @@ if (! empty($model->group)):
     );
 
     $uo1 = !empty($dates) ? $dates[0]['uo1'] : -1;
-    $nr1 = !empty($dates) ? $dates[0]['nr1'] : -1;
+
+    $nr1 = array();
+    foreach ($dates as $date) {
+        $nr1[] = $date['nr1'];
+    }
+    $nr1 = array_values(array_unique($nr1));
+
+    $ps9 = PortalSettings::model()->findByPk(9)->ps2;
 
     $students = St::model()->getStudentsForJournal($model->group, $uo1);
 
@@ -31,13 +38,15 @@ HTML;
     $this->renderPartial('journal/_table_2', array(
         'students' => $students,
         'dates' => $dates,
-        'nr1' => $nr1
+        'nr1' => $nr1,
+        'ps9' => $ps9
     ));
 
     $this->renderPartial('journal/_table_3', array(
         'students' => $students,
         'dates' => $dates,
-        'nr1' => $nr1
+        'nr1' => $nr1,
+        'ps9' => $ps9
     ));
 echo <<<HTML
 </div>
@@ -53,9 +62,12 @@ HTML;
 
 
     $insertMarkUrl = Yii::app()->createAbsoluteUrl('/progress/insertMark');
+    $arrayNR1 = CJSON::encode($nr1);
+
     Yii::app()->clientScript->registerScript('journal-vars', <<<JS
-        nr1 = "{$nr1}";
-        insertMarkUrl = "{$insertMarkUrl}"
+        nr1 = {$arrayNR1};
+        ps9 = {$ps9};
+        insertMarkUrl = "{$insertMarkUrl}";
 JS
     , CClientScript::POS_READY);
 

@@ -19,6 +19,7 @@ CREATE TABLE PORTAL_SETTINGS (
 	6-отображать dsej7
 	7-имя для dsej7
 	8-внешний вид журнала
+	9-учитывать min max в журнале
 */
 SQL;
 		$this->execute($sql);
