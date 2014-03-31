@@ -174,9 +174,10 @@ class ProgressController extends Controller
         if (! Yii::app()->request->isAjaxRequest)
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
-        $mej3 = Yii::app()->request->getParam('mej3', null);
-        $mej4 = Yii::app()->request->getParam('mej4', null);
-        $mej5 = Yii::app()->request->getParam('mej5', null);
+        $mej3  = Yii::app()->request->getParam('mej3', null);
+        $mej4  = Yii::app()->request->getParam('mej4', null);
+        $mej5  = Yii::app()->request->getParam('mej5', null);
+        $vvmp1 = Yii::app()->request->getParam('vvmp1', null);
 
         $model = new Mej();
         $model->mej1 = new CDbExpression('GEN_ID(GEN_MEJ, 1)');
@@ -187,13 +188,7 @@ class ProgressController extends Controller
         $error = !$model->save();
 
         if (! $error) {
-            // todo recalculate vmp
-            // как пересчитывать?
-            // раньше для ведомости собирались все nr1 и по ним уже брались оценки, т.е.
-            // несколько журналов может вести на одну ведомость? создал модуль в журнале - смотрю оценки в модуле - а там другие числа
-            // как быть если модуль создан , а после оценка была изменена?
-            // или оценку в модуле ввели напрямую, а потом создали модуль череж журнал - ссответственно оценка изменилась
-            // поскольку модули можно удалять - при создании и удаление каждый раз придется пересчитывать ВСЕ модули.
+            Vmp::model()->recalculateModulesFor($vvmp1, $mej3);
         }
 
 

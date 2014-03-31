@@ -506,4 +506,20 @@ SQL;
 
         return $students;
     }
+
+    public function getStudentsOfGroup($gr1)
+    {
+        $date1 = date("d.m.Y", strtotime("+ 20 days"));
+        $date2 = date('d.m.Y 00:00:00');
+        $sql=<<<SQL
+            SELECT ST1,ST2,ST3,ST4,sgr2, ST117, ST118, ST119, ST120, ST121, ST122, ST123, ST124,ST125,ST139
+            from st
+            inner join std on (st.st1 = std.std2)
+            inner join sgr on (st.st32 = sgr.sgr1)
+            WHERE st101<>7 and STD3={$gr1} and STD11 in (0,6,8) and STD4<='{$date1}' and (STD7 is null or STD7>'{$date2}')
+            order by 2
+SQL;
+        $students = Yii::app()->db->createCommand($sql)->queryAll();
+        return $students;
+    }
 }

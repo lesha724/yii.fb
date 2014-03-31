@@ -193,7 +193,7 @@ SQL;
 
         // fill table vmp
         foreach($students as $st) {
-            for($i=0;$i<=$newModules;$i++) {
+            for($i=-1;$i<=$newModules;$i++) {
                 $vmp = new Vmp();
                 $vmp->attributes = array(
                     'vmp1' => $vvmp->vvmp1,
