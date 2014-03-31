@@ -187,9 +187,9 @@ class ProgressController extends Controller
 
         $error = !$model->save();
 
-        if (! $error) {
+        if (! $error)
             Vmp::model()->recalculateModulesFor($vvmp1, $mej3);
-        }
+
 
 
         Yii::app()->end(CJSON::encode(array('error' => $error, 'errors' => $model->getErrors())));
@@ -200,9 +200,14 @@ class ProgressController extends Controller
         if (! Yii::app()->request->isAjaxRequest)
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
-        $mej1 = Yii::app()->request->getParam('mej1', null);
+        $mej1  = Yii::app()->request->getParam('mej1', null);
+        $nr1   = Yii::app()->request->getParam('nr1', null);
+        $vvmp1 = Yii::app()->request->getParam('vvmp1', null);
 
-        Mej::model()->deleteByPk($mej1);
+        $deleted = Mej::model()->deleteByPk($mej1);
+
+        if ($deleted)
+            Vmp::model()->recalculateModulesFor($vvmp1, $nr1);
     }
 
 }

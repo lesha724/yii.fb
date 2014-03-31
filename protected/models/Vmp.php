@@ -141,7 +141,17 @@ SQL;
                           count($arrayNr1) > 0;
 
         if ($canRecalculate) {
-            foreach ($moduleDates as $num => $module) {
+
+            // set to 0 all rows
+            $condition = 'vmp1 = '.$vvmp->vvmp1.' AND vmp3 >=1';
+            Vmp::model()->updateAll(array(
+                'vmp4' => 0,
+                'vmp5' => 0,
+                'vmp6' => 0,
+                'vmp7' => 0,
+            ), $condition);
+
+            foreach ($moduleDates as $key => $module) {
                 foreach($students as $st) {
 
                     $st1 = $st['st1'];
@@ -161,8 +171,9 @@ SQL;
                     if (! empty($data['sum'])) {
                         $vmp4 = round($data['sum'], 1);
                         $vmp1 = $vvmp->vvmp1;
+                        $num  = $key + 1;
 
-                         $sql = <<<SQL
+                        $sql = <<<SQL
                             update vmp set vmp4 = {$vmp4}
                             where vmp1={$vmp1} and vmp2 = {$st1} and vmp3 = {$num}
 SQL;

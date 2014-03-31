@@ -69,7 +69,13 @@ $(document).ready(function(){
         if (! confirm(tt.confirmDeleteMsg))
             return false;
 
+        params = {
+            nr1 : $('[name=mej3]').val(),
+            vvmp1: vvmp1
+        };
+
         $.fn.yiiGridView.update('modules-list', {
+            data: params,
             type: 'GET',
             url:  $(this).attr('href'),
             success:function(data) {
