@@ -49,7 +49,7 @@ JS
     $this->endWidget();
 
     echo <<<HTML
-    <span id="spinner"></span>
+    <span id="spinner1"></span>
 HTML;
 
     $this->renderPartial('journal/_bottom', array('model' => $model, 'type' => $type));

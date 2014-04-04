@@ -41,6 +41,21 @@ $this->widget('zii.widgets.CMenu', array(
             'visible' => Yii::app()->user->isAdmin,
         ),
         array(
+            'label' => '<i class="icon-calendar"></i><span class="menu-text">'.tt('Расписание').'</span><b class="arrow icon-angle-down"></b>',
+            'url' => '#',
+            'linkOptions'=> array(
+                'class' => 'dropdown-toggle',
+            ),
+            'itemOptions'=>array('class'=> $controller=='timeTable' ? 'active open' : ''),
+            'items' => array(
+                array(
+                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Преподавателя'),
+                    'url' => Yii::app()->createUrl('/timeTable/teacher'),
+                    'active' => $controller=='timeTable' && $action=='teacher'
+                ),
+            ),
+        ),
+        array(
             'label' => '<i class="icon-list"></i><span class="menu-text">'.tt('Успеваемость').'</span><b class="arrow icon-angle-down"></b>',
             'url' => '#',
             'linkOptions'=> array(
@@ -52,7 +67,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'label' => '<i class="icon-double-angle-right"></i>'.tt('Эл. журнал'),
                     'url' => Yii::app()->createUrl('/progress/journal'),
                     'visible' => Yii::app()->user->isTch,
-                    'active' => $action=='journal' && $controller=='progress'
+                    'active' => $controller=='progress' && $action=='journal'
                 ),
             ),
         ),

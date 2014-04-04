@@ -6,16 +6,19 @@
     $moduleError   = tt('Модуль не сохранен!');
     $moduleSuccess = tt('Модуль сохранен!');
     $moduleDeleted = tt('Модуль удален!');
-    $confirmDeleteMsg = tt('Вы уверены, что хотите удалить модуль?');
+    $confirmDeleteMsg  = tt('Вы уверены, что хотите удалить модуль?');
+    $moduleRestriction = tt('Максимальное количество модулей - 5');
 
     $vvmp  = Vvmp::model()->loadBillBy($nr1[0], $students);
     $vvmp1 = $vvmp->vvmp1;
 
     Yii::app()->clientScript->registerScript('messages', <<<JS
-            tt.moduleError      = '{$moduleError}';
-            tt.moduleSuccess    = '{$moduleSuccess}'
-            tt.moduleDeleted    = '{$moduleDeleted}'
-            tt.confirmDeleteMsg = '{$confirmDeleteMsg}';
+            tt.moduleError       = '{$moduleError}';
+            tt.moduleSuccess     = '{$moduleSuccess}'
+            tt.moduleDeleted     = '{$moduleDeleted}'
+            tt.confirmDeleteMsg  = '{$confirmDeleteMsg}';
+            tt.moduleRestriction = '{$moduleRestriction}';
+
             vvmp1 = '{$vvmp1}';
 JS
     ,CClientScript::POS_READY);
@@ -68,6 +71,8 @@ JS
         ));
 ?>
 </div>
+
+<span id="spinner2"></span>
 
 <div class="row-fluid span4"  style="margin-left:0">
     <form class="form-inline" action="<?=Yii::app()->createAbsoluteUrl('progress/insertMejModule')?>">

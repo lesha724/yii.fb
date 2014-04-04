@@ -2,9 +2,9 @@ $(document).ready(function(){
 
     initChosen();
 
-    initSpinner();
+    initSpinner('spinner1');
 
-    $spinner = $('#spinner');
+    $spinner1 = $('#spinner1');
 
     $(document).on('change', '#JournalForm_discipline', function() {
         var params = {
@@ -12,13 +12,13 @@ $(document).ready(function(){
             discipline : $(this).val()
         }
 
-        $spinner.show();
+        $spinner1.show();
 
         $.get(getGroupsUrl, params, function(data){
             $('[id*=JournalForm_group]').remove();
             $('#journal-form').append(data)
             initChosen();
-            $spinner.hide();
+            $spinner1.hide();
         })
     });
 
@@ -75,7 +75,7 @@ $(document).ready(function(){
 
         var url = $that.parents('[data-url]').data('url');
 
-        $spinner.show();
+        $spinner1.show();
 
         $.get(url, params, function(data){
 
@@ -91,7 +91,7 @@ $(document).ready(function(){
                 recalculateBothTotal(st1);
             }
 
-            $spinner.hide();
+            $spinner1.hide();
         }, 'json')
     });
 
@@ -115,7 +115,7 @@ $(document).ready(function(){
 
         var url = $that.parents('[data-url]').data('url');
 
-        $spinner.show()
+        $spinner1.show()
 
         $.get(url, params, function(data){
 
@@ -131,7 +131,7 @@ $(document).ready(function(){
                 recalculateValueFor(params.field);
             }
 
-            $spinner.hide();
+            $spinner1.hide();
         }, 'json')
     });
 });

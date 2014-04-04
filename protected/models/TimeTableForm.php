@@ -5,10 +5,10 @@
  * ContactForm is the data structure for keeping
  * contact form data. It is used by the 'contact' action of 'SiteController'.
  */
-class JournalForm extends CFormModel
+class TimeTableForm extends CFormModel
 {
-	public $discipline;
-	public $group;
+	public $chair;
+	public $teacher;
 
 	/**
 	 * Declares the validation rules.
@@ -16,7 +16,7 @@ class JournalForm extends CFormModel
 	public function rules()
 	{
 		return array(
-			array('discipline, group', 'required'),
+			array('chair, teacher', 'required', 'on' => 'teacher'),
 		);
 	}
 
@@ -28,8 +28,8 @@ class JournalForm extends CFormModel
 	public function attributeLabels()
 	{
 		return array(
-			'discipline'=> tt('Дисциплина'),
-			'group'=> tt('Группа'),
+			'chair'=> tt('Кафедра'),
+			'teacher'=> tt('Преподаватель'),
 		);
 	}
 }

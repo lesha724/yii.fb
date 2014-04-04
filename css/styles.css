@@ -66,7 +66,7 @@ div.journal_div_table3 {
 .journal_div_table3 table input {
     width: 45%;
 }
-#spinner {
+#spinner, #spinner1, #spinner2 {
     display: none;
 }
 tr.min-max {

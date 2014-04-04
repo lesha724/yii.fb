@@ -1,6 +1,8 @@
 $(document).ready(function(){
 
 
+
+
     $('#modules').dataTable({
         iDisplayLength: 100,
         aaSorting: [],
@@ -40,7 +42,16 @@ $(document).ready(function(){
     });
 
 
+    initSpinner('spinner2');
+
+    $spinner2 = $('#spinner2');
+
     $('#addNewModule').click(function(){
+
+        if ( $('#modules-list table tbody tr').length >= 5 ) {
+            addGritter('', tt.moduleRestriction, 'error');
+            return;
+        }
 
         var $that = $(this);
         var url   = $that.closest('form').attr('action');
@@ -51,7 +62,13 @@ $(document).ready(function(){
             mej5 : $('[name=mej5]').val(),
             vvmp1: vvmp1
         };
+
+        $spinner2.show();
+
         $.get(url, params, function(data){
+
+            $spinner2.hide();
+
             if (data.error)
                 addGritter('', tt.moduleError, 'error')
             else {
@@ -74,11 +91,16 @@ $(document).ready(function(){
             vvmp1: vvmp1
         };
 
+        $spinner2.show();
+
         $.fn.yiiGridView.update('modules-list', {
             data: params,
             type: 'GET',
             url:  $(this).attr('href'),
             success:function(data) {
+
+                $spinner2.hide();
+
                 $("#modules-list").yiiGridView("update", {
                     data: $("#journal-form").serialize()
                 });
