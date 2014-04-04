@@ -78,31 +78,36 @@ $config = array(
                     'baseUrl' => '/theme/ace/assets/',
                     'css' => array('css/chosen.css'),
                     'js' => array('js/chosen.jquery.min.js'),
+                    'depends' => array('jquery')
                 ),
                 'gritter' => array(
                     'baseUrl' => '/theme/ace/assets/',
                     'css' => array('css/jquery.gritter.css'),
                     'js' => array('js/jquery.gritter.min.js'),
+                    'depends' => array('jquery')
                 ),
                 'spin' => array(
                     'baseUrl' => '/theme/ace/assets/',
                     'js' => array('js/spin.min.js'),
+                    'depends' => array('jquery')
                 ),
                 'jqgrid' => array(
                     'baseUrl' => '/theme/ace/assets/',
                     'css' => array('css/ui.jqgrid.css'),
                     'js' => array('js/jqGrid/jquery.jqGrid.min.js'),
+                    'depends' => array('jquery')
                 ),
                 'dataTables' => array(
                     'baseUrl' => '/theme/ace/assets/',
                     'js' => array('js/jquery.dataTables.min.js', 'js/jquery.dataTables.bootstrap.js'),
+                    'depends' => array('jquery')
                 ),
                 'daterangepicker' => array(
                     'baseUrl' => '/theme/ace/assets/',
                     'css' => array('css/daterangepicker.css'),
                     'js' => array('js/date-time/daterangepicker.min.js', 'js/date-time/moment.min.js'),
+                    'depends' => array('jquery')
                 ),
-
             ),
 			'behaviors' => array(
 				array(

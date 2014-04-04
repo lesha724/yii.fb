@@ -23,4 +23,4 @@ $groups = CHtml::listData(Gr::model()->getGroupsFor($model->discipline, $type), 
 echo $form->label($model, 'group');
 echo $form->dropDownList($model, 'group', $groups, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;')));
 
-echo CHtml::h
+$this->endWidget();
