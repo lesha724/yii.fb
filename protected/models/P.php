@@ -168,7 +168,7 @@ class P extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-            'account' => array(self::HAS_ONE, 'Users', 'u6', 'on' => 'u6=p1 AND u5=1'),
+            'account' => array(self::HAS_ONE, 'Users', 'u6', 'on' => 'u5=1'),
             'pd' => array(self::HAS_MANY, 'Pd', 'pd2'),
             'grants' => array(self::HAS_ONE, 'Grants', 'grants2'),
 		);
