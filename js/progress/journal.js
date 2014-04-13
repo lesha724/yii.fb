@@ -1,30 +1,8 @@
 $(document).ready(function(){
 
-    initChosen();
-
     initSpinner('spinner1');
 
     $spinner1 = $('#spinner1');
-
-    $(document).on('change', '#JournalForm_discipline', function() {
-        var params = {
-            type : $('#type').val(),
-            discipline : $(this).val()
-        }
-
-        $spinner1.show();
-
-        $.get(getGroupsUrl, params, function(data){
-            $('[id*=JournalForm_group]').remove();
-            $('#journal-form').append(data)
-            initChosen();
-            $spinner1.hide();
-        })
-    });
-
-    $(document).on('change', '#JournalForm_group', function() {
-        $(this).closest('form').submit();
-    });
 
     $('div[class*=journal_div_table] tr:not(.min-max) input').change(function(){
 

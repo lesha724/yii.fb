@@ -187,4 +187,62 @@ SQL;
         }
     }
 
+    public function getMarksForStudent($st1, $vvmp1)
+    {
+        $raws = Yii::app()->db->createCommand()
+                ->select('*')
+                ->from('vmp')
+                ->where('vmp1 = :VVMP1 and vmp2 = :ST1', array(
+                    ':VVMP1' => $vvmp1,
+                    ':ST1' => $st1,
+                ))
+                ->queryAll();
+
+        $res = array();
+        foreach($raws as $raw) {
+            $key = $raw['vmp3'];
+            $res[$key] = $raw;
+        }
+
+        return $res;
+    }
+
+    public function getExtraMarks($st1, $vvmp1)
+    {
+        $marks = array();
+
+        $marks['0'] = Yii::app()->db->createCommand()
+                    ->select('vmp4')
+                    ->from('vmp')
+                    ->where('vmp1 = :VVMP1 and vmp2 = :ST1 and vmp3=0', array(
+                        ':VVMP1' => $vvmp1,
+                        ':ST1' => $st1,
+                    ))
+                    ->queryScalar();
+
+        $vvmp = Vvmp::model()->findByPk($vvmp1);
+
+        $marks['stus3'] = Yii::app()->db->createCommand()
+                            ->select('stus3')
+                            ->from('stus')
+                            ->where('stus1=:ST1 and stus18=:D1 and stus19=8 and stus20=:SEM7 and stus21=:K1', array(
+                                ':ST1'  => $st1,
+                                ':D1'   => $vvmp->vvmp3,
+                                ':SEM7' => $vvmp->vvmp4,
+                                ':K1'   => $vvmp->vvmp5,
+                            ))
+                            ->queryScalar();
+
+        $marks['-1'] = Yii::app()->db->createCommand()
+                    ->select('vmp4')
+                    ->from('vmp')
+                    ->where('vmp1 = :VVMP1 and vmp2 = :ST1 and vmp3=-1', array(
+                        ':VVMP1' => $vvmp1,
+                        ':ST1' => $st1,
+                    ))
+                    ->queryScalar();
+
+        return $marks;
+
+    }
 }

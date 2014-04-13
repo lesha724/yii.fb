@@ -207,4 +207,19 @@ SQL;
         return $vvmp;
     }
 
+    public function fillDataForGroup($gr1, $d1, $year, $sem)
+    {
+        $sql = <<<SQL
+        SELECT * FROM PROC_MODULI(:GR1, :D1, :YEAR, :SEM);
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':GR1', $gr1);
+        $command->bindValue(':D1', $d1);
+        $command->bindValue(':YEAR', $year);
+        $command->bindValue(':SEM', $sem);
+        $res = $command->queryRow();
+        return $res;
+    }
+
 }

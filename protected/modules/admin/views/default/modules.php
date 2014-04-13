@@ -3,7 +3,7 @@
  *
  * @var DefaultController $this
  */
-    $this->pageHeader=tt('Настройки сервиса Эл. журнал');
+    $this->pageHeader=tt('Настройки сервиса Ведение модулей');
     $this->breadcrumbs=array(
         tt('Админ. панель'),
     );
@@ -31,11 +31,10 @@
 HTML;
 
     $title = tt('Дополнительные колонки');
-    $html  = $this->renderPartial('journal/_extra_columns', array(), true);
+    $html  = $this->renderPartial('modules/_extra_columns', array(), true);
     echo sprintf($widget, $title, $html);
 
-
     $title = tt('Внешний вид журнала');
-    $html  = $this->renderPartial('journal/_journal_type', array(), true);
+    $html  = $this->renderPartial('modules/_journal_type', array(), true);
     echo sprintf($widget, $title, $html);
 

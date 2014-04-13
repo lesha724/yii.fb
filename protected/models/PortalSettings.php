@@ -121,4 +121,31 @@ SQL;
         return $res;
     }
 
+    public function getModuleExtraColumns()
+    {
+        $sql = <<<SQL
+        SELECT ps1, ps2
+        FROM PORTAL_SETTINGS
+        WHERE ps1 between 10 and 15
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $columns = $command->queryAll();
+
+        $res = array();
+        $res['total1'] = array();
+        $res['total2'] = array();
+
+        foreach ($columns as $key => $column) {
+            if ($column['ps1'] == 10 && $column['ps2'] == 1)
+                $res['total1'][] = array('0', $columns[$key+1]['ps2']);
+
+            if ($column['ps1'] == 12 && $column['ps2'] == 1)
+                $res['total1'][] = array('stus3', $columns[$key+1]['ps2']);
+
+            if ($column['ps1'] == 14 && $column['ps2'] == 1)
+                $res['total2'][] = array('-1', $columns[$key+1]['ps2']);
+        }
+
+        return $res;
+    }
 }

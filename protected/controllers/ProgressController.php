@@ -20,7 +20,11 @@ class ProgressController extends Controller
                     'insertDsejMark',
                     'insertMmbjMark',
                     'insertMejModule',
-                    'deleteMejModule'
+                    'deleteMejModule',
+                    'modules',
+                    'updateVvmp',
+                    'insertVmpMark',
+                    'updateStus',
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -39,9 +43,9 @@ class ProgressController extends Controller
             $type = $grants->getGrantsFor(Grants::EL_JOURNAL);
 
 
-        $model = new JournalForm;
-        if (isset($_REQUEST['JournalForm']))
-            $model->attributes=$_REQUEST['JournalForm'];
+        $model = new FilterForm;
+        if (isset($_REQUEST['FilterForm']))
+            $model->attributes=$_REQUEST['FilterForm'];
 
 
         if (! empty($model->group)) {
@@ -65,7 +69,7 @@ class ProgressController extends Controller
 
         $groups = CHtml::listData(Gr::model()->getGroupsFor($discipline, $type), 'gr1', 'name');
 
-        echo CHtml::dropDownList('JournalForm[group]', '',$groups, array('id'=>'JournalForm_group', 'class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;'));
+        echo CHtml::dropDownList('FilterForm[group]', '',$groups, array('id'=>'FilterForm_group', 'class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;'));
     }
 
     private function fillJournalFor($model)
@@ -190,8 +194,6 @@ class ProgressController extends Controller
         if (! $error)
             Vmp::model()->recalculateModulesFor($vvmp1, $mej3);
 
-
-
         Yii::app()->end(CJSON::encode(array('error' => $error, 'errors' => $model->getErrors())));
     }
 
@@ -210,4 +212,143 @@ class ProgressController extends Controller
             Vmp::model()->recalculateModulesFor($vvmp1, $nr1);
     }
 
+    public function actionModules()
+    {
+        $type = 0; // own modules
+
+        $grants = Yii::app()->user->dbModel->grants;
+        if (! empty($grants))
+            $type = $grants->getGrantsFor(Grants::MODULES);
+
+        $model = new FilterForm;
+        if (isset($_REQUEST['FilterForm']))
+            $model->attributes=$_REQUEST['FilterForm'];
+
+
+        $moduleInfo = null;
+        if (! empty($model->group)) {
+            $moduleInfo = $this->fillModulesFor($model);
+        }
+
+        $this->render('modules', array(
+            'model'      => $model,
+            'type'       => $type,
+            'moduleInfo' => $moduleInfo,
+        ));
+    }
+
+    private function fillModulesFor($model)
+    {
+        $gr1  = $model->group;
+        $d1   = $model->discipline;
+        $year = Yii::app()->session['year'];
+        $sem  = Yii::app()->session['sem'];
+        $res = Vvmp::model()->fillDataForGroup($gr1, $d1, $year, $sem);
+        return $res;
+    }
+
+    public function actionUpdateVvmp()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $value = Yii::app()->request->getParam('value', null);
+        $field = Yii::app()->request->getParam('field', null);
+        $vvmp1 = Yii::app()->request->getParam('vvmp1', null);
+
+        $whiteList = array(
+            'vvmp10', 'vvmp11', 'vvmp12', 'vvmp13', 'vvmp14', 'vvmp15', 'vvmp16',
+            'vvmp17', 'vvmp18', 'vvmp19', 'vvmp20', 'vvmp21', 'vvmp22', 'vvmp23',
+        );
+        if (in_array($field, $whiteList))
+            $attr = array(
+                $field => $value
+            );
+
+        $criteria = new CDbCriteria();
+        $criteria->compare('vvmp1', $vvmp1);
+
+        $model = Vvmp::model()->find($criteria);
+        if (empty($model))
+            $error = true;
+        else
+            $error = !$model->saveAttributes($attr);
+
+        Yii::app()->end(CJSON::encode(array('error' => $error, 'errors' => $model->getErrors())));
+    }
+
+    public function actionInsertVmpMark()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $vmp1  = Yii::app()->request->getParam('vvmp1', null);
+        $vmp2  = Yii::app()->request->getParam('st1', null);
+        $vmp3  = Yii::app()->request->getParam('module', null);
+        $field = Yii::app()->request->getParam('field', null);
+        $value = Yii::app()->request->getParam('value', null);
+
+        $whiteList = array('vmp4');
+        if (in_array($field, $whiteList))
+            $attr = array(
+                $field => $value
+            );
+
+
+        $criteria = new CDbCriteria();
+        $criteria->compare('vmp1', $vmp1);
+        $criteria->compare('vmp2', $vmp2);
+        $criteria->compare('vmp3', $vmp3);
+
+        $model = Vmp::model()->find($criteria);
+        if (empty($model))
+            $error = true;
+        else
+            $error = !$model->saveAttributes($attr);
+
+        Yii::app()->end(CJSON::encode(array('error' => $error, 'errors' => $model->getErrors())));
+    }
+
+    public function actionUpdateStus()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $value = Yii::app()->request->getParam('value', null);
+        $field = Yii::app()->request->getParam('field', null);
+        $vvmp1 = Yii::app()->request->getParam('vvmp1', null);
+        $st1   = Yii::app()->request->getParam('st1', null);
+
+        $whiteList = array(
+            'stus3'
+        );
+        if (in_array($field, $whiteList))
+            $attr = array(
+                $field => $value
+            );
+
+        $vvmp = Vvmp::model()->findByPk($vvmp1);
+
+        $criteria = new CDbCriteria();
+        $criteria->compare('stus1',  $st1);
+        $criteria->compare('stus18', $vvmp->vvmp3);
+        $criteria->compare('stus19', 8);
+        $criteria->compare('stus20', $vvmp->vvmp4);
+        $criteria->compare('stus21', $vvmp->vvmp5);
+
+        $model = Stus::model()->find($criteria);
+        if (empty($model))
+            $error = true;
+        else
+            $error = !$model->saveAttributes($attr);
+
+        $res = array(
+            'error' => $error
+        );
+
+        if (! empty($model))
+            $res += array('errors' => $model->getErrors());
+
+        Yii::app()->end(CJSON::encode($res));
+    }
 }

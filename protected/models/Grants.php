@@ -7,6 +7,7 @@
  * @property integer $grants1
  * @property integer $grants2
  * @property integer $grants3
+ * @property integer $grants4
  *
  * The followings are the available model relations:
  * @property P $p
@@ -14,6 +15,7 @@
 class Grants extends CActiveRecord
 {
     const EL_JOURNAL = 'grant3';
+    const MODULES = 'grant4';
 	/**
 	 * @return string the associated database table name
 	 */
@@ -30,7 +32,7 @@ class Grants extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('grants1, grants2, grants3', 'numerical', 'integerOnly'=>true),
+			array('grants1, grants2, grants3, grants4', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('grants1, grants2, grants3', 'safe', 'on'=>'search'),
@@ -58,6 +60,7 @@ class Grants extends CActiveRecord
 			'grants1' => 'Grants1',
 			'grants2' => 'Grants2',
 			'grants3' => tt('Эл. журнал'),
+			'grants4' => tt('Ведомости'),
 		);
 	}
 
@@ -82,6 +85,7 @@ class Grants extends CActiveRecord
 		$criteria->compare('grants1',$this->grants1);
 		$criteria->compare('grants2',$this->grants2);
 		$criteria->compare('grants3',$this->grants3);
+		$criteria->compare('grants4',$this->grants4);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -104,6 +108,9 @@ class Grants extends CActiveRecord
         switch($service){
             case self::EL_JOURNAL:
                 $grants = $this->grants3;
+                break;
+            case self::MODULES:
+                $grants = $this->grants4;
                 break;
             default:
                 $grants = null;

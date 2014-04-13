@@ -85,3 +85,18 @@ tr.min-max th {
 .journal_table_1 thead tr {
     height: 68px;
 }
+
+table.modules_table_2 td{
+    text-align: center;
+}
+table.modules_table_2 tr:not(.min-max) input {
+    width: 50%;
+}
+
+div.module_div_table2 {
+    width: 40%;
+}
+
+.modules_table_3 thead tr {
+    height: 68px;
+}

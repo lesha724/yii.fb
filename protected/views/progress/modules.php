@@ -2,7 +2,7 @@
 /* @var $this ProgressController
  * @var $model FilterForm
  */
-    $this->pageHeader=tt('Электронный журнал');
+    $this->pageHeader=tt('Ведение модулей');
     $this->breadcrumbs=array(
         tt('Успеваемость'),
     );
@@ -11,7 +11,7 @@
     Yii::app()->clientScript->registerPackage('chosen');
     Yii::app()->clientScript->registerPackage('gritter');
     Yii::app()->clientScript->registerPackage('spin');
-    Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/progress/journal.js', CClientScript::POS_HEAD);
+    Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/progress/modules.js', CClientScript::POS_HEAD);
 
     $error       = tt('Ошибка! Проверьте правильность вводимых данных!');
     $success     = tt('Cохранено!');
@@ -29,9 +29,16 @@ JS
 <?php
     $this->renderPartial('/widget/year_sem');
 
+
     $this->renderPartial('/widget/filter_form', array(
         'model' => $model,
         'type'  => $type
     ));
 
-    $this->renderPartial('journal/_bottom', array('model' => $model, 'type' => $type));
+
+    $this->renderPartial('modules/_bottom', array(
+        'model' => $model,
+        'type' => $type,
+        'moduleInfo' => $moduleInfo
+    ));
+

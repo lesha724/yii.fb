@@ -1,8 +1,5 @@
 $(document).ready(function(){
 
-
-
-
     $('#modules').dataTable({
         iDisplayLength: 100,
         aaSorting: [],
@@ -20,7 +17,6 @@ $(document).ready(function(){
             sZeroRecords: 'Ничего не найдено'
         }
     });
-
 
     $('#id-date-range-picker-1').daterangepicker({
         format: 'DD/MM/YYYY',
@@ -40,7 +36,6 @@ $(document).ready(function(){
         $('[name=mej4]').val(start.format('YYYY-MM-DD'));
         $('[name=mej5]').val(end.format('YYYY-MM-DD'));
     });
-
 
     initSpinner('spinner2');
 
@@ -73,7 +68,7 @@ $(document).ready(function(){
                 addGritter('', tt.moduleError, 'error')
             else {
                 $("#modules-list").yiiGridView("update", {
-                    data: $("#journal-form").serialize()
+                    data: $("#filter-form").serialize()
                 });
                 addGritter('', tt.moduleSuccess, 'success')
             }
@@ -102,7 +97,7 @@ $(document).ready(function(){
                 $spinner2.hide();
 
                 $("#modules-list").yiiGridView("update", {
-                    data: $("#journal-form").serialize()
+                    data: $("#filter-form").serialize()
                 });
                 addGritter('', tt.moduleDeleted, 'success')
             }

@@ -1,6 +1,6 @@
 <?php
 /* @var $this DefaultController
- * @var $model JournalForm
+ * @var $model FilterForm
  */
 
 

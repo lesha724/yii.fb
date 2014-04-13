@@ -6,7 +6,7 @@ class m140308_081901_grants extends CDbMigration
 	{
 		$sql = <<<SQL
   CREATE TABLE GRANTS (
-	GRANTS1 inte PRIMARY KEY,    /* код P1 */
+	GRANTS1 inte PRIMARY KEY,
 	GRANTS2 inte,    /* код P1 */
 	GRANTS3 smal    /* эл. журнал 0-только к своим 1-ко всем на кафедре*/
   );

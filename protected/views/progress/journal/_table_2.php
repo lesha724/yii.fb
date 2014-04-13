@@ -104,7 +104,7 @@ HTML;
 
         $tr .= '<tr data-st1="'.$st1.'">';
         foreach($dates as $date) {
-            $tr .= table2Tr($date, $marks).'</td>';
+            $tr .= table2Tr($date, $marks);
         }
         $tr .= '</tr>';
     }

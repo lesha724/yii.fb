@@ -81,4 +81,20 @@ class DefaultController extends AdminController
         $this->render('journal', array(
         ));
     }
+
+    public function actionModules()
+    {
+        $settings = Yii::app()->request->getParam('settings', array());
+
+        foreach ($settings as $key => $value) {
+            PortalSettings::model()
+                ->findByPk($key)
+                ->saveAttributes(array(
+                    'ps2' => $value
+                ));
+        }
+
+        $this->render('modules', array(
+        ));
+    }
 }

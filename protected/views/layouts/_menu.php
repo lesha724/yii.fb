@@ -37,10 +37,15 @@ $this->widget('zii.widgets.CMenu', array(
                     'url' => Yii::app()->createUrl('/admin/default/journal'),
                     'active' => $action=='journal' && $module=='admin'
                 ),
+                array(
+                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Ведение модулей'),
+                    'url' => Yii::app()->createUrl('/admin/default/modules'),
+                    'active' => $action=='modules' && $module=='admin'
+                ),
             ),
             'visible' => Yii::app()->user->isAdmin,
         ),
-        array(
+        /*array(
             'label' => '<i class="icon-calendar"></i><span class="menu-text">'.tt('Расписание').'</span><b class="arrow icon-angle-down"></b>',
             'url' => '#',
             'linkOptions'=> array(
@@ -54,7 +59,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'active' => $controller=='timeTable' && $action=='teacher'
                 ),
             ),
-        ),
+        ),*/
         array(
             'label' => '<i class="icon-list"></i><span class="menu-text">'.tt('Успеваемость').'</span><b class="arrow icon-angle-down"></b>',
             'url' => '#',
@@ -68,6 +73,12 @@ $this->widget('zii.widgets.CMenu', array(
                     'url' => Yii::app()->createUrl('/progress/journal'),
                     'visible' => Yii::app()->user->isTch,
                     'active' => $controller=='progress' && $action=='journal'
+                ),
+                array(
+                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Ведение модулей'),
+                    'url' => Yii::app()->createUrl('/progress/modules'),
+                    'visible' => Yii::app()->user->isTch,
+                    'active' => $controller=='progress' && $action=='modules'
                 ),
             ),
         ),
