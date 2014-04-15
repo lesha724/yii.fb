@@ -1,5 +1,5 @@
 <?php
-function table3Tr($field, $marks)
+function table3Tr($field, $marks, $isClosed)
 {
 
     $data_url = $field === 'stus3'
@@ -25,6 +25,9 @@ HTML;
         if ($marks[$field] === false)
             $disabled = 'disabled="disabled"';
     }
+
+    if ($isClosed)
+        $disabled = 'disabled="disabled"';
 
     return sprintf($tr, $mark, $name, $module, $disabled);
 }
@@ -111,7 +114,7 @@ HTML;
 
                 foreach($columns['total1'] as $column) {
                     list($field, $name) = $column;
-                    $tr  .= table3Tr($field, $marks);
+                    $tr  .= table3Tr($field, $marks, $isClosed);
                 }
                 $tr  .= '<td data-total=2 >'.$total_2[$st1].'</td>';
             }
@@ -122,7 +125,7 @@ HTML;
 
                 foreach($columns['total2'] as $column) {
                     list($field, $name) = $column;
-                    $tr  .= table3Tr($field, $marks);
+                    $tr  .= table3Tr($field, $marks, $isClosed);
                 }
 
                 $tr  .= '<td data-total=3 >'.$total_3[$st1].'</td>';

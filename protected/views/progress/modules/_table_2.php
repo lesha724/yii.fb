@@ -1,5 +1,5 @@
 <?php
-function generateTh2($moduleInfo, $i)
+function generateTh2($moduleInfo, $i, $isClosed)
 {
     $min = $moduleInfo['min_mod_'.$i];
     $max = $moduleInfo['max_mod_'.$i];
@@ -8,18 +8,22 @@ function generateTh2($moduleInfo, $i)
     $field2 = 9+2*$i;
 
     $pattern = <<<HTML
-<th><input value="{$min}" maxlength="3" placeholder="min" data-name="vvmp{$field1}" ></th>
-<th><input value="{$max}" maxlength="3" placeholder="max" data-name="vvmp{$field2}" ></th>
+<th><input value="{$min}" maxlength="3" placeholder="min" data-name="vvmp{$field1}" %s></th>
+<th><input value="{$max}" maxlength="3" placeholder="max" data-name="vvmp{$field2}" %s></th>
 HTML;
 
-    return sprintf($pattern);
+    $disabled = $isClosed
+                    ? 'disabled="disabled"'
+                    : '';
+
+    return sprintf($pattern, $disabled, $disabled);
 }
 
-function table2Tr($marks, $module)
+function table2Tr($marks, $module, $isClosed)
 {
     $pattern= <<<HTML
     <td colspan="2">
-        <input value="%s" maxlength="3" data-name="vmp4" data-module="%s">
+        <input value="%s" maxlength="3" data-name="vmp4" data-module="%s" %s>
     </td>
 HTML;
 
@@ -27,7 +31,11 @@ HTML;
                 ? round($marks[$module]['vmp4'], 1)
                 : '';
 
-    return sprintf($pattern, $vmp4, $module);
+    $disabled = $isClosed
+                    ? 'disabled="disabled"'
+                    : '';
+
+    return sprintf($pattern, $vmp4, $module, $disabled);
 }
 
 function countVmpTotal($marks)
@@ -71,7 +79,7 @@ $th = $th2 = '';
 
 for($i = 1; $i <= $modules; $i++) {
     $th  .= '<th colspan="2">'.$moduleInfo['name_modul_'.$i].'</th>';
-    $th2   .= generateTh2($moduleInfo, $i);
+    $th2   .= generateTh2($moduleInfo, $i, $isClosed);
 }
 
 global $total_1;
@@ -85,7 +93,7 @@ foreach($students as $st) {
 
     $tr .= '<tr data-st1="'.$st1.'">';
     for($i = 1; $i <= $modules; $i++) {
-        $tr .= table2Tr($marks, $i);
+        $tr .= table2Tr($marks, $i, $isClosed);
     }
     $tr .= '</tr>';
 }

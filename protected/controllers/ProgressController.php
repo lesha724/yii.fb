@@ -25,6 +25,7 @@ class ProgressController extends Controller
                     'updateVvmp',
                     'insertVmpMark',
                     'updateStus',
+                    'closeModule'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -351,4 +352,24 @@ class ProgressController extends Controller
 
         Yii::app()->end(CJSON::encode($res));
     }
+
+    public function actionCloseModule()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $vvmp1 = Yii::app()->request->getParam('vvmp1', null);
+
+        if (empty($vvmp1))
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $vvmp = Vvmp::model()->findByPk($vvmp1);
+
+        $res = $vvmp->saveAttributes(array(
+            'vvmp7' => date('Y-m-d H:i:s')
+        ));
+
+        Yii::app()->end(CJSON::encode(array('res' => $res)));
+    }
+
 }

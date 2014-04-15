@@ -160,19 +160,19 @@ SQL;
         return $chairs;
     }
 
-    public function getOnlyChairsFor()
+    public function getOnlyChairsFor($filial)
     {
-        $today = date('Y-m-d');
         $sql=<<<SQL
             SELECT K1,K2,K3,K15,K16,K17,K6,K10, K18
 				FROM F
 				inner join k on (f.f1 = k.k7)
-			WHERE f12='1' and f17='0' and k11='1' and k10=$ks1 and (k9 is null) and K1>0
+			WHERE f12='1' and f17='0' and k11='1' and k10=:FILIAL and (k9 is null) and K1>0
 			ORDER BY K3
-
 SQL;
 
-        $chairs = Yii::app()->db->createCommand($sql)->queryAll();
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':FILIAL', $filial);
+        $chairs = $command->queryAll();
 
         return $chairs;
     }

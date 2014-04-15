@@ -107,6 +107,14 @@ $(document).ready(function(){
             $spinner1.hide();
         }, 'json')
     });
+
+    $('#close-module').click(function(){
+        var url = $(this).data('url');
+        $.get(url, {vvmp1: vvmp1}, function(data){
+            if (data.res)
+                $('#filter-form').submit();
+        }, 'json')
+    })
 });
 
 
