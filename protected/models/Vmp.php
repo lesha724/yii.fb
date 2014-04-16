@@ -245,4 +245,31 @@ SQL;
         return $marks;
 
     }
+
+    public function recalculateVmp4()
+    {
+        $array = array(
+            $this->vmp5,
+            $this->vmp6,
+            $this->vmp7
+        );
+
+        $this->saveAttributes(array(
+            'vmp4' => array_sum($array)
+        ));
+    }
+
+    public function isModuleExtended($vvmp1, $module)
+    {
+        $isExtended = Yii::app()->db->createCommand()
+                        ->select('count(*)')
+                        ->from('vmp')
+                        ->where('vmp1 = :VVMP1 AND vmp3 = :MODULE_NUM and (vmp5 <> 0 OR vmp6 <> 0 OR vmp7 <> 0)', array(
+                            ':VVMP1' => $vvmp1,
+                            ':MODULE_NUM' => $module,
+                        ))
+                        ->queryScalar();
+
+        return (bool)$isExtended;
+    }
 }

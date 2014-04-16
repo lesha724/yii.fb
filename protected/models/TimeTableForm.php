@@ -8,7 +8,7 @@
 class TimeTableForm extends CFormModel
 {
 	public $filial = 0;
-	public $chair;
+	public $chair = 0;
 	public $teacher;
 
 	/**
@@ -18,6 +18,7 @@ class TimeTableForm extends CFormModel
 	{
 		return array(
             array('filial', 'required'),
+            array('chair, teacher', 'numerical', 'allowEmpty' => false, 'on' => 'teacher'),
 			array('chair, teacher', 'required', 'on' => 'teacher'),
 		);
 	}

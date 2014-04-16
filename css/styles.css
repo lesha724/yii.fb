@@ -42,11 +42,11 @@ table.journal_table_1{
     text-align: center !important;
 }
 
-.journal_div_table2 td.error, .journal_div_table3 td.error, .journal_div_table2 th.error  {
+.journal-bottom td.error {
     border:1px solid red;
 }
 
-.journal_div_table2 td.success, .journal_div_table3 td.success, .journal_div_table2 th.success  {
+.journal-bottom td.success {
     border:1px solid green;
 }
 
@@ -71,11 +71,13 @@ div.journal_div_table3 {
 }
 tr.min-max {
     height: 28px !important;
+
 }
 
 tr.min-max input {
     width: 40%;
     font-size: 10px;
+
  }
 
 tr.min-max th {
@@ -99,4 +101,13 @@ div.module_div_table2 {
 
 .modules_table_3 thead tr {
     height: 68px;
+}
+
+
+.expanded-module input {
+    width: 90%;
+}
+
+.expanded-module tr td:last-child {
+    text-align: center;
 }

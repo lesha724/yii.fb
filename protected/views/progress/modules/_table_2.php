@@ -19,7 +19,7 @@ HTML;
     return sprintf($pattern, $disabled, $disabled);
 }
 
-function table2Tr($marks, $module, $isClosed)
+function table2Tr($marks, $module, $isClosed, $areModulesExtended)
 {
     $pattern= <<<HTML
     <td colspan="2">
@@ -31,9 +31,12 @@ HTML;
                 ? round($marks[$module]['vmp4'], 1)
                 : '';
 
-    $disabled = $isClosed
-                    ? 'disabled="disabled"'
-                    : '';
+    $disabled = '';
+    if ($isClosed)
+        $disabled = 'disabled="disabled"';
+    elseif ($areModulesExtended[$module])
+        $disabled = 'disabled="disabled"';
+
 
     return sprintf($pattern, $vmp4, $module, $disabled);
 }
@@ -54,10 +57,11 @@ function countVmpTotal($marks)
 
 $url       = Yii::app()->createUrl('/progress/insertVmpMark');
 $minMaxUrl = Yii::app()->createUrl('/progress/updateVvmp');
+$extendedModuleUrl = Yii::app()->createUrl('/progress/renderExtendedModule');
 $table = <<<HTML
 <div class="journal_div_table2 module_div_table2" >
     <table class="table table-striped table-bordered table-hover journal_table modules_table_2">
-        <thead data-url="{$minMaxUrl}">
+        <thead data-url="{$minMaxUrl}" data-extended_module_url="{$extendedModuleUrl}">
             <tr>
                 %s
             </tr>
@@ -73,14 +77,27 @@ $table = <<<HTML
 HTML;
 
 $modules = $moduleInfo['kol_modul'];
+$vvmp1   = $moduleInfo['vvmp1'];
 
 /*** 2 table ***/
 $th = $th2 = '';
 
 for($i = 1; $i <= $modules; $i++) {
-    $th  .= '<th colspan="2">'.$moduleInfo['name_modul_'.$i].'</th>';
-    $th2   .= generateTh2($moduleInfo, $i, $isClosed);
+    $name = $moduleInfo['name_modul_'.$i];
+    $th  .= <<<HTML
+        <th colspan="2" data-module_num="{$i}">
+            <i class="icon-hand-right icon-animated-hand-pointer blue"></i>
+            <a class="green show-extended-module" role="button" href="#modal-table">{$name}</a>
+        </th>
+HTML;
+    $th2 .= generateTh2($moduleInfo, $i, $isClosed);
 }
+
+$areModulesExtended = array();
+for($i = 1; $i <= $modules; $i++) {
+    $areModulesExtended[$i] = Vmp::model()->isModuleExtended($vvmp1, $i);
+}
+
 
 global $total_1;
 $tr = '';
@@ -93,10 +110,13 @@ foreach($students as $st) {
 
     $tr .= '<tr data-st1="'.$st1.'">';
     for($i = 1; $i <= $modules; $i++) {
-        $tr .= table2Tr($marks, $i, $isClosed);
+        $tr .= table2Tr($marks, $i, $isClosed, $areModulesExtended);
     }
     $tr .= '</tr>';
 }
 echo sprintf($table, $th, $th2, $tr); // 2 table
+
+
+
 
 

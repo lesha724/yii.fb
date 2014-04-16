@@ -25,7 +25,8 @@ class ProgressController extends Controller
                     'updateVvmp',
                     'insertVmpMark',
                     'updateStus',
-                    'closeModule'
+                    'closeModule',
+                    'renderExtendedModule'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -289,7 +290,7 @@ class ProgressController extends Controller
         $field = Yii::app()->request->getParam('field', null);
         $value = Yii::app()->request->getParam('value', null);
 
-        $whiteList = array('vmp4');
+        $whiteList = array('vmp4', 'vmp5', 'vmp6', 'vmp7');
         if (in_array($field, $whiteList))
             $attr = array(
                 $field => $value
@@ -306,6 +307,10 @@ class ProgressController extends Controller
             $error = true;
         else
             $error = !$model->saveAttributes($attr);
+
+        // recalculate vmp4 if vmp5, vmp6 or vmp7 were changed
+        if (! $error && in_array($field, array('vmp5', 'vmp6', 'vmp7')))
+            $model->recalculateVmp4();
 
         Yii::app()->end(CJSON::encode(array('error' => $error, 'errors' => $model->getErrors())));
     }
@@ -372,4 +377,32 @@ class ProgressController extends Controller
         Yii::app()->end(CJSON::encode(array('res' => $res)));
     }
 
+    public function actionRenderExtendedModule()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $uo1  = Yii::app()->request->getParam('uo1', null);
+        $gr1  = Yii::app()->request->getParam('gr1', null);
+        $d1   = Yii::app()->request->getParam('d1', null);
+        $module_num = Yii::app()->request->getParam('module_num', null);
+
+
+        $model = new FilterForm;
+        $model->group = $gr1;
+        $model->discipline = $d1;
+        $moduleInfo = $this->fillModulesFor($model);
+
+
+        if (empty($uo1) || empty($gr1) || empty($d1) || empty($module_num))
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $students = St::model()->getStudentsForJournal($gr1, $uo1);
+
+        $this->renderPartial('modules/_extended_module', array(
+            'students'   => $students,
+            'moduleInfo' => $moduleInfo,
+            'module_num' => $module_num
+        ));
+    }
 }

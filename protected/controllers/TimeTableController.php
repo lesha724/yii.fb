@@ -27,9 +27,9 @@ class TimeTableController extends Controller
     {
         $model = new TimeTableForm;
         $model->scenario = 'teacher';
+
         if (isset($_REQUEST['TimeTableForm']))
             $model->attributes=$_REQUEST['TimeTableForm'];
-
 
         $this->render('teacher', array(
             'model' => $model,

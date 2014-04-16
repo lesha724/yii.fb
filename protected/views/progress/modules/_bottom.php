@@ -22,8 +22,9 @@ HTML;
     }
 
     $vvmp1 = $moduleInfo['vvmp1'];
+    $uo1   = $moduleInfo['uo1'];
 
-    $students = St::model()->getStudentsForJournal($model->group, $moduleInfo['uo1']);
+    $students = St::model()->getStudentsForJournal($model->group, $uo1);
 
     $isClosed = !empty($moduleInfo['data_close_ved']);
 
@@ -83,6 +84,7 @@ HTML;
     Yii::app()->clientScript->registerScript('module-vars', <<<JS
         vvmp1 = {$vvmp1};
         ps16  = {$ps16};
+        uo1   = {$uo1};
 JS
         , CClientScript::POS_READY);
 
