@@ -55,6 +55,26 @@ function countVmpTotal($marks)
     return $total;
 }
 
+function generateModuleHeader($i, $name, $isClosed)
+{
+    if (! $isClosed)
+        $pattern = <<<HTML
+<th colspan="2" data-module_num="%s">
+    <i class="icon-hand-right icon-animated-hand-pointer blue"></i>
+    <a class="green show-extended-module" role="button" href="#modal-table">%s</a>
+</th>
+HTML;
+    else
+        $pattern = <<<HTML
+<th colspan="2" data-module_num="%s">
+    %s
+</th>
+HTML;
+
+
+    return sprintf($pattern, $i, $name);
+}
+
 $url       = Yii::app()->createUrl('/progress/insertVmpMark');
 $minMaxUrl = Yii::app()->createUrl('/progress/updateVvmp');
 $extendedModuleUrl = Yii::app()->createUrl('/progress/renderExtendedModule');
@@ -84,12 +104,7 @@ $th = $th2 = '';
 
 for($i = 1; $i <= $modules; $i++) {
     $name = $moduleInfo['name_modul_'.$i];
-    $th  .= <<<HTML
-        <th colspan="2" data-module_num="{$i}">
-            <i class="icon-hand-right icon-animated-hand-pointer blue"></i>
-            <a class="green show-extended-module" role="button" href="#modal-table">{$name}</a>
-        </th>
-HTML;
+    $th  .= generateModuleHeader($i, $name, $isClosed);
     $th2 .= generateTh2($moduleInfo, $i, $isClosed);
 }
 

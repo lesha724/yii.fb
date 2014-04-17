@@ -70,9 +70,9 @@ $minMaxUrl = Yii::app()->createUrl('/progress/updateVvmp');
                 <thead data-url="<?=$minMaxUrl?>">
                     <tr>
                         <th rowspan="2"><?=tt('ФИО')?></th>
-                        <th rowspan="2" style="width:15%">VMP5</th>
-                        <th rowspan="2" style="width:15%">VMP6</th>
-                        <th rowspan="2" style="width:15%">VMP7</th>
+                        <th rowspan="2" style="width:15%"><?=PortalSettings::model()->findByPk(17)->ps2?></th>
+                        <th rowspan="2" style="width:15%"><?=PortalSettings::model()->findByPk(18)->ps2?></th>
+                        <th rowspan="2" style="width:15%"><?=PortalSettings::model()->findByPk(19)->ps2?></th>
                         <th colspan="2" style="width:15%"><?=$moduleInfo['name_modul_'.$module_num]?></th>
                     </tr>
                     <tr class="min-max">
