@@ -114,29 +114,44 @@ div.module_div_table2 {
 
 
 table.timeTable {
-    border:1px solid black;
     border-spacing: 0px;
     border-collapse: collapse;
     font-size: 0.9em;
     line-height: 1.4em;
+    border: 1px solid #ddd;
 }
 table.timeTable td{
-    border:1px solid black;
     text-align: center;
+    padding: 0;
 }
 
 .lh-50{
     line-height: 50px;
 }
-.lh-25{
-    line-height: 25px;
+
+
+table.timeTable .cell {
+    min-height: 50px;
+    padding: 4px;
+    border: 1px solid #ddd;
+    background: linear-gradient(to bottom, #fcfcfc, #f6f6f6) repeat-x scroll 0 0 #F3F3F3;
 }
 
-.minh-50 {
-    min-height: 50px;
-    border:1px solid black
-}
-.h-25 {
+table.timeTable td div:first-child {
+    padding: 4px;
     height: 25px;
-    border:1px solid black
+    line-height: 25px;
+    background-color: #6FB3E0;
+    color: white;
+    font-weight: bold;
+    border-left: 1px solid #DDDDDD;
+    border-right: 1px solid #DDDDDD;
+}
+
+table.timeTable .closed *{
+    background: linear-gradient(to top, #b8b8b8, #a4a4a4);
+}
+
+table.timeTable tr td:not(:first-child) div{
+    min-width: 85px;
 }

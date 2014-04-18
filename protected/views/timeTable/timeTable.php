@@ -15,10 +15,12 @@ foreach(range(1,7) as $dayOfWeek) {// дни недели 1-пн
     $min  = $minMax['min'][$dayOfWeek];
     $max  = $minMax['max'][$dayOfWeek];
 
+
+
     $html .= '<td>
-                  <div class="h-25 lh-25">'.$name.'</div>';
+                  <div>'.$name.'</div>';
     foreach (range($min, $max) as $lesson) {
-        $html .= '<div class="minh-50 lh-50">'.$lesson.'</div>';
+        $html .= '<div class="lh-50 cell">'.$lesson.'</div>';
     }
     $html .= '</td>';
 
@@ -30,17 +32,22 @@ foreach(range(1,7) as $dayOfWeek) {// дни недели 1-пн
         $tt   = $timeTable[$day]['timeTable'];
         $date = $timeTable[$day]['date'];
 
-        $html .= '<td>
-                    <div class="h-25 lh-25">'.$date.'</div>';
+        $closedClass = $day < strtotime($model->date1) || $day > strtotime($model->date2)
+                           ? 'class="closed"'
+                           : '';
+
+        $html .= '<td '.$closedClass.'>
+                    <div>'.$date.'</div>';
 
         foreach (range($min, $max) as $lesson) {
 
-            $html .= '<div class="minh-50">';
+            $text = $color = '';
+            if (isset($tt[$lesson])) {
+                $text  = $tt[$lesson]['text'];
+                $color = SH::getLessonColor($tt[$lesson]['tip']);
+            }
 
-                if (isset($tt[$lesson]))
-                    $html .= $tt[$lesson]['text'];
-
-            $html .= '</div>';
+            $html .= '<div class="cell" style="background:'.$color.'">'.$text.'</div>';
         }
 
         $html .= '</td>';

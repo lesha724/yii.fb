@@ -60,6 +60,52 @@ class ShortCodes extends CApplicationComponent
         }
         return $type;
     }
+
+    public static function getLessonColor($type)
+    {
+        $type = mb_strtolower($type);
+        switch($type){
+            case 'лк':
+            case 'улк':
+                $color = '#fffadb'; break;
+            case 'пз':
+            case 'пз1':
+            case 'пз2':
+            case 'пз3':
+            case 'пз4':
+            case 'упз':
+                $color = '#e2ffe2'; break;
+            case 'сем':
+            case 'сем1':
+            case 'сем2':
+            case 'сем3':
+            case 'сем4':
+                $color = '#fff0ff'; break;
+            case 'лб':
+            case 'лб1':
+            case 'лб2':
+            case 'лб3':
+            case 'лб4':
+            case 'улб':
+            case 'улб1':
+            case 'улб2':
+            case 'улб3':
+            case 'улб4':
+                $color = '#c4e5ff'; break;
+            case 'экз':	$color = '#ffe1e1'; break;
+            case 'зач':	$color = '#ddffdd'; break;
+            case 'кр':	$color = '#d6d6bd'; break;
+            case 'кп':	$color = '#d4d4b9'; break;
+            case 'доп': $color = '#e3ebe4'; break;
+            case 'инд': $color = '#fffadd'; break;
+            case 'гек': $color = '#ff0000'; break;
+            case 'кнч': $color = '#dfefff'; break;
+            case 'конс': $color = '#ffe2ff'; break;
+            case 'пер': $color = '#e2ffe2'; break;
+            default: $color = '';
+        }
+        return $color;
+    }
 }
 
 class SH extends ShortCodes
