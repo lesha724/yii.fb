@@ -137,7 +137,7 @@ table.timeTable .cell {
     background: linear-gradient(to bottom, #fcfcfc, #f6f6f6) repeat-x scroll 0 0 #F3F3F3;
 }
 
-table.timeTable td div:first-child {
+table.timeTable td div:first-child:not(.arrow) {
     padding: 4px;
     height: 25px;
     line-height: 25px;
@@ -152,6 +152,10 @@ table.timeTable .closed *{
     background: linear-gradient(to top, #b8b8b8, #a4a4a4);
 }
 
-table.timeTable tr td:not(:first-child) div{
+table.timeTable tr td:not(:first-child) div:not(.arrow){
     min-width: 85px;
+}
+
+table.timeTable div.hint {
+    display: none;
 }

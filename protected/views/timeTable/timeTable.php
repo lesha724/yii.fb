@@ -41,13 +41,17 @@ foreach(range(1,7) as $dayOfWeek) {// дни недели 1-пн
 
         foreach (range($min, $max) as $lesson) {
 
-            $text = $color = '';
+            $shortText = $fullText = $color = '';
             if (isset($tt[$lesson])) {
-                $text  = $tt[$lesson]['text'];
+                $shortText  = $tt[$lesson]['shortText'];
+                $fullText   = $tt[$lesson]['fullText'];
                 $color = SH::getLessonColor($tt[$lesson]['tip']);
             }
 
-            $html .= '<div class="cell" style="background:'.$color.'">'.$text.'</div>';
+            $html .= <<<HTML
+<div class="cell" style="background:{$color}" data-rel="popover" data-placement="right" data-content="{$fullText}">{$shortText}</div>
+HTML;
+
         }
 
         $html .= '</td>';

@@ -18,7 +18,7 @@ JS
             <span class="add-on">
                 <i class="icon-calendar"></i>
             </span>
-            <input class="span10" type="text" name="date-range-picker" id="id-date-range-picker-1" value="<?=$date1.' - '.$date2?>"/>
+            <input class="span10" type="text" id="id-date-range-picker-1" value="<?=$date1.' - '.$date2?>"/>
         </div>
     </div>
 
@@ -26,4 +26,7 @@ JS
         <i class="icon-plus bigger-110"></i>
         <?=tt('Изменить')?>
     </button>
+
+
+
 </div>

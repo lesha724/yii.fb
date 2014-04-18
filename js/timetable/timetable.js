@@ -27,4 +27,6 @@ $(document).ready(function(){
     $(document).on('change', '#TimeTableForm_teacher', function(){
         $(this).closest('form').submit();
     });
+
+    $('[data-rel=popover]').popover({html:true});
 });

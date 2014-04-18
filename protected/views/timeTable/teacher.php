@@ -38,8 +38,18 @@ echo '<fieldset>';
     $this->renderPartial('_date_interval', array(
         'date1' => $model->date1,
         'date2' => $model->date2,
+        'r11'   => $model->r11,
     ));
 
+    /*$label = $form->label($model, 'r11');
+    $input = $form->textField($model, 'r11', array('class'=>'input-mini', 'placeholder' => tt('дней')));
+echo <<<HTMl
+    <div class="control-group">
+        {$label}
+        <div class="controls">{$input}</div>
+    </div>
+HTMl;
+*/
     echo $form->hiddenField($model, 'date1');
     echo $form->hiddenField($model, 'date2');
 

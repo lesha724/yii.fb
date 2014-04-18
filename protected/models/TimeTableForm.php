@@ -13,6 +13,7 @@ class TimeTableForm extends CFormModel
 
     public $date1;
     public $date2;
+    public $r11 = 5;
 
 	/**
 	 * Declares the validation rules.
@@ -21,7 +22,7 @@ class TimeTableForm extends CFormModel
 	{
 		return array(
             array('filial', 'required'),
-            array('date1, date2', 'safe'),
+            array('date1, date2, r11', 'safe'),
             array('chair, teacher', 'numerical', 'allowEmpty' => false, 'on' => 'teacher'),
 			array('chair, teacher', 'required', 'on' => 'teacher'),
 		);
@@ -38,6 +39,7 @@ class TimeTableForm extends CFormModel
 			'filial'=> tt('Филиал'),
 			'chair'=> tt('Кафедра'),
 			'teacher'=> tt('Преподаватель'),
+            'r11' => tt('Индикация изменений в расписании')
 		);
 	}
 
@@ -106,7 +108,8 @@ class TimeTableForm extends CFormModel
 
                 $res[$r2]['timeTable'][$r3] = $day;
 
-                $res[$r2]['timeTable'][$r3]['text'] = $this->cellTextForTeach($day);
+                $res[$r2]['timeTable'][$r3]['shortText'] = $this->cellShortTextForTeach($day);
+                $res[$r2]['timeTable'][$r3]['fullText']  = $this->cellFullTextForTeach($day);
 
             } else
                 $res[$r2]['timeTable'][$r3]['gr3'] .= ','.$day['gr3'];
@@ -162,7 +165,7 @@ class TimeTableForm extends CFormModel
         return array($monday, $sunday);
     }
 
-    public function cellTextForTeach($day)
+    public function cellShortTextForTeach($day)
     {
         $d3  = $day['d3'];
         $tip = $day['tip'];
@@ -173,6 +176,26 @@ class TimeTableForm extends CFormModel
             {$d3}[{$tip}]<br>
             {$gr3}<br>
             ауд. {$a2}
+HTML;
+
+        return sprintf(trim($pattern));
+    }
+
+    public function cellFullTextForTeach($day)
+    {
+        $d2  = $day['d2'];
+        $tip = $day['tip'];
+        $gr3 = $day['gr3'];
+        $a2  = $day['a2'];
+        $class = tt('ауд');
+        $text  = tt('Добавлено');
+        $added = date('d.m.Y H:i', strtotime($day['r11']));
+
+        $pattern = <<<HTML
+            {$d2}[{$tip}]<br>
+            {$gr3}<br>
+            {$class}. {$a2}<br>
+            {$text}: {$added}
 HTML;
 
         return sprintf(trim($pattern));
