@@ -111,3 +111,32 @@ div.module_div_table2 {
 .expanded-module tr td:last-child {
     text-align: center;
 }
+
+
+table.timeTable {
+    border:1px solid black;
+    border-spacing: 0px;
+    border-collapse: collapse;
+    font-size: 0.9em;
+    line-height: 1.4em;
+}
+table.timeTable td{
+    border:1px solid black;
+    text-align: center;
+}
+
+.lh-50{
+    line-height: 50px;
+}
+.lh-25{
+    line-height: 25px;
+}
+
+.minh-50 {
+    min-height: 50px;
+    border:1px solid black
+}
+.h-25 {
+    height: 25px;
+    border:1px solid black
+}

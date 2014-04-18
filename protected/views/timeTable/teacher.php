@@ -3,6 +3,7 @@
  *
  * @var TimeTableController $this
  * @var TimeTableForm $model
+ * @var CActiveForm $form
  */
 
 $this->pageHeader=tt('Расписание преподавателя');
@@ -34,6 +35,14 @@ echo '<fieldset>';
     echo $form->label($model, 'teacher');
     echo $form->dropDownList($model, 'teacher', $teachers, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;')));
 
+    $this->renderPartial('_date_interval', array(
+        'date1' => $model->date1,
+        'date2' => $model->date2,
+    ));
+
+    echo $form->hiddenField($model, 'date1');
+    echo $form->hiddenField($model, 'date2');
+
 echo '</fieldset>';
 
 $this->endWidget();
@@ -42,5 +51,12 @@ echo <<<HTML
     <span id="spinner1"></span>
 HTML;
 
+
+
+
 if (! empty($model->teacher))
-    echo $model->teacher;
+    $this->renderPartial('timeTable', array(
+        'model'     => $model,
+        'timeTable' => $timeTable,
+        'minMax'    => $minMax,
+    ));

@@ -482,4 +482,24 @@ SQL;
         }
         return $res;
     }
+
+    public static function getTimeTable($p1, $date1, $date2)
+    {
+        $sql = <<<SQL
+        SELECT nday,r3,r2, d36,d37,d3,d2,tip,gr3,a2,r11,gr13_,d27,d28,d32,d33,d34,d35,us4
+        FROM RAPR(:P1, :DATE_1, :DATE_2)
+        ORDER BY r2,r3
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', $p1);
+        $command->bindValue(':DATE_1', $date1);
+        $command->bindValue(':DATE_2', $date2);
+        $timeTable = $command->queryAll();
+
+        if (empty($timeTable))
+            return array();
+
+        return $timeTable;
+    }
 }
