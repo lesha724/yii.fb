@@ -23,7 +23,8 @@ if (! empty($model->group)):
     }
     $nr1 = array_values(array_unique($nr1));
 
-    $ps9 = PortalSettings::model()->findByPk(9)->ps2;
+    $ps9  = PortalSettings::model()->findByPk(9)->ps2;
+    $ps20 = PortalSettings::model()->findByPk(20)->ps2;// use sub modules
 
     $students = St::model()->getStudentsForJournal($model->group, $uo1);
 
@@ -38,15 +39,17 @@ HTML;
     $this->renderPartial('journal/_table_2', array(
         'students' => $students,
         'dates' => $dates,
-        'nr1' => $nr1,
-        'ps9' => $ps9
+        'nr1'   => $nr1,
+        'ps9'   => $ps9,
+        'ps20'  => $ps20,
     ));
 
     $this->renderPartial('journal/_table_3', array(
         'students' => $students,
-        'dates' => $dates,
-        'nr1' => $nr1,
-        'ps9' => $ps9
+        'dates'    => $dates,
+        'nr1'      => $nr1,
+        'ps9'      => $ps9,
+        'ps20'     => $ps20,
     ));
 echo <<<HTML
 </div>
@@ -65,11 +68,12 @@ HTML;
     $arrayNR1 = CJSON::encode($nr1);
 
     Yii::app()->clientScript->registerScript('journal-vars', <<<JS
-        nr1 = {$arrayNR1};
-        ps9 = {$ps9};
+        nr1  = {$arrayNR1};
+        ps9  = {$ps9};
+        ps20 = {$ps20};
         insertMarkUrl = "{$insertMarkUrl}";
 JS
-    , CClientScript::POS_READY);
+    , CClientScript::POS_HEAD);
 
 
 endif;

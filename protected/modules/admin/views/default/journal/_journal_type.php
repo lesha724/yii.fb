@@ -32,6 +32,12 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         <?=CHtml::hiddenField('settings[9]', PortalSettings::model()->findByPk(9)->ps2)?>
     </div>
 
+    <div class="control-group">
+        <?=CHtml::checkBox('', PortalSettings::model()->findByPk(20)->ps2, $htmlOptions2);?>
+        <span class="lbl"> <?=tt('Использовать субмодули')?></span>
+        <?=CHtml::hiddenField('settings[20]', PortalSettings::model()->findByPk(20)->ps2)?>
+    </div>
+
     <div class="form-actions">
         <button type="submit" class="btn btn-info btn-small">
             <i class="icon-ok bigger-110"></i>

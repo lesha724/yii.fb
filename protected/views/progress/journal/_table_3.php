@@ -40,6 +40,20 @@ HTML;
     return sprintf($th2, $total['min'], $total['max']);
 }
 
+function generateTotal1Header($ps20)
+{
+    $pattern = <<<HTML
+        <th colspan="2">%s</th>
+HTML;
+
+    if ($ps20 == 1)
+        $name = tt('Итого по субмодулям');
+    else
+        $name = tt('Итого');
+
+    return sprintf($pattern, $name);
+}
+
     $url = Yii::app()->createUrl('/progress/insertDsejMark');
     $table = <<<HTML
 <div class="journal_div_table3" data-url="{$url}">
@@ -64,7 +78,7 @@ HTML;
     $columns     = PortalSettings::model()->getJournalExtraColumns();
     $showTotal   = !empty($columns);
 
-    $th  = '<th colspan="2">'.tt('Итого').'</th>';
+    $th  = generateTotal1Header($ps20);
     $th2 = table3Th2($nr1, $ps9);
 
     foreach($columns as $column) {
@@ -80,7 +94,6 @@ HTML;
     foreach ($students as $st) {
 
         $st1 = $st['st1'];
-
 
         $marks = Dsej::model()->getMarksForStudent($st['st1'], $nr1);
         $total_2[$st1] = $total_1[$st1] + countDSEJTotal($marks, $columns);

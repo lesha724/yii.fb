@@ -28,5 +28,5 @@ $(document).ready(function(){
         $(this).closest('form').submit();
     });
 
-    $('[data-rel=popover]').popover({html:true});
+    initPopovers();
 });

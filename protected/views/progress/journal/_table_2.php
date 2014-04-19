@@ -61,6 +61,35 @@ HTML;
     return sprintf($pattern);
 }
 
+function generateColumnName($date, $ps20)
+{
+    if ($ps20 == 1 && $date['priz'] == 1)
+        $pattern = <<<HTML
+<th colspan="2" data-submodule="true">
+    <i class="icon-hand-right icon-animated-hand-pointer blue"></i>
+    <span data-rel="popover" data-placement="top" data-content="{$date['tema']}" class="green">%s</span>
+</th>
+HTML;
+    else
+        $pattern = <<<HTML
+<th colspan="2">%s</th>
+HTML;
+
+    $name = $date['formatted_date'].' '.SH::convertUS4($date['us4']);
+
+    return sprintf($pattern, $name);
+}
+
+function countSubModulesTotal($date, $marks)
+{
+    $key = $date['nr1'].'/'.$date['r2'].'/0'; // 0 - r3
+
+    $mark = $marks[$key]['steg9'] != 0
+                ? $marks[$key]['steg9']
+                : $marks[$key]['steg5'];
+    return $mark;
+}
+
     $url       = Yii::app()->createUrl('/progress/insertStegMark');
     $minMaxUrl = Yii::app()->createUrl('/progress/insertMmbjMark');
     $table = <<<HTML
@@ -88,10 +117,18 @@ HTML;
     $column = 1;
 
     foreach($dates as $date) {
-        $th    .= '<th colspan="2">'.$date['formatted_date'].' '.SH::convertUS4($date['us4']).'</th>';
+        $th    .= generateColumnName($date, $ps20);
         $th2   .= generateTh2($minMax, $column, $ps9);
         $column++;
     }
+
+    // submodules indexes are needed in order to recalculate total_1 value
+    $subModules = array();
+    if ($ps20 == 1)
+        foreach($dates as $key => $date) {
+            if ($date['priz'] == 1)
+                $subModules[] = $key;
+        }
 
     global $total_1;
     $tr = '';
@@ -100,11 +137,18 @@ HTML;
         $st1 = $st['st1'];
 
         $marks = Steg::model()->getMarksForStudent($st1, $nr1);
-        $total_1[$st1] = countSTEGTotal($marks);
+        $total_1[$st1] = 0;
+
+        if ($ps20 == 0)
+            $total_1[$st1] = countSTEGTotal($marks);
 
         $tr .= '<tr data-st1="'.$st1.'">';
-        foreach($dates as $date) {
+        foreach($dates as $key => $date) {
+
             $tr .= table2Tr($date, $marks);
+
+            if ($ps20 == 1 && in_array($key, $subModules))
+                $total_1[$st1] += countSubModulesTotal($date, $marks);
         }
         $tr .= '</tr>';
     }

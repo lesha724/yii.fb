@@ -2,6 +2,8 @@ $(document).ready(function(){
 
     initSpinner('spinner1');
 
+    initPopovers();
+
     $spinner1 = $('#spinner1');
 
     $('div[class*=journal_div_table] tr:not(.min-max) input').change(function(){
@@ -112,6 +114,7 @@ $(document).ready(function(){
             $spinner1.hide();
         }, 'json')
     });
+
 });
 
 
@@ -123,7 +126,15 @@ function recalculateBothTotal(st1)
     var table_2 = 'div.journal_div_table2 tr[data-st1='+st1+']';
     var table_3 = 'div.journal_div_table3 tr[data-st1='+st1+']';
 
+    var submodules = [];
+    if (ps20 == 1)
+        var submodules = getSubmodulesIndexes();
+
     $(table_2 +' td').each(function(){
+
+        var onlySubmodules = (ps20 == 1 && $.inArray($(this).index(), submodules) == -1);
+        if (onlySubmodules)
+            return;
 
         var mark = calculateMarkFor(this);
 
@@ -180,4 +191,13 @@ function recalculateValueFor(name)
     });
 
     $(table_3 +' th[data-total='+name+']').text(total);
+}
+
+function getSubmodulesIndexes()
+{
+    var submodules = [];
+    $('.journal_div_table2 th[data-submodule]').each(function(){
+        submodules.push($(this).index());
+    });
+    return submodules;
 }

@@ -24,3 +24,8 @@ function addGritter(title, text, className)
     }
     $.gritter.add(obj)
 }
+
+function initPopovers()
+{
+    $('[data-rel=popover]').popover({html:true});
+}
