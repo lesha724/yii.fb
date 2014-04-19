@@ -150,6 +150,14 @@ function recalculateBothTotal(st1)
             total_2 += mark;
     });
 
+    if (ps20 == 1) {
+        if (submodules.length > 0)
+            total_1 = (total_1/submodules.length).toFixed(1);
+        if (typeof pbal[total_1] != "undefined"){
+            total_1 = pbal[total_1]// convert mark
+        }
+    }
+
     $(table_3 +' td[data-total=1]').text(total_1);
     $(table_3 +' td[data-total=2]').text(total_1 + total_2);
 }

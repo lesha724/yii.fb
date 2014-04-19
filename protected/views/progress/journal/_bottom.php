@@ -28,6 +28,8 @@ if (! empty($model->group)):
 
     $students = St::model()->getStudentsForJournal($model->group, $uo1);
 
+    $pbal     = Pbal::model()->getAllInArray();
+
 echo <<<HTML
 <div class="journal-bottom">
 HTML;
@@ -42,6 +44,7 @@ HTML;
         'nr1'   => $nr1,
         'ps9'   => $ps9,
         'ps20'  => $ps20,
+        'pbal'  => $pbal,
     ));
 
     $this->renderPartial('journal/_table_3', array(
@@ -65,13 +68,15 @@ HTML;
 
 
     $insertMarkUrl = Yii::app()->createAbsoluteUrl('/progress/insertMark');
-    $arrayNR1 = CJSON::encode($nr1);
+    $arrayNR1  = CJSON::encode($nr1);
+    $arrayPbal = CJSON::encode($pbal);
 
     Yii::app()->clientScript->registerScript('journal-vars', <<<JS
         nr1  = {$arrayNR1};
         ps9  = {$ps9};
         ps20 = {$ps20};
         insertMarkUrl = "{$insertMarkUrl}";
+        pbal = {$arrayPbal};
 JS
     , CClientScript::POS_HEAD);
 

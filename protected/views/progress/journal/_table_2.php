@@ -80,7 +80,7 @@ HTML;
     return sprintf($pattern, $name);
 }
 
-function countSubModulesTotal($date, $marks)
+function getSubModulesMark($date, $marks)
 {
     $key = $date['nr1'].'/'.$date['r2'].'/0'; // 0 - r3
 
@@ -88,6 +88,29 @@ function countSubModulesTotal($date, $marks)
                 ? $marks[$key]['steg9']
                 : $marks[$key]['steg5'];
     return $mark;
+}
+
+function countTotal1($ps20, $dates, $marks, $pbal)
+{
+    $res = 0;
+
+    if ($ps20 == 0)
+        $res = countSTEGTotal($marks);
+    else {
+        $subModuleMarks = array();
+        foreach($dates as $date) {
+            if ($date['priz'] == 1) // is sub module?
+                $subModuleMarks[] = getSubModulesMark($date, $marks);
+        }
+        if (! empty($subModuleMarks)) {
+            $res = (string)round(array_sum($subModuleMarks)/count($subModuleMarks), 1);
+
+            if (isset($pbal[$res]))
+                $res = $pbal[$res];
+        }
+    }
+
+    return $res;
 }
 
     $url       = Yii::app()->createUrl('/progress/insertStegMark');
@@ -113,7 +136,7 @@ HTML;
     $minMax = Mmbj::model()->getDataFor($nr1);
 
     /*** 2 table ***/
-    $th = $th2 = '';
+    $th = $th2 = $tr = '';
     $column = 1;
 
     foreach($dates as $date) {
@@ -122,36 +145,22 @@ HTML;
         $column++;
     }
 
-    // submodules indexes are needed in order to recalculate total_1 value
-    $subModules = array();
-    if ($ps20 == 1)
-        foreach($dates as $key => $date) {
-            if ($date['priz'] == 1)
-                $subModules[] = $key;
-        }
-
     global $total_1;
-    $tr = '';
+
     foreach($students as $st) {
 
         $st1 = $st['st1'];
 
         $marks = Steg::model()->getMarksForStudent($st1, $nr1);
-        $total_1[$st1] = 0;
-
-        if ($ps20 == 0)
-            $total_1[$st1] = countSTEGTotal($marks);
+        $total_1[$st1] = countTotal1($ps20, $dates, $marks, $pbal);
 
         $tr .= '<tr data-st1="'.$st1.'">';
         foreach($dates as $key => $date) {
-
             $tr .= table2Tr($date, $marks);
-
-            if ($ps20 == 1 && in_array($key, $subModules))
-                $total_1[$st1] += countSubModulesTotal($date, $marks);
         }
         $tr .= '</tr>';
     }
+
     echo sprintf($table, $th, $th2, $tr); // 2 table
 
 
