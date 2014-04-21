@@ -151,10 +151,11 @@ function recalculateBothTotal(st1)
     });
 
     if (ps20 == 1) {
-        if (submodules.length > 0)
+        if (submodules.length > 0) {
             total_1 = (total_1/submodules.length).toFixed(1);
-        if (typeof pbal[total_1] != "undefined"){
-            total_1 = pbal[total_1]// convert mark
+            if (typeof pbal[total_1] != "undefined"){
+                total_1 = pbal[total_1]; // convert mark
+            }
         }
     }
 
