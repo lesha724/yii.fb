@@ -16,8 +16,8 @@ $(document).ready(function(){
 
         $.get(url, $form.serialize(), function(data){
 
-            var html = '<fieldset>'+$('#'+formId, data).html()+'</fieldset>';
-            $('fieldset', $form).replaceWith(html);
+            var html = $('#'+formId, data).html();
+            $('div', $form).replaceWith(html);
             initChosen();
             $spinner1.hide();
         })
@@ -29,4 +29,7 @@ $(document).ready(function(){
     });
 
     initPopovers();
+
+    initTooltips();
+
 });

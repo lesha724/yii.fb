@@ -12,21 +12,16 @@ JS
 
 ?>
 
-<div style="margin-top:1%">
-    <div class="control-group span2">
-        <div class="row-fluid input-prepend">
-            <span class="add-on">
-                <i class="icon-calendar"></i>
-            </span>
-            <input class="span10" type="text" id="id-date-range-picker-1" value="<?=$date1.' - '.$date2?>"/>
-        </div>
-    </div>
 
+<div class="row-fluid span3">
+    <div class="input-prepend">
+        <span class="add-on">
+            <i class="icon-calendar"></i>
+        </span>
+        <input  type="text" id="id-date-range-picker-1" value="<?=$date1.' - '.$date2?>"/>
+    </div>
     <button id="addNewModule" class="btn btn-info btn-small" type="submit">
         <i class="icon-plus bigger-110"></i>
         <?=tt('Изменить')?>
     </button>
-
-
-
 </div>

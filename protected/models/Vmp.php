@@ -189,7 +189,7 @@ SQL;
 
     public function getMarksForStudent($st1, $vvmp1)
     {
-        $raws = Yii::app()->db->createCommand()
+        $rows = Yii::app()->db->createCommand()
                 ->select('*')
                 ->from('vmp')
                 ->where('vmp1 = :VVMP1 and vmp2 = :ST1', array(
@@ -199,9 +199,9 @@ SQL;
                 ->queryAll();
 
         $res = array();
-        foreach($raws as $raw) {
-            $key = $raw['vmp3'];
-            $res[$key] = $raw;
+        foreach($rows as $row) {
+            $key = $row['vmp3'];
+            $res[$key] = $row;
         }
 
         return $res;

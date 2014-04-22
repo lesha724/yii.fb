@@ -15,6 +15,8 @@ class TimeTableForm extends CFormModel
     public $date2;
     public $r11 = 5;
 
+    const r11Color = '#EFBCEF';
+
 	/**
 	 * Declares the validation rules.
 	 */

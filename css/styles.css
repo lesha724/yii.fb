@@ -140,7 +140,7 @@ table.timeTable .cell {
     background: linear-gradient(to bottom, #fcfcfc, #f6f6f6) repeat-x scroll 0 0 #F3F3F3;
 }
 
-table.timeTable td div:first-child:not(.arrow) {
+table.timeTable td div:first-child:not(.arrow):not(.tooltip-arrow) {
     padding: 4px;
     height: 25px;
     line-height: 25px;

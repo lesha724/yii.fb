@@ -20,7 +20,11 @@ foreach(range(1,7) as $dayOfWeek) {// дни недели 1-пн
     $html .= '<td>
                   <div>'.$name.'</div>';
     foreach (range($min, $max) as $lesson) {
-        $html .= '<div class="lh-50 cell">'.$lesson.'</div>';
+        $interval = isset($rz[$lesson]) ? $rz[$lesson]['rz2'].' - '.$rz[$lesson]['rz3'] : null;
+        $html .= <<<HTML
+<div class="lh-50 cell tooltip-info" data-rel="tooltip" data-placement="left" data-original-title="{$interval}">{$lesson}</div>
+HTML;
+
     }
     $html .= '</td>';
 
@@ -30,6 +34,7 @@ foreach(range(1,7) as $dayOfWeek) {// дни недели 1-пн
 
         $day  = $firstTs + $week*7*86400; // timestamp of current day
         $tt   = $timeTable[$day]['timeTable'];
+
         $date = $timeTable[$day]['date'];
 
         $closedClass = $day < strtotime($model->date1) || $day > strtotime($model->date2)
@@ -41,12 +46,18 @@ foreach(range(1,7) as $dayOfWeek) {// дни недели 1-пн
 
         foreach (range($min, $max) as $lesson) {
 
-            $shortText = $fullText = $color = '';
+            $shortText = $fullText = $color = $r11 = '';
             if (isset($tt[$lesson])) {
-                $shortText  = $tt[$lesson]['shortText'];
-                $fullText   = $tt[$lesson]['fullText'];
-                $color = SH::getLessonColor($tt[$lesson]['tip']);
+                $shortText = $tt[$lesson]['shortText'];
+                $fullText  = $tt[$lesson]['fullText'];
+                $color     = SH::getLessonColor($tt[$lesson]['tip']);
+                $r11       = $tt[$lesson]['r11'];
             }
+            // индикация изменений
+            $indicated = !empty($r11) &&
+                         strtotime('today -'.$model->r11.' days') <= strtotime($r11);
+            if ($indicated)
+                $color = TimeTableForm::r11Color;
 
             $html .= <<<HTML
 <div class="cell" style="background:{$color}" data-rel="popover" data-placement="right" data-content="{$fullText}">{$shortText}</div>

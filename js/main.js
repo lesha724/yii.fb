@@ -29,3 +29,9 @@ function initPopovers()
 {
     $('[data-rel=popover]').popover({html:true});
 }
+
+function initTooltips()
+{
+    $('[data-rel=tooltip]').tooltip();
+}
+

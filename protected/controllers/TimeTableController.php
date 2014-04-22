@@ -66,6 +66,7 @@ class TimeTableController extends Controller
             'model'     => $model,
             'timeTable' => $timeTable,
             'minMax'    => $minMax,
+            'rz'        => Rz::model()->getRzArray(),
         ));
     }
 
