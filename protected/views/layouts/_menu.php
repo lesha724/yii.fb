@@ -45,7 +45,7 @@ $this->widget('zii.widgets.CMenu', array(
             ),
             'visible' => Yii::app()->user->isAdmin,
         ),
-        /*array(
+        array(
             'label' => '<i class="icon-calendar"></i><span class="menu-text">'.tt('Расписание').'</span><b class="arrow icon-angle-down"></b>',
             'url' => '#',
             'linkOptions'=> array(
@@ -59,7 +59,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'active' => $controller=='timeTable' && $action=='teacher'
                 ),
             ),
-        ),*/
+        ),
         array(
             'label' => '<i class="icon-list"></i><span class="menu-text">'.tt('Успеваемость').'</span><b class="arrow icon-angle-down"></b>',
             'url' => '#',
