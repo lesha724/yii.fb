@@ -154,14 +154,23 @@ class TimeTableForm extends CFormModel
 
     private function cellShortTextFor($day, $type)
     {
-        $d3  = $day['d3'];
-        $tip = $day['tip'];
-        $gr3 = mb_strimwidth($day['gr3'], 0, mb_strlen($d3.$tip), '...');
-        $a2  = $day['a2'];
-        $r11 = $day['r11'];
-        if (isset($day['fio']))
-            $fio = mb_strimwidth($day['fio'], 0, mb_strlen($d3.$tip), '...');
+        $d3    = $day['d3'];
+        $tip   = $day['tip'];
+        $a2    = $day['a2'];
+        $r11   = $day['r11'];
         $class = tt('ауд');
+
+        $lengths = array(
+            mb_strlen($d3.'['.$tip.']'),
+            mb_strlen($class.' '.$a2),
+        );
+        $maxLength = max($lengths);
+
+        $gr3 = mb_strimwidth($day['gr3'], 0, $maxLength, '...');
+
+        if (isset($day['fio']))
+            $fio = mb_strimwidth($day['fio'], 0, $maxLength, '...');
+
 
         $color = SH::getLessonColor($day['tip']);
         // индикация изменений
