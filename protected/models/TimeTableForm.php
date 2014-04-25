@@ -169,7 +169,7 @@ class TimeTableForm extends CFormModel
         $gr3 = mb_strimwidth($day['gr3'], 0, $maxLength, '...');
 
         if (isset($day['fio']))
-            $fio = mb_strimwidth($day['fio'], 0, $maxLength, '...');
+            $fio = $day['fio'];
 
 
         $color = SH::getLessonColor($day['tip']);
