@@ -3,7 +3,7 @@
         'tt.authorization = "'.tt('Авторизация').'"',
         CClientScript::POS_END);
 
-    Yii::app()->clientScript->registerScriptFile('/js/authorization.js', CClientScript::POS_END);
+    Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/authorization.js', CClientScript::POS_END);
 ?>
 <div class="navbar navbar-fixed-top">
     <script type="text/javascript">
