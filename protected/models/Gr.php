@@ -245,10 +245,10 @@ SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':FACULTY', $faculty);
         $command->bindValue(':COURSE', $course);
-        $command->bindValue(':YEAR1', 2012);// TODO change here
-        $command->bindValue(':YEAR2', 2012);// TODO change here
-        $command->bindValue(':SEM1', 1);// TODO change here
-        $command->bindValue(':SEM2', 1);// TODO change here
+        $command->bindValue(':YEAR1', date('Y'));
+        $command->bindValue(':YEAR2', date('Y'));
+        $command->bindValue(':SEM1', date('n')>=8 ? 0 : 1);
+        $command->bindValue(':SEM2', date('n')>=8 ? 0 : 1);
         $groups = $command->queryAll();
 
         foreach($groups as $key => $group) {

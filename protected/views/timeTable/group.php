@@ -38,7 +38,6 @@ $html = '<div>';
     $html .= '</div>';
 
 
-    // TODO change getCoursesFor !!!!!!!!!!!
     $courses = Sp::model()->getCoursesFor($model->faculty);
     $html .= '<div class="row-fluid span2">';
     $html .= $form->label($model, 'course');
@@ -46,7 +45,6 @@ $html = '<div>';
     $html .= '</div>';
 
 
-    // TODO change getGroupsForTimeTable !!!!!!!!!!!
     $groups = CHtml::listData(Gr::model()->getGroupsForTimeTable($model->faculty, $model->course), 'gr1', 'name');
     $html .= '<div class="row-fluid span2">';
     $html .= $form->label($model, 'group');
