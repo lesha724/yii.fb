@@ -6,7 +6,7 @@
  * @var CActiveForm $form
  */
 
-$this->pageHeader=tt('Расписание преподавателя');
+$this->pageHeader=tt('Расписание академ. группы');
 $this->breadcrumbs=array(
     tt('Расписание'),
 );
@@ -15,6 +15,7 @@ Yii::app()->clientScript->registerPackage('chosen');
 Yii::app()->clientScript->registerPackage('spin');
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/timetable/timetable.js', CClientScript::POS_HEAD);
 
+$options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;'));
 $form=$this->beginWidget('CActiveForm', array(
     'id'=>'tameTable-form',
     'htmlOptions' => array('class' => 'form-inline')
@@ -26,20 +27,30 @@ $html = '<div>';
     if (count($filials) > 1) {
         $html .= '<div class="row-fluid span2">';
         $html .= $form->label($model, 'filial');
-        $html .= $form->dropDownList($model, 'filial', $filials, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;')));
+        $html .= $form->dropDownList($model, 'filial', $filials, $options);
         $html .= '</div>';
     }
 
-    $chairs = CHtml::listData(K::model()->getOnlyChairsFor($model->filial), 'k1', 'k2');
+    $faculties = CHtml::listData(F::model()->getFacultiesFor($model->filial), 'f1', 'f3');
     $html .= '<div class="row-fluid span2">';
-    $html .= $form->label($model, 'chair');
-    $html .= $form->dropDownList($model, 'chair', $chairs, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;')));
+    $html .= $form->label($model, 'faculty');
+    $html .= $form->dropDownList($model, 'faculty', $faculties, $options);
     $html .= '</div>';
 
-    $teachers = P::model()->getTeachersForTimeTable($model->chair);
+
+    // TODO change getCoursesFor !!!!!!!!!!!
+    $courses = Sp::model()->getCoursesFor($model->faculty);
     $html .= '<div class="row-fluid span2">';
-    $html .= $form->label($model, 'teacher');
-    $html .= $form->dropDownList($model, 'teacher', $teachers, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;')));
+    $html .= $form->label($model, 'course');
+    $html .= $form->dropDownList($model, 'course', $courses, $options);
+    $html .= '</div>';
+
+
+    // TODO change getGroupsForTimeTable !!!!!!!!!!!
+    $groups = CHtml::listData(Gr::model()->getGroupsForTimeTable($model->faculty, $model->course), 'gr1', 'name');
+    $html .= '<div class="row-fluid span2">';
+    $html .= $form->label($model, 'group');
+    $html .= $form->dropDownList($model, 'group', $groups, $options);
     $html .= '</div>';
 
 
@@ -72,11 +83,11 @@ HTML;
 
 
 
-if (! empty($model->teacher))
+if (! empty($model->group))
     $this->renderPartial('timeTable', array(
         'model'      => $model,
         'timeTable'  => $timeTable,
         'minMax'     => $minMax,
+        'maxLessons' => $maxLessons,
         'rz'         => $rz,
-        'maxLessons' => array(),
     ));

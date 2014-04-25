@@ -54,6 +54,11 @@ $this->widget('zii.widgets.CMenu', array(
             'itemOptions'=>array('class'=> $controller=='timeTable' ? 'active open' : ''),
             'items' => array(
                 array(
+                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Академ. группы'),
+                    'url' => Yii::app()->createUrl('/timeTable/group'),
+                    'active' => $controller=='timeTable' && $action=='group'
+                ),
+                array(
                     'label' => '<i class="icon-double-angle-right"></i>'.tt('Преподавателя'),
                     'url' => Yii::app()->createUrl('/timeTable/teacher'),
                     'active' => $controller=='timeTable' && $action=='teacher'

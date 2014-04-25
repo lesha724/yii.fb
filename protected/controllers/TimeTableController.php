@@ -38,7 +38,7 @@ class TimeTableController extends Controller
         if ($date2 === null)
             $date2 = Yii::app()->session['date2'];
         if ($date2 === null)
-            $date2 = date('d.m.Y', strtotime('+4 week', strtotime($date1)));
+            $date2 = date('d.m.Y', strtotime('+8 week', strtotime($date1)));
 
         Yii::app()->session['date2'] = $date2;
 
@@ -63,10 +63,10 @@ class TimeTableController extends Controller
 
 
         $this->render('teacher', array(
-            'model'     => $model,
-            'timeTable' => $timeTable,
-            'minMax'    => $minMax,
-            'rz'        => Rz::model()->getRzArray(),
+            'model'      => $model,
+            'timeTable'  => $timeTable,
+            'minMax'     => $minMax,
+            'rz'         => Rz::model()->getRzArray(),
         ));
     }
 
@@ -80,4 +80,39 @@ class TimeTableController extends Controller
         return array($minMax, $fullTimeTable);
     }
 
+
+    public function actionGroup()
+    {
+        $model = new TimeTableForm;
+        $model->scenario = 'group';
+
+        $model->date1 = Yii::app()->session['date1'];
+        $model->date2 = Yii::app()->session['date2'];
+
+        if (isset($_REQUEST['TimeTableForm']))
+            $model->attributes=$_REQUEST['TimeTableForm'];
+
+        $timeTable = $minMax = $maxLessons = array();
+        if (! empty($model->group))
+            list($minMax, $timeTable, $maxLessons) = $this->generateGroupTimeTable($model);
+
+
+        $this->render('group', array(
+            'model'      => $model,
+            'timeTable'  => $timeTable,
+            'minMax'     => $minMax,
+            'maxLessons' => $maxLessons,
+            'rz'         => Rz::model()->getRzArray(),
+        ));
+    }
+
+    public function generateGroupTimeTable(TimeTableForm $model)
+    {
+        $timeTable = Gr::getTimeTable($model->group, $model->date1, $model->date2);
+        $minMax    = $model->getMinMaxLessons($timeTable);
+
+        list($fullTimeTable, $maxLessons) = $model->fillTameTableForGroup($timeTable);
+
+        return array($minMax, $fullTimeTable, $maxLessons);
+    }
 }

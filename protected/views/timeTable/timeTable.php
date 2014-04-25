@@ -1,5 +1,14 @@
 <?php
 
+function countHeight($maxLessons, $dayOfWeek, $lesson)
+{
+    $height = isset($maxLessons[$dayOfWeek][$lesson])
+                ? 50*$maxLessons[$dayOfWeek][$lesson]
+                : 50;
+
+    return $height;
+}
+
 $timestamps    = array_keys($timeTable);
 $amountOfWeeks =  ceil(((current($timestamps) - end($timestamps))/86400) / -7);
 reset($timestamps);
@@ -21,8 +30,9 @@ foreach(range(1,7) as $dayOfWeek) {// дни недели 1-пн
                   <div>'.$name.'</div>';
     foreach (range($min, $max) as $lesson) {
         $interval = isset($rz[$lesson]) ? $rz[$lesson]['rz2'].' - '.$rz[$lesson]['rz3'] : null;
+        $mh = $lh = countHeight($maxLessons, $dayOfWeek, $lesson);
         $html .= <<<HTML
-<div class="lh-50 cell tooltip-info" data-rel="tooltip" data-placement="left" data-original-title="{$interval}">{$lesson}</div>
+<div class="lh-{$lh} mh-{$mh} cell tooltip-info" data-rel="tooltip" data-placement="left" data-original-title="{$interval}">{$lesson}</div>
 HTML;
 
     }
@@ -37,36 +47,30 @@ HTML;
 
         $date = $timeTable[$day]['date'];
 
-        $closedClass = $day < strtotime($model->date1) || $day > strtotime($model->date2)
-                           ? 'class="closed"'
-                           : '';
+        $isClosed = $day < strtotime($model->date1) ||
+                    $day > strtotime($model->date2);
+        $closedClass = $isClosed ? 'class="closed"' : null;
 
         $html .= '<td '.$closedClass.'>
                     <div>'.$date.'</div>';
 
         foreach (range($min, $max) as $lesson) {
 
-            $shortText = $fullText = $color = $r11 = '';
+            $mh = countHeight($maxLessons, $dayOfWeek, $lesson);
+
+            $shortText = $fullText = '';
             if (isset($tt[$lesson])) {
                 $shortText = $tt[$lesson]['shortText'];
-                $fullText  = $tt[$lesson]['fullText'];
-                $color     = SH::getLessonColor($tt[$lesson]['tip']);
-                $r11       = $tt[$lesson]['r11'];
+                $fullText  = trim($tt[$lesson]['fullText'], '<br>');
             }
-            // индикация изменений
-            $indicated = !empty($r11) &&
-                         strtotime('today -'.$model->r11.' days') <= strtotime($r11);
-            if ($indicated)
-                $color = TimeTableForm::r11Color;
 
             $html .= <<<HTML
-<div class="cell" style="background:{$color}" data-rel="popover" data-placement="right" data-content="{$fullText}">{$shortText}</div>
+<div class="cell mh-{$mh}"  data-rel="popover" data-placement="right" data-content="{$fullText}">{$shortText}</div>
 HTML;
 
         }
 
         $html .= '</td>';
-
     }
     array_shift($timestamps);
 

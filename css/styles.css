@@ -131,16 +131,50 @@ table.timeTable td{
 .lh-50{
     line-height: 50px;
 }
+.lh-100{
+    line-height: 100px;
+}
+.lh-150{
+    line-height: 150px;
+}
+.lh-200{
+    line-height: 200px;
+}
+.lh-250{
+    line-height: 250px;
+}
 
+.mh-50{
+    min-height: 50px;
+}
+.mh-100{
+    min-height: 100px;
+}
+.mh-150{
+    min-height: 150px;
+}
+.mh-200{
+    min-height: 200px;
+}
+
+.mh-250{
+    min-height: 250px;
+}
 
 table.timeTable .cell {
-    min-height: 50px;
-    padding: 4px;
     border: 1px solid #ddd;
     background: linear-gradient(to bottom, #fcfcfc, #f6f6f6) repeat-x scroll 0 0 #F3F3F3;
 }
+table.timeTable .cell > div {
+    min-height: 50px;
+}
 
-table.timeTable td div:first-child:not(.arrow):not(.tooltip-arrow) {
+table.timeTable .cell > div span {
+    font-style: oblique;
+}
+
+
+table.timeTable td > div:first-child {
     padding: 4px;
     height: 25px;
     line-height: 25px;
@@ -155,10 +189,14 @@ table.timeTable .closed *{
     background: linear-gradient(to top, #b8b8b8, #a4a4a4);
 }
 
-table.timeTable tr td:not(:first-child) div:not(.arrow){
+table.timeTable tr td:not(:first-child) > div{
     min-width: 85px;
 }
 
 table.timeTable div.hint {
     display: none;
+}
+
+table.timeTable tr td:first-child > div:not(:first-child) {
+    /*padding:4px;*/
 }

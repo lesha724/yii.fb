@@ -165,7 +165,7 @@ class Gr extends CActiveRecord
         if (empty($discipline))
             return array();
         $sql = <<<SQL
-            select gr1,gr3,  sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28,gr7
+            select gr1,gr3,  sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28,gr7
             from sem
                inner join us on (sem1 = us12)
                inner join uo on (us2 = uo1)
@@ -183,7 +183,7 @@ class Gr extends CActiveRecord
                inner join r on (nr1 = r1)
                inner join gr on (ug2 = gr1)
             where sg4=0 and sem3=:YEAR and sem5=:SEM and uo3=:D1 and us4 in (2,3,4)
-            group by sem4,gr3,gr7,gr1,gr19,gr20,gr21,gr22,gr23,gr24,gr28
+            group by sem4,gr3,gr7,gr1,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
@@ -200,7 +200,7 @@ SQL;
         return $groups;
     }
 
-    function getGroupName($cr, $data)
+    public function getGroupName($cr, $data)
     {
         switch($cr) {
             case 1:
@@ -222,5 +222,60 @@ SQL;
         }
 
         return $name;
+    }
+
+    public function getGroupsForTimeTable($faculty, $course)
+    {
+        if (empty($faculty) || empty($course))
+            return array();
+
+        $sql=<<<SQL
+            SELECT sg4, sem4, gr7,gr3,gr1, gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26
+            FROM SP
+            INNER JOIN SG ON (SP1 = SG2)
+            INNER JOIN SEM ON (SG1 = SEM2)
+            INNER JOIN GR ON (SG1 = GR2)
+            INNER JOIN GRK ON (GR1 = GRK1)
+            WHERE gr13=0 and sp5=:FACULTY and gr6 is null and sem3=:YEAR1 and sem5=:SEM1 and grk2=:YEAR2 and grk3=:SEM2
+            and (grk4 > 0 or grk5 > 0 or grk6 > 0 or grk7 > 0) and sem4=:COURSE
+            GROUP BY sg4, sem4, gr7,gr3,gr1, gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26
+            ORDER BY gr7,gr3
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':FACULTY', $faculty);
+        $command->bindValue(':COURSE', $course);
+        $command->bindValue(':YEAR1', 2012);// TODO change here
+        $command->bindValue(':YEAR2', 2012);// TODO change here
+        $command->bindValue(':SEM1', 1);// TODO change here
+        $command->bindValue(':SEM2', 1);// TODO change here
+        $groups = $command->queryAll();
+
+        foreach($groups as $key => $group) {
+            $groups[$key]['name'] = $this->getGroupName($course, $group);
+        }
+
+        return $groups;
+    }
+
+    public static function getTimeTable($gr1, $date1, $date2)
+    {
+        $sql = <<<SQL
+        SELECT *
+        FROM RAGR(:LANG, :GR1, :DATE_1, :DATE_2)
+        ORDER BY r2,r3
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':LANG', 1);
+        $command->bindValue(':GR1', $gr1);
+        $command->bindValue(':DATE_1', $date1);
+        $command->bindValue(':DATE_2', $date2);
+        $timeTable = $command->queryAll();
+
+        if (empty($timeTable))
+            return array();
+
+        return $timeTable;
     }
 }

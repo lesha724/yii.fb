@@ -6,7 +6,7 @@ $(document).ready(function(){
 
     $spinner1 = $('#spinner1');
 
-    $(document).on('change', '#TimeTableForm_filial, #TimeTableForm_chair', function(){
+    $(document).on('change', '#TimeTableForm_filial, #TimeTableForm_chair, #TimeTableForm_faculty, #TimeTableForm_course', function(){
 
         $spinner1.show();
 
@@ -24,7 +24,7 @@ $(document).ready(function(){
 
     });
 
-    $(document).on('change', '#TimeTableForm_teacher', function(){
+    $(document).on('change', '#TimeTableForm_teacher, #TimeTableForm_group', function(){
         $(this).closest('form').submit();
     });
 
