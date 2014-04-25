@@ -149,7 +149,7 @@ SQL;
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':FACULTY', $faculty);
-        $command->bindValue(':YEAR', date('Y'));
+        $command->bindValue(':YEAR', date('n')>=8 ? date('Y') : date('Y' , strtotime('-1 year')));
         $command->bindValue(':SEM', date('n')>=8 ? 0 : 1);
         $courses = $command->queryAll();
 
