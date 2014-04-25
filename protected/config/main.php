@@ -71,7 +71,7 @@ $config = array(
 					'js' => array(YII_DEBUG ? 'jquery.js' : 'jquery.min.js'),
 				),*/
 				'jquery' => array( // jQuery CDN - provided by (mt) Media Temple
-					'baseUrl' => '/js/',
+					'baseUrl' => 'js/',
 					'js' => array(YII_DEBUG ? 'jquery-1.11.0.js' : 'jquery-1.11.0.min.js'),
 				),
                 'chosen' => array(
