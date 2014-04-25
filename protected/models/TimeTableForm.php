@@ -156,11 +156,11 @@ class TimeTableForm extends CFormModel
     {
         $d3  = $day['d3'];
         $tip = $day['tip'];
-        $gr3 = mb_strimwidth($day['gr3'], 0, 10, '...');
+        $gr3 = mb_strimwidth($day['gr3'], 0, mb_strlen($d3.$tip), '...');
         $a2  = $day['a2'];
         $r11 = $day['r11'];
         if (isset($day['fio']))
-            $fio = mb_strimwidth($day['fio'], 0, 10, '...');
+            $fio = mb_strimwidth($day['fio'], 0, mb_strlen($d3.$tip), '...');
         $class = tt('ауд');
 
         $color = SH::getLessonColor($day['tip']);
@@ -200,7 +200,7 @@ HTML;
         $text  = tt('Добавлено');
         $added = date('d.m.Y H:i', strtotime($day['r11']));
         if (isset($day['fio']))
-            $fio = mb_strimwidth($day['fio'], 0, 10, '...');
+            $fio = $day['fio'];
 
         if ($type == 1) // teacher
             $pattern = <<<HTML
