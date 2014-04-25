@@ -147,10 +147,12 @@ class Sp extends CActiveRecord
             GROUP BY sem4
 SQL;
 
+        list($year, $sem) = SH::getCurrentYearAndSem();
+
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':FACULTY', $faculty);
-        $command->bindValue(':YEAR', date('n')>=8 ? date('Y') : date('Y' , strtotime('-1 year')));
-        $command->bindValue(':SEM', date('n')>=8 ? 0 : 1);
+        $command->bindValue(':YEAR', $year);
+        $command->bindValue(':SEM', $sem);
         $courses = $command->queryAll();
 
         $res = array();

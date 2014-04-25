@@ -106,6 +106,19 @@ class ShortCodes extends CApplicationComponent
         }
         return $color;
     }
+
+    public static function getCurrentYearAndSem()
+    {
+        if (date('n') >= 8) {
+            $year = date('Y');
+            $sem  = 0;
+        } else {
+            $year = date('Y', strtotime('-1 year'));
+            $sem  = 1;
+        }
+
+        return array($year, $sem);
+    }
 }
 
 class SH extends ShortCodes

@@ -242,13 +242,15 @@ SQL;
             ORDER BY gr7,gr3
 SQL;
 
+        list($year, $sem) = SH::getCurrentYearAndSem();
+
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':FACULTY', $faculty);
         $command->bindValue(':COURSE', $course);
-        $command->bindValue(':YEAR1', date('Y'));
-        $command->bindValue(':YEAR2', date('Y'));
-        $command->bindValue(':SEM1', date('n')>=8 ? 0 : 1);
-        $command->bindValue(':SEM2', date('n')>=8 ? 0 : 1);
+        $command->bindValue(':YEAR1', $year);
+        $command->bindValue(':YEAR2', $year);
+        $command->bindValue(':SEM1', $sem);
+        $command->bindValue(':SEM2', $sem);
         $groups = $command->queryAll();
 
         foreach($groups as $key => $group) {
