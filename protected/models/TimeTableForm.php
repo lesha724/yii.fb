@@ -160,16 +160,18 @@ class TimeTableForm extends CFormModel
         $r11   = $day['r11'];
         $class = tt('ауд');
 
-        $lengths = array(
-            mb_strlen($d3.'['.$tip.']'),
-            mb_strlen($class.' '.$a2),
-        );
-        $maxLength = max($lengths);
+        $maxLength = 18;
+
+        $rowDisc = $d3.'['.$tip.']';
+        $rowDisc = mb_strimwidth($rowDisc, 0, $maxLength, '...');
+
+        $rowClass = $class.'. '.$a2;
+        $rowClass = mb_strimwidth($rowClass, 0, $maxLength, '...');
 
         $gr3 = mb_strimwidth($day['gr3'], 0, $maxLength, '...');
 
         if (isset($day['fio']))
-            $fio = $day['fio'];
+            $fio = mb_strimwidth($day['fio'], 0, $maxLength, '...');
 
 
         $color = SH::getLessonColor($day['tip']);
@@ -179,19 +181,20 @@ class TimeTableForm extends CFormModel
         if ($indicated)
             $color = TimeTableForm::r11Color;
 
+
         if ($type == 1) // teacher
             $pattern = <<<HTML
 <div style="background:{$color}">
-    <span>{$d3}[{$tip}]</span><br>
+    <span>{$rowDisc}</span><br>
     {$gr3}<br>
-    {$class}. {$a2}
+    {$rowClass}
 </div>
 HTML;
         elseif($type == 2) // group
             $pattern = <<<HTML
 <div style="background:{$color}">
-    <span>{$d3}[{$tip}]</span><br>
-    {$class}. {$a2}<br>
+    <span>{$rowDisc}</span><br>
+    {$rowClass}<br>
     {$fio}
 </div>
 HTML;

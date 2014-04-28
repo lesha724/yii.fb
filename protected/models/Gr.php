@@ -247,10 +247,10 @@ SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':FACULTY', $faculty);
         $command->bindValue(':COURSE', $course);
-        $command->bindValue(':YEAR1', $year);
-        $command->bindValue(':YEAR2', $year);
-        $command->bindValue(':SEM1', $sem);
-        $command->bindValue(':SEM2', $sem);
+        $command->bindValue(':YEAR1', 2012);
+        $command->bindValue(':YEAR2', 2012);
+        $command->bindValue(':SEM1', 1);
+        $command->bindValue(':SEM2', 1);
         $groups = $command->queryAll();
 
         foreach($groups as $key => $group) {
