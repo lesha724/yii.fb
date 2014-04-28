@@ -190,7 +190,7 @@ table.timeTable .closed *{
 }
 
 table.timeTable tr td:not(:first-child) > div{
-    min-width: 85px;
+    min-width: 115px;
 }
 
 table.timeTable div.hint {
