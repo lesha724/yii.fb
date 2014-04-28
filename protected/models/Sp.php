@@ -151,8 +151,8 @@ SQL;
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':FACULTY', $faculty);
-        $command->bindValue(':YEAR', 2012);
-        $command->bindValue(':SEM', 0);
+        $command->bindValue(':YEAR', $year);
+        $command->bindValue(':SEM', $sem);
         $courses = $command->queryAll();
 
         $res = array();
