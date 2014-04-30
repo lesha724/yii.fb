@@ -38,7 +38,7 @@ class TimeTableController extends Controller
         if ($date2 === null)
             $date2 = Yii::app()->session['date2'];
         if ($date2 === null)
-            $date2 = date('d.m.Y', strtotime('+8 week', strtotime($date1)));
+            $date2 = date('d.m.Y', strtotime('+7 week', strtotime($date1)));
 
         Yii::app()->session['date2'] = $date2;
 
@@ -75,7 +75,7 @@ class TimeTableController extends Controller
         $timeTable = P::getTimeTable($model->teacher, $model->date1, $model->date2);
         $minMax    = $model->getMinMaxLessons($timeTable);
 
-        $fullTimeTable = $model->fillTameTableForTeacher($timeTable, $model);
+        $fullTimeTable = $model->fillTameTable($timeTable, $model);
 
         return array($minMax, $fullTimeTable);
     }
@@ -114,5 +114,40 @@ class TimeTableController extends Controller
         list($fullTimeTable, $maxLessons) = $model->fillTameTableForGroup($timeTable);
 
         return array($minMax, $fullTimeTable, $maxLessons);
+    }
+
+
+    public function actionStudent()
+    {
+        $model = new TimeTableForm;
+        $model->scenario = 'student';
+
+        $model->date1 = Yii::app()->session['date1'];
+        $model->date2 = Yii::app()->session['date2'];
+
+        if (isset($_REQUEST['TimeTableForm']))
+            $model->attributes=$_REQUEST['TimeTableForm'];
+
+        $timeTable = $minMax = $maxLessons = array();
+        if (! empty($model->student))
+            list($minMax, $timeTable) = $this->generateStudentTimeTable($model);
+
+
+        $this->render('student', array(
+            'model'      => $model,
+            'timeTable'  => $timeTable,
+            'minMax'     => $minMax,
+            'rz'         => Rz::model()->getRzArray(),
+        ));
+    }
+
+    public function generateStudentTimeTable(TimeTableForm $model)
+    {
+        $timeTable = St::getTimeTable($model->student, $model->date1, $model->date2);
+        $minMax    = $model->getMinMaxLessons($timeTable);
+
+        $fullTimeTable = $model->fillTameTable($timeTable);
+
+        return array($minMax, $fullTimeTable);
     }
 }

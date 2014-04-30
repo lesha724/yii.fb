@@ -6,7 +6,7 @@ $(document).ready(function(){
 
     $spinner1 = $('#spinner1');
 
-    $(document).on('change', '#TimeTableForm_filial, #TimeTableForm_chair, #TimeTableForm_faculty, #TimeTableForm_course', function(){
+    $(document).on('change', '#tameTable-form select:not(:last)', function(){
 
         $spinner1.show();
 
@@ -24,7 +24,7 @@ $(document).ready(function(){
 
     });
 
-    $(document).on('change', '#TimeTableForm_teacher, #TimeTableForm_group', function(){
+    $(document).on('change', '#tameTable-form select:last', function(){
         $(this).closest('form').submit();
     });
 

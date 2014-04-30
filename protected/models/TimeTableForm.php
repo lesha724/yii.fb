@@ -13,6 +13,7 @@ class TimeTableForm extends CFormModel
 	public $course;
 	public $teacher;
 	public $group;
+	public $student;
 
     public $date1;
     public $date2;
@@ -31,8 +32,10 @@ class TimeTableForm extends CFormModel
             array('chair, teacher', 'numerical', 'allowEmpty' => false, 'on' => 'teacher'),
 			array('chair, teacher', 'required', 'on' => 'teacher'),
 
-            array('faculty, course, group', 'numerical', 'allowEmpty' => false, 'on' => 'group'),
-            array('faculty, course, group', 'required', 'on' => 'group'),
+            array('faculty, course, group', 'numerical', 'allowEmpty' => false, 'on' => 'group, student'),
+            array('faculty, course, group', 'required', 'on' => 'group, student'),
+
+            array('student', 'required', 'on' => 'student'),
 		);
 	}
 
@@ -50,6 +53,7 @@ class TimeTableForm extends CFormModel
 			'course'=> tt('Курс'),
 			'group'=> tt('Группа'),
 			'teacher'=> tt('Преподаватель'),
+			'student'=> tt('Студент'),
             'r11' => tt('Индикация изменений в расписании')
 		);
 	}
@@ -238,7 +242,7 @@ HTML;
 
 
 
-    public function fillTameTableForTeacher($timeTable)
+    public function fillTameTable($timeTable)
     {
         $timeTable = $this->joinGroups($timeTable);
 

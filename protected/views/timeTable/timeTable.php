@@ -30,9 +30,9 @@ foreach(range(1,7) as $dayOfWeek) {// дни недели 1-пн
                   <div>'.$name.'</div>';
     foreach (range($min, $max) as $lesson) {
         $interval = isset($rz[$lesson]) ? $rz[$lesson]['rz2'].' - '.$rz[$lesson]['rz3'] : null;
-        $mh = $lh = countHeight($maxLessons, $dayOfWeek, $lesson);
+        $h = countHeight($maxLessons, $dayOfWeek, $lesson);
         $html .= <<<HTML
-<div class="lh-{$lh} mh-{$mh} cell tooltip-info" data-rel="tooltip" data-placement="left" data-original-title="{$interval}">{$lesson}</div>
+<div class="lh-{$h} mh-{$h} cell tooltip-info" data-rel="tooltip" data-placement="left" data-original-title="{$interval}">{$lesson}</div>
 HTML;
 
     }

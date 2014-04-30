@@ -509,17 +509,49 @@ SQL;
 
     public function getStudentsOfGroup($gr1)
     {
+        if (empty($gr1))
+            return array();
+
         $date1 = date("d.m.Y", strtotime("+ 20 days"));
         $date2 = date('d.m.Y 00:00:00');
         $sql=<<<SQL
             SELECT ST1,ST2,ST3,ST4,sgr2, ST117, ST118, ST119, ST120, ST121, ST122, ST123, ST124,ST125,ST139
-            from st
-            inner join std on (st.st1 = std.std2)
-            inner join sgr on (st.st32 = sgr.sgr1)
-            WHERE st101<>7 and STD3={$gr1} and STD11 in (0,6,8) and STD4<='{$date1}' and (STD7 is null or STD7>'{$date2}')
-            order by 2
+            FROM st
+            INNER JOIN std on (st.st1 = std.std2)
+            INNER JOIN sgr on (st.st32 = sgr.sgr1)
+            WHERE st101<>7 and STD3=:GR1 and STD11 in (0,6,8) and STD4<='{$date1}' and (STD7 is null or STD7>'{$date2}')
+            ORDER BY 2
 SQL;
-        $students = Yii::app()->db->createCommand($sql)->queryAll();
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':GR1', $gr1);
+        $students = $command->queryAll();
+
+        foreach($students as $key => $student) {
+            $students[$key]['name'] = SH::getShortName($student['st2'], $student['st3'], $student['st4']);
+        }
+
         return $students;
+    }
+
+    public static function getTimeTable($st1, $date1, $date2)
+    {
+        $sql = <<<SQL
+        SELECT *
+        FROM RAST(:LANG, :ST1, :DATE_1, :DATE_2)
+        ORDER BY r2,r3
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':LANG', 1);
+        $command->bindValue(':ST1', $st1);
+        $command->bindValue(':DATE_1', $date1);
+        $command->bindValue(':DATE_2', $date2);
+        $timeTable = $command->queryAll();
+
+        if (empty($timeTable))
+            return array();
+
+        return $timeTable;
     }
 }
