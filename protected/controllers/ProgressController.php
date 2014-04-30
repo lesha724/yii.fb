@@ -26,7 +26,10 @@ class ProgressController extends Controller
                     'insertVmpMark',
                     'updateStus',
                     'closeModule',
-                    'renderExtendedModule'
+                    'renderExtendedModule',
+                    'thematicPlan',
+                    'renderNrTheme',
+                    'deleteNrTheme',
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -46,13 +49,13 @@ class ProgressController extends Controller
 
 
         $model = new FilterForm;
+        $model->scenario = 'journal';
         if (isset($_REQUEST['FilterForm']))
             $model->attributes=$_REQUEST['FilterForm'];
 
 
         if (! empty($model->group)) {
             $this->fillJournalFor($model);
-
         }
 
         $this->render('journal', array(
@@ -223,6 +226,7 @@ class ProgressController extends Controller
             $type = $grants->getGrantsFor(Grants::MODULES);
 
         $model = new FilterForm;
+        $model->scenario = 'modules';
         if (isset($_REQUEST['FilterForm']))
             $model->attributes=$_REQUEST['FilterForm'];
 
@@ -389,6 +393,7 @@ class ProgressController extends Controller
 
 
         $model = new FilterForm;
+        $model->scenario = 'modules';
         $model->group = $gr1;
         $model->discipline = $d1;
         $moduleInfo = $this->fillModulesFor($model);
@@ -404,5 +409,63 @@ class ProgressController extends Controller
             'moduleInfo' => $moduleInfo,
             'module_num' => $module_num
         ));
+    }
+
+    public function actionThematicPlan()
+    {
+        $model = new FilterForm();
+        $model->scenario = 'thematicPlan';
+        if (isset($_REQUEST['FilterForm']))
+            $model->attributes=$_REQUEST['FilterForm'];
+
+        $model->semester = 885;
+
+        $this->render('thematicPlan', array(
+            'model' => $model
+        ));
+    }
+
+    public function actionRenderNrTheme()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $nr1 = Yii::app()->request->getParam('nr1', null);
+
+        if (empty($nr1))
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $model = Nr::model()->findByPk($nr1);
+        if (isset($_REQUEST['Nr'])) {
+            $model->attributes = $_REQUEST['Nr'];
+            $model->save();
+        }
+
+        $html = $this->renderPartial('thematicPlan/_theme', array(
+            'model' => $model,
+        ), true);
+
+        $res = array(
+            'html' => $html,
+            'errors' => $model->getErrors(),
+        );
+
+        Yii::app()->end(CJSON::encode($res));
+    }
+
+    public function actionDeleteNrTheme()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $nr1 = Yii::app()->request->getParam('nr1', null);
+
+        $deleted = (bool)Nr::model()->deleteByPk($nr1);
+
+        $res = array(
+            'deleted' => $deleted
+        );
+
+        Yii::app()->end(CJSON::encode($res));
     }
 }

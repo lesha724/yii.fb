@@ -85,6 +85,12 @@ $this->widget('zii.widgets.CMenu', array(
                     'visible' => Yii::app()->user->isTch,
                     'active' => $controller=='progress' && $action=='modules'
                 ),
+                array(
+                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Тематический план'),
+                    'url' => Yii::app()->createUrl('/progress/thematicPlan'),
+                    'visible' => Yii::app()->user->isTch,
+                    'active' => $controller=='progress' && $action=='thematicPlan'
+                ),
             ),
         ),
 

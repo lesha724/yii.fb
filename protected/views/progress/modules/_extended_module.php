@@ -60,7 +60,7 @@ $minMaxUrl = Yii::app()->createUrl('/progress/updateVvmp');
     <div class="modal-header no-padding">
         <div class="table-header">
             <button data-dismiss="modal" class="close" type="button">×</button>
-            <?=tt('Расширенные оценки')?> <?=$moduleInfo['name_modul_'.$module_num]?></span>
+            <span><?=tt('Расширенные оценки')?> <?=$moduleInfo['name_modul_'.$module_num]?></span>
         </div>
     </div>
 

@@ -162,4 +162,28 @@ SQL;
 
         return $res;
     }
+
+    public function getSpecialititesForFaculty($faculty)
+    {
+        if (empty($faculty))
+            return array();
+
+        $sql=<<<SQL
+            SELECT pnsp2,sp2,sp1
+            FROM sp
+            INNER JOIN pnsp on (sp.sp11 = pnsp.pnsp1)
+            WHERE sp5=:FACULTY and sp7 is null and pnsp9 is null
+            ORDER BY pnsp2
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':FACULTY', $faculty);
+        $specialitites = $command->queryAll();
+
+        foreach ($specialitites as $key => $specialitity) {
+            $specialitites[$key]['name'] = $specialitity['pnsp2'].' ('.$specialitity['sp2'].')';
+        }
+
+        return $specialitites;
+    }
 }

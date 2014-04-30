@@ -119,6 +119,19 @@ class ShortCodes extends CApplicationComponent
 
         return array($year, $sem);
     }
+
+    public static function convertEducationType($sg4)
+    {
+        switch($sg4){
+            case 0:	$type = tt('Дневная'); break;
+            case 1:	$type = tt('Заочная'); break;
+            case 2:	$type = tt('Вечерняя'); break;
+            case 3:	$type = tt('Экстернат'); break;
+            case 4:	$type = tt('Второе высшее'); break;
+            default: $type='';
+        }
+        return $type;
+    }
 }
 
 class SH extends ShortCodes

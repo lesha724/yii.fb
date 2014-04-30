@@ -232,4 +232,26 @@ SQL;
 
         return $disciplines;
     }
+
+    public function getDisciplineBySg1($sg1)
+    {
+        if (empty($speciality))
+            return array();
+
+        $sql=<<<SQL
+           SELECT d2,d1,uo1,uo4
+           FROM d
+           INNER JOIN uo on (d.d1 = uo.uo3)
+           INNER JOIN u on (uo.uo22 = u.u1)
+           WHERE u2=:SG1
+           GROUP BY d2,d1,uo1,uo4
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':SG1', $sg1);
+        $disciplines = $command->queryAll();
+
+        return $disciplines;
+    }
+
 }

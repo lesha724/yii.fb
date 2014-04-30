@@ -19,8 +19,8 @@ class UserIdentity extends CUserIdentity
 	public function authenticate()
 	{
         $params = array(
-            ':USERNAME' => strtolower($this->username),
-            ':EMAIL'    => strtolower($this->username),
+            ':USERNAME' => mb_strtolower($this->username),
+            ':EMAIL'    => mb_strtolower($this->username),
             #':PASSWORD' => $this->password,
         );
 

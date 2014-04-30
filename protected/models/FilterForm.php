@@ -5,13 +5,20 @@ class FilterForm extends CFormModel
 	public $discipline;
 	public $group;
 
+	public $filial = 0;
+    public $faculty;
+    public $speciality;
+    public $year_of_admission;
+    public $semester;
+
 	/**
 	 * Declares the validation rules.
 	 */
 	public function rules()
 	{
 		return array(
-			array('discipline, group', 'required'),
+			array('discipline, group', 'required', 'on' => 'journal, modules'),
+			array('filial, faculty, speciality, year_of_admission, type, semester', 'required', 'on' => 'thematicPlan'),
 		);
 	}
 
@@ -25,6 +32,12 @@ class FilterForm extends CFormModel
 		return array(
 			'discipline'=> tt('Дисциплина'),
 			'group'=> tt('Группа'),
+			'filial'=> tt('Филиал'),
+			'faculty'=> tt('Факультет'),
+			'speciality'=> tt('Специальность'),
+			'year_of_admission'=> tt('Год приема'),
+			'type'=> tt('Вид'),
+			'semester'=> tt('№ семестра'),
 		);
 	}
 }
