@@ -14,6 +14,9 @@ class TimeTableForm extends CFormModel
 	public $teacher;
 	public $group;
 	public $student;
+	public $classroom;
+	public $housing = 0;
+
 
     public $date1;
     public $date2;
@@ -36,6 +39,8 @@ class TimeTableForm extends CFormModel
             array('faculty, course, group', 'required', 'on' => 'group, student'),
 
             array('student', 'required', 'on' => 'student'),
+
+            array('housing, classroom', 'required', 'on' => 'classroom'),
 		);
 	}
 
@@ -54,6 +59,8 @@ class TimeTableForm extends CFormModel
 			'group'=> tt('Группа'),
 			'teacher'=> tt('Преподаватель'),
 			'student'=> tt('Студент'),
+			'classroom'=> tt('Аудитория'),
+			'housing'=> tt('Корпус'),
             'r11' => tt('Индикация изменений в расписании')
 		);
 	}
@@ -158,13 +165,13 @@ class TimeTableForm extends CFormModel
 
     private function cellShortTextFor($day, $type)
     {
+        $maxLength = 18;
+
         $d3    = $day['d3'];
         $tip   = $day['tip'];
         $a2    = $day['a2'];
         $r11   = $day['r11'];
         $class = tt('ауд');
-
-        $maxLength = 18;
 
         $rowDisc = $d3.'['.$tip.']';
         $rowDisc = mb_strimwidth($rowDisc, 0, $maxLength, '...');
@@ -194,11 +201,19 @@ class TimeTableForm extends CFormModel
     {$rowClass}
 </div>
 HTML;
-        elseif($type == 2) // group
+        elseif($type == 2) // group / student
             $pattern = <<<HTML
 <div style="background:{$color}">
     <span>{$rowDisc}</span><br>
     {$rowClass}<br>
+    {$fio}
+</div>
+HTML;
+        elseif($type == 3) // classroom
+            $pattern = <<<HTML
+<div style="background:{$color}">
+    <span>{$rowDisc}</span><br>
+    {$gr3}<br>
     {$fio}
 </div>
 HTML;
@@ -232,7 +247,13 @@ HTML;
 {$fio}<br>
 {$text}: {$added}<br>
 HTML;
-
+        elseif($type == 3)
+            $pattern = <<<HTML
+<br>{$d2}[{$tip}]<br>
+{$gr3}<br>
+{$fio}<br>
+{$text}: {$added}<br>
+HTML;
 
         return trim($pattern);
     }
@@ -242,16 +263,16 @@ HTML;
 
 
 
-    public function fillTameTable($timeTable)
+    public function fillTameTable($timeTable, $type)
     {
-        $timeTable = $this->joinGroups($timeTable);
+        $timeTable = $this->joinGroups($timeTable, $type);
 
         $timeTable = $this->fillMissingCells($timeTable);
         //die(var_dump($timeTable));
         return $timeTable;
     }
 
-    private function joinGroups($timeTable)
+    private function joinGroups($timeTable, $type)
     {
         $res = array();
         foreach($timeTable as $day) {
@@ -263,8 +284,8 @@ HTML;
 
                 $res[$r2]['timeTable'][$r3] = $day;
 
-                $res[$r2]['timeTable'][$r3]['shortText'] = $this->cellShortTextFor($day, 1);
-                $res[$r2]['timeTable'][$r3]['fullText']  = $this->cellFullTextFor($day, 1);
+                $res[$r2]['timeTable'][$r3]['shortText'] = $this->cellShortTextFor($day, $type);
+                $res[$r2]['timeTable'][$r3]['fullText']  = $this->cellFullTextFor($day, $type);
 
             } else
                 $res[$r2]['timeTable'][$r3]['gr3'] .= ','.$day['gr3'];
@@ -290,7 +311,10 @@ HTML;
 
     private function joinLessons($timeTable)
     {
-        $res = array();
+        $type = 2;
+
+        $res  = array();
+
         foreach($timeTable as $day) {
 
             $r2 = strtotime($day['r2']); // date
@@ -298,14 +322,14 @@ HTML;
 
             if (! isset($res[$r2]['timeTable'][$r3])) {
 
-                $res[$r2]['timeTable'][$r3]['shortText'] = $this->cellShortTextFor($day, 2);
-                $res[$r2]['timeTable'][$r3]['fullText']  = $this->cellFullTextFor($day, 2);
+                $res[$r2]['timeTable'][$r3]['shortText'] = $this->cellShortTextFor($day, $type);
+                $res[$r2]['timeTable'][$r3]['fullText']  = $this->cellFullTextFor($day, $type);
 
                 $res[$r2]['timeTable'][$r3][] = $day;
 
             } else {
-                $res[$r2]['timeTable'][$r3]['shortText'] .= $this->cellShortTextFor($day, 2);
-                $res[$r2]['timeTable'][$r3]['fullText']  .= $this->cellFullTextFor($day, 2);
+                $res[$r2]['timeTable'][$r3]['shortText'] .= $this->cellShortTextFor($day, $type);
+                $res[$r2]['timeTable'][$r3]['fullText']  .= $this->cellFullTextFor($day, $type);
 
                 $res[$r2]['timeTable'][$r3][] = $day;
             }

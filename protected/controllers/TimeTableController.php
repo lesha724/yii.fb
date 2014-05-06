@@ -46,6 +46,8 @@ class TimeTableController extends Controller
         return parent::beforeAction($action);
     }
 
+
+
     public function actionTeacher()
     {
         $model = new TimeTableForm;
@@ -75,7 +77,7 @@ class TimeTableController extends Controller
         $timeTable = P::getTimeTable($model->teacher, $model->date1, $model->date2);
         $minMax    = $model->getMinMaxLessons($timeTable);
 
-        $fullTimeTable = $model->fillTameTable($timeTable, $model);
+        $fullTimeTable = $model->fillTameTable($timeTable, 1);
 
         return array($minMax, $fullTimeTable);
     }
@@ -146,7 +148,42 @@ class TimeTableController extends Controller
         $timeTable = St::getTimeTable($model->student, $model->date1, $model->date2);
         $minMax    = $model->getMinMaxLessons($timeTable);
 
-        $fullTimeTable = $model->fillTameTable($timeTable);
+        $fullTimeTable = $model->fillTameTable($timeTable, 2);
+
+        return array($minMax, $fullTimeTable);
+    }
+
+
+    public function actionClassroom()
+    {
+        $model = new TimeTableForm;
+        $model->scenario = 'classroom';
+
+        $model->date1 = Yii::app()->session['date1'];
+        $model->date2 = Yii::app()->session['date2'];
+
+        if (isset($_REQUEST['TimeTableForm']))
+            $model->attributes=$_REQUEST['TimeTableForm'];
+
+        $timeTable = $minMax = $maxLessons = array();
+        if (! empty($model->classroom))
+            list($minMax, $timeTable) = $this->generateClassroomTimeTable($model);
+
+
+        $this->render('classroom', array(
+            'model'      => $model,
+            'timeTable'  => $timeTable,
+            'minMax'     => $minMax,
+            'rz'         => Rz::model()->getRzArray(),
+        ));
+    }
+
+    public function generateClassroomTimeTable(TimeTableForm $model)
+    {
+        $timeTable = A::getTimeTable($model->classroom, $model->date1, $model->date2);
+        $minMax    = $model->getMinMaxLessons($timeTable);
+
+        $fullTimeTable = $model->fillTameTable($timeTable, 3);
 
         return array($minMax, $fullTimeTable);
     }
