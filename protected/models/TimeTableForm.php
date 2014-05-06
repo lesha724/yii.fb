@@ -17,6 +17,9 @@ class TimeTableForm extends CFormModel
 	public $classroom;
 	public $housing = 0;
 
+	public $lessonStart = 1;
+	public $lessonEnd   = null;
+
 
     public $date1;
     public $date2;
@@ -40,7 +43,8 @@ class TimeTableForm extends CFormModel
 
             array('student', 'required', 'on' => 'student'),
 
-            array('housing, classroom', 'required', 'on' => 'classroom'),
+            array('housing, classroom', 'required', 'on' => 'classroom, free-classroom'),
+            array('lessonStart, lessonEnd', 'required', 'on' => 'free-classroom'),
 		);
 	}
 
@@ -61,7 +65,10 @@ class TimeTableForm extends CFormModel
 			'student'=> tt('Студент'),
 			'classroom'=> tt('Аудитория'),
 			'housing'=> tt('Корпус'),
-            'r11' => tt('Индикация изменений в расписании')
+            'r11' => tt('Индикация изменений в расписании'),
+            'date1' => tt('Дата'),
+            'lessonStart' => tt('Начало'),
+            'lessonEnd' => tt('Окончание'),
 		);
 	}
 
@@ -120,6 +127,7 @@ class TimeTableForm extends CFormModel
 
 
 
+
     private function fillMissingCells($timeTable)
     {
         list($firstMonday,) = $this->getWeekBoundary($this->date1);
@@ -165,7 +173,7 @@ class TimeTableForm extends CFormModel
 
     private function cellShortTextFor($day, $type)
     {
-        $maxLength = 18;
+        $maxLength = 17;
 
         $d3    = $day['d3'];
         $tip   = $day['tip'];
@@ -257,8 +265,6 @@ HTML;
 
         return trim($pattern);
     }
-
-
 
 
 

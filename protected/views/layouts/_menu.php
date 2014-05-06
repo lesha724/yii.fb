@@ -73,6 +73,11 @@ $this->widget('zii.widgets.CMenu', array(
                     'url' => Yii::app()->createUrl('/timeTable/classroom'),
                     'active' => $controller=='timeTable' && $action=='classroom'
                 ),
+                array(
+                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Свободные аудитории'),
+                    'url' => Yii::app()->createUrl('/timeTable/freeClassroom'),
+                    'active' => $controller=='timeTable' && $action=='freeClassroom'
+                ),
             ),
         ),
         array(

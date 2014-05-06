@@ -155,7 +155,7 @@ SQL;
     {
         if (! empty($housing)) {
             $sql=<<<SQL
-                SELECT A1,A2
+                SELECT *
                 FROM kaa
                 INNER JOIN a on (kaa.kaa2 = a.a1)
                 WHERE A5 is null and A6=:FILIAL and A1>0 and kaa1=:HOUSING
@@ -166,7 +166,7 @@ SQL;
             $command->bindValue(':HOUSING', $housing);
         } else {
             $sql= <<<SQL
-                SELECT A1,A2
+                SELECT *
                 FROM A
                 WHERE A5 is null and A6=:FILIAL and A1>0
                 ORDER BY A8,A9,A2
@@ -180,4 +180,32 @@ SQL;
         return $classrooms;
     }
 
+    public function getOccupiedRooms(TimeTableForm $model)
+    {
+        if ($model->filial)
+            $sql=<<<SQL
+                SELECT a1
+                FROM kaa
+                INNER JOIN a on (kaa.kaa2 = a.a1)
+                INNER JOIN r on (a.a1 = r.r5)
+                WHERE r2=:DATE and r3>=:LESSON_START and r3<=:LESSON_END and kaa1=:FILIAL
+SQL;
+        else
+            $sql=<<<SQL
+                SELECT a1
+                FROM a
+                INNER JOIN r on (a.a1 = r.r5)
+                WHERE r2=:DATE and r3>=:LESSON_START and r3<=:LESSON_END
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':FILIAL', $model->filial);
+        $command->bindValue(':DATE',   $model->date1);
+        $command->bindValue(':LESSON_START', $model->lessonStart);
+        $command->bindValue(':LESSON_END', $model->lessonEnd);
+
+        $classrooms = $command->queryColumn();
+
+        return array_filter($classrooms);
+    }
 }

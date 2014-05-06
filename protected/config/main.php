@@ -108,6 +108,12 @@ $config = array(
                     'js' => array('js/date-time/daterangepicker.min.js', 'js/date-time/moment.min.js'),
                     'depends' => array('jquery')
                 ),
+                'datepicker' => array(
+                    'baseUrl' => 'theme/ace/assets/',
+                    'css' => array('css/datepicker.css'),
+                    'js' => array('js/date-time/bootstrap-datepicker.min.js', 'js/date-time/locales/bootstrap-datepicker.ru.js'),
+                    'depends' => array('jquery')
+                ),
             ),
 			'behaviors' => array(
 				array(

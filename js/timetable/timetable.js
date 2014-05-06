@@ -32,4 +32,10 @@ $(document).ready(function(){
 
     initTooltips();
 
+    $(document).on('click', 'input.datepicker', function(event) {
+        $(this).datepicker({
+            format: 'dd.mm.yyyy',
+            language: 'ru'
+        }).focus();
+    });
 });

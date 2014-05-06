@@ -116,4 +116,19 @@ class Rz extends CActiveRecord
 
         return $res;
     }
+
+    public function getRzForDropdown()
+    {
+        $rows = Yii::app()->db->createCommand()
+            ->select('*')
+            ->from($this->tableName())
+            ->queryAll();
+
+        foreach($rows as $key => $row) {
+            $rows[$key]['name'] = $row['rz1'].' '.tt('пара').' ('.$row['rz2'].'-'.$row['rz3'].')';
+        }
+
+        return $rows;
+    }
+
 }

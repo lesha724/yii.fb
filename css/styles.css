@@ -200,3 +200,16 @@ table.timeTable div.hint {
 table.timeTable tr td:first-child > div:not(:first-child) {
     /*padding:4px;*/
 }
+ul.classrooms-list{
+    list-style-type: none;
+    margin: 0;
+    padding-left: 5px;
+}
+
+ul.classrooms-list li {
+    border: 1px solid #808080;
+    float: left;
+    margin: 2px;
+    text-align: center;
+    min-width: 90px;
+}

@@ -187,4 +187,27 @@ class TimeTableController extends Controller
 
         return array($minMax, $fullTimeTable);
     }
+
+
+    public function actionFreeClassroom()
+    {
+        $model = new TimeTableForm;
+        $model->scenario = 'free-classroom';
+
+        $model->date1 = Yii::app()->session['date1'];
+
+        $classrooms = $occupiedRooms = array();
+        if (isset($_REQUEST['TimeTableForm'])){
+            $model->attributes=$_REQUEST['TimeTableForm'];
+            $classrooms    = A::model()->getClassRooms($model->filial, $model->housing);
+            $occupiedRooms = A::model()->getOccupiedRooms($model);
+        }
+
+
+        $this->render('freeClassroom', array(
+            'model'         => $model,
+            'classrooms'    => $classrooms,
+            'occupiedRooms' => $occupiedRooms,
+        ));
+    }
 }
