@@ -18,7 +18,7 @@ class TimeTableForm extends CFormModel
 	public $housing = 0;
 
 	public $lessonStart = 1;
-	public $lessonEnd   = null;
+	public $lessonEnd   = 1;
 
 
     public $date1;
