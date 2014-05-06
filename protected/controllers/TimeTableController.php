@@ -166,7 +166,7 @@ class TimeTableController extends Controller
             $model->attributes=$_REQUEST['TimeTableForm'];
 
         $timeTable = $minMax = $maxLessons = array();
-        if (! empty($model->classroom))
+        if ($model->validate())
             list($minMax, $timeTable) = $this->generateClassroomTimeTable($model);
 
 
@@ -195,12 +195,17 @@ class TimeTableController extends Controller
         $model->scenario = 'free-classroom';
 
         $model->date1 = Yii::app()->session['date1'];
+        $model->date2 = Yii::app()->session['date2'];
 
         $classrooms = $occupiedRooms = array();
         if (isset($_REQUEST['TimeTableForm'])){
+
             $model->attributes=$_REQUEST['TimeTableForm'];
-            $classrooms    = A::model()->getClassRooms($model->filial, $model->housing);
-            $occupiedRooms = A::model()->getOccupiedRooms($model);
+
+            if ($model->validate()) {
+                $classrooms    = A::model()->getClassRooms($model->filial, $model->housing);
+                $occupiedRooms = A::model()->getOccupiedRooms($model);
+            }
         }
 
 
