@@ -15,7 +15,8 @@ $(document).ready(function(){
             firstDay: 1
         },
         startDate: startDate,
-        endDate: endDate
+        endDate: endDate,
+        dateLimit: {days: 99}
 
     }, function(start, end) {
         $('#TimeTableForm_date1').val(start.format('DD.MM.YYYY'));

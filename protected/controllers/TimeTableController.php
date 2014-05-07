@@ -40,6 +40,14 @@ class TimeTableController extends Controller
         if ($date2 === null)
             $date2 = date('d.m.Y', strtotime('+7 week', strtotime($date1)));
 
+
+        $datetime1 = new DateTime($date1);
+        $datetime2 = new DateTime($date2);
+        $interval = $datetime1->diff($datetime2);
+
+        if ($interval->days >= 100)
+            $date2 = date('d.m.Y', strtotime('+7 week', strtotime($date1)));
+
         Yii::app()->session['date2'] = $date2;
 
 
@@ -53,11 +61,11 @@ class TimeTableController extends Controller
         $model = new TimeTableForm;
         $model->scenario = 'teacher';
 
-        $model->date1 = Yii::app()->session['date1'];
-        $model->date2 = Yii::app()->session['date2'];
-
         if (isset($_REQUEST['TimeTableForm']))
             $model->attributes=$_REQUEST['TimeTableForm'];
+
+        $model->date1 = Yii::app()->session['date1'];
+        $model->date2 = Yii::app()->session['date2'];
 
         $timeTable = $minMax = array();
         if (! empty($model->teacher))
@@ -88,11 +96,11 @@ class TimeTableController extends Controller
         $model = new TimeTableForm;
         $model->scenario = 'group';
 
-        $model->date1 = Yii::app()->session['date1'];
-        $model->date2 = Yii::app()->session['date2'];
-
         if (isset($_REQUEST['TimeTableForm']))
             $model->attributes=$_REQUEST['TimeTableForm'];
+
+        $model->date1 = Yii::app()->session['date1'];
+        $model->date2 = Yii::app()->session['date2'];
 
         $timeTable = $minMax = $maxLessons = array();
         if (! empty($model->group))
@@ -124,11 +132,11 @@ class TimeTableController extends Controller
         $model = new TimeTableForm;
         $model->scenario = 'student';
 
-        $model->date1 = Yii::app()->session['date1'];
-        $model->date2 = Yii::app()->session['date2'];
-
         if (isset($_REQUEST['TimeTableForm']))
             $model->attributes=$_REQUEST['TimeTableForm'];
+
+        $model->date1 = Yii::app()->session['date1'];
+        $model->date2 = Yii::app()->session['date2'];
 
         $timeTable = $minMax = $maxLessons = array();
         if (! empty($model->student))
@@ -159,11 +167,11 @@ class TimeTableController extends Controller
         $model = new TimeTableForm;
         $model->scenario = 'classroom';
 
-        $model->date1 = Yii::app()->session['date1'];
-        $model->date2 = Yii::app()->session['date2'];
-
         if (isset($_REQUEST['TimeTableForm']))
             $model->attributes=$_REQUEST['TimeTableForm'];
+
+        $model->date1 = Yii::app()->session['date1'];
+        $model->date2 = Yii::app()->session['date2'];
 
         $timeTable = $minMax = $maxLessons = array();
         if ($model->validate())

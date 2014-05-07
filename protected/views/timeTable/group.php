@@ -51,7 +51,6 @@ $html = '<div>';
     $html .= $form->dropDownList($model, 'group', $groups, $options);
     $html .= '</div>';
 
-
     $html .= $form->hiddenField($model, 'date1');
     $html .= $form->hiddenField($model, 'date2');
     $html .= '</fieldset>';
