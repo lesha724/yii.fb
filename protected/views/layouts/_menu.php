@@ -140,7 +140,7 @@ $this->widget('zii.widgets.CMenu', array(
             ),
         ),*/
         array(
-            'label' => '<i class="icon-folder-open"></i><span class="menu-text">'.tt('Другое').'</span><b class="arrow icon-angle-down"></b>',
+            'label' => '<i class="icon-globe"></i><span class="menu-text">'.tt('Другое').'</span><b class="arrow icon-angle-down"></b>',
             'url' => '#',
             'linkOptions'=> array(
                 'class' => 'dropdown-toggle',
