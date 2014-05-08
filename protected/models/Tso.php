@@ -120,11 +120,10 @@ class Tso extends CActiveRecord
     {
 
         $sql = <<<SQL
-        SELECT tso.*, b1, b2, k1, k2, tsg2, p3, p4, p5
+        SELECT tso.*, b1, b2, k1, k2, tsg2
         FROM tso
            INNER JOIN k on (k.k1 = tso.tso4)
            INNER JOIN tsg on (tso.tso2 = tsg.tsg1)
-           INNER JOIN p on (tso.tso6 = p.p1)
            INNER JOIN b on (tso.tso5 = b.b1)
         ORDER BY tso9
 SQL;
