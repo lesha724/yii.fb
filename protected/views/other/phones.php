@@ -23,11 +23,11 @@ $this->breadcrumbs=array(
             <th><?=tt('Сотрудник')?></th>
 
             <th class="hidden-phone">
-                <i class="icon-bell bigger-110 hidden-phone"></i>
+                <i class="icon-bell-alt bigger-110 hidden-phone"></i>
                 <?=tt('Внешний тел.')?>
             </th>
             <th class="hidden-phone">
-                <i class="icon-bell-alt bigger-110 hidden-phone"></i>
+                <i class="icon-bell bigger-110 hidden-phone"></i>
                 <?=tt('Внутренний тел.')?>
             </th>
         </tr>
@@ -45,10 +45,10 @@ $this->breadcrumbs=array(
     <td>$phone[b2]</td>
     <td>$phone[teacher]</td>
     <td>
-        <span class="label label-success">$phone[tso8]</span>
+        <span class="label label-warning">$phone[tso7]</span>
     </td>
     <td>
-        <span class="label label-warning">$phone[tso7]</span>
+        <span class="label label-success">$phone[tso8]</span>
     </td>
 </tr>
 HTML;
