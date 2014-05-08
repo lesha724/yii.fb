@@ -118,9 +118,9 @@ class Tso extends CActiveRecord
 
     public function getAllPhonesInArray($department)
     {
-        $where = '';
+        $condition = '';
         if (! empty($department))
-            $where = 'WHERE tsg1 = :DEPARTMENT';
+            $condition = ' AND tsg1 = :DEPARTMENT';
 
         $sql = <<<SQL
         SELECT tso.*, b1, b2, k1, tsg2
@@ -128,7 +128,7 @@ class Tso extends CActiveRecord
            INNER JOIN k on (k.k1 = tso.tso4)
            INNER JOIN tsg on (tso.tso2 = tsg.tsg1)
            INNER JOIN b on (tso.tso5 = b.b1)
-        $where
+        WHERE tso1 > 0 $condition
         ORDER BY tso9
 SQL;
 
