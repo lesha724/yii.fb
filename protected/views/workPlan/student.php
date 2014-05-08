@@ -1,21 +1,22 @@
 <?php
 /**
  *
- * @var TimeTableController $this
+ * @var WorkPlanController $this
  * @var TimeTableForm $model
  */
 
-$this->pageHeader=tt('Расписание студента');
+$this->pageHeader=tt('Рабочий план студента');
 $this->breadcrumbs=array(
-    tt('Расписание'),
+    tt('Рабочий план'),
 );
 
+
 Yii::app()->clientScript->registerPackage('spin');
-Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/timetable/timetable.js', CClientScript::POS_HEAD);
+Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/workplan/student.js', CClientScript::POS_HEAD);
 
 $this->renderPartial('/filter_form/student', array(
     'model' => $model,
-    'showDateRangePicker' => true
+    'showDateRangePicker' => false
 ));
 
 
@@ -26,7 +27,7 @@ HTML;
 
 
 
-if (! empty($model->student))
+/*if (! empty($model->student))
     $this->renderPartial('timeTable', array(
         'model'      => $model,
         'timeTable'  => $timeTable,
@@ -34,3 +35,4 @@ if (! empty($model->student))
         'rz'         => $rz,
         'maxLessons' => array(),
     ));
+*/

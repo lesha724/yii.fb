@@ -1,5 +1,5 @@
 <?php
-    Yii::app()->clientScript->registerPackage('dataTables');
+    //Yii::app()->clientScript->registerPackage('dataTables');
     Yii::app()->clientScript->registerPackage('daterangepicker');
     Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/progress/journal/_modules.js', CClientScript::POS_HEAD);
 

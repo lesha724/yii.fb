@@ -512,4 +512,28 @@ SQL;
 
         return $model->getShortName();
     }
+
+    public function getTeacherNameForPhones($k1, $b1)
+    {
+        $sql = <<<SQL
+            SELECT p3,p4,p5
+            FROM PD
+               INNER JOIN P ON (PD.PD2 = P.P1)
+            WHERE pd4=:K1 and pd5=:B1 and pd28 in (2,5) and (pd13 is null or pd13>:DATE)
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':K1', $k1);
+        $command->bindValue(':B1', $b1);
+        $command->bindValue(':DATE', date('d.m.Y'));
+        $teachers = $command->queryAll();
+
+        $names = array();
+        foreach ($teachers as $teacher) {
+            $names[] = SH::getShortName($teacher['p3'], $teacher['p4'], $teacher['p5']);
+        }
+
+        $name = implode('<br/>', $names);
+
+        return $name;
+    }
 }

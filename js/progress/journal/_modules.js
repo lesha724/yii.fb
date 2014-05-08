@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-    $('#modules').dataTable({
+    /*$('#modules').dataTable({
         iDisplayLength: 100,
         aaSorting: [],
         bPaginate: false,
@@ -16,7 +16,7 @@ $(document).ready(function(){
             sInfoFiltered: ' - отсортировано _MAX_ записей',
             sZeroRecords: 'Ничего не найдено'
         }
-    });
+    });*/
 
     $('#id-date-range-picker-1').daterangepicker({
         format: 'DD/MM/YYYY',

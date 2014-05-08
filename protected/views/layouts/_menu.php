@@ -80,6 +80,21 @@ $this->widget('zii.widgets.CMenu', array(
                 ),
             ),
         ),
+        /*array(
+            'label' => '<i class="icon-edit"></i><span class="menu-text">'.tt('Рабочий план').'</span><b class="arrow icon-angle-down"></b>',
+            'url' => '#',
+            'linkOptions'=> array(
+                'class' => 'dropdown-toggle',
+            ),
+            'itemOptions'=>array('class'=> $controller=='workPlan' ? 'active open' : ''),
+            'items' => array(
+                array(
+                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Студента'),
+                    'url' => Yii::app()->createUrl('/workPlan/student'),
+                    'active' => $controller=='workPlan' && $action=='student'
+                ),
+            ),
+        ),*/
         array(
             'label' => '<i class="icon-list"></i><span class="menu-text">'.tt('Успеваемость').'</span><b class="arrow icon-angle-down"></b>',
             'url' => '#',
@@ -108,7 +123,37 @@ $this->widget('zii.widgets.CMenu', array(
                 ),
             ),
         ),
-
+        /*array(
+            'label' => '<i class="icon-folder-open"></i><span class="menu-text">'.tt('Док.-оборот').'</span><b class="arrow icon-angle-down"></b>',
+            'url' => '#',
+            'linkOptions'=> array(
+                'class' => 'dropdown-toggle',
+            ),
+            'itemOptions'=>array('class'=> $controller=='docs' ? 'active open' : ''),
+            'items' => array(
+                array(
+                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Документооборот'),
+                    'url' => Yii::app()->createUrl('/docs/farm'),
+                    'visible' => Yii::app()->user->isTch,
+                    'active' => $controller=='docs' && $action=='farm'
+                ),
+            ),
+        ),*/
+        array(
+            'label' => '<i class="icon-folder-open"></i><span class="menu-text">'.tt('Другое').'</span><b class="arrow icon-angle-down"></b>',
+            'url' => '#',
+            'linkOptions'=> array(
+                'class' => 'dropdown-toggle',
+            ),
+            'itemOptions'=>array('class'=> $controller=='other' ? 'active open' : ''),
+            'items' => array(
+                array(
+                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Телефонный справочник'),
+                    'url' => Yii::app()->createUrl('/other/phones'),
+                    'active' => $controller=='other' && $action=='phones'
+                ),
+            ),
+        ),
     ),
 ));
 
