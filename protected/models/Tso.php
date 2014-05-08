@@ -116,19 +116,25 @@ class Tso extends CActiveRecord
 		return parent::model($className);
 	}
 
-    public function getAllPhonesInArray()
+    public function getAllPhonesInArray($department)
     {
+        $where = '';
+        if (! empty($department))
+            $where = 'WHERE tsg1 = :DEPARTMENT';
 
         $sql = <<<SQL
-        SELECT tso.*, b1, b2, k1, k2, tsg2
+        SELECT tso.*, b1, b2, k1, tsg2
         FROM tso
            INNER JOIN k on (k.k1 = tso.tso4)
            INNER JOIN tsg on (tso.tso2 = tsg.tsg1)
            INNER JOIN b on (tso.tso5 = b.b1)
+        $where
         ORDER BY tso9
 SQL;
 
-        $phones = Yii::app()->db->createCommand($sql)->queryAll();
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':DEPARTMENT', $department);
+        $phones = $command->queryAll();
 
         foreach ($phones as $key => $phone) {
 

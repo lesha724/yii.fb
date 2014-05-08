@@ -27,10 +27,13 @@ class OtherController extends Controller
 
     public function actionPhones()
     {
-        $phones = Tso::model()->getAllPhonesInArray();
+        $department = Yii::app()->request->getParam('department', null);
+
+        $phones = Tso::model()->getAllPhonesInArray($department);
 
         $this->render('phones', array(
-            'phones' => $phones
+            'phones' => $phones,
+            'department' => $department
         ));
     }
 

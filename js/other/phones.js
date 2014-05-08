@@ -1,5 +1,9 @@
 $(document).ready(function(){
 
+    $('#department').change(function(){
+        $(this).closest('form').submit();
+    });
+
     $('#phones').dataTable({
          iDisplayLength: 20,
          aaSorting: [],

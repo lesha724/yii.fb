@@ -13,12 +13,20 @@ $this->breadcrumbs=array(
 );
 
 ?>
+
+<form class="form-inline">
+    <?php
+        echo CHtml::label(tt('Подразделение'), 'department');
+        $departments = CHtml::listData(Tsg::model()->findAll(), 'tsg1', 'tsg2');
+        echo CHtml::dropDownList('department', $department, $departments, array('empty' => 'Все'));
+    ?>
+</form>
+
 <table id="phones" class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
             <th><?=tt('Подразделение')?></th>
-            <th><?=tt('Отдел')?></th>
-            <th><?=tt('Кафедра')?></th>
+            <th><?=tt('Отдел').' / '.tt('Кафедра')?></th>
             <th><?=tt('Должность')?></th>
             <th><?=tt('Сотрудник')?></th>
 
@@ -41,7 +49,6 @@ $this->breadcrumbs=array(
 <tr>
     <td>$phone[tsg2]</td>
     <td>$phone[tso3]</td>
-    <td>$phone[k2]</td>
     <td>$phone[b2]</td>
     <td>$phone[teacher]</td>
     <td>
