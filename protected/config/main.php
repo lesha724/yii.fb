@@ -155,6 +155,7 @@ $config = array(
 		'adminEmail'=>'webmaster@example.com',
         'defaultLanguage'=>'ru',
         'siteUrl' => '',
+        'code' => null,
     ),
 );
 

@@ -25,6 +25,9 @@ class ShortCodes extends CApplicationComponent
 
     public static function formatDate($patternFrom, $patternTo, $value)
     {
+        if (empty($value))
+            return null;
+
         try{
             $result = DateTime::createFromFormat($patternFrom, $value)->format($patternTo);
         } catch(Exception $e) {

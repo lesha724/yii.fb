@@ -22,6 +22,13 @@
  */
 class Tddo extends CActiveRecord
 {
+    public $executor;
+
+    public $executorType = 0;
+
+    const ONLY_TEACHERS = 1;
+    const ONLY_INDEXES  = 2;
+    const ONLY_CHAIRS   = 3;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -69,19 +76,20 @@ class Tddo extends CActiveRecord
 		return array(
 			'tddo1' => 'Tddo1',
 			'tddo2' => 'Tddo2',
-			'tddo3' => 'Tddo3',
-			'tddo4' => 'Tddo4',
+			'tddo3' => '№',
+			'tddo4' => tt('Дата'),
 			'tddo5' => 'Tddo5',
-			'tddo6' => 'Tddo6',
-			'tddo7' => 'Tddo7',
-			'tddo8' => 'Tddo8',
-			'tddo9' => 'Tddo9',
-			'tddo10' => 'Tddo10',
+			'tddo6' => tt('Краткое содержание'),
+			'tddo7' => tt('Входящий номер регистрации'),
+			'tddo8' => tt('Исходящий номер регистрации'),
+			'tddo9' => tt('Дата'),
+			'tddo10' => tt('Сдан оригинал в канц.'),
 			'tddo11' => 'Tddo11',
 			'tddo12' => 'Tddo12',
 			'tddo13' => 'Tddo13',
 			'tddo14' => 'Tddo14',
 			'tddo15' => 'Tddo15',
+            'executor' => tt('Исполнитель'),
 		);
 	}
 
@@ -141,11 +149,124 @@ class Tddo extends CActiveRecord
 
         $criteria->compare('tddo2', $docType);
 
-        return new CActiveDataProvider($this, array(
+        $provider = new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
             'pagination' => array(
                 'pageSize' => 20
             )
         ));
+
+        $items = $provider->getData();
+        foreach ($items as $key => $item) {
+            $items[$key]->executor = $item->executorNames;
+        }
+        $provider->setData($items);
+
+        return $provider;
     }
+
+    public static function getTddo5Header($docType)
+    {
+        if ($docType == 1)
+            $header = tt('Город и название организации отправителя');
+        elseif ($docType == 2)
+            $header = tt('Город и название организации получателя');
+        else
+            $header = tt('От кого');
+
+        return $header;
+    }
+
+    public function getExecutorNames()
+    {
+        $executors = array();
+
+        $sql = <<<SQL
+            SELECT ido2, ido3, ido4, ido5, p3, p4, p5, innf2, innf3
+            FROM IDO
+            LEFT JOIN PD on (pd1 = ido2)
+            LEFT JOIN P on (p1 = pd2)
+            LEFT JOIN INNF on (innf1 = ido4)
+            WHERE ido1 = :IDO1
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':IDO1', $this->tddo1);
+        $result = $command->queryAll();
+
+        foreach ($result as $executor) {
+
+            if (empty($executor['ido2'])) // teacher
+                continue;
+
+            if ($executor['ido5'] == 1) {
+                $symbol = '<i class="icon-ok green"></i>';
+            } else {
+                $symbol = '<i class="icon-remove red"></i>';
+            }
+
+            $executors[] = $symbol.' '.SH::getShortName($executor['p3'], $executor['p4'], $executor['p5']);
+
+            $this->executorType = Tddo::ONLY_TEACHERS;
+        }
+
+        if (empty($executors)) {
+            foreach ($result as $executor) {
+
+                if (empty($executor['ido4'])) // indexes
+                    continue;
+
+                $executors[] = $executor['innf2'].' '.$executor['innf3'];
+                $this->executorType = Tddo::ONLY_INDEXES;
+            }
+        }
+
+        // chairs
+        if (empty($executors)) {
+            $sql = <<<SQL
+                SELECT idok2, idok3, idok4, k3
+                FROM idok
+                LEFT JOIN K on (k1 = idok2)
+                WHERE idok1 = :IDOK1
+SQL;
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':IDOK1', $this->tddo1);
+            $chairs = $command->queryAll();
+
+            foreach ($chairs as $chair) {
+
+                if ($chair['idok4'] == 1) {
+                    $symbol = '<i class="icon-ok green"></i>';
+                } else {
+                    $symbol = '<i class="icon-remove red"></i>';
+                }
+
+                $executors[] = $symbol.' '.$chair['k3'];
+                $this->executorType = Tddo::ONLY_CHAIRS;
+            }
+
+        }
+
+        return implode('<br>', $executors);
+    }
+
+    public static function getNextNumberFor($docType, $date = null)
+    {
+        if (empty($date))
+            $date = date('d.m.Y H:i');
+
+        $year = DateTime::createFromFormat('d.m.Y H:i', $date)->format('Y');
+
+        $sql = <<<SQL
+          SELECT max(tddo3)
+          FROM tddo
+          WHERE tddo2 = :DOC_TYPE and EXTRACT (year FROM tddo4) = :YEAR
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':DOC_TYPE', $docType);
+        $command->bindValue(':YEAR', $year);
+        $count = $command->queryScalar();
+
+        return $count + 1;
+    }
+
 }
