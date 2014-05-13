@@ -513,7 +513,7 @@ SQL;
         return $model->getShortName();
     }
 
-    public function getTeacherNameForPhones($k1, $b1)
+    public function getTeacherNameForPhones($b1, $k1)
     {
         $sql = <<<SQL
             SELECT p3,p4,p5

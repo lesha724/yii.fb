@@ -27,15 +27,15 @@ $this->breadcrumbs=array(
         <tr>
             <th><?=tt('Подразделение')?></th>
             <th><?=tt('Отдел').' / '.tt('Кафедра')?></th>
-            <th><?=tt('Должность')?></th>
-            <th><?=tt('Сотрудник')?></th>
+            <th style="width:10%"><?=tt('Должность')?></th>
+            <th style="width:20%"><?=tt('Сотрудник')?></th>
 
-            <th class="hidden-phone">
-                <i class="icon-bell-alt bigger-110 hidden-phone"></i>
+            <th class="hidden-phone" style="width:11%">
+                <i class="icon-bell bigger-110 hidden-phone"></i>
                 <?=tt('Внешний тел.')?>
             </th>
-            <th class="hidden-phone">
-                <i class="icon-bell bigger-110 hidden-phone"></i>
+            <th class="hidden-phone" style="width:11%">
+                <i class="icon-bell-alt bigger-110 hidden-phone"></i>
                 <?=tt('Внутренний тел.')?>
             </th>
         </tr>

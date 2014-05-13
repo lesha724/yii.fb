@@ -42,7 +42,7 @@ class DocsController extends Controller
 
         $model = new Tddo;
 
-        // input registration number
+        // next input registration number
         $model->tddo7 = $model->getNextNumberFor($docType);
 
         if (isset($_REQUEST['tddo'])) {
