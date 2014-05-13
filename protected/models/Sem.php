@@ -154,14 +154,14 @@ class Sem extends CActiveRecord
             FROM sem
             INNER JOIN sg on (sem.sem2 = sg.sg1)
             WHERE sg2=:SPECIALITY and (sem3=:YEAR1 or sem3=:YEAR2)
+            GROUP BY sg3,sg4,sg1
             ORDER BY sg4,sg3 DESC
-
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':SPECIALITY', $speciality);
-        $command->bindValue(':YEAR1', date('Y'));
-        $command->bindValue(':YEAR2', date('Y', strtotime('next year')));
+        $command->bindValue(':YEAR1', date('Y', strtotime('previous year')));
+        $command->bindValue(':YEAR2', date('Y'));
         $years = $command->queryAll();
 
         foreach ($years as $key => $year) {
@@ -173,7 +173,7 @@ SQL;
 
     public function getSemestersForThematicPlan($uo1)
     {
-        if (empty($speciality))
+        if (empty($uo1))
             return array();
 
         $sql=<<<SQL
@@ -190,7 +190,7 @@ SQL;
         $semesters = $command->queryAll();
 
         foreach ($semesters as $key => $sem) {
-            $semesters[$key]['name'] = SH::convertUS4($sem['us4']).' '.$sem['sem7'].' ('.$sem['sem3'].', '.$sem['sem5'].')';
+            $semesters[$key]['name'] = SH::convertUS4($sem['us4']).' '.$sem['sem7'].' ('.$sem['sem3'].', '.SH::convertSem5($sem['sem5']).')';
         }
 
         return $semesters;

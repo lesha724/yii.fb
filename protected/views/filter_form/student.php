@@ -8,7 +8,7 @@ Yii::app()->clientScript->registerPackage('chosen');
 
 $options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;'));
 $form=$this->beginWidget('CActiveForm', array(
-    'id'=>'tameTable-form',
+    'id'=>'timeTable-form',
     'htmlOptions' => array('class' => 'form-inline')
 ));
 

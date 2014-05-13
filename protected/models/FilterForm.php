@@ -11,6 +11,10 @@ class FilterForm extends CFormModel
     public $year_of_admission;
     public $semester;
 
+/* field for thematic plan */
+    public $duration = 0;
+    public $teacher = 0;
+    public $code = 0;
 	/**
 	 * Declares the validation rules.
 	 */
@@ -18,7 +22,8 @@ class FilterForm extends CFormModel
 	{
 		return array(
 			array('discipline, group', 'required', 'on' => 'journal, modules'),
-			array('filial, faculty, speciality, year_of_admission, type, semester', 'required', 'on' => 'thematicPlan'),
+			array('filial, faculty, speciality, year_of_admission, discipline, semester', 'required', 'on' => 'thematicPlan'),
+            array('duration, teacher, code', 'safe', 'on' => 'thematicPlan'),
 		);
 	}
 
@@ -38,6 +43,8 @@ class FilterForm extends CFormModel
 			'year_of_admission'=> tt('Год приема'),
 			'type'=> tt('Вид'),
 			'semester'=> tt('№ семестра'),
+            'duration' => tt('Длительность занятий'),
+            'teacher' => tt('Преподаватель'),
 		);
 	}
 }

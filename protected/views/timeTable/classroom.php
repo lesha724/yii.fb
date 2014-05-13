@@ -17,7 +17,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/t
 
 $options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;'));
 $form=$this->beginWidget('CActiveForm', array(
-    'id'=>'tameTable-form',
+    'id'=>'timeTable-form',
     'htmlOptions' => array('class' => 'form-inline')
 ));
 

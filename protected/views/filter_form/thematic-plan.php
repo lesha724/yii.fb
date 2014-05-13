@@ -40,12 +40,12 @@ $form=$this->beginWidget('CActiveForm', array(
     $html .= '</div>';
     $html .= '</fieldset>';
 
-
     $html .= '<fieldset>';
-    $disciplines = CHtml::listData(D::model()->getDisciplineBySg1($model->year_of_admission), 'uo1', 'd2');
+    list($disciplines, $dataAttrs) = D::model()->getDisciplineBySg1($model->year_of_admission);
+    $disciplines = CHtml::listData($disciplines, 'uo1', 'd2');
     $html .= '<div class="row-fluid span2">';
     $html .= $form->label($model, 'discipline');
-    $html .= $form->dropDownList($model, 'discipline', $disciplines, $options);
+    $html .= $form->dropDownList($model, 'discipline', $disciplines, $options + array('options' => $dataAttrs));
     $html .= '</div>';
 
     $semesters = CHtml::listData(Sem::model()->getSemestersForThematicPlan($model->discipline), 'us1', 'name');
@@ -55,8 +55,39 @@ $form=$this->beginWidget('CActiveForm', array(
     $html .= '</div>';
 
     $html .= '</fieldset>';
+
+    if (! empty($model->semester)) {
+        $html .= '<fieldset class="not-submit" style="margin-top:2%;">';
+
+        $html .= '<div class="row-fluid span2">';
+        $html .= $form->label($model, 'duration');
+        $html .= $form->textField($model, 'duration', array('class' => ''));
+        $html .= '</div>';
+        $html .= '&nbsp;&nbsp;';
+
+        $chairId  = K::model()->getChairByUo1($model->discipline);
+        $teachers = P::model()->getTeachersForTimeTable($chairId, 'pd1');
+        $html .= '<div class="row-fluid span2">';
+        $html .= $form->label($model, 'teacher');
+        $html .= $form->dropDownList($model, 'teacher', $teachers, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;')));
+        $html .= '</div>';
+
+        $button =  <<<HTML
+<div>
+    <button class="btn btn-info btn-small">
+        <i class="icon-key bigger-110"></i>
+        %s
+    </button>
+</div>
+HTML;
+        $html .= sprintf($button, tt('Разбить'));
+
+        $html .= $form->hiddenField($model, 'code');
+
+        $html .= '</fieldset>';
+    }
     $html .= '</div>';
 
-    echo $html;
+echo $html;
 
 $this->endWidget();

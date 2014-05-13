@@ -16,7 +16,7 @@ Yii::app()->clientScript->registerPackage('spin');
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/timetable/timetable.js', CClientScript::POS_HEAD);
 
 $form=$this->beginWidget('CActiveForm', array(
-    'id'=>'tameTable-form',
+    'id'=>'timeTable-form',
     'htmlOptions' => array('class' => 'form-inline')
 ));
 

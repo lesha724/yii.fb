@@ -6,41 +6,23 @@ $(document).ready(function(){
 
     initChosen();
 
-    $(document).on('change', '#FilterForm_filial, #FilterForm_faculty, #FilterForm_speciality, #FilterForm_year_of_admission, #FilterForm_discipline', function(){
-
-        $spinner1.show();
-
-        var $form  = $(this).closest('form');
-        var formId = $form.attr('id');
-        var url    = $form.attr('action');
-
-        $.get(url, $form.serialize(), function(data){
-
-            var html = $('#'+formId, data).html();
-            $('div', $form).replaceWith(html);
-            initChosen();
-            $spinner1.hide();
-        })
-
-    });
-
-    $(document).on('change', '#FilterForm_semester', function() {
-        $(this).closest('form').submit();
-    });
+    initFilterForm($spinner1);
 
     $(document).on('click', '.edit-theme', function(){
 
         var url = $(this).attr('href');
 
         $.getJSON(url, {}, function(data){
-            $('#themes-list').append(data.html);
+            $('#themes').append(data.html);
+            initChosen();
+            $('div#Nr_nr6_chosen').attr('style', '');
             $('#modal-table').modal('show');
         })
 
         return false;
     })
 
-    $(document).on('hidden', '#modal-table', function () {
+    $(document).on('hidden', '#modal-table', function (){
         $(this).remove();
     });
 
@@ -57,9 +39,7 @@ $(document).ready(function(){
 
         $.getJSON(url, $form.serialize(), function(data){
             if (data.errors.length  === 0) {
-                $("#themes-list").yiiGridView("update", {
-                    data: $("#filter-form").serialize()
-                });
+                window.location.reload();
                 $('#modal-table').modal('hide');
             } else {
                 var html = $('form > div', data.html);
@@ -72,7 +52,7 @@ $(document).ready(function(){
         return false;
     });
 
-    $(document).on('click', '#themes-list .delete', function(){
+    $(document).on('click', '.delete-theme', function(){
         if (! confirm(tt.confirmDeleteMsg))
             return false;
 
@@ -80,9 +60,7 @@ $(document).ready(function(){
 
         $.getJSON(url, {}, function(data){
             if (data.deleted === true) {
-                $("#themes-list").yiiGridView("update", {
-                    data: $("#filter-form").serialize()
-                });
+                window.location.reload();
             } else {
                 console.log(1);
             }
@@ -91,5 +69,11 @@ $(document).ready(function(){
         })
 
         return false;
+    });
+
+    initDataTable('themes');
+
+    $(document).on('change', '#FilterForm_teacher', function(){
+        $('#FilterForm_code').val(1);
     });
 });

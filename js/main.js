@@ -37,8 +37,7 @@ function initTooltips()
 
 function initFilterForm($spinner)
 {
-    $(document).on('change', '#tameTable-form select:not(:last)', function(){
-
+    $(document).on('change', '#timeTable-form select:not(:last), #filter-form fieldset:not(.not-submit) select:not(:last)', function(){
         $spinner.show();
 
         var $form  = $(this).closest('form');
@@ -55,8 +54,29 @@ function initFilterForm($spinner)
 
     });
 
-    $(document).on('change', '#tameTable-form select:last', function(){
+    $(document).on('change', '#timeTable-form select:last, #filter-form fieldset:not(.not-submit) select:last', function(){
         $(this).closest('form').submit();
+    });
+}
+
+function initDataTable(id)
+{
+    $('#'+id).dataTable({
+        iDisplayLength: 20,
+        aaSorting: [],
+        bPaginate: true,
+        oLanguage: {
+            sSearch: 'Поиск',
+            oPaginate: {
+                sNext: 'След',
+                sPrevious: 'Пред'
+            },
+            sLengthMenu: '',//'Показать _MENU_ записей',
+            sInfo: 'Общее кол-во записей _TOTAL_ отображено (_START_ - _END_)',
+            sInfoEmpty: 'Ничего не найдено',
+            sInfoFiltered: ' - отсортировано _MAX_ записей',
+            sZeroRecords: 'Ничего не найдено'
+        }
     });
 }
 

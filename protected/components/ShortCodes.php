@@ -135,6 +135,16 @@ class ShortCodes extends CApplicationComponent
         }
         return $type;
     }
+
+    public static function convertSem5($sem5)
+    {
+        switch($sem5){
+            case 0:	$type = tt('Осенний'); break;
+            case 1:	$type = tt('Весенний'); break;
+            default: $type='';
+        }
+        return $type;
+    }
 }
 
 class SH extends ShortCodes

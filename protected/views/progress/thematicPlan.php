@@ -12,6 +12,7 @@
 
     Yii::app()->clientScript->registerPackage('chosen');
     Yii::app()->clientScript->registerPackage('spin');
+    Yii::app()->clientScript->registerPackage('dataTables');
     Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/progress/thematicPlan.js', CClientScript::POS_HEAD);
 
     $confirmDeleteMsg = tt('Вы уверены, что хотите удалить тему?');
@@ -22,7 +23,7 @@ JS
     , CClientScript::POS_READY);
 
 
-   $this->renderPartial('thematicPlan/filter_form', array(
+   $this->renderPartial('/filter_form/thematic-plan', array(
        'model' => $model,
    ));
 

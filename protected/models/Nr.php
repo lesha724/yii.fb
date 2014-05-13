@@ -110,10 +110,10 @@ class Nr extends CActiveRecord
 			'nr27' => 'Nr27',
 			'nr28' => 'Nr28',
 			'nr29' => 'Nr29',
-			'nr31' => tt('Тема занятия'),
-			'nr32' => tt('Номер занятия'),
-			'nr33' => tt('Название темы'),
-			'nr34' => tt('Тип занятия'),
+			'nr31' => tt('№ темы'),
+			'nr32' => tt('№ занятия'),
+			'nr33' => tt('Тема'),
+			'nr34' => tt('Тип'),
 		);
 	}
 
@@ -184,19 +184,18 @@ class Nr extends CActiveRecord
 		return parent::model($className);
 	}
 
-    public function searchThemesBy($us1)
+    public function getThemesBy(FilterForm $model)
     {
-        $criteria=new CDbCriteria;
-        $criteria->compare('nr2', $us1);
+        $sql=<<<SQL
+            SELECT * FROM TEM_PLAN(:US1, :CODE, :DURATION, :PD1);
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':US1', $model->semester);
+        $command->bindValue(':CODE', $model->code);
+        $command->bindValue(':DURATION', $model->duration);
+        $command->bindValue(':PD1', $model->teacher);
+        $themes = $command->queryAll();
 
-        return new CActiveDataProvider($this, array(
-            'criteria'=>$criteria,
-            'sort' => array(
-                'defaultOrder' => 'nr31, nr32'
-            ),
-            'pagination' => array(
-                'pageSize' => 10,
-            ),
-        ));
+        return $themes;
     }
 }

@@ -235,8 +235,8 @@ SQL;
 
     public function getDisciplineBySg1($sg1)
     {
-        if (empty($speciality))
-            return array();
+        if (empty($sg1))
+            return array(array(), array());
 
         $sql=<<<SQL
            SELECT d2,d1,uo1,uo4
@@ -251,7 +251,12 @@ SQL;
         $command->bindValue(':SG1', $sg1);
         $disciplines = $command->queryAll();
 
-        return $disciplines;
+        $dataAttrs = array();
+        foreach ($disciplines as $discipline) {
+            $dataAttrs[$discipline['uo1']] = array('data-uo4' => $discipline['uo4']);
+        }
+
+        return array($disciplines, $dataAttrs);
     }
 
 }

@@ -6,15 +6,62 @@
  */
 
 ?>
+
 <div class="row-fluid" >
 
     <h3 class="header smaller lighter blue"><?=tt('Темы занятий')?></h3>
+
+    <table id="themes" class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr>
+            <th><?=tt('№')?></th>
+            <th><?=tt('№ темы')?></th>
+            <th><?=tt('№ занятия')?></th>
+            <th><?=tt('Длительность')?></th>
+            <th><?=tt('Тема')?></th>
+            <th><?=tt('Тип')?></th>
+            <th><?=tt('Преподаватель')?></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            <?php
+                $themes = Nr::model()->getThemesBy($model);
+
+                $html = '';
+                $i = 1;
+                foreach ($themes as $theme) {
+
+                    $tip = $theme['submod'] == 0 ? tt('Занятие') : tt('Субмодуль');
+                    $urlDelete = Yii::app()->controller->createAbsoluteUrl("progress/deleteNrTheme", array("nr1" => $theme['nr1']));
+                    $urlEdit   = Yii::app()->controller->createAbsoluteUrl("progress/renderNrTheme", array("nr1" => $theme['nr1']));
+
+                    $html .= <<<HTML
+                        <td>$i</td>
+                        <td>$theme[nom_temi]</td>
+                        <td>$theme[nom_zan]</td>
+                        <td>$theme[dlitel]</td>
+                        <td>$theme[tema]</td>
+                        <td>$tip</td>
+                        <td>$theme[fio]</td>
+                        <td>
+                            <a href="$urlEdit" class="edit-theme btn btn-mini btn-info">
+                                <i class="icon-edit bigger-120"></i>
+                            </a>
+                            <a href="$urlDelete" class="delete-theme btn btn-mini btn-danger">
+                                <i class="icon-trash bigger-120"></i>
+                            </a>
+                        </td>
+HTML;
+                    $i++;
+                }
+                echo $html;
+            ?>
+        </tbody>
+    </table>
 <?php
 
-    // TODO pd6 где то учесть
-    $provider = Nr::model()->searchThemesBy($model->semester);
-
-    $this->widget('bootstrap.widgets.TbGridView', array(
+/*    $this->widget('bootstrap.widgets.TbGridView', array(
         'id' => 'themes-list',
         'dataProvider' => $provider,
         'type' => 'striped bordered',
@@ -60,6 +107,6 @@
                 ),
             ),
         ),
-    ));
+    ));*/
 ?>
 </div>

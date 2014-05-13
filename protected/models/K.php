@@ -177,4 +177,33 @@ SQL;
         return $chairs;
     }
 
+    public function getChairByUo1($uo1)
+    {
+        $sql=<<<SQL
+            SELECT uo4
+				FROM uo
+			WHERE uo1=:UO1
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':UO1', $uo1);
+        $chair = $command->queryScalar();
+
+        return $chair;
+    }
+
+    public function getChairByPd1($pd1)
+    {
+        $sql=<<<SQL
+            SELECT pd4
+				FROM pd
+			WHERE pd1=:PD1
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':PD1', $pd1);
+        $chair = $command->queryScalar();
+
+        return $chair;
+    }
 }
