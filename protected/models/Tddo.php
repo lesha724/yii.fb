@@ -25,6 +25,7 @@ class Tddo extends CActiveRecord
     public $executor;
 
     public $executorType = 0;
+    public $executionDates;
 
     const ONLY_TEACHERS = 1;
     const ONLY_INDEXES  = 2;
@@ -45,8 +46,9 @@ class Tddo extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('tddo1, tddo2, tddo3, tddo7, tddo10, tddo11, tddo15', 'numerical', 'integerOnly'=>true),
-			array('tddo4, tddo9, tddo13', 'length', 'max'=>8),
+            array('tddo1', 'safe'),
+			array('tddo2, tddo3, tddo7, tddo10, tddo11, tddo15', 'numerical', 'integerOnly'=>true),
+			array('tddo4, tddo9, tddo13', 'length', 'max'=>10),
 			array('tddo5', 'length', 'max'=>400),
 			array('tddo6', 'length', 'max'=>4000),
 			array('tddo8, tddo12', 'length', 'max'=>180),
@@ -73,12 +75,13 @@ class Tddo extends CActiveRecord
 	 */
 	public function attributeLabels()
 	{
+        $tddo5Header = Tddo::getTddo5Header($this->tddo2);
 		return array(
 			'tddo1' => 'Tddo1',
 			'tddo2' => 'Tddo2',
 			'tddo3' => '№',
 			'tddo4' => tt('Дата'),
-			'tddo5' => 'Tddo5',
+			'tddo5' => $tddo5Header,
 			'tddo6' => tt('Краткое содержание'),
 			'tddo7' => tt('Входящий номер регистрации'),
 			'tddo8' => tt('Исходящий номер регистрации'),
@@ -90,6 +93,9 @@ class Tddo extends CActiveRecord
 			'tddo14' => 'Tddo14',
 			'tddo15' => 'Tddo15',
             'executor' => tt('Исполнитель'),
+            'executorType' => tt('Исполнитель'),
+            'executionDates' => tt('Даты контроля исполнений'),
+
 		);
 	}
 
@@ -152,8 +158,11 @@ class Tddo extends CActiveRecord
         $provider = new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
             'pagination' => array(
-                'pageSize' => 20
-            )
+                'pageSize' => 10,
+            ),
+            'sort' => array(
+                'defaultOrder' => 'tddo1 DESC'
+            ),
         ));
 
         $items = $provider->getData();
@@ -267,6 +276,23 @@ SQL;
         $count = $command->queryScalar();
 
         return $count + 1;
+    }
+
+    public static function showExecutorFor($docType)
+    {
+        return (Yii::app()->params['code'] == U_FARM && in_array($docType, array(1,2,3,4))) ||
+               (Yii::app()->params['code'] == U_NULAU && $docType != 2);
+    }
+
+    public static function getLastInsertId()
+    {
+        $sql = <<<'SQL'
+          SELECT gen_ID(GEN_TDDO, 0)
+          FROM RDB$DATABASE
+SQL;
+        $tddo1 = Yii::app()->db->createCommand($sql)->queryScalar();
+
+        return $tddo1;
     }
 
 }

@@ -5,6 +5,7 @@
 
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
+
 Yii::setPathOfAlias('bootstrap', dirname(__FILE__).'/../extensions/bootstrap');
 
 $config = array(
@@ -77,7 +78,7 @@ $config = array(
                 'chosen' => array(
                     'baseUrl' => 'theme/ace/assets/',
                     'css' => array('css/chosen.css'),
-                    'js' => array('js/chosen.jquery.min.js'),
+                    'js' => array('js/uncompressed/chosen.jquery.js'),
                     'depends' => array('jquery')
                 ),
                 'gritter' => array(
@@ -113,6 +114,17 @@ $config = array(
                     'css' => array('css/datepicker.css'),
                     'js' => array('js/date-time/bootstrap-datepicker.min.js', 'js/date-time/locales/bootstrap-datepicker.ru.js'),
                     'depends' => array('jquery')
+                ),
+                'autosize' => array(
+                    'baseUrl' => 'theme/ace/assets/',
+                    'js' => array('js/jquery.autosize-min.js'),
+                    'depends'=>array('jquery'),
+                ),
+                'jquery.ui' => array(
+                    'baseUrl' => 'theme/ace/assets/',
+                    'css' => array('css/jquery-ui-1.10.3.full.min.css'),
+                    'js' => array('js/jquery-ui-1.10.3.full.min.js'),
+                    'depends'=>array('jquery'),
                 ),
             ),
 			'behaviors' => array(

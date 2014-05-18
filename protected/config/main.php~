@@ -5,11 +5,12 @@
 
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
+Yii::setPathOfAlias('bootstrap', dirname(__FILE__).'/../extensions/bootstrap');
+
 $config = array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
-	'name'=>'My Web Application',
+	'name'=>'АСУ',
 
-	// preloading 'log' component
 	'preload'=>array('log', 'shortcodes'),
 
 	// autoloading model and component classes
@@ -17,6 +18,7 @@ $config = array(
 		'application.models.*',
 		'application.components.*',
 		'application.extensions.bootstrap.*',
+		'application.extensions.behaviors.*',
 
 		'ext.EScriptBoost.*',
 		'ext.LangPick.*',
@@ -69,10 +71,61 @@ $config = array(
 					'js' => array(YII_DEBUG ? 'jquery.js' : 'jquery.min.js'),
 				),*/
 				'jquery' => array( // jQuery CDN - provided by (mt) Media Temple
-					'baseUrl' => 'http://code.jquery.com/',
-					'js' => array(YII_DEBUG ? 'jquery-1.7.2.js' : 'jquery-1.7.2.min.js'),
+					'baseUrl' => 'js/',
+					'js' => array(YII_DEBUG ? 'jquery-1.11.0.js' : 'jquery-1.11.0.min.js'),
 				),
-			),
+                'chosen' => array(
+                    'baseUrl' => 'theme/ace/assets/',
+                    'css' => array('css/chosen.css'),
+                    'js' => array('js/uncompressed/chosen.jquery.js'),
+                    'depends' => array('jquery')
+                ),
+                'gritter' => array(
+                    'baseUrl' => 'theme/ace/assets/',
+                    'css' => array('css/jquery.gritter.css'),
+                    'js' => array('js/jquery.gritter.min.js'),
+                    'depends' => array('jquery')
+                ),
+                'spin' => array(
+                    'baseUrl' => 'theme/ace/assets/',
+                    'js' => array('js/spin.min.js'),
+                    'depends' => array('jquery')
+                ),
+                'jqgrid' => array(
+                    'baseUrl' => 'theme/ace/assets/',
+                    'css' => array('css/ui.jqgrid.css'),
+                    'js' => array('js/jqGrid/jquery.jqGrid.min.js'),
+                    'depends' => array('jquery')
+                ),
+                'dataTables' => array(
+                    'baseUrl' => 'theme/ace/assets/',
+                    'js' => array('js/jquery.dataTables.min.js', 'js/jquery.dataTables.bootstrap.js'),
+                    'depends' => array('jquery')
+                ),
+                'daterangepicker' => array(
+                    'baseUrl' => 'theme/ace/assets/',
+                    'css' => array('css/daterangepicker.css'),
+                    'js' => array('js/date-time/daterangepicker.min.js', 'js/date-time/moment.min.js'),
+                    'depends' => array('jquery')
+                ),
+                'datepicker' => array(
+                    'baseUrl' => 'theme/ace/assets/',
+                    'css' => array('css/datepicker.css'),
+                    'js' => array('js/date-time/bootstrap-datepicker.min.js', 'js/date-time/locales/bootstrap-datepicker.ru.js'),
+                    'depends' => array('jquery')
+                ),
+                'autosize' => array(
+                    'baseUrl' => 'theme/ace/assets/',
+                    'js' => array('js/jquery.autosize-min.js'),
+                    'depends'=>array('jquery'),
+                ),
+                'jquery.ui' => array(
+                    'baseUrl' => 'theme/ace/assets/',
+                    'css' => array('css/jquery-ui-1.10.3.full.min.css'),
+                    'js' => array('js/jquery-ui-1.10.3.full.min.js'),
+                    'depends'=>array('jquery'),
+                ),
+            ),
 			'behaviors' => array(
 				array(
 					'class' => 'ext.behaviors.localscripts.LocalScriptsBehavior',
@@ -95,7 +148,7 @@ $config = array(
 				),
 			),
 		),
-'bootstrap' => array(
+        'bootstrap' => array(
             'class' => 'ext.bootstrap.components.Bootstrap',
         ),
         'shortcodes' => array(
@@ -106,10 +159,15 @@ $config = array(
         ),
 	),
 
+    'sourceLanguage'=>'ru',
+
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@example.com',
-	),
+        'defaultLanguage'=>'ru',
+        'siteUrl' => '',
+        'code' => null,
+    ),
 );
 
 // Apply local config modifications

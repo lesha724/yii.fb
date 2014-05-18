@@ -536,4 +536,59 @@ SQL;
 
         return $name;
     }
+
+    public function findTeacherByName($query)
+    {
+        $sql = <<<SQL
+            select P1,P3,P4,P5,DOL2,K3,K1,K2, P76, P77, P78, P102,
+			P103, P104, P105, P106, P107, K15, K16, K17, K18, P108, P109, P110, K10,
+			PD1,PD7
+			FROM P
+				INNER JOIN PD ON(P1=PD2)
+				INNER JOIN DOL ON (PD45 = DOL1)
+				INNER JOIN K ON (PD4 = K1)
+				where PD2>0  and (PD28 in (0,2,5,9)) and PD11<=:DATE1
+				and (PD13 is null or PD13>:DATE2)
+				and
+				(
+					P3 CONTAINING :QUERY1
+					or P76 CONTAINING :QUERY2
+					or P102 CONTAINING :QUERY3
+					or P105 CONTAINING :QUERY4
+					or P108 CONTAINING :QUERY5
+				)
+				and p1 not in
+					(
+						Select ZPD3
+							from ZPD
+						where ZPD2 = 2
+					)
+			order by P3,P4,P5,PD7
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':DATE1', date('d.m.Y 00:00', strtotime('+20 days')));
+        $command->bindValue(':DATE2', date('d.m.Y 00:00'));
+        $command->bindValue(':QUERY1', $query);
+        $command->bindValue(':QUERY2', $query);
+        $command->bindValue(':QUERY3', $query);
+        $command->bindValue(':QUERY4', $query);
+        $command->bindValue(':QUERY5', $query);
+        $teachers = $command->queryAll();
+
+        foreach ($teachers as $key => $teacher) {
+
+            $teachers[$key]['id'] = $teacher['pd1'];
+
+            $name = '';
+            if (! empty($teacher['dol2']))
+                $name .= $teacher['dol2'].' ';
+            $name .= SH::getShortName($teacher['p3'], $teacher['p4'], $teacher['p5']);
+            if (! empty($teacher['k2']))
+                $name .= '('.$teacher['k2'].')';
+
+            $teachers[$key]['name'] = $name;
+        }
+
+        return $teachers;
+    }
 }

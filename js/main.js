@@ -80,3 +80,9 @@ function initDataTable(id)
     });
 }
 
+function initAutoSize()
+{
+    $('textarea[class*=autosize]').autosize({append: "\n"});
+}
+
+

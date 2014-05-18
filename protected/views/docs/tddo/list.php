@@ -8,7 +8,17 @@ $this->pageHeader=tt('Документооборот');
 $this->breadcrumbs=array(
     tt('Док.-оборот'),
 );
+Yii::app()->clientScript->registerPackage('autosize');
+Yii::app()->clientScript->registerPackage('jquery.ui');
+Yii::app()->clientScript->registerPackage('chosen');
+
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/docs/farm.js', CClientScript::POS_HEAD);
+
+$confirmDeleteMsg = tt('Вы уверены, что хотите удалить документ?');
+Yii::app()->clientScript->registerScript('variables', <<<JS
+   tt.confirmDeleteMsg  = '{$confirmDeleteMsg}';
+JS
+    ,CClientScript::POS_READY);
 
 ?>
 <form class="form-inline">
@@ -23,7 +33,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/d
     if (! empty($docType)) {
         $provider = Tddo::model()->getDocsFor($docType);
 
-        $addUrl = Yii::app()->createUrl('docs/farmCreate', array('docType' => $docType));
+        $addUrl = Yii::app()->createUrl('docs/tddoCreate', array('docType' => $docType));
 
         $pager = <<<HTML
     <div>
@@ -89,7 +99,7 @@ HTML;
                 array(
                     'name' => 'executor',
                     'value' => '$data->getExecutorNames()',
-                    'visible' => $docType < 5,
+                    'visible' => Tddo::showExecutorFor($docType),
                     'type' => 'raw',
                     'cssClassExpression' => '($data->executorType == Tddo::ONLY_TEACHERS
                                                 ? "only-teachers"

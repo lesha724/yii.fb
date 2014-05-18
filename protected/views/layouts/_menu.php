@@ -133,7 +133,7 @@ $this->widget('zii.widgets.CMenu', array(
             'items' => array(
                 array(
                     'label' => '<i class="icon-double-angle-right"></i>'.tt('Документооборот'),
-                    'url' => Yii::app()->createUrl('/docs/farm'),
+                    'url' => Yii::app()->createUrl('/docs/tddo'),
                     'visible' => Yii::app()->user->isTch,
                     'active' => $controller=='docs' && $action=='farm'
                 ),
@@ -151,6 +151,12 @@ $this->widget('zii.widgets.CMenu', array(
                     'label' => '<i class="icon-double-angle-right"></i>'.tt('Телефонный справочник'),
                     'url' => Yii::app()->createUrl('/other/phones'),
                     'active' => $controller=='other' && $action=='phones'
+                ),
+                array(
+                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Запись на гос. экзамены'),
+                    'url' => Yii::app()->createUrl('/other/gostem'),
+                    'active' => $controller=='other' && $action=='gostem',
+                    'visible' => Yii::app()->user->isStd,
                 ),
             ),
         ),

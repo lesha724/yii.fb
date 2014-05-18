@@ -15,6 +15,13 @@ class FilterForm extends CFormModel
     public $duration = 0;
     public $teacher = 0;
     public $code = 0;
+
+/* field for other/gostem */
+    public $chair = 0;
+    public $d1 = 0;
+    public $gostem1;
+    public $nr1;
+
 	/**
 	 * Declares the validation rules.
 	 */
@@ -24,6 +31,7 @@ class FilterForm extends CFormModel
 			array('discipline, group', 'required', 'on' => 'journal, modules'),
 			array('filial, faculty, speciality, year_of_admission, discipline, semester', 'required', 'on' => 'thematicPlan'),
             array('duration, teacher, code', 'safe', 'on' => 'thematicPlan'),
+            array('chair, gostem1, nr1, d1', 'safe', 'on' => 'gostem'),
 		);
 	}
 
@@ -45,6 +53,9 @@ class FilterForm extends CFormModel
 			'semester'=> tt('№ семестра'),
             'duration' => tt('Длительность занятий'),
             'teacher' => tt('Преподаватель'),
+            'chair' => tt('Кафедра'),
+            'gostem1' => tt('Гос. экзамен'),
+            'nr1' => tt('Кафедра'),
 		);
 	}
 }
