@@ -143,7 +143,6 @@ class DocsController extends Controller
 
         //$model->executorType = $model->tddo2 == 2 ? Tddo::ONLY_INDEXES : Tddo::ONLY_TEACHERS;
 
-        die(var_dump('save after create'));
         $this->render('tddo/edit', array(
             'model' => $model,
         ));

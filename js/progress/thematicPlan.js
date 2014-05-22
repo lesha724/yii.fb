@@ -15,7 +15,7 @@ $(document).ready(function(){
         $.getJSON(url, {}, function(data){
             $('#themes').append(data.html);
             initChosen();
-            $('div#Nr_nr6_chosen').attr('style', '');
+            $('div#Nr_nr6_chosen').attr('style', 'min-width:220px');
             $('#modal-table').modal('show');
         })
 
