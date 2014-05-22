@@ -19,6 +19,7 @@ class DocsController extends Controller
                     'findExecutor',
                     'getTddoNextNumber',
                     'deleteTddo',
+                    'tddoEdit',
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -48,12 +49,14 @@ class DocsController extends Controller
         $model = new Tddo;
         $model->unsetAttributes();
 
+        $model->scenario = 'create';
+
         $model->tddo2 = $docType;
         // next input registration number
         $model->tddo3 = $model->getNextNumberFor($docType);
         $model->tddo7 = $model->getNextNumberFor($docType);
         // default executor type
-        $model->executorType = $docType == 2 ? Tddo::ONLY_INDEXES : Tddo::ONLY_TEACHERS;
+        //$model->executorType = $docType == 2 ? Tddo::ONLY_INDEXES : Tddo::ONLY_TEACHERS;
 
         if (isset($_REQUEST['Tddo'])) {
             $model->attributes = $_REQUEST['Tddo'];
@@ -121,6 +124,27 @@ class DocsController extends Controller
 
 
         $this->render('tddo/create', array(
+            'model' => $model,
+        ));
+    }
+
+    public function actionTddoEdit()
+    {
+        $tddo1 = Yii::app()->request->getParam('tddo1', null);
+        if (empty($tddo1))
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $model = Tddo::model()->findByPk($tddo1);
+        if (empty($model))
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+
+        $model->scenario = 'edit';
+
+        //$model->executorType = $model->tddo2 == 2 ? Tddo::ONLY_INDEXES : Tddo::ONLY_TEACHERS;
+
+        die(var_dump('save after create'));
+        $this->render('tddo/edit', array(
             'model' => $model,
         ));
     }

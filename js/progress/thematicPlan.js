@@ -39,7 +39,7 @@ $(document).ready(function(){
 
         $.getJSON(url, $form.serialize(), function(data){
             if (data.errors.length  === 0) {
-                window.location.reload();
+                window.location = window.location.href+'?'+$('#filter-form').serialize();
                 $('#modal-table').modal('hide');
             } else {
                 var html = $('form > div', data.html);

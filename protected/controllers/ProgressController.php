@@ -430,8 +430,9 @@ class ProgressController extends Controller
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $nr1 = Yii::app()->request->getParam('nr1', null);
+        $d1  = Yii::app()->request->getParam('d1', null);
 
-        if (empty($nr1))
+        if (empty($nr1) || empty($d1))
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $model = Nr::model()->findByPk($nr1);
@@ -442,6 +443,7 @@ class ProgressController extends Controller
 
         $html = $this->renderPartial('thematicPlan/_theme', array(
             'model' => $model,
+            'd1'    => $d1
         ), true);
 
         $res = array(

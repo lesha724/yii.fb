@@ -89,7 +89,7 @@ HTML;
                     'name' => 'tddo5',
                     'header' => Tddo::getTddo5Header($docType),
                     'value' => '$data->tddo5',
-                    'headerHtmlOptions' => array('style' => 'width:30%')
+                    'headerHtmlOptions' => array('style' => 'width:25%')
                 ),
                 array(
                     'name' => 'tddo6',
@@ -117,8 +117,15 @@ HTML;
                 ),
                 array(
                     'class'=>'CButtonColumn',
-                    'template'=>'{delete}',
+                    'template'=>'{edit} {delete}',
                     'buttons'=>array(
+                        'edit'=>array(
+                            'url'=>'Yii::app()->controller->createAbsoluteUrl("docs/tddoEdit", array("tddo1" => $data->tddo1))',
+                            'click' => 'function(){}',
+                            'options' => array('class' => 'edit btn btn-mini btn-info'),
+                            'imageUrl' => false,
+                            'label' => '<i class="icon-edit bigger-120"></i>'
+                        ),
                         'delete'=>array(
                             'url'=>'Yii::app()->controller->createAbsoluteUrl("docs/deleteTddo", array("tddo1" => $data->tddo1))',
                             'click' => 'function(){}',

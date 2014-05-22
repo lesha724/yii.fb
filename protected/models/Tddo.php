@@ -24,7 +24,7 @@ class Tddo extends CActiveRecord
 {
     public $executor;
 
-    public $executorType = 0;
+    //public $executorType = 0;
     public $executionDates;
 
     const ONLY_TEACHERS = 1;
@@ -53,6 +53,7 @@ class Tddo extends CActiveRecord
 			array('tddo6', 'length', 'max'=>4000),
 			array('tddo8, tddo12', 'length', 'max'=>180),
 			array('tddo14', 'length', 'max'=>1000),
+            array('executorType' , 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('tddo1, tddo2, tddo3, tddo4, tddo5, tddo6, tddo7, tddo8, tddo9, tddo10, tddo11, tddo12, tddo13, tddo14, tddo15', 'safe', 'on'=>'search'),
@@ -295,4 +296,45 @@ SQL;
         return $tddo1;
     }
 
+    public function getTddo4Formatted()
+    {
+        return SH::formatDate('Y-m-d H:i:s', 'd.m.Y', $this->tddo4);
+    }
+
+    public function getTddo9Formatted()
+    {
+        return SH::formatDate('Y-m-d H:i:s', 'd.m.Y', $this->tddo9);
+    }
+
+    public function getExecutorType()
+    {
+        if ($this->isNewRecord) {
+            $type = $this->tddo2 == 2 ? Tddo::ONLY_INDEXES : Tddo::ONLY_TEACHERS;
+        } else {
+            if ($this->tddo2 == 2)
+                $type = Tddo::ONLY_INDEXES;
+            else {
+                $tddo1 = $this->tddo1;
+                if (Idok::model()->exists('idok1='.$tddo1))
+                    $type = Tddo::ONLY_CHAIRS;
+                elseif (Ido::model()->exists('ido1='.$tddo1))
+                    $type = Tddo::ONLY_TEACHERS;
+                else
+                    $type = null;
+            }
+        }
+
+        $emptyTypeOnEdit = $this->scenario == 'edit' &&
+                           is_null($type);
+        if ($emptyTypeOnEdit)
+            $type = Tddo::ONLY_TEACHERS;
+
+
+        return $type;
+    }
+
+    public function setExecutorType($value)
+    {
+        $this->executorType = $value;
+    }
 }

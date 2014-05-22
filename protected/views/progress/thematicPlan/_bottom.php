@@ -34,24 +34,26 @@
 
                     $tip = $theme['submod'] == 0 ? tt('Занятие') : tt('Субмодуль');
                     $urlDelete = Yii::app()->controller->createAbsoluteUrl("progress/deleteNrTheme", array("nr1" => $theme['nr1']));
-                    $urlEdit   = Yii::app()->controller->createAbsoluteUrl("progress/renderNrTheme", array("nr1" => $theme['nr1']));
+                    $urlEdit   = Yii::app()->controller->createAbsoluteUrl("progress/renderNrTheme", array("nr1" => $theme['nr1'], 'd1' => $model->discipline));
 
                     $html .= <<<HTML
-                        <td>$i</td>
-                        <td>$theme[nom_temi]</td>
-                        <td>$theme[nom_zan]</td>
-                        <td>$theme[dlitel]</td>
-                        <td>$theme[tema]</td>
-                        <td>$tip</td>
-                        <td>$theme[fio]</td>
-                        <td>
-                            <a href="$urlEdit" class="edit-theme btn btn-mini btn-info">
-                                <i class="icon-edit bigger-120"></i>
-                            </a>
-                            <a href="$urlDelete" class="delete-theme btn btn-mini btn-danger">
-                                <i class="icon-trash bigger-120"></i>
-                            </a>
-                        </td>
+                        <tr>
+                            <td>$i</td>
+                            <td>$theme[nom_temi]</td>
+                            <td>$theme[nom_zan]</td>
+                            <td>$theme[dlitel]</td>
+                            <td>$theme[tema]</td>
+                            <td>$tip</td>
+                            <td>$theme[fio]</td>
+                            <td>
+                                <a href="$urlEdit" class="edit-theme btn btn-mini btn-info">
+                                    <i class="icon-edit bigger-120"></i>
+                                </a>
+                                <a href="$urlDelete" class="delete-theme btn btn-mini btn-danger">
+                                    <i class="icon-trash bigger-120"></i>
+                                </a>
+                            </td>
+                        </tr>
 HTML;
                     $i++;
                 }

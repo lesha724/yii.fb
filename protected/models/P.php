@@ -513,6 +513,18 @@ SQL;
         return $model->getShortName();
     }
 
+    public function getTeacherNameByPd1($pd1)
+    {
+        if (empty($pd1))
+            return '';
+
+        $pd = Pd::model()->findByAttributes(array('pd1' => $pd1));
+        if (empty($pd))
+            return '';
+
+        return $this->getTeacherNameBy($pd->pd2);
+    }
+
     public function getTeacherNameForPhones($b1, $k1)
     {
         $sql = <<<SQL

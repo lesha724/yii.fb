@@ -41,7 +41,7 @@ $options = array(
                 ));
                 $html .= $form->errorSummary($model, null, null, array('class' => 'alert alert-error'));
 
-                $chairId  = K::model()->getChairByPd1($model->nr6);
+                $chairId  = K::model()->getChairByUo1($d1);
                 $teachers = P::model()->getTeachersForTimeTable($chairId, 'pd1');
                 $label = $form->label($model, 'nr6', $options);
                 $input = $form->dropDownList($model, 'nr6', $teachers, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;')));
@@ -62,8 +62,6 @@ $options = array(
                 $label = $form->label($model, 'nr34', $options);
                 $input = $form->dropDownList($model, 'nr34', array('Занятие', 'Субмодуль'));
                 $html .= sprintf($pattern, $label, $input);
-
-
 
                 $html .= '</div>';
                 echo $html;

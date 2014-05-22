@@ -209,6 +209,7 @@ SQL;
 
     public function findChairsByName($query)
     {
+        $query = mb_strimwidth($query, 0, 50);
         $sql = <<<SQL
             SELECT K1,K2,K3,K15,K16,K17,K6,K10, K18
                 FROM F

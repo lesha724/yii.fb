@@ -150,11 +150,11 @@ class Sem extends CActiveRecord
             return array();
 
         $sql=<<<SQL
-            SELECT sg3,sg4,sg1
+            SELECT sg3,sg4,sg1,sem4
             FROM sem
             INNER JOIN sg on (sem.sem2 = sg.sg1)
             WHERE sg2=:SPECIALITY and (sem3=:YEAR1 or sem3=:YEAR2)
-            GROUP BY sg3,sg4,sg1
+            GROUP BY sg3,sg4,sg1,sem4
             ORDER BY sg4,sg3 DESC
 SQL;
 
@@ -165,7 +165,7 @@ SQL;
         $years = $command->queryAll();
 
         foreach ($years as $key => $year) {
-            $years[$key]['name'] = $year['sg3'].' ('.SH::convertEducationType($year['sg4']).')';
+            $years[$key]['name'] = $year['sg3'].' ('.SH::convertEducationType($year['sg4']).') '.$year['sem4'].' '.tt('курс');
         }
 
         return $years;
