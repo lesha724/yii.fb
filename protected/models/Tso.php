@@ -13,6 +13,7 @@
  * @property string $tso7
  * @property string $tso8
  * @property integer $tso9
+ * @property integer $tso10
  */
 class Tso extends CActiveRecord
 {
@@ -33,7 +34,7 @@ class Tso extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('tso1', 'required'),
-			array('tso1, tso2, tso4, tso5, tso6, tso9', 'numerical', 'integerOnly'=>true),
+			array('tso1, tso2, tso4, tso5, tso6, tso9, tso10', 'numerical', 'integerOnly'=>true),
 			array('tso3', 'length', 'max'=>600),
 			array('tso7', 'length', 'max'=>40),
 			array('tso8', 'length', 'max'=>20),
@@ -138,9 +139,13 @@ SQL;
 
         foreach ($phones as $key => $phone) {
 
-            if ($phone['b1'] != 0 && $phone['k1'] != 0)
-                $teacher = P::model()->getTeacherNameForPhones($phone['b1'], $phone['k1']);
-            else
+            if ($phone['b1'] != 0 && $phone['k1'] != 0) {
+                if ($phone['tso10'] == '0')
+                    $teacher = P::model()->getTeacherNameForPhones($phone['b1'], $phone['k1']);
+                else
+                    $teacher = P::model()->getTeacherNameBy($phone['tso6']);
+
+            } else
                 $teacher = '';
 
             $phones[$key]['teacher'] = $teacher;

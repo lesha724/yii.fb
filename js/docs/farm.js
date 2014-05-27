@@ -16,10 +16,10 @@ $(document).ready(function(){
         }).on('changeDate', function(ev){
 
             if ($(ev.currentTarget).is('#Tddo_tddo4')){
-
                 var post = {docType:docType, tddo4:ev.date.getTime()};
                 $.getJSON(getTddoNextNumberUrl, post, function(data){
-                    $('#Tddo_tddo3').val(data.res)
+                    $('#Tddo_tddo7').val(data.res)
+                    $('#Tddo_tddo3:hidden').val(data.res)
                 })
             }
 
@@ -27,7 +27,6 @@ $(document).ready(function(){
     });
 
     initAutoSize();
-
 
     hideShowChosens($('input:radio:checked[name="Tddo[executorType]"]').val());
     $('input:radio[name="Tddo[executorType]"]').change(function(){
@@ -60,7 +59,7 @@ $(document).ready(function(){
 
     initAutoComplete();
 
-    var amount = $('[name*=dkdi2]').length;
+    var amount = $('[name*="dkid2"]').length;
     $('#addNewExecutionDate').click(function(){
         $(this).before(
             '<input name="Dkid['+amount+'][dkid2]" class="datepicker input-medium" placeholder="Треб.дата"/> - <input name="Dkid['+amount+'][dkid3]" class="datepicker input-medium" placeholder="Факт.дата"/> <br/>'
@@ -125,6 +124,11 @@ function initAutoComplete()
             $(event.target).siblings('input:hidden').val(id);
             var name = $(event.target).data('type') == '1' ? 'ido5' : 'idok4';
             $(event.target).siblings('input:checkbox').attr('name', name+'['+id+']');
+        },
+        change: function( event, ui ) {
+            if (! $(event.currentTarget).val()) {
+                $(event.target).siblings('input:hidden').val('');
+            }
         }
     });
 }

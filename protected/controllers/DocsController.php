@@ -49,9 +49,8 @@ class DocsController extends Controller
         $model = new Tddo;
         $model->unsetAttributes();
 
-        $model->scenario = 'create';
-
         $model->tddo2 = $docType;
+        $model->tddo4 = date('Y-m-d H:i:s');
         // next input registration number
         $model->tddo3 = $model->getNextNumberFor($docType);
         $model->tddo7 = $model->getNextNumberFor($docType);
@@ -59,63 +58,14 @@ class DocsController extends Controller
         //$model->executorType = $docType == 2 ? Tddo::ONLY_INDEXES : Tddo::ONLY_TEACHERS;
 
         if (isset($_REQUEST['Tddo'])) {
+            $model->scenario   = 'create';
             $model->attributes = $_REQUEST['Tddo'];
-            $model->tddo1 = new CDbExpression('GEN_ID(GEN_TDDO, 1)');
-            $model->tddo11 =isset($_REQUEST['Dkid']) ? 1 : 2;
+            $model->tddo1  = new CDbExpression('GEN_ID(GEN_TDDO, 1)');
+            $model->tddo11 = isset($_REQUEST['Dkid']) ? 1 : 2;
 
             if ($model->save()) {
 
-                $tddo1 = Tddo::getLastInsertId();
-
-                if (isset($_REQUEST['Dkid']))
-                    foreach ($_REQUEST['Dkid'] as $dates) {
-
-                        if (empty($dates['dkid2']))
-                            continue;
-
-                        $date = new Dkid;
-                        $date->dkid1 = $tddo1;
-                        $date->dkid2 = $dates['dkid2'];
-                        $date->dkid3 = $dates['dkid3'];
-                        $date->save();
-                    }
-
-                if ($model->executorType == Tddo::ONLY_TEACHERS) {
-                    if (isset($_REQUEST['teachers'])) {
-                        $teachers = array_filter($_REQUEST['teachers']);
-                        foreach ($teachers as $teacher) {
-                            $executor = new Ido;
-                            $executor->ido1 = $tddo1;
-                            $executor->ido2 = $teacher;
-                            $executor->ido5 = isset($_REQUEST['ido5'][$teacher]) ? 1 : 2;
-                            $executor->save();
-                        }
-                    }
-                }
-                if ($model->executorType == Tddo::ONLY_INDEXES) {
-                    if (isset($_REQUEST['indexs'])) {
-                        $indexes = array_filter($_REQUEST['indexs']);
-                        foreach ($indexes as $index) {
-                            $executor = new Ido;
-                            $executor->ido1 = $tddo1;
-                            $executor->ido4 = $index;
-                            $executor->ido5 = 2;
-                            $executor->save();
-                        }
-                    }
-                }
-                if ($model->executorType == Tddo::ONLY_CHAIRS) {
-                    if (isset($_REQUEST['chairs'])) {
-                        $chairs = array_filter($_REQUEST['chairs']);
-                        foreach ($chairs as $chair) {
-                            $executor = new Idok;
-                            $executor->idok1 = $tddo1;
-                            $executor->idok2 = $chair;
-                            $executor->idok4 = isset($_REQUEST['idok4'][$chair]) ? 1 : 2;
-                            $executor->save();
-                        }
-                    }
-                }
+                $this->saveExecutorsAndDatesFor($model);
 
                 Yii::app()->request->redirect(Yii::app()->createUrl('/docs/tddo', array('docType' => $docType)));
             }
@@ -138,10 +88,20 @@ class DocsController extends Controller
         if (empty($model))
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
-
         $model->scenario = 'edit';
 
-        //$model->executorType = $model->tddo2 == 2 ? Tddo::ONLY_INDEXES : Tddo::ONLY_TEACHERS;
+        if (isset($_REQUEST['Tddo'])) {
+            $model->attributes = $_REQUEST['Tddo'];
+            $model->tddo11 = isset($_REQUEST['Dkid']) ? 1 : 2;
+
+            if ($model->save()) {
+
+                $this->saveExecutorsAndDatesFor($model);
+
+                Yii::app()->request->redirect(Yii::app()->createUrl('/docs/tddo', array('docType' => $model->tddo2)));
+            }
+            //(var_dump($_REQUEST));
+        }
 
         $this->render('tddo/edit', array(
             'model' => $model,
@@ -199,6 +159,75 @@ class DocsController extends Controller
         );
 
         Yii::app()->end(CJSON::encode($res));
+    }
+
+    private function saveExecutorsAndDatesFor($model)
+    {
+        $isEdit = $model->scenario == 'edit';
+
+        $tddo1 = $isEdit
+                    ? $model->tddo1
+                    : Tddo::getLastInsertId();
+
+        if ($isEdit) {
+            Ido::model()->deleteAll('ido1='.$tddo1);
+            Idok::model()->deleteAll('idok1='.$tddo1);
+            Dkid::model()->deleteAll('dkid1='.$tddo1);
+        }
+
+        if (isset($_REQUEST['Dkid'])) {
+            $dates = array_map("unserialize", array_unique(array_map("serialize", $_REQUEST['Dkid'])));
+            foreach ($dates as $array) {
+
+                if (empty($array['dkid2']))
+                    continue;
+
+                $date = new Dkid;
+                $date->dkid1 = $tddo1;
+                $date->dkid2 = $array['dkid2'];
+                $date->dkid3 = $array['dkid3'];
+                $date->save();
+            }
+        }
+
+        if ($model->executorType == Tddo::ONLY_TEACHERS) {
+            if (isset($_REQUEST['teachers'])) {
+                $teachers = array_unique(array_filter($_REQUEST['teachers']));
+                foreach ($teachers as $teacher) {
+                    $executor = new Ido;
+                    $executor->ido1 = $tddo1;
+                    $executor->ido2 = $teacher;
+                    $executor->ido5 = isset($_REQUEST['ido5'][$teacher]) ? 1 : 2;
+                    $executor->save();
+                    var_dump($executor->getErrors());
+                }
+            }
+        }
+        if ($model->executorType == Tddo::ONLY_INDEXES) {
+            if (isset($_REQUEST['indexs'])) {
+                $indexes = array_unique(array_filter($_REQUEST['indexs']));
+                foreach ($indexes as $index) {
+                    $executor = new Ido;
+                    $executor->ido1 = $tddo1;
+                    $executor->ido4 = $index;
+                    $executor->ido5 = 2;
+                    $executor->save();
+                }
+            }
+        }
+
+        if ($model->executorType == Tddo::ONLY_CHAIRS) {
+            if (isset($_REQUEST['chairs'])) {
+                $chairs = array_unique(array_filter($_REQUEST['chairs']));
+                foreach ($chairs as $chair) {
+                    $executor = new Idok;
+                    $executor->idok1 = $tddo1;
+                    $executor->idok2 = $chair;
+                    $executor->idok4 = isset($_REQUEST['idok4'][$chair]) ? 1 : 2;
+                    $executor->save();
+                }
+            }
+        }
     }
 
 }

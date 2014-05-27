@@ -46,9 +46,9 @@ class Tddo extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-            array('tddo1', 'safe'),
+            array('tddo1,tddo13', 'safe'),
 			array('tddo2, tddo3, tddo7, tddo10, tddo11, tddo15', 'numerical', 'integerOnly'=>true),
-			array('tddo4, tddo9, tddo13', 'length', 'max'=>10),
+			array('tddo4, tddo9', 'length', 'max'=>10),
 			array('tddo5', 'length', 'max'=>400),
 			array('tddo6', 'length', 'max'=>4000),
 			array('tddo8, tddo12', 'length', 'max'=>180),
@@ -162,7 +162,7 @@ class Tddo extends CActiveRecord
                 'pageSize' => 10,
             ),
             'sort' => array(
-                'defaultOrder' => 'tddo1 DESC'
+                'defaultOrder' => 'EXTRACT (year FROM tddo4) DESC, tddo3 DESC'
             ),
         ));
 
@@ -328,7 +328,6 @@ SQL;
                            is_null($type);
         if ($emptyTypeOnEdit)
             $type = Tddo::ONLY_TEACHERS;
-
 
         return $type;
     }

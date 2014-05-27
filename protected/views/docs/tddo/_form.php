@@ -63,8 +63,9 @@ $labelOptions = array('class' => 'control-label');
         $label = $form->label($model, 'tddo12', $labelOptions);
         $input = $form->textField($model, 'tddo12');
     } else {
-        $label = $form->label($model, 'tddo7', $labelOptions);
-        $input = $form->textField($model, 'tddo7', array('disabled' => 'disabled'));
+        $label  = $form->label($model, 'tddo7', $labelOptions);
+        $input  = $form->textField($model, 'tddo7', array('readonly' => 'readonly'));
+        $input .= $form->hiddenField($model, 'tddo3', array('value' => $model->tddo7));
     }
 
     $html .= sprintf($pattern, $label, $input);
@@ -79,7 +80,7 @@ $labelOptions = array('class' => 'control-label');
 
     // Enter date
     $label = $form->label($model, 'tddo4', $labelOptions);
-    $input = $form->textField($model, 'tddo4Formatted', array('class' => 'datepicker', 'name' => 'Tddo[tddo4]'));
+    $input = $form->textField($model, 'tddo4Formatted', array('class' => 'datepicker', 'name' => 'Tddo[tddo4]', 'readonly' => 'readonly'));
     $html .= sprintf($pattern, $label, $input);
 
     // Output registration number
@@ -190,13 +191,15 @@ HTML;
 <br>
 HTML;
 
-        $i = 0;
-        $dates = Dkid::model()->findAll('dkid1='.$model->tddo1);
-        foreach ($dates as $date) {
-            $dkid2 = SH::formatDate('Y-m-d H:i:s', 'd.m.Y', $date['dkid2']);
-            $dkid3 = SH::formatDate('Y-m-d H:i:s', 'd.m.Y', $date['dkid3']);
-            $addDateHtml .= sprintf($datePattern, tt('Треб.дата'), $dkid2, $i, tt('Факт.дата'), $dkid3, $i);
-            $i++;
+        if (! $model->isNewRecord) {
+            $i = 0;
+            $dates = Dkid::model()->findAll('dkid1='.$model->tddo1);
+            foreach ($dates as $date) {
+                $dkid2 = SH::formatDate('Y-m-d H:i:s', 'd.m.Y', $date['dkid2']);
+                $dkid3 = SH::formatDate('Y-m-d H:i:s', 'd.m.Y', $date['dkid3']);
+                $addDateHtml .= sprintf($datePattern, tt('Треб.дата'), $dkid2, $i, tt('Факт.дата'), $dkid3, $i);
+                $i++;
+            }
         }
 
         $label = $form->label($model, 'executionDates', $labelOptions);

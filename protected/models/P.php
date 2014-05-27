@@ -531,7 +531,7 @@ SQL;
             SELECT p3,p4,p5
             FROM PD
                INNER JOIN P ON (PD.PD2 = P.P1)
-            WHERE pd4=:K1 and pd5=:B1 and pd28 in (2,5) and (pd13 is null or pd13>:DATE)
+            WHERE pd4=:K1 and pd5=:B1 and pd28 in (0,2,5,9) and (pd13 is null or pd13>:DATE)
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':K1', $k1);
