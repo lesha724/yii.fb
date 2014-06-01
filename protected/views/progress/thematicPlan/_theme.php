@@ -2,7 +2,7 @@
 /**
  *
  * @var ProgressController $this
- * @var Nr $model
+ * @var Ustem $model
  * @var CActiveForm $form
  */
 
@@ -43,25 +43,39 @@ $options = array(
 
                 $chairId  = K::model()->getChairByUo1($d1);
                 $teachers = P::model()->getTeachersForTimeTable($chairId, 'pd1');
+                $label = $form->label($model, 'groups', $options);
+                $input = '';
+
+                $groups = Gr::model()->getGroupsForThematicPlan($model->ustem1, $sem4);
+                foreach ($groups as $group) {
+                    $input .= $group['name'].' '.Chtml::dropDownList('Nr['.$group['nr1'].']', $group['nr6'], $teachers, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => array('&nbsp;'))).'<br/>';
+                }
+                $html .= sprintf($pattern, $label, $input);
+
+                $label = $form->label($model, 'ustem3', $options);
+                $input = $form->textField($model, 'ustem3');
+                $html .= sprintf($pattern, $label, $input);
+
+                $label = $form->label($model, 'ustem4', $options);
+                $input = $form->textField($model, 'ustem4');
+                $html .= sprintf($pattern, $label, $input);
+
+                $label = $form->label($model, 'ustem5', $options);
+                $input = $form->textArea($model, 'ustem5');
+                $html .= sprintf($pattern, $label, $input);
+
+                $label = $form->label($model, 'ustem6', $options);
+                $input = $form->dropDownList($model, 'ustem6', array('Занятие', 'Субмодуль'));
+                $html .= sprintf($pattern, $label, $input);
+
+                /*$chairId  = K::model()->getChairByUo1($d1);
+                $teachers = P::model()->getTeachersForTimeTable($chairId, 'pd1');
                 $label = $form->label($model, 'nr6', $options);
-                $input = $form->dropDownList($model, 'nr6', $teachers, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;')));
-                $html .= sprintf($pattern, $label, $input);
+                $input = '';//$form->dropDownList($model, 'nr6', $teachers, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;')));
+                $html .= sprintf($pattern, $label, $input);*/
 
-                $label = $form->label($model, 'nr31', $options);
-                $input = $form->textField($model, 'nr31');
-                $html .= sprintf($pattern, $label, $input);
 
-                $label = $form->label($model, 'nr32', $options);
-                $input = $form->textField($model, 'nr32');
-                $html .= sprintf($pattern, $label, $input);
 
-                $label = $form->label($model, 'nr33', $options);
-                $input = $form->textArea($model, 'nr33');
-                $html .= sprintf($pattern, $label, $input);
-
-                $label = $form->label($model, 'nr34', $options);
-                $input = $form->dropDownList($model, 'nr34', array('Занятие', 'Субмодуль'));
-                $html .= sprintf($pattern, $label, $input);
 
                 $html .= '</div>';
                 echo $html;

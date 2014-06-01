@@ -33,10 +33,11 @@ $form=$this->beginWidget('CActiveForm', array(
     $html .= $form->dropDownList($model, 'speciality', $specialities, $options);
     $html .= '</div>';
 
-    $years_of_admission = CHtml::listData(Sem::model()->getYearsForThematicPlan($model->speciality), 'sg1', 'name');
+    list($years_of_admission, $dataAttrs) = Sem::model()->getYearsForThematicPlan($model->speciality);
+    $years_of_admission = CHtml::listData($years_of_admission, 'sg1', 'name');
     $html .= '<div class="row-fluid span2">';
     $html .= $form->label($model, 'year_of_admission');
-    $html .= $form->dropDownList($model, 'year_of_admission', $years_of_admission, $options);
+    $html .= $form->dropDownList($model, 'year_of_admission', $years_of_admission, $options + array('options' => $dataAttrs));
     $html .= '</div>';
     $html .= '</fieldset>';
 
@@ -56,8 +57,8 @@ $form=$this->beginWidget('CActiveForm', array(
 
     $html .= '</fieldset>';
 
-    if (! empty($model->semester)) {
-        $html .= '<fieldset class="not-submit" style="margin-top:2%;">';
+    //if (! empty($model->semester)) {
+        $html .= '<fieldset style="margin-top:2%;">';
 
         $html .= '<div class="row-fluid span2">';
         $html .= $form->label($model, 'duration');
@@ -69,7 +70,7 @@ $form=$this->beginWidget('CActiveForm', array(
         $teachers = P::model()->getTeachersForTimeTable($chairId, 'pd1');
         $html .= '<div class="row-fluid span2">';
         $html .= $form->label($model, 'teacher');
-        $html .= $form->dropDownList($model, 'teacher', $teachers, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;')));
+        $html .= $form->dropDownList($model, 'teacher', $teachers, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => array('&nbsp;')));
         $html .= '</div>';
 
         $button =  <<<HTML
@@ -80,12 +81,12 @@ $form=$this->beginWidget('CActiveForm', array(
     </button>
 </div>
 HTML;
-        $html .= sprintf($button, tt('Разбить'));
+        $html .= sprintf($button, tt('Ок'));
 
         $html .= $form->hiddenField($model, 'code');
 
         $html .= '</fieldset>';
-    }
+    //}
     $html .= '</div>';
 
 echo $html;

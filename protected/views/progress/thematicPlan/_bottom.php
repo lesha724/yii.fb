@@ -5,8 +5,12 @@
  * @var $model FilterForm
  */
 
+$urlEdit   = Yii::app()->controller->createAbsoluteUrl("progress/renderUstemTheme", array("us1" => 390219, 'd1' => $model->discipline));
 ?>
 
+<a href="<?=$urlEdit?>" class="edit-theme btn btn-mini btn-info">
+    <i class="icon-edit bigger-120"></i>
+</a>
 <div class="row-fluid" >
 
     <h3 class="header smaller lighter blue"><?=tt('Темы занятий')?></h3>
@@ -26,15 +30,15 @@
         </thead>
         <tbody>
             <?php
-                $themes = Nr::model()->getThemesBy($model);
+                $themes = Ustem::model()->getThemesBy($model);
 
                 $html = '';
                 $i = 1;
                 foreach ($themes as $theme) {
 
                     $tip = $theme['submod'] == 0 ? tt('Занятие') : tt('Субмодуль');
-                    $urlDelete = Yii::app()->controller->createAbsoluteUrl("progress/deleteNrTheme", array("nr1" => $theme['nr1']));
-                    $urlEdit   = Yii::app()->controller->createAbsoluteUrl("progress/renderNrTheme", array("nr1" => $theme['nr1'], 'd1' => $model->discipline));
+                    $urlDelete = Yii::app()->controller->createAbsoluteUrl("progress/deleteNrTheme", array("us1" => $model->semester));
+                    $urlEdit   = Yii::app()->controller->createAbsoluteUrl("progress/renderUstemTheme", array("us1" => $model->semester, 'd1' => $model->discipline));
 
                     $html .= <<<HTML
                         <tr>

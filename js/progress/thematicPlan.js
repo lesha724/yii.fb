@@ -10,12 +10,13 @@ $(document).ready(function(){
 
     $(document).on('click', '.edit-theme', function(){
 
-        var url = $(this).attr('href');
+        var course = $('#FilterForm_year_of_admission option:selected').data('sem4');
+        var url = $(this).attr('href')+'&sem4='+course;
 
         $.getJSON(url, {}, function(data){
             $('#themes').append(data.html);
             initChosen();
-            $('div#Nr_nr6_chosen').attr('style', 'min-width:220px');
+            $('#theme-form').find('div.chosen-container').attr('style', 'min-width:220px');
             $('#modal-table').modal('show');
         })
 

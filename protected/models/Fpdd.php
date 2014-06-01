@@ -1,24 +1,24 @@
 <?php
 
 /**
- * This is the model class for table "ustem".
+ * This is the model class for table "fpdd".
  *
- * The followings are the available columns in table 'ustem':
- * @property integer $ustem1
- * @property integer $ustem2
- * @property integer $ustem3
- * @property integer $ustem4
- * @property string $ustem5
- * @property integer $ustem6
+ * The followings are the available columns in table 'fpdd':
+ * @property integer $fpdd1
+ * @property string $fpdd2
+ * @property integer $fpdd3
+ * @property string $fpdd4
+ * @property string $fpdd5
  */
-class Ustem extends CActiveRecord
+class Fpdd extends CActiveRecord
 {
+    public $doc_file;
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'ustem';
+		return 'fpdd';
 	}
 
 	/**
@@ -29,12 +29,13 @@ class Ustem extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('ustem1', 'required'),
-			array('ustem2, ustem3, ustem4, ustem6', 'numerical', 'integerOnly'=>true),
-			array('ustem5', 'length', 'max'=>1000),
+			array('fpdd1, fpdd3', 'numerical', 'integerOnly'=>true),
+			array('fpdd2', 'length', 'max'=>400),
+			array('fpdd4, fpdd5', 'length', 'max'=>1000),
+            array('doc_file', 'file', 'allowEmpty'=>true, 'maxSize'=>1024 * 1024 * 10, 'tooLarge'=>'File has to be smaller than 10MB'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('ustem1, ustem2, ustem3, ustem4, ustem5, ustem6', 'safe', 'on'=>'search'),
+			array('fpdd1, fpdd2, fpdd3, fpdd4, fpdd5', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -55,13 +56,12 @@ class Ustem extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'ustem1' => 'Ustem1',
-			'ustem2' => 'Ustem2',
-            'ustem3' => tt('№ темы'),
-            'ustem4' => tt('№ занятия'),
-            'ustem5' => tt('Тема'),
-            'ustem6' => tt('Тип'),
-            'groups' => tt('Группы')
+			'fpdd1' => 'Fpdd1',
+			'fpdd2' => 'Fpdd2',
+			'fpdd3' => 'Fpdd3',
+			'fpdd4' => 'Fpdd4',
+			'fpdd5' => 'Fpdd5',
+            'doc_file' => tt('Прикрепить файл')
 		);
 	}
 
@@ -83,12 +83,11 @@ class Ustem extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('ustem1',$this->ustem1);
-		$criteria->compare('ustem2',$this->ustem2);
-		$criteria->compare('ustem3',$this->ustem3);
-		$criteria->compare('ustem4',$this->ustem4);
-		$criteria->compare('ustem5',$this->ustem5,true);
-		$criteria->compare('ustem6',$this->ustem6);
+		$criteria->compare('fpdd1',$this->fpdd1);
+		$criteria->compare('fpdd2',$this->fpdd2,true);
+		$criteria->compare('fpdd3',$this->fpdd3);
+		$criteria->compare('fpdd4',$this->fpdd4,true);
+		$criteria->compare('fpdd5',$this->fpdd5,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -99,27 +98,10 @@ class Ustem extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Ustem the static model class
+	 * @return Fpdd the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
 	}
-
-    public function getThemesBy(FilterForm $model)
-    {
-        $sql=<<<SQL
-            SELECT * FROM TEM_PLAN(:US1, :CODE, :DURATION, :PD1);
-SQL;
-        $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':US1', $model->semester);
-        $command->bindValue(':CODE', 1);
-        $command->bindValue(':DURATION', $model->duration);
-        $command->bindValue(':PD1', $model->teacher);
-        $themes = $command->queryAll();
-
-        return $themes;
-    }
-
-
 }

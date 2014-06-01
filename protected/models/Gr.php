@@ -280,4 +280,30 @@ SQL;
 
         return $timeTable;
     }
+
+
+    public function getGroupsForThematicPlan($ustem1, $course)
+    {
+        $sql = <<<SQL
+            select nr1,nr6,gr3,p3,p4,p5,r2,r3,a2, gr19,gr20,gr21,gr22,gr23,gr24,gr28
+            from a
+               inner join r on (a.a1 = r.r5)
+               right outer join nr on (r.r1 = nr.nr1)
+               inner join pd on (nr.nr6 = pd.pd1)
+               inner join p on (pd.pd2 = p.p1)
+               inner join ug on (nr.nr1 = ug.ug3)
+               inner join gr on (ug.ug2 = gr.gr1)
+            where nr31=:USTEM1
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':USTEM1', $ustem1);
+        $groups = $command->queryAll();
+
+        foreach($groups as $key => $group) {
+            $groups[$key]['name'] = $this->getGroupName($course, $group);
+        }
+
+        return $groups;
+    }
 }

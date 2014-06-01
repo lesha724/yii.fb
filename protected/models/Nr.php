@@ -184,18 +184,4 @@ class Nr extends CActiveRecord
 		return parent::model($className);
 	}
 
-    public function getThemesBy(FilterForm $model)
-    {
-        $sql=<<<SQL
-            SELECT * FROM TEM_PLAN(:US1, :CODE, :DURATION, :PD1);
-SQL;
-        $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':US1', $model->semester);
-        $command->bindValue(':CODE', $model->code);
-        $command->bindValue(':DURATION', $model->duration);
-        $command->bindValue(':PD1', $model->teacher);
-        $themes = $command->queryAll();
-
-        return $themes;
-    }
 }

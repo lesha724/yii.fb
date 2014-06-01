@@ -28,7 +28,7 @@ class ProgressController extends Controller
                     'closeModule',
                     'renderExtendedModule',
                     'thematicPlan',
-                    'renderNrTheme',
+                    'renderUstemTheme',
                     'deleteNrTheme',
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
@@ -424,26 +424,40 @@ class ProgressController extends Controller
         ));
     }
 
-    public function actionRenderNrTheme()
+    public function actionRenderUstemTheme()
     {
         if (! Yii::app()->request->isAjaxRequest)
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
-        $nr1 = Yii::app()->request->getParam('nr1', null);
-        $d1  = Yii::app()->request->getParam('d1', null);
+        $us1  = Yii::app()->request->getParam('us1', null);
+        $d1   = Yii::app()->request->getParam('d1', null);
+        $sem4 = Yii::app()->request->getParam('sem4', null);
 
-        if (empty($nr1) || empty($d1))
+        if (empty($us1) || empty($d1) || empty($sem4))
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
-        $model = Nr::model()->findByPk($nr1);
-        if (isset($_REQUEST['Nr'])) {
-            $model->attributes = $_REQUEST['Nr'];
+        $model = Ustem::model()->findByAttributes(array('ustem2' => $us1));
+        if (isset($_REQUEST['Ustem'])) {
+
+            $model->attributes = $_REQUEST['Ustem'];
             $model->save();
+
+            if (isset($_REQUEST['Nr'])) {
+                foreach ($_REQUEST['Nr'] as $key => $nr6) {
+                    Nr::model()
+                        ->findByPk($key)
+                        ->saveAttributes(array(
+                            'nr6' => $nr6
+                        ));
+                }
+
+            }
         }
 
         $html = $this->renderPartial('thematicPlan/_theme', array(
             'model' => $model,
-            'd1'    => $d1
+            'd1'    => $d1,
+            'sem4'  => $sem4,
         ), true);
 
         $res = array(

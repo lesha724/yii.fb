@@ -147,7 +147,7 @@ class Sem extends CActiveRecord
     public function getYearsForThematicPlan($speciality)
     {
         if (empty($speciality))
-            return array();
+            return array(array(), array());
 
         $sql=<<<SQL
             SELECT sg3,sg4,sg1,sem4
@@ -168,7 +168,12 @@ SQL;
             $years[$key]['name'] = $year['sg3'].' ('.SH::convertEducationType($year['sg4']).') '.$year['sem4'].' '.tt('курс');
         }
 
-        return $years;
+        $dataAttrs = array();
+        foreach ($years as $year) {
+            $dataAttrs[$year['sg1']] = array('data-sem4' => $year['sem4']);
+        }
+
+        return array($years, $dataAttrs);
     }
 
     public function getSemestersForThematicPlan($uo1)

@@ -7,6 +7,10 @@
 !/protected/runtime/cache
 /protected/runtime/cache/*
 !/protected/runtime/cache/.gitkeep
+/uploads/*
+!/uploads/.gitkeep
+/uploads/docs/*
+!/uploads/docs/.gitkeep
 # Local config file
 /protected/config/main-local.php
 # Svn files

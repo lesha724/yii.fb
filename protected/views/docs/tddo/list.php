@@ -117,7 +117,7 @@ HTML;
                 ),
                 array(
                     'class'=>'CButtonColumn',
-                    'template'=>'{edit} {delete}',
+                    'template'=>'{edit} {delete} {attach}',
                     'buttons'=>array(
                         'edit'=>array(
                             'url'=>'Yii::app()->controller->createAbsoluteUrl("docs/tddoEdit", array("tddo1" => $data->tddo1))',
@@ -132,6 +132,13 @@ HTML;
                             'options' => array('class' => 'delete btn btn-mini btn-danger'),
                             'imageUrl' => false,
                             'label' => '<i class="icon-trash bigger-120"></i>'
+                        ),
+                        'attach'=>array(
+                            'url'=>'Yii::app()->controller->createAbsoluteUrl("docs/attachFileTddo", array("tddo1" => $data->tddo1))',
+                            'click' => 'function(){}',
+                            'options' => array('class' => 'attachFile btn btn-mini btn-grey'),
+                            'imageUrl' => false,
+                            'label' => '<i class="icon-cloud-download bigger-120"></i>'
                         ),
                     ),
                 ),

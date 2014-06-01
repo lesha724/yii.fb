@@ -20,6 +20,7 @@ class DocsController extends Controller
                     'getTddoNextNumber',
                     'deleteTddo',
                     'tddoEdit',
+                    'attachFileTddo'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -229,5 +230,48 @@ class DocsController extends Controller
             }
         }
     }
+
+    public function actionAttachFileTddo()
+    {
+        die(var_dump('Кнопка remove не работает в аплоадере'));
+        $tddo1 = Yii::app()->request->getParam('tddo1', null);
+        if (empty($tddo1))
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $model = Tddo::model()->findByPk($tddo1);
+        if (empty($model))
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        if (! empty($_FILES))
+        {
+            $files = CUploadedFile::getInstancesByName('files');
+
+            foreach ($files as $file) {
+
+                $name = time();
+                $type = $file->getExtensionName();
+                $newName = $name.'.'.$type;
+
+                $fpdd = new Fpdd();
+                $fpdd->fpdd1 = $tddo1;
+                $fpdd->fpdd3 = Yii::app()->user->dbModel->p1;
+                $fpdd->fpdd4 = $newName;
+                $fpdd->fpdd5 = $file->getName();
+
+                if ($fpdd->save()) {
+                    $path = Yii::getPathOfAlias('webroot').'/uploads/docs/'.$newName;
+                    $file->saveAs($path);
+                }
+            }
+        }
+
+        $attachedFiles = Fpdd::model()->findAll('fpdd1='.$tddo1);
+
+        $this->render('tddo/attachFile', array(
+            'model' => $model,
+            'attachedFiles' => $attachedFiles
+        ));
+    }
+
 
 }

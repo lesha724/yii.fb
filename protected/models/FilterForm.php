@@ -15,6 +15,7 @@ class FilterForm extends CFormModel
     public $duration = 0;
     public $teacher = 0;
     public $code = 0;
+    public $course = 0;
 
 /* field for other/gostem */
     public $chair = 0;
@@ -30,7 +31,7 @@ class FilterForm extends CFormModel
 		return array(
 			array('discipline, group', 'required', 'on' => 'journal, modules'),
 			array('filial, faculty, speciality, year_of_admission, discipline, semester', 'required', 'on' => 'thematicPlan'),
-            array('duration, teacher, code', 'safe', 'on' => 'thematicPlan'),
+            array('duration, teacher, code, course', 'safe', 'on' => 'thematicPlan'),
             array('chair, gostem1, nr1, d1', 'safe', 'on' => 'gostem'),
 		);
 	}
