@@ -7,7 +7,7 @@
 
 //$urlEdit   = Yii::app()->controller->createAbsoluteUrl("progress/renderUstemTheme", array("us1" => 390219, 'd1' => $model->discipline));
 ?>
-<!--<a href="<?=$urlEdit?>" class="edit-theme btn btn-mini btn-info">
+<!--<a href="<?php //echo $urlEdit?>" class="edit-theme btn btn-mini btn-info">
     <i class="icon-edit bigger-120"></i>
 </a>-->
 
