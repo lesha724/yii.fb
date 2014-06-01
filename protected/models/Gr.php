@@ -285,7 +285,7 @@ SQL;
     public function getGroupsForThematicPlan($ustem1, $course)
     {
         $sql = <<<SQL
-            select nr1,nr6,gr3,p3,p4,p5,r2,r3,a2, gr19,gr20,gr21,gr22,gr23,gr24,gr28
+            select nr1,nr6,nr18,gr3,p3,p4,p5,r2,r3,a2, gr19,gr20,gr21,gr22,gr23,gr24,gr28
             from a
                inner join r on (a.a1 = r.r5)
                right outer join nr on (r.r1 = nr.nr1)

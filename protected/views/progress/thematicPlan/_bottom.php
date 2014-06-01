@@ -5,12 +5,12 @@
  * @var $model FilterForm
  */
 
-$urlEdit   = Yii::app()->controller->createAbsoluteUrl("progress/renderUstemTheme", array("us1" => 390219, 'd1' => $model->discipline));
+//$urlEdit   = Yii::app()->controller->createAbsoluteUrl("progress/renderUstemTheme", array("us1" => 390219, 'd1' => $model->discipline));
 ?>
-
-<a href="<?=$urlEdit?>" class="edit-theme btn btn-mini btn-info">
+<!--<a href="<?=$urlEdit?>" class="edit-theme btn btn-mini btn-info">
     <i class="icon-edit bigger-120"></i>
-</a>
+</a>-->
+
 <div class="row-fluid" >
 
     <h3 class="header smaller lighter blue"><?=tt('Темы занятий')?></h3>
@@ -37,7 +37,7 @@ $urlEdit   = Yii::app()->controller->createAbsoluteUrl("progress/renderUstemThem
                 foreach ($themes as $theme) {
 
                     $tip = $theme['submod'] == 0 ? tt('Занятие') : tt('Субмодуль');
-                    $urlDelete = Yii::app()->controller->createAbsoluteUrl("progress/deleteNrTheme", array("us1" => $model->semester));
+                    $urlDelete = Yii::app()->controller->createAbsoluteUrl("progress/deleteUstemTheme", array("ustem1" => $theme['ustem1']));
                     $urlEdit   = Yii::app()->controller->createAbsoluteUrl("progress/renderUstemTheme", array("us1" => $model->semester, 'd1' => $model->discipline));
 
                     $html .= <<<HTML

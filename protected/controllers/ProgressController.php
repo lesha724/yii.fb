@@ -29,7 +29,7 @@ class ProgressController extends Controller
                     'renderExtendedModule',
                     'thematicPlan',
                     'renderUstemTheme',
-                    'deleteNrTheme',
+                    'deleteUstemTheme',
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -447,7 +447,8 @@ class ProgressController extends Controller
                     Nr::model()
                         ->findByPk($key)
                         ->saveAttributes(array(
-                            'nr6' => $nr6
+                            'nr6' => $nr6,
+                            'nr18' => $model->nr18
                         ));
                 }
 
@@ -468,14 +469,14 @@ class ProgressController extends Controller
         Yii::app()->end(CJSON::encode($res));
     }
 
-    public function actionDeleteNrTheme()
+    public function actionDeleteUstemTheme()
     {
         if (! Yii::app()->request->isAjaxRequest)
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
-        $nr1 = Yii::app()->request->getParam('nr1', null);
+        $ustem1 = Yii::app()->request->getParam('ustem1', null);
 
-        $deleted = (bool)Nr::model()->deleteByPk($nr1);
+        $deleted = (bool)Ustem::model()->deleteByPk($ustem1);
 
         $res = array(
             'deleted' => $deleted

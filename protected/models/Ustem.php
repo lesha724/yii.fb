@@ -13,6 +13,7 @@
  */
 class Ustem extends CActiveRecord
 {
+    public $nr18;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -32,6 +33,7 @@ class Ustem extends CActiveRecord
 			array('ustem1', 'required'),
 			array('ustem2, ustem3, ustem4, ustem6', 'numerical', 'integerOnly'=>true),
 			array('ustem5', 'length', 'max'=>1000),
+            array('nr18', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('ustem1, ustem2, ustem3, ustem4, ustem5, ustem6', 'safe', 'on'=>'search'),
@@ -61,7 +63,8 @@ class Ustem extends CActiveRecord
             'ustem4' => tt('№ занятия'),
             'ustem5' => tt('Тема'),
             'ustem6' => tt('Тип'),
-            'groups' => tt('Группы')
+            'groups' => tt('Группы'),
+            'nr18'   => tt('Длительность')
 		);
 	}
 
