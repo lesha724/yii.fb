@@ -179,6 +179,9 @@ SQL;
 
     public function getChairByUo1($uo1)
     {
+        if (empty($uo1))
+            return 0;
+        
         $sql=<<<SQL
             SELECT uo4
 				FROM uo
