@@ -195,7 +195,7 @@ SQL;
         $semesters = $command->queryAll();
 
         foreach ($semesters as $key => $sem) {
-            $semesters[$key]['name'] = SH::convertUS4($sem['us4']).' '.$sem['sem7'].' ('.$sem['sem3'].', '.SH::convertSem5($sem['sem5']).')';
+            $semesters[$key]['name'] = SH::convertUS4($sem['us4']).', '.$sem['sem7'].' '.tt('сем').'. ('.$sem['sem3'].', '.SH::convertSem5($sem['sem5']).')';
         }
 
         return $semesters;

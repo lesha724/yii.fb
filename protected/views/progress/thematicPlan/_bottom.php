@@ -24,7 +24,7 @@
             <th><?=tt('Длительность')?></th>
             <th><?=tt('Тема')?></th>
             <th><?=tt('Тип')?></th>
-            <th><?=tt('Преподаватель')?></th>
+            <!--<th><?=tt('Преподаватель')?></th>-->
             <th></th>
         </tr>
         </thead>
@@ -37,7 +37,7 @@
                 foreach ($themes as $theme) {
 
                     $tip = $theme['submod'] == 0 ? tt('Занятие') : tt('Субмодуль');
-                    $urlDelete = Yii::app()->controller->createAbsoluteUrl("progress/deleteUstemTheme", array("ustem1" => $theme['ustem1']));
+                    //$urlDelete = Yii::app()->controller->createAbsoluteUrl("progress/deleteUstemTheme", array("ustem1" => $theme['ustem1']));
                     $urlEdit   = Yii::app()->controller->createAbsoluteUrl("progress/renderUstemTheme", array("us1" => $model->semester, 'd1' => $model->discipline));
 
                     $html .= <<<HTML
@@ -48,14 +48,13 @@
                             <td>$theme[dlitel]</td>
                             <td>$theme[tema]</td>
                             <td>$tip</td>
-                            <td>$theme[fio]</td>
                             <td>
                                 <a href="$urlEdit" class="edit-theme btn btn-mini btn-info">
                                     <i class="icon-edit bigger-120"></i>
                                 </a>
-                                <a href="$urlDelete" class="delete-theme btn btn-mini btn-danger">
+                                <!--<a href="$urlDelete" class="delete-theme btn btn-mini btn-danger">
                                     <i class="icon-trash bigger-120"></i>
-                                </a>
+                                </a>-->
                             </td>
                         </tr>
 HTML;

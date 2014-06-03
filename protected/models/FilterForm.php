@@ -12,7 +12,7 @@ class FilterForm extends CFormModel
     public $semester;
 
 /* field for thematic plan */
-    public $duration = 0;
+    public $duration = 1;
     public $teacher = 0;
     public $code = 0;
     public $course = 0;

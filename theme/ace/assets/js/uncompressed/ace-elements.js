@@ -53,7 +53,7 @@ jQuery(function() {
 				self.$element.click();
 		})
 
-		if(remove_btn) this.$label.next('a').on(ace.click_event, function(){
+		if(remove_btn) this.$label.next('a').on('click', function(){
 			if(! self.can_reset ) return false;
 			
 			var ret = true;

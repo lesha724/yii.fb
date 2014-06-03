@@ -233,7 +233,6 @@ class DocsController extends Controller
 
     public function actionAttachFileTddo()
     {
-        die(var_dump('Кнопка remove не работает в аплоадере'));
         $tddo1 = Yii::app()->request->getParam('tddo1', null);
         if (empty($tddo1))
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');

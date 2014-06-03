@@ -86,7 +86,7 @@
     </script>
 
     <!-- ace scripts -->
-    <script src="<?=Yii::app()->baseUrl?>/theme/ace/assets/js/ace-elements.min.js"></script>
+    <script src="<?=Yii::app()->baseUrl?>/theme/ace/assets/js/uncompressed/ace-elements.js"></script>
     <script src="<?=Yii::app()->baseUrl?>/theme/ace/assets/js/ace.min.js"></script>
     <script src="<?=Yii::app()->baseUrl?>/theme/ace/assets/js/uncompressed/bootbox.js"></script>
 

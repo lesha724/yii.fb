@@ -181,7 +181,7 @@ SQL;
     {
         if (empty($uo1))
             return 0;
-        
+
         $sql=<<<SQL
             SELECT uo4
 				FROM uo

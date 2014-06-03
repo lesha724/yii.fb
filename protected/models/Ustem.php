@@ -117,7 +117,7 @@ SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':US1', $model->semester);
         $command->bindValue(':CODE', 1);
-        $command->bindValue(':DURATION', $model->duration);
+        $command->bindValue(':DURATION', $model->duration > 0 ? $model->duration : 1);
         $command->bindValue(':PD1', $model->teacher);
         $themes = $command->queryAll();
 

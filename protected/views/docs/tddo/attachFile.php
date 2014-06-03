@@ -7,6 +7,7 @@
  */
 
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/docs/attachFile.js', CClientScript::POS_HEAD);
+Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/theme/ace/assets/js/jquery-2.0.3.min.js', CClientScript::POS_HEAD);
 
 $docType=$model->tddo2;
 $this->pageHeader=tt('Прикрепить файл к документу #').$model->tddo7;
