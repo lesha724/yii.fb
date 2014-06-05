@@ -135,7 +135,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'label' => '<i class="icon-double-angle-right"></i>'.tt('Документооборот'),
                     'url' => Yii::app()->createUrl('/docs/tddo'),
                     'visible' => Yii::app()->user->isTch || Yii::app()->user->isAdmin,
-                    'active' => $controller=='docs' && $action=='tddo'
+                    'active' => $controller=='docs' && stristr($action, 'tddo')
                 ),
             ),
         ),
