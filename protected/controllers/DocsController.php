@@ -6,6 +6,7 @@ class DocsController extends Controller
 
         return array(
             'accessControl',
+            'checkPermission'
         );
     }
 
@@ -20,7 +21,8 @@ class DocsController extends Controller
                     'getTddoNextNumber',
                     'deleteTddo',
                     'tddoEdit',
-                    'attachFileTddo'
+                    'attachFileTddo',
+                    'tddoPrint',
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -30,14 +32,36 @@ class DocsController extends Controller
         );
     }
 
+    public function filterCheckPermission($filterChain)
+    {
+        $grants = Yii::app()->user->dbModel->grants;
+        if (empty($grants))
+            throw new CHttpException(404, 'Invalid request. You don\'t have access to the service.');
+
+        if ($grants->grants5 != 1)
+            throw new CHttpException(404, 'Invalid request. You don\'t have access to the service.');
+
+        $filterChain->run();
+    }
 
 
     public function actionTddo()
     {
         $docType = Yii::app()->request->getParam('docType', null);
 
+        $model = new Tddo();
+        $model->unsetAttributes();
+
+        $model->tddo2 = $docType;
+
+        if (isset($_REQUEST['Tddo'])) {
+            $model->scenario = 'filter';
+            $model->attributes = $_REQUEST['Tddo'];
+        }
+
         $this->render('tddo/list', array(
-            'docType' => $docType
+            'docType' => $docType,
+            'model'   => $model
         ));
     }
 
@@ -272,5 +296,24 @@ class DocsController extends Controller
         ));
     }
 
+    public function actionTddoPrint()
+    {
+        $docType = Yii::app()->request->getParam('docType', null);
+
+        $model = new Tddo();
+        $model->unsetAttributes();
+
+        $model->tddo2 = $docType;
+
+        if (isset($_REQUEST['Tddo'])) {
+            $model->scenario = 'filter';
+            $model->attributes = $_REQUEST['Tddo'];
+        }
+
+        $this->render('tddo/print', array(
+            'docType' => $docType,
+            'model'   => $model
+        ));
+    }
 
 }

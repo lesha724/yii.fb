@@ -39,6 +39,22 @@ $this->breadcrumbs=array(
         </div>
     </div>
 
+    <div class="control-group">
+        <?=$form->label($model, 'grants5', array('class' => 'control-label'))?>
+        <div class="controls">
+            <label>
+                <?php
+                    echo CHtml::checkBox('Grants[grants5]', $model->grants5,
+                        array(
+                            'class' => 'ace ace-switch'
+                        )
+                    )
+                ?>
+                <span class="lbl"></span>
+            </label>
+        </div>
+    </div>
+
     <div class="form-actions">
         <button type="submit" class="btn btn-info">
             <i class="icon-ok bigger-110"></i>

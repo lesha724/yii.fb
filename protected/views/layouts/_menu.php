@@ -123,7 +123,7 @@ $this->widget('zii.widgets.CMenu', array(
                 ),
             ),
         ),
-        /*array(
+        array(
             'label' => '<i class="icon-folder-open"></i><span class="menu-text">'.tt('Док.-оборот').'</span><b class="arrow icon-angle-down"></b>',
             'url' => '#',
             'linkOptions'=> array(
@@ -134,11 +134,11 @@ $this->widget('zii.widgets.CMenu', array(
                 array(
                     'label' => '<i class="icon-double-angle-right"></i>'.tt('Документооборот'),
                     'url' => Yii::app()->createUrl('/docs/tddo'),
-                    'visible' => Yii::app()->user->isTch,
-                    'active' => $controller=='docs' && $action=='farm'
+                    'visible' => Yii::app()->user->isTch || Yii::app()->user->isAdmin,
+                    'active' => $controller=='docs' && $action=='tddo'
                 ),
             ),
-        ),*/
+        ),
         array(
             'label' => '<i class="icon-globe"></i><span class="menu-text">'.tt('Другое').'</span><b class="arrow icon-angle-down"></b>',
             'url' => '#',

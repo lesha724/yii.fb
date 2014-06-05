@@ -68,6 +68,8 @@ class Tddo extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+            'ido' => array(self::HAS_MANY, 'Ido', 'ido1'),
+            'idok' => array(self::HAS_MANY, 'Idok', 'idok1')
 		);
 	}
 
@@ -156,10 +158,50 @@ class Tddo extends CActiveRecord
 
         $criteria->compare('tddo2', $docType);
 
+        $criteria->compare('tddo3', $this->tddo3);
+        $criteria->compare('tddo7', $this->tddo7);
+        $criteria->compare('tddo4', $this->tddo4);
+        $criteria->addSearchCondition('tddo8', $this->tddo8);
+        $criteria->compare('tddo9', $this->tddo9);
+        $criteria->addSearchCondition('tddo5', $this->tddo5);
+        $criteria->addSearchCondition('tddo6', $this->tddo6);
+
+        $id = Yii::app()->request->getParam('executor', null);
+        if (! empty($id)) {
+            if ($this->executorType == Tddo::ONLY_TEACHERS) {
+                $criteria->with = array(
+                    'ido' => array(
+                        'select' => false
+                    )
+                );
+                $criteria->compare('ido2', $id);
+
+            } else if ($this->executorType == Tddo::ONLY_INDEXES) {
+                $criteria->with = array(
+                    'ido' => array(
+                        'select' => false
+                    )
+                );
+                $criteria->compare('ido4', $id);
+
+            } else if ($this->executorType == Tddo::ONLY_CHAIRS) {
+                $criteria->with = array(
+                    'idok' => array(
+                        'select' => false
+                    )
+                );
+                $criteria->compare('idok2', $id);
+            }
+
+            $criteria->together = true;
+        }
+
+        $isPrintMode = stristr(Yii::app()->controller->action->id, 'print');
+
         $provider = new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
             'pagination' => array(
-                'pageSize' => 10,
+                'pageSize' => $isPrintMode ? 100 : 10,
             ),
             'sort' => array(
                 'defaultOrder' => 'EXTRACT (year FROM tddo4) DESC, tddo3 DESC'
@@ -208,11 +250,7 @@ SQL;
             if (empty($executor['ido2'])) // teacher
                 continue;
 
-            if ($executor['ido5'] == 1) {
-                $symbol = '<i class="icon-ok green"></i>';
-            } else {
-                $symbol = '<i class="icon-remove red"></i>';
-            }
+            $symbol = SH::showIcon($executor['ido5']);
 
             $executors[] = $symbol.' '.SH::getShortName($executor['p3'], $executor['p4'], $executor['p5']);
 
@@ -243,13 +281,7 @@ SQL;
             $chairs = $command->queryAll();
 
             foreach ($chairs as $chair) {
-
-                if ($chair['idok4'] == 1) {
-                    $symbol = '<i class="icon-ok green"></i>';
-                } else {
-                    $symbol = '<i class="icon-remove red"></i>';
-                }
-
+                $symbol = SH::showIcon($chair['idok4']);
                 $executors[] = $symbol.' '.$chair['k3'];
                 $this->executorType = Tddo::ONLY_CHAIRS;
             }
@@ -329,6 +361,13 @@ SQL;
         if ($emptyTypeOnEdit)
             $type = Tddo::ONLY_TEACHERS;
 
+
+        $filterScenario = $this->scenario == 'filter' &&
+                          isset($_REQUEST['executorType']);
+        if ($filterScenario)
+            $type = $_REQUEST['executorType'];
+
+
         return $type;
     }
 
@@ -336,4 +375,15 @@ SQL;
     {
         $this->executorType = $value;
     }
+
+    public function hasAttachedFiles()
+    {
+        return Fpdd::model()->exists('fpdd1 = '.$this->tddo1);
+    }
+
+    public function isOnControl()
+    {
+        return Dkid::model()->exists('dkid1 = '.$this->tddo1);
+    }
+
 }

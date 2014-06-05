@@ -8,6 +8,7 @@
  * @property integer $grants2
  * @property integer $grants3
  * @property integer $grants4
+ * @property integer $grants5
  *
  * The followings are the available model relations:
  * @property P $p
@@ -16,6 +17,7 @@ class Grants extends CActiveRecord
 {
     const EL_JOURNAL = 'grant3';
     const MODULES = 'grant4';
+    const DOCS = 'grant5';
 	/**
 	 * @return string the associated database table name
 	 */
@@ -32,7 +34,7 @@ class Grants extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('grants1, grants2, grants3, grants4', 'numerical', 'integerOnly'=>true),
+			array('grants1, grants2, grants3, grants4, grants5', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('grants1, grants2, grants3', 'safe', 'on'=>'search'),
@@ -61,6 +63,7 @@ class Grants extends CActiveRecord
 			'grants2' => 'Grants2',
 			'grants3' => tt('Эл. журнал'),
 			'grants4' => tt('Ведомости'),
+			'grants5' => tt('Документооборот'),
 		);
 	}
 
@@ -111,6 +114,9 @@ class Grants extends CActiveRecord
                 break;
             case self::MODULES:
                 $grants = $this->grants4;
+                break;
+            case self::DOCS:
+                $grants = $this->grants5;
                 break;
             default:
                 $grants = null;

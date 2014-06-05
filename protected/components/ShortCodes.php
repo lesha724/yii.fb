@@ -145,6 +145,22 @@ class ShortCodes extends CApplicationComponent
         }
         return $type;
     }
+
+    public static function showIcon($val)
+    {
+        $isPrint = stristr(Yii::app()->controller->action->id, 'print');
+        if ($val == 1) {
+            $symbol = ! $isPrint
+                        ? '<i class="icon-ok green"></i>'
+                        : '+';
+        } else {
+            $symbol = ! $isPrint
+                        ? '<i class="icon-remove red"></i>'
+                        : '-';
+        }
+
+        return $symbol;
+    }
 }
 
 class SH extends ShortCodes

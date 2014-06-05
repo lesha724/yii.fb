@@ -29,10 +29,10 @@ JS
 Yii::app()->clientScript->registerPackage('jquery.ui');
 Yii::app()->clientScript->registerPackage('datepicker');
 Yii::app()->clientScript->registerPackage('autosize');
-
 Yii::app()->clientScript->registerPackage('chosen');
 
-Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/docs/farm.js', CClientScript::POS_HEAD);
+Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/docs/tddo.js', CClientScript::POS_HEAD);
+Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/docs/_form.js', CClientScript::POS_HEAD);
 
 $pattern = <<<HTML
 <div class="control-group">
@@ -174,7 +174,7 @@ HTML;
         $html .= sprintf($pattern, '', $addExecutorHtml);
     }
 
-    // execution control
+    // chancellery
     if ($docType >= 5) {
         $label = $form->label($model, 'tddo10', $labelOptions);
         $input = $form->checkBox($model, 'tddo10');

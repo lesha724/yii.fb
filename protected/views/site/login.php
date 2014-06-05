@@ -53,8 +53,7 @@ $this->breadcrumbs=array(
                                         <input type="checkbox" class="ace" />
                                         <span class="lbl"> Remember Me</span>
                                     </label>-->
-
-                                    <button class="width-35 pull-right btn btn-small btn-primary" type="submit">
+                                    <button  data-loading-text="Loading..." class="width-35 pull-right btn btn-small btn-primary" type="submit">
                                         <i class="icon-key"></i>
                                         <?=tt('Войти')?>
                                     </button>
