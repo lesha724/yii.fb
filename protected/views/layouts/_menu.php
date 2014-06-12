@@ -42,6 +42,11 @@ $this->widget('zii.widgets.CMenu', array(
                     'url' => Yii::app()->createUrl('/admin/default/modules'),
                     'active' => $action=='modules' && $module=='admin'
                 ),
+                array(
+                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Абитуриент'),
+                    'url' => Yii::app()->createUrl('/admin/default/entrance'),
+                    'active' => $action=='entrance' && $module=='admin'
+                ),
             ),
             'visible' => Yii::app()->user->isAdmin,
         ),
@@ -139,6 +144,22 @@ $this->widget('zii.widgets.CMenu', array(
                 ),
             ),
         ),
+        /*array(
+            'label' => '<i class="icon-book"></i><span class="menu-text">'.tt('Абитуриент').'</span><b class="arrow icon-angle-down"></b>',
+            'url' => '#',
+            'linkOptions'=> array(
+                'class' => 'dropdown-toggle',
+            ),
+            'itemOptions'=>array('class'=> $controller=='entrance' ? 'active open' : ''),
+            'items' => array(
+                array(
+                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Ход приема документов'),
+                    'url' => Yii::app()->createUrl('/entrance/documentReception'),
+                    'visible' => true,//Yii::app()->user->isTch || Yii::app()->user->isAdmin,
+                    'active' => $controller=='entrance' && $action=='documentReception'
+                ),
+            ),
+        ),*/
         array(
             'label' => '<i class="icon-globe"></i><span class="menu-text">'.tt('Другое').'</span><b class="arrow icon-angle-down"></b>',
             'url' => '#',

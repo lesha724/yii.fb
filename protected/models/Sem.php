@@ -155,7 +155,7 @@ class Sem extends CActiveRecord
             INNER JOIN sg on (sem.sem2 = sg.sg1)
             WHERE sg2=:SPECIALITY and (sem3=:YEAR1 or sem3=:YEAR2)
             GROUP BY sg3,sg4,sg1,sem4
-            ORDER BY sg4,sg3 DESC
+            ORDER BY sg4,sg3 DESC,sem4 DESC
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);

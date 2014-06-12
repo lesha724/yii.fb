@@ -23,6 +23,11 @@ class FilterForm extends CFormModel
     public $gostem1;
     public $nr1;
 
+
+    public $sel_1;
+    public $sel_2;
+    public $extendedForm = 0;
+
 	/**
 	 * Declares the validation rules.
 	 */
@@ -33,6 +38,7 @@ class FilterForm extends CFormModel
 			array('filial, faculty, speciality, year_of_admission, discipline, semester', 'required', 'on' => 'thematicPlan'),
             array('duration, teacher, code, course', 'safe', 'on' => 'thematicPlan'),
             array('chair, gostem1, nr1, d1', 'safe', 'on' => 'gostem'),
+            array('sel_1, sel_2, course, extendedForm', 'safe', 'on' => 'documentReception'),
 		);
 	}
 
@@ -43,6 +49,12 @@ class FilterForm extends CFormModel
 	 */
 	public function attributeLabels()
 	{
+        $sel_1 = $sel_2 = '';
+        if ($this->scenario == 'documentReception') {
+            $sel_1 = tt('Направление подготовки');
+            $sel_2 = tt('Форма обучения');
+        }
+
 		return array(
 			'discipline'=> tt('Дисциплина'),
 			'group'=> tt('Группа'),
@@ -57,6 +69,10 @@ class FilterForm extends CFormModel
             'chair' => tt('Кафедра'),
             'gostem1' => tt('Гос. экзамен'),
             'nr1' => tt('Кафедра'),
+            'sel_1' => $sel_1,
+            'sel_2' => $sel_2,
+            'course' => tt('Курс'),
+            'extendedForm' => tt('Расширенная форма'),
 		);
 	}
 }
