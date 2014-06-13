@@ -52,7 +52,7 @@
                                 <a href="$urlEdit" class="edit-theme btn btn-mini btn-info">
                                     <i class="icon-edit bigger-120"></i>
                                 </a>
-                                <!--<a href="$urlDelete" class="delete-theme btn btn-mini btn-danger">
+                                <!--<a href="" class="delete-theme btn btn-mini btn-danger">
                                     <i class="icon-trash bigger-120"></i>
                                 </a>-->
                             </td>
@@ -64,6 +64,11 @@ HTML;
             ?>
         </tbody>
     </table>
+
+    <button class="btn btn-mini btn-danger" name="delete-thematic-plan">
+        <i class="icon-trash"></i>
+        <?=tt('Удалить тематический план')?>
+    </button>
 <?php
 
 /*    $this->widget('bootstrap.widgets.TbGridView', array(

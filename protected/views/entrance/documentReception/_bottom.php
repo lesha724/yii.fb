@@ -79,7 +79,10 @@ $shortForm = $model->extendedForm == 0
 
             $html = '';
             $i = 1;
-            $v1=$v2=$v3=$v4=$v5=$v6=$v7=$v8=$v9=$v10=$v11=$v12=$v13=0;
+            $sum = array();
+            for($i=1; $i<=13; $i++)
+                $sum['v'.$i] = 0;
+
             foreach ($specialities as $sp) {
 
                 if ($shortForm) {
@@ -92,19 +95,19 @@ $shortForm = $model->extendedForm == 0
                                 ? $sp['spab14']
                                 : "<a target='_blank' href='#'>".$sp['spab14']."</a>";
 
-                    $v1  += $sp['v'];
-                    $v2  += $sp['b'];
-                    $v3  += $sp['k'];
-                    $v4  += ($count_1  = Spab::model()->countFor($model, $sp['spab1'], 0));
-                    $v5  += ($count_2  = Spab::model()->countFor($model, $sp['spab1'], 0, "$t=1"));
-                    $v6  += ($count_3  = Spab::model()->countFor($model, $sp['spab1'], 0, "$t=0"));
-                    $v7  += ($count_4  = Spab::model()->countFor($model, $sp['spab1'], 1));
-                    $v8  += ($count_5  = Spab::model()->countFor($model, $sp['spab1'], 1, "$t=1"));
-                    $v9  += ($count_6  = Spab::model()->countFor($model, $sp['spab1'], 1, "$t=0"));
-                    $v10 += ($count_7  = Spab::model()->countFor($model, $sp['spab1'], 1, "ABD44 <> ''"));
-                    $v11 += ($count_8  = Spab::model()->countFor($model, $sp['spab1'], 1, "ABD48 = 1"));
-                    $v12 += ($count_9  = $count_7 - $count_8);
-                    $v12 += ($count_10 = Spab::model()->countFor($model, $sp['spab1'], "0,1", "ABD12 is not null", 1));
+                    $sum['v1']  += $sp['v'];
+                    $sum['v2']  += $sp['b'];
+                    $sum['v3']  += $sp['k'];
+                    $sum['v4']  += ($count_1  = Spab::model()->countFor($model, $sp['spab1'], 0));
+                    $sum['v5']  += ($count_2  = Spab::model()->countFor($model, $sp['spab1'], 0, "$t=1"));
+                    $sum['v6']  += ($count_3  = Spab::model()->countFor($model, $sp['spab1'], 0, "$t=0"));
+                    $sum['v7']  += ($count_4  = Spab::model()->countFor($model, $sp['spab1'], 1));
+                    $sum['v8']  += ($count_5  = Spab::model()->countFor($model, $sp['spab1'], 1, "$t=1"));
+                    $sum['v9']  += ($count_6  = Spab::model()->countFor($model, $sp['spab1'], 1, "$t=0"));
+                    $sum['v10'] += ($count_7  = Spab::model()->countFor($model, $sp['spab1'], 1, "ABD44 <> ''"));
+                    $sum['v11'] += ($count_8  = Spab::model()->countFor($model, $sp['spab1'], 1, "ABD48 = 1"));
+                    $sum['v12'] += ($count_9  = ( ($count_7-$count_8) > 0 ? $count_7-$count_8:'' ));
+                    $sum['v13'] += ($count_10 = Spab::model()->countFor($model, $sp['spab1'], "0,1", "ABD12 is not null", 1));
 
                     if (! $showColumns)
                         $count_7 = $count_8 = $count_9 = $v13 = $v10 = $v11 = '';
@@ -127,30 +130,98 @@ $shortForm = $model->extendedForm == 0
                         <td>$count_10</td>
                     </tr>
 HTML;
+                } else { // EXTENDED FORM
+
+
+                    $name = ($isNulau && ($sp['spab1'] == 10 || $sp['spab1'] == 16))
+                                ? $sp['spab14']
+                                : "<a target='_blank' href='#'>".$sp['spab14']."</a>";
+
+                    $sum['v1']  += $sp['v'];
+                    $sum['v2']  += $sp['b'];
+                    $sum['v3']  += $sp['k'];
+                    $sum['v4']  += ($count_1  = Spab::model()->countFor($model, $sp['spab1'], '0,1'));
+                    $count_2  = round($count_1/$sp['v'],1);
+                    $sum['v5']  += ($count_3  = Spab::model()->countFor($model, $sp['spab1'], 0));
+                    $sum['v6']  += ($count_4  = Spab::model()->countFor($model, $sp['spab1'], 0, "abd4 = 2"));
+                    $sum['v7']  += ($count_5  = Spab::model()->countFor($model, $sp['spab1'], 0, "(abd4 = 3 or ab160 = 1)"));
+                    $sum['v8']  += ($count_6  = Spab::model()->countFor($model, $sp['spab1'], 0, "abd4 in (1,8)"));
+                    $sum['v9']  += ($count_7  = Spab::model()->countFor($model, $sp['spab1'], 1));
+                    $sum['v10'] += ($count_8  = Spab::model()->countFor($model, $sp['spab1'], 1, "(abd4 = 3 or ab160 = 1)"));
+                    $sum['v11'] += ($count_9  = Spab::model()->countFor($model, $sp['spab1'], '0,1', "ABD12 is not null", 1));
+                    $sum['v12'] += ($count_10 = Spab::model()->countFor($model, $sp['spab1'], 0, "ABD12 is not null", 1));
+                    $sum['v13'] += ($count_11 = Spab::model()->countFor($model, $sp['spab1'], 1, "ABD12 is not null", 1));
+
+                    $html .= <<<HTML
+                    <tr>
+                        <td>$name</td>
+                        <td>$sp[v]</td>
+                        <td>$sp[b]</td>
+                        <td>$sp[k]</td>
+                        <td>$count_1</td>
+                        <td>$count_2</td>
+                        <td>$count_3</td>
+                        <td>$count_4</td>
+                        <td>$count_5</td>
+                        <td>$count_6</td>
+                        <td>$count_7</td>
+                        <td>$count_8</td>
+                        <td>$count_9</td>
+                        <td>$count_10</td>
+                        <td>$count_11</td>
+                    </tr>
+HTML;
                 }
                 $i++;
             }
 
-            if ($shortForm) {
-                $html .= <<<HTML
-                    <tr>
-                        <td></td>
-                        <td>$v1</td>
-                        <td>$v2</td>
-                        <td>$v3</td>
-                        <td>$v4</td>
-                        <td>$v5</td>
-                        <td>$v6</td>
-                        <td>$v7</td>
-                        <td>$v8</td>
-                        <td>$v9</td>
-                        <td>$v10</td>
-                        <td>$v11</td>
-                        <td>$v12</td>
-                        <td>$v13</td>
-                    </tr>
+        foreach ($sum as $key=>$val) {
+            if ($val == 0)
+                $sum[$key] = '';
+        }
+
+        if ($shortForm) {
+            $html .= <<<HTML
+                <tr>
+                    <td></td>
+                    <td>$sum[v1]</td>
+                    <td>$sum[v2]</td>
+                    <td>$sum[v3]</td>
+                    <td>$sum[v4]</td>
+                    <td>$sum[v5]</td>
+                    <td>$sum[v6]</td>
+                    <td>$sum[v7]</td>
+                    <td>$sum[v8]</td>
+                    <td>$sum[v9]</td>
+                    <td>$sum[v10]</td>
+                    <td>$sum[v11]</td>
+                    <td>$sum[v12]</td>
+                    <td>$sum[v13]</td>
+                </tr>
 HTML;
-            }
+        } else {
+
+            $percent = round($sum['v4']/$sum['v1'],1);
+            $html .= <<<HTML
+                <tr>
+                    <td></td>
+                    <td>$sum[v1]</td>
+                    <td>$sum[v2]</td>
+                    <td>$sum[v3]</td>
+                    <td>$sum[v4]</td>
+                    <td>$percent</td>
+                    <td>$sum[v5]</td>
+                    <td>$sum[v6]</td>
+                    <td>$sum[v7]</td>
+                    <td>$sum[v8]</td>
+                    <td>$sum[v9]</td>
+                    <td>$sum[v10]</td>
+                    <td>$sum[v11]</td>
+                    <td>$sum[v12]</td>
+                    <td>$sum[v13]</td>
+                </tr>
+HTML;
+        }
             echo $html;
         ?>
         </tbody>

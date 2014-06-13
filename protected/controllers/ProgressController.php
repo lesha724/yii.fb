@@ -416,8 +416,13 @@ class ProgressController extends Controller
         $model = new FilterForm();
         $model->scenario = 'thematicPlan';
 
-        if (isset($_REQUEST['FilterForm']))
+        if (isset($_REQUEST['FilterForm'])) {
             $model->attributes=$_REQUEST['FilterForm'];
+
+            $deleteThematicPlan = Yii::app()->request->getParam('delete-thematic-plan', null);
+            if ($deleteThematicPlan)
+                Ustem::model()->deleteThematicPlan($model);
+        }
 
         $this->render('thematicPlan', array(
             'model' => $model

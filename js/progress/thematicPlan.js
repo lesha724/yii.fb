@@ -77,4 +77,14 @@ $(document).ready(function(){
     $(document).on('change', '#FilterForm_teacher', function(){
         $('#FilterForm_code').val(1);
     });
+
+    $('[name=delete-thematic-plan]').click(function(){
+        var $input = $('<input>', {
+            'type' : 'hidden',
+            'value': '1',
+            'name' : $(this).attr('name')
+        })
+        $('#filter-form').append($input);
+        $('#filter-form').submit();
+    })
 });
