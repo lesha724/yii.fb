@@ -213,7 +213,7 @@ class Spab extends CActiveRecord
         $criteria->select = 'spab6';
         $criteria->compare('spab4', $model->sel_1);
         $criteria->compare('spab5', $model->sel_2);
-        $criteria->compare('spab2', 2013); // TODO change date
+        $criteria->compare('spab2', $model->currentYear);
         $criteria->compare('spab15', $model->filial);
         $criteria->group = 'spab6';
 
@@ -234,7 +234,7 @@ SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':SEL_1', $model->sel_1);
         $command->bindValue(':SEL_2', $model->sel_2);
-        $command->bindValue(':YEAR',  2013); // TODO here
+        $command->bindValue(':YEAR',  $model->currentYear);
         $command->bindValue(':SEL_3', $model->course);
         $command->bindValue(':FILIAL',$model->filial);
 
@@ -256,8 +256,8 @@ SQL;
                             ? 'and '.$extra_sign
                             : '';
 
-        // TODO here
-        $tmp = ($flag == 0) ? ' and (abd12 is null or abd12>\''.date('d.m.y', strtotime('- 1 year')).'\')' : '';
+
+        $tmp = ($flag == 0) ? ' and (abd12 is null or abd12>\''.date('d.m.Y', strtotime(date('d.m.'.$model->currentYear))).'\')' : '';
 
         $joins = $showFacilities
                     ? 'from ab
@@ -290,8 +290,8 @@ SQL;
         $command->bindValue(':SPAB1',  $spab1);
         $command->bindValue(':SEL_3',  $model->course);
         //$command->bindValue(':B_OR_K', $b_or_k);
-        $command->bindValue(':YEAR_1', 2013); // TODO here
-        $command->bindValue(':YEAR_2', 2013); // TODO here
+        $command->bindValue(':YEAR_1', $model->currentYear);
+        $command->bindValue(':YEAR_2', $model->currentYear);
 
         $count = $command->queryScalar();
 
@@ -369,7 +369,7 @@ SQL;
         $command->bindValue(':SEL_2',  $model->sel_2);
         $command->bindValue(':SEL_3',  $model->course);
         $command->bindValue(':FILIAL', $model->filial);
-        $command->bindValue(':YEAR',   2013); // TODO here
+        $command->bindValue(':YEAR',   $model->currentYear);
         $command->bindValue(':DATE_1', $date1);
         $command->bindValue(':DATE_2', $date2);
         $count = $command->queryScalar();

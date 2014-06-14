@@ -28,6 +28,7 @@ class FilterForm extends CFormModel
     public $sel_2;
     public $extendedForm = 0;
 
+    public $currentYear;
 	/**
 	 * Declares the validation rules.
 	 */

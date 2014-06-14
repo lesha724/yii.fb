@@ -43,6 +43,9 @@ class EntranceController extends Controller
         $model = new FilterForm;
         $model->scenario = 'documentReception';
 
+        $dateEntranceBegin  = PortalSettings::model()->findByPk(23)->getAttribute('ps2');
+        $model->currentYear = date('Y', strtotime($dateEntranceBegin));
+
         if (isset($_REQUEST['FilterForm'])) {
             $model->attributes=$_REQUEST['FilterForm'];
         }
