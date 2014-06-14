@@ -14,6 +14,14 @@ $form=$this->beginWidget('CActiveForm', array(
     $html = '<div>';
     $html .= '<fieldset>';
 
+    $filials = CHtml::listData(Ks::model()->findAll(), 'ks1', 'ks2');
+    if (count($filials) > 1) {
+        $html .= '<div class="row-fluid span2">';
+        $html .= $form->label($model, 'filial');
+        $html .= $form->dropDownList($model, 'filial', $filials, $options);
+        $html .= '</div>';
+    }
+
     $sel_1 = array(
         0 => tt('Младший специалист'),
         1 => tt('Бакалавр'),
@@ -32,7 +40,7 @@ $form=$this->beginWidget('CActiveForm', array(
         1 => tt('Заочная'),
         2 => tt('Вечерняя'),
     );
-    $html .= '<div class="row-fluid span2">';
+    $html .= '<div class="row-fluid span3">';
     $html .= $form->label($model, 'sel_2');
     $html .= $form->dropDownList($model, 'sel_2', $sel_2, $options);
     $html .= '</div>';
@@ -46,7 +54,7 @@ $form=$this->beginWidget('CActiveForm', array(
     $html .= '</label>';
     $html .= '</div>';
 
-    $course = CHtml::listData(Spab::model()->getCoursesForDocumentReception($model->sel_1, $model->sel_2), 'spab6', 'spab6');
+    $course = CHtml::listData(Spab::model()->getCoursesForDocumentReception($model), 'spab6', 'spab6');
     $html .= '<div class="row-fluid span2">';
     $html .= $form->label($model, 'course');
     $html .= $form->dropDownList($model, 'course', $course, $options);    

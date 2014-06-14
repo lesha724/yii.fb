@@ -144,7 +144,7 @@ $this->widget('zii.widgets.CMenu', array(
                 ),
             ),
         ),
-        /*array(
+        array(
             'label' => '<i class="icon-book"></i><span class="menu-text">'.tt('Абитуриент').'</span><b class="arrow icon-angle-down"></b>',
             'url' => '#',
             'linkOptions'=> array(
@@ -159,7 +159,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'active' => $controller=='entrance' && $action=='documentReception'
                 ),
             ),
-        ),*/
+        ),
         array(
             'label' => '<i class="icon-globe"></i><span class="menu-text">'.tt('Другое').'</span><b class="arrow icon-angle-down"></b>',
             'url' => '#',

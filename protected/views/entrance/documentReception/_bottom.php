@@ -5,10 +5,29 @@
  * @var $model FilterForm
  */
 
-$isBsaa  = Yii::app()->params['code'] == U_BSAA;
-$isOseu  = Yii::app()->params['code'] == U_OSEU;
-$isNulau = Yii::app()->params['code'] == U_NULAU;
-$showColumns = PortalSettings::model()->findByPk(25)->getAttribute('ps2') == 1;
+    $isBsaa  = Yii::app()->params['code'] == U_BSAA;
+    $isOseu  = Yii::app()->params['code'] == U_OSEU;
+    $isNulau = Yii::app()->params['code'] == U_NULAU;
+    $showColumns = PortalSettings::model()->findByPk(25)->getAttribute('ps2') == 1;
+
+    list($line1, $line2) = Spab::model()->getDataForSchedule($model);
+
+    $chartTitle = tt('График подачи заявлений абитуриентами');
+    $label1     = tt('Общее количество абитуриентов');
+    $label2     = tt('Подано оригиналов документов');
+    $dateStart  = PortalSettings::model()->findByPk(23)->getAttribute('ps2');
+    $dateEnd    = PortalSettings::model()->findByPk(24)->getAttribute('ps2');
+
+    Yii::app()->clientScript->registerScript('chart', <<<JS
+        line1 = [$line1];
+        line2 = [$line2];
+        tt.chartTitle = "$chartTitle";
+        tt.label1  = "$label1";
+        tt.label2  = "$label2";
+        dateStart = "$dateStart";
+        dateEnd   = "$dateEnd";
+JS
+    , CClientScript::POS_END);
 
 $shortForm = $model->extendedForm == 0
 ?>
@@ -144,10 +163,18 @@ HTML;
                     $count_2  = round($count_1/$sp['v'],1);
                     $sum['v5']  += ($count_3  = Spab::model()->countFor($model, $sp['spab1'], 0));
                     $sum['v6']  += ($count_4  = Spab::model()->countFor($model, $sp['spab1'], 0, "abd4 = 2"));
-                    $sum['v7']  += ($count_5  = Spab::model()->countFor($model, $sp['spab1'], 0, "(abd4 = 3 or ab160 = 1)"));
-                    $sum['v8']  += ($count_6  = Spab::model()->countFor($model, $sp['spab1'], 0, "abd4 in (1,8)"));
+
+                    $cond = $isBsaa ?  '(abd4 = 3 or abd66 = 1)' : 'stal3>0';
+                    $sum['v7']  += ($count_5  = Spab::model()->countFor($model, $sp['spab1'], 0, $cond, 0, true));
+
+                    $cond = $isBsaa ?  'abd4 in (1,8)' : 'abd6>0';
+                    $sum['v8']  += ($count_6  = Spab::model()->countFor($model, $sp['spab1'], 0, $cond));
+
                     $sum['v9']  += ($count_7  = Spab::model()->countFor($model, $sp['spab1'], 1));
-                    $sum['v10'] += ($count_8  = Spab::model()->countFor($model, $sp['spab1'], 1, "(abd4 = 3 or ab160 = 1)"));
+
+                    $cond = $isBsaa ?  '(abd4 = 3 or abd66 = 1)' : 'STAL3>0';
+                    $sum['v10'] += ($count_8  = Spab::model()->countFor($model, $sp['spab1'], 1, $cond, 0, true));
+
                     $sum['v11'] += ($count_9  = Spab::model()->countFor($model, $sp['spab1'], '0,1', "ABD12 is not null", 1));
                     $sum['v12'] += ($count_10 = Spab::model()->countFor($model, $sp['spab1'], 0, "ABD12 is not null", 1));
                     $sum['v13'] += ($count_11 = Spab::model()->countFor($model, $sp['spab1'], 1, "ABD12 is not null", 1));
@@ -226,4 +253,8 @@ HTML;
         ?>
         </tbody>
     </table>
+
+
+    <div id="chart1" style="height:400px;width:100%; "></div>
+
 </div>

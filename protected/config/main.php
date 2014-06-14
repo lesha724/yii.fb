@@ -126,6 +126,17 @@ $config = array(
                     'js' => array('js/jquery-ui-1.10.3.full.min.js'),
                     'depends'=>array('jquery'),
                 ),
+                'jqplot' => array(
+                    'baseUrl' => 'theme/ace/assets/',
+                    'css' => array('css/jquery.jqplot.css'),
+                    'js' => array(
+                        'js/jqplot/jquery.jqplot.js',
+                        'js/jqplot/jqplot.highlighter.js',
+                        'js/jqplot/jqplot.cursor.js',
+                        'js/jqplot/jqplot.dateAxisRenderer.js',
+                    ),
+                    'depends'=>array('jquery'),
+                ),
             ),
 			'behaviors' => array(
 				array(

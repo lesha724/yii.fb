@@ -196,24 +196,25 @@ class Spab extends CActiveRecord
 	}
 
     /**
-     * @param $sel_1 Направление подготовки
-     * @param $sel_2 Форма обучения
+     * @param sel_1 Направление подготовки
+     * @param sel_2 Форма обучения
      */
-    public function getCoursesForDocumentReception($sel_1, $sel_2)
+    public function getCoursesForDocumentReception($model)
     {
-        $selectsAreEmpty = is_null($sel_1) ||
-                           is_null($sel_2) ||
-                           $sel_1 == '' ||
-                           $sel_2 == '';
+        $selectsAreEmpty = is_null($model->sel_1) ||
+                           is_null($model->sel_2) ||
+                           $model->sel_1 == '' ||
+                           $model->sel_2 == '';
 
         if ($selectsAreEmpty)
             return array();
 
         $criteria = new CDbCriteria();
         $criteria->select = 'spab6';
-        $criteria->compare('spab4', $sel_1);
-        $criteria->compare('spab5', $sel_2);
+        $criteria->compare('spab4', $model->sel_1);
+        $criteria->compare('spab5', $model->sel_2);
         $criteria->compare('spab2', 2013); // TODO change date
+        $criteria->compare('spab15', $model->filial);
         $criteria->group = 'spab6';
 
         $courses = Spab::model()->findAll($criteria);
@@ -226,15 +227,16 @@ class Spab extends CActiveRecord
         $sql = <<<SQL
           SELECT *
           FROM spab
-          WHERE spab4 = :SEL_1 AND spab5 = :SEL_2 AND spab2 = :YEAR AND spab6 = :SEL_3
+          WHERE spab4 = :SEL_1 AND spab5 = :SEL_2 AND spab2 = :YEAR AND spab6 = :SEL_3 and spab15 = :FILIAL
           ORDER BY spab3
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':SEL_1', $model->sel_1);
         $command->bindValue(':SEL_2', $model->sel_2);
-        $command->bindValue(':YEAR',  2013);
+        $command->bindValue(':YEAR',  2013); // TODO here
         $command->bindValue(':SEL_3', $model->course);
+        $command->bindValue(':FILIAL',$model->filial);
 
         $specialities = $command->queryAll();
 
@@ -248,7 +250,7 @@ SQL;
         return $specialities;
     }
 
-    public function countFor($model, $spab1, $b_or_k, $extra_sign = '', $flag = 0)
+    public function countFor($model, $spab1, $b_or_k, $extra_sign = '', $flag = 0, $showFacilities = false)
     {
         $extra_sign = ! empty($extra_sign)
                             ? 'and '.$extra_sign
@@ -257,11 +259,18 @@ SQL;
         // TODO here
         $tmp = ($flag == 0) ? ' and (abd12 is null or abd12>\''.date('d.m.y', strtotime('- 1 year')).'\')' : '';
 
+        $joins = $showFacilities
+                    ? 'from ab
+                           inner join abd on (ab.ab1 = abd.abd2)
+                           inner join spab on (abd.abd3 = spab.spab1)
+                           inner join stal on (abd.abd1 = stal.stal2)'
+                    : 'from ab
+                           inner join abd on (ab.ab1 = abd.abd2)
+                           inner join spab on (abd.abd3 = spab.spab1)';
+
         $sql = <<<SQL
             SELECT count(AB1)
-            FROM spab
-               INNER JOIN abd ON (spab.spab1 = abd.abd3)
-               INNER JOIN ab ON (abd.abd2 = ab.ab1)
+            {$joins}
             WHERE SPAB4 = :SEL_1 and
                   SPAB5 = :SEL_2 and
                   SPAB1 = :SPAB1 and
@@ -281,8 +290,8 @@ SQL;
         $command->bindValue(':SPAB1',  $spab1);
         $command->bindValue(':SEL_3',  $model->course);
         //$command->bindValue(':B_OR_K', $b_or_k);
-        $command->bindValue(':YEAR_1', 2013);
-        $command->bindValue(':YEAR_2', 2013);
+        $command->bindValue(':YEAR_1', 2013); // TODO here
+        $command->bindValue(':YEAR_2', 2013); // TODO here
 
         $count = $command->queryScalar();
 
@@ -291,5 +300,83 @@ SQL;
 
         return $count;
 
+    }
+
+    public function getDataForSchedule($model)
+    {
+        $dateStart = PortalSettings::model()->findByPk(23)->getAttribute('ps2');
+        $dateEnd   = PortalSettings::model()->findByPk(24)->getAttribute('ps2');
+
+        if (empty($dateStart) || empty($dateEnd))
+            return array('', '');
+
+        $sql= <<<SQL
+            SELECT abd11
+            FROM spab
+               INNER JOIN abd ON (spab.spab1 = abd.abd3)
+               INNER JOIN ab ON (abd.abd2 = ab.ab1)
+			WHERE spab4 = :SEL_1 and spab5 = :SEL_2 and spab6 = :SEL_3 and spab15 = :FILIAL
+			and ABD11  >= :DATE_START and ABD11 <= :DATE_END
+			group by ABD11
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':SEL_1', $model->sel_1);
+        $command->bindValue(':SEL_2', $model->sel_2);
+        $command->bindValue(':SEL_3', $model->course);
+        $command->bindValue(':FILIAL',  $model->filial);
+        $command->bindValue(':DATE_START',  $dateStart);
+        $command->bindValue(':DATE_END',  $dateEnd);
+        $dates = $command->queryAll();
+
+        $line_1 = array("['$dateStart',0]");
+        $line_2 = array("['$dateEnd',0]");
+
+        foreach($dates as $date)
+        {
+            $count_1 = $this->countEntrantForDate($model, $dateStart, $date['abd11']);
+            $count_2 = $this->countEntrantForDate($model, $dateStart, $date['abd11'], 2);
+
+            $currentDate = SH::formatDate('Y-m-d H:i:s', 'd.m.Y', $date['abd11']);
+
+            $line_1[] = "['$currentDate',$count_1]";
+            $line_2[] = "['$currentDate',$count_2]";
+        }
+
+        $line_1 = implode(',', $line_1);
+        $line_2 = implode(',', $line_2);
+
+        return array($line_1, $line_2);
+    }
+
+    public function countEntrantForDate($model, $date1, $date2, $flag = 1)
+    {
+        $isBsaa  = Yii::app()->params['code'] == U_BSAA;
+        $t = $isBsaa ? "ABD29" : "ABD33";
+        $tmp = ($flag == 2) ? "and $t = 1" : '';
+
+        $sql = <<<SQL
+            SELECT count(AB1)
+            FROM spab
+               INNER JOIN abd ON (spab.spab1 = abd.abd3)
+               INNER JOIN ab ON (abd.abd2 = ab.ab1)
+			WHERE spab4 = :SEL_1 and spab5 = :SEL_2 and spab6 = :SEL_3 and spab15 = :FILIAL and
+			      AB130 = :YEAR and ABD11  >= :DATE_1 and ABD11 <= :DATE_2
+			      $tmp
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':SEL_1',  $model->sel_1);
+        $command->bindValue(':SEL_2',  $model->sel_2);
+        $command->bindValue(':SEL_3',  $model->course);
+        $command->bindValue(':FILIAL', $model->filial);
+        $command->bindValue(':YEAR',   2013); // TODO here
+        $command->bindValue(':DATE_1', $date1);
+        $command->bindValue(':DATE_2', $date2);
+        $count = $command->queryScalar();
+
+        if (! $count)
+            return 0;
+
+        return $count;
     }
 }
