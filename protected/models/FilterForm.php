@@ -28,6 +28,9 @@ class FilterForm extends CFormModel
     public $sel_2;
     public $extendedForm = 0;
 
+    public $adp1;
+    public $cn1;
+
     public $currentYear;
 	/**
 	 * Declares the validation rules.
@@ -40,6 +43,7 @@ class FilterForm extends CFormModel
             array('duration, teacher, code, course', 'safe', 'on' => 'thematicPlan'),
             array('chair, gostem1, nr1, d1', 'safe', 'on' => 'gostem'),
             array('sel_1, sel_2, course, extendedForm', 'safe', 'on' => 'documentReception'),
+            array('sel_1, sel_2, course, adp1, cn1, speciality', 'safe', 'on' => 'rating'),
 		);
 	}
 
@@ -51,7 +55,9 @@ class FilterForm extends CFormModel
 	public function attributeLabels()
 	{
         $sel_1 = $sel_2 = '';
-        if ($this->scenario == 'documentReception') {
+        $isEntrance = $this->scenario == 'documentReception' ||
+                      $this->scenario == 'rating';
+        if ($isEntrance) {
             $sel_1 = tt('Направление подготовки');
             $sel_2 = tt('Форма обучения');
         }
@@ -74,6 +80,8 @@ class FilterForm extends CFormModel
             'sel_2' => $sel_2,
             'course' => tt('Курс'),
             'extendedForm' => tt('Расширенная форма'),
+            'adp1' => tt('Доп. признак'),
+            'cn1' => tt('Цел. направление'),
 		);
 	}
 }

@@ -161,6 +161,11 @@ class ShortCodes extends CApplicationComponent
 
         return $symbol;
     }
+
+    public static function is($code)
+    {
+        return Yii::app()->params['code'] == $code;
+    }
 }
 
 class SH extends ShortCodes

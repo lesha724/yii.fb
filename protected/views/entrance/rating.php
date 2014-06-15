@@ -7,18 +7,18 @@ Yii::app()->clientScript->registerPackage('chosen');
 Yii::app()->clientScript->registerPackage('spin');
 Yii::app()->clientScript->registerPackage('jqplot');
 
-Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/entrance/documentReception.js', CClientScript::POS_HEAD);
+Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/entrance/rating.js', CClientScript::POS_HEAD);
 
 
-$this->pageHeader=tt('Ход приема документов');
+$this->pageHeader=tt('Рейтинговый список');
 $this->breadcrumbs=array(
-    tt('Ход приема документов'),
+    tt('Рейтинговый список'),
 );
 
 ?>
 
 <?php
-    $this->renderPartial('/filter_form/entrance/documentReception', array(
+    $this->renderPartial('/filter_form/entrance/rating', array(
         'model' => $model,
     ));
 
@@ -28,9 +28,10 @@ HTML;
 
 
 if (! empty($model->course))
-    $this->renderPartial('documentReception/_bottom', array(
+    $this->renderPartial('rating/_bottom', array(
         'model' => $model,
     ));
+
 ?>
 
 

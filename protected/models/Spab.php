@@ -199,7 +199,7 @@ class Spab extends CActiveRecord
      * @param sel_1 Направление подготовки
      * @param sel_2 Форма обучения
      */
-    public function getCoursesForDocumentReception($model)
+    public function getCoursesForEntrance($model)
     {
         $selectsAreEmpty = is_null($model->sel_1) ||
                            is_null($model->sel_2) ||
@@ -222,13 +222,23 @@ class Spab extends CActiveRecord
         return $courses;
     }
 
-    public function getSpecialitiesForDocumentReception(FilterForm $model)
+    public function getSpecialitiesForEntrance(FilterForm $model)
     {
+        $selectsAreEmpty = is_null($model->sel_1) ||
+                           is_null($model->sel_2) ||
+                           is_null($model->course) ||
+                           $model->sel_1 == '' ||
+                           $model->sel_2 == '' ||
+                           $model->course == '';
+
+        if ($selectsAreEmpty)
+            return array();
+
         $sql = <<<SQL
           SELECT *
           FROM spab
           WHERE spab4 = :SEL_1 AND spab5 = :SEL_2 AND spab2 = :YEAR AND spab6 = :SEL_3 and spab15 = :FILIAL
-          ORDER BY spab3
+          ORDER BY spab7
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);

@@ -23,7 +23,7 @@ JS
     , CClientScript::POS_READY);
 
 
-   $this->renderPartial('/filter_form/thematicPlan', array(
+   $this->renderPartial('/filter_form/progress/thematicPlan', array(
        'model' => $model,
    ));
 

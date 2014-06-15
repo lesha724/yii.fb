@@ -5,7 +5,7 @@
  * @var CActiveForm $form
  */
 
-$options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;'));
+$options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;'), 'style' => 'width:150px');
 $form=$this->beginWidget('CActiveForm', array(
     'id'=>'filter-form',
     'htmlOptions' => array('class' => 'form-inline')
@@ -38,9 +38,11 @@ $form=$this->beginWidget('CActiveForm', array(
         0 => tt('Дневная'),
         3 => tt('Экстернат'),
         1 => tt('Заочная'),
-        2 => tt('Вечерняя'),
     );
-    $html .= '<div class="row-fluid span3">';
+    if (! SH::is(U_NULAU))
+        $sel_2 += array(2 => tt('Вечерняя'));
+
+    $html .= '<div class="row-fluid span2">';
     $html .= $form->label($model, 'sel_2');
     $html .= $form->dropDownList($model, 'sel_2', $sel_2, $options);
     $html .= '</div>';
@@ -54,10 +56,10 @@ $form=$this->beginWidget('CActiveForm', array(
     $html .= '</label>';
     $html .= '</div>';
 
-    $course = CHtml::listData(Spab::model()->getCoursesForDocumentReception($model), 'spab6', 'spab6');
+    $courses = CHtml::listData(Spab::model()->getCoursesForEntrance($model), 'spab6', 'spab6');
     $html .= '<div class="row-fluid span2">';
     $html .= $form->label($model, 'course');
-    $html .= $form->dropDownList($model, 'course', $course, $options);    
+    $html .= $form->dropDownList($model, 'course', $courses, $options);
     $html .= '</div>';
 
     $button =  <<<HTML

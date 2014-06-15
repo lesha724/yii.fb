@@ -14,7 +14,7 @@ $this->breadcrumbs=array(
 Yii::app()->clientScript->registerPackage('spin');
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/workplan/student.js', CClientScript::POS_HEAD);
 
-$this->renderPartial('/filter_form/student', array(
+$this->renderPartial('/filter_form/workPlan/student', array(
     'model' => $model,
     'showDateRangePicker' => false
 ));

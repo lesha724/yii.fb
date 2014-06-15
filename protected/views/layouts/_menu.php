@@ -158,6 +158,12 @@ $this->widget('zii.widgets.CMenu', array(
                     'visible' => true,//Yii::app()->user->isTch || Yii::app()->user->isAdmin,
                     'active' => $controller=='entrance' && $action=='documentReception'
                 ),
+                array(
+                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Рейтинговый список'),
+                    'url' => Yii::app()->createUrl('/entrance/rating'),
+                    'visible' => true,//Yii::app()->user->isTch || Yii::app()->user->isAdmin,
+                    'active' => $controller=='entrance' && $action=='rating'
+                ),
             ),
         ),
         array(

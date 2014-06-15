@@ -5,9 +5,9 @@
  * @var $model FilterForm
  */
 
-    $isBsaa  = Yii::app()->params['code'] == U_BSAA;
-    $isOseu  = Yii::app()->params['code'] == U_OSEU;
-    $isNulau = Yii::app()->params['code'] == U_NULAU;
+    $isBsaa  = SH::is(U_BSAA);
+    $isOseu  = SH::is(U_OSEU);
+    $isNulau = SH::is(U_NULAU);
     $showColumns = PortalSettings::model()->findByPk(25)->getAttribute('ps2') == 1;
 
     list($line1, $line2) = Spab::model()->getDataForSchedule($model);
@@ -94,7 +94,7 @@ $shortForm = $model->extendedForm == 0
         </thead>
         <tbody>
         <?php
-            $specialities = Spab::model()->getSpecialitiesForDocumentReception($model);
+            $specialities = Spab::model()->getSpecialitiesForEntrance($model);
 
             $html = '';
             $i = 1;

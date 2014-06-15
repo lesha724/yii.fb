@@ -239,3 +239,7 @@ ul.classrooms-list li {
 .hasAttachesFiles {
     border: 1px solid blue !important;
 }
+
+td.entrance-rating-title {
+    text-align: center !important;
+}

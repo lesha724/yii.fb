@@ -25,7 +25,7 @@ JS
     , CClientScript::POS_READY);
 
 
-$this->renderPartial('/filter_form/gostem', array(
+$this->renderPartial('/filter_form/other/gostem', array(
     'model' => $model,
 ));
 
