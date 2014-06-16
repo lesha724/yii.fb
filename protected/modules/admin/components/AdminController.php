@@ -20,6 +20,7 @@ class AdminController extends Controller
                     'journal',
                     'modules',
                     'entrance',
+                    'menu'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin',
             ),

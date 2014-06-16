@@ -47,6 +47,11 @@ $this->widget('zii.widgets.CMenu', array(
                     'url' => Yii::app()->createUrl('/admin/default/entrance'),
                     'active' => $action=='entrance' && $module=='admin'
                 ),
+                array(
+                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Меню'),
+                    'url' => Yii::app()->createUrl('/admin/default/menu'),
+                    'active' => $action=='menu' && $module=='admin'
+                ),
             ),
             'visible' => Yii::app()->user->isAdmin,
         ),
