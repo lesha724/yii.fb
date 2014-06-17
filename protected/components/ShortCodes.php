@@ -5,6 +5,8 @@
  */
 class ShortCodes extends CApplicationComponent
 {
+    protected $_menuSettings;
+
     public static function getShortName($surname, $name, $patronymic)
     {
         $res = $surname;
@@ -166,11 +168,61 @@ class ShortCodes extends CApplicationComponent
     {
         return Yii::app()->params['code'] == $code;
     }
+
+    public static function isVisibleMenu($controller, $action, $showAlert = false)
+    {
+        $controller = mb_strtolower($controller);
+        $action     = mb_strtolower($action);
+
+        $settings = SH::getInstance()->getMenuSettings();
+
+        parse_str(urldecode($settings), $menu);
+
+        $isVisible = isset($menu[$controller][$action])
+                       ? $menu[$controller][$action]
+                       : 1;
+
+        $isVisible = (bool)$isVisible;
+
+        if (! $isVisible && Yii::app()->user->isAdmin) {
+            if ($showAlert)
+                Yii::app()->user->setFlash('warning', tt('<strong>Внимание!</strong> Данный сервис закрыт администратором!'));
+            return true;
+        }
+
+
+        return $isVisible;
+    }
+
+    public function getMenuSettings()
+    {
+        if (empty($this->_menuSettings)) {
+            $file     = Yii::getPathOfAlias('application') . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'menu.txt';
+            $settings = file_get_contents($file);
+            $this->_menuSettings = $settings;
+        }
+
+        return $this->_menuSettings;
+    }
+
 }
 
 class SH extends ShortCodes
 {
+    protected static $_instance;
 
+    private function __construct(){}
+
+    private function __clone(){}
+
+    public static function getInstance() {
+
+        if (null === self::$_instance) {
+            self::$_instance = new self();
+        }
+
+        return self::$_instance;
+    }
 }
 
 

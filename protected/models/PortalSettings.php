@@ -27,7 +27,7 @@ class PortalSettings extends CActiveRecord
 		return array(
 			array('ps1', 'required'),
 			array('ps1', 'numerical', 'integerOnly'=>true),
-			array('ps2', 'length', 'max'=>4000),
+			array('ps2', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('ps1, ps2', 'safe', 'on'=>'search'),

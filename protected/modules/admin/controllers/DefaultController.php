@@ -116,17 +116,16 @@ class DefaultController extends AdminController
 
     public function actionMenu()
     {
-        $settings = Yii::app()->request->getParam('settings', array());
+        $webroot = Yii::getPathOfAlias('application');
+        $file = $webroot . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'menu.txt';
 
-        foreach ($settings as $key => $value) {
-            PortalSettings::model()
-                ->findByPk($key)
-                ->saveAttributes(array(
-                    'ps2' => $value
-                ));
-        }
+        if (isset($_REQUEST['menu']))
+            file_put_contents($file, $_REQUEST['menu']);
+
+        $settings = file_get_contents($file);
 
         $this->render('menu', array(
+            'settings' => $settings
         ));
     }
 }

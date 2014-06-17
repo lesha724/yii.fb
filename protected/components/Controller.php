@@ -32,6 +32,10 @@ class Controller extends CController
 
     public function beforeAction($action)
     {
+        if (! SH::isVisibleMenu(Yii::app()->controller->id, $action->id, true))
+            throw new CHttpException(500, tt('Сервис временно недоступен!'));
+
+
         $year = Yii::app()->request->getParam('year', null);
         if ($year === null)
             $year = Yii::app()->session['year'];
