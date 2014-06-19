@@ -434,14 +434,16 @@ class ProgressController extends Controller
         if (! Yii::app()->request->isAjaxRequest)
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
-        $us1  = Yii::app()->request->getParam('us1', null);
-        $d1   = Yii::app()->request->getParam('d1', null);
-        $sem4 = Yii::app()->request->getParam('sem4', null);
+        $ustem1 = Yii::app()->request->getParam('ustem1', null);
+        $d1     = Yii::app()->request->getParam('d1', null);
+        $sem4   = Yii::app()->request->getParam('sem4', null);
 
-        if (empty($us1) || empty($d1) || empty($sem4))
+        if (empty($ustem1) || empty($d1) || empty($sem4))
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
-        $model = Ustem::model()->findByAttributes(array('ustem2' => $us1));
+
+        $model = Ustem::model()->findByAttributes(array('ustem1' => $ustem1));
+
         if (isset($_REQUEST['Ustem'])) {
 
             $model->attributes = $_REQUEST['Ustem'];

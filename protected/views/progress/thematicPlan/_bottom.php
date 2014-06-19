@@ -38,7 +38,7 @@
 
                     $tip = $theme['submod'] == 0 ? tt('Занятие') : tt('Субмодуль');
                     //$urlDelete = Yii::app()->controller->createAbsoluteUrl("progress/deleteUstemTheme", array("ustem1" => $theme['ustem1']));
-                    $urlEdit   = Yii::app()->controller->createAbsoluteUrl("progress/renderUstemTheme", array("us1" => $model->semester, 'd1' => $model->discipline));
+                    $urlEdit   = Yii::app()->controller->createAbsoluteUrl("progress/renderUstemTheme", array("ustem1" => $theme['ustem1'], 'd1' => $model->discipline));
 
                     $html .= <<<HTML
                         <tr>
