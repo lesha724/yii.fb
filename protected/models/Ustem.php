@@ -127,7 +127,7 @@ SQL;
     public function deleteThematicPlan($model)
     {
         $sql=<<<SQL
-            SELECT * PROCEDURE TEM_PLAN(:US1, :CODE, :DURATION, :PD1);
+            SELECT * FROM TEM_PLAN(:US1, :CODE, :DURATION, :PD1);
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':US1', $model->semester);
