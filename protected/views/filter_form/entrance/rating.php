@@ -36,11 +36,11 @@ $form=$this->beginWidget('CActiveForm', array(
 
     $sel_2 = array(
         0 => tt('Дневная'),
-        3 => tt('Экстернат'),
-        1 => tt('Заочная')
+        1 => tt('Заочная'),
     );
     if (! SH::is(U_NULAU))
         $sel_2 += array(2 => tt('Вечерняя'));
+    $sel_2 += array(3 => tt('Экстернат'));
 
     $html .= '<div class="row-fluid span2">';
     $html .= $form->label($model, 'sel_2');

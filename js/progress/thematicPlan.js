@@ -78,13 +78,49 @@ $(document).ready(function(){
         $('#FilterForm_code').val(1);
     });
 
-    $('[name=delete-thematic-plan]').click(function(){
-        var $input = $('<input>', {
-            'type' : 'hidden',
-            'value': '1',
-            'name' : $(this).attr('name')
-        })
-        $('#filter-form').append($input);
-        $('#filter-form').submit();
+    $('[name=delete-thematic-plan]').click(function(e){
+
+        e.preventDefault();
+
+        $( "#dialog-confirm" ).dialog({
+            resizable: false,
+            modal: true,
+            title: "<div class='widget-header'><h4 class='smaller'><i class='icon-warning-sign red'></i> Удалить тем. план?</h4></div>",
+            title_html: true,
+            buttons: [
+                {
+                    html: "<i class='icon-trash bigger-110'></i>&nbsp; Удалить",
+                    "class" : "btn btn-danger btn-mini",
+                    click: function() {
+                        var $input = $('<input>', {
+                            'type' : 'hidden',
+                            'value': '1',
+                            'name' : $(this).attr('name')
+                        })
+                        $('#filter-form').append($input);
+                        $('#filter-form').submit();
+                    }
+                }
+                ,
+                {
+                    html: "<i class='icon-remove bigger-110'></i>&nbsp; Отмена",
+                    "class" : "btn btn-mini",
+                    click: function() {
+                        $( this ).dialog( "close" );
+                    }
+                }
+            ]
+        });
+
     })
+
+    $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+        _title: function(title) {
+            var $title = this.options.title || '&nbsp;'
+            if( ("title_html" in this.options) && this.options.title_html == true )
+                title.html($title);
+            else title.text($title);
+        }
+    }));
+
 });

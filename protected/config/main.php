@@ -142,6 +142,12 @@ $config = array(
                     'js' => array('js/jquery.nestable.min.js'),
                     'depends'=>array('jquery'),
                 ),
+                'jquery.ui' => array(
+                    'baseUrl' => 'theme/ace/assets/',
+                    'css' => array('css/jquery-ui-1.10.3.full.min.css'),
+                    'js' => array('js/jquery-ui-1.10.3.full.min.js'),
+                    'depends'=>array('jquery'),
+                ),
             ),
 			'behaviors' => array(
 				array(

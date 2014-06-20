@@ -120,3 +120,15 @@ HTML;
     ));*/
 ?>
 </div>
+<div id="dialog-confirm" class="hide" title="Empty the recycle bin?">
+    <div class="alert alert-info bigger-110">
+        <?=tt('Все темы будут удалены')?>
+    </div>
+
+    <div class="space-6"></div>
+
+    <p class="bigger-110 bolder center grey">
+        <i class="icon-hand-right blue bigger-120"></i>
+        <?=tt('Вы уверены?')?>
+    </p>
+</div><!-- #dialog-confirm -->
