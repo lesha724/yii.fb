@@ -437,7 +437,7 @@ class Ab extends CActiveRecord
               SELECT ab1,ab2,ab3,ab4,abd20,abd33,abd28,abd29,abd23,abd66,abd54,abd1
               FROM {$from}
               WHERE spab4 = :SEL_1 AND spab5 = :SEL_2 AND spab6 = :SEL_3 AND
-                    spab1 = :SEL_6 AND spab2 = :YEAR_1 AND ab130 = :YEAR_2 AND
+                    spab1 = :SEL_6 AND spab2 = :YEAR_1 AND
                     ab1>0 AND abd12 is null AND
                     {$extras}
 		      ORDER BY abd20 DESC, abd28 DESC, ab2
@@ -449,7 +449,7 @@ SQL;
         $command->bindValue(':SEL_3', $model->course);
         $command->bindValue(':SEL_6', $model->speciality);
         $command->bindValue(':YEAR_1',  $model->currentYear);
-        $command->bindValue(':YEAR_2',  $model->currentYear);
+
 
         $students = $command->queryAll();
 

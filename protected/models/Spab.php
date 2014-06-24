@@ -287,7 +287,6 @@ SQL;
                   SPAB6 = :SEL_3 and
                   ABD7 in ($b_or_k) and
                   SPAB2 = :YEAR_1 and
-                  AB130 = :YEAR_2 and
                   ab1>0 and
                   abd13>0
                   $extra_sign
@@ -301,7 +300,6 @@ SQL;
         $command->bindValue(':SEL_3',  $model->course);
         //$command->bindValue(':B_OR_K', $b_or_k);
         $command->bindValue(':YEAR_1', $model->currentYear);
-        $command->bindValue(':YEAR_2', $model->currentYear);
 
         $count = $command->queryScalar();
 
@@ -370,7 +368,7 @@ SQL;
                INNER JOIN abd ON (spab.spab1 = abd.abd3)
                INNER JOIN ab ON (abd.abd2 = ab.ab1)
 			WHERE spab4 = :SEL_1 and spab5 = :SEL_2 and spab6 = :SEL_3 and spab15 = :FILIAL and
-			      AB130 = :YEAR and ABD11  >= :DATE_1 and ABD11 <= :DATE_2
+			      and ABD11  >= :DATE_1 and ABD11 <= :DATE_2
 			      $tmp
 SQL;
 
@@ -379,7 +377,6 @@ SQL;
         $command->bindValue(':SEL_2',  $model->sel_2);
         $command->bindValue(':SEL_3',  $model->course);
         $command->bindValue(':FILIAL', $model->filial);
-        $command->bindValue(':YEAR',   $model->currentYear);
         $command->bindValue(':DATE_1', $date1);
         $command->bindValue(':DATE_2', $date2);
         $count = $command->queryScalar();

@@ -137,7 +137,7 @@ $shortForm = $model->extendedForm == 0
                         $count_7 = $count_8 = $count_9 = $v13 = $v10 = $v11 = '';
 
                     $html .= <<<HTML
-                    <tr>
+                    <tr data-id="$sp[spab1]">
                         <td>$name</td>
                         <td>$sp[v]</td>
                         <td>$sp[b]</td>
