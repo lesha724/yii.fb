@@ -70,7 +70,7 @@ $form=$this->beginWidget('CActiveForm', array(
     $html .= '</div>';
 
 
-    $specialities = CHtml::listData(Spab::model()->getSpecialitiesForEntrance($model), 'spab1', 'spab14');
+    $specialities = CHtml::listData(Spab::model()->getSpecialitiesForEntrance($model), 'spab1', (SH::is(U_BSAA) ? 'spab3' : 'spab14'));
     $html .= '<div class="row-fluid span2">';
     $html .= $form->label($model, 'speciality');
     $html .= $form->dropDownList($model, 'speciality', $specialities, array_merge($options, array('style' => 'width:200px')));
