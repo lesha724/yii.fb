@@ -64,7 +64,7 @@ $speciality = Spab::model()->findByPk($model->speciality);
         <?=tt('Рейтинговый список')?>
         <small>
             <i class="icon-double-angle-right"></i>
-            <?=$speciality->getAttribute('spab14');?>
+            <?=$speciality->getAttribute($isBsaa?'spab3':'spab14');?>
         </small>
     </h3>
 

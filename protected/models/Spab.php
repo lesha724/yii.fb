@@ -358,7 +358,7 @@ SQL;
 
     public function countEntrantForDate($model, $date1, $date2, $flag = 1)
     {
-        $isBsaa  = Yii::app()->params['code'] == U_BSAA;
+        $isBsaa  = SH::is(U_BSAA);
         $t = $isBsaa ? "ABD29" : "ABD33";
         $tmp = ($flag == 2) ? "and $t = 1" : '';
 
