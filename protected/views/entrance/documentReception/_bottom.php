@@ -104,15 +104,20 @@ $shortForm = $model->extendedForm == 0
 
             foreach ($specialities as $sp) {
 
+
+                if ($isNulau && ($sp['spab1'] == 10 || $sp['spab1'] == 16))
+                    $name = $sp['spab14'];
+                elseif ($isBsaa)
+                    $name = "<a target='_blank' href='#'>".$sp['spab3']."</a>";
+                else
+                    $name = "<a target='_blank' href='#'>".$sp['spab14']."</a>";
+
+
                 if ($shortForm) {
 
                     $t = "abd33";
                     if ($isBsaa || ($isOseu && $model->sel_3 != 5))
                         $t = "abd29";
-
-                    $name = ($isNulau && ($sp['spab1'] == 10 || $sp['spab1'] == 16))
-                                ? $sp['spab14']
-                                : "<a target='_blank' href='#'>".$sp['spab14']."</a>";
 
                     $sum['v1']  += $sp['v'];
                     $sum['v2']  += $sp['b'];
@@ -151,10 +156,6 @@ $shortForm = $model->extendedForm == 0
 HTML;
                 } else { // EXTENDED FORM
 
-
-                    $name = ($isNulau && ($sp['spab1'] == 10 || $sp['spab1'] == 16))
-                                ? $sp['spab14']
-                                : "<a target='_blank' href='#'>".$sp['spab14']."</a>";
 
                     $sum['v1']  += $sp['v'];
                     $sum['v2']  += $sp['b'];
