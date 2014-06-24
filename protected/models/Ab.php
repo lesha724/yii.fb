@@ -459,7 +459,7 @@ SQL;
             if (SH::is(U_BSAA))
                 $notice = Sl::model()->getSlFor($st['abd1']);
 
-            $students[$key]['notice'] = $notice;
+            $students[$key] = array_merge($st, array('notice' => $notice));
         }
 
         return $students;
