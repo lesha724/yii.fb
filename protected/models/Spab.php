@@ -368,7 +368,7 @@ SQL;
                INNER JOIN abd ON (spab.spab1 = abd.abd3)
                INNER JOIN ab ON (abd.abd2 = ab.ab1)
 			WHERE spab4 = :SEL_1 and spab5 = :SEL_2 and spab6 = :SEL_3 and spab15 = :FILIAL and
-			      and ABD11  >= :DATE_1 and ABD11 <= :DATE_2
+			      ABD11  >= :DATE_1 and ABD11 <= :DATE_2
 			      $tmp
 SQL;
 
