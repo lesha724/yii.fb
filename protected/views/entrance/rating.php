@@ -30,6 +30,10 @@ HTML;
 if (! empty($model->course))
     $this->renderPartial('rating/_bottom', array(
         'model' => $model,
+        'list_1' => $list_1,
+        'list_3' => $list_3,
+        'list_4' => $list_4,
+        'list_5' => $list_5,
     ));
 
 ?>

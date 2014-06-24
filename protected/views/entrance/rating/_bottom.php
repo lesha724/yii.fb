@@ -27,13 +27,14 @@ function generateTr($i, $st, $model)
 {
     list($td1, $td2) = getDocumentTypeFor($st, $model);
 
+    $mark = round($st['abd20'], 3);
     $tr = <<<HTML
             <tr>
                 <td>$i</td>
                 <td>$st[ab2]</td>
                 <td>$st[ab3]</td>
                 <td>$st[ab4]</td>
-                <td>$st[ab20]</td>
+                <td>$mark</td>
                 <td>{$td1}</td>
                 <td>{$td2}</td>
                 <td>$st[notice]</td>
