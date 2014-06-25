@@ -139,7 +139,7 @@ $speciality = Spab::model()->findByPk($model->speciality);
                 $html = '';
 
                 if ($model->cn1)
-                    $cns = Cn::model()->findByPk($model->cn1);
+                    $cns = array(Cn::model()->findByPk($model->cn1));
                 else
                     $cns = Cn::model()->getAllCn();
 
@@ -172,12 +172,14 @@ HTML;
                             <tr><td colspan='8' style='text-decoration:underline;'>{$title}</td></tr>
 HTML;
                         $html .= $outOfContest;
-                    }
 
-                    $title = tt('На общих основаниях');
-                    $html .= <<<HTML
+                        $title = tt('На общих основаниях');
+                        $html .= <<<HTML
                         <tr><td colspan='8' style='text-decoration:underline;'>{$title}</td></tr>
 HTML;
+                    }
+
+
                     $html .= $inContest;
                 }
                 echo $html;
