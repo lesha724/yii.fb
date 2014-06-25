@@ -178,7 +178,7 @@ HTML;
                     $html .= <<<HTML
                         <tr><td colspan='8' style='text-decoration:underline;'>{$title}</td></tr>
 HTML;
-
+                    $html .= $inContest;
                 }
                 echo $html;
             endif;
