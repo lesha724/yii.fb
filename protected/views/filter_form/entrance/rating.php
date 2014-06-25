@@ -63,13 +63,11 @@ $form=$this->beginWidget('CActiveForm', array(
     $html .= '</div>';
 
 
-    if (! SH::is(U_BSAA)) {
-        $cns = CHtml::listData(Cn::model()->getAllCn(), 'cn1', 'cn2');
-        $html .= '<div class="row-fluid span2">';
-        $html .= $form->label($model, 'cn1');
-        $html .= $form->dropDownList($model, 'cn1', $cns, $options);
-        $html .= '</div>';
-    }
+    $cns = CHtml::listData(Cn::model()->getAllCn(), 'cn1', 'cn2');
+    $html .= '<div class="row-fluid span2">';
+    $html .= $form->label($model, 'cn1');
+    $html .= $form->dropDownList($model, 'cn1', $cns, $options);
+    $html .= '</div>';
 
 
     $specialities = CHtml::listData(Spab::model()->getSpecialitiesForEntrance($model), 'spab1', (SH::is(U_BSAA) ? 'spab3' : 'spab14'));
