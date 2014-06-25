@@ -106,11 +106,11 @@ class EntranceController extends Controller
     private function getList3(FilterForm $model)
     {
         if (SH::is(U_NULAU) && in_array($model->speciality, array(/*здесь какие-то особые специальности*/)))
-            $condition = 'abd66 = 0 AND ABD6 = 0';
+            $condition = 'abd66 = 0 AND abd6 = 0';
         elseif (SH::is(U_BSAA))
-            $condition = 'abd66 = 0 AND ABD4 <> 3';
+            $condition = 'abd66 = 0 AND abd4 <> 3 AND abd6=0';
         else
-            $condition = 'abd66 = 0';
+            $condition = 'abd66 = 0 AND abd6=0';
 
         // На конкурсной основе на общих основаниях
         $list_3 = Ab::model()->getStudents($model, 0, $condition);
