@@ -122,9 +122,13 @@ $speciality = Spab::model()->findByPk($model->speciality);
             ?>
 
         <?php
-            $showList2 = //$isNulau &&
-                         //in_array($model->speciality, array(/*здесь какие-то особые специальности*/)) &&
-                         Spabk::model()->checkIfCNExists($model->speciality);
+            if ($isNulau) {
+                $showList2 = //in_array($model->speciality, array(/*здесь какие-то особые специальности*/)) &&
+                             Spabk::model()->checkIfCNExists($model->speciality);
+            } else {
+                $showList2 = Spabk::model()->checkIfCNExists($model->speciality);
+            }
+
 
             if ($showList2) :
 
