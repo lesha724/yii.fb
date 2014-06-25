@@ -122,8 +122,8 @@ $speciality = Spab::model()->findByPk($model->speciality);
             ?>
 
         <?php
-            $showList2 = SH::is(U_NULAU) &&
-                         in_array($model->speciality, array(/*здесь какие-то особые специальности*/)) &&
+            $showList2 = //$isNulau &&
+                         //in_array($model->speciality, array(/*здесь какие-то особые специальности*/)) &&
                          Spabk::model()->checkIfCNExists($model->speciality);
 
             if ($showList2) :
@@ -134,7 +134,6 @@ $speciality = Spab::model()->findByPk($model->speciality);
                     $cns = Cn::model()->findByPk($model->cn1);
                 else
                     $cns = Cn::model()->getAllCn();
-
 
                 foreach ($cns as $cn) {
 
@@ -161,7 +160,7 @@ HTML;
 
                     if (! empty($outOfContest)) {
                         $title = tt('Вне конкурса');
-                        $html  .= <<<HTML
+                        $html .= <<<HTML
                             <tr><td colspan='8' style='text-decoration:underline;'>{$title}</td></tr>
 HTML;
                         $html .= $outOfContest;
