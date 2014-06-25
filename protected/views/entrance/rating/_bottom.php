@@ -179,7 +179,6 @@ HTML;
 HTML;
                     }
 
-
                     $html .= $inContest;
                 }
                 echo $html;
