@@ -27,7 +27,7 @@ echo <<<HTML
 HTML;
 
 
-if (! empty($model->course))
+if (! empty($model->speciality))
     $this->renderPartial('rating/_bottom', array(
         'model' => $model,
         'list_1' => $list_1,
