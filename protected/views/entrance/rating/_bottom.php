@@ -145,7 +145,7 @@ $speciality = Spab::model()->findByPk($model->speciality);
 
                 foreach ($cns as $cn) {
 
-                    $list = Ab::model()->getStudents($model, 0, 'ABD6='.$cn->cn1);
+                    $list = Ab::model()->getStudents($model, 0, 'abd66=0 AND abd6='.$cn->cn1);
 
                     $title = $cn->cn2.' ('.Spabk::model()->getBudgetAndContract($model->speciality, $cn->cn1).')';
                     $html .= <<<HTML

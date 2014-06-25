@@ -90,13 +90,7 @@ class EntranceController extends Controller
 
     private function getList1(FilterForm $model)
     {
-        if (SH::is(U_NULAU) && in_array($model->speciality, array(/*здесь какие-то особые специальности*/)))
-            $condition = '(abd66 = 1) AND abd6 = 0';
-        elseif (SH::is(U_NULAU))
-            $condition = '(abd66 = 1)';
-        else
-            $condition = '(abd66 = 1 OR abd4 = 3) AND abd6 = 0';
-
+        $condition = 'abd66 = 1';
         // вне конкурса
         $list_1 = Ab::model()->getStudents($model, 0, $condition);
 
@@ -105,12 +99,7 @@ class EntranceController extends Controller
 
     private function getList3(FilterForm $model)
     {
-        if (SH::is(U_NULAU) && in_array($model->speciality, array(/*здесь какие-то особые специальности*/)))
-            $condition = 'abd66 = 0 AND abd6 = 0';
-        elseif (SH::is(U_BSAA))
-            $condition = 'abd66 = 0 AND abd4 <> 3 AND abd6=0';
-        else
-            $condition = 'abd66 = 0 AND abd6=0';
+        $condition = 'abd66 = 0 AND abd6=0';
 
         // На конкурсной основе на общих основаниях
         $list_3 = Ab::model()->getStudents($model, 0, $condition);
@@ -120,10 +109,7 @@ class EntranceController extends Controller
 
     private function getList4(FilterForm $model)
     {
-        if (SH::is(U_NULAU))
-            $condition = '(abd66 = 1)';
-        else
-            $condition = '(abd66 = 1 OR abd4 = 3)';
+        $condition = 'abd66 = 1';
 
         // контракт - вне конкурса
         $list_4 = Ab::model()->getStudents($model, 1, $condition);
@@ -133,10 +119,7 @@ class EntranceController extends Controller
 
     private function getList5(FilterForm $model)
     {
-        if (SH::is(U_NULAU))
-            $condition = '(abd66 = 0)';
-        else
-            $condition = 'abd66 = 0 AND abd4 <> 3';
+        $condition = 'abd66 = 0';
 
         // контракт - на общих основаниях
         $list_5 = Ab::model()->getStudents($model, 1, $condition);
