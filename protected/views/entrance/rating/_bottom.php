@@ -12,9 +12,10 @@ function getDocumentTypeFor($st, $model)
 
     $t = 'abd33';
 
-    if (SH::is(U_BSAA))
-        $t = 'abd29';
-    elseif(SH::is(U_OSEU) && $model->course != 5)
+    //if (SH::is(U_BSAA))
+    //    $t = 'abd29';
+    //else
+    if(SH::is(U_OSEU) && $model->course != 5)
         $t = 'ABD29';
 
 
@@ -122,11 +123,14 @@ $speciality = Spab::model()->findByPk($model->speciality);
             ?>
 
         <?php
+
+            $showList2 = true;
+        
             if ($isNulau) {
-                $showList2 = //in_array($model->speciality, array(/*здесь какие-то особые специальности*/)) &&
-                             Spabk::model()->checkIfCNExists($model->speciality);
+                //$showList2 = //in_array($model->speciality, array(/*здесь какие-то особые специальности*/)) &&
+                             //Spabk::model()->checkIfCNExists($model->speciality);
             } else {
-                $showList2 = Spabk::model()->checkIfCNExists($model->speciality);
+                //$showList2 = //Spabk::model()->checkIfCNExists($model->speciality);
             }
 
 
