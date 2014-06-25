@@ -116,7 +116,7 @@ $shortForm = $model->extendedForm == 0
                 if ($shortForm) {
 
                     $t = "abd33";
-                    if ($isBsaa || ($isOseu && $model->sel_3 != 5))
+                    if ($isOseu && $model->sel_3 != 5)
                         $t = "abd29";
 
                     $sum['v1']  += $sp['v'];
