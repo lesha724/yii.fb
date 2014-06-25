@@ -114,7 +114,7 @@ SQL;
         $sql = <<<SQL
                 SELECT spabk3
 				FROM spabk
-				WHERE spabk1 = :SEL_6 and SPABK2 = :CN1 ";
+				WHERE spabk1 = :SEL_6 and SPABK2 = :CN1
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
