@@ -172,11 +172,13 @@ HTML;
                             <tr><td colspan='8' style='text-decoration:underline;'>{$title}</td></tr>
 HTML;
                         $html .= $outOfContest;
-                        $title = tt('На общих основаниях');
-                        $html .= <<<HTML
-                            <tr><td colspan='8' style='text-decoration:underline;'>{$title}</td></tr>
-HTML;
                     }
+
+                    $title = tt('На общих основаниях');
+                    $html .= <<<HTML
+                        <tr><td colspan='8' style='text-decoration:underline;'>{$title}</td></tr>
+HTML;
+
                 }
                 echo $html;
             endif;
