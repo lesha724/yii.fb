@@ -5,6 +5,29 @@
  * @var $model FilterForm
  */
 
+    function generateName($sp, $model)
+    {
+       if (SH::is(U_BSAA))
+           $field = $sp['spab3'];
+       else
+           $field = $sp['spab14'];
+
+
+       $name = CHtml::link(
+           $field,
+           Yii::app()->createUrl('entrance/rating', array(
+               'FilterForm' => array(
+                   'sel_1'      => $model->sel_1,
+                   'sel_2'      => $model->sel_2,
+                   'course'     => $model->course,
+                   'speciality' => $sp['spab1'],
+               ))
+           ));
+
+       return $name;
+    }
+
+
     $isBsaa  = SH::is(U_BSAA);
     $isOseu  = SH::is(U_OSEU);
     $isNulau = SH::is(U_NULAU);
@@ -104,14 +127,7 @@ $shortForm = $model->extendedForm == 0
 
             foreach ($specialities as $sp) {
 
-
-                if ($isNulau && ($sp['spab1'] == 10 || $sp['spab1'] == 16))
-                    $name = $sp['spab14'];
-                elseif ($isBsaa)
-                    $name = "<a target='_blank' href='#'>".$sp['spab3']."</a>";
-                else
-                    $name = "<a target='_blank' href='#'>".$sp['spab14']."</a>";
-
+                $name = generateName($sp, $model);
 
                 if ($shortForm) {
 
