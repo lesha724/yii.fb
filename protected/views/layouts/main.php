@@ -35,7 +35,7 @@
     <script src="<?=Yii::app()->baseUrl?>/js/main.js"></script>
     <script>
         tt = {} // object containing translations
-        var loginUrl = "<?=Yii::app()->createAbsoluteUrl('/site/login')?>"
+        var loginUrl = "<?=Yii::app()->createUrl('site/login')?>"
     </script>
 </head>
 
