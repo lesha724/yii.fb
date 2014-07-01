@@ -425,7 +425,6 @@ jQuery(function() {
 
 (function($ , undefined) {
 	$.fn.ace_wizard = function(options) {
-		
 		this.each(function() {
 			var $this = $(this);
 			$this.wizard();
@@ -435,10 +434,10 @@ jQuery(function() {
 			$wizard.$prevBtn.remove();
 			$wizard.$nextBtn.remove();
 			
-			$wizard.$prevBtn = buttons.find('.btn-prev').eq(0).on(ace.click_event,  function(){
+			$wizard.$prevBtn = buttons.find('.btn-prev').eq(0).on('click',  function(){
 				$this.wizard('previous');
 			}).attr('disabled', 'disabled');
-			$wizard.$nextBtn = buttons.find('.btn-next').eq(0).on(ace.click_event,  function(){
+			$wizard.$nextBtn = buttons.find('.btn-next').eq(0).on('click',  function(){
 				$this.wizard('next');
 			}).removeAttr('disabled');
 			$wizard.nextText = $wizard.$nextBtn.text();

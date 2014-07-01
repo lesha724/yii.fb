@@ -148,6 +148,22 @@ $config = array(
                     'js' => array('js/jquery-ui-1.10.3.full.min.js'),
                     'depends'=>array('jquery'),
                 ),
+                'jquery2' => array(
+                    'baseUrl' => 'theme/ace/assets/',
+                    'js' => array('js/jquery-2.0.3.min.js'),
+                ),
+                'form-wizard' => array(
+                    'baseUrl' => 'theme/ace/assets/',
+                    'css' => array('css/select2.css'),
+                    'js' => array(
+                        'js/fuelux/fuelux.wizard.min.js',
+                        'js/jquery.validate.min.js',
+                        'js/additional-methods.min.js',
+                        'js/bootbox.min.js',
+                        'js/select2.min.js'
+                    ),
+                    'depends'=>array('jquery'),
+                ),
             ),
 			'behaviors' => array(
 				array(

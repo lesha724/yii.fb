@@ -126,4 +126,45 @@ class EntranceController extends Controller
 
         return $list_5;
     }
+
+
+    public function actionRegistration()
+    {
+        $model = new Aap();
+        $model->unsetAttributes();
+
+        if (isset($_REQUEST['Aap'])){
+            $model->attributes = $_REQUEST['Aap'];
+        }
+
+        $this->render('registration', array(
+            'model'  => $model,
+        ));
+    }
+
+    public function actionGetSpecialities()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $spab4 = Yii::app()->request->getParam('spab4', null); // направление подготовки
+        $spab5 = Yii::app()->request->getParam('spab5', null); // форма обучения
+        $spab6 = 1; // курс
+
+        if ($spab4 == null || $spab5 == null)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $specialities = Spab::model()->getSpecialitiesForRegistration($spab4, $spab5);
+
+        $res = array(
+            'html' => CHtml::dropDownList(
+                '',
+                '',
+                CHtml::listData($specialities, 'spab1', 'spab14'),
+                array('empty' => '')
+            )
+        );
+
+        Yii::app()->end(CJSON::encode($res));
+    }
 }

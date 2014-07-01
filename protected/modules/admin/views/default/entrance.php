@@ -62,6 +62,12 @@ HTML;
                     <?=CHtml::hiddenField('settings[25]', PortalSettings::model()->findByPk(25)->ps2)?>
                 </div>
 
+                <div class="control-group">
+                    <?=CHtml::checkBox('', PortalSettings::model()->findByPk(26)->ps2, $htmlOptions);?>
+                    <span class="lbl"> <?=tt('Отображать колонку - № личного дела')?></span>
+                    <?=CHtml::hiddenField('settings[26]', PortalSettings::model()->findByPk(26)->ps2)?>
+                </div>
+
                 <div class="form-actions">
                     <button type="submit" class="btn btn-info btn-small">
                         <i class="icon-ok bigger-110"></i>

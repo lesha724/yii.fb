@@ -1,9 +1,21 @@
+<style>
+    .table-striped tbody > tr:nth-child(2n+1) > td, .table-striped tbody > tr:nth-child(2n+1) > th {
+        background-color: transparent;
+    }
+</style>>
 <?php
 /**
  *
  * @var EntranceController $this
  * @var $model FilterForm
  */
+
+// колонка - № личного дела
+global $showColumn;
+$showColumn = PortalSettings::model()->findByPk(26)->ps2;
+$colspan = 8;
+if ($showColumn)
+    $colspan = 9;
 
 function getDocumentTypeFor($st, $model)
 {
@@ -26,12 +38,25 @@ function getDocumentTypeFor($st, $model)
 
 function generateTr($i, $st, $model)
 {
+    global $showColumn;
+
     list($td1, $td2) = getDocumentTypeFor($st, $model);
 
     $mark = round($st['abd20'], 3);
+
+    $bgColor = '';
+    if ($st['color'])
+        $bgColor = 'background-color:'.$st['color'].' !important';
+
     $tr = <<<HTML
-            <tr>
+            <tr style="$bgColor">
                 <td>$i</td>
+HTML;
+    if ($showColumn)
+    $tr .= <<<HTML
+                <td>$st[abd9]</td>
+HTML;
+    $tr .= <<<HTML
                 <td>$st[ab2]</td>
                 <td>$st[ab3]</td>
                 <td>$st[ab4]</td>
@@ -58,6 +83,13 @@ JS
 
 
 $speciality = Spab::model()->findByPk($model->speciality);
+
+$cnPlan = null;
+if (! empty($model->cn1))
+    $cnPlan = Spabk::model()->findByAttributes(array(
+        'spabk1' => $speciality->spab1,
+        'spabk2' => $model->cn1
+    ));
 ?>
 
 <div class="row-fluid" >
@@ -73,7 +105,10 @@ $speciality = Spab::model()->findByPk($model->speciality);
     <table id="rating" class="table table-striped table-bordered table-hover">
         <thead>
             <tr>
-                <th rowspan="2"><?=tt('№ п/п')?></th>
+                <th rowspan="2" style="width:2%"><?=tt('№ п/п')?></th>
+                <?php if ($showColumn) :?>
+                    <th rowspan="2"><?=tt('№ личного дела')?></th>
+                <?php endif; ?>
                 <th rowspan="2"><?=tt('Фамилия')?></th>
                 <th rowspan="2"><?=tt('Имя')?></th>
                 <th rowspan="2"><?=tt('Отчество')?></th>
@@ -87,15 +122,22 @@ $speciality = Spab::model()->findByPk($model->speciality);
             </tr>
         </thead>
         <tbody>
+        <?php
+            $title  = $isBsaa ? tt("НА ФЕДЕРАЛЬНЫЙ БЮДЖЕТ") : tt("НА БЮДЖЕТНОЙ ОСНОВЕ");
+
+            $count = 0;
+            if (empty($model->cn1))
+                $count = $speciality->getAttribute('spab11');
+            else
+                if (! empty($cnPlan)) $count = $cnPlan->getAttribute('spabk3');
+
+            $title .= " (".$count.")";
+            if ($count > 0) :
+        ?>
         <tr>
-            <td colspan="8" class="entrance-rating-title">
+            <td colspan="<?=$colspan?>" class="entrance-rating-title">
                 <h4>
-                    <?php
-                        $title  = $isBsaa ? tt("НА ФЕДЕРАЛЬНЫЙ БЮДЖЕТ") : tt("НА БЮДЖЕТНОЙ ОСНОВЕ");
-                        $spab11 = $speciality->getAttribute('spab11');
-                        $title .= " (".$spab11.")";
-                        echo $title;
-                    ?>
+                    <?=$title;?>
                 </h4>
             </td>
         </tr>
@@ -104,7 +146,7 @@ $speciality = Spab::model()->findByPk($model->speciality);
             if (! empty($list_1)) :
         ?>
                 <tr>
-                    <td colspan='8'>
+                    <td colspan='<?=$colspan?>'>
                         <?php
                             $spab17 = $speciality->getAttribute('spab17');
                             echo tt('ВНЕ КОНКУРСА').' ('.$spab17.')'
@@ -147,9 +189,9 @@ $speciality = Spab::model()->findByPk($model->speciality);
 
                     $list = Ab::model()->getStudents($model, 0, 'abd66=0 AND abd6='.$cn->cn1);
 
-                    $title = $cn->cn2.' ('.Spabk::model()->getBudgetAndContract($model->speciality, $cn->cn1).')';
+                    $title = $cn->cn2.' ('.Spabk::model()->getValueOf('spabk3', $model->speciality, $cn->cn1).')';
                     $html .= <<<HTML
-                        <tr><td colspan='8' style='text-decoration:underline;'>{$title}</td></tr>
+                        <tr><td colspan='{$colspan}' style='text-decoration:underline;'>{$title}</td></tr>
 HTML;
 
                     $i = 1;
@@ -167,15 +209,15 @@ HTML;
                     }
 
                     if (! empty($outOfContest)) {
-                        $title = tt('Вне конкурса');
+                        $title = tt('ВНЕ КОНКУРСА');
                         $html .= <<<HTML
-                            <tr><td colspan='8' style='text-decoration:underline;'>{$title}</td></tr>
+                            <tr><td colspan='{$colspan}' style='text-decoration:underline;'>{$title}</td></tr>
 HTML;
                         $html .= $outOfContest;
 
-                        $title = tt('На общих основаниях');
+                        $title = tt('НА ОБЩИХ ОСНОВАНИЯХ');
                         $html .= <<<HTML
-                        <tr><td colspan='8' style='text-decoration:underline;'>{$title}</td></tr>
+                        <tr><td colspan='{$colspan}' style='text-decoration:underline;'>{$title}</td></tr>
 HTML;
                     }
 
@@ -190,13 +232,13 @@ HTML;
             if (! empty($list_3)) :
         ?>
             <tr>
-                <td colspan='8'>
+                <td colspan='<?=$colspan?>'>
                     <?php
                         $amount = '';
                         if (isset($spab11) && isset($spab17))
                             $amount = ' ('.($spab11 - $spab17).')';
                     ?>
-                    <?=tt('На конкурсной основе на общих основаниях').$amount?>
+                    <?=tt('НА КОНКУРСНОЙ ОСНОВЕ НА ОБЩИХ ОСНОВАНИЯХ').$amount?>
                 </td>
             </tr>
             <?php
@@ -209,24 +251,33 @@ HTML;
                 echo $html;
             endif;
             ?>
+        <?php endif; ?>
 
+        <?php
+            $title = tt('НА КОНТРАКТ');
+            $count = 0;
+
+            if (empty($model->cn1))
+                $count = $speciality->getAttribute('spab12');
+            else
+                if (! empty($cnPlan)) $count = $cnPlan->getAttribute('spabk4');
+
+            $title .= " (".$count.")";
+            if ($count > 0) :
+        ?>
         <tr>
-            <td colspan="8" class="entrance-rating-title">
+            <td colspan='<?=$colspan?>' class="entrance-rating-title">
                 <h4>
-                    <?php
-                        $title   = tt('НА КОНТРАКТ');
-                        $spab12 = $speciality->getAttribute('spab12');
-                        $title  .= " (".$spab12.")";
-                        echo $title;
-                    ?>
+                    <?=$title?>
                 </h4>
             </td>
         </tr>
 
         <?php
             if (! empty($list_4)) :
+                $title = tt('ВНЕ КОНКУРСА').' ('.$speciality->spab18.')';
         ?>
-            <tr><td colspan='8'><?=tt('ВНЕ КОНКУРСА')?></td></tr>
+            <tr><td colspan='<?=$colspan?>'><?=$title?></td></tr>
             <?php
                 $i = 1;
                 $html = '';
@@ -242,7 +293,7 @@ HTML;
         <?php
             if (! empty($list_5)) :
                 ?>
-                <tr><td colspan='8'><?=tt('На общих основаниях')?></td></tr>
+                <tr><td colspan='<?=$colspan?>'><?=tt('На общих основаниях')?></td></tr>
                 <?php
                 $i = 1;
                 $html = '';
@@ -254,6 +305,7 @@ HTML;
             endif;
         ?>
 
+        <?php endif; ?>
         </tbody>
     </table>
 
