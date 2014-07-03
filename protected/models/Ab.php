@@ -401,17 +401,18 @@ class Ab extends CActiveRecord
     {
         $extra = array();
 
-        $mp2 = Mp::model()->findByPk(33)->getAttribute('mp2');
+        $mp33 = Mp::model()->findByPk(33)->getAttribute('mp2');
+        $mp32 = Mp::model()->findByPk(32)->getAttribute('mp2');
 
-        if ($mp2 == 0)
+        if ($mp33 == 0)
             return array();	// don't show
-        elseif (in_array($mp2, array(1,2,3,4))){
+        elseif (in_array($mp33, array(1,2,3,4))){
             // текущий прием + 1-3 заходы рекомендованных
             $from = 'spab
                        inner join abd on (spab.spab1 = abd.abd3)
                        inner join ab on (abd.abd2 = ab.ab1)';
-            if ($mp2 != 1)
-                $extra[] = 'abd'.(22+$mp2).' = 1';
+            if ($mp33 != 1)
+                $extra[] = 'abd'.(22+$mp33).' = 1';
         } else {
             // зачисленные
             $from = 'spab
@@ -434,7 +435,8 @@ class Ab extends CActiveRecord
         $extras = implode($extra, ' AND ');
 
         $sql = <<<SQL
-              SELECT ab1,ab2,ab3,ab4,abd20,abd33,abd28,abd29,abd23,abd66,abd54,abd1
+              SELECT ab1,ab2,ab3,ab4,abd20,abd33,abd28,abd29,abd23,
+                     abd66,abd54,abd1,abd9,abd24,abd25,abd26,abd27,abd52
               FROM {$from}
               WHERE spab4 = :SEL_1 AND spab5 = :SEL_2 AND spab6 = :SEL_3 AND
                     spab1 = :SEL_6 AND spab2 = :YEAR_1 AND
@@ -455,13 +457,74 @@ SQL;
 
         foreach ($students as $key => $st) {
 
-            $notice = '';
-            if (SH::is(U_BSAA))
+            if (SH::is(U_NULAU)){
+                list($notice, $color) = $this->getNotice($st, $mp32);
+            } else {
                 $notice = Sl::model()->getSlFor($st['abd1']);
+                $color = '';
+            }
 
-            $students[$key] = array_merge($st, array('notice' => $notice));
+            $students[$key] = array_merge($st, array('notice' => $notice, 'color' => $color));
         }
 
         return $students;
+    }
+
+    private function getNotice($st, $mp2)
+    {
+        $notice = $color = '';
+
+        if($st['abd52'] > 0 && $st['abd27'] == 1)
+        {
+            $notice = tt("Зачислен");
+            $color = '#b8cbea';
+        }
+        elseif($st['abd27'] == 1 && $mp2 == 3)
+        {
+            $notice = tt("Рекомендован");
+            $color = '#00ff00';
+        }
+        elseif($st['abd26'] == 1 && $mp2 == 2)
+        {
+            $notice = tt("Рекомендован");
+            $color = '#00ff00';
+        }
+        elseif($st['abd25'] == 1 && $mp2 == 1)
+        {
+            $notice = tt("Рекомендован");
+            $color = '#00ff00';
+        }
+        elseif($st['abd24'] == 1 && $mp2 == 0)
+        {
+            $notice = tt("Рекомендован");
+            $color = '#00ff00';
+        }
+
+        else {
+
+            if($st['abd26'] == 0 && $st['abd25'] == 0 && $st['abd24'] == 0 && $st['abd27'] == 0)
+            {
+                $notice =  tt("Резерв");
+                $color = '';
+            }
+            elseif($st['abd26'] == 1)
+            {
+                $notice =  tt("Рекомендован в 3 волне");
+                $color = '#99ff99';
+            }
+            elseif($st['abd25'] == 1)
+            {
+                $notice =  tt("Рекомендован во 2 волне");
+                $color = '#99ff99';
+            }
+            elseif($st['abd24'] == 1)
+            {
+                $notice =  tt("Рекомендован в 1 волне");
+                $color = '#99ff99';
+            }
+        }
+
+
+        return array($notice, $color);
     }
 }

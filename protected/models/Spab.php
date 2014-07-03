@@ -386,4 +386,20 @@ SQL;
 
         return $count;
     }
+
+    public function getSpecialitiesForRegistration($spab4, $spab5)
+    {
+        $dateEntranceBegin  = PortalSettings::model()->findByPk(23)->getAttribute('ps2');
+        $spab2 = date('Y', strtotime($dateEntranceBegin));
+
+        $criteria = new CDbCriteria();
+        $criteria->compare('spab4', $spab4);
+        $criteria->compare('spab5', $spab5);
+        $criteria->compare('spab2', $spab2);
+        $criteria->order = 'spab7';
+
+        $specialities = Spab::model()->findAll($criteria);
+
+        return $specialities;
+    }
 }

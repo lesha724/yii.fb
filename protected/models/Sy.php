@@ -1,21 +1,20 @@
 <?php
 
 /**
- * This is the model class for table "spabk".
+ * This is the model class for table "sy".
  *
- * The followings are the available columns in table 'spabk':
- * @property integer $spabk1
- * @property integer $spabk2
- * @property integer $spabk3
+ * The followings are the available columns in table 'sy':
+ * @property integer $sy1
+ * @property string $sy2
  */
-class Spabk extends CActiveRecord
+class Sy extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'spabk';
+		return 'sy';
 	}
 
 	/**
@@ -26,10 +25,12 @@ class Spabk extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('spabk1, spabk2, spabk3', 'numerical', 'integerOnly'=>true),
+			array('sy1', 'required'),
+			array('sy1', 'numerical', 'integerOnly'=>true),
+			array('sy2', 'length', 'max'=>180),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('spabk1, spabk2, spabk3', 'safe', 'on'=>'search'),
+			array('sy1, sy2', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -50,9 +51,8 @@ class Spabk extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'spabk1' => 'Spabk1',
-			'spabk2' => 'Spabk2',
-			'spabk3' => 'Spabk3',
+			'sy1' => 'Sy1',
+			'sy2' => 'Sy2',
 		);
 	}
 
@@ -74,9 +74,8 @@ class Spabk extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('spabk1',$this->spabk1);
-		$criteria->compare('spabk2',$this->spabk2);
-		$criteria->compare('spabk3',$this->spabk3);
+		$criteria->compare('sy1',$this->sy1);
+		$criteria->compare('sy2',$this->sy2,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -87,42 +86,21 @@ class Spabk extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Spabk the static model class
+	 * @return Sy the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
 	}
 
-    public function checkIfCNExists($spab1)
+    public function getAllSy()
     {
-        $sql = <<<SQL
-                SELECT SUM(spabk3)
-                FROM spabk
-				WHERE spabk1 = :SEL_6
-SQL;
-        $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':SEL_6', $spab1);
+        $criteria = new CDbCriteria();
+        $criteria->addCondition('sy1 > 0');
 
-        $sum = $command->queryScalar();
+        $sys = $this->findAll($criteria);
 
-        return (bool)$sum;
+        return $sys;
     }
 
-    public function getValueOf($field, $speciality, $cn1)
-    {
-        $sql = <<<SQL
-                SELECT {$field}
-				FROM spabk
-				WHERE spabk1 = :SEL_6 and SPABK2 = :CN1
-SQL;
-
-        $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':SEL_6', $speciality);
-        $command->bindValue(':CN1', $cn1);
-
-        $amount = $command->queryScalar();
-
-        return $amount;
-    }
 }

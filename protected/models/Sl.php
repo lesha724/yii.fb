@@ -128,4 +128,14 @@ SQL;
         $sl = $command->queryScalar();
         return $sl;
     }
+    public function getAllSl()
+    {
+        $criteria = new CDbCriteria();
+        $criteria->addCondition('sl1 > 0');
+        $criteria->addInCondition('sl6', array(2,3));
+
+        $sls = $this->findAll($criteria);
+
+        return $sls;
+    }
 }
