@@ -14,7 +14,7 @@
             <a class="brand" href="#">
                 <small>
                     <i class="icon-leaf"></i>
-                    Ace Admin
+                    <?=tt('АСУ')?>
                 </small>
             </a><!-- /.brand -->
             <ul class="nav ace-nav pull-right">
