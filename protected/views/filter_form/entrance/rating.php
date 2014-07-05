@@ -3,6 +3,7 @@
  *
  * @var EntranceController $this
  * @var CActiveForm $form
+ * @var FilterForm $model
  */
 
 $options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;'), 'style' => 'width:150px');
@@ -47,12 +48,15 @@ $form=$this->beginWidget('CActiveForm', array(
     $html .= $form->dropDownList($model, 'sel_2', $sel_2, $options);
     $html .= '</div>';
 
-    $courses = CHtml::listData(Spab::model()->getCoursesForEntrance($model), 'spab6', 'spab6');
-    $html .= '<div class="row-fluid span2">';
-    $html .= $form->label($model, 'course');
-    $html .= $form->dropDownList($model, 'course', $courses, $options);
-    $html .= '</div>';
-
+    if (SH::is(U_BSAA)) {
+        $html .= $form->hiddenField($model, 'course', array('value' => 1));
+    } else {
+        $courses = CHtml::listData(Spab::model()->getCoursesForEntrance($model), 'spab6', 'spab6');
+        $html .= '<div class="row-fluid span2">';
+        $html .= $form->label($model, 'course');
+        $html .= $form->dropDownList($model, 'course', $courses, $options);
+        $html .= '</div>';
+    }
     $html .= '</fieldset>
               <fieldset>';
 
