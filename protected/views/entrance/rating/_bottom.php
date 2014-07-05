@@ -71,6 +71,14 @@ HTML;
 
 }
 
+function generateEmptyRow($colspan)
+{
+    $tr = '';
+    for($i=1;$i<=$colspan;$i++)
+        $tr .= '<td></td>';
+
+    return $tr;
+}
 
     $isBsaa  = SH::is(U_BSAA);
     $isOseu  = SH::is(U_OSEU);
@@ -221,7 +229,9 @@ HTML;
 HTML;
                     }
 
-                    $html .= $inContest;
+                    $html .= empty($inContest)
+                                ? generateEmptyRow($colspan)
+                                : $inContest;
                 }
                 echo $html;
             endif;
