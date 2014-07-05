@@ -232,7 +232,7 @@ HTML;
             if (! empty($list_3)) :
         ?>
             <tr>
-                <td colspan='<?=$colspan?>'>
+                <td colspan='<?=$colspan?>' class="entrance-rating-title">
                     <?php
                         $amount = '';
                         if (isset($spab11) && isset($spab17))
@@ -293,7 +293,7 @@ HTML;
         <?php
             if (! empty($list_5)) :
                 ?>
-                <tr><td colspan='<?=$colspan?>'><?=tt('На общих основаниях')?></td></tr>
+                <tr><td colspan='<?=$colspan?>' class="entrance-rating-title"><?=tt('НА ОБЩИХ ОСНОВАНИЯХ')?></td></tr>
                 <?php
                 $i = 1;
                 $html = '';
