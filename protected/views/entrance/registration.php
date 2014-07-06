@@ -13,9 +13,9 @@ Yii::app()->clientScript->registerPackage('autosize');
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/entrance/registration.js', CClientScript::POS_HEAD);
 
 $required  = tt('Поле обязательно для заполнения!');
-$maxLength = tt('Пожалуйста, введите не больше чем {0} символов');
-$minLength = tt('Пожалуйста, введите не меньше чем {0} символов');
-$digits    = tt('Пожалуйста, введите только цифры');
+$maxLength = tt('Пожалуйста, введите не больше чем {0} символов!');
+$minLength = tt('Пожалуйста, введите не меньше чем {0} символов!');
+$digits    = tt('Пожалуйста, введите только цифры!');
 
 $getSpecialitiesUrl = Yii::app()->createUrl('/entrance/getSpecialities');
 

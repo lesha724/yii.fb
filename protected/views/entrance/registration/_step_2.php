@@ -1,22 +1,9 @@
 <?php
-$pattern = <<<HTML
-<div class="control-group">
-    %s
-    <div class="controls">
-        <div class="span12">
-            %s
-        </div>
-    </div>
-</div>
-HTML;
-$labelOptions = array(
-    'class' => 'control-label'
-);
-$inputOptions = array(
-    'class' => 'span6'
-);
+/**
+ * @var Aap $model
+ */
 ?>
-<div class="step-pane active" id="step2">
+<div class="step-pane" id="step2">
 
     <?php
         $data = array(
@@ -75,7 +62,7 @@ $inputOptions = array(
             tt('Нет'),
             tt('Да'),
         );
-        $label = CHtml::label('Агроклассы', '', $labelOptions);
+        $label = CHtml::label(tt('Агроклассы'), '', $labelOptions);
         $input = CHtml::dropDownList('agroClasses', '', $data, $inputOptions);
         echo sprintf($pattern, $label, $input);
 
@@ -112,5 +99,9 @@ $inputOptions = array(
         $label = $form->label($model, 'aap50', $labelOptions);
         $input = $form->dropDownList($model, 'aap50', $data, $inputOptions);
         echo sprintf($pattern, $label, $input);
+
+        echo '<div id="exams">';
+        $this->renderPartial('registration/_exams', array('model' => $model));
+        echo '</div>';
     ?>
 </div>

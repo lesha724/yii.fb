@@ -259,4 +259,22 @@ SQL;
         return array($disciplines, $dataAttrs);
     }
 
+    public function getExamsOf($d1)
+    {
+        if (empty($d1))
+            return array();
+
+        $sql=<<<SQL
+           SELECT d1,d2
+           FROM d
+           INNER JOIN seka on (d.d1 = seka.seka2)
+           WHERE seka1=:D1
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':D1', $d1);
+        $disciplines = $command->queryAll();
+
+        return $disciplines;
+    }
 }

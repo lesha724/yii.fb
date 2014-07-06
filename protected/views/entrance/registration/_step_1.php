@@ -1,22 +1,7 @@
 <?php
-    $pattern = <<<HTML
-<div class="control-group">
-    %s
-    <div class="controls">
-        <div class="span12">
-            %s
-        </div>
-    </div>
-</div>
-HTML;
-$labelOptions = array(
-    'class' => 'control-label'
-);
-$inputOptions = array(
-    'class' => 'span6'
-);
+
 ?>
-<div class="step-pane " id="step1">
+<div class="step-pane active" id="step1">
 
     <?php
         $label = $form->label($model, 'aap2', $labelOptions);
