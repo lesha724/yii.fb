@@ -27,7 +27,7 @@ echo <<<HTML
 HTML;
 
 $showBottom = SH::is(U_BSAA)
-                ? !empty($model->sel_1) && !empty($model->sel_2)
+                ? $model->sel_1 != '' && $model->sel_2 != ''
                 : !empty($model->course);
 
 if ($showBottom)
