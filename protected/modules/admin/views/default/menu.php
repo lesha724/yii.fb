@@ -27,6 +27,7 @@
             'items' => array(
                 'documentReception' => 'Ход приема документов',
                 'rating'            => 'Рейтинговый список',
+                'registration'      => 'Регистрация',
             ),
             'settings' => $settings
         ));
