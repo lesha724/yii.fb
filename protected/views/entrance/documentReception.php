@@ -26,6 +26,8 @@ echo <<<HTML
     <span id="spinner1"></span>
 HTML;
 
+$showBottom = SH::is(U_BSAA)
+                ? !empty($model->sel_1) && !empty($model->sel_2)
 
 if (! empty($model->course))
     $this->renderPartial('documentReception/_bottom', array(
