@@ -358,9 +358,7 @@ SQL;
 
     public function countEntrantForDate($model, $date1, $date2, $flag = 1)
     {
-        $isBsaa  = SH::is(U_BSAA);
-        $t = $isBsaa ? "ABD29" : "ABD33";
-        $tmp = ($flag == 2) ? "and $t = 1" : '';
+        $tmp = ($flag == 2) ? "and ABD33 = 1" : '';
 
         $sql = <<<SQL
             SELECT count(AB1)
