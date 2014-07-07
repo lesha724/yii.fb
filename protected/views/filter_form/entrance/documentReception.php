@@ -56,11 +56,15 @@ $form=$this->beginWidget('CActiveForm', array(
     $html .= '</label>';
     $html .= '</div>';
 
-    $courses = CHtml::listData(Spab::model()->getCoursesForEntrance($model), 'spab6', 'spab6');
-    $html .= '<div class="row-fluid span2">';
-    $html .= $form->label($model, 'course');
-    $html .= $form->dropDownList($model, 'course', $courses, $options);
-    $html .= '</div>';
+    if (SH::is(U_BSAA)) {
+        $html .= $form->hiddenField($model, 'course', array('value' => 1));
+    } else {
+        $courses = CHtml::listData(Spab::model()->getCoursesForEntrance($model), 'spab6', 'spab6');
+        $html .= '<div class="row-fluid span2">';
+        $html .= $form->label($model, 'course');
+        $html .= $form->dropDownList($model, 'course', $courses, $options);
+        $html .= '</div>';
+    }
 
     $button =  <<<HTML
     <div class="row-fluid span2" style="padding:23px 0 0 0">
