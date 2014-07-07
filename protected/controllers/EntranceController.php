@@ -130,21 +130,30 @@ class EntranceController extends Controller
 
     public function actionRegistration()
     {
-        die(var_dump(
-            'удалить через миграцию все внешние ключи на табл aap,
-            перевести в js сообщение об окончании заполнения,
-            проверить сохранение анкеты'));
         $model = new Aap();
         $model->unsetAttributes();
 
         $finished = Yii::app()->request->getParam('finished', null);
 
         if (isset($_REQUEST['Aap'])){
-            $model->aap1 = new CDbExpression('GEN_ID(GEN_AAP, 1)');
+            $model->aap1  = new CDbExpression('GEN_ID(GEN_AAP, 1)');
+            $model->aap51 = 0; // st1
             $model->attributes = $_REQUEST['Aap'];
 
             if ($finished && $model->save()) {
-                // сохранить оценки
+                if (isset($_REQUEST['aapes']))
+                    foreach ($_REQUEST['aapes'] as $aapes2 => $values) {
+
+                        if (empty($values['aapes5']))
+                            continue;
+
+                        $aapes = new Aapes;
+                        $aapes->aapes1 = Aap::getLastInsertId();
+                        $aapes->aapes2 = $aapes2;
+                        $aapes->attributes = $values;
+                        $aapes->save();
+                    }
+
             }
         }
 

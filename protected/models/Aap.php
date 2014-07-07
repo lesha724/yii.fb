@@ -446,4 +446,15 @@ class Aap extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+    public static function getLastInsertId()
+    {
+        $sql = <<<'SQL'
+          SELECT gen_ID(GEN_AAP, 0)
+          FROM RDB$DATABASE
+SQL;
+        $id = Yii::app()->db->createCommand($sql)->queryScalar();
+
+        return $id;
+    }
 }

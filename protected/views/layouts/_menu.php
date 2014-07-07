@@ -180,6 +180,12 @@ $this->widget('zii.widgets.CMenu', array(
                     'visible' => SH::isVisibleMenu('entrance', 'rating'),
                     'active' => $controller=='entrance' && $action=='rating'
                 ),
+                array(
+                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Регистрация'),
+                    'url' => Yii::app()->createUrl('/entrance/registration'),
+                    'visible' => SH::isVisibleMenu('entrance', 'registration'),
+                    'active' => $controller=='entrance' && $action=='registration'
+                ),
             ),
             'visible' => SH::isVisibleMenu('entrance', 'main')
         ),

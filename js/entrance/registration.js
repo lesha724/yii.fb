@@ -19,6 +19,9 @@ $(document).ready(function(){
             return false;
     }).on('finished', function(e) {
 
+        if(!$('#validation-form').valid())
+            return false;
+
         var $form  = $('form');
         var $input = $('<input>', {
             type:  'hidden',
@@ -28,10 +31,13 @@ $(document).ready(function(){
         $form.append($input)
 
         $.post('', $form.serialize(), function(data){
-            bootbox.dialog("Thank you! Your information was successfully saved!",
+            bootbox.dialog(tt.finish,
                 [{
-                    "label" : "OK",
-                    "class" : "btn-small btn-primary",
+                    'label' : 'OK',
+                    'class' : 'btn-small btn-primary',
+                    'callback': function(){
+                        window.location.reload();
+                    }
                 }]
             );
         });
@@ -146,18 +152,20 @@ $(document).ready(function(){
             'Aap[aap13]': 'required',
             'Aap[aap14]': {
                 digits : true,
-                minlength: 4
+                minlength: 4,
+                required: true
             },
             'Aap[aap61]': {
                 maxlength: 50
             },
-            'Aap[aap14]': 'required',
             'Aap[aap54]': 'required',
             'Aap[aap38]': {
                 required : true,
                 maxlength: 50
             },
             'Aap[aap58]': 'required',
+            'Aap[aap28]': 'required',
+            'Aap[aap23]': 'required'
         },
 
         invalidHandler: function (event, validator) { //display error alert on form submit

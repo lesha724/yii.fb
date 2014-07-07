@@ -16,6 +16,7 @@ $required  = tt('Поле обязательно для заполнения!');
 $maxLength = tt('Пожалуйста, введите не больше чем {0} символов!');
 $minLength = tt('Пожалуйста, введите не меньше чем {0} символов!');
 $digits    = tt('Пожалуйста, введите только цифры!');
+$finish    = tt('Регистрация прошла успешно! Ваша анкета сохранена!');
 
 $getSpecialitiesUrl = Yii::app()->createUrl('/entrance/getSpecialities');
 
@@ -24,6 +25,7 @@ Yii::app()->clientScript->registerScript('translations', <<<JS
         tt.maxLength = "{$maxLength}";
         tt.minLength = "{$minLength}";
         tt.digits    = "{$digits}";
+        tt.finish    = "{$finish}";
 
         getSpecialitiesUrl = "{$getSpecialitiesUrl}"
 JS
