@@ -28,8 +28,9 @@ HTML;
 
 $showBottom = SH::is(U_BSAA)
                 ? !empty($model->sel_1) && !empty($model->sel_2)
+                : !empty($model->course);
 
-if (! empty($model->course))
+if ($showBottom)
     $this->renderPartial('documentReception/_bottom', array(
         'model' => $model,
     ));
