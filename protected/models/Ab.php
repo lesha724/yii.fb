@@ -457,12 +457,13 @@ SQL;
 
         foreach ($students as $key => $st) {
 
-            if (SH::is(U_NULAU)){
+            list($notice, $color) = $this->getNotice($st, $mp32);
+            /*(if (SH::is(U_NULAU)){
                 list($notice, $color) = $this->getNotice($st, $mp32);
             } else {
                 $notice = Sl::model()->getSlFor($st['abd1']);
                 $color = '';
-            }
+            }*/
 
             $students[$key] = array_merge($st, array('notice' => $notice, 'color' => $color));
         }
