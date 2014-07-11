@@ -2,7 +2,7 @@
 global $menu;
 $menu = $settings;
 
-function checkbox($controller, $action)
+function checkbox($controller, $action, $type)
 {
     global $menu;
 
@@ -11,17 +11,23 @@ function checkbox($controller, $action)
 
     parse_str(urldecode($menu), $output);
 
-    $val = isset($output[$controller][$action])
-                ? $output[$controller][$action]
+    $val = isset($output[$controller][$action][$type])
+                ? $output[$controller][$action][$type]
                 : 1;
 
     $checked = $val ? "checked='checked'" : '';
 
-    $name = $controller.'['.$action.']';
+    $tooltip = '';
+    if ($type == MENU_ELEMENT_VISIBLE)
+        $tooltip = tt('Скрыть пункт меню');
+    elseif ($type == MENU_ELEMENT_NEED_AUTH)
+        $tooltip = 'Доступен без авторизации';
+
+    $name = $controller.'['.$action.']['.$type.']';
     return <<<HTML
         <span>
             <input type="hidden" name="{$name}" value="{$val}"/>
-            <input type="checkbox" {$checked}/>
+            <input type="checkbox" {$checked} data-rel="tooltip" data-placement="top" data-original-title="{$tooltip}" />
         </span>
 HTML;
 
@@ -45,7 +51,7 @@ function checkbox2($controller)
     $name = $controller.'['.$action.']';
     return <<<HTML
             <label>
-                <input type="checkbox" class="ace ace-switch ace-switch-3" {$checked}/>
+                <input type="checkbox" class="ace ace-switch ace-switch-3" {$checked} />
                 <span class="lbl"></span>
                 <input type="hidden" name="{$name}" value="{$val}" />
             </label>
@@ -74,7 +80,10 @@ HTML;
             <ol class="dd-list">
                 <?php foreach ($items as $action => $name): ?>
                     <li class="dd-item" >
-                        <div class="dd-handle"><?=checkbox($controller, $action)?> <?=tt($name)?></div>
+                        <div class="dd-handle">
+                            <?=checkbox($controller, $action, MENU_ELEMENT_VISIBLE)?>
+                            <?=checkbox($controller, $action, MENU_ELEMENT_NEED_AUTH)?>
+                            <?=tt($name)?></div>
                     </li>
                 <?php endforeach; ?>
             </ol>

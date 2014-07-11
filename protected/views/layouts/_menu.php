@@ -69,34 +69,34 @@ $this->widget('zii.widgets.CMenu', array(
                     'label' => '<i class="icon-double-angle-right"></i>'.tt('Академ. группы'),
                     'url' => Yii::app()->createUrl('/timeTable/group'),
                     'active' => $controller=='timeTable' && $action=='group',
-                    'visible' => SH::isVisibleMenu('timeTable', 'group')
+                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'timeTable', 'group')
                 ),
                 array(
                     'label' => '<i class="icon-double-angle-right"></i>'.tt('Преподавателя'),
                     'url' => Yii::app()->createUrl('/timeTable/teacher'),
                     'active' => $controller=='timeTable' && $action=='teacher',
-                    'visible' => SH::isVisibleMenu('timeTable', 'teacher')
+                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'timeTable', 'teacher')
                 ),
                 array(
                     'label' => '<i class="icon-double-angle-right"></i>'.tt('Студента'),
                     'url' => Yii::app()->createUrl('/timeTable/student'),
                     'active' => $controller=='timeTable' && $action=='student',
-                    'visible' => SH::isVisibleMenu('timeTable', 'student')
+                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'timeTable', 'student')
                 ),
                 array(
                     'label' => '<i class="icon-double-angle-right"></i>'.tt('Аудитории'),
                     'url' => Yii::app()->createUrl('/timeTable/classroom'),
                     'active' => $controller=='timeTable' && $action=='classroom',
-                    'visible' => SH::isVisibleMenu('timeTable', 'classroom')
+                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'timeTable', 'classroom')
                 ),
                 array(
                     'label' => '<i class="icon-double-angle-right"></i>'.tt('Свободные аудитории'),
                     'url' => Yii::app()->createUrl('/timeTable/freeClassroom'),
                     'active' => $controller=='timeTable' && $action=='freeClassroom',
-                    'visible' => SH::isVisibleMenu('timeTable', 'freeClassroom')
+                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'timeTable', 'freeClassroom')
                 ),
             ),
-            'visible' => SH::isVisibleMenu('timeTable', 'main')
+            'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'timeTable', 'main')
         ),
         /*array(
             'label' => '<i class="icon-edit"></i><span class="menu-text">'.tt('Рабочий план').'</span><b class="arrow icon-angle-down"></b>',
@@ -112,7 +112,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'active' => $controller=='workPlan' && $action=='student'
                 ),
             ),
-            'visible' => SH::isVisibleMenu('workPlan', 'main')
+            'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'workPlan', 'main')
         ),*/
         array(
             'label' => '<i class="icon-list"></i><span class="menu-text">'.tt('Успеваемость').'</span><b class="arrow icon-angle-down"></b>',
@@ -141,7 +141,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'active' => $controller=='progress' && $action=='thematicPlan'
                 ),
             ),
-            'visible' => SH::isVisibleMenu('progress', 'main')
+            'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'progress', 'main')
         ),
         array(
             'label' => '<i class="icon-folder-open"></i><span class="menu-text">'.tt('Док.-оборот').'</span><b class="arrow icon-angle-down"></b>',
@@ -158,7 +158,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'active' => $controller=='docs' && stristr($action, 'tddo')
                 ),
             ),
-            'visible' => SH::isVisibleMenu('docs', 'main')
+            'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'docs', 'main')
         ),
         array(
             'label' => '<i class="icon-book"></i><span class="menu-text">'.tt('Абитуриент').'</span><b class="arrow icon-angle-down"></b>',
@@ -171,23 +171,23 @@ $this->widget('zii.widgets.CMenu', array(
                 array(
                     'label' => '<i class="icon-double-angle-right"></i>'.tt('Ход приема документов'),
                     'url' => Yii::app()->createUrl('/entrance/documentReception'),
-                    'visible' => SH::isVisibleMenu('entrance', 'documentReception'),
+                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'entrance', 'documentReception'),
                     'active' => $controller=='entrance' && $action=='documentReception'
                 ),
                 array(
                     'label' => '<i class="icon-double-angle-right"></i>'.tt('Рейтинговый список'),
                     'url' => Yii::app()->createUrl('/entrance/rating'),
-                    'visible' => SH::isVisibleMenu('entrance', 'rating'),
+                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'entrance', 'rating'),
                     'active' => $controller=='entrance' && $action=='rating'
                 ),
                 array(
                     'label' => '<i class="icon-double-angle-right"></i>'.tt('Регистрация'),
                     'url' => Yii::app()->createUrl('/entrance/registration'),
-                    'visible' => SH::isVisibleMenu('entrance', 'registration'),
+                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'entrance', 'registration'),
                     'active' => $controller=='entrance' && $action=='registration'
                 ),
             ),
-            'visible' => SH::isVisibleMenu('entrance', 'main')
+            'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'entrance', 'main')
         ),
         array(
             'label' => '<i class="icon-globe"></i><span class="menu-text">'.tt('Другое').'</span><b class="arrow icon-angle-down"></b>',
@@ -209,7 +209,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'visible' => Yii::app()->user->isStd,
                 ),
             ),
-            'visible' => SH::isVisibleMenu('other', 'main')
+            'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'other', 'main')
         ),
     ),
 ));

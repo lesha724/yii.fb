@@ -3,7 +3,7 @@ $(document).ready(function(){
     $(':checkbox').change(function(){
         var $hidden = $(this).siblings(':hidden');
         $hidden.val(1 - $hidden.val());
-    })
+    });
 
     $('.save-form').click(function(){
         var $form = $('form');
@@ -17,5 +17,7 @@ $(document).ready(function(){
 
         $form.append($input);
         $form.submit();
-    })
+    });
+
+    initTooltips();
 });

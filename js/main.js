@@ -85,6 +85,7 @@ function initAutoSize()
     $('textarea[class*=autosize]').autosize({append: "\n"});
 }
 
+
 $.fn.outerHTML = function(s) {
     return s
         ? this.before(s).remove()

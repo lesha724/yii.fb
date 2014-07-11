@@ -169,7 +169,7 @@ class ShortCodes extends CApplicationComponent
         return Yii::app()->params['code'] == $code;
     }
 
-    public static function isVisibleMenu($controller, $action, $showAlert = false)
+    public static function checkServiceFor($type, $controller, $action, $showAlert = false)
     {
         $controller = mb_strtolower($controller);
         $action     = mb_strtolower($action);
@@ -178,8 +178,8 @@ class ShortCodes extends CApplicationComponent
 
         parse_str(urldecode($settings), $menu);
 
-        $isVisible = isset($menu[$controller][$action])
-                       ? $menu[$controller][$action]
+        $isVisible = isset($menu[$controller][$action][$type])
+                       ? $menu[$controller][$action][$type]
                        : 1;
 
         $isVisible = (bool)$isVisible;

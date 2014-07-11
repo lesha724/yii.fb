@@ -2,6 +2,7 @@
 
 class DefaultController extends AdminController
 {
+
 	public function actionTeachers()
 	{
         $chairId = Yii::app()->request->getParam('chairId', null);

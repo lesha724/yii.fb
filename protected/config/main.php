@@ -6,6 +6,9 @@
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
 
+define('MENU_ELEMENT_VISIBLE', 'visible');
+define('MENU_ELEMENT_NEED_AUTH', 'need_auth');
+
 Yii::setPathOfAlias('bootstrap', dirname(__FILE__).'/../extensions/bootstrap');
 
 $config = array(
