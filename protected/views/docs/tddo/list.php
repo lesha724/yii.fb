@@ -29,7 +29,6 @@ $this->breadcrumbs=array(
 Yii::app()->clientScript->registerPackage('autosize');
 Yii::app()->clientScript->registerPackage('jquery.ui');
 Yii::app()->clientScript->registerPackage('datepicker');
-Yii::app()->clientScript->registerPackage('chosen');
 
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/docs/tddo.js', CClientScript::POS_HEAD);
 

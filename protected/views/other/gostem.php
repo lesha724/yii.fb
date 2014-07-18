@@ -11,8 +11,7 @@ $this->breadcrumbs=array(
 );
 
 
-Yii::app()->clientScript->registerPackage('chosen');
-Yii::app()->clientScript->registerPackage('spin');
+
 Yii::app()->clientScript->registerPackage('dataTables');
 
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/other/gostem.js', CClientScript::POS_HEAD);

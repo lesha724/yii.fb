@@ -7,10 +7,7 @@
         tt('Успеваемость'),
     );
 
-
-    Yii::app()->clientScript->registerPackage('chosen');
     Yii::app()->clientScript->registerPackage('gritter');
-    Yii::app()->clientScript->registerPackage('spin');
     Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/progress/modules.js', CClientScript::POS_HEAD);
 
     $error       = tt('Ошибка! Проверьте правильность вводимых данных!');

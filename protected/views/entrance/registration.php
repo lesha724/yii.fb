@@ -3,8 +3,6 @@
  *
  * @var EntranceController $this
  */
-Yii::app()->clientScript->registerPackage('chosen');
-Yii::app()->clientScript->registerPackage('spin');
 Yii::app()->clientScript->registerPackage('form-wizard');
 Yii::app()->clientScript->registerPackage('datepicker');
 Yii::app()->clientScript->registerPackage('autosize');

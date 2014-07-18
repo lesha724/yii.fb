@@ -11,8 +11,6 @@ $this->breadcrumbs=array(
     tt('Расписание'),
 );
 
-Yii::app()->clientScript->registerPackage('chosen');
-Yii::app()->clientScript->registerPackage('spin');
 Yii::app()->clientScript->registerPackage('datepicker');
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/timetable/timetable.js', CClientScript::POS_HEAD);
 

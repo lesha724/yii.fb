@@ -3,8 +3,6 @@
  *
  * @var EntranceController $this
  */
-Yii::app()->clientScript->registerPackage('chosen');
-Yii::app()->clientScript->registerPackage('spin');
 Yii::app()->clientScript->registerPackage('jqplot');
 
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/entrance/documentReception.js', CClientScript::POS_HEAD);

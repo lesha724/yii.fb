@@ -10,8 +10,6 @@
         tt('Успеваемость'),
     );
 
-    Yii::app()->clientScript->registerPackage('chosen');
-    Yii::app()->clientScript->registerPackage('spin');
     Yii::app()->clientScript->registerPackage('dataTables');
     Yii::app()->clientScript->registerPackage('jquery.ui');
     Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/progress/thematicPlan.js', CClientScript::POS_HEAD);

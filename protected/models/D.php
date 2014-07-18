@@ -277,4 +277,241 @@ SQL;
 
         return $disciplines;
     }
+
+    public function getDisciplinesForWorkPlan($p1, $year, $sem)
+    {
+        $sql = <<<SQL
+            SELECT d1, d2, us4, uo1, ug2, nr3, sem4,ug3,gr2,gr1,d27,d32,d34,d36,
+                   gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28
+			FROM sem
+		    INNER JOIN us ON (sem.sem1 = us.us12)
+		    INNER JOIN nr ON (us.us1 = nr.nr2)
+		    INNER JOIN pd ON (nr.nr6 = pd.pd1) or (nr.nr7 = pd.pd1) or (nr.nr8 = pd.pd1) or (nr.nr9 = pd.pd1)
+	        INNER JOIN ug ON (nr.nr1 = ug.ug3)
+            INNER JOIN uo ON (us.us2 = uo.uo1)
+            INNER JOIN d ON (uo.uo3 = d.d1)
+            INNER JOIN gr ON (ug.ug2 = gr.gr1)
+            WHERE pd2=:P1 and sem3=:SEM3 and sem5=:SEM5
+			ORDER BY d1,d2,us4,ug3,uo1
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', $p1);
+        $command->bindValue(':SEM3', $year);
+        $command->bindValue(':SEM5', $sem);
+        $disciplines = $command->queryAll();
+
+        $i = 0;
+        $_us4 = $_ug3 = $_uo1 = 0; // previous row values
+        $data = array();
+
+        foreach ($disciplines as $discipline) {
+
+            // this row values
+            $us4 = $discipline['us4'];
+            $ug3 = $discipline['ug3'];
+            $uo1 = $discipline['uo1'];
+
+            $changeRow = ($us4 != $_us4) ||
+                         ($ug3 != $_ug3 && in_array($us4, array(1,2,3,4,9,10,11,12,16))) ||
+                         ($uo1 != $_uo1 && in_array($us4, array(5,6,7,8,14,17)));
+
+            if ($changeRow) {
+                $i++;
+                $_us4 = $us4;
+                $_ug3 = $ug3;
+                $_uo1 = $uo1;
+            }
+
+
+            if (! isset($data[$i]))
+                $data[$i] = $discipline;
+
+            $data[$i]['groups'][] = Gr::model()->getGroupName($discipline['sem4'], $discipline);
+            $data[$i]['sum'][]    = $discipline['nr3'];
+            $data[$i]['ids'][]    = $discipline['gr1'];
+        }
+
+        $prak = $this->getPrakForWorkPlan($p1, $year, $sem);
+        $dipl = $this->getDiplForWorkPlan($p1, $year, $sem);
+        $gek  = $this->getGekForWorkPlan($p1, $year, $sem);
+        $asp  = $this->getAspForWorkPlan($p1, $year, $sem);
+        $dop  = $this->getDopForWorkPlan($p1, $year, $sem);
+
+        $data = array_merge($data, $prak, $dipl, $gek, $asp, $dop);
+
+        return $data;
+    }
+
+
+    public function getPrakForWorkPlan($p1, $year, $sem)
+    {
+        $sql= <<<SQL
+                SELECT prun3 as NR3, sg1
+				FROM spr
+				INNER JOIN pru on (spr.spr1 = pru.pru3)
+				INNER JOIN prun on (pru.pru1 = prun.prun1)
+				INNER JOIN pd on (prun.prun2 = pd.pd1)
+				INNER JOIN sg on (pru.pru2 = sg.sg1)
+				INNER JOIN sem on (sg.sg1 = sem.sem2)
+				WHERE pru4 = sem7 and pd2=:P1 and sem3=:SEM3 and sem5=:SEM5
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', $p1);
+        $command->bindValue(':SEM3', $year);
+        $command->bindValue(':SEM5', $sem);
+        $disciplines = $command->queryAll();
+
+        foreach ($disciplines as $key => $discipline) {
+            $disciplines[$key]['d2']  = tt('Практика');
+            $disciplines[$key]['us4'] = 'Prak';
+            $disciplines[$key]['sum'][] = $discipline['nr3'];
+
+            list($gr1, $names) = Gr::model()->getGroupsBySg1ForWorkPlan($discipline['sg1'], $year, $sem);
+
+            $disciplines[$key]['groups'][] = $names;
+            $disciplines[$key]['ids']      = $gr1;
+        }
+
+        return $disciplines;
+    }
+
+    public function getDiplForWorkPlan($p1, $year, $sem)
+    {
+        $sql= <<<SQL
+                SELECT dipn3 as NR3,dipn6
+				FROM sem
+				INNER JOIN dnk on (sem.sem1 = dnk.dnk2)
+				INNER JOIN dipn on (dnk.dnk1 = dipn.dipn1)
+				INNER JOIN pd on (dipn.dipn2 = pd.pd1)
+				WHERE pd2 = :P1 and sem3 = :SEM3 and sem5 = :SEM5
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', $p1);
+        $command->bindValue(':SEM3', $year);
+        $command->bindValue(':SEM5', $sem);
+        $disciplines = $command->queryAll();
+
+        foreach ($disciplines as $key => $discipline) {
+            $disciplines[$key]['d2']    = $this->getDiplName($discipline['dipn6']);
+            $disciplines[$key]['us4']   = 'Dipl';
+            $disciplines[$key]['sum'][] = $discipline['nr3'];
+            $disciplines[$key]['groups'][] = null;
+            $disciplines[$key]['ids'][]    = null;
+        }
+
+        return $disciplines;
+    }
+
+    public function getDiplName($dipn6)
+    {
+        switch($dipn6){
+            case 0:	$name = tt('Руководство дипломом'); break;
+            case 1: $name = tt('Норма контроль'); break;
+            case 2: $name = tt('Проверка зав. кафедрой'); break;
+            case 3: $name = tt('Рецензирование дипломов'); break;
+            case 4: $name = tt('ГЭК'); break;
+            case 5: $name = tt('Консультирование дипломов'); break;
+            default: $name='';
+        }
+
+        return $name;
+    }
+
+    public function getGekForWorkPlan($p1, $year, $sem)
+    {
+        $sql= <<<SQL
+                SELECT gosn3 as NR3,sem2 as SG1, d1, d2
+                FROM d
+                INNER JOIN gnk on (d.d1 = gnk.gnk2)
+                INNER JOIN gosn on (gnk.gnk1 = gosn.gosn1)
+                INNER JOIN pd on (gosn.gosn2 = pd.pd1)
+                INNER JOIN sem on (gnk.gnk3 = sem.sem1)
+				WHERE pd2 = :P1 and sem3 = :SEM3 and sem5 = :SEM5
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', $p1);
+        $command->bindValue(':SEM3', $year);
+        $command->bindValue(':SEM5', $sem);
+        $disciplines = $command->queryAll();
+
+        foreach ($disciplines as $key => $discipline) {
+            $disciplines[$key]['us4'] = 'Gek';
+            $disciplines[$key]['sum'][] = $discipline['nr3'];
+
+            list($gr1, $names) = Gr::model()->getGroupsBySg1ForWorkPlan($discipline['sg1'], $year, $sem);
+
+            $disciplines[$key]['groups'][] = $names;
+            $disciplines[$key]['ids']      = $gr1;
+        }
+
+        return $disciplines;
+    }
+
+    public function getAspForWorkPlan($p1, $year, $sem)
+    {
+        $sql= <<<SQL
+                SELECT nakn6 as NR3, nakn4
+                FROM nakn
+                INNER JOIN pd on (nakn.nakn5 = pd.pd1)
+				WHERE pd2 = :P1 and NAKN2 = :YEAR and NAKN3 = :SEM
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', $p1);
+        $command->bindValue(':YEAR', $year);
+        $command->bindValue(':SEM', $sem);
+        $disciplines = $command->queryAll();
+
+        foreach ($disciplines as $key => $discipline) {
+            $disciplines[$key]['d2']  = $this->getAspName($discipline['nakn4']);
+            $disciplines[$key]['us4'] = 'Asp';
+            $disciplines[$key]['sum'][] = $discipline['nr3'];
+            $disciplines[$key]['groups'][] = null;
+            $disciplines[$key]['ids'][]    = null;
+        }
+
+        return $disciplines;
+    }
+
+    public function getAspName($nakn4)
+    {
+        switch($nakn4){
+            case 0:	$name = tt('Нагрузка по аспирантуре'); break;
+            case 1: $name = tt('Руководство докторантами'); break;
+            case 2: $name = tt('Руководство аспирантами'); break;
+            case 3: $name = tt('Руководство аспирантами иностранцами'); break;
+            case 4: $name = tt('Руководство соискателями'); break;
+            case 5: $name = tt('Руководство магистрами'); break;
+            default: $name='';
+        }
+
+        return $name;
+    }
+
+    public function getDopForWorkPlan($p1, $year, $sem)
+    {
+        $sql = <<<SQL
+                SELECT nrdn4 as nr3, d1,d2
+                FROM d
+                INNER JOIN dn on (d.d1 = dn.dn2)
+                INNER JOIN nrdn on (dn.dn1 = nrdn.nrdn1)
+                INNER JOIN pd on (nrdn.nrdn2 = pd.pd1)
+                WHERE pd2 = :P1 and DN4 = :YEAR and NRDN3 = :SEM
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', $p1);
+        $command->bindValue(':YEAR', $year);
+        $command->bindValue(':SEM', $sem);
+        $disciplines = $command->queryAll();
+
+        foreach ($disciplines as $key => $discipline) {
+            $disciplines[$key]['us4']   = 'Dop';
+            $disciplines[$key]['sum'][] = $discipline['nr3'];
+            $disciplines[$key]['groups'][] = null;
+            $disciplines[$key]['ids'][]    = null;
+        }
+
+        return $disciplines;
+    }
 }

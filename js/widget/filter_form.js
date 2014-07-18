@@ -1,7 +1,5 @@
 $(document).ready(function(){
 
-    initChosen();
-
     $spinner1 = $('#spinner1');
 
     $(document).on('change', '#FilterForm_discipline', function() {

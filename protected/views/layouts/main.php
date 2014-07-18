@@ -37,6 +37,10 @@
         tt = {} // object containing translations
         var loginUrl = "<?=Yii::app()->createUrl('site/login')?>"
     </script>
+    <?php
+        Yii::app()->clientScript->registerPackage('chosen');
+        Yii::app()->clientScript->registerPackage('spin');
+    ?>
 </head>
 
 <body class="navbar-fixed breadcrumbs-fixed">

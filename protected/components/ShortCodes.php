@@ -42,6 +42,12 @@ class ShortCodes extends CApplicationComponent
     public static function convertUS4($us4)
     {
         switch($us4){
+            case 'Prak': $type = tt('Прак');break;
+            case 'Dipl': $type = tt('Дипл');break;
+            case 'Gek': $type = tt('ГЭК');break;
+            case 'Asp': $type = tt('Асп');break;
+            case 'Dop': $type = tt('Доп');break;
+
             case 0:	$type = tt('Всего'); break;
             case 1:	$type = tt('Лк'); break;
             case 2:	$type = tt('Пз'); break;

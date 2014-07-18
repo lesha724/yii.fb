@@ -4,8 +4,6 @@
  * @var TimeTableForm $model
  * @var CActiveForm $form
  */
-Yii::app()->clientScript->registerPackage('chosen');
-
 $options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;'));
 $form=$this->beginWidget('CActiveForm', array(
     'id'=>'timeTable-form',

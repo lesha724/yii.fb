@@ -1,10 +1,6 @@
 $(document).ready(function(){
 
-    initSpinner('spinner1');
-
     $spinner1 = $('#spinner1');
-
-    initChosen();
 
     initFilterForm($spinner1);
 

@@ -1,3 +1,11 @@
+$(document).ready(function(){
+
+    initChosen();
+
+    initSpinner('spinner1');
+
+});
+
 function initChosen()
 {
     $('.chosen-select').chosen();

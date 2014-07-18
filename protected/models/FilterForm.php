@@ -8,16 +8,14 @@ class FilterForm extends CFormModel
 	public $filial = 0;
     public $faculty;
     public $speciality;
-    public $year_of_admission;
+    public $year;
     public $semester;
 
-/* field for thematic plan */
     public $duration = 1;
     public $teacher = 0;
     public $code = 0;
     public $course = 0;
 
-/* field for other/gostem */
     public $chair = 0;
     public $d1 = 0;
     public $gostem1;
@@ -39,11 +37,12 @@ class FilterForm extends CFormModel
 	{
 		return array(
 			array('discipline, group', 'required', 'on' => 'journal, modules'),
-			array('filial, faculty, speciality, year_of_admission, discipline, semester', 'required', 'on' => 'thematicPlan'),
+			array('filial, faculty, speciality, year, discipline, semester', 'required', 'on' => 'thematicPlan'),
             array('duration, teacher, code, course', 'safe', 'on' => 'thematicPlan'),
             array('chair, gostem1, nr1, d1', 'safe', 'on' => 'gostem'),
             array('sel_1, sel_2, course, extendedForm', 'safe', 'on' => 'documentReception'),
             array('sel_1, sel_2, course, adp1, cn1, speciality', 'safe', 'on' => 'rating'),
+            array('filial, teacher, chair, year, semester', 'required', 'on' => 'workPlan-teacher'),
 		);
 	}
 
@@ -68,7 +67,7 @@ class FilterForm extends CFormModel
 			'filial'=> tt('Филиал'),
 			'faculty'=> tt('Факультет'),
 			'speciality'=> tt('Специальность'),
-			'year_of_admission'=> tt('Год приема'),
+			'year'=> tt('Год'),
 			'type'=> tt('Вид'),
 			'semester'=> tt('№ семестра'),
             'duration' => tt('Длительность занятий'),

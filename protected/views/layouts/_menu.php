@@ -190,6 +190,29 @@ $this->widget('zii.widgets.CMenu', array(
             'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'entrance', 'main')
         ),
         array(
+            'label' => '<i class="icon-book"></i><span class="menu-text">'.tt('Нагрузка').'</span><b class="arrow icon-angle-down"></b>',
+            'url' => '#',
+            'linkOptions'=> array(
+                'class' => 'dropdown-toggle',
+            ),
+            'itemOptions'=>array('class'=> $controller=='workLoad' ? 'active open' : ''),
+            'items' => array(
+                array(
+                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Личная'),
+                    'url' => Yii::app()->createUrl('/workLoad/self'),
+                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'workLoad', 'self') && Yii::app()->user->isTch,
+                    'active' => $controller=='workLoad' && $action=='self'
+                ),
+                array(
+                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Преподавателя'),
+                    'url' => Yii::app()->createUrl('/workLoad/teacher'),
+                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'workLoad', 'teacher'),
+                    'active' => $controller=='workLoad' && $action=='teacher'
+                ),
+            ),
+            'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'workLoad', 'main')
+        ),
+        array(
             'label' => '<i class="icon-globe"></i><span class="menu-text">'.tt('Другое').'</span><b class="arrow icon-angle-down"></b>',
             'url' => '#',
             'linkOptions'=> array(

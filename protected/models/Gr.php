@@ -206,17 +206,17 @@ SQL;
             case 1:
                 $name = !empty($data['gr19']) ? $data['gr19'] : $data['gr3']; break;
             case 2:
-                $name = !empty($data['gr21']) ? $data['gr21'] : $data['gr3']; break;
+                $name = !empty($data['gr20']) ? $data['gr20'] : $data['gr3']; break;
             case 3:
-                $name = !empty($data['gr22']) ? $data['gr22'] : $data['gr3']; break;
+                $name = !empty($data['gr21']) ? $data['gr21'] : $data['gr3']; break;
             case 4:
-                $name = !empty($data['gr23']) ? $data['gr23'] : $data['gr3']; break;
+                $name = !empty($data['gr22']) ? $data['gr22'] : $data['gr3']; break;
             case 5:
-                $name = !empty($data['gr24']) ? $data['gr24'] : $data['gr3']; break;
+                $name = !empty($data['gr23']) ? $data['gr23'] : $data['gr3']; break;
             case 6:
-                $name = !empty($data['gr25']) ? $data['gr25'] : $data['gr3']; break;
+                $name = !empty($data['gr24']) ? $data['gr24'] : $data['gr3']; break;
             case 7:
-                $name = !empty($data['gr26']) ? $data['gr26'] : $data['gr3']; break;
+                $name = !empty($data['gr28']) ? $data['gr28'] : $data['gr3']; break;
             default:
                 $name = $data['gr3'];
         }
@@ -281,7 +281,6 @@ SQL;
         return $timeTable;
     }
 
-
     public function getGroupsForThematicPlan($ustem1, $course)
     {
         $sql = <<<SQL
@@ -306,4 +305,57 @@ SQL;
 
         return $groups;
     }
+
+    public function getGroupsBySg1ForWorkPlan($sg1, $year, $sem)
+    {
+        $sql= <<<SQL
+              SELECT gr1,sem4, gr19,gr20,gr21,gr22,gr23,gr24,gr28
+              FROM sem
+              INNER JOIN sg on (sem.sem2 = sg.sg1)
+		      INNER JOIN gr on (sg.sg1 = gr.gr2)
+		      INNER JOIN grk on (gr.gr1 = grk.grk1)
+		      WHERE gr2 = :SG1 and grk2 = :YEAR1 and grk3 = :SEM1 and sem3 = :YEAR2 and sem5 = :SEM2
+			  GROUP BY gr1,sem4, gr19,gr20,gr21,gr22,gr23,gr24,gr28
+
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':SG1', $sg1);
+        $command->bindValue(':YEAR1', $year);
+        $command->bindValue(':SEM1', $sem);
+        $command->bindValue(':YEAR2', $year);
+        $command->bindValue(':SEM3', $sem);
+        $groups = $command->queryAll();
+
+        $names = $gr1 = array();
+
+        foreach ($groups as $group) {
+            $names[] = Gr::model()->getGroupName($group['sem4'], $group);
+            $gr1[] = $group['gr1'];
+        }
+
+        $names = implode(', ', $names);
+
+        return array($gr1, $names);
+    }
+
+    public function getCourseFor($gr1, $year, $sem)
+    {
+        $sql = <<<SQL
+            SELECT first 1 sem4
+            FROM gr
+            INNER JOIN sg on (gr.gr2 = sg.sg1)
+            INNER JOIN sem on (sg.sg1 = sem.sem2)
+            WHERE gr1=:GR1 and sem3=:YEAR and sem5=:SEM
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':GR1', $gr1);
+        $command->bindValue(':YEAR', $year);
+        $command->bindValue(':SEM', $sem);
+        $course = $command->queryScalar();
+
+        return $course;
+    }
+
 }

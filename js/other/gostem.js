@@ -1,10 +1,6 @@
 $(document).ready(function(){
 
-    initSpinner('spinner1');
-
     $spinner1 = $('#spinner1');
-
-    initChosen();
 
     $(document).on('change', '#filter-form select:not(:last)', function(){
         $spinner1.show();

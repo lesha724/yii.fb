@@ -243,3 +243,31 @@ ul.classrooms-list li {
 td.entrance-rating-title {
     text-align: center !important;
 }
+
+div.group-box {
+    height: 250px;
+    width:  150px;
+    border: 1px solid darkgrey;
+    float: left;
+    margin: 0 5px;
+}
+div.group-title{
+    text-align: center;
+}
+div.group-students {
+    height: 230px;
+    overflow: scroll;
+    background-color: #f9f9f9;
+}
+
+div.group-students ul {
+    list-style-type: none;
+    margin:0;
+}
+div.group-students ul li{
+    padding-left: 5px;
+}
+
+div#groups{
+    margin-top: 20px;
+}

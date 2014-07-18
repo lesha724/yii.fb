@@ -6,7 +6,6 @@
  *
  */
 
-    Yii::app()->clientScript->registerPackage('chosen');
     Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/admin/teachers.js', CClientScript::POS_HEAD);
 
     $this->pageHeader=tt('Преподаватели');

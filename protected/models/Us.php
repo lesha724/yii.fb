@@ -121,4 +121,203 @@ class Us extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+    public function getWorkLoadHoursFor($p1, $year)
+    {
+        if (empty($p1) || empty($year))
+            return array();
+
+        $sql= <<<SQL
+           SELECT sem5, us4, sum(nr3)
+		   FROM US
+			  INNER JOIN NR ON (US.US1 = NR.NR2)
+			  INNER JOIN SEM ON (US.US12 = SEM.SEM1)
+			  INNER JOIN UG ON (NR.NR1 = UG.UG3)
+			  INNER JOIN pd ON (nr.nr6 = pd.pd1) OR (nr.nr7 = pd.pd1) OR (nr.nr8 = pd.pd1) OR (nr.nr9 = pd.pd1)
+		   WHERE pd2=:P1 AND sem3=:SEM3
+		   GROUP BY sem5, us4
+		   ORDER BY sem5, us4
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', $p1);
+        $command->bindValue(':SEM3', $year);
+        $res = $command->queryAll();
+
+        $data = array(
+            0 => array(
+                0 => array('sum' => null)
+            ),
+            1 => array(
+                0 => array('sum' => null)
+            ),
+        );
+
+        $map = array(
+            9  => 1, // УЛк
+            10 => 2, // УПз
+            11 => 3, // УСем
+            12 => 4, // УЛб
+        );
+
+        foreach ($res as $arr) {
+
+            $sem5 = $arr['sem5'];
+            $us4  = $arr['us4'];
+
+            if (in_array($us4, array(9, 10, 11, 12))) {
+
+                $_us4 = $map[$us4];
+
+                if (! isset($data[$sem5][$_us4]))
+                    $data[$sem5][$_us4] = $data[$sem5][$us4];
+                else
+                    $data[$sem5][$_us4]['sum'] += $data[$sem5][$us4]['sum'];
+
+            }
+
+            $data[$sem5][$us4] = $arr;
+
+            if (! isset($data[$sem5][0]['sum']))
+                $data[$sem5][0]['sum'] = 0;
+
+            $data[$sem5][0]['sum'] += $arr['sum']; // Всего
+        }
+
+        for ($sem5=0; $sem5<=1; $sem5++) {
+
+            $prak = $this->getPrakFor($p1, $year, $sem5);
+            $data[$sem5]['Prak']['sum'] = $prak;
+
+            $dipl = $this->getDiplFor($p1, $year, $sem5);
+            $data[$sem5]['Dipl']['sum'] = $dipl;
+
+            $gek = $this->getGekFor($p1, $year, $sem5);
+            $data[$sem5]['Gek']['sum'] = $gek;
+
+            $asp = $this->getAspFor($p1, $year, $sem5);
+            $data[$sem5]['Asp']['sum'] = $asp;
+
+            $dop = $this->getDopFor($p1, $year, $sem5);
+            $data[$sem5]['Dop']['sum'] = $dop;
+
+            $data[$sem5][0]['sum'] += $prak+$dipl+$gek+$asp+$dop;
+        }
+
+        return $data;
+    }
+
+    private function getPrakFor($p1, $year, $sem5)
+    {
+        $sql = <<<SQL
+          SELECT sum(prun3)
+          FROM spr
+          INNER JOIN pru on (spr.spr1 = pru.pru3)
+          INNER JOIN prun on (pru.pru1 = prun.prun1)
+          INNER JOIN pd on (prun.prun2 = pd.pd1)
+          INNER JOIN sg on (pru.pru2 = sg.sg1)
+          INNER JOIN sem on (sg.sg1 = sem.sem2)
+          WHERE pru4 = sem7 and pd2=:P1 and sem3=:SEM3 and sem5 = :SEM5
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', $p1);
+        $command->bindValue(':SEM3', $year);
+        $command->bindValue(':SEM5', $sem5);
+        $sum = $command->queryScalar();
+
+        if ($sum == 0)
+            $sum = '';
+
+        return $sum;
+    }
+
+    private function getDiplFor($p1, $year, $sem5)
+    {
+        $sql = <<<SQL
+          SELECT sum(dipn3)
+		  FROM sem
+		  INNER JOIN dnk on (sem.sem1 = dnk.dnk2)
+		  INNER JOIN dipn on (dnk.dnk1 = dipn.dipn1)
+		  INNER JOIN pd on (dipn.dipn2 = pd.pd1)
+		  WHERE pd2=:P1 AND sem3=:SEM3 and sem5 = :SEM5
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', $p1);
+        $command->bindValue(':SEM3', $year);
+        $command->bindValue(':SEM5', $sem5);
+        $sum = $command->queryScalar();
+
+        if ($sum == 0)
+            $sum = '';
+
+        return $sum;
+    }
+
+    private function getGekFor($p1, $year, $sem5)
+    {
+        $sql = <<<SQL
+          SELECT sum(gosn3)
+		  FROM gosn
+		  INNER JOIN pd on (gosn.gosn2 = pd.pd1)
+		  INNER JOIN gnk on (gosn.gosn1 = gnk.gnk1)
+		  INNER JOIN sem on (gnk.gnk3 = sem.sem1)
+		  WHERE pd2=:P1 AND sem3=:SEM3 and sem5 = :SEM5
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', $p1);
+        $command->bindValue(':SEM3', $year);
+        $command->bindValue(':SEM5', $sem5);
+        $sum = $command->queryScalar();
+
+        if ($sum == 0)
+            $sum = '';
+
+        return $sum;
+    }
+
+    private function getAspFor($p1, $year, $sem5)
+    {
+        $sql = <<<SQL
+          SELECT sum(nakn6)
+		  FROM nakn
+		  INNER JOIN pd on (nakn.nakn5 = pd.pd1)
+		  WHERE pd2=:P1 and NAKN2 = :SEM3 and NAKN3 = :SEM5
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', $p1);
+        $command->bindValue(':SEM3', $year);
+        $command->bindValue(':SEM5', $sem5);
+        $sum = $command->queryScalar();
+
+        if ($sum == 0)
+            $sum = '';
+
+        return $sum;
+    }
+
+    private function getDopFor($p1, $year, $sem5)
+    {
+        $sql = <<<SQL
+          SELECT sum(NRDN4)
+		  FROM nrdn
+          INNER JOIN dn on (nrdn.nrdn1 = dn.dn1)
+	      INNER JOIN pd on (nrdn.nrdn2 = pd.pd1)
+	      WHERE pd2=:P1 and DN4 = :SEM3 and NRDN3 = :SEM5
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', $p1);
+        $command->bindValue(':SEM3', $year);
+        $command->bindValue(':SEM5', $sem5);
+        $sum = $command->queryScalar();
+
+        if ($sum == 0)
+            $sum = '';
+
+        return $sum;
+    }
+
 }

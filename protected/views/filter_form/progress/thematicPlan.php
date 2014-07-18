@@ -36,13 +36,13 @@ $form=$this->beginWidget('CActiveForm', array(
     list($years_of_admission, $dataAttrs) = Sem::model()->getYearsForThematicPlan($model->speciality);
     $years_of_admission = CHtml::listData($years_of_admission, 'sg1', 'name');
     $html .= '<div class="row-fluid span2">';
-    $html .= $form->label($model, 'year_of_admission');
-    $html .= $form->dropDownList($model, 'year_of_admission', $years_of_admission, $options + array('options' => $dataAttrs));
+    $html .= $form->label($model, 'year');
+    $html .= $form->dropDownList($model, 'year', $years_of_admission, $options + array('options' => $dataAttrs));
     $html .= '</div>';
     $html .= '</fieldset>';
 
     $html .= '<fieldset>';
-    list($disciplines, $dataAttrs) = D::model()->getDisciplineBySg1($model->year_of_admission);
+    list($disciplines, $dataAttrs) = D::model()->getDisciplineBySg1($model->year);
     $disciplines = CHtml::listData($disciplines, 'uo1', 'd2');
     $html .= '<div class="row-fluid span2">';
     $html .= $form->label($model, 'discipline');
