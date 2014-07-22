@@ -358,4 +358,43 @@ SQL;
         return $course;
     }
 
+    public function getGroupsAndStudentsForWorkLoadAmount(FilterForm $model, array $discipline)
+    {
+        $condition = $fields = null;
+        if ($model->extendedForm == 1) {
+            $condition = 'and ug3 = '.$discipline['ug3'].' and us4 = '.$discipline['us4'];
+            $fields = ',us4';
+        }
+
+        $sql = <<<SQL
+            SELECT d1, gr1, ug2, sem4, gr3, gr19, gr20, gr21, gr22, gr23, gr24, gr28 {$fields}
+            FROM sem
+            INNER JOIN us ON (sem.sem1 = us.us12)
+            INNER JOIN nr ON (us.us1 = nr.nr2)
+            INNER JOIN pd ON (nr.nr6 = pd.pd1) or (nr.nr7 = pd.pd1) or (nr.nr8 = pd.pd1) or (nr.nr9 = pd.pd1)
+            INNER JOIN ug ON (nr.nr1 = ug.ug3)
+            INNER JOIN uo ON (us.us2 = uo.uo1)
+            INNER JOIN d ON (uo.uo3 = d.d1)
+            INNER JOIN gr ON (ug.ug2 = gr.gr1)
+            WHERE pd2=:P1 and sem3=:SEM3 and sem5=:SEM5 and d1 = :D1 {$condition}
+            GROUP BY  d1, d2, gr1, ug2, sem4, gr3, gr19, gr20, gr21, gr22, gr23, gr24, gr28 {$fields}
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', $model->teacher);
+        $command->bindValue(':SEM3', $model->year);
+        $command->bindValue(':SEM5', $model->semester);
+        $command->bindValue(':D1', $discipline['d1']);
+        $groups = $command->queryAll();
+
+        $groupNames = array();
+        $studentsAmount = 0;
+
+        foreach ($groups as $group) {
+            $groupNames[] = Gr::model()->getGroupName($group['sem4'], $group);
+            $studentsAmount += St::model()->getStudentsAmountFor($group['gr1']);
+        }
+
+        return array($groupNames, $studentsAmount);
+    }
 }

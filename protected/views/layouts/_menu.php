@@ -190,7 +190,7 @@ $this->widget('zii.widgets.CMenu', array(
             'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'entrance', 'main')
         ),
         array(
-            'label' => '<i class="icon-book"></i><span class="menu-text">'.tt('Нагрузка').'</span><b class="arrow icon-angle-down"></b>',
+            'label' => '<i class="icon-briefcase"></i><span class="menu-text">'.tt('Нагрузка').'</span><b class="arrow icon-angle-down"></b>',
             'url' => '#',
             'linkOptions'=> array(
                 'class' => 'dropdown-toggle',
@@ -208,6 +208,12 @@ $this->widget('zii.widgets.CMenu', array(
                     'url' => Yii::app()->createUrl('/workLoad/teacher'),
                     'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'workLoad', 'teacher'),
                     'active' => $controller=='workLoad' && $action=='teacher'
+                ),
+                array(
+                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Объем учебной нагрузки'),
+                    'url' => Yii::app()->createUrl('/workLoad/amount'),
+                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'workLoad', 'amount'),
+                    'active' => $controller=='workLoad' && $action=='amount'
                 ),
             ),
             'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'workLoad', 'main')

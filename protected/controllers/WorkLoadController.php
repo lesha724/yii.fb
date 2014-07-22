@@ -28,7 +28,7 @@ class WorkLoadController extends Controller
     public function actionTeacher()
     {
         $model = new FilterForm();
-        $model->scenario = 'workPlan-teacher';
+        $model->scenario = 'workLoad-teacher';
 
         list($year,$semester) = SH::getCurrentYearAndSem();
         $model->year     = $year;
@@ -46,7 +46,7 @@ class WorkLoadController extends Controller
     public function actionSelf()
     {
         $model = new FilterForm();
-        $model->scenario = 'workPlan-teacher';
+        $model->scenario = 'workLoad-teacher';
 
         list($year,$semester) = SH::getCurrentYearAndSem();
         $model->year     = $year;
@@ -58,6 +58,23 @@ class WorkLoadController extends Controller
 
 
         $this->render('self', array(
+            'model' => $model,
+        ));
+    }
+
+    public function actionAmount()
+    {
+        $model = new FilterForm();
+        $model->scenario = 'workLoad-teacher';
+
+        list($year,) = SH::getCurrentYearAndSem();
+        $model->year = $year;
+
+        if (isset($_REQUEST['FilterForm']))
+            $model->attributes=$_REQUEST['FilterForm'];
+
+
+        $this->render('amount', array(
             'model' => $model,
         ));
     }

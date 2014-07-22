@@ -42,7 +42,7 @@ class FilterForm extends CFormModel
             array('chair, gostem1, nr1, d1', 'safe', 'on' => 'gostem'),
             array('sel_1, sel_2, course, extendedForm', 'safe', 'on' => 'documentReception'),
             array('sel_1, sel_2, course, adp1, cn1, speciality', 'safe', 'on' => 'rating'),
-            array('filial, teacher, chair, year, semester', 'required', 'on' => 'workPlan-teacher'),
+            array('filial, teacher, chair, year, semester, extendedForm', 'required', 'on' => 'workLoad-teacher'),
 		);
 	}
 

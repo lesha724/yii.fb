@@ -77,4 +77,18 @@ $(document).ready(function(){
 
     });
 
+    $('.submit-bottom').click(function(){
+        var $form   = $('#filter-form');
+        var $select = $('#FilterForm_year').clone();
+        var $input  = $('#FilterForm_extendedForm').clone();
+
+        $form.append($select, $input);
+
+        $form.submit();
+    });
+
+    $('#FilterForm_extendedForm').change(function(){
+        $(this).val( 1-$(this).val() );
+    })
+
 });

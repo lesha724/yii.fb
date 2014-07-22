@@ -1,8 +1,8 @@
 <?php
 /**
  *
- * @var WorkPlanController $this
- * @var TimeTableForm $model
+ * @var WorkLoadController $this
+ * @var FilterForm $model
  */
 
 $this->pageHeader=tt('Нагрузка преподавателя');
@@ -20,6 +20,6 @@ HTML;
 
 
 if (! empty($model->teacher))
-    $this->renderPartial('_bottom', array(
+    $this->renderPartial('_bottom/_teacher', array(
         'model' => $model,
     ));

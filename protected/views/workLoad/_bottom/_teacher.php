@@ -4,6 +4,9 @@
     color: #707070;
     font-weight: normal;
 }
+table#disciplines tr td {
+    padding: 2px 8px;
+}
 </style>
 <?php
 /**
@@ -31,7 +34,7 @@
 
     if (! empty($model->year)) :
 
-        $hours = Us::model()->getWorkLoadHoursFor($model->teacher, $model->year);
+        $hours = Us::model()->getHoursForWorkLoad($model->teacher, $model->year);
 
         $types = array(
             0 => tt('Всего'),
@@ -109,7 +112,7 @@
 
 
         <?php
-            $disciplines = D::model()->getDisciplinesForWorkPlan($model->teacher, $model->year, $model->semester);
+            $disciplines = D::model()->getDisciplinesForWorkLoad($model);
 
             $getGroupUrl = Yii::app()->createUrl('workLoad/getGroups');
         ?>
@@ -131,7 +134,7 @@
 
                     $i = ++$key;
                     $td3 = SH::convertUS4($discipline['us4']);
-                    $td4 = array_sum($discipline['sum']);
+                    $td4 = array_sum($discipline['hours']);
                     $td5 = implode(', ', $discipline['groups']);
 
                     if (! empty($td5)) {

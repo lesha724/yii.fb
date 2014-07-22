@@ -554,4 +554,21 @@ SQL;
 
         return $timeTable;
     }
+
+    public function getStudentsAmountFor($gr1)
+    {
+       $sql = <<<SQL
+            SELECT count(distinct st1)
+            FROM st
+            INNER JOIN ucs on (st.st1 = ucs.ucs3)
+            INNER JOIN ucg on (ucs.ucs2 = ucg.ucg1)
+            INNER JOIN gr on (ucg.ucg3 = gr.gr1)
+            WHERE gr1 = :GR1
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':GR1', $gr1);
+        $amount = $command->queryScalar();
+
+        return $amount;
+    }
 }

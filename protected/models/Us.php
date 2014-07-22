@@ -122,7 +122,7 @@ class Us extends CActiveRecord
 		return parent::model($className);
 	}
 
-    public function getWorkLoadHoursFor($p1, $year)
+    public function getHoursForWorkLoad($p1, $year)
     {
         if (empty($p1) || empty($year))
             return array();
@@ -177,8 +177,8 @@ SQL;
 
             $data[$sem5][$us4] = $arr;
 
-            if (! isset($data[$sem5][0]['sum']))
-                $data[$sem5][0]['sum'] = 0;
+            //if (! isset($data[$sem5][0]['sum']))
+            //    $data[$sem5][0]['sum'] = 0;
 
             $data[$sem5][0]['sum'] += $arr['sum']; // Всего
         }
@@ -320,4 +320,55 @@ SQL;
         return $sum;
     }
 
+    public function getHoursForWorkLoadAmount(FilterForm $model, array $discipline)
+    {
+        $condition = null;
+        if ($model->extendedForm == 1)
+            $condition = 'and ug3 = '.$discipline['ug3'].' and us4 = '.$discipline['us4'];
+
+        $sql= <<<SQL
+            SELECT d1, d2, us4, nr3, ug3
+            FROM sem
+            INNER JOIN us ON (sem.sem1 = us.us12)
+            INNER JOIN nr ON (us.us1 = nr.nr2)
+            INNER JOIN pd ON (nr.nr6 = pd.pd1) or (nr.nr7 = pd.pd1) or (nr.nr8 = pd.pd1) or (nr.nr9 = pd.pd1)
+            INNER JOIN ug ON (nr.nr1 = ug.ug3)
+            INNER JOIN uo ON (us.us2 = uo.uo1)
+            INNER JOIN d ON (uo.uo3 = d.d1)
+            INNER JOIN gr ON (ug.ug2 = gr.gr1)
+            WHERE pd2=:P1 and sem3=:SEM3 and sem5=:SEM5 and d1 = :D1 {$condition}
+            group by d1, d2, us4, nr3, ug3
+            order by us4,d1,d2
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', $model->teacher);
+        $command->bindValue(':SEM3', $model->year);
+        $command->bindValue(':SEM5', $model->semester);
+        $command->bindValue(':D1', $discipline['d1']);
+        $res = $command->queryAll();
+
+        $data = array();
+
+        $map = array(
+            9  => 1, // УЛк
+            10 => 2, // УПз
+            11 => 3, // УСем
+            12 => 4, // УЛб
+        );
+
+        foreach ($res as $arr) {
+
+            $us4 = $arr['us4'];
+
+            if (in_array($us4, array(9, 10, 11, 12)))
+                $us4 = $map[$us4];
+
+            if (! isset($data[$us4]))
+                $data[$us4] = null;
+
+            $data[$us4] += round($arr['nr3']);
+        }
+
+        return $data;
+    }
 }

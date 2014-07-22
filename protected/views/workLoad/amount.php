@@ -5,9 +5,9 @@
  * @var FilterForm $model
  */
 
-$this->pageHeader=tt('Нагрузка преподавателя');
+$this->pageHeader=tt('Объем учебной нагрузки преподавателя');
 $this->breadcrumbs=array(
-    tt('Нагрузка'),
+    tt('Объем учебной нагрузки'),
 );
 
 Yii::app()->clientScript->registerPackage('dataTables');
@@ -26,6 +26,6 @@ HTML;
 
 
 if (! empty($model->teacher))
-    $this->renderPartial('_bottom/_teacher', array(
+    $this->renderPartial('_bottom/_amount', array(
         'model' => $model,
     ));

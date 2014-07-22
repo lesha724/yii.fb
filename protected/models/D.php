@@ -278,7 +278,7 @@ SQL;
         return $disciplines;
     }
 
-    public function getDisciplinesForWorkPlan($p1, $year, $sem)
+    public function getDisciplinesForWorkLoad(FilterForm $model)
     {
         $sql = <<<SQL
             SELECT d1, d2, us4, uo1, ug2, nr3, sem4,ug3,gr2,gr1,d27,d32,d34,d36,
@@ -296,9 +296,9 @@ SQL;
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':P1', $p1);
-        $command->bindValue(':SEM3', $year);
-        $command->bindValue(':SEM5', $sem);
+        $command->bindValue(':P1', $model->teacher);
+        $command->bindValue(':SEM3', $model->year);
+        $command->bindValue(':SEM5', $model->semester);
         $disciplines = $command->queryAll();
 
         $i = 0;
@@ -328,15 +328,15 @@ SQL;
                 $data[$i] = $discipline;
 
             $data[$i]['groups'][] = Gr::model()->getGroupName($discipline['sem4'], $discipline);
-            $data[$i]['sum'][]    = $discipline['nr3'];
+            $data[$i]['hours'][]  = $discipline['nr3'];
             $data[$i]['ids'][]    = $discipline['gr1'];
         }
 
-        $prak = $this->getPrakForWorkPlan($p1, $year, $sem);
-        $dipl = $this->getDiplForWorkPlan($p1, $year, $sem);
-        $gek  = $this->getGekForWorkPlan($p1, $year, $sem);
-        $asp  = $this->getAspForWorkPlan($p1, $year, $sem);
-        $dop  = $this->getDopForWorkPlan($p1, $year, $sem);
+        $prak = $this->getPrakForWorkLoad($model);
+        $dipl = $this->getDiplForWorkLoad($model);
+        $gek  = $this->getGekForWorkLoad($model);
+        $asp  = $this->getAspForWorkLoad($model);
+        $dop  = $this->getDopForWorkLoad($model);
 
         $data = array_merge($data, $prak, $dipl, $gek, $asp, $dop);
 
@@ -344,7 +344,7 @@ SQL;
     }
 
 
-    public function getPrakForWorkPlan($p1, $year, $sem)
+    public function getPrakForWorkLoad(FilterForm $model)
     {
         $sql= <<<SQL
                 SELECT prun3 as NR3, sg1
@@ -357,26 +357,29 @@ SQL;
 				WHERE pru4 = sem7 and pd2=:P1 and sem3=:SEM3 and sem5=:SEM5
 SQL;
         $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':P1', $p1);
-        $command->bindValue(':SEM3', $year);
-        $command->bindValue(':SEM5', $sem);
+        $command->bindValue(':P1', $model->teacher);
+        $command->bindValue(':SEM3', $model->year);
+        $command->bindValue(':SEM5', $model->semester);
         $disciplines = $command->queryAll();
 
         foreach ($disciplines as $key => $discipline) {
+            $us4 = 'Prak';
             $disciplines[$key]['d2']  = tt('Практика');
-            $disciplines[$key]['us4'] = 'Prak';
-            $disciplines[$key]['sum'][] = $discipline['nr3'];
+            $disciplines[$key]['us4'] = $us4;
+            $disciplines[$key]['hours'][$us4] = round($discipline['nr3']);
 
-            list($gr1, $names) = Gr::model()->getGroupsBySg1ForWorkPlan($discipline['sg1'], $year, $sem);
+            list($gr1, $names) = Gr::model()->getGroupsBySg1ForWorkPlan($discipline['sg1'], $model->year, $model->semester);
 
             $disciplines[$key]['groups'][] = $names;
             $disciplines[$key]['ids']      = $gr1;
+
+            $disciplines[$key]['studentsAmount'] = null;
         }
 
         return $disciplines;
     }
 
-    public function getDiplForWorkPlan($p1, $year, $sem)
+    public function getDiplForWorkLoad(FilterForm $model)
     {
         $sql= <<<SQL
                 SELECT dipn3 as NR3,dipn6
@@ -387,17 +390,19 @@ SQL;
 				WHERE pd2 = :P1 and sem3 = :SEM3 and sem5 = :SEM5
 SQL;
         $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':P1', $p1);
-        $command->bindValue(':SEM3', $year);
-        $command->bindValue(':SEM5', $sem);
+        $command->bindValue(':P1', $model->teacher);
+        $command->bindValue(':SEM3', $model->year);
+        $command->bindValue(':SEM5', $model->semester);
         $disciplines = $command->queryAll();
 
         foreach ($disciplines as $key => $discipline) {
-            $disciplines[$key]['d2']    = $this->getDiplName($discipline['dipn6']);
-            $disciplines[$key]['us4']   = 'Dipl';
-            $disciplines[$key]['sum'][] = $discipline['nr3'];
-            $disciplines[$key]['groups'][] = null;
-            $disciplines[$key]['ids'][]    = null;
+            $us4 = 'Dipl';
+            $disciplines[$key]['d2']  = $this->getDiplName($discipline['dipn6']);
+            $disciplines[$key]['us4'] = $us4;
+            $disciplines[$key]['hours'][$us4] = round($discipline['nr3']);
+            $disciplines[$key]['groups'][]    = null;
+            $disciplines[$key]['ids'][]       = null;
+            $disciplines[$key]['studentsAmount'] = null;
         }
 
         return $disciplines;
@@ -418,7 +423,7 @@ SQL;
         return $name;
     }
 
-    public function getGekForWorkPlan($p1, $year, $sem)
+    public function getGekForWorkLoad(FilterForm $model)
     {
         $sql= <<<SQL
                 SELECT gosn3 as NR3,sem2 as SG1, d1, d2
@@ -430,44 +435,48 @@ SQL;
 				WHERE pd2 = :P1 and sem3 = :SEM3 and sem5 = :SEM5
 SQL;
         $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':P1', $p1);
-        $command->bindValue(':SEM3', $year);
-        $command->bindValue(':SEM5', $sem);
+        $command->bindValue(':P1', $model->teacher);
+        $command->bindValue(':SEM3', $model->year);
+        $command->bindValue(':SEM5', $model->semester);
         $disciplines = $command->queryAll();
 
         foreach ($disciplines as $key => $discipline) {
-            $disciplines[$key]['us4'] = 'Gek';
-            $disciplines[$key]['sum'][] = $discipline['nr3'];
+            $us4 = 'Gek';
+            $disciplines[$key]['us4'] = $us4;
+            $disciplines[$key]['hours'][$us4] = round($discipline['nr3']);
 
-            list($gr1, $names) = Gr::model()->getGroupsBySg1ForWorkPlan($discipline['sg1'], $year, $sem);
+            list($gr1, $names) = Gr::model()->getGroupsBySg1ForWorkPlan($discipline['sg1'], $model->year, $model->semester);
 
             $disciplines[$key]['groups'][] = $names;
             $disciplines[$key]['ids']      = $gr1;
+            $disciplines[$key]['studentsAmount'] = null;
         }
 
         return $disciplines;
     }
 
-    public function getAspForWorkPlan($p1, $year, $sem)
+    public function getAspForWorkLoad(FilterForm $model)
     {
         $sql= <<<SQL
                 SELECT nakn6 as NR3, nakn4
                 FROM nakn
                 INNER JOIN pd on (nakn.nakn5 = pd.pd1)
-				WHERE pd2 = :P1 and NAKN2 = :YEAR and NAKN3 = :SEM
+				WHERE pd2 = :P1 and NAKN2 = :SEM3 and NAKN3 = :SEM5
 SQL;
         $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':P1', $p1);
-        $command->bindValue(':YEAR', $year);
-        $command->bindValue(':SEM', $sem);
+        $command->bindValue(':P1', $model->teacher);
+        $command->bindValue(':SEM3', $model->year);
+        $command->bindValue(':SEM5', $model->semester);
         $disciplines = $command->queryAll();
 
         foreach ($disciplines as $key => $discipline) {
+            $us4 = 'Asp';
             $disciplines[$key]['d2']  = $this->getAspName($discipline['nakn4']);
-            $disciplines[$key]['us4'] = 'Asp';
-            $disciplines[$key]['sum'][] = $discipline['nr3'];
-            $disciplines[$key]['groups'][] = null;
-            $disciplines[$key]['ids'][]    = null;
+            $disciplines[$key]['us4'] = $us4;
+            $disciplines[$key]['hours'][$us4] = round($discipline['nr3']);
+            $disciplines[$key]['groups'][]    = null;
+            $disciplines[$key]['ids'][]       = null;
+            $disciplines[$key]['studentsAmount'] = null;
         }
 
         return $disciplines;
@@ -488,7 +497,7 @@ SQL;
         return $name;
     }
 
-    public function getDopForWorkPlan($p1, $year, $sem)
+    public function getDopForWorkLoad(FilterForm $model)
     {
         $sql = <<<SQL
                 SELECT nrdn4 as nr3, d1,d2
@@ -496,21 +505,72 @@ SQL;
                 INNER JOIN dn on (d.d1 = dn.dn2)
                 INNER JOIN nrdn on (dn.dn1 = nrdn.nrdn1)
                 INNER JOIN pd on (nrdn.nrdn2 = pd.pd1)
-                WHERE pd2 = :P1 and DN4 = :YEAR and NRDN3 = :SEM
+                WHERE pd2 = :P1 and DN4 = :SEM3 and NRDN3 = :SEM5
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':P1', $p1);
-        $command->bindValue(':YEAR', $year);
-        $command->bindValue(':SEM', $sem);
+        $command->bindValue(':P1', $model->teacher);
+        $command->bindValue(':SEM3', $model->year);
+        $command->bindValue(':SEM5', $model->semester);
         $disciplines = $command->queryAll();
 
         foreach ($disciplines as $key => $discipline) {
-            $disciplines[$key]['us4']   = 'Dop';
-            $disciplines[$key]['sum'][] = $discipline['nr3'];
-            $disciplines[$key]['groups'][] = null;
-            $disciplines[$key]['ids'][]    = null;
+            $us4 = 'Dop';
+            $disciplines[$key]['us4']         = $us4;
+            $disciplines[$key]['hours'][$us4] = round($discipline['nr3']);
+            $disciplines[$key]['groups'][]    = null;
+            $disciplines[$key]['ids'][]       = null;
+            $disciplines[$key]['studentsAmount'] = null;
         }
+
+        return $disciplines;
+    }
+
+
+    public function getDisciplinesForWorkLoadAmount(FilterForm $model)
+    {
+        $extraFields = null;
+        if ($model->extendedForm == 1)
+            $extraFields = ',uo22,ug3,us4';
+
+        $sql = <<<SQL
+            SELECT  d1,d2,d27,d32,d34,d36 {$extraFields}
+            FROM sem
+            INNER JOIN us ON (sem.sem1 = us.us12)
+            INNER JOIN nr ON (us.us1 = nr.nr2)
+            INNER JOIN pd ON (nr.nr6 = pd.pd1) or (nr.nr7 = pd.pd1) or (nr.nr8 = pd.pd1) or (nr.nr9 = pd.pd1)
+            INNER JOIN ug ON (nr.nr1 = ug.ug3)
+            INNER JOIN uo ON (us.us2 = uo.uo1)
+            INNER JOIN d ON (uo.uo3 = d.d1)
+            INNER JOIN gr ON (ug.ug2 = gr.gr1)
+            WHERE pd2=:P1 and sem3=:SEM3 and sem5=:SEM5
+            GROUP BY  d1,d2,d27,d32,d34,d36 {$extraFields}
+            ORDER BY d1,d2 {$extraFields}
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', $model->teacher);
+        $command->bindValue(':SEM3', $model->year);
+        $command->bindValue(':SEM5', $model->semester);
+        $disciplines = $command->queryAll();
+
+        foreach ($disciplines as $key => $discipline) {
+
+            list($groupNames, $studentsAmount)   = Gr::model()->getGroupsAndStudentsForWorkLoadAmount($model, $discipline);
+            $disciplines[$key]['groups']         = $groupNames;
+            $disciplines[$key]['studentsAmount'] = $studentsAmount;
+
+            $disciplines[$key]['hours'] = Us::model()->getHoursForWorkLoadAmount($model, $discipline);
+        }
+
+        $prak = $this->getPrakForWorkLoad($model);
+        $dipl = $this->getDiplForWorkLoad($model);
+        $gek  = $this->getGekForWorkLoad($model);
+        $asp  = $this->getAspForWorkLoad($model);
+        $dop  = $this->getDopForWorkLoad($model);
+
+        $disciplines = array_merge($disciplines, $prak, $dipl, $gek, $asp, $dop);
+
 
         return $disciplines;
     }
