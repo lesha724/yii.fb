@@ -13,7 +13,7 @@ $options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => t
 
 $data = CHtml::listData(Sem::model()->getSemestersForWorkPlan($model->group, $type), 'us3', 'sem7', 'name');
 
-$html  = '<div class="row-fluid">';
+$html  = '<div class="row-fluid" style="margin-bottom:2%">';
 $html .= CHtml::label(tt('Семестр'), 'FilterForm_semester');
 $html .= CHtml::dropDownList('FilterForm[semester]', $model->semester, $data, $options);
 $html .= '</div>';
@@ -42,7 +42,7 @@ if (! empty($model->semester)) :
         );
 ?>
 
-<table id="disciplines" class="table table-striped table-bordered table-hover" style="margin-top:2%" data-getGroupUrl="<?=$getGroupUrl?>">
+<table id="disciplines" class="table table-striped table-bordered table-hover"  data-getGroupUrl="<?=$getGroupUrl?>">
     <thead>
         <tr>
             <th rowspan="2">№</th>
