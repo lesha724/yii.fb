@@ -400,6 +400,9 @@ SQL;
 
     public function getGroupsForWorkPlan($speciality, $course)
     {
+        if (empty($speciality))
+            return array();
+
         $sql = <<<SQL
             SELECT sp2,gr1,gr7,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,sg3,sg4,gr13,sg1
             FROM sem

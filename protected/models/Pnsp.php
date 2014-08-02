@@ -151,7 +151,7 @@ class Pnsp extends CActiveRecord
     {
         if (empty($faculty))
             return array();
-        
+
         $sql=<<<SQL
             SELECT pnsp1, pnsp2, pnsp17, pnsp18, pnsp19, pnsp20
             FROM sg
