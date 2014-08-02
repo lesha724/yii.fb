@@ -400,7 +400,7 @@ SQL;
 
     public function getGroupsForWorkPlan($speciality, $course)
     {
-        if (empty($speciality))
+        if (empty($speciality) || empty($course))
             return array();
 
         $sql = <<<SQL
