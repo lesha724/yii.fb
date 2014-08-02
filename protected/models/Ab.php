@@ -408,17 +408,25 @@ class Ab extends CActiveRecord
             return array();	// don't show
         elseif (in_array($mp33, array(1,2,3,4))){
             // текущий прием + 1-3 заходы рекомендованных
-            /*$from = 'spab
-                       inner join abd on (spab.spab1 = abd.abd3)
-                       inner join ab on (abd.abd2 = ab.ab1)';*/
             if ($mp33 != 1)
                 $extra[] = 'abd'.(22+$mp33).' = 1';
         } else {
             // зачисленные
-            /*$from = 'spab
-					   inner join abd on (spab.spab1 = abd.abd3)
-					   inner join ab on (abd.abd2 = ab.ab1)';*/
             $extra[] = 'ABD52 > 0';
+        }
+
+        $extraOrder = null;
+        $from = <<<SQL
+                FROM spab
+                INNER JOIN abd ON (spab.spab1 = abd.abd3)
+                INNER JOIN ab ON (abd.abd2 = ab.ab1)
+SQL;
+
+        // проверяем наличие профильного предмета
+        $profileSubjectExists = Sekap::model()->checkIfProfileSubjectExists();
+        if ($profileSubjectExists) {
+            $from .= 'INNER JOIN ae ON (abd1=ae2 AND ae3=:seka2)';
+            $extraOrder = 'ae4 DESC, ';
         }
 
         // чтобы без указания доп признака выводились все в том числе и те у кого он есть
@@ -436,17 +444,12 @@ class Ab extends CActiveRecord
         $sql = <<<SQL
               SELECT ab1,ab2,ab3,ab4,abd20,abd33,abd28,abd29,abd23,
                      abd66,abd54,abd1,abd9,abd24,abd25,abd26,abd27,abd52
-              FROM spab
-                    INNER JOIN abd ON (spab.spab1 = abd.abd3)
-                    INNER JOIN ab ON (abd.abd2 = ab.ab1)
-                    INNER JOIN ae ON (abd1=ae2)
-                    INNER JOIN seka ON (spab1=seka1 AND ae3=seka2)
-                    INNER JOIN sekap ON (spab1=sekap1 AND seka3=sekap2 AND sekap3=1)
+              {$from}
               WHERE spab4 = :SEL_1 AND spab5 = :SEL_2 AND spab6 = :SEL_3 AND
                     spab1 = :SEL_6 AND spab2 = :YEAR_1 AND
                     ab1>0 AND abd12 is null AND
                     {$extras}
-		      ORDER BY abd20 DESC, ae4 DESC, abd28 DESC, ab2
+		      ORDER BY abd20 DESC, {$extraOrder} abd28 DESC, ab2
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
