@@ -27,7 +27,7 @@ $form=$this->beginWidget('CActiveForm', array(
     $html .= $form->dropDownList($model, 'faculty', $faculties, $options);
     $html .= '</div>';
 
-    $specialities = CHtml::listData(Sp::model()->getSpecialititesForFaculty($model->faculty), 'sp1', 'name');
+    $specialities = CHtml::listData(Sp::model()->getSpecialitiesForFaculty($model->faculty), 'sp1', 'name');
     $html .= '<div class="row-fluid span2">';
     $html .= $form->label($model, 'speciality');
     $html .= $form->dropDownList($model, 'speciality', $specialities, $options);

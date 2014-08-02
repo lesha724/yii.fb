@@ -426,8 +426,7 @@ class Ab extends CActiveRecord
             $extra[] = 'abd4 = '.$model->adp1;
 
         $studyCondition = 'ABD7 = '.$study_type;
-        if (SH::is(U_NULAU) && $study_type == 1)
-            $studyCondition = '(abd7=1 or (abd8=1 and abd52=0 and spab36=5))';
+
         $extra[] = $studyCondition;
 
         $extra[] = $condition;
@@ -463,12 +462,6 @@ SQL;
         foreach ($students as $key => $st) {
 
             list($notice, $color) = $this->getNotice($st, $mp32);
-            /*(if (SH::is(U_NULAU)){
-                list($notice, $color) = $this->getNotice($st, $mp32);
-            } else {
-                $notice = Sl::model()->getSlFor($st['abd1']);
-                $color = '';
-            }*/
 
             $students[$key] = array_merge($st, array('notice' => $notice, 'color' => $color));
         }

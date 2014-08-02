@@ -337,8 +337,8 @@ SQL;
             INNER JOIN d ON (uo.uo3 = d.d1)
             INNER JOIN gr ON (ug.ug2 = gr.gr1)
             WHERE pd2=:P1 and sem3=:SEM3 and sem5=:SEM5 and d1 = :D1 {$condition}
-            group by d1, d2, us4, nr3, ug3
-            order by us4,d1,d2
+            GROUP BY d1, d2, us4, nr3, ug3
+            ORDER BY us4,d1,d2
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':P1', $model->teacher);

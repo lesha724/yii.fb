@@ -81,24 +81,24 @@ $this->widget('zii.widgets.CMenu', array(
                     'label' => '<i class="icon-double-angle-right"></i>'.tt('Студента'),
                     'url' => Yii::app()->createUrl('/timeTable/student'),
                     'active' => $controller=='timeTable' && $action=='student',
-                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'timeTable', 'student')
+                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'timeTable', 'student')
                 ),
                 array(
                     'label' => '<i class="icon-double-angle-right"></i>'.tt('Аудитории'),
                     'url' => Yii::app()->createUrl('/timeTable/classroom'),
                     'active' => $controller=='timeTable' && $action=='classroom',
-                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'timeTable', 'classroom')
+                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'timeTable', 'classroom')
                 ),
                 array(
                     'label' => '<i class="icon-double-angle-right"></i>'.tt('Свободные аудитории'),
                     'url' => Yii::app()->createUrl('/timeTable/freeClassroom'),
                     'active' => $controller=='timeTable' && $action=='freeClassroom',
-                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'timeTable', 'freeClassroom')
+                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'timeTable', 'freeClassroom')
                 ),
             ),
             'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'timeTable', 'main')
         ),
-        /*array(
+        array(
             'label' => '<i class="icon-edit"></i><span class="menu-text">'.tt('Рабочий план').'</span><b class="arrow icon-angle-down"></b>',
             'url' => '#',
             'linkOptions'=> array(
@@ -107,13 +107,26 @@ $this->widget('zii.widgets.CMenu', array(
             'itemOptions'=>array('class'=> $controller=='workPlan' ? 'active open' : ''),
             'items' => array(
                 array(
+                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Специальности'),
+                    'url' => Yii::app()->createUrl('/workPlan/speciality'),
+                    'active' => $controller=='workPlan' && $action=='speciality',
+                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'workPlan', 'speciality')
+                ),
+                array(
+                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Группы'),
+                    'url' => Yii::app()->createUrl('/workPlan/group'),
+                    'active' => $controller=='workPlan' && $action=='group',
+                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'workPlan', 'group')
+                ),
+                array(
                     'label' => '<i class="icon-double-angle-right"></i>'.tt('Студента'),
                     'url' => Yii::app()->createUrl('/workPlan/student'),
-                    'active' => $controller=='workPlan' && $action=='student'
+                    'active' => $controller=='workPlan' && $action=='student',
+                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'workPlan', 'student')
                 ),
             ),
-            'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'workPlan', 'main')
-        ),*/
+            'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'workPlan', 'main')
+        ),
         array(
             'label' => '<i class="icon-list"></i><span class="menu-text">'.tt('Успеваемость').'</span><b class="arrow icon-angle-down"></b>',
             'url' => '#',

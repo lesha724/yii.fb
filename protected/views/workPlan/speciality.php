@@ -5,16 +5,15 @@
  * @var FilterForm $model
  */
 
-$this->pageHeader=tt('Рабочий план студента');
+$this->pageHeader=tt('Рабочий план специальности');
 $this->breadcrumbs=array(
     tt('Рабочий план'),
 );
 
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/workPlan/main.js', CClientScript::POS_HEAD);
 
-$this->renderPartial('/filter_form/timeTable/student', array(
+$this->renderPartial('/filter_form/workPlan/speciality', array(
     'model' => $model,
-    'showDateRangePicker' => false
 ));
 
 
@@ -23,8 +22,8 @@ echo <<<HTML
 HTML;
 
 
-if (! empty($model->student))
+if (! empty($model->group))
     $this->renderPartial('_bottom', array(
         'model' => $model,
-        'type'  => WorkPlanController::STUDENT
+        'type'  => WorkPlanController::SPECIALITY
     ));

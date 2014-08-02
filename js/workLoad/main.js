@@ -6,14 +6,15 @@ $(document).ready(function(){
 
     $('#FilterForm_year').change(function(){
 
-        var $select = $(this).clone();
+        var $that   = $(this);
+        var $select = $that.clone();
         var $form   = $('#filter-form');
-        var value  = $(this).val();
+        var value   = $that.val();
 
         if (value.length == 0)
             return;
 
-        $select.find('option[value='+$(this).val()+']').attr('selected', 'selected');
+        $select.find('option[value='+$that.val()+']').attr('selected', 'selected');
 
         $form.append($select);
 

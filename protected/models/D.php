@@ -574,4 +574,126 @@ SQL;
 
         return $disciplines;
     }
+
+    public function getDisciplinesForWorkPlan(FilterForm $model, $type)
+    {
+        $disciplines = $this->getWorkPlanDisciplinesFor($model, $type);
+
+        $i = 0;
+        $_uo3 = 0; // previous row values
+        $data = array();
+
+        $map = array(
+            9  => 1, // УЛк
+            10 => 2, // УПз
+            11 => 3, // УСем
+            12 => 4, // УЛб
+        );
+
+        foreach ($disciplines as $discipline) {
+
+            // this row values
+            $uo3 = $discipline['uo3'];
+            $us4 = $discipline['us4'];
+            if (in_array($us4, array(9, 10, 11, 12)))
+                $us4 = $map[$us4];
+
+
+            $changeRow = $uo3 != $_uo3;
+            if ($changeRow) {
+                $i++;
+                $_uo3 = $uo3;
+            }
+
+            if (! isset($data[$i]))
+                $data[$i] = $discipline + array('hours' => array());
+
+
+            if (! isset($data[$i]['hours'][$us4]))
+                $data[$i]['hours'][$us4] = null;
+
+            $data[$i]['hours'][$us4] += $discipline['us6'];
+            $data[$i]['d2'] = $this->getNameFor($discipline);
+
+        }
+
+        return $data;
+    }
+
+    private function getWorkPlanDisciplinesFor($model, $type)
+    {
+        if ($type == WorkPlanController::SPECIALITY) {
+            $sql = <<<SQL
+                SELECT d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1
+                FROM us
+                INNER JOIN uo ON (US.US2 = UO.UO1)
+                INNER JOIN u ON (UO.uo22 = U.U1)
+                INNER JOIN d ON (UO.uo3 = D.D1)
+                INNER JOIN k ON (UO.uo4 = K.K1)
+                INNER JOIN ucx ON (UO.UO19 = UCX.UCX1)
+                INNER JOIN ucg ON (UCX.UCX1 = UCG.UCG2)
+                WHERE us4<>13 and u2=:ID and us3=:SEM1
+                ORDER BY d2,us4,uo3
+SQL;
+            $id  = $model->group;
+        } elseif ($type == WorkPlanController::GROUP) {
+            $sql = <<<SQL
+                SELECT d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1
+                FROM us
+                INNER JOIN uo ON (us.us2 = uo.uo1)
+                INNER JOIN u ON (uo.uo22 = u.u1)
+                INNER JOIN d ON (uo.uo3 = d.d1)
+                INNER JOIN k ON (uo.uo4 = k.k1)
+                INNER JOIN ucx ON (uo.uo19 = ucx.ucx1)
+                INNER JOIN ucg ON (ucx.ucx1 = ucg.ucg2)
+                WHERE us4<>13 and ucg3=:ID and us3=:SEM1
+                ORDER BY d2,us4,uo3
+SQL;
+            $id  = $model->group;
+        } elseif ($type == WorkPlanController::STUDENT) {
+            $sql = <<<SQL
+                SELECT d2,us4,us6,k2,uo3,u16,u1,d27,d32,d34,d36
+                FROM us
+                INNER JOIN uo ON (us.us2 = uo.uo1)
+                INNER JOIN u ON (uo.uo22 = u.u1)
+                INNER JOIN d ON (uo.uo3 = d.d1)
+                INNER JOIN k ON (uo.uo4 = k.k1)
+                INNER JOIN ucx ON (uo.uo19 = ucx.ucx1)
+                INNER JOIN ucg ON (ucx.ucx1 = ucg.ucg2)
+                INNER JOIN ucs ON (ucg.ucg1 = ucs.ucs2)
+                WHERE us4<>13 and ucg4=0 and ucs3=:ID and us3=:SEM1
+                ORDER BY d2,us4,uo3
+SQL;
+            $id  = $model->student;
+        }
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ID', $id);
+        $command->bindValue(':SEM1', $model->semester);
+        $disciplines = $command->queryAll();
+
+        return $disciplines;
+    }
+
+    private function getNameFor($discipline)
+    {
+        $u16 = $discipline['u16'];
+
+        $pos = strpos($u16, '@');
+        if ($pos === false) {
+            $name = $u16 . $discipline['d2'];
+        } elseif(is_integer($pos)) {
+
+            $parts = explode('@', $u16);
+
+            if ($pos === 0)
+                $name = $discipline['d2'] . $parts[1];
+            else
+                $name = $parts[0] . $discipline['d2'] . $parts[1];
+
+        }
+
+        return $name;
+    }
+
 }

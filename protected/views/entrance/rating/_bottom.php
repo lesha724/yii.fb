@@ -302,9 +302,9 @@ HTML;
 
         <?php
             if (! empty($list_5)) :
-                ?>
+        ?>
                 <tr><td colspan='<?=$colspan?>' class="entrance-rating-title"><?=tt('НА ОБЩИХ ОСНОВАНИЯХ')?></td></tr>
-                <?php
+            <?php
                 $i = 1;
                 $html = '';
                 foreach ($list_5 as $st) {

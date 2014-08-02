@@ -13,6 +13,8 @@ class FilterForm extends CFormModel
 
     public $duration = 1;
     public $teacher = 0;
+    public $student;
+    public $sg1;
     public $code = 0;
     public $course = 0;
 
@@ -43,6 +45,9 @@ class FilterForm extends CFormModel
             array('sel_1, sel_2, course, extendedForm', 'safe', 'on' => 'documentReception'),
             array('sel_1, sel_2, course, adp1, cn1, speciality', 'safe', 'on' => 'rating'),
             array('filial, teacher, chair, year, semester, extendedForm', 'required', 'on' => 'workLoad-teacher'),
+            array('filial, faculty, course, group, student, semester', 'required', 'on' => 'workPlan-student'),
+            array('filial, faculty, course, group, semester', 'required', 'on' => 'workPlan-group'),
+            array('filial, faculty, speciality, course, group, semester', 'required', 'on' => 'workPlan-speciality'),
 		);
 	}
 
@@ -81,6 +86,7 @@ class FilterForm extends CFormModel
             'extendedForm' => tt('Расширенная форма'),
             'adp1' => tt('Доп. признак'),
             'cn1' => tt('Цел. направление'),
+            'student' => tt('Студент')
 		);
 	}
 }

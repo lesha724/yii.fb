@@ -12,7 +12,7 @@ $this->breadcrumbs=array(
 
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/timetable/timetable.js', CClientScript::POS_HEAD);
 
-$this->renderPartial('/filter_form/student', array(
+$this->renderPartial('/filter_form/timeTable/student', array(
     'model' => $model,
     'showDateRangePicker' => true
 ));

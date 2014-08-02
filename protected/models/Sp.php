@@ -133,17 +133,21 @@ class Sp extends CActiveRecord
 		return parent::model($className);
 	}
 
-    public function getCoursesFor($faculty)
+    public function getCoursesFor($faculty, $speciality = null)
     {
         if (empty($faculty))
             return array();
+
+        $extraCondition = null;
+        if (! empty($speciality))
+            $extraCondition = ' and sp11='.$speciality;
 
         $sql=<<<SQL
             SELECT sem4
             FROM SP
             INNER JOIN SG ON (SP.SP1 = SG.SG2)
             INNER JOIN SEM ON (SG.SG1 = SEM.SEM2)
-            WHERE sp5=:FACULTY and sem3=:YEAR and sem5=:SEM
+            WHERE sp5=:FACULTY and sem3=:YEAR and sem5=:SEM {$extraCondition}
             GROUP BY sem4
 SQL;
 
@@ -163,7 +167,7 @@ SQL;
         return $res;
     }
 
-    public function getSpecialititesForFaculty($faculty)
+    public function getSpecialitiesForFaculty($faculty)
     {
         if (empty($faculty))
             return array();
@@ -178,12 +182,12 @@ SQL;
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':FACULTY', $faculty);
-        $specialitites = $command->queryAll();
+        $specialities = $command->queryAll();
 
-        foreach ($specialitites as $key => $specialitity) {
-            $specialitites[$key]['name'] = $specialitity['pnsp2'].' ('.$specialitity['sp2'].')';
+        foreach ($specialities as $key => $speciality) {
+            $specialities[$key]['name'] = $speciality['pnsp2'].' ('.$speciality['sp2'].')';
         }
 
-        return $specialitites;
+        return $specialities;
     }
 }

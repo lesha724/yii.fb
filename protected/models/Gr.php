@@ -397,4 +397,54 @@ SQL;
 
         return array($groupNames, $studentsAmount);
     }
+
+    public function getGroupsForWorkPlan($speciality, $course)
+    {
+        $sql = <<<SQL
+            SELECT sp2,gr1,gr7,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,sg3,sg4,gr13,sg1
+            FROM sem
+            INNER JOIN sg on (sem.sem2 = sg.sg1)
+            INNER JOIN sp on (sg.sg2 = sp.sp1)
+            INNER JOIN gr on (sg.sg1 = gr.gr2)
+            WHERE sp11 =:SPECIALITY and sem3 =:YEAR  and sem4=:COURSE and sp7 is null and gr13<>1
+            GROUP BY sp2,gr1,gr7,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,sg3,sg4,gr13,sg1
+SQL;
+
+        list($year,) = SH::getCurrentYearAndSem();
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':SPECIALITY', $speciality);
+        $command->bindValue(':YEAR', $year);
+        $command->bindValue(':COURSE', $course);
+        $groups = $command->queryAll();
+
+        $_sg1 = 0; // previous row values
+        $data = array();
+
+        foreach ($groups as $group) {
+
+            // this row values
+            $sg1 = $group['sg1'];
+
+            $changeRow = $sg1 != $_sg1;
+            if ($changeRow)
+                $_sg1 = $sg1;
+
+
+            if (! isset($data[$sg1]))
+                $data[$sg1] = array('groups' => array());
+
+
+            $data[$sg1]['groups'][] = Gr::model()->getGroupName($course, $group);
+        }
+
+        foreach ($data as $sg1 => $flow) {
+            $flowGroups = implode(', ', $flow['groups']);
+            $data[$sg1]['name'] = mb_strimwidth($flowGroups, 0, 50, '...');
+            $data[$sg1]['sg1']  = $sg1;
+        }
+
+        return $data;
+    }
+
 }
