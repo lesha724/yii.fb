@@ -110,7 +110,7 @@ SQL;
         $command->bindValue(':SPAB1', $spab1);
         $exist = $command->queryScalar();
 
-        return (bool)$exist;
+        return $exist;
     }
 
 }

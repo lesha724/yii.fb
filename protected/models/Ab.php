@@ -425,7 +425,7 @@ SQL;
         // проверяем наличие профильного предмета
         $profileSubjectExists = Sekap::model()->checkIfProfileSubjectExistsFor($model->speciality);
         if ($profileSubjectExists) {
-            $from .= ' INNER JOIN ae ON (abd1=ae2 AND ae3=:seka2)';
+            $from .= ' INNER JOIN ae ON (abd1=ae2 AND ae3='.$profileSubjectExists.')';
             $extraOrder = 'ae4 DESC, ';
         }
 
