@@ -184,14 +184,20 @@ $this->widget('zii.widgets.CMenu', array(
                 array(
                     'label' => '<i class="icon-double-angle-right"></i>'.tt('Ход приема документов'),
                     'url' => Yii::app()->createUrl('/entrance/documentReception'),
-                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'entrance', 'documentReception'),
+                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'entrance', 'documentReception'),
                     'active' => $controller=='entrance' && $action=='documentReception'
                 ),
                 array(
                     'label' => '<i class="icon-double-angle-right"></i>'.tt('Рейтинговый список'),
                     'url' => Yii::app()->createUrl('/entrance/rating'),
-                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'entrance', 'rating'),
-                    'active' => $controller=='entrance' && $action=='rating'
+                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'entrance', 'rating'),
+                    'active' => $controller=='entrance' && $action=='rating' && !Yii::app()->request->getParam('sortByStatus', null)
+                ),
+                array(
+                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Список рекомендованных'),
+                    'url' => Yii::app()->createUrl('/entrance/rating', array('sortByStatus' => 1)),
+                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'entrance', 'rating'),
+                    'active' => $controller=='entrance' && $action=='rating' && Yii::app()->request->getParam('sortByStatus', null)
                 ),
                 array(
                     'label' => '<i class="icon-double-angle-right"></i>'.tt('Регистрация'),
