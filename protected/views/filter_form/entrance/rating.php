@@ -6,7 +6,7 @@
  * @var FilterForm $model
  */
 
-$options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;'), 'style' => 'width:150px');
+$options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;'), 'style' => 'width:190px');
 $form=$this->beginWidget('CActiveForm', array(
     'id'=>'filter-form',
     'htmlOptions' => array('class' => 'form-inline')

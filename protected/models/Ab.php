@@ -433,9 +433,7 @@ SQL;
         if ($model->adp1 != 0)
             $extra[] = 'abd4 = '.$model->adp1;
 
-        $studyCondition = 'ABD7 = '.$study_type;
-
-        $extra[] = $studyCondition;
+        $extra[] = 'ABD7 = '.$study_type;
 
         $extra[] = $condition;
 
@@ -468,6 +466,10 @@ SQL;
 
             $students[$key] = array_merge($st, array('notice' => $notice, 'color' => $color));
         }
+
+        $sortByNotice = Yii::app()->request->getParam('sortByNotice', null);
+        if ($sortByNotice)
+            usort($students, array($this, 'sortByNotice'));
 
         return $students;
     }
@@ -528,5 +530,16 @@ SQL;
 
 
         return array($notice, $color);
+    }
+
+    private function sortByNotice($a, $b)
+    {
+        $a_hasANotice = mb_strlen($a['color']);
+        $b_hasANotice = mb_strlen($b['color']);
+
+        if ($a_hasANotice == $b_hasANotice)
+            return 0;
+
+        return $a_hasANotice > $b_hasANotice ? -1 : 1;
     }
 }
