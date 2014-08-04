@@ -469,7 +469,7 @@ SQL;
 
         $sortByNotice = Yii::app()->request->getParam('sortByNotice', null);
         if ($sortByNotice)
-            usort($students, array($this, 'sortByNotice'));
+            uksort($students, array($this, 'sortByNotice'));
 
         return $students;
     }
