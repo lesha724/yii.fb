@@ -2,7 +2,7 @@
     .table-striped tbody > tr:nth-child(2n+1) > td, .table-striped tbody > tr:nth-child(2n+1) > th {
         background-color: transparent;
     }
-</style>>
+</style>
 <?php
 /**
  *
