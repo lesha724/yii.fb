@@ -534,6 +534,7 @@ SQL;
 
     private function sortByStatus($a, $b)
     {
+        // students with some status have to be on top of the list
         $a_status = mb_strlen($a['color']);
         $b_status = mb_strlen($b['color']);
 
