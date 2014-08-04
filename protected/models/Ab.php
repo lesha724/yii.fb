@@ -467,9 +467,9 @@ SQL;
             $students[$key] = array_merge($st, array('notice' => $notice, 'color' => $color));
         }
 
-        $sortByNotice = Yii::app()->request->getParam('sortByNotice', null);
-        if ($sortByNotice)
-            uksort($students, array($this, 'sortByNotice'));
+        $sortByStatus = Yii::app()->request->getParam('sortByStatus', null);
+        if ($sortByStatus)
+            uksort($students, array($this, 'sortByStatus'));
 
         return $students;
     }
@@ -532,14 +532,46 @@ SQL;
         return array($notice, $color);
     }
 
-    private function sortByNotice($a, $b)
+    private function sortByStatus($a, $b)
     {
-        $a_hasANotice = mb_strlen($a['color']);
-        $b_hasANotice = mb_strlen($b['color']);
+        $a_status = mb_strlen($a['color']);
+        $b_status = mb_strlen($b['color']);
 
-        if ($a_hasANotice == $b_hasANotice)
-            return 0;
+        if ($a_status == $b_status) {
 
-        return $a_hasANotice > $b_hasANotice ? -1 : 1;
+            if ($a['abd20'] == $b['abd20']) {
+
+                if (isset($a['ae4'])) {
+
+                    if ($a['ae4'] == $b['ae4']) {
+
+                        if ($a['abd28'] == $b['abd28']) {
+
+                            if (strcmp($a['ab2'], $b['ab2']) == 0)
+                                return 0;
+                            return strcmp($a['ab2'], $b['ab2']) < 0 ? -1 : 1;
+
+                        }
+                        return $a['abd28'] > $b['abd28'] ? -1 : 1;
+
+                    }
+                    return $a['ae4'] > $b['ae4'] ? -1 : 1;
+
+                } else {
+
+                    if ($a['abd28'] == $b['abd28']) {
+
+                        if (strcmp($a['ab2'], $b['ab2']) == 0)
+                            return 0;
+                        return strcmp($a['ab2'], $b['ab2']) < 0 ? -1 : 1;
+                    }
+                    return $a['abd28'] > $b['abd28'] ? -1 : 1;
+
+                }
+
+            }
+            return $a['abd20'] > $b['abd20'] ? -1 : 1;
+        }
+        return $a_status > $b_status ? -1 : 1;
     }
 }
