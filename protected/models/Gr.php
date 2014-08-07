@@ -324,7 +324,7 @@ SQL;
         $command->bindValue(':YEAR1', $year);
         $command->bindValue(':SEM1', $sem);
         $command->bindValue(':YEAR2', $year);
-        $command->bindValue(':SEM3', $sem);
+        $command->bindValue(':SEM2', $sem);
         $groups = $command->queryAll();
 
         $names = $gr1 = array();

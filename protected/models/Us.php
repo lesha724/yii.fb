@@ -164,6 +164,8 @@ SQL;
             $sem5 = $arr['sem5'];
             $us4  = $arr['us4'];
 
+            $data[$sem5][$us4] = $arr;
+
             if (in_array($us4, array(9, 10, 11, 12))) {
 
                 $_us4 = $map[$us4];
@@ -171,11 +173,9 @@ SQL;
                 if (! isset($data[$sem5][$_us4]))
                     $data[$sem5][$_us4] = $data[$sem5][$us4];
                 else
-                    $data[$sem5][$_us4]['sum'] += $data[$sem5][$us4]['sum'];
+                    $data[$sem5][$_us4]['sum'] += $arr['sum'];
 
             }
-
-            $data[$sem5][$us4] = $arr;
 
             //if (! isset($data[$sem5][0]['sum']))
             //    $data[$sem5][0]['sum'] = 0;

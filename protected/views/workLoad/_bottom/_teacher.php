@@ -138,10 +138,10 @@ table#disciplines tr td {
                     $td5 = implode(', ', $discipline['groups']);
 
                     if (! empty($td5)) {
-                        $tip = tt('Нажмите для просмотра списка студентов');
-                        $ids = serialize($discipline['ids']);
-                        $sem4 = $discipline['sem4'];
-                        $td5 = <<<HTML
+                        $tip  = tt('Нажмите для просмотра списка студентов');
+                        $ids  = serialize($discipline['ids']);
+
+                        $td5  = <<<HTML
                         <button class="btn btn-minier btn-yellow tooltip-info"
                                 data-rel="tooltip"
                                 data-placement="bottom"
