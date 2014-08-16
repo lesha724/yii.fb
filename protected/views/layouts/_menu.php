@@ -1,8 +1,40 @@
 <?php
-$module     = isset(Yii::app()->controller->module) ? Yii::app()->controller->module->id : '';
-$controller = Yii::app()->controller->id;
-$action     = Yii::app()->controller->action->id;
+$_m = isset(Yii::app()->controller->module) ? Yii::app()->controller->module->id : '';
+$_c = Yii::app()->controller->id;
+$_a = Yii::app()->controller->action->id;
 
+function _l($name, $icon)
+{
+    return '<i class="icon-'.$icon.'"></i><span class="menu-text">'.tt($name).'</span><b class="arrow icon-angle-down"></b>';
+}
+
+function _l2($name)
+{
+    return '<i class="icon-double-angle-right"></i>'.tt($name);
+}
+
+function _u($url)
+{
+    return Yii::app()->createUrl($url);
+}
+
+function _ch($controller, $action)
+{
+    return SH::checkServiceFor(MENU_ELEMENT_VISIBLE, $controller, $action);
+}
+
+function _i($name)
+{
+    return array('class'=> Yii::app()->controller->id==$name ? 'active open' : '');
+}
+
+$_l = array(
+    'class' => 'dropdown-toggle',
+);
+
+$isStd   = Yii::app()->user->isStd;
+$isTch   = Yii::app()->user->isTch;
+$isAdmin = Yii::app()->user->isAdmin;
 
 
 $this->widget('zii.widgets.CMenu', array(
@@ -17,268 +49,253 @@ $this->widget('zii.widgets.CMenu', array(
 
     'items'=>array(
         array(
-            'label' => '<i class="icon-dashboard"></i><span class="menu-text">'.tt('Админ. панель').'</span><b class="arrow icon-angle-down"></b>',
+            'label' => _l('Админ. панель', 'dashboard'),
             'url' => '#',
-            'linkOptions'=> array(
-                'class' => 'dropdown-toggle',
-            ),
-            'itemOptions'=>array('class'=> $module=='admin' ? 'active open' : ''),
+            'linkOptions'=>$_l,
+            'itemOptions'=>array('class'=> $_m=='admin' ? 'active open' : ''),
             'items' => array(
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Преподаватели'),
-                    'url' => Yii::app()->createUrl('/admin/default/teachers'),
-                    'active' => $action=='teachers' || $action=='grants'
+                    'label'  => _l2('Преподаватели'),
+                    'url'    => _u('/admin/default/teachers'),
+                    'active' => $_a=='teachers' || $_a=='grants'
                 ),
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Студенты'),
-                    'url' => Yii::app()->createUrl('/admin/default/students'),
-                    'active' => $action=='students'
+                    'label'  => _l2('Студенты'),
+                    'url'    => _u('/admin/default/students'),
+                    'active' => $_a=='students'
                 ),
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Эл. журнал'),
-                    'url' => Yii::app()->createUrl('/admin/default/journal'),
-                    'active' => $action=='journal' && $module=='admin'
+                    'label'  => _l2('Эл. журнал'),
+                    'url'    => _u('/admin/default/journal'),
+                    'active' => $_a=='journal' && $_m=='admin'
                 ),
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Ведение модулей'),
-                    'url' => Yii::app()->createUrl('/admin/default/modules'),
-                    'active' => $action=='modules' && $module=='admin'
+                    'label'  => _l2('Ведение модулей'),
+                    'url'    => _u('/admin/default/modules'),
+                    'active' => $_a=='modules' && $_m=='admin'
                 ),
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Абитуриент'),
-                    'url' => Yii::app()->createUrl('/admin/default/entrance'),
-                    'active' => $action=='entrance' && $module=='admin'
+                    'label'  => _l2('Абитуриент'),
+                    'url'    => _u('/admin/default/entrance'),
+                    'active' => $_a=='entrance' && $_m=='admin'
                 ),
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Меню'),
-                    'url' => Yii::app()->createUrl('/admin/default/menu'),
-                    'active' => $action=='menu' && $module=='admin'
+                    'label'  => _l2('Меню'),
+                    'url'    => _u('/admin/default/menu'),
+                    'active' => $_a=='menu' && $_m=='admin'
                 ),
             ),
-            'visible' => Yii::app()->user->isAdmin,
+            'visible' => $isAdmin,
         ),
         array(
-            'label' => '<i class="icon-calendar"></i><span class="menu-text">'.tt('Расписание').'</span><b class="arrow icon-angle-down"></b>',
+            'label' => _l('Расписание', 'calendar'),
             'url' => '#',
-            'linkOptions'=> array(
-                'class' => 'dropdown-toggle',
-            ),
-            'itemOptions'=>array('class'=> $controller=='timeTable' ? 'active open' : ''),
+            'linkOptions'=> $_l,
+            'itemOptions'=>_i('timeTable'),
             'items' => array(
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Академ. группы'),
-                    'url' => Yii::app()->createUrl('/timeTable/group'),
-                    'active' => $controller=='timeTable' && $action=='group',
-                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'timeTable', 'group')
+                    'label'   => _l2('Академ. группы'),
+                    'url'     => _u('/timeTable/group'),
+                    'active'  => $_c=='timeTable' && $_a=='group',
+                    'visible' => _ch('timeTable', 'group')
                 ),
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Преподавателя'),
-                    'url' => Yii::app()->createUrl('/timeTable/teacher'),
-                    'active' => $controller=='timeTable' && $action=='teacher',
-                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'timeTable', 'teacher')
+                    'label'   => _l2('Преподавателя'),
+                    'url'     => _u('/timeTable/teacher'),
+                    'active'  => $_c=='timeTable' && $_a=='teacher',
+                    'visible' => _ch('timeTable', 'teacher')
                 ),
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Студента'),
-                    'url' => Yii::app()->createUrl('/timeTable/student'),
-                    'active' => $controller=='timeTable' && $action=='student',
-                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'timeTable', 'student')
+                    'label'   => _l2('Студента'),
+                    'url'     => _u('/timeTable/student'),
+                    'active'  => $_c=='timeTable' && $_a=='student',
+                    'visible' => _ch('timeTable', 'student')
                 ),
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Аудитории'),
-                    'url' => Yii::app()->createUrl('/timeTable/classroom'),
-                    'active' => $controller=='timeTable' && $action=='classroom',
-                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'timeTable', 'classroom')
+                    'label'   => _l2('Аудитории'),
+                    'url'     => _u('/timeTable/classroom'),
+                    'active'  => $_c=='timeTable' && $_a=='classroom',
+                    'visible' => _ch('timeTable', 'classroom')
                 ),
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Свободные аудитории'),
-                    'url' => Yii::app()->createUrl('/timeTable/freeClassroom'),
-                    'active' => $controller=='timeTable' && $action=='freeClassroom',
-                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'timeTable', 'freeClassroom')
+                    'label'   => _l2('Свободные аудитории'),
+                    'url'     => _u('/timeTable/freeClassroom'),
+                    'active'  => $_c=='timeTable' && $_a=='freeClassroom',
+                    'visible' => _ch('timeTable', 'freeClassroom')
                 ),
             ),
-            'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'timeTable', 'main')
+            'visible' => _ch('timeTable', 'main')
         ),
         array(
-            'label' => '<i class="icon-edit"></i><span class="menu-text">'.tt('Рабочий план').'</span><b class="arrow icon-angle-down"></b>',
+            'label' => _l('Рабочий план', 'edit'),
             'url' => '#',
-            'linkOptions'=> array(
-                'class' => 'dropdown-toggle',
-            ),
-            'itemOptions'=>array('class'=> $controller=='workPlan' ? 'active open' : ''),
+            'linkOptions'=> $_l,
+            'itemOptions'=>_i('workPlan'),
             'items' => array(
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Специальности'),
-                    'url' => Yii::app()->createUrl('/workPlan/speciality'),
-                    'active' => $controller=='workPlan' && $action=='speciality',
-                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'workPlan', 'speciality')
+                    'label'   => _l2('Специальности'),
+                    'url'     => _u('/workPlan/speciality'),
+                    'active'  => $_c=='workPlan' && $_a=='speciality',
+                    'visible' => _ch('workPlan', 'speciality')
                 ),
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Группы'),
-                    'url' => Yii::app()->createUrl('/workPlan/group'),
-                    'active' => $controller=='workPlan' && $action=='group',
-                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'workPlan', 'group')
+                    'label'   => _l2('Группы'),
+                    'url'     => _u('/workPlan/group'),
+                    'active'  => $_c=='workPlan' && $_a=='group',
+                    'visible' => _ch('workPlan', 'group')
                 ),
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Студента'),
-                    'url' => Yii::app()->createUrl('/workPlan/student'),
-                    'active' => $controller=='workPlan' && $action=='student',
-                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'workPlan', 'student')
+                    'label'   => _l2('Студента'),
+                    'url'     => _u('/workPlan/student'),
+                    'active'  => $_c=='workPlan' && $_a=='student',
+                    'visible' => _ch('workPlan', 'student')
                 ),
             ),
-            'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'workPlan', 'main')
+            'visible' => _ch('workPlan', 'main')
         ),
         array(
-            'label' => '<i class="icon-list"></i><span class="menu-text">'.tt('Успеваемость').'</span><b class="arrow icon-angle-down"></b>',
+            'label' => _l('Успеваемость', 'list'),
             'url' => '#',
-            'linkOptions'=> array(
-                'class' => 'dropdown-toggle',
-            ),
-            'itemOptions'=>array('class'=> $controller=='progress' ? 'active open' : ''),
+            'linkOptions'=> $_l,
+            'itemOptions'=>_i('progress'),
             'items' => array(
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Эл. журнал'),
-                    'url' => Yii::app()->createUrl('/progress/journal'),
-                    'visible' => Yii::app()->user->isTch,
-                    'active' => $controller=='progress' && $action=='journal'
+                    'label'   => _l2('Эл. журнал'),
+                    'url'     => _u('/progress/journal'),
+                    'visible' => _ch('progress', 'journal') && $isTch,
+                    'active'  => $_c=='progress' && $_a=='journal'
                 ),
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Ведение модулей'),
-                    'url' => Yii::app()->createUrl('/progress/modules'),
-                    'visible' => Yii::app()->user->isTch,
-                    'active' => $controller=='progress' && $action=='modules'
+                    'label'   => _l2('Ведение модулей'),
+                    'url'     => _u('/progress/modules'),
+                    'visible' => _ch('progress', 'modules') && $isTch,
+                    'active'  => $_c=='progress' && $_a=='modules'
                 ),
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Тематический план'),
-                    'url' => Yii::app()->createUrl('/progress/thematicPlan'),
-                    'visible' => Yii::app()->user->isTch,
-                    'active' => $controller=='progress' && $action=='thematicPlan'
+                    'label'   => _l2('Тематический план'),
+                    'url'     => _u('/progress/thematicPlan'),
+                    'visible' => _ch('progress', 'thematicPlan') && $isTch,
+                    'active'  => $_c=='progress' && $_a=='thematicPlan'
                 ),
             ),
-            'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'progress', 'main')
+            'visible' => _ch('progress', 'main')
         ),
         array(
-            'label' => '<i class="icon-folder-open"></i><span class="menu-text">'.tt('Док.-оборот').'</span><b class="arrow icon-angle-down"></b>',
+            'label' => _l('Док.-оборот', 'folder-open'),
             'url' => '#',
-            'linkOptions'=> array(
-                'class' => 'dropdown-toggle',
-            ),
-            'itemOptions'=>array('class'=> $controller=='docs' ? 'active open' : ''),
+            'linkOptions'=> $_l,
+            'itemOptions'=>_i('docs'),
             'items' => array(
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Документооборот'),
-                    'url' => Yii::app()->createUrl('/docs/tddo'),
-                    'visible' => Yii::app()->user->isTch || Yii::app()->user->isAdmin,
-                    'active' => $controller=='docs' && stristr($action, 'tddo')
+                    'label'   => _l2('Документооборот'),
+                    'url'     => _u('/docs/tddo'),
+                    'visible' => _ch('docs', 'tddo') && $isTch,
+                    'active'  => $_c=='docs' && stristr($_a, 'tddo')
                 ),
             ),
-            'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'docs', 'main')
+            'visible' => _ch('docs', 'main') && $isTch,
         ),
         array(
-            'label' => '<i class="icon-book"></i><span class="menu-text">'.tt('Абитуриент').'</span><b class="arrow icon-angle-down"></b>',
+            'label' => _l('Абитуриент', 'book'),
             'url' => '#',
-            'linkOptions'=> array(
-                'class' => 'dropdown-toggle',
-            ),
-            'itemOptions'=>array('class'=> $controller=='entrance' ? 'active open' : ''),
+            'linkOptions'=> $_l,
+            'itemOptions'=>_i('entrance'),
             'items' => array(
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Ход приема документов'),
-                    'url' => Yii::app()->createUrl('/entrance/documentReception'),
-                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'entrance', 'documentReception'),
-                    'active' => $controller=='entrance' && $action=='documentReception'
+                    'label'   => _l2('Ход приема документов'),
+                    'url'     => _u('/entrance/documentReception'),
+                    'visible' => _ch('entrance', 'documentReception'),
+                    'active'  => $_c=='entrance' && $_a=='documentReception'
                 ),
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Рейтинговый список'),
-                    'url' => Yii::app()->createUrl('/entrance/rating'),
-                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'entrance', 'rating'),
-                    'active' => $controller=='entrance' && $action=='rating' && !Yii::app()->request->getParam('sortByStatus', null)
+                    'label'   => _l2('Рейтинговый список'),
+                    'url'     => _u('/entrance/rating'),
+                    'visible' => _ch('entrance', 'rating'),
+                    'active'  => $_c=='entrance' && $_a=='rating' && !Yii::app()->request->getParam('sortByStatus', null)
                 ),
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Список рекомендованных'),
-                    'url' => Yii::app()->createUrl('/entrance/rating', array('sortByStatus' => 1)),
-                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'entrance', 'rating'),
-                    'active' => $controller=='entrance' && $action=='rating' && Yii::app()->request->getParam('sortByStatus', null)
+                    'label'   => _l2('Список рекомендованных'),
+                    'url'     => _u('/entrance/rating', array('sortByStatus' => 1)),
+                    'visible' => _ch('entrance', 'rating'),
+                    'active'  => $_c=='entrance' && $_a=='rating' && Yii::app()->request->getParam('sortByStatus', null)
                 ),
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Регистрация'),
-                    'url' => Yii::app()->createUrl('/entrance/registration'),
-                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'entrance', 'registration'),
-                    'active' => $controller=='entrance' && $action=='registration'
+                    'label'   => _l2('Регистрация'),
+                    'url'     => _u('/entrance/registration'),
+                    'visible' => _ch('entrance', 'registration'),
+                    'active'  => $_c=='entrance' && $_a=='registration'
                 ),
             ),
-            'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'entrance', 'main')
+            'visible' => _ch('entrance', 'main')
         ),
         array(
-            'label' => '<i class="icon-briefcase"></i><span class="menu-text">'.tt('Нагрузка').'</span><b class="arrow icon-angle-down"></b>',
+            'label' => _l('Нагрузка', 'briefcase'),
             'url' => '#',
-            'linkOptions'=> array(
-                'class' => 'dropdown-toggle',
-            ),
-            'itemOptions'=>array('class'=> $controller=='workLoad' ? 'active open' : ''),
+            'linkOptions'=> $_l,
+            'itemOptions'=>_i('workLoad'),
             'items' => array(
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Личная'),
-                    'url' => Yii::app()->createUrl('/workLoad/self'),
-                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'workLoad', 'self') && Yii::app()->user->isTch,
-                    'active' => $controller=='workLoad' && $action=='self'
+                    'label'   => _l2('Личная'),
+                    'url'     => _u('/workLoad/self'),
+                    'visible' => _ch('workLoad', 'self') && $isTch,
+                    'active'  => $_c=='workLoad' && $_a=='self'
                 ),
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Преподавателя'),
-                    'url' => Yii::app()->createUrl('/workLoad/teacher'),
-                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'workLoad', 'teacher'),
-                    'active' => $controller=='workLoad' && $action=='teacher'
+                    'label'   => _l2('Преподавателя'),
+                    'url'     => _u('/workLoad/teacher'),
+                    'visible' => _ch('workLoad', 'teacher'),
+                    'active'  => $_c=='workLoad' && $_a=='teacher'
                 ),
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Объем учебной нагрузки'),
-                    'url' => Yii::app()->createUrl('/workLoad/amount'),
-                    'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'workLoad', 'amount'),
-                    'active' => $controller=='workLoad' && $action=='amount'
+                    'label'   => _l2('Объем учебной нагрузки'),
+                    'url'     => _u('/workLoad/amount'),
+                    'visible' => _ch('workLoad', 'amount'),
+                    'active'  => $_c=='workLoad' && $_a=='amount'
                 ),
             ),
-            'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'workLoad', 'main')
+            'visible' => _ch('workLoad', 'main')
         ),
         array(
-            'label' => '<i class="icon-money"></i><span class="menu-text">'.tt('Оплата').'</span><b class="arrow icon-angle-down"></b>',
+            'label' => _l('Оплата', 'money'),
             'url' => '#',
-            'linkOptions'=> array(
-                'class' => 'dropdown-toggle',
-            ),
-            'itemOptions'=>array('class'=> $controller=='payment' ? 'active open' : ''),
+            'linkOptions'=> $_l,
+            'itemOptions'=>_i('payment'),
             'items' => array(
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Общежитие'),
-                    'url' => Yii::app()->createUrl('/payment/hostel'),
-                    'active' => $controller=='payment' && $action=='hostel'
+                    'label'   => _l2('Общежитие'),
+                    'url'     => _u('/payment/hostel'),
+                    'visible' => _ch('payment', 'hostel'),
+                    'active'  => $_c=='payment' && $_a=='hostel'
                 ),
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Обучение'),
-                    'url' => Yii::app()->createUrl('/payment/education'),
-                    'active' => $controller=='payment' && $action=='education',
+                    'label'   => _l2('Обучение'),
+                    'url'     => _u('/payment/education'),
+                    'visible' => _ch('payment', 'education'),
+                    'active'  => $_c=='payment' && $_a=='education',
                 ),
             ),
-            'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'payment', 'main') && Yii::app()->user->isStd
+            'visible' => _ch('payment', 'main') && $isStd
         ),
         array(
-            'label' => '<i class="icon-globe"></i><span class="menu-text">'.tt('Другое').'</span><b class="arrow icon-angle-down"></b>',
+            'label' => _l('Другое', 'globe'),
             'url' => '#',
-            'linkOptions'=> array(
-                'class' => 'dropdown-toggle',
-            ),
-            'itemOptions'=>array('class'=> $controller=='other' ? 'active open' : ''),
+            'linkOptions'=> $_l,
+            'itemOptions'=>_i('other'),
             'items' => array(
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Телефонный справочник'),
-                    'url' => Yii::app()->createUrl('/other/phones'),
-                    'active' => $controller=='other' && $action=='phones'
+                    'label'   => _l2('Телефонный справочник'),
+                    'url'     => _u('/other/phones'),
+                    'visible' => _ch('other', 'phones'),
+                    'active'  => $_c=='other' && $_a=='phones'
                 ),
                 array(
-                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Запись на гос. экзамены'),
-                    'url' => Yii::app()->createUrl('/other/gostem'),
-                    'active' => $controller=='other' && $action=='gostem',
-                    'visible' => Yii::app()->user->isStd,
+                    'label'   => _l2('Запись на гос. экзамены'),
+                    'url'     => _u('/other/gostem'),
+                    'active'  => $_c=='other' && $_a=='gostem',
+                    'visible' => _ch('other', 'gostem') && $isStd,
                 ),
             ),
-            'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'other', 'main')
+            'visible' => _ch('other', 'main')
         ),
     ),
 ));

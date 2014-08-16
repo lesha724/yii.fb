@@ -33,7 +33,7 @@ HTML;
 
 }
 
-function checkbox2($controller)
+function checkbox2($controller, $type)
 {
     global $menu;
 
@@ -42,13 +42,13 @@ function checkbox2($controller)
 
     parse_str(urldecode($menu), $output);
 
-    $val = isset($output[$controller][$action])
-                ? $output[$controller][$action]
+    $val = isset($output[$controller][$action][$type])
+                ? $output[$controller][$action][$type]
                 : 1;
 
     $checked = $val ? "checked='checked'" : '';
 
-    $name = $controller.'['.$action.']';
+    $name = $controller.'['.$action.']['.$type.']';
     return <<<HTML
             <label>
                 <input type="checkbox" class="ace ace-switch ace-switch-3" {$checked} />
@@ -59,9 +59,14 @@ HTML;
 
 }
 
+foreach ($blocks as $block) :
+
+    $name       = $block['name'];
+    $controller = $block['controller'];
+    $items      = $block['items'];
 
 ?>
-<div class="span3 widget-box collapsed">
+<div class="span3 widget-box collapsed" style="margin: 10px 10px 0 0">
     <div class="widget-header">
         <h5><?=tt($name)?></h5>
 
@@ -71,7 +76,7 @@ HTML;
             </a>
         </div>
         <div class="widget-toolbar no-border">
-            <?=checkbox2($controller)?>
+            <?=checkbox2($controller, MENU_ELEMENT_VISIBLE)?>
         </div>
     </div>
 
@@ -90,3 +95,5 @@ HTML;
         </div>
     </div>
 </div>
+<?php
+endforeach;
