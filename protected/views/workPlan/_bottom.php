@@ -1,8 +1,3 @@
-<style>
-    table#disciplines tr td {
-        padding: 2px 8px;
-    }
-</style>
 <?php
 /**
  * @var WorkPlanController $this
@@ -42,7 +37,7 @@ if (! empty($model->semester)) :
         );
 ?>
 
-<table id="disciplines" class="table table-striped table-bordered table-hover"  data-getGroupUrl="<?=$getGroupUrl?>">
+<table id="disciplines" class="table table-striped table-bordered table-hover small-rows"  data-getGroupUrl="<?=$getGroupUrl?>">
     <thead>
         <tr>
             <th rowspan="2">№</th>

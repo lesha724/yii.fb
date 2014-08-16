@@ -211,6 +211,25 @@ class ShortCodes extends CApplicationComponent
         return $this->_menuSettings;
     }
 
+    public static function russianMonthName($month)
+    {
+        switch($month){
+            case 1:	 $name=tt('Январь'); break;
+            case 2:	 $name=tt('Февраль'); break;
+            case 3:	 $name=tt('Март'); break;
+            case 4:	 $name=tt('Апрель'); break;
+            case 5:	 $name=tt('Май'); break;
+            case 6:	 $name=tt('Июнь'); break;
+            case 7:	 $name=tt('Июль'); break;
+            case 8:	 $name=tt('Август'); break;
+            case 9:	 $name=tt('Сентябрь'); break;
+            case 10: $name=tt('Октябрь'); break;
+            case 11: $name=tt('Ноябрь'); break;
+            case 12: $name=tt('Декабрь'); break;
+            default: $name='';
+        }
+        return $name;
+    }
 }
 
 class SH extends ShortCodes

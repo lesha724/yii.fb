@@ -17,10 +17,16 @@ SQL;
             $u3 = $st['st106'];
             $u4 = $st['st107'];
             $u6 = $st['st1'];
+
             $sql = <<<SQL
-insert into USERS(u1,u2,u3,u4,u5,u6,u7) values(GEN_ID(GEN_USERS,1), '{$u2}', '{$u3}', '{$u4}', 0, {$u6}, 0)
+            insert into USERS(u1,u2,u3,u4,u5,u6,u7) values(GEN_ID(GEN_USERS,1), :U2, :U3, :U4, 0, :U6, 0)
 SQL;
-            $this->execute($sql);
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':U2', $u2);
+            $command->bindValue(':U3', $u3);
+            $command->bindValue(':U4', $u4);
+            $command->bindValue(':U6', $u6);
+            $command->execute();
         }
 
 

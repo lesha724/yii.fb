@@ -271,3 +271,7 @@ div.group-students ul li{
 div#groups{
     margin-top: 20px;
 }
+
+table.small-rows tr td {
+    padding: 2px 8px;
+}

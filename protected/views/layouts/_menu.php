@@ -238,6 +238,27 @@ $this->widget('zii.widgets.CMenu', array(
             'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE, 'workLoad', 'main')
         ),
         array(
+            'label' => '<i class="icon-money"></i><span class="menu-text">'.tt('Оплата').'</span><b class="arrow icon-angle-down"></b>',
+            'url' => '#',
+            'linkOptions'=> array(
+                'class' => 'dropdown-toggle',
+            ),
+            'itemOptions'=>array('class'=> $controller=='payment' ? 'active open' : ''),
+            'items' => array(
+                array(
+                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Общежитие'),
+                    'url' => Yii::app()->createUrl('/payment/hostel'),
+                    'active' => $controller=='payment' && $action=='hostel'
+                ),
+                array(
+                    'label' => '<i class="icon-double-angle-right"></i>'.tt('Обучение'),
+                    'url' => Yii::app()->createUrl('/payment/education'),
+                    'active' => $controller=='payment' && $action=='education',
+                ),
+            ),
+            'visible' => SH::checkServiceFor(MENU_ELEMENT_VISIBLE,'payment', 'main') && Yii::app()->user->isStd
+        ),
+        array(
             'label' => '<i class="icon-globe"></i><span class="menu-text">'.tt('Другое').'</span><b class="arrow icon-angle-down"></b>',
             'url' => '#',
             'linkOptions'=> array(
