@@ -132,7 +132,6 @@ class Us extends CActiveRecord
 		   FROM US
 			  INNER JOIN NR ON (US.US1 = NR.NR2)
 			  INNER JOIN SEM ON (US.US12 = SEM.SEM1)
-			  INNER JOIN UG ON (NR.NR1 = UG.UG3)
 			  INNER JOIN pd ON (nr.nr6 = pd.pd1) OR (nr.nr7 = pd.pd1) OR (nr.nr8 = pd.pd1) OR (nr.nr9 = pd.pd1)
 		   WHERE pd2=:P1 AND sem3=:SEM3
 		   GROUP BY sem5, us4

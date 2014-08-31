@@ -60,8 +60,7 @@ HTML;
 
     <table class="table table-striped table-bordered table-hover" style="margin-top:7%">
 
-        <?php
-
+    <?php
         $types = array(
             //0 => tt('Всего'),
             1 => tt('Лк'),
@@ -88,7 +87,7 @@ HTML;
         $total = array();
 
         for ($sem5=0; $sem5<=1; $sem5++) : ?>
-            <tr></tr> <!-- hack, do not remove this raw -->
+            <tr></tr> <!-- hack, do not remove this row -->
             <tr class="headline">
                 <td style="width:25%"><?=tt('Дисциплины')?></td>
                 <td><?=tt('Группы')?></td>
