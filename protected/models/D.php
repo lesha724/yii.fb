@@ -327,8 +327,9 @@ SQL;
             if (! isset($data[$i]))
                 $data[$i] = $discipline;
 
+            // takes hours only for one row from the query
+            $data[$i]['hours']    = array($discipline['nr3']);
             $data[$i]['groups'][] = Gr::model()->getGroupName($discipline['sem4'], $discipline);
-            $data[$i]['hours'][]  = $discipline['nr3'];
             $data[$i]['ids'][]    = $discipline['gr1'];
         }
 
