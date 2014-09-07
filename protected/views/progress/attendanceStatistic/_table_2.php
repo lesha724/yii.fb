@@ -14,6 +14,16 @@ function tds($start, $attendance, $monthStatistic)
     $td2 = $statistic['td2'] ? $statistic['td2'] : '';
     $td3 = $statistic['td3'] ? $statistic['td3'] : '';
 
+    // percents {{{
+    $td2P = $td3P = '';
+    if ($statistic['td1']) {
+        $td2P = round(($statistic['td2']/$statistic['td1'])*100);
+        $td3P = round(($statistic['td3']/$statistic['td1'])*100);
+        $td2P = $td2P ? $td2P : '';
+        $td3P = $td3P ? $td3P : '';
+    }
+    // }}}
+
     $weekend = null;
     $showWeekends = $monthStatistic && $start != 'summary';
     if ($showWeekends) {
@@ -23,8 +33,8 @@ function tds($start, $attendance, $monthStatistic)
 
     return <<<HTML
 <td class="center {$weekend}" style="background-color: #e1e9da">{$td1}</td>
-<td class="center {$weekend}">{$td2}</td>
-<td class="center {$weekend}">{$td3}</td>
+<td class="center {$weekend}"><span>{$td2}</span><span class="hide">{$td2P}</span></td>
+<td class="center {$weekend}"><span>{$td3}</span><span class="hide">{$td3P}</span></td>
 
 HTML;
 }
@@ -49,6 +59,8 @@ function getFirstAndLastDays($model) {
 list($firstDay, $lastDay) = getFirstAndLastDays($model);
 
 $monthStatistic = ! empty($model->month);
+
+$tooltip = '';
 
 if (! empty($firstDay) && !empty($lastDay)) :
     $start = strtotime($firstDay);

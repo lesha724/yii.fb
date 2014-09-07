@@ -1,9 +1,13 @@
+<style>
+    input.ace.ace-switch.ace-switch-6[type="checkbox"]:checked + .lbl:before {
+        background-color: #468fcc;
+    }
+</style>
 <?php
 /**
  * @var ProgressController $this
  * @var FilterForm $model
  */
-
 
 $options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;'), 'style' => 'width:200px');
 
@@ -24,6 +28,30 @@ if ($model->semester) {
 }
 $html .= '</div>';
 echo $html;
+
+$tooltip = tt('Зн - суммарное кол-во занятий').'&nbsp;&nbsp;&nbsp;'.
+           tt('Ну - кол-во пропусков по неуважительной причине').'&nbsp;&nbsp;&nbsp;'.
+           tt('Ув - кол-во пропусков по уважительной причине').'&nbsp;&nbsp;&nbsp;';
+$text = tt('в процентах');
+
+echo <<<HTML
+<h3 class="blue header lighter tooltip-info" >
+    <i class="icon-info-sign"></i>
+    <small>
+        <i class="icon-double-angle-right"></i>
+        {$tooltip}
+    </small>
+    <span class="">
+        <label class="pull-right inline">
+            <small class="muted">{$text}</small>
+            <input type="checkbox" class="ace ace-switch ace-switch-6" name="show-percents">
+            <span class="lbl"></span>
+        </label>
+    </span>
+</h3>
+HTML;
+
+
 
 if (! empty($model->semester)) :
 

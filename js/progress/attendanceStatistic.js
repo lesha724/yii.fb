@@ -24,4 +24,9 @@ $(document).ready(function(){
         $form.submit();
     });
 
+    initTooltips();
+
+    $('[name="show-percents"]').change(function(){
+        $('.attendance-statistic-table-2 tr span').toggleClass('hide');
+    });
 });
