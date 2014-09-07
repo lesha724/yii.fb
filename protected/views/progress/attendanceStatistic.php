@@ -23,8 +23,6 @@ echo <<<HTML
     <span id="spinner1"></span>
 HTML;
 
-// TODO remove here
-$model->group = 802;
 if (! empty($model->group))
     $this->renderPartial('attendanceStatistic/_bottom', array(
         'model' => $model,

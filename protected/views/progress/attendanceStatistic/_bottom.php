@@ -66,6 +66,4 @@ if (! empty($model->semester)) :
         'model'    => $model
     ));
 
-    ?>
-
-<?php endif ?>
+endif ?>
