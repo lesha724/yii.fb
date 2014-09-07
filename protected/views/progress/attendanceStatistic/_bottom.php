@@ -34,7 +34,7 @@ $tooltip = tt('Зн - суммарное кол-во занятий').'&nbsp;&nb
            tt('Ув - кол-во пропусков по уважительной причине').'&nbsp;&nbsp;&nbsp;';
 $text = tt('в процентах');
 
-echo <<<HTML
+$caption = <<<HTML
 <h3 class="blue header lighter tooltip-info" >
     <i class="icon-info-sign"></i>
     <small>
@@ -54,6 +54,8 @@ HTML;
 
 
 if (! empty($model->semester)) :
+
+    echo $caption;
 
     $students = St::model()->getStudentsOfGroup($model->group);
 

@@ -8,18 +8,23 @@ $(document).ready(function(){
 
         var $form = $('#filter-form');
 
-        $('#FilterForm_semester, #FilterForm_month').each(function(){
-            var $that   = $(this);
+        var selects = [];
+        selects.push($('#FilterForm_semester'));
+        if ($(this).is('#FilterForm_month'))
+            selects.push($(this));
+
+        for (var i in selects) {
+            var $that   = selects[i];
             var $select = $that.clone();
             var value   = $that.val();
 
             if (value.length == 0)
-                return;
+                continue;
 
             $select.find('option[value='+$that.val()+']').attr('selected', 'selected');
 
             $form.append($select);
-        });
+        }
 
         $form.submit();
     });
