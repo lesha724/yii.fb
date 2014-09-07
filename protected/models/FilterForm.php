@@ -23,13 +23,14 @@ class FilterForm extends CFormModel
     public $gostem1;
     public $nr1;
 
-
     public $sel_1;
     public $sel_2;
     public $extendedForm = 0;
 
     public $adp1;
     public $cn1;
+
+    public $month;
 
     public $currentYear;
 	/**
@@ -48,6 +49,7 @@ class FilterForm extends CFormModel
             array('filial, faculty, course, group, student, semester', 'required', 'on' => 'workPlan-student'),
             array('filial, faculty, course, group, semester', 'required', 'on' => 'workPlan-group'),
             array('filial, faculty, speciality, course, group, semester', 'required', 'on' => 'workPlan-speciality'),
+            array('filial, faculty, course, group, semester, month', 'required', 'on' => 'attendanceStatistic'),
 		);
 	}
 
@@ -86,7 +88,8 @@ class FilterForm extends CFormModel
             'extendedForm' => tt('Расширенная форма'),
             'adp1' => tt('Доп. признак'),
             'cn1' => tt('Цел. направление'),
-            'student' => tt('Студент')
+            'student' => tt('Студент'),
+            'month' => tt('Месяц')
 		);
 	}
 }

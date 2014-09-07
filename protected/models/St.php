@@ -514,6 +514,7 @@ SQL;
 
         $date1 = date("d.m.Y", strtotime("+ 20 days"));
         $date2 = date('d.m.Y 00:00:00');
+
         $sql=<<<SQL
             SELECT ST1,ST2,ST3,ST4,sgr2, ST117, ST118, ST119, ST120, ST121, ST122, ST123, ST124,ST125,ST139
             FROM st

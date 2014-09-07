@@ -51,7 +51,6 @@ class WorkPlanController extends Controller
         if (isset($_REQUEST['FilterForm']))
             $model->attributes=$_REQUEST['FilterForm'];
 
-
         $this->render('group', array(
             'model' => $model,
         ));

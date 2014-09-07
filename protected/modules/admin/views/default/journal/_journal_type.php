@@ -27,15 +27,20 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     </div>
 
     <div class="control-group">
-        <?=CHtml::checkBox('', PortalSettings::model()->findByPk(9)->ps2, $htmlOptions2);?>
+        <?=CHtml::checkBox('', PortalSettings::model()->findByPk(9)->ps2, $htmlOptions2)?>
         <span class="lbl"> <?=tt('Учитывать min max')?></span>
         <?=CHtml::hiddenField('settings[9]', PortalSettings::model()->findByPk(9)->ps2)?>
     </div>
 
     <div class="control-group">
-        <?=CHtml::checkBox('', PortalSettings::model()->findByPk(20)->ps2, $htmlOptions2);?>
+        <?=CHtml::checkBox('', PortalSettings::model()->findByPk(20)->ps2, $htmlOptions2)?>
         <span class="lbl"> <?=tt('Использовать субмодули')?></span>
         <?=CHtml::hiddenField('settings[20]', PortalSettings::model()->findByPk(20)->ps2)?>
+    </div>
+
+    <div class="control-group">
+        <span class="lbl"> <?=tt('Количество дней на редактирование оценок')?>:</span>
+        <?=CHtml::textField('settings[27]', PortalSettings::model()->findByPk(27)->ps2)?>
     </div>
 
     <div class="form-actions">

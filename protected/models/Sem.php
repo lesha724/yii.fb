@@ -235,4 +235,67 @@ SQL;
         return $semesters;
     }
 
+    public function getSemestersForAttendanceStatistic($gr1)
+    {
+        $sql = <<<SQL
+                SELECT sem3,sem4,sem5,sem7,us3
+                FROM us
+                INNER JOIN sem on (us.us3 = sem.sem1)
+                INNER JOIN sg on (sem.sem2 = sg.sg1)
+                INNER JOIN gr on (sg.sg1 = gr.gr2)
+                WHERE gr1=:ID
+                GROUP BY sem3,sem4,sem5,sem7,us3
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ID', $gr1);
+        $semesters = $command->queryAll();
+
+        foreach ($semesters as $key => $sem) {
+            $semesters[$key]['name'] = $sem['sem3'].' ('.$sem['sem4'].' '.tt('курс').')';
+        }
+
+        return $semesters;
+    }
+
+    public function getSemesterStartAndEnd($sem1)
+    {
+        $sql = <<<SQL
+                SELECT sem10,sem11
+                FROM sem
+                WHERE sem1=:SEM1
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':SEM1', $sem1);
+        $dates = $command->queryRow();
+
+        $date1 = $dates['sem10'];
+        $date2 = $dates['sem11'];
+
+        if (empty($date1) || empty($date2))
+            Yii::app()->user->setFlash('error', tt('Неуказаны дата начала и/или дата окончания семестра'));
+
+        return array($date1, $date2);
+    }
+
+    public function getMonthsNamesForAttendanceStatistic($sem1)
+    {
+        $months = array();
+
+        list($start, $end) = Sem::model()->getSemesterStartAndEnd($sem1);
+
+        $start = strtotime($start);
+        $end   = strtotime($end);
+
+        while($start <= $end) {
+            $months[] = array(
+                'firstDay' => date('Y-m-d', $start),
+                'name'     => SH::russianMonthName(date('m', $start))
+            );
+            $start = strtotime('first day of next month', $start);
+        }
+
+        return $months;
+    }
 }

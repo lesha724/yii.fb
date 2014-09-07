@@ -9,6 +9,7 @@
  */
 class PortalSettings extends CActiveRecord
 {
+    private  $settings = array();
 	/**
 	 * @return string the associated database table name
 	 */
@@ -147,5 +148,17 @@ SQL;
         }
 
         return $res;
+    }
+
+    public function getSettingFor($key)
+    {
+        if (empty($this->settings[$key])) {
+
+            $setting = PortalSettings::model()->findByPk($key)->getAttribute('ps2');
+
+            $this->settings[$key] = $setting;
+        }
+
+        return $this->settings[$key];
     }
 }

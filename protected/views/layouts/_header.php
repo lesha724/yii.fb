@@ -40,7 +40,7 @@
                                 </a>
                             </li>
 
-                            <li>
+                            <!--<li>
                                 <a href="#">
                                     <i class="icon-user"></i>
                                     <?=tt('Регистрация')?>
@@ -51,7 +51,7 @@
                                     <i class="icon-envelope"></i>
                                     <?=tt('Забыл пароль')?>
                                 </a>
-                            </li>
+                            </li>-->
                         <?php else: ?>
                             <li>
                                 <a href="<?=Yii::app()->createUrl('/site/logout')?>">

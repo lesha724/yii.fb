@@ -5,7 +5,7 @@ HTML;
 
     $columnName = tt('ФИО');
     $table = <<<HTML
-<table class="table table-striped table-bordered table-hover journal_table journal_table_1" >
+<table class="table table-striped table-bordered table-hover journal_table journal_table_1 small-table-1" >
     <thead>
         <tr>
             <th class="center">№</th>

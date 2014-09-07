@@ -6,12 +6,22 @@ function table2Tr($date, $marks)
 
     $r2  = $date['r2'];
     $nr1 = $date['nr1'];
+    $ps2 = PortalSettings::model()->getSettingFor(27);
+    $disabled = null;
+
+    if (! empty($ps2)) {
+        $date1  = new DateTime(date('Y-m-d H:i:s'));
+        $date2  = new DateTime($date['r2']);
+        $diff = $date1->diff($date2)->days;
+        if ($diff > $ps2)
+            $disabled = 'disabled="disabled"';
+    }
 
     $pattern= <<<HTML
     <td colspan="2" data-r2="{$r2}" data-nr1="{$nr1}">
-        <input type="checkbox" %s data-name="steg6">
-        <input value="%s" maxlength="3" data-name="steg5">
-        <input value="%s" maxlength="3" data-name="steg9">
+        <input type="checkbox" %s data-name="steg6" {$disabled}>
+        <input value="%s" maxlength="3" data-name="steg5" {$disabled}>
+        <input value="%s" maxlength="3" data-name="steg9" {$disabled}>
     </td>
 HTML;
 

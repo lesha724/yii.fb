@@ -420,7 +420,7 @@ class P extends CActiveRecord
 
         $with = array(
             'account' => array(
-                'select' => 'u2, u3, u4'
+                'select' => 'u2, u3, u4, u7'
             )
         );
         if (! empty($chairId)) {
@@ -440,6 +440,7 @@ class P extends CActiveRecord
         $criteria->addSearchCondition('account.u2', Yii::app()->request->getParam('login'));
         $criteria->addSearchCondition('account.u3', Yii::app()->request->getParam('password'));
         $criteria->addSearchCondition('account.u4', Yii::app()->request->getParam('email'));
+        $criteria->addSearchCondition('account.u7', Yii::app()->request->getParam('status'));
 
         $criteria->with = $with;
 
@@ -454,6 +455,7 @@ class P extends CActiveRecord
                     'account.u2',
                     'account.u3',
                     'account.u4',
+                    'account.u7',
                 ),
             )
         ));

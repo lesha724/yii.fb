@@ -33,6 +33,9 @@ class ProgressController extends Controller
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
+            array('allow',
+                'actions' => array('attendanceStatistic')
+            ),
             array('deny',
                 'users' => array('*'),
             ),
@@ -490,5 +493,18 @@ class ProgressController extends Controller
         );
 
         Yii::app()->end(CJSON::encode($res));
+    }
+
+    public function actionAttendanceStatistic()
+    {
+        $model = new FilterForm();
+        $model->scenario = 'attendanceStatistic';
+
+        if (isset($_REQUEST['FilterForm']))
+            $model->attributes=$_REQUEST['FilterForm'];
+
+        $this->render('attendanceStatistic', array(
+            'model' => $model,
+        ));
     }
 }

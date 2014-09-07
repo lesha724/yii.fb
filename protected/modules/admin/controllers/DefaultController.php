@@ -45,8 +45,16 @@ class DefaultController extends AdminController
             $model->save();
         }
 
+        $user = $this->loadUsersModel($model->grants2);
+
+        if (isset($_REQUEST['Users'])) {
+            $user->attributes = $_REQUEST['Users'];
+            $user->save(false);
+        }
+
         $this->render('grants', array(
             'model' => $model,
+            'user'  => $user
         ));
     }
 
@@ -66,11 +74,37 @@ class DefaultController extends AdminController
         return $model;
     }
 
+    public function loadUsersModel($p1)
+    {
+        $user = Users::model()->findByAttributes(array(
+            'u5' => 1,  // teacher
+            'u6' => $p1 //p1
+        ));
+
+        if (empty($user)) {
+            $user = new Users();
+            $user->u1 = new CDbExpression('GEN_ID(GEN_USERS, 1)');
+            $user->u2 = '';
+            $user->u3 = '';
+            $user->u4 = '';
+            $user->u5 = 1;
+            $user->u6 = $p1;
+            $user->u7 = 0;
+            $user->save(false);
+        }
+
+        return $user;
+    }
+
     public function actionJournal()
     {
         $settings = Yii::app()->request->getParam('settings', array());
 
         foreach ($settings as $key => $value) {
+
+            if ($key == 27)
+                $value = intval($value);
+
             PortalSettings::model()
                 ->findByPk($key)
                 ->saveAttributes(array(

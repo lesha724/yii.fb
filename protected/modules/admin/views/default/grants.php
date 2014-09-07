@@ -23,6 +23,16 @@ $this->breadcrumbs=array(
     ));
 ?>
     <div class="control-group">
+        <label for="Grants_grants5" class="control-label"><?=tt('Администратор')?></label>
+        <div class="controls">
+            <label>
+                <?=CHtml::checkBox('Users[u7]', $user->u7, array('class' => 'ace ace-switch'))?>
+                <span class="lbl"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="control-group">
         <?=$form->label($model, 'grants3', array('class' => 'control-label'))?>
         <div class="controls">
             <?php

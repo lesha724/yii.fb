@@ -177,6 +177,12 @@ $this->widget('zii.widgets.CMenu', array(
                     'visible' => _ch('progress', 'thematicPlan') && $isTch,
                     'active'  => $_c=='progress' && $_a=='thematicPlan'
                 ),
+                array(
+                    'label'   => _l2('Статистика посещаемости'),
+                    'url'     => _u('/progress/attendanceStatistic'),
+                    'visible' => _ch('progress', 'attendanceStatistic'),
+                    'active'  => $_c=='progress' && $_a=='attendanceStatistic'
+                ),
             ),
             'visible' => _ch('progress', 'main')
         ),

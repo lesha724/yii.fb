@@ -34,8 +34,8 @@
             array(
                 'header' => 'Login',
                 'filter' => CHtml::textField('login', Yii::app()->request->getParam('login')),
-                'name' => 'account.u2',
-                'value' => '! empty($data->account)
+                'name'   => 'account.u2',
+                'value'  => '! empty($data->account)
                                 ? $data->account->u2
                                 : ""',
             ),
@@ -50,10 +50,19 @@
             array(
                 'header' => 'Email',
                 'filter' => CHtml::textField('email', Yii::app()->request->getParam('email')),
-                'name' => 'account.u4',
-                'value' => '! empty($data->account)
+                'name'   => 'account.u4',
+                'value'  => '! empty($data->account)
                                 ? $data->account->u4
                                 : ""',
+            ),
+            array(
+                'header' => tt('Статус'),
+                'filter' => CHtml::dropDownList('status', Yii::app()->request->getParam('status'), array(''=>'',1=>tt('Администратор'))),
+                'name'   => 'account.u7',
+                'value'  => '! empty($data->account)
+                                ? $data->account->u7 == 1 ? "<span class=\"label label-warning\">'.tt("Администратор").'</span>" : ""
+                                : ""',
+                'type'   => 'raw'
             ),
             array(
                 'class'=>'CButtonColumn',
