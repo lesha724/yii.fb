@@ -20,7 +20,10 @@ return array(
 			'class'        => 'application.commands.ChMigrateCommand',
 			'templateFile' => 'application.migrations.template',
 		),
+        'message' => array(
+            'class' => 'application.commands.ttMessageCommand'
+        )
 	),
-	
+
 	'params' => $mainConfig['params'],
 );

@@ -35,7 +35,7 @@
     <script src="<?=Yii::app()->baseUrl?>/js/main.js"></script>
     <script>
         tt = {} // object containing translations
-        var loginUrl = "<?=Yii::app()->createUrl('site/login')?>"
+        tt.registerConfirm = '<?=tt('Регистрация прошла успешно! Пожалуйста, авторизируйтесь!')?>'
     </script>
     <?php
         Yii::app()->clientScript->registerPackage('chosen');

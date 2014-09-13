@@ -1,12 +1,8 @@
 <?php
 /* @var $this SiteController */
 /* @var $model LoginForm */
-/* @var $form CActiveForm  */
+/* @var $form TbActiveForm  */
 
-$this->pageTitle=Yii::app()->name . ' - Login';
-$this->breadcrumbs=array(
-	'Login',
-);
 ?>
 
 <div class="login-container ">
@@ -17,19 +13,15 @@ $this->breadcrumbs=array(
                     <div class="widget-main">
                         <h5 class="header blue lighter bigger">
                             <i class="icon-coffee green"></i>
-                            <?=tt('Укажите свою информацию')?>
+                            <?=tt('Укажите необходимую информацию')?>
                         </h5>
 
                         <div class="space-6"></div>
                         <div id="replace-there">
                         <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
                             'id'=>'login-form',
-                            'enableClientValidation'=>true,
-                            'clientOptions'=>array(
-                                'validateOnSubmit'=>true,
-                            ),
                             'type' => 'horizontal',
-                            'action' => Yii::app()->createUrl("/site/login")
+                            'action' => Yii::app()->createUrl("site/login")
                         )); ?>
                             <fieldset>
                                 <label>

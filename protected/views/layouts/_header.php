@@ -23,7 +23,7 @@
                         <?php if (Yii::app()->user->isGuest) : ?>
                             <i class="icon-user"></i><?=tt('Войти')?>
                         <?php else: ?>
-                            <img alt="Jason's Photo" src="/theme/ace/assets/avatars/avatar2.png" class="nav-user-photo">
+                            <img alt="User's Photo" src="/theme/ace/assets/avatars/avatar2.png" class="nav-user-photo">
                             <span class="user-info">
                                 <small>Welcome,</small>
                                 <?=Yii::app()->user->name?>
@@ -35,18 +35,17 @@
                     <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
                         <?php if (Yii::app()->user->isGuest) : ?>
                             <li>
-                                <a href="#" id="sign-in">
+                                <a href="<?=Yii::app()->createUrl('site/login')?>" id="sign-in">
                                     <i class="icon-signin"></i><?=tt('Авторизация')?>
                                 </a>
                             </li>
-
-                            <!--<li>
-                                <a href="#">
+                            <li>
+                                <a href="<?=Yii::app()->createUrl('site/registration')?>" id="registration">
                                     <i class="icon-user"></i>
                                     <?=tt('Регистрация')?>
                                 </a>
                             </li>
-                            <li>
+                            <!--<li>
                                 <a href="#">
                                     <i class="icon-envelope"></i>
                                     <?=tt('Забыл пароль')?>

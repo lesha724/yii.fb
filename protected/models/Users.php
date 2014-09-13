@@ -140,7 +140,7 @@ class Users extends CActiveRecord
     {
         $id = $this->u6;
 
-        if ($this->u5 == 0 && $this->u5 == 2) { // student or parent
+        if ($this->u5 == 0 || $this->u5 == 2) { // student or parent
             $model = St::model()->findByPk($id);
             $name  = $model->getShortName();
         } elseif ($this->u5 == 1) {             // teacher
