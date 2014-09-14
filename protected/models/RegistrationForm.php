@@ -61,8 +61,6 @@ class RegistrationForm extends CFormModel
             if ($alreadyRegistered)
                 $this->addError($attribute, tt('Пользователь с таким идентификационным кодом уже зарегистрирован!'));
         }
-
-
     }
 
     public function register()

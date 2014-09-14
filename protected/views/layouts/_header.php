@@ -45,12 +45,12 @@
                                     <?=tt('Регистрация')?>
                                 </a>
                             </li>
-                            <!--<li>
-                                <a href="#">
+                            <li>
+                                <a href="<?=Yii::app()->createUrl('site/forgotPassword')?>" id="forgot-password">
                                     <i class="icon-envelope"></i>
                                     <?=tt('Забыл пароль')?>
                                 </a>
-                            </li>-->
+                            </li>
                         <?php else: ?>
                             <li>
                                 <a href="<?=Yii::app()->createUrl('/site/logout')?>">

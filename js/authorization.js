@@ -3,7 +3,7 @@ $(document).ready(function(){
     var option = {
         'headerClass' : 'authorization-header'
     }
-    $("#sign-in, #registration").on('click', function() {
+    $("#sign-in, #registration, #forgot-password").on('click', function() {
 
         var $that = $(this);
         var header = $that.text();
@@ -17,7 +17,7 @@ $(document).ready(function(){
         return false;
     });
 
-    $(document).on('submit', '#login-form, #registration-form', function(){
+    $(document).on('submit', '#login-form, #registration-form, #forgot-password-form', function(){
 
         var data  = $(this).serialize();
         var url   = $(this).attr('action');
@@ -31,11 +31,14 @@ $(document).ready(function(){
             data: data,
             success:function(data){
                 $that.find('button').button('reset')
-                if (data == 'ok')
+                if (data == 'ok') {
                     window.location.reload();
-                else if (data == 'registered') {
+                } else if (data == 'registered') {
                     alert(tt.registerConfirm)
                    window.location.reload();
+                } else if (data == 'send') {
+                    alert(tt.sendingConfirm)
+                    window.location.reload();
                 } else
                     $($that).replaceWith( $('#replace-there', data).html() )
             },

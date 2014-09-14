@@ -1,5 +1,8 @@
 <?php
 
+// Grab the Apostle namespace
+use Apostle\Mail;
+
 class SiteController extends Controller
 {
 	/**
@@ -102,7 +105,6 @@ class SiteController extends Controller
 
         $model=new RegistrationForm;
 
-        // collect user input data
         if(isset($_POST['RegistrationForm']))
         {
             $model->attributes=$_POST['RegistrationForm'];
@@ -114,4 +116,36 @@ class SiteController extends Controller
 
         $this->render('registration',array('model'=>$model));
     }
+
+    public function actionForgotPassword()
+    {
+        if (!Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $model=new ForgotPasswordForm;
+
+        if(isset($_POST['ForgotPasswordForm']))
+        {
+            $model->attributes=$_POST['ForgotPasswordForm'];
+
+            if ($model->validate()) {
+
+                $user = Users::model()->findByAttributes(array('u4'=>$model->email));
+
+                Apostle::setup("476ca3d42516c6f85057e24daa889f5cf538afbe");
+                $mail = new Mail( "forgot-password", array( "email" => $user->u4 ) );
+                $mail->name = $user->name;
+                $mail->url  = Yii::app()->createAbsoluteUrl('site/index');
+                $mail->login    = $user->u2;
+                $mail->password = $user->u3;
+                $mail->deliver();
+
+                Yii::app()->end('send');
+            }
+
+        }
+
+        $this->render('forgotPassword',array('model'=>$model));
+    }
+
 }
