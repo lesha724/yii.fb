@@ -6,7 +6,6 @@ class ChMigrateCommand extends MigrateCommand
 {
     public function run($args)
     {
-        tt('123');
         parent::run($args);
  
         $this->flushCache();
