@@ -66,14 +66,6 @@ $config = array(
 		),
 		'clientScript'=>array(
 			'packages' => array(
-				/*'jquery' => array( // Google CDN
-					'baseUrl' => 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/',
-					'js' => array(YII_DEBUG ? 'jquery.js' : 'jquery.min.js'),
-				),*/
-				/*'jquery' => array( // Yandex CDN
-					'baseUrl' => 'http://yandex.st/jquery/1.7.2/',
-					'js' => array(YII_DEBUG ? 'jquery.js' : 'jquery.min.js'),
-				),*/
 				'jquery' => array( // jQuery CDN - provided by (mt) Media Temple
 					'baseUrl' => 'js/',
 					'js' => array(YII_DEBUG ? 'jquery-1.11.0.js' : 'jquery-1.11.0.min.js'),
@@ -143,12 +135,6 @@ $config = array(
                 'nestable' => array(
                     'baseUrl' => 'theme/ace/assets/',
                     'js' => array('js/jquery.nestable.min.js'),
-                    'depends'=>array('jquery'),
-                ),
-                'jquery.ui' => array(
-                    'baseUrl' => 'theme/ace/assets/',
-                    'css' => array('css/jquery-ui-1.10.3.full.min.css'),
-                    'js' => array('js/jquery-ui-1.10.3.full.min.js'),
                     'depends'=>array('jquery'),
                 ),
                 'jquery2' => array(

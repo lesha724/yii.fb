@@ -26,7 +26,7 @@ HTML;
 
 
 if (! empty($model->group))
-    $this->renderPartial('timeTable', array(
+    $this->renderPartial('/timeTable/schedule', array(
         'model'      => $model,
         'timeTable'  => $timeTable,
         'minMax'     => $minMax,

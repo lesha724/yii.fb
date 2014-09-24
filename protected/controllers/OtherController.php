@@ -14,9 +14,9 @@ class OtherController extends Controller
         return array(
             array('allow',
                 'actions' => array(
-                    ''
+                    'orderLesson'
                 ),
-                'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
+                'expression' => 'Yii::app()->user->isTch',
             ),
             array('allow',
                 'actions' => array(
@@ -49,7 +49,6 @@ class OtherController extends Controller
             'department' => $department
         ));
     }
-
 
     public function actionGostem()
     {
@@ -97,6 +96,31 @@ class OtherController extends Controller
         );
 
         Yii::app()->end(CJSON::encode($res));
+    }
+
+    public function actionOrderLesson()
+    {
+        $model = new TimeTableForm;
+        $model->scenario = 'group';
+
+        if (isset($_REQUEST['TimeTableForm']))
+            $model->attributes=$_REQUEST['TimeTableForm'];
+
+        $model->date1 = Yii::app()->session['date1'];
+        $model->date2 = Yii::app()->session['date2'];
+
+        $timeTable = $minMax = $maxLessons = array();
+        if (! empty($model->group))
+            list($minMax, $timeTable, $maxLessons) = $model->generateGroupTimeTable($model);
+
+
+        $this->render('orderLesson', array(
+            'model'      => $model,
+            'timeTable'  => $timeTable,
+            'minMax'     => $minMax,
+            'maxLessons' => $maxLessons,
+            'rz'         => Rz::model()->getRzArray(),
+        ));
     }
 
 }

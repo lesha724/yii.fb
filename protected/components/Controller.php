@@ -32,6 +32,17 @@ class Controller extends CController
 
     public function beforeAction($action)
     {
+        $this->processAccess($action);
+
+        $this->processYearAndSem();
+
+        $this->processDate1AndDate2();
+
+        return parent::beforeAction($action);
+    }
+
+    private function processAccess($action)
+    {
         if (! SH::checkServiceFor(MENU_ELEMENT_VISIBLE, Yii::app()->controller->id, $action->id, true))
             throw new CHttpException(500, tt('Сервис временно недоступен!'));
 
@@ -41,7 +52,10 @@ class Controller extends CController
 
         if (! SH::checkServiceFor(MENU_ELEMENT_VISIBLE, Yii::app()->controller->id, 'main', true))
             throw new CHttpException(404, tt('Сервис закрыт!'));
+    }
 
+    private function processYearAndSem()
+    {
         $year = Yii::app()->request->getParam('year', null);
         if ($year === null)
             $year = Yii::app()->session['year'];
@@ -58,7 +72,33 @@ class Controller extends CController
             $sem = date('n')>=8 ? 0 : 1;
 
         Yii::app()->session['sem']  = $sem;
+    }
 
-        return parent::beforeAction($action);
+    private function processDate1AndDate2()
+    {
+        $date1 = isset($_REQUEST['TimeTableForm']['date1']) ? $_REQUEST['TimeTableForm']['date1'] : null;
+        if ($date1 === null)
+            $date1 = Yii::app()->session['date1'];
+        if ($date1 === null)
+            $date1 = date('d.m.Y');
+
+        Yii::app()->session['date1'] = $date1;
+
+
+        $date2 = isset($_REQUEST['TimeTableForm']['date2']) ? $_REQUEST['TimeTableForm']['date2'] : null;
+        if ($date2 === null)
+            $date2 = Yii::app()->session['date2'];
+        if ($date2 === null)
+            $date2 = date('d.m.Y', strtotime('+7 week', strtotime($date1)));
+
+
+        $datetime1 = new DateTime($date1);
+        $datetime2 = new DateTime($date2);
+        $interval = $datetime1->diff($datetime2);
+
+        if ($interval->days >= 100)
+            $date2 = date('d.m.Y', strtotime('+7 week', strtotime($date1)));
+
+        Yii::app()->session['date2'] = $date2;
     }
 }

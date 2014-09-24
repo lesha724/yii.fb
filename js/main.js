@@ -4,7 +4,22 @@ $(document).ready(function(){
 
     initSpinner('spinner1');
 
+    initDialogSettings()
+
 });
+
+function initDialogSettings()
+{
+    if ($.ui != undefined)
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function(title) {
+                var $title = this.options.title || '&nbsp;'
+                if( ("title_html" in this.options) && this.options.title_html == true )
+                    title.html($title);
+                else title.text($title);
+            }
+        }));
+}
 
 function initChosen()
 {
@@ -36,6 +51,11 @@ function addGritter(title, text, className)
 function initPopovers()
 {
     $('[data-rel=popover]').popover({html:true});
+
+    /* avoid popover to open more than one at the same time */
+    $('[data-rel=popover]').click(function(){
+        $('[data-rel=popover]').not(this).popover('hide'); //all but this
+    });
 }
 
 function initTooltips()

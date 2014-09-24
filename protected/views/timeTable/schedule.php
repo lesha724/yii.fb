@@ -58,7 +58,7 @@ HTML;
 
             $mh = countHeight($maxLessons, $dayOfWeek, $lesson);
 
-            $shortText = $fullText = '';
+            $shortText = $fullText = $params = '';
             if (isset($tt[$lesson])) {
                 $shortText = $tt[$lesson]['shortText'];
                 $fullText  = trim($tt[$lesson]['fullText'], '<br>');
@@ -72,6 +72,7 @@ HTML;
 
         $html .= '</td>';
     }
+
     array_shift($timestamps);
 
     $html .= '</tr>';

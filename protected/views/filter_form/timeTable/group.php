@@ -44,7 +44,7 @@ $form=$this->beginWidget('CActiveForm', array(
 
     if ($showDateRangePicker) {
         $html .= '<fieldset style="margin-top:1%;">';
-        $html .= $this->renderPartial('_date_interval', array(
+        $html .= $this->renderPartial('/timeTable/_date_interval', array(
             'date1' => $model->date1,
             'date2' => $model->date2,
             'r11'   => $model->r11,

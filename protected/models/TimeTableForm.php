@@ -177,6 +177,12 @@ class TimeTableForm extends CFormModel
         $a2    = $day['a2'];
         $r11   = $day['r11'];
         $class = tt('ауд');
+        $hiddenParams = null;
+
+        // for order lesson service {{{
+        if (Yii::app()->controller->action->id == 'orderLesson')
+            $hiddenParams = implode('/', array($day['r2'], $day['r3'], $day['r5'], $day['r7']));
+        // }}}
 
         $rowDisc = $d3.'['.$tip.']';
         $rowDisc = mb_strimwidth($rowDisc, 0, $maxLength, '...');
@@ -212,6 +218,7 @@ HTML;
     <span>{$rowDisc}</span><br>
     {$rowClass}<br>
     {$fio}
+    <span class="hidden">{$hiddenParams}</span>
 </div>
 HTML;
         elseif($type == 3) // classroom
@@ -245,14 +252,14 @@ HTML;
 {$class}. {$a2}<br>
 {$text}: {$added}
 HTML;
-        elseif($type == 2)
+        elseif($type == 2) // group / student
             $pattern = <<<HTML
 <br>{$d2}[{$tip}]<br>
 {$class}. {$a2}<br>
 {$fio}<br>
 {$text}: {$added}<br>
 HTML;
-        elseif($type == 3)
+        elseif($type == 3) // classroom
             $pattern = <<<HTML
 <br>{$d2}[{$tip}]<br>
 {$gr3}<br>
@@ -331,6 +338,7 @@ HTML;
                 $res[$r2]['timeTable'][$r3][] = $day;
 
             } else {
+
                 $res[$r2]['timeTable'][$r3]['shortText'] .= $this->cellShortTextFor($day, $type);
                 $res[$r2]['timeTable'][$r3]['fullText']  .= $this->cellFullTextFor($day, $type);
 
@@ -369,4 +377,45 @@ HTML;
     }
 
 
+
+
+    public function generateGroupTimeTable()
+    {
+        $timeTable = Gr::getTimeTable($this->group, $this->date1, $this->date2);
+        $minMax    = $this->getMinMaxLessons($timeTable);
+
+        list($fullTimeTable, $maxLessons) = $this->fillTameTableForGroup($timeTable);
+
+        return array($minMax, $fullTimeTable, $maxLessons);
+    }
+
+    public function generateStudentTimeTable()
+    {
+        $timeTable = St::getTimeTable($this->student, $this->date1, $this->date2);
+        $minMax    = $this->getMinMaxLessons($timeTable);
+
+        $fullTimeTable = $this->fillTameTable($timeTable, 2);
+
+        return array($minMax, $fullTimeTable);
+    }
+
+    public function generateClassroomTimeTable()
+    {
+        $timeTable = A::getTimeTable($this->classroom, $this->date1, $this->date2);
+        $minMax    = $this->getMinMaxLessons($timeTable);
+
+        $fullTimeTable = $this->fillTameTable($timeTable, 3);
+
+        return array($minMax, $fullTimeTable);
+    }
+
+    public function generateTeacherTimeTable()
+    {
+        $timeTable = P::getTimeTable($this->teacher, $this->date1, $this->date2);
+        $minMax    = $this->getMinMaxLessons($timeTable);
+
+        $fullTimeTable = $this->fillTameTable($timeTable, 1);
+
+        return array($minMax, $fullTimeTable);
+    }
 }

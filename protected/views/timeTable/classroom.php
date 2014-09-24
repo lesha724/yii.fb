@@ -75,7 +75,7 @@ HTML;
 
 
 if (! empty($model->classroom))
-    $this->renderPartial('timeTable', array(
+    $this->renderPartial('schedule', array(
         'model'      => $model,
         'timeTable'  => $timeTable,
         'minMax'     => $minMax,
