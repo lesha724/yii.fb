@@ -208,4 +208,32 @@ SQL;
 
         return array_filter($classrooms);
     }
+
+    public function getFreeRooms($filial, $r2, $r3)
+    {
+        $filial = ! empty($filial) ? 'and ka3 = '.$filial : '';
+
+        $sql= <<<SQL
+            SELECT A1,A2,KA2
+            FROM a
+            INNER JOIN kaa on (a.a1 = kaa.kaa2)
+            INNER JOIN ka on (kaa.kaa1 = ka.ka1)
+            WHERE a5 IS NULL AND a1>0 {$filial} AND a1 NOT IN
+            (
+                SELECT  a1
+                FROM a
+                INNER JOIN r on (a.a1 = r.r5)
+                WHERE r2=:R2 and  r3=:R3 {$filial}
+                GROUP BY a1
+            )
+            ORDER BY A8,A9,A2
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':R2', $r2);
+        $command->bindValue(':R3', $r3);
+
+        $classrooms = $command->queryAll();
+
+        return $classrooms;
+    }
 }

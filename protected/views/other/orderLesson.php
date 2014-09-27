@@ -26,9 +26,14 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/o
 
 $orderLesson = tt('Заказать перенос занятия?');
 $cancel      = tt('Отмена');
+$successful  = tt('Ваш запрос успешно отправлен!');
+$error       = tt('Произошла ошибка!');
+
 Yii::app()->clientScript->registerScript('orderLesson-messages', <<<JS
     tt.orderLesson  = '{$orderLesson}';
     tt.cancel       = '{$cancel}';
+    tt.successful   = '{$successful}';
+    tt.error        = '{$error}';
 JS
     , CClientScript::POS_READY);
 
