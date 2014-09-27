@@ -13,7 +13,7 @@ $this->breadcrumbs=array(
 
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/timetable/timetable.js', CClientScript::POS_HEAD);
 
-$options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;'));
+$options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;');
 $form=$this->beginWidget('CActiveForm', array(
     'id'=>'timeTable-form',
     'htmlOptions' => array('class' => 'form-inline')

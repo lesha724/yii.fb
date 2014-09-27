@@ -30,7 +30,7 @@ HTML;
     <table id="gostems" class="table table-striped table-bordered table-hover">
         <thead>
         <tr>
-            <th><?=tt('№')?></th>
+            <th>№</th>
             <th><?=tt('Кафедра')?></th>
             <th><?=tt('Гос. экзамен')?></th>
             <th></th>

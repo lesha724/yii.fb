@@ -19,7 +19,7 @@
         $currentYear  => $currentYear.'/'.$nextYear,
     );
 
-    $options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;'), 'style' => 'width:200px');
+    $options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;', 'style' => 'width:200px');
 
     $html  = '<div class="row-fluid">';
     $html .= CHtml::label(tt('Учебный год'), 'FilterForm_year');

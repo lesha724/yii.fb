@@ -51,6 +51,15 @@ $(document).ready(function(){
             $zpz8.replaceWith(data.html);
         });
     });
+
+    // put information block {{{
+    if ($('.timeTable').length > 0) {
+        var $h3 = $('h3.hide');
+        $('.timeTable').before($h3);
+        $h3.removeClass('hide');
+    }
+    // }}}
+
 });
 
 function showDialog()

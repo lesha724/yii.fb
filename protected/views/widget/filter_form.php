@@ -14,11 +14,11 @@ JS
 
         $disciplines = CHtml::listData(D::model()->getDisciplines($type), 'd1', 'd2');
         echo $form->label($model, 'discipline');
-        echo $form->dropDownList($model, 'discipline', $disciplines, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;')));
+        echo $form->dropDownList($model, 'discipline', $disciplines, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;'));
 
         $groups = CHtml::listData(Gr::model()->getGroupsFor($model->discipline, $type), 'gr1', 'name');
         echo $form->label($model, 'group');
-        echo $form->dropDownList($model, 'group', $groups, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;')));
+        echo $form->dropDownList($model, 'group', $groups, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;'));
 
         echo CHtml::hiddenField('type', $type);
 

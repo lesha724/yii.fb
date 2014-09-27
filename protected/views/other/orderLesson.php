@@ -37,6 +37,14 @@ Yii::app()->clientScript->registerScript('orderLesson-messages', <<<JS
 JS
     , CClientScript::POS_READY);
 
-echo $html;
+    echo $html;
+    $this->renderPartial('orderLesson/popup', array());
+?>
 
-$this->renderPartial('orderLesson/popup', array());
+<h3 class="blue header lighter tooltip-info hide">
+    <i class="icon-info-sign"></i>
+    <small>
+        <i class="icon-double-angle-right"></i>
+        <?=tt('Выберите ячейку и нажмите на клавиатуре кнопку `Delete`, чтобы заказать перенос занятия')?>
+    </small>
+</h3>

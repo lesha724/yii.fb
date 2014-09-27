@@ -5,7 +5,7 @@
  * @var CActiveForm $form
  */
 
-$options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;'), 'style' => 'width:200px');
+$options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;', 'style' => 'width:200px');
 
 $form=$this->beginWidget('CActiveForm', array(
     'id'=>'filter-form',
