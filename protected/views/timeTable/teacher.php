@@ -28,7 +28,7 @@ $html = '<div>';
         $html .= '</div>';
     }
 
-    $chairs = CHtml::listData(K::model()->getOnlyChairsFor($model->filial), 'k1', 'k2');
+    $chairs = CHtml::listData(K::model()->getOnlyChairsFor($model->filial), 'k1', 'k3');
     $html .= '<div class="row-fluid span2">';
     $html .= $form->label($model, 'chair');
     $html .= $form->dropDownList($model, 'chair', $chairs, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;'));
