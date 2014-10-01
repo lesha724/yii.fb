@@ -9,7 +9,7 @@
  * @var FilterForm $model
  */
 
-$options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => tt('&nbsp;'), 'style' => 'width:200px');
+$options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;', 'style' => 'width:200px');
 
 $data = CHtml::listData(Sem::model()->getSemestersForAttendanceStatistic($model->group), 'us3', 'sem7', 'name');
 

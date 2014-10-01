@@ -18,7 +18,7 @@
     <table id="themes" class="table table-striped table-bordered table-hover">
         <thead>
         <tr>
-            <th><?=tt('№')?></th>
+            <th>№</th>
             <th><?=tt('№ темы')?></th>
             <th><?=tt('№ занятия')?></th>
             <th><?=tt('Длительность')?></th>

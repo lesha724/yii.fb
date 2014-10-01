@@ -66,7 +66,7 @@ function totalMsg($total)
     $amount = abs($total);
 
     if ($total < 0)
-        $msg = '<span class="label label-important">'.tt('задолженость').': '.$amount.' грн.'.'</span>';
+        $msg = '<span class="label label-important">'.tt('задолженность').': '.$amount.' грн.'.'</span>';
     else if ($total > 0)
         $msg = '<span class="label label-success">'.tt('переплата').': '.$amount.' грн.'.'</span>';
     else
