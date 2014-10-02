@@ -496,7 +496,7 @@ class St extends CActiveRecord
            inner join ucx on (ucg.ucg2 = ucx.ucx1)
            inner join uo on (ucx.ucx1 = uo.uo19)
         where ucg3=:GR1 and uo1=:UO1 and ucg4=0
-        order by st2, st3 collate UNICODE
+        order by st2, st3
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
@@ -521,7 +521,7 @@ SQL;
             INNER JOIN std on (st.st1 = std.std2)
             INNER JOIN sgr on (st.st32 = sgr.sgr1)
             WHERE st101<>7 and STD3=:GR1 and STD11 in (0,6,8) and STD4<='{$date1}' and (STD7 is null or STD7>'{$date2}')
-            ORDER BY 2 collate UNICODE
+            ORDER BY 2
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
