@@ -13,7 +13,7 @@
 }
 
 div.journal_div_table2 {
-    width:50%;
+    width:60%;
     overflow-x:scroll;
     float:left;
 }
@@ -53,6 +53,7 @@ table.small-table-1{
 
 div.journal_div_table3 {
     width:25%;
+    float:right;
 }
 
 .journal_div_table3 th {
