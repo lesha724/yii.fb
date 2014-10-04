@@ -168,6 +168,7 @@ class St extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
             'account' => array(self::HAS_ONE, 'Users', 'u6', 'on' => 'u6=st1 AND u5=0'),
+            'parentsAccount' => array(self::HAS_ONE, 'Users', 'u6', 'on' => 'u6=st1 AND u5=2'),
 		);
 	}
 
@@ -457,6 +458,7 @@ class St extends CActiveRecord
             )
         );
 
+        $criteria->addCondition("st1 > 0");
         $criteria->addCondition("st2 <> ''");
 
 
@@ -481,6 +483,48 @@ class St extends CActiveRecord
                     'account.u2',
                     'account.u3',
                     'account.u4',
+                ),
+            )
+        ));
+    }
+
+    public function getParentsForAdmin()
+    {
+        $criteria=new CDbCriteria;
+
+        $criteria->select = 'st2, st3, st4';
+
+        $with = array(
+            'parentsAccount' => array(
+                'select' => 'u2, u3, u4'
+            )
+        );
+
+        $criteria->addCondition("st1 > 0");
+        $criteria->addCondition("st2 <> ''");
+
+
+        $criteria->addSearchCondition('st2', $this->st2);
+        $criteria->addSearchCondition('st3', $this->st3);
+        $criteria->addSearchCondition('st4', $this->st4);
+
+        $criteria->addSearchCondition('parentsAccount.u2', Yii::app()->request->getParam('login'));
+        $criteria->addSearchCondition('parentsAccount.u3', Yii::app()->request->getParam('password'));
+        $criteria->addSearchCondition('parentsAccount.u4', Yii::app()->request->getParam('email'));
+
+        $criteria->with = $with;
+
+        return new CActiveDataProvider($this, array(
+            'criteria'=>$criteria,
+            'sort' => array(
+                'defaultOrder' => 'st2',
+                'attributes' => array(
+                    'st2',
+                    'st3',
+                    'st4',
+                    'parentsAccount.u2',
+                    'parentsAccount.u3',
+                    'parentsAccount.u4',
                 ),
             )
         ));

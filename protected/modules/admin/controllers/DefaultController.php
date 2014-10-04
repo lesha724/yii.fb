@@ -33,7 +33,38 @@ class DefaultController extends AdminController
         ));
     }
 
-    public function actionGrants($id)
+    public function actionParents()
+    {
+        $model = new St;
+        $model->unsetAttributes();
+
+        if (isset($_REQUEST['St']))
+            $model->attributes = $_REQUEST['St'];
+
+        $this->render('parents', array(
+            'model' => $model,
+        ));
+    }
+
+    public function actionStGrants($id)
+    {
+        if (empty($id))
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $type = 0; // student
+        $user = $this->loadUsersModel($type, $id);
+
+        if (isset($_REQUEST['Users'])) {
+            $user->attributes = $_REQUEST['Users'];
+            $user->save();
+        }
+
+        $this->render('stGrants', array(
+            'user'  => $user
+        ));
+    }
+
+    public function actionPGrants($id)
     {
         if (empty($id))
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
@@ -45,15 +76,34 @@ class DefaultController extends AdminController
             $model->save();
         }
 
-        $user = $this->loadUsersModel($model->grants2);
+        $type = 1; // teacher
+        $user = $this->loadUsersModel($type, $model->grants2);
 
         if (isset($_REQUEST['Users'])) {
             $user->attributes = $_REQUEST['Users'];
-            $user->save(false);
+            $user->save();
         }
 
-        $this->render('grants', array(
+        $this->render('pGrants', array(
             'model' => $model,
+            'user'  => $user
+        ));
+    }
+
+    public function actionPrntGrants($id)
+    {
+        if (empty($id))
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $type = 2; // parent
+        $user = $this->loadUsersModel($type, $id);
+
+        if (isset($_REQUEST['Users'])) {
+            $user->attributes = $_REQUEST['Users'];
+            $user->save();
+        }
+
+        $this->render('prntGrants', array(
             'user'  => $user
         ));
     }
@@ -74,11 +124,11 @@ class DefaultController extends AdminController
         return $model;
     }
 
-    public function loadUsersModel($p1)
+    public function loadUsersModel($type, $id)
     {
         $user = Users::model()->findByAttributes(array(
-            'u5' => 1,  // teacher
-            'u6' => $p1 //p1
+            'u5' => $type,  // teacher || student || parents
+            'u6' => $id     // p1 || st1
         ));
 
         if (empty($user)) {
@@ -87,10 +137,12 @@ class DefaultController extends AdminController
             $user->u2 = '';
             $user->u3 = '';
             $user->u4 = '';
-            $user->u5 = 1;
-            $user->u6 = $p1;
+            $user->u5 = $type;
+            $user->u6 = $id;
             $user->u7 = 0;
             $user->save(false);
+
+            $user->scenario = 'create';
         }
 
         return $user;

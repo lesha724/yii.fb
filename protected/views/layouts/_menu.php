@@ -52,12 +52,17 @@ $this->widget('zii.widgets.CMenu', array(
                 array(
                     'label'  => $_l2.tt('Преподаватели'),
                     'url'    => _u('/admin/default/teachers'),
-                    'active' => $_a=='teachers' || $_a=='grants'
+                    'active' => $_a=='teachers' || $_a=='PGrants'
                 ),
                 array(
                     'label'  => $_l2.tt('Студенты'),
                     'url'    => _u('/admin/default/students'),
-                    'active' => $_a=='students'
+                    'active' => $_a=='students' || $_a=='StGrants'
+                ),
+                array(
+                    'label'  => $_l2.tt('Родители'),
+                    'url'    => _u('/admin/default/parents'),
+                    'active' => $_a=='parents' || $_a=='prntGrants'
                 ),
                 array(
                     'label'  => $_l2.tt('Эл. журнал'),

@@ -2,7 +2,8 @@
 /**
  *
  * @var DefaultController $this
- * @var P $model
+ * @var Grants $model
+ * @var Users $user
  *
  */
 
@@ -21,12 +22,43 @@ $this->breadcrumbs=array(
         'type' => 'horizontal',
         'action' => ''//$this->createUrl('/admin/prospect/scheduleProspect')
     ));
+    echo $form->errorSummary($user);
 ?>
     <div class="control-group">
-        <label for="Grants_grants5" class="control-label"><?=tt('Администратор')?></label>
+        <label for="Users_u7" class="control-label"><?=tt('Администратор')?></label>
         <div class="controls">
             <label>
                 <?=CHtml::checkBox('Users[u7]', $user->u7, array('class' => 'ace ace-switch'))?>
+                <span class="lbl"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="Users_u2" class="control-label"><?=tt('Логин')?></label>
+        <div class="controls">
+            <label>
+                <?=CHtml::textField('Users[u2]', $user->u2)?>
+                <span class="lbl"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="Users_u3" class="control-label"><?=tt('Пароль')?></label>
+        <div class="controls">
+            <label>
+                <?=CHtml::textField('Users[u3]', $user->u3)?>
+                <span class="lbl"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="Users_u4" class="control-label">Email</label>
+        <div class="controls">
+            <label>
+                <?=CHtml::textField('Users[u4]', $user->u4)?>
                 <span class="lbl"></span>
             </label>
         </div>
