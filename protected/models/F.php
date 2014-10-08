@@ -195,7 +195,7 @@ class F extends CActiveRecord
             SELECT f1, f3, f26, f27, f28, f30
             FROM f
             WHERE f1>0 and f12<>0 and f17=0 and (f19 is null) and f14=:FILIAL and f32 = 0
-            ORDER BY f15,f3 collate UNICODE
+            ORDER BY f15,f3
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);

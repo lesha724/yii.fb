@@ -73,7 +73,7 @@
                     'grants' => array(
                         'label'=>'<i class="icon-check bigger-120"></i>',
                         'imageUrl'=>false,
-                        'url'=>'Yii::app()->createAbsoluteUrl("/admin/default/grants", array("id" => $data->p1))',
+                        'url'=>'Yii::app()->createAbsoluteUrl("/admin/default/PGrants", array("id" => $data->p1))',
                         'options' => array('class' => 'btn btn-mini btn-success'),
                     ),
                 ),

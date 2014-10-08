@@ -34,6 +34,10 @@ class Users extends CActiveRecord
 			array('u1, u5, u6, u7', 'numerical', 'integerOnly'=>true),
 			array('u2, u3', 'length', 'max'=>200),
 			array('u4', 'length', 'max'=>400),
+
+            array('u2, u4', 'checkIfUnique'),
+            array('u4', 'email'),
+
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('u1, u2, u3, u4, u5, u6, u7', 'safe', 'on'=>'search'),
@@ -140,7 +144,7 @@ class Users extends CActiveRecord
     {
         $id = $this->u6;
 
-        if ($this->u5 == 0 || $this->u5 == 2) { // student or parent
+        if ($this->u5 === 0 || $this->u5 === 2) { // student or parent
             $model = St::model()->findByPk($id);
             $name  = $model->getShortName();
         } elseif ($this->u5 == 1) {             // teacher
@@ -154,4 +158,21 @@ class Users extends CActiveRecord
         return $name;
     }
 
+    public function checkIfUnique($attribute, $params)
+    {
+        if (empty($this->$attribute))
+            return;
+
+        $criteria = new CDbCriteria;
+        $criteria->addCondition('u1 != '.$this->u1);
+        $criteria->addInCondition($attribute, array($this->$attribute));
+
+        $amount = Users::model()->count($criteria);
+
+        if ($amount > 0) {
+            $labels = $this->attributeLabels();
+            $errorMessage = $labels[$attribute].' '.tt('значение должно быть уникально!');
+            $this->addError($attribute, $errorMessage);
+        }
+    }
 }

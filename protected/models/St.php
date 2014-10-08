@@ -168,6 +168,7 @@ class St extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
             'account' => array(self::HAS_ONE, 'Users', 'u6', 'on' => 'u6=st1 AND u5=0'),
+            'parentsAccount' => array(self::HAS_ONE, 'Users', 'u6', 'on' => 'u6=st1 AND u5=2'),
 		);
 	}
 
@@ -457,6 +458,7 @@ class St extends CActiveRecord
             )
         );
 
+        $criteria->addCondition("st1 > 0");
         $criteria->addCondition("st2 <> ''");
 
 
@@ -486,6 +488,48 @@ class St extends CActiveRecord
         ));
     }
 
+    public function getParentsForAdmin()
+    {
+        $criteria=new CDbCriteria;
+
+        $criteria->select = 'st2, st3, st4';
+
+        $with = array(
+            'parentsAccount' => array(
+                'select' => 'u2, u3, u4'
+            )
+        );
+
+        $criteria->addCondition("st1 > 0");
+        $criteria->addCondition("st2 <> ''");
+
+
+        $criteria->addSearchCondition('st2', $this->st2);
+        $criteria->addSearchCondition('st3', $this->st3);
+        $criteria->addSearchCondition('st4', $this->st4);
+
+        $criteria->addSearchCondition('parentsAccount.u2', Yii::app()->request->getParam('login'));
+        $criteria->addSearchCondition('parentsAccount.u3', Yii::app()->request->getParam('password'));
+        $criteria->addSearchCondition('parentsAccount.u4', Yii::app()->request->getParam('email'));
+
+        $criteria->with = $with;
+
+        return new CActiveDataProvider($this, array(
+            'criteria'=>$criteria,
+            'sort' => array(
+                'defaultOrder' => 'st2',
+                'attributes' => array(
+                    'st2',
+                    'st3',
+                    'st4',
+                    'parentsAccount.u2',
+                    'parentsAccount.u3',
+                    'parentsAccount.u4',
+                ),
+            )
+        ));
+    }
+
     public function getStudentsForJournal($gr1, $uo1)
     {
         $sql = <<<SQL
@@ -496,7 +540,7 @@ class St extends CActiveRecord
            inner join ucx on (ucg.ucg2 = ucx.ucx1)
            inner join uo on (ucx.ucx1 = uo.uo19)
         where ucg3=:GR1 and uo1=:UO1 and ucg4=0
-        order by st2, st3 collate UNICODE
+        order by st2, st3
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
@@ -521,7 +565,7 @@ SQL;
             INNER JOIN std on (st.st1 = std.std2)
             INNER JOIN sgr on (st.st32 = sgr.sgr1)
             WHERE st101<>7 and STD3=:GR1 and STD11 in (0,6,8) and STD4<='{$date1}' and (STD7 is null or STD7>'{$date2}')
-            ORDER BY 2 collate UNICODE
+            ORDER BY 2
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);

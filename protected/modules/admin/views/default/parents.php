@@ -5,20 +5,20 @@
  * @var St $model
  *
  */
-$this->pageHeader=tt('Студенты');
+$this->pageHeader=tt('Родители');
 $this->breadcrumbs=array(
     tt('Админ. панель'),
 );
 ?>
 
 <?php
-$provider = $model->getStudentsForAdmin();
+$provider = $model->getParentsForAdmin();
 $this->widget('bootstrap.widgets.TbGridView', array(
-    'id' => 'students',
+    'id' => 'parents',
     'dataProvider' => $provider,
     'filter' => $model,
     'type' => 'striped bordered',
-    'ajaxUrl' => Yii::app()->createAbsoluteUrl('/admin/default/students'),
+    'ajaxUrl' => Yii::app()->createAbsoluteUrl('/admin/default/parents'),
     'columns' => array(
         'st2',
         'st3',
@@ -26,25 +26,17 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         array(
             'header' => 'Login',
             'filter' => CHtml::textField('login', Yii::app()->request->getParam('login')),
-            'name' => 'account.u2',
-            'value' => '! empty($data->account)
-                                ? $data->account->u2
+            'name'   => 'parentsAccount.u2',
+            'value'  => '! empty($data->parentsAccount)
+                                ? $data->parentsAccount->u2
                                 : ""',
         ),
         array(
             'header' => 'Password',
             'filter' => CHtml::textField('password', Yii::app()->request->getParam('password')),
-            'name'   => 'account.u3',
-            'value'  => '! empty($data->account)
-                                ? $data->account->u3
-                                : ""',
-        ),
-        array(
-            'header' => 'Email',
-            'filter' => CHtml::textField('email', Yii::app()->request->getParam('email')),
-            'name' => 'account.u4',
-            'value' => '! empty($data->account)
-                                ? $data->account->u4
+            'name'   => 'parentsAccount.u3',
+            'value'  => '! empty($data->parentsAccount)
+                                ? $data->parentsAccount->u3
                                 : ""',
         ),
         array(
@@ -56,7 +48,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                 'grants' => array(
                     'label'=>'<i class="icon-check bigger-120"></i>',
                     'imageUrl'=>false,
-                    'url'=>'Yii::app()->createAbsoluteUrl("/admin/default/StGrants", array("id" => $data->st1))',
+                    'url'=>'Yii::app()->createAbsoluteUrl("/admin/default/prntGrants", array("id" => $data->st1))',
                     'options' => array('class' => 'btn btn-mini btn-success'),
                 ),
             ),

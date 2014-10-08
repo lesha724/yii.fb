@@ -16,7 +16,10 @@ class AdminController extends Controller
                 'actions' => array(
                     'teachers',
                     'students',
-                    'grants',
+                    'parents',
+                    'stGrants',
+                    'pGrants',
+                    'prntGrants',
                     'journal',
                     'modules',
                     'entrance',
