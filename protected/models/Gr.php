@@ -398,9 +398,9 @@ SQL;
         return array($groupNames, $studentsAmount);
     }
 
-    public function getGroupsForWorkPlan($speciality, $course)
+    public function getGroupsForWorkPlan(FilterForm $model)
     {
-        if (empty($speciality) || empty($course))
+        if (empty($model->speciality) || empty($model->course) || empty($model->faculty))
             return array();
 
         $sql = <<<SQL
@@ -409,16 +409,18 @@ SQL;
             INNER JOIN sg on (sem.sem2 = sg.sg1)
             INNER JOIN sp on (sg.sg2 = sp.sp1)
             INNER JOIN gr on (sg.sg1 = gr.gr2)
-            WHERE sp11 =:SPECIALITY and sem3 =:YEAR  and sem4=:COURSE and sp7 is null and gr13<>1
+            WHERE sp5=:FACULTY and sp11 =:SPECIALITY and sem3 =:YEAR  and sem4=:COURSE and sp7 is null and gr13<>1
             GROUP BY sp2,gr1,gr7,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,sg3,sg4,gr13,sg1
 SQL;
 
         list($year,) = SH::getCurrentYearAndSem();
 
         $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':SPECIALITY', $speciality);
+        $command->bindValue(':SPECIALITY', $model->speciality);
         $command->bindValue(':YEAR', $year);
-        $command->bindValue(':COURSE', $course);
+        $command->bindValue(':COURSE', $model->course);
+        $command->bindValue(':FACULTY', $model->faculty);
+
         $groups = $command->queryAll();
 
         $_sg1 = 0; // previous row values
@@ -438,7 +440,7 @@ SQL;
                 $data[$sg1] = array('groups' => array());
 
 
-            $data[$sg1]['groups'][] = Gr::model()->getGroupName($course, $group);
+            $data[$sg1]['groups'][] = Gr::model()->getGroupName($model->course, $group);
         }
 
         foreach ($data as $sg1 => $flow) {
