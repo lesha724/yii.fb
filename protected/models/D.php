@@ -631,8 +631,6 @@ SQL;
                 INNER JOIN u ON (UO.uo22 = U.U1)
                 INNER JOIN d ON (UO.uo3 = D.D1)
                 INNER JOIN k ON (UO.uo4 = K.K1)
-                INNER JOIN ucx ON (UO.UO19 = UCX.UCX1)
-                INNER JOIN ucg ON (UCX.UCX1 = UCG.UCG2)
                 WHERE us4<>13 and u2=:ID and us3=:SEM1
                 ORDER BY d2,us4,uo3
 SQL;
