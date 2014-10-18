@@ -616,4 +616,22 @@ SQL;
 
         return $amount;
     }
+
+    public function getStudentsForEmployment(FilterForm $model)
+    {
+        $sg1 = intval($model->group);
+
+        $sql = <<<SQL
+            SELECT sum( stus8 ) as s, st1,st2,st3,st4, st56, st74, st75, st76, st117, st118, st119, st120, st121, st122, st123, st124, st125
+            FROM STUS_AN({$sg1}, 4, 0, 1, 99)
+            WHERE stus19<>6
+            GROUP BY st1, st2, st3, st4, st56, st74, st75, st76, st117, st118, st119, st120, st121, st122,st123,st124,st125
+            ORDER BY s DESC
+SQL;
+
+        $command  = Yii::app()->db->createCommand($sql);
+        $students = $command->queryAll();
+
+        return $students;
+    }
 }

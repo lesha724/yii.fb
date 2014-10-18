@@ -14,6 +14,13 @@
  */
 class Users extends CActiveRecord
 {
+    const ST1  = 0;
+    const P1   = 1;
+    const PRNT = 2;
+
+    const FOTO_ST1  = 1;
+    const FOTO_P1   = 0;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -174,5 +181,37 @@ class Users extends CActiveRecord
             $errorMessage = $labels[$attribute].' '.tt('значение должно быть уникально!');
             $this->addError($attribute, $errorMessage);
         }
+    }
+
+    public function renderPhoto($id, $type)
+    {
+        // TODO remove it
+        $id = 1;
+
+        $sql = <<<SQL
+        SELECT foto4 as foto
+        FROM foto
+        WHERE foto1 = {$id} AND foto2 = {$type}
+SQL;
+
+        $string = Yii::app()->db->connectionString;
+        $parts = explode('=', $string);
+
+        $host     = $parts[1].'D';
+        $login    = Yii::app()->db->username;
+        $password = Yii::app()->db->password;
+        $dbh = ibase_connect($host, $login, $password);
+
+        $result = ibase_query($dbh, $sql);
+        $data   = ibase_fetch_object($result);
+
+        if (empty($data->FOTO)) {
+            $defaultImg = imagecreatefrompng(Yii::app()->basePath.'/../theme/ace/assets/avatars/avatar2.png');
+            imagepng($defaultImg);
+        } else {
+            header("Content-type: image/jpeg");
+            ibase_blob_echo($data->FOTO);
+        }
+        ibase_free_result($result);
     }
 }

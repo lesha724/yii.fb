@@ -27,7 +27,8 @@ class OtherController extends Controller
             ),
             array('allow',
                 'actions' => array(
-                    'phones'
+                    'phones',
+                    'employment'
                 ),
             ),
             array('deny',
@@ -175,4 +176,18 @@ class OtherController extends Controller
             ))
         );
     }
+
+    public function actionEmployment()
+    {
+        $model = new FilterForm;
+        $model->scenario = 'employment';
+
+        if (isset($_REQUEST['FilterForm']))
+            $model->attributes=$_REQUEST['FilterForm'];
+
+        $this->render('employment', array(
+            'model' => $model,
+        ));
+    }
+
 }

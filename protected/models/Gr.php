@@ -164,6 +164,7 @@ class Gr extends CActiveRecord
     {
         if (empty($discipline))
             return array();
+
         $sql = <<<SQL
             select gr1,gr3,  sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28,gr7
             from sem
@@ -450,4 +451,89 @@ SQL;
         return $data;
     }
 
+    public function getGraduatingYears(FilterForm $model)
+    {
+        if (empty($model->speciality))
+            return array();
+
+        $sql = <<<SQL
+            SELECT sg11
+            FROM gr
+            INNER JOIN sg on (GR.GR2 = SG.SG1)
+            INNER JOIN sp on (SG.SG2 = SP.SP1)
+            WHERE gr13<>1 and gr1>0 and sp11=:SPECIALITY and sp7 is null and sg11<=:YEAR and sg11>0
+            GROUP BY sg11
+            ORDER BY sg11 DESC
+SQL;
+
+        list($year,) = SH::getCurrentYearAndSem();
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':SPECIALITY', $model->speciality);
+        $command->bindValue(':YEAR', $year);
+        $years = $command->queryAll();
+
+        return $years;
+    }
+
+    public function getGraduatedGroups(FilterForm $model)
+    {
+        if (empty($model->speciality) || empty($model->year))
+            return array();
+
+        $sql = <<<SQL
+            SELECT gr1,gr7,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,sg3,sg4,gr13,sg1
+            FROM gr
+            INNER JOIN sg on (gr.gr2 = sg.sg1)
+            INNER JOIN sp on (sg.sg2 = sp.sp1)
+            WHERE gr13<>'1' and gr1>0 and sp11=:SPECIALITY and sp7 is null and sg11 = :YEAR
+            GROUP BY gr1,gr7,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,sg3,sg4,gr13,sg1
+            ORDER BY gr1,gr3,sg1
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':SPECIALITY', $model->speciality);
+        $command->bindValue(':YEAR', $model->year);
+        $groups = $command->queryAll();
+
+        foreach ($groups as $key => $group) {
+            $sql = <<<SQL
+            SELECT FIRST 1 sem4
+            FROM sem
+            WHERE sem2=:SG1
+            ORDER BY sem7 DESC
+SQL;
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':SG1', $group['sg1']);
+            $course = $command->queryScalar();
+
+            $groups[$key]['name'] = Gr::model()->getGroupName($course, $group);
+        }
+
+        $_sg1 = 0; // previous row values
+        $data = array();
+
+        foreach ($groups as $group) {
+
+            // this row values
+            $sg1 = $group['sg1'];
+
+            $changeRow = $sg1 != $_sg1;
+            if ($changeRow)
+                $_sg1 = $sg1;
+
+            if (! isset($data[$sg1]))
+                $data[$sg1] = array('groups' => array());
+
+            $data[$sg1]['groups'][] = $group['name'];
+        }
+
+        foreach ($data as $sg1 => $flow) {
+            $flowGroups = implode(', ', $flow['groups']);
+            $data[$sg1]['name'] = mb_strimwidth($flowGroups, 0, 50, '...');
+            $data[$sg1]['sg1']  = $sg1;
+        }
+
+        return $data;
+    }
 }

@@ -11,8 +11,16 @@ $this->breadcrumbs=array(
     tt('Расписание'),
 );
 
+Yii::app()->clientScript->registerPackage('jquery.ui');
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/timetable/timetable.js', CClientScript::POS_HEAD);
 
+$popupTitle = tt('Информация о преподавателе');
+Yii::app()->clientScript->registerScript('teacher-messages', <<<JS
+    tt.popupTitle = '{$popupTitle}';
+JS
+    , CClientScript::POS_READY);
+
+$attr = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;');
 $form=$this->beginWidget('CActiveForm', array(
     'id'=>'timeTable-form',
     'htmlOptions' => array('class' => 'form-inline')
@@ -24,20 +32,20 @@ $html = '<div>';
     if (count($filials) > 1) {
         $html .= '<div class="row-fluid span2">';
         $html .= $form->label($model, 'filial');
-        $html .= $form->dropDownList($model, 'filial', $filials, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;'));
+        $html .= $form->dropDownList($model, 'filial', $filials, $attr);
         $html .= '</div>';
     }
 
     $chairs = CHtml::listData(K::model()->getOnlyChairsFor($model->filial), 'k1', 'k3');
     $html .= '<div class="row-fluid span2">';
     $html .= $form->label($model, 'chair');
-    $html .= $form->dropDownList($model, 'chair', $chairs, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;'));
+    $html .= $form->dropDownList($model, 'chair', $chairs, $attr);
     $html .= '</div>';
 
     $teachers = P::model()->getTeachersForTimeTable($model->chair);
     $html .= '<div class="row-fluid span2">';
     $html .= $form->label($model, 'teacher');
-    $html .= $form->dropDownList($model, 'teacher', $teachers, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;'));
+    $html .= $form->dropDownList($model, 'teacher', $teachers, $attr);
     $html .= '</div>';
 
 
@@ -69,8 +77,21 @@ HTML;
 
 
 
-
 if (! empty($model->teacher))
+
+
+if (! empty($model->teacher)) {
+
+    $text = tt('Нажмите здесь для просмотра фотографии преподавателя');
+    echo <<<HTML
+<h3 class="blue header lighter tooltip-info">
+    <i class="icon-info-sign show-info" style="cursor:pointer"></i>
+    <small>
+        <i class="icon-double-angle-right"></i> {$text}
+    </small>
+</h3>
+HTML;
+
     $this->renderPartial('schedule', array(
         'model'      => $model,
         'timeTable'  => $timeTable,
@@ -78,3 +99,17 @@ if (! empty($model->teacher))
         'rz'         => $rz,
         'maxLessons' => array(),
     ));
+
+    $url = $this->createUrl('site/userPhoto', array('_id' => $model->teacher, 'type' => Users::FOTO_P1));
+    echo <<<HTML
+<div id="dialog-message" class="hide">
+    <div id="foto">
+        <img src="{$url}" alt="">
+        <img src="http://ci.fb/autenth/showfoto/0/68s351883f4/0" alt="">
+    </div>
+    <div class="hr hr-12 hr-double"></div>
+    <div id="info"></div>
+</div><!-- #dialog-message -->
+HTML;
+
+}

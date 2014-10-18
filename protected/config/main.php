@@ -201,4 +201,7 @@ $config = array(
 // Apply local config modifications
 @include dirname(__FILE__) . '/main-local.php';
 
+$config['components']['db2'] = $config['components']['db'];
+$config['components']['db2']['connectionString'] = $config['components']['db']['connectionString'].'D';
+
 return $config;

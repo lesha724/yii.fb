@@ -306,6 +306,12 @@ $this->widget('zii.widgets.CMenu', array(
                     'active'  => $_c=='other' && $_a=='orderLesson',
                     'visible' => _ch('other', 'orderLesson') && $isTch,
                 ),
+                array(
+                    'label'   => $_l2.tt('Трудоустройство'),
+                    'url'     => _u('/other/employment'),
+                    'active'  => $_c=='other' && $_a=='employment',
+                    'visible' => _ch('other', 'employment'),
+                ),
             ),
             'visible' => _ch('other', 'main')
         ),
