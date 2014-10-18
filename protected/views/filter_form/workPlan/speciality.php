@@ -39,7 +39,7 @@ $form=$this->beginWidget('CActiveForm', array(
     $html .= $form->dropDownList($model, 'course', $courses, $options);
     $html .= '</div>';
 
-    $groups = CHtml::listData(Gr::model()->getGroupsForWorkPlan($model->speciality, $model->course), 'sg1', 'name');
+    $groups = CHtml::listData(Gr::model()->getGroupsForWorkPlan($model), 'sg1', 'name');
     $html .= '<div class="row-fluid span2">';
     $html .= $form->label($model, 'group');
     $html .= $form->dropDownList($model, 'group', $groups, $options);
