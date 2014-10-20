@@ -139,14 +139,12 @@ SQL;
 
         foreach ($phones as $key => $phone) {
 
-            if ($phone['b1'] != 0 && $phone['k1'] != 0) {
-                if ($phone['tso10'] == '0')
-                    $teacher = P::model()->getTeacherNameForPhones($phone['b1'], $phone['k1']);
-                else
-                    $teacher = P::model()->getTeacherNameBy($phone['tso6']);
-
+            if ($phone['tso4'] == 0) {
+                $teacher = $phone['tso11'];
+            } elseif ($phone['tso10'] == 1) {
+                $teacher = P::model()->getTeacherNameBy($phone['tso6']);
             } else
-                $teacher = '';
+                $teacher = P::model()->getTeacherNameForPhones($phone['b1'], $phone['k1']);
 
             $phones[$key]['teacher'] = $teacher;
         }

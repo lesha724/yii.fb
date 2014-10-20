@@ -4,6 +4,6 @@ $(document).ready(function(){
         $(this).closest('form').submit();
     });
 
-    initDataTable('disciplines');
+    initDataTable('phones');
 
 });
