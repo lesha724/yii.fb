@@ -67,7 +67,7 @@ class Sdp extends CActiveRecord
 			array('sdp1', 'required'),
             array('sdp31', 'email'),
 			array('sdp1, sdp6, sdp14, sdp15, sdp32, sdp33, sdp41, sdp42, sdp43, sdp45, sdp47', 'numerical', 'integerOnly'=>true),
-			array('sdp39, sdp40', 'numerical'),
+			array('sdp39, sdp40', 'safe'),
 			array('sdp4', 'length', 'max'=>6000),
 			array('sdp5', 'length', 'max'=>100),
 			array('sdp7, sdp24, sdp25, sdp36, sdp38', 'length', 'max'=>60),
