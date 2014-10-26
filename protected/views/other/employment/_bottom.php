@@ -22,18 +22,19 @@
     <tbody>
     <?php
         $html = '';
-        $sum = $rating = 0;
+        $sum  = $rating = 0;
+
         foreach ($students as $student) {
 
             if ($student['s'] != $sum) {
                 $sum = $student['s'];
                 $rating++;
             }
-
+            $link = CHtml::link($student['st2'].' '.$student['st3'].' '.$student['st4'], $this->createUrl('other/employment', array('id' => $student['st1'])));
             $html .= <<<HTML
         <tr>
             <td>$rating</td>
-            <td>$student[st2] $student[st3] $student[st4]</td>
+            <td>$link</td>
             <td>$sum</td>
         </tr>
 HTML;

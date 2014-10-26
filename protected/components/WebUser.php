@@ -37,9 +37,6 @@ class WebUser extends CWebUser
 
     public function getIsStd()
     {
-        //if ($this->isAdmin)
-        //    return true;
-
         return !$this->isGuest && $this->model->isStudent;
     }
 

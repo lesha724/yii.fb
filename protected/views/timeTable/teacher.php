@@ -105,7 +105,6 @@ HTML;
 <div id="dialog-message" class="hide">
     <div id="foto">
         <img src="{$url}" alt="">
-        <img src="http://ci.fb/autenth/showfoto/0/68s351883f4/0" alt="">
     </div>
     <div class="hr hr-12 hr-double"></div>
     <div id="info"></div>

@@ -183,24 +183,21 @@ class Users extends CActiveRecord
         }
     }
 
-    public function renderPhoto($id, $type)
+    public function renderPhoto($foto1, $type)
     {
-        // TODO remove it
-        $id = 1;
-
         $sql = <<<SQL
-        SELECT foto4 as foto
+        SELECT foto3 as foto
         FROM foto
-        WHERE foto1 = {$id} AND foto2 = {$type}
+        WHERE foto1 = {$foto1} AND foto2 = {$type}
 SQL;
 
         $string = Yii::app()->db->connectionString;
-        $parts = explode('=', $string);
+        $parts  = explode('=', $string);
 
         $host     = $parts[1].'D';
         $login    = Yii::app()->db->username;
         $password = Yii::app()->db->password;
-        $dbh = ibase_connect($host, $login, $password);
+        $dbh      = ibase_connect($host, $login, $password);
 
         $result = ibase_query($dbh, $sql);
         $data   = ibase_fetch_object($result);
@@ -212,6 +209,7 @@ SQL;
             header("Content-type: image/jpeg");
             ibase_blob_echo($data->FOTO);
         }
+
         ibase_free_result($result);
     }
 }

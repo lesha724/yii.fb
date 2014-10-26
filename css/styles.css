@@ -300,3 +300,17 @@ table.attendance-statistic-table-2 tr.second-row th{
     border: 1px solid #ddd;
     text-align: center;
 }
+
+form.employment-st-info div.controls {
+    line-height: 29px;
+}
+
+form.employment-st-info div.control-group {
+    margin-bottom: 0 !important;
+}
+
+form.employment-st-info div.controls span {
+    font-size: 15px;
+}
+
+}

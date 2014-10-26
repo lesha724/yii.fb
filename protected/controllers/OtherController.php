@@ -179,15 +179,49 @@ class OtherController extends Controller
 
     public function actionEmployment()
     {
-        $model = new FilterForm;
-        $model->scenario = 'employment';
+        $st1 = Yii::app()->request->getParam('id', null);
 
-        if (isset($_REQUEST['FilterForm']))
-            $model->attributes=$_REQUEST['FilterForm'];
+        if (empty($st1)) {
 
-        $this->render('employment', array(
-            'model' => $model,
-        ));
+            $model = new FilterForm;
+            $model->scenario = 'employment';
+
+            if (isset($_REQUEST['FilterForm']))
+                $model->attributes=$_REQUEST['FilterForm'];
+
+            $this->render('employment', array(
+                'model' => $model,
+            ));
+
+        } else {
+
+            $student = St::model()->findByPk($st1);
+
+            $model = Sdp::model()->loadModel($st1);
+
+            $user = Yii::app()->user;
+            $isEditable = $user->isAdmin ||
+                ($user->isStd && $user->dbModel->st1 == $st1);
+
+            if ($isEditable && isset($_REQUEST['Sdp'])) {
+
+                $model->attributes = $_REQUEST['Sdp'];
+                if ($model->validate()) {
+                    $model->save();
+                } else
+                    Yii::app()->user->setFlash('error', tt('Пожалуйста, исправьте возникшие ошибки!'));
+
+            }
+
+
+
+            $this->render('employment/_st_info', array(
+                'model'   => $model,
+                'student' => $student,
+                'isEditable' => $isEditable,
+            ));
+
+        }
     }
 
 }
