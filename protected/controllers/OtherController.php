@@ -208,7 +208,7 @@ class OtherController extends Controller
                 $model->attributes = $_REQUEST['Sdp'];
                 $attr = array('sdp4', 'sdp26', 'sdp27', 'sdp28', 'sdp30', 'sdp31', 'sdp32', 'sdp33');
                 if ($model->validate($attr)) {
-                    $model->save();
+                    $model->save(false);
                 } else
                     Yii::app()->user->setFlash('error', tt('Пожалуйста, исправьте возникшие ошибки!'));
 
