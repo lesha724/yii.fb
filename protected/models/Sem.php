@@ -298,4 +298,25 @@ SQL;
 
         return $months;
     }
+
+    public function getSemestersForSt($st1)
+    {
+        $sql = <<<SQL
+            SELECT sem7
+            FROM ucs
+            INNER JOIN ucg on (ucs.ucs2 = ucg.ucg1)
+            INNER JOIN ucx on (ucg.ucg2 = ucx.ucx1)
+            INNER JOIN uo on (ucx.ucx1 = uo.uo19)
+            INNER JOIN us on (uo.uo1 = us.us2)
+            INNER JOIN sem on (us.us12 = sem.sem1)
+            WHERE ucg4 = 0 and ucs3 = :ST1
+            GROUP BY sem7
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ST1', $st1);
+        $semesters = $command->queryColumn();
+
+        return $semesters;
+    }
 }

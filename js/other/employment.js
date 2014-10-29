@@ -28,5 +28,5 @@ $(document).ready(function(){
         $('#filter-form').append($select);
     }
 
-    initDataTable('students');
+    initDataTable('marks');
 });

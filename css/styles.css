@@ -313,4 +313,20 @@ form.employment-st-info div.controls span {
     font-size: 15px;
 }
 
+.t-a-c td {
+    text-align: center !important;
+}
+
+div#marks-statistic table {
+    float: left;
+}
+
+div#marks-statistic .table-1 {
+    width:25%;
+}
+div#marks-statistic .table-2 {
+    width:50%;
+}
+div#marks-statistic .table-3 {
+    width:25%;
 }

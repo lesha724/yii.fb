@@ -147,4 +147,38 @@ class Stus extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+    public function getMarksFor($st1, $start=0, $end=99)
+    {
+        if (empty($st1))
+            return array();
+
+        $sql = <<<SQL
+            SELECT stus8
+            FROM stus_an(0, 1, {$st1}, {$start}, {$end})
+            WHERE stus19<>6
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $marks = $command->queryColumn();
+
+        return $marks;
+    }
+
+    public function getStatisticForDisciplines($st1, $start=0, $end=99)
+    {
+        if (empty($st1))
+            return array();
+
+        $sql = <<<SQL
+            SELECT *
+            FROM stus_an(0, 1, {$st1}, {$start}, {$end})
+            ORDER BY STUS20_,d2
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $statistic = $command->queryAll();
+
+        return $statistic;
+    }
+
 }

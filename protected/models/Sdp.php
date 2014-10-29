@@ -230,7 +230,49 @@ class Sdp extends CActiveRecord
 
         if (empty($model)) {
             $model = new Sdp();
+            $model->unsetAttributes();
+
             $model->sdp1 = $st1;
+            $model->sdp4 = '';
+            $model->sdp5 = '';
+            $model->sdp6 = 0;
+            $model->sdp7 = '';
+            $model->sdp8 = '';
+            $model->sdp10 = '';
+            $model->sdp14 = 0;
+            $model->sdp15 = 0;
+            $model->sdp16 = '';
+            $model->sdp17 = '';
+            $model->sdp18 = '';
+            $model->sdp19 = '';
+            $model->sdp20 = '';
+            $model->sdp21 = '';
+            $model->sdp22 = '';
+            $model->sdp23 = '';
+            $model->sdp24 = '';
+            $model->sdp25 = '';
+            $model->sdp26 = '';
+            $model->sdp27 = '';
+            $model->sdp28 = '';
+            $model->sdp30 = '';
+            $model->sdp31 = '';
+            $model->sdp32 = 0;
+            $model->sdp33 = 0;
+            $model->sdp34 = '';
+            $model->sdp35 = '';
+            $model->sdp36 = '';
+            $model->sdp37 = '';
+            $model->sdp38 = '';
+            $model->sdp39 = 0;
+            $model->sdp40 = 0;
+            $model->sdp41 = 0;
+            $model->sdp42 = 0;
+            $model->sdp43 = 0;
+            $model->sdp44 = '';
+            $model->sdp45 = 0;
+            $model->sdp46 = '';
+            $model->sdp47 = 0;
+            $model->save(false);
         }
 
         return $model;
