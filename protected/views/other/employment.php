@@ -8,7 +8,6 @@ $this->breadcrumbs=array(
     tt('Трудоустройство'),
 );
 
-Yii::app()->clientScript->registerPackage('dataTables');
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/other/employment.js', CClientScript::POS_HEAD);
 
 $data    = array(tt('Студенты'), tt('Выпускники'));
@@ -43,5 +42,4 @@ if (! empty($model->group)) {
         'students' => $students
     ));
 }
-?>
 
