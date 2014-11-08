@@ -631,7 +631,7 @@ SQL;
 
         $command  = Yii::app()->db->createCommand($sql);
         $students = $command->queryAll();
-
+        //die(var_dump($students));
         return $students;
     }
 

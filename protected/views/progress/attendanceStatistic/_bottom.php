@@ -68,4 +68,4 @@ if (! empty($model->semester)) :
         'model'    => $model
     ));
 
-endif ?>
+endif;
