@@ -347,12 +347,12 @@ SQL;
             INNER JOIN uo ON (us.us2 = uo.uo1)
             INNER JOIN d ON (uo.uo3 = d.d1)
             INNER JOIN gr ON (ug.ug2 = gr.gr1)
-            WHERE pd2=:P1 and sem3=:SEM3 and sem5=:SEM5 and d1 = :D1 {$condition}
+            WHERE pd1=:PD1 and sem3=:SEM3 and sem5=:SEM5 and d1 = :D1 {$condition}
             GROUP BY d1, d2, us4, nr3, ug3
             ORDER BY us4,d1,d2
 SQL;
         $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':P1', $model->teacher);
+        $command->bindValue(':PD1', $model->teacher);
         $command->bindValue(':SEM3', $model->year);
         $command->bindValue(':SEM5', $model->semester);
         $command->bindValue(':D1', $discipline['d1']);
