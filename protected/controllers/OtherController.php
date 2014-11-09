@@ -21,7 +21,8 @@ class OtherController extends Controller
             array('allow',
                 'actions' => array(
                     'gostem',
-                    'deleteGostem'
+                    'deleteGostem',
+                    'subscription'
                 ),
                 'expression' => 'Yii::app()->user->isStd',
             ),
@@ -282,6 +283,15 @@ SQL;
         Yii::app()->end(
             CJSON::encode(array('res' => $res))
         );
+    }
+
+    public function actionSubscription()
+    {
+        $model = Yii::app()->user->dbModel;
+
+        $this->render('subscription', array(
+            'model' => $model,
+        ));
     }
 
 }

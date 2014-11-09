@@ -109,6 +109,7 @@
 
 
         <?php
+            // todo refactor gek dipl an so on
             $disciplines = D::model()->getDisciplinesForWorkLoad($model);
 
             $getGroupUrl = Yii::app()->createUrl('workLoad/getGroups');

@@ -291,12 +291,12 @@ SQL;
             INNER JOIN uo ON (us.us2 = uo.uo1)
             INNER JOIN d ON (uo.uo3 = d.d1)
             INNER JOIN gr ON (ug.ug2 = gr.gr1)
-            WHERE pd2=:P1 and sem3=:SEM3 and sem5=:SEM5
+            WHERE pd1=:PD1 and sem3=:SEM3 and sem5=:SEM5
 			ORDER BY d1,d2,us4,ug3,uo1
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':P1', $model->teacher);
+        $command->bindValue(':PD1', $model->teacher);
         $command->bindValue(':SEM3', $model->year);
         $command->bindValue(':SEM5', $model->semester);
         $disciplines = $command->queryAll();
@@ -427,16 +427,22 @@ SQL;
     public function getGekForWorkLoad(FilterForm $model)
     {
         $sql= <<<SQL
-                SELECT gosn3 as NR3,sem2 as SG1, d1, d2
-                FROM d
-                INNER JOIN gnk on (d.d1 = gnk.gnk2)
-                INNER JOIN gosn on (gnk.gnk1 = gosn.gosn1)
-                INNER JOIN pd on (gosn.gosn2 = pd.pd1)
-                INNER JOIN sem on (gnk.gnk3 = sem.sem1)
-				WHERE pd2 = :P1 and sem3 = :SEM3 and sem5 = :SEM5
+            SELECT nr3, sg1, d1, d2, sem5, us4
+            FROM d
+            INNER JOIN uo on (d.d1 = uo.uo3)
+            INNER JOIN us on (uo.uo1 = us.us2)
+            INNER JOIN sem on (us.us12 = sem.sem1)
+            INNER JOIN nr on (us.us1 = nr.nr2)
+            INNER JOIN u on (uo.uo22 = u.u1)
+            INNER JOIN c on (u.u15 = c.c1)
+            INNER JOIN sg on (u.u2 = sg.sg1)
+            INNER JOIN pd ON (nr.nr6 = pd.pd1) OR (nr.nr7 = pd.pd1) OR (nr.nr8 = pd.pd1) OR (nr.nr9 = pd.pd1)
+            WHERE c8=3 and pd1 = :PD1 and sem3 = :SEM3 and sem5 = :SEM5
+            GROUP BY nr3, sg1, d1, d2, sem5, us4
+            ORDER BY sem5, us4
 SQL;
         $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':P1', $model->teacher);
+        $command->bindValue(':PD1', $model->teacher);
         $command->bindValue(':SEM3', $model->year);
         $command->bindValue(':SEM5', $model->semester);
         $disciplines = $command->queryAll();
@@ -459,20 +465,20 @@ SQL;
     public function getAspForWorkLoad(FilterForm $model)
     {
         $sql= <<<SQL
-                SELECT nakn6 as NR3, nakn4
-                FROM nakn
-                INNER JOIN pd on (nakn.nakn5 = pd.pd1)
-				WHERE pd2 = :P1 and NAKN2 = :SEM3 and NAKN3 = :SEM5
+            SELECT vrn2 as d2, vrnar4 as NR3
+            FROM vrn
+            INNER JOIN vrna on (vrn.vrn1 = vrna.vrna3)
+            INNER JOIN vrnar on (vrna.vrna1 = vrnar.vrnar2)
+            WHERE vrnar3 = :PD1 and vrna4 = :SEM3 and vrna6 = :SEM5
 SQL;
         $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':P1', $model->teacher);
+        $command->bindValue(':PD1', $model->teacher);
         $command->bindValue(':SEM3', $model->year);
         $command->bindValue(':SEM5', $model->semester);
         $disciplines = $command->queryAll();
 
         foreach ($disciplines as $key => $discipline) {
             $us4 = 'Asp';
-            $disciplines[$key]['d2']  = $this->getAspName($discipline['nakn4']);
             $disciplines[$key]['us4'] = $us4;
             $disciplines[$key]['hours'][$us4] = round($discipline['nr3']);
             $disciplines[$key]['groups'][]    = null;
@@ -501,16 +507,15 @@ SQL;
     public function getDopForWorkLoad(FilterForm $model)
     {
         $sql = <<<SQL
-                SELECT nrdn4 as nr3, d1,d2
-                FROM d
-                INNER JOIN dn on (d.d1 = dn.dn2)
-                INNER JOIN nrdn on (dn.dn1 = nrdn.nrdn1)
-                INNER JOIN pd on (nrdn.nrdn2 = pd.pd1)
-                WHERE pd2 = :P1 and DN4 = :SEM3 and NRDN3 = :SEM5
+            SELECT d1, d2, DNAR4 as nr3
+            FROM dna
+            INNER JOIN dnar on (dna.dna1 = dnar.dnar2)
+            INNER JOIN d on (dna.dna2 = d.d1)
+            WHERE DNAR3=:PD1 and DNA4=:SEM3 and DNA7=:SEM5
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':P1', $model->teacher);
+        $command->bindValue(':PD1', $model->teacher);
         $command->bindValue(':SEM3', $model->year);
         $command->bindValue(':SEM5', $model->semester);
         $disciplines = $command->queryAll();

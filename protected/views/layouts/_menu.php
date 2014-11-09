@@ -312,6 +312,12 @@ $this->widget('zii.widgets.CMenu', array(
                     'active'  => $_c=='other' && $_a=='employment',
                     'visible' => _ch('other', 'employment'),
                 ),
+                array(
+                    'label'   => $_l2.tt('Запись на дисциплины'),
+                    'url'     => _u('/other/subscription'),
+                    'active'  => $_c=='other' && $_a=='subscription',
+                    'visible' => _ch('other', 'subscription') && $isStd,
+                ),
             ),
             'visible' => _ch('other', 'main')
         ),

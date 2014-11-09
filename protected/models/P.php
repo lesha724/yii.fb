@@ -468,13 +468,13 @@ class P extends CActiveRecord
 
         $today = date('d.m.Y 00:00');
         $sql = <<<SQL
-                    SELECT P1,P3,P4,P5,DOL2,PD1
-					FROM P
-						INNER JOIN PD ON (P1=PD2)
-						INNER JOIN DOL ON (PD45 = DOL1)
-					WHERE PD4 = {$chairId} and PD28 in (0,2,5,9) and PD3=0 and (PD13 IS NULL or PD13>'{$today}')
-					group by P1,P3,P4,P5,DOL2,PD1
-					ORDER BY P3
+            SELECT P1,P3,P4,P5,DOL2,PD1
+            FROM P
+                INNER JOIN PD ON (P1=PD2)
+                INNER JOIN DOL ON (PD45 = DOL1)
+            WHERE PD4 = {$chairId} and PD28 in (0,2,5,9) and PD3=0 and (PD13 IS NULL or PD13>'{$today}')
+            group by P1,P3,P4,P5,DOL2,PD1
+            ORDER BY P3
 SQL;
 
         $teachers = Yii::app()->db->createCommand($sql)->queryAll();
@@ -604,5 +604,28 @@ SQL;
         }
 
         return $teachers;
+    }
+
+    public function getTeachersWorkLoad($chairId, $keyFieldName = 'pd1')
+    {
+        if (empty($chairId))
+            return array();
+
+        $today = date('d.m.Y 00:00');
+        $sql = <<<SQL
+            SELECT P1,P3,P4,P5,DOL2,PD1,PD7
+            FROM P
+                INNER JOIN PD ON (P1=PD2)
+                INNER JOIN DOL ON (PD45 = DOL1)
+            WHERE PD4 = {$chairId} and PD28 in (0,2,5,9) and PD3=0 and (PD13 IS NULL or PD13>'{$today}')
+            ORDER BY P3
+SQL;
+
+        $teachers = Yii::app()->db->createCommand($sql)->queryAll();
+        $res = array();
+        foreach ($teachers as $tch) {
+            $res[ $tch[$keyFieldName] ] = SH::getShortName($tch['p3'], $tch['p4'], $tch['p5']).' '.$tch['dol2'];
+        }
+        return $res;
     }
 }

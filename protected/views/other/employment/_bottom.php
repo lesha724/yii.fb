@@ -40,8 +40,6 @@
         </tr>
 HTML;
 
-
-
         }
 
         echo $html;
