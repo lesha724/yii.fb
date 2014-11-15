@@ -627,7 +627,7 @@ SQL;
                 FROM STUS_AN({$sg1}, 4, 0, 1, 99)
                 WHERE stus19<>6
                 GROUP BY st1, st2, st3, st4, st56, st74, st75, st76, st117, st118, st119, st120, st121, st122,st123,st124,st125,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28
-                ORDER BY s DES
+                ORDER BY s DESC
 SQL;
         } elseif ($type == 1) {
             $sql = <<<SQL
