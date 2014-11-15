@@ -244,7 +244,7 @@ HTML;
         $added = date('d.m.Y H:i', strtotime($day['r11']));
         if (isset($day['fio']))
             $fio = $day['fio'];
-
+        $link = "<a href='#'>Доп. материалы</a>";
         if ($type == 1) // teacher
             $pattern = <<<HTML
 {$d2}[{$tip}]<br>
@@ -258,6 +258,7 @@ HTML;
 {$class}. {$a2}<br>
 {$fio}<br>
 {$text}: {$added}<br>
+{$link}
 HTML;
         elseif($type == 3) // classroom
             $pattern = <<<HTML

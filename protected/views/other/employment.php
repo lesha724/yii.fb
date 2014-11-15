@@ -1,3 +1,8 @@
+<style>
+    div#students_wrapper {
+        width:50%
+    }
+</style>
 <?php
 /**
  * @var OtherController $this
@@ -36,10 +41,19 @@ if ($model->category == 0) {
 
 
 if (! empty($model->group)) {
-    $students = St::model()->getStudentsForEmployment($model);
-    $this->renderPartial('employment/_bottom', array(
-        'model' => $model,
-        'students' => $students
-    ));
+
+    $type = PortalSettings::model()->findByPk(28)->ps2;
+    $students = St::model()->getStudentsForEmployment($model, $type);
+
+    if ($type == 0)
+        $this->renderPartial('employment/_bottom_0', array(
+            'model' => $model,
+            'students' => $students
+        ));
+    elseif ($type == 1)
+        $this->renderPartial('employment/_bottom_1', array(
+            'model' => $model,
+            'students' => $students
+        ));
 }
 

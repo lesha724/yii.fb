@@ -617,20 +617,63 @@ SQL;
         return $amount;
     }
 
-    public function getStudentsForEmployment(FilterForm $model)
+    public function getStudentsForEmployment(FilterForm $model, $type)
     {
         $sg1 = intval($model->group);
 
-        $sql = <<<SQL
-            SELECT sum( stus8 ) as s, st1,st2,st3,st4, st56, st74, st75, st76, st117, st118, st119, st120, st121, st122, st123, st124, st125
-            FROM STUS_AN({$sg1}, 4, 0, 1, 99)
-            WHERE stus19<>6
-            GROUP BY st1, st2, st3, st4, st56, st74, st75, st76, st117, st118, st119, st120, st121, st122,st123,st124,st125
-            ORDER BY s DESC
+        if ($type == 0) {
+            $sql = <<<SQL
+                SELECT sum(stus8) as s, st1,st2,st3,st4, st56, st74, st75, st76, st117, st118, st119, st120, st121, st122, st123, st124, st125,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28
+                FROM STUS_AN({$sg1}, 4, 0, 1, 99)
+                WHERE stus19<>6
+                GROUP BY st1, st2, st3, st4, st56, st74, st75, st76, st117, st118, st119, st120, st121, st122,st123,st124,st125,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28
+                ORDER BY s DES
 SQL;
+        } elseif ($type == 1) {
+            $sql = <<<SQL
+                SELECT stus8 as s, stus19, st1,st2,st3,st4, st56, st74, st75, st76, st117, st118, st119, st120, st121, st122, st123, st124, st125,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28
+                FROM STUS_AN({$sg1}, 4, 0, 1, 99)
+                WHERE stus19<>6
+                GROUP BY s, stus19,st1, st2, st3, st4, st56, st74, st75, st76, st117, st118, st119, st120, st121, st122,st123,st124,st125,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28
+SQL;
+        }
 
         $command  = Yii::app()->db->createCommand($sql);
         $students = $command->queryAll();
+
+        foreach ($students as $key => $student) {
+            $students[$key]['gr'] = Gr::model()->getGroupName($student['st56'], $student);
+        }
+
+        // counting avg stus8 manually because AVG function returns inappropriate results {{{
+        if ($type == 1) {
+            $data = array();
+            foreach ($students as $student) {
+
+                $gr  = $student['gr'];
+                $st1 = $student['st1'];
+
+                if (! isset($data[$gr][$st1]))
+                    $data[$gr][$st1] = $student;
+
+                $data[$gr][$st1]['marks'][] = $student['s'];
+
+                $marks = $data[$gr][$st1]['marks'];
+                $count = count($marks);
+                $sum   = array_sum($marks);
+                $avg   = $count > 0 ? round($sum/$count, 2) : 0;
+
+                $data[$gr][$st1]['avg'] = $avg;
+            }
+
+            foreach ($data as $group => $students) {
+                $sortedStudents = $students;
+                usort($sortedStudents, array($this, "sortByAvg"));
+                $data[$group] = $sortedStudents;
+            }
+            $students = $data;
+        }
+        // }}}
 
         return $students;
     }
@@ -690,4 +733,11 @@ SQL;
         return $params;
     }
 
+    private function sortByAvg($a, $b)
+    {
+        if ($a['avg'] == $b['avg']) {
+            return 0;
+        }
+        return ($a['avg'] > $b['avg']) ? -1 : 1;
+    }
 }

@@ -82,7 +82,7 @@ if (! empty($model->teacher))
 
 if (! empty($model->teacher)) {
 
-    $text = tt('Нажмите здесь для просмотра фотографии преподавателя');
+    $text = tt('Нажмите на иконку для просмотра фотографии преподавателя');
     echo <<<HTML
 <h3 class="blue header lighter tooltip-info">
     <i class="icon-info-sign show-info" style="cursor:pointer"></i>

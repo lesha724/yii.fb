@@ -80,6 +80,11 @@ $this->widget('zii.widgets.CMenu', array(
                     'active' => $_a=='entrance' && $_m=='admin'
                 ),
                 array(
+                    'label'  => $_l2.tt('Трудоустройство'),
+                    'url'    => _u('/admin/default/employment'),
+                    'active' => $_a=='employment' && $_m=='admin'
+                ),
+                array(
                     'label'  => $_l2.tt('Меню'),
                     'url'    => _u('/admin/default/menu'),
                     'active' => $_a=='menu' && $_m=='admin'

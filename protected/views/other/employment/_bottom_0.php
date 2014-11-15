@@ -1,12 +1,7 @@
-<style>
-    div#students_wrapper {
-        width:50%
-    }
-</style>
 <?php
 /**
  * @var OtherController $this
- * @var FilterForm $model
+ * @var array $students
  */
 ?>
 
@@ -22,7 +17,7 @@
     <tbody>
     <?php
         $html = '';
-        $sum  = $rating = 0;
+        $sum = $rating = 0;
 
         foreach ($students as $student) {
 
