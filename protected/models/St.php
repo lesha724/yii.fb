@@ -624,7 +624,7 @@ SQL;
         if ($type == 0) {
             $sql = <<<SQL
                 SELECT sum(stus8) as s, st1,st2,st3,st4, st56, st74, st75, st76, st117, st118, st119, st120, st121, st122, st123, st124, st125,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28
-                FROM STUS_AN({$sg1}, 4, 0, 1, 99)
+                FROM STUS_AN({$sg1}, 3, 0, 1, 99)
                 WHERE stus19<>6
                 GROUP BY st1, st2, st3, st4, st56, st74, st75, st76, st117, st118, st119, st120, st121, st122,st123,st124,st125,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28
                 ORDER BY s DESC
@@ -632,7 +632,7 @@ SQL;
         } elseif ($type == 1) {
             $sql = <<<SQL
                 SELECT stus8 as s, stus19, st1,st2,st3,st4, st56, st74, st75, st76, st117, st118, st119, st120, st121, st122, st123, st124, st125,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28
-                FROM STUS_AN({$sg1}, 4, 0, 1, 99)
+                FROM STUS_AN({$sg1}, 3, 0, 1, 99)
                 WHERE stus19<>6
                 GROUP BY s, stus19,st1, st2, st3, st4, st56, st74, st75, st76, st117, st118, st119, st120, st121, st122,st123,st124,st125,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28
 SQL;
