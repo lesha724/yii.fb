@@ -1,5 +1,5 @@
 <?php
-/* @var $this DefaultController
+/* @var $this ProgressController
  * @var $model FilterForm
  */
 

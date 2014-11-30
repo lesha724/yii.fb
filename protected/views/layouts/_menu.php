@@ -188,6 +188,12 @@ $this->widget('zii.widgets.CMenu', array(
                     'visible' => _ch('progress', 'attendanceStatistic'),
                     'active'  => $_c=='progress' && $_a=='attendanceStatistic'
                 ),
+                array(
+                    'label'   => $_l2.tt('Экз. сессия'),
+                    'url'     => _u('/progress/examSession'),
+                    'visible' => _ch('progress', 'examSession'),
+                    'active'  => $_c=='progress' && $_a=='examSession'
+                ),
             ),
             'visible' => _ch('progress', 'main')
         ),

@@ -9,6 +9,7 @@
  * @property integer $grants3
  * @property integer $grants4
  * @property integer $grants5
+ * @property integer $grants6
  *
  * The followings are the available model relations:
  * @property P $p
@@ -18,6 +19,7 @@ class Grants extends CActiveRecord
     const EL_JOURNAL = 'grant3';
     const MODULES = 'grant4';
     const DOCS = 'grant5';
+    const EXAM_SESSION = 'grant6';
 	/**
 	 * @return string the associated database table name
 	 */
@@ -117,6 +119,9 @@ class Grants extends CActiveRecord
                 break;
             case self::DOCS:
                 $grants = $this->grants5;
+                break;
+            case self::EXAM_SESSION:
+                $grants = $this->grants6;
                 break;
             default:
                 $grants = null;

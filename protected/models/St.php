@@ -475,7 +475,7 @@ class St extends CActiveRecord
         return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
             'sort' => array(
-                'defaultOrder' => 'st2',
+                'defaultOrder' => 'st2 collate UNICODE',
                 'attributes' => array(
                     'st2',
                     'st3',
@@ -517,7 +517,7 @@ class St extends CActiveRecord
         return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
             'sort' => array(
-                'defaultOrder' => 'st2',
+                'defaultOrder' => 'st2 collate UNICODE',
                 'attributes' => array(
                     'st2',
                     'st3',
@@ -540,7 +540,7 @@ class St extends CActiveRecord
            inner join ucx on (ucg.ucg2 = ucx.ucx1)
            inner join uo on (ucx.ucx1 = uo.uo19)
         where ucg3=:GR1 and uo1=:UO1 and ucg4=0
-        order by st2, st3
+        order by st2 collate UNICODE, st3 collate UNICODE
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
@@ -565,7 +565,7 @@ SQL;
             INNER JOIN std on (st.st1 = std.std2)
             INNER JOIN sgr on (st.st32 = sgr.sgr1)
             WHERE st101<>7 and STD3=:GR1 and STD11 in (0,6,8) and STD4<='{$date1}' and (STD7 is null or STD7>'{$date2}')
-            ORDER BY 2
+            ORDER BY ST2 collate UNICODE
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
@@ -703,7 +703,7 @@ SQL;
             INNER JOIN std on (gr.gr1 = std.std3)
             INNER JOIN st on (std.std2 = st.st1)
             WHERE std2 = :ST1
-            GROUP BY pnsp2,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,st56,pnsp13,PNSP17, PNSP18, PNSP19,PNSP20
+            GROUP BY pnsp2 collate UNICODE,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,st56,pnsp13,PNSP17, PNSP18, PNSP19,PNSP20
 SQL;
 
 
@@ -740,4 +740,29 @@ SQL;
         }
         return ($a['avg'] > $b['avg']) ? -1 : 1;
     }
+
+    public function getStudentsForExamSession($params)
+    {
+        extract($params);
+
+        $sql = <<<SQL
+            select stus.*, st1,st2,st3,st4
+            from gr
+            inner join std on (gr.gr1 = std.std3)
+            inner join st on (std.std2 = st.st1)
+            inner join stus on (st.st1 = stus.stus1)
+            where gr1=:GR1 and std7 is null and std11 <> 1 and stus18 = :STUS18 AND stus19 = :STUS19 AND stus20 = :STUS20 AND stus21 = :STUS21
+            order by st2 collate UNICODE
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':GR1', $gr1);
+        $command->bindValue(':STUS18', $stus18);
+        $command->bindValue(':STUS19', $stus19);
+        $command->bindValue(':STUS20', $stus20);
+        $command->bindValue(':STUS21', $stus21);
+        $students = $command->queryAll();
+
+        return $students;
+    }
+
 }

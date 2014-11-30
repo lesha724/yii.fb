@@ -30,6 +30,8 @@ class ProgressController extends Controller
                     'thematicPlan',
                     'renderUstemTheme',
                     'deleteUstemTheme',
+                    'examSession',
+                    'insertStus'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -506,5 +508,81 @@ class ProgressController extends Controller
         $this->render('attendanceStatistic', array(
             'model' => $model,
         ));
+    }
+
+    public function actionExamSession()
+    {
+        $type = 0; // own disciplines
+
+        $grants = Yii::app()->user->dbModel->grants;
+        if (! empty($grants))
+            $type = $grants->getGrantsFor(Grants::EXAM_SESSION);
+
+        $model = new FilterForm;
+        $model->scenario = 'exam-session';
+        if (isset($_REQUEST['FilterForm']))
+            $model->attributes=$_REQUEST['FilterForm'];
+
+        $this->render('examSession', array(
+            'model' => $model,
+            'type' => $type,
+        ));
+
+    }
+
+    public function actionInsertStus()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $st1    = Yii::app()->request->getParam('st1', null);
+        $stus0  = Yii::app()->request->getParam('stus0', null);
+        $stusp5 = Yii::app()->request->getParam('stusp5', null);
+        $field  = Yii::app()->request->getParam('field', null);
+        $value  = Yii::app()->request->getParam('value', null);
+
+        $stus  = array('stus8', 'stus6', 'stus7', 'stus3');
+        $stusp = array('stusp8', 'stusp6', 'stusp7', 'stusp3');
+        $whiteList = array_merge($stus, $stusp);
+
+        if (in_array($field, $whiteList))
+            $attr = array(
+                $field => $value
+            );
+
+        $error = true;
+
+        if (in_array($field, $stus)) {
+
+            $criteria = new CDbCriteria();
+            $criteria->compare('stus0', $stus0);
+
+            $model = Stus::model()->find($criteria);
+            if (! empty($model))
+                $error = !$model->saveAttributes($attr);
+
+        } elseif (in_array($field, $stusp)) {
+
+                $criteria = new CDbCriteria();
+                $criteria->compare('stusp0', $stus0);
+                $criteria->compare('stusp5', $stusp5);
+
+                $model = Stusp::model()->find($criteria);
+                if (empty($model)) {
+                    $model = new Stusp();
+                    $model->stusp0 = $stus0;
+                    $model->stusp2 = 0;
+                    $model->stusp5 = $stusp5;
+                    $model->stusp7 = '';
+                    $model->stusp12 = '';
+
+                    $model->$field = $value;
+
+                    $error = ! $model->save();
+                } else
+                    $error = ! $model->customSave($attr);
+            }
+
+        Yii::app()->end(CJSON::encode(array('error' => $error)));
     }
 }

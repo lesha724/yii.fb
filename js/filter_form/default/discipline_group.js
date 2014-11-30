@@ -3,16 +3,17 @@ $(document).ready(function(){
     $spinner1 = $('#spinner1');
 
     $(document).on('change', '#FilterForm_discipline', function() {
-        var params = {
-            type : $('#type').val(),
-            discipline : $(this).val()
-        }
+
+        var $form  = $(this).closest('form');
+        var formId = $form.attr('id');
+        var url    = $form.attr('action');
 
         $spinner1.show();
 
-        $.get(getGroupsUrl, params, function(data){
-            $('[id*=FilterForm_group]').remove();
-            $('#filter-form').append(data)
+        $.get(url, $form.serialize(), function(data){
+
+            var html = $('#'+formId, data).html();
+            $('div', $form).replaceWith(html);
             initChosen();
             $spinner1.hide();
         })

@@ -8,7 +8,7 @@ $(document).ready(function(){
 
     $('div[class*=journal_div_table] tr:not(.min-max) input').change(function(){
 
-        $that = $(this);
+        var $that = $(this);
 
         var st1  = $that.parents('[data-st1]').data('st1');
 

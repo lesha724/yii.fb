@@ -152,7 +152,7 @@ SQL;
 
     public function getSettingFor($key)
     {
-        if (empty($this->settings[$key])) {
+        if (! isset($this->settings[$key])) {
 
             $setting = PortalSettings::model()->findByPk($key)->getAttribute('ps2');
 

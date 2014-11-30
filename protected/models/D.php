@@ -221,7 +221,7 @@ class D extends CActiveRecord
                inner join sem on (us.us12 = sem.sem1)
                inner join sg on (u.u2 = sg.sg1)
             where sg4=0 and sem3=:YEAR and sem5=:SEM
-            group by d1,d2;
+            group by d1,d2
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
@@ -230,6 +230,24 @@ SQL;
         $command->bindValue(':SEM', Yii::app()->session['sem']);
         $disciplines = $command->queryAll();
 
+        return $disciplines;
+    }
+
+    public function getDisciplinesForExamSession($type = null)
+    {
+        $sql = <<<SQL
+            select * from LIST_DISC_PREP(:P1, :YEAR, :SEM)
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $disciplines = $command->queryAll();
+
+        foreach ($disciplines as $key => $d) {
+            $disciplines[$key]['id']   = implode(':', array($d['gr1'], $d['stus18'], $d['stus19'], $d['stus20'], $d['stus21']));
+            $disciplines[$key]['name'] = $d['vid'].' '.$d['gr3'].' '.$d['d2'];
+        }
         return $disciplines;
     }
 

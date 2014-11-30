@@ -447,7 +447,7 @@ class P extends CActiveRecord
         return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
             'sort' => array(
-                'defaultOrder' => 'p3 ',
+                'defaultOrder' => 'p3 collate UNICODE',
                 'attributes' => array(
                     'p3',
                     'p4',
@@ -474,7 +474,7 @@ class P extends CActiveRecord
                 INNER JOIN DOL ON (PD45 = DOL1)
             WHERE PD4 = {$chairId} and PD28 in (0,2,5,9) and PD3=0 and (PD13 IS NULL or PD13>'{$today}')
             group by P1,P3,P4,P5,DOL2,PD1
-            ORDER BY P3
+            ORDER BY P3 collate UNICODE
 SQL;
 
         $teachers = Yii::app()->db->createCommand($sql)->queryAll();
@@ -577,7 +577,7 @@ SQL;
 							from ZPD
 						where ZPD2 = 2
 					)
-			order by P3,P4,P5,PD7
+			order by P3 collate UNICODE,P4,P5,PD7
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':DATE1', date('d.m.Y 00:00', strtotime('+20 days')));
@@ -618,7 +618,7 @@ SQL;
                 INNER JOIN PD ON (P1=PD2)
                 INNER JOIN DOL ON (PD45 = DOL1)
             WHERE PD4 = {$chairId} and PD28 in (0,2,5,9) and PD3=0 and (PD13 IS NULL or PD13>'{$today}')
-            ORDER BY P3
+            ORDER BY P3 collate UNICODE
 SQL;
 
         $teachers = Yii::app()->db->createCommand($sql)->queryAll();

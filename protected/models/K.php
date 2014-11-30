@@ -153,7 +153,7 @@ class K extends CActiveRecord
               INNER JOIN k on (f.f1 = k.k7)
             WHERE f1>0 and f12<>0 and f17<>2 and (f19 is null or f19>'{$today}') and
                   k11<>0 and k1>0 and (k9 is null or k9>'{$today}')
-            ORDER BY k8,f15,f3,k3
+            ORDER BY k8,f15,f3 collate UNICODE, k3 collate UNICODE
 SQL;
         $chairs = Yii::app()->db->createCommand($sql)->queryAll();
 
@@ -167,7 +167,7 @@ SQL;
 				FROM F
 				inner join k on (f.f1 = k.k7)
 			WHERE f12='1' and f17='0' and k11='1' and k10=:FILIAL and (k9 is null) and K1>0
-			ORDER BY K3
+			ORDER BY K3 collate UNICODE
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
@@ -223,7 +223,7 @@ SQL;
 					K2 CONTAINING :QUERY1 OR
 					K3 CONTAINING :QUERY2
 				)
-            ORDER BY K3
+            ORDER BY K3 collate UNICODE
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':QUERY1', $query);
@@ -254,7 +254,7 @@ SQL;
              INNER JOIN k on (nr30 = k1)
              INNER JOIN std on (gr1 = std3)
            WHERE  c8=3 and sem3=:YEAR and std2=:ST1 and std11 in (0,6,8) and std7 is null
-           GROUP BY d1,k1,k3,d2,nr1,uo3
+           GROUP BY d1,k1,k3 collate UNICODE, d2 collate UNICODE,nr1,uo3
 SQL;
         list($year, ) = SH::getCurrentYearAndSem();
         $command = Yii::app()->db->createCommand($sql);

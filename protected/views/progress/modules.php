@@ -24,10 +24,10 @@ JS
 ?>
 
 <?php
-    $this->renderPartial('/widget/year_sem');
+    $this->renderPartial('/filter_form/default/year_sem');
 
 
-    $this->renderPartial('/widget/filter_form', array(
+    $this->renderPartial('/filter_form/default/discipline_group', array(
         'model' => $model,
         'type'  => $type
     ));

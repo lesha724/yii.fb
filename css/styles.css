@@ -43,11 +43,11 @@ table.small-table-1{
     font-size:10px;
 }
 
-.journal-bottom td.error {
+.journal-bottom td.error, .exam-session-table-2 td.error {
     border:1px solid red;
 }
 
-.journal-bottom td.success {
+.journal-bottom td.success, .exam-session-table-2 td.success {
     border:1px solid green;
 }
 
@@ -329,4 +329,25 @@ div#marks-statistic .table-2 {
 }
 div#marks-statistic .table-3 {
     width:25%;
+}
+
+table.exam-session-table-2 {
+    width: 10% !important;
+    float:left;
+}
+
+table.exam-session-table-2 input{
+    font-size: 10px;
+}
+
+table.exam-session-table-1 {
+    width:15%;
+    float: left;
+}
+
+table.tr-h-25 tr td{
+    height:25px !important;
+}
+div.exam-session-div {
+    overflow-x: scroll;
 }
