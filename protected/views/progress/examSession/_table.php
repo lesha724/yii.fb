@@ -1,6 +1,6 @@
 <?php
-global $params;
-$params = array(
+global $htmlOptions;
+$htmlOptions = array(
     1 => array('style' => 'margin:0;width:50px;font-size:10px;height: 20px;padding:0', 'id'=>false),
     2 => array('maxlength' => 3, 'style' => 'height:10px;margin:0;width:20px', 'id'=>false),
     3 => array('maxlength' => 1, 'style' => 'height:10px;margin:0;width:10px', 'id'=>false),
@@ -40,21 +40,21 @@ HTML;
 
 function tdMain($stus)
 {
-    global $params;
+    global $htmlOptions;
     global $statuses;
 
-    //$select = CHtml::dropDownList('stus3', $stus['stus3'], $statuses, $params[1]);
+    //$select = CHtml::dropDownList('stus3', $stus['stus3'], $statuses, $htmlOptions[1]);
 
     $mark = $stus['stus8'];
     if ($stus['stus19'] == 6)
         $input1 = CHtml::checkBox('stus8', $mark == -1, array('id' => false));
     else {
         $mark = $mark == 0 ? '' : $mark;
-        $input1 = CHtml::textField('stus8', $mark, $params[3]);
+        $input1 = CHtml::textField('stus8', $mark, $htmlOptions[3]);
     }
 
-    $input2 = CHtml::textField('stus6', SH::formatDate('Y-m-d H:i:s', 'd.m.y', $stus['stus6']), $params[4]);
-    $input3 = CHtml::textField('stus7', $stus['stus7'], $params[5]);
+    $input2 = CHtml::textField('stus6', SH::formatDate('Y-m-d H:i:s', 'd.m.y', $stus['stus6']), $htmlOptions[4]);
+    $input3 = CHtml::textField('stus7', $stus['stus7'], $htmlOptions[5]);
 
     $td1 = <<<HTML
     <td>{$input1}</td>
@@ -67,14 +67,14 @@ HTML;
 
 function tdP($stus, $i, $allStusp)
 {
-    global $params;
+    global $htmlOptions;
     global $statuses;
 
     $st1   = $stus['st1'];
     $stus0 = $stus['stus0'];
 
     $status = isset($allStusp[$st1][$stus0][$i]) ? $allStusp[$st1][$stus0][$i]['stusp3'] : '';
-    $select = CHtml::dropDownList('stusp3', $status, $statuses, $params[1]);
+    $select = CHtml::dropDownList('stusp3', $status, $statuses, $htmlOptions[1]);
 
     $mark = isset($allStusp[$st1][$stus0][$i]) ? $allStusp[$st1][$stus0][$i]['stusp8'] : '';
 
@@ -82,14 +82,14 @@ function tdP($stus, $i, $allStusp)
         $input1 = CHtml::checkBox('stusp8', $mark == -1, array('id' => false));
     else {
         $mark = $mark == 0 ? '' : $mark;
-        $input1 = CHtml::textField('stusp8', $mark, $params[3]);
+        $input1 = CHtml::textField('stusp8', $mark, $htmlOptions[3]);
     }
 
     $mark = isset($allStusp[$st1][$stus0][$i]) ? SH::formatDate('Y-m-d H:i:s', 'd.m.y', $allStusp[$st1][$stus0][$i]['stusp6']) : '';
-    $input2 = CHtml::textField('stusp6', $mark, $params[4]);
+    $input2 = CHtml::textField('stusp6', $mark, $htmlOptions[4]);
 
     $mark = isset($allStusp[$st1][$stus0][$i]) ? $allStusp[$st1][$stus0][$i]['stusp7'] : '';
-    $input3 = CHtml::textField('stusp7', $mark, $params[5]);
+    $input3 = CHtml::textField('stusp7', $mark, $htmlOptions[5]);
 
     $td1 = <<<HTML
     <td data-stusp5="{$i}">{$select}</td>
@@ -114,8 +114,9 @@ function getAllSt1($students)
     $text1 = tt('Дата');
     $text2 = tt('№ вед.');
     $url   = Yii::app()->createUrl('progress/insertStus');
+    $k1    = $params['stus21'];
     $table = <<<HTML
-<table class="table table-striped table-bordered table-hover small-rows exam-session-table-2 tr-h-25" data-url="{$url}">
+<table data-url="{$url}" data-k1="{$k1}" class="table table-striped table-bordered table-hover small-rows exam-session-table-2 tr-h-25" >
     <thead>
         <tr>
             <th colspan="3">%s</th>

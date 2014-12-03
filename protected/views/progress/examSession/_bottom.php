@@ -27,7 +27,8 @@ echo '<div>';
 
     echo '<div class="exam-session-div">';
     $this->renderPartial('examSession/_table', array(
-        'students' => $students
+        'students' => $students,
+        'params'   => $params
     ));
     echo '</div>';
 echo '</div>';

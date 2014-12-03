@@ -24,6 +24,7 @@ $(document).ready(function(){
         var st1    = $that.parents('[data-st1]').data('st1');
         var stus0  = $that.parents('[data-stus0]').data('stus0');
         var stusp5 = $that.parents('[data-stusp5]').data('stusp5');
+        var k1     = $that.parents('[data-k1]').data('k1');
 
         var sheet = {
             date  : $('#date').val(),
@@ -35,6 +36,7 @@ $(document).ready(function(){
             st1   : st1,
             stus0 : stus0,
             stusp5: stusp5,
+            k1    : k1,
             value : $that.is(':checkbox')
                         ? $that.is(':checked') ? -1 : 0
                         : $that.val()

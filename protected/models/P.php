@@ -628,4 +628,21 @@ SQL;
         }
         return $res;
     }
+
+    public function getPd1ByK1($k1)
+    {
+        $today = date('Y-m-d 00:00');
+        $sql = <<<SQL
+        SELECT FIRST 1 pd1
+        FROM PD
+        WHERE pd2=:P1 and pd4=:K1 and pd3=0 and pd28 in (0,2,5,9) and pd11<='{$today}' and (pd13 is null or pd13>'{$today}')
+        ORDER BY pd7
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':K1', $k1);
+        $command->bindValue(':P1', $this->p1);
+        $pd1 = $command->queryRow();
+        return $pd1;
+    }
+
 }

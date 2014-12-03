@@ -538,6 +538,7 @@ class ProgressController extends Controller
         $st1    = Yii::app()->request->getParam('st1', null);
         $stus0  = Yii::app()->request->getParam('stus0', null);
         $stusp5 = Yii::app()->request->getParam('stusp5', null);
+        $k1     = Yii::app()->request->getParam('k1', null);
         $field  = Yii::app()->request->getParam('field', null);
         $value  = Yii::app()->request->getParam('value', null);
 
@@ -552,14 +553,15 @@ class ProgressController extends Controller
 
         $error = true;
 
+        $criteria = new CDbCriteria();
+        $criteria->compare('stus0', $stus0);
+        $modelS = Stus::model()->find($criteria);
+        $modelS->saveAttributes(array('stus4' => Yii::app()->user->dbModel->getPd1ByK1($k1)));
+
         if (in_array($field, $stus)) {
 
-            $criteria = new CDbCriteria();
-            $criteria->compare('stus0', $stus0);
-
-            $model = Stus::model()->find($criteria);
-            if (! empty($model))
-                $error = !$model->saveAttributes($attr);
+            if (! empty($modelS))
+                $error = ! $modelS->saveAttributes($attr);
 
         } elseif (in_array($field, $stusp)) {
 
