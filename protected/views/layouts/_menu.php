@@ -191,7 +191,7 @@ $this->widget('zii.widgets.CMenu', array(
                 array(
                     'label'   => $_l2.tt('Экз. сессия'),
                     'url'     => _u('/progress/examSession'),
-                    'visible' => _ch('progress', 'examSession'),
+                    'visible' => _ch('progress', 'examSession') && $isTch,
                     'active'  => $_c=='progress' && $_a=='examSession'
                 ),
             ),
