@@ -541,6 +541,9 @@ class ProgressController extends Controller
         $k1     = Yii::app()->request->getParam('k1', null);
         $field  = Yii::app()->request->getParam('field', null);
         $value  = Yii::app()->request->getParam('value', null);
+        $stus6  = Yii::app()->request->getParam('stus6', null);
+        $stus7  = Yii::app()->request->getParam('stus7', null);
+        $cxmb0  = Yii::app()->request->getParam('cxmb0', null);
 
         $stus  = array('stus8', 'stus6', 'stus7', 'stus3');
         $stusp = array('stusp8', 'stusp6', 'stusp7', 'stusp3');
@@ -560,8 +563,16 @@ class ProgressController extends Controller
 
         if (in_array($field, $stus)) {
 
-            if (! empty($modelS))
-                $error = ! $modelS->saveAttributes($attr);
+            if (! empty($modelS)) {
+                if ($field == 'stus3') {
+                    $cxmb = Cxmb::model()->getExtraMarks($cxmb0, $value);
+                    if (! empty($cxmb)) {
+                        $attr['stus11'] = $cxmb['cxmb3'];
+                        $attr['stus8']  = $cxmb['cxmb2'];
+                    }
+                }
+                $error = ! $modelS->saveAttributes($attr + array('stus6'=>$stus6, 'stus7'=>$stus7));
+            }
 
         } elseif (in_array($field, $stusp)) {
 
@@ -569,20 +580,29 @@ class ProgressController extends Controller
                 $criteria->compare('stusp0', $stus0);
                 $criteria->compare('stusp5', $stusp5);
 
+                if ($field == 'stusp3') {
+                    $cxmb = Cxmb::model()->getExtraMarks($cxmb0, $value);
+                    if (! empty($cxmb)) {
+                        $attr['stusp11'] = $cxmb['cxmb3'];
+                        $attr['stusp8']  = $cxmb['cxmb2'];
+                    }
+                }
+
                 $model = Stusp::model()->find($criteria);
                 if (empty($model)) {
                     $model = new Stusp();
                     $model->stusp0 = $stus0;
                     $model->stusp2 = 0;
                     $model->stusp5 = $stusp5;
-                    $model->stusp7 = '';
+                    $model->stusp6 = $stus6;
+                    $model->stusp7 = $stus7;
                     $model->stusp12 = '';
 
                     $model->$field = $value;
 
                     $error = ! $model->save();
                 } else
-                    $error = ! $model->customSave($attr);
+                    $error = ! $model->customSave($attr + array('stusp6'=>$stus6, 'stusp7'=>$stus7));
             }
 
         Yii::app()->end(CJSON::encode(array('error' => $error)));

@@ -236,7 +236,9 @@ SQL;
     public function getDisciplinesForExamSession($type = null)
     {
         $sql = <<<SQL
-            select * from LIST_DISC_PREP(:P1, :YEAR, :SEM)
+            select *
+            from LIST_DISC_PREP(:P1, :YEAR, :SEM)
+            order by d2 collate UNICODE, vid collate UNICODE, gr3
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
@@ -245,8 +247,8 @@ SQL;
         $disciplines = $command->queryAll();
 
         foreach ($disciplines as $key => $d) {
-            $disciplines[$key]['id']   = implode(':', array($d['gr1'], $d['stus18'], $d['stus19'], $d['stus20'], $d['stus21']));
-            $disciplines[$key]['name'] = $d['vid'].' '.$d['gr3'].' '.$d['d2'];
+            $disciplines[$key]['id']   = implode(':', array($d['gr1'], $d['cxmb0'], $d['stus18'], $d['stus19'], $d['stus20'], $d['stus21']));
+            $disciplines[$key]['name'] = implode(', ', array($d['d2'], $d['vid'], $d['gr3'], ));
         }
         return $disciplines;
     }

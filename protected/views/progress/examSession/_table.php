@@ -3,7 +3,7 @@ global $htmlOptions;
 $htmlOptions = array(
     1 => array('style' => 'margin:0;width:50px;font-size:10px;height: 20px;padding:0', 'id'=>false),
     2 => array('maxlength' => 3, 'style' => 'height:10px;margin:0;width:20px', 'id'=>false),
-    3 => array('maxlength' => 1, 'style' => 'height:10px;margin:0;width:10px', 'id'=>false),
+    3 => array('maxlength' => 3, 'style' => 'height:10px;margin:0;width:15px', 'id'=>false),
     4 => array('style' => 'height:10px;margin:0;width:45px', 'class' => 'datepicker', 'id'=>false),
     5 => array('maxlength' => 15, 'style' => 'height:10px;margin:0;width:40px', 'id'=>false),
 );
@@ -16,15 +16,15 @@ $statuses = array(
     -3 => 'Н/я у',
 );
 
-function tr($stus, $allStusp)
+function tr($stus, $allStusp, $tabindex)
 {
     $st1   = $stus['st1'];
     $stus0 = $stus['stus0'];
 
-    $td1 = tdMain($stus);
-    $td2 = tdP($stus, 0, $allStusp);
-    $td3 = tdP($stus, 1, $allStusp);
-    $td4 = tdP($stus, 2, $allStusp);
+    $td1 = tdMain($stus, $tabindex);
+    $td2 = tdP($stus, 0, $allStusp, $tabindex);
+    $td3 = tdP($stus, 1, $allStusp, $tabindex);
+    $td4 = tdP($stus, 2, $allStusp, $tabindex);
 
     $pattern = <<<HTML
 <tr data-st1="{$st1}" data-stus0="{$stus0}">
@@ -38,19 +38,19 @@ HTML;
     return $pattern;
 }
 
-function tdMain($stus)
+function tdMain($stus, $tabindex)
 {
     global $htmlOptions;
     global $statuses;
 
     //$select = CHtml::dropDownList('stus3', $stus['stus3'], $statuses, $htmlOptions[1]);
 
-    $mark = $stus['stus8'];
+    $mark = $stus['stus3'];
     if ($stus['stus19'] == 6)
-        $input1 = CHtml::checkBox('stus8', $mark == -1, array('id' => false));
+        $input1 = CHtml::checkBox('stus3', $mark == -1, array('id' => false, 'tabindex' => $tabindex));
     else {
         $mark = $mark == 0 ? '' : $mark;
-        $input1 = CHtml::textField('stus8', $mark, $htmlOptions[3]);
+        $input1 = CHtml::textField('stus3', $mark, $htmlOptions[3]+array('tabindex' => $tabindex));
     }
 
     $input2 = CHtml::textField('stus6', SH::formatDate('Y-m-d H:i:s', 'd.m.y', $stus['stus6']), $htmlOptions[4]);
@@ -65,24 +65,25 @@ HTML;
     return $td1;
 }
 
-function tdP($stus, $i, $allStusp)
+function tdP($stus, $i, $allStusp, $tabindex)
 {
     global $htmlOptions;
     global $statuses;
 
+    $tabindex = ($i+1) * ($tabindex+100);
     $st1   = $stus['st1'];
     $stus0 = $stus['stus0'];
 
     $status = isset($allStusp[$st1][$stus0][$i]) ? $allStusp[$st1][$stus0][$i]['stusp3'] : '';
     $select = CHtml::dropDownList('stusp3', $status, $statuses, $htmlOptions[1]);
 
-    $mark = isset($allStusp[$st1][$stus0][$i]) ? $allStusp[$st1][$stus0][$i]['stusp8'] : '';
+    $mark = isset($allStusp[$st1][$stus0][$i]) ? $allStusp[$st1][$stus0][$i]['stusp3'] : '';
 
     if ($stus['stus19'] == 6)
-        $input1 = CHtml::checkBox('stusp8', $mark == -1, array('id' => false));
+        $input1 = CHtml::checkBox('stusp3', $mark == -1, array('id' => false, 'tabindex' => $tabindex));
     else {
-        $mark = $mark == 0 ? '' : $mark;
-        $input1 = CHtml::textField('stusp8', $mark, $htmlOptions[3]);
+        $mark = $mark <= 0 ? '' : $mark;
+        $input1 = CHtml::textField('stusp3', $mark, $htmlOptions[3]+array('tabindex' => $tabindex));
     }
 
     $mark = isset($allStusp[$st1][$stus0][$i]) ? SH::formatDate('Y-m-d H:i:s', 'd.m.y', $allStusp[$st1][$stus0][$i]['stusp6']) : '';
@@ -115,8 +116,10 @@ function getAllSt1($students)
     $text2 = tt('№ вед.');
     $url   = Yii::app()->createUrl('progress/insertStus');
     $k1    = $params['stus21'];
+    $cxmb0 = $params['cxmb0'];
+
     $table = <<<HTML
-<table data-url="{$url}" data-k1="{$k1}" class="table table-striped table-bordered table-hover small-rows exam-session-table-2 tr-h-25" >
+<table data-url="{$url}" data-k1="{$k1}" data-cxmb0="{$cxmb0}" class="table table-striped table-bordered table-hover small-rows exam-session-table-2 tr-h-25" >
     <thead>
         <tr>
             <th colspan="3">%s</th>
@@ -125,19 +128,19 @@ function getAllSt1($students)
             <th colspan="4">%s</th>
         </tr>
         <tr>
-            <th>5</th>
+            <th>100</th>
             <th>{$text1}</th>
             <th>{$text2}</th>
             <th></th>
-            <th>5</th>
+            <th>100</th>
             <th>{$text1}</th>
             <th>{$text2}</th>
             <th></th>
-            <th>5</th>
+            <th>100</th>
             <th>{$text1}</th>
             <th>{$text2}</th>
             <th></th>
-            <th>5</th>
+            <th>100</th>
             <th>{$text1}</th>
             <th>{$text2}</th>
         </tr>
@@ -152,8 +155,10 @@ HTML;
     $allStusp = Stusp::model()->getAllStusP($allSt1);
 
     $tr = '';
+    $tabindex = 1;
     foreach($students as $key => $stus) {
-        $tr .= tr($stus, $allStusp);
+        $tr .= tr($stus, $allStusp, $tabindex);
+        $tabindex++;
     }
     echo sprintf($table, tt('Основная сдача'), tt('Несдача основная'), tt('Пересдача 1'), tt('Пересдача 2'), $tr);
 

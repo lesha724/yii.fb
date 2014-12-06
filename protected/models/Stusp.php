@@ -140,22 +140,31 @@ SQL;
         return $res;
     }
 
-    public function customSave($attr)
+    public function customSave($attrs)
     {
-        $field  = key($attr);
+        /*$field  = key($attr);
         $value  = $attr[$field];
 
-        if ($field == 'stusp8')
-            $value = empty($value) ? 0 : $value;
+        if ($field == 'stusp3')
+            $value = empty($value) ? 0 : $value;*/
+
+        $sets = $params = array();
+        foreach ($attrs as $key => $val) {
+            $paramName = ':'.mb_strtoupper($key);
+            $sets[] = $key.'='.$paramName;
+            $params[$paramName] = $val;
+        }
+        $sets = implode(', ', $sets);
 
         $stusp0 = $this->stusp0;
         $stusp5 = $this->stusp5;
 
         $sql = <<<SQL
-          update stusp set {$field} = :VALUE
+          update stusp set {$sets}
           where stusp0={$stusp0} and stusp5={$stusp5}
 SQL;
-        return Yii::app()->db->createCommand($sql)->execute(array(':VALUE' => $value));
+
+        return Yii::app()->db->createCommand($sql)->execute($params);
     }
 
 }

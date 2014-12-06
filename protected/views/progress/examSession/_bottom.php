@@ -5,10 +5,11 @@
 
 if (! empty($model->discipline)):
 
-    list($gr1, $stus18, $stus19, $stus20, $stus21) = explode(':', $model->discipline);
+    list($gr1, $cxmb0, $stus18, $stus19, $stus20, $stus21) = explode(':', $model->discipline);
 
     $params = array(
         'gr1'    => $gr1,
+        'cxmb0'  => $cxmb0,
         'stus18' => $stus18,
         'stus19' => $stus19,
         'stus20' => $stus20,

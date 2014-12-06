@@ -641,7 +641,8 @@ SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':K1', $k1);
         $command->bindValue(':P1', $this->p1);
-        $pd1 = $command->queryRow();
+        $pd1 = $command->queryScalar();
+
         return $pd1;
     }
 
