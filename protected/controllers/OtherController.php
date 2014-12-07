@@ -22,7 +22,8 @@ class OtherController extends Controller
                 'actions' => array(
                     'gostem',
                     'deleteGostem',
-                    'subscription'
+                    'subscription',
+                    'ciklVBloke'
                 ),
                 'expression' => 'Yii::app()->user->isStd',
             ),
@@ -289,9 +290,34 @@ SQL;
     {
         $model = Yii::app()->user->dbModel;
 
+        //unset($_SESSION['u1_vib'], $_SESSION['u1_vib_disc'], $_SESSION['func']);
+        die(var_dump('отменить все чтто выбрал студент'));
         $this->render('subscription', array(
             'model' => $model,
         ));
     }
+
+    public function actionCiklVBloke()
+    {
+        $u1_cikl = Yii::app()->request->getParam('u1_cikl', null);
+
+        $res = false;
+        if (! empty($u1_cikl)) {
+
+            $_SESSION['u1_vib'] .= ','.$u1_cikl;
+
+            if (! isset($_SESSION['u1_vib_disc']))
+                $_SESSION['u1_vib_disc'] = $u1_cikl;
+            else
+                $_SESSION['u1_vib_disc'] .= $u1_cikl;
+
+            $_SESSION['func'] = 'PROCEDURA_VIBOR_DISCIPLIN';
+
+            $res = true;
+        }
+
+        Yii::app()->end(CJSON::encode(array('res' => $res)));
+    }
+
 
 }

@@ -305,4 +305,103 @@ SQL;
 
         return $u1;
     }
+
+    public function getCiklList($block, $sg1_kod)
+    {
+        $sql = <<<SQL
+            select c2,u1 as U1_CIKL
+            from c
+            inner join u on (c.c1 = u.u15)
+            where u2=:SG1_KOD and u9=:BLOCK
+            order by u10
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':SG1_KOD', $sg1_kod);
+        $command->bindValue(':BLOCK', $block);
+        $blocks = $command->queryAll();
+
+        $data = array();
+        foreach ($blocks as $block) {
+            $data[$block['u1_cikl']] = $block['c2'];
+        }
+
+        return $data;
+    }
+
+    public function getNADO_VIBRAT($u1_vib_disc, $uch_god, $semester)
+    {
+        $sql = <<<SQL
+            select first 1 u8 as NADO_VIBRAT
+            from uo
+            inner join us on (uo1 = us2)
+            inner join u on (uo22 = u1)
+            inner join sem on (us3 = sem1)
+            where (uo22 in (:U1_VIB_DISC)) and (sem3 = :UCH_GOD) and (sem5 = :SEMESTER)
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':U1_VIB_DISC', $u1_vib_disc);
+        $command->bindValue(':UCH_GOD', $uch_god);
+        $command->bindValue(':SEMESTER', $semester);
+        $u8 = $command->queryScalar();
+
+        return $u8;
+    }
+
+    public function getKOL2($u1_vib_disc, $uch_god, $semester)
+    {
+        $sql = <<<SQL
+            select count(*)  as KOL from
+            (select us2
+            from uo
+            inner join us on (uo.uo1 = us.us2)
+            inner join sem on (us.us3 = sem.sem1)
+            inner join (select ucx1 from ucx where ucx5>1) on (uo.uo19 = ucx1)
+            inner join ucxg on (ucx1 = ucxg1)
+            inner join ucgn on (ucxg2 = ucgn1)
+            inner join ucgns on (ucgn1 = ucgns2)
+            inner join ucsn on (ucgns1 = ucsn1)
+            where (uo22 = :U1_VIB_DISC) and (sem3 = :UCH_GOD1) and (sem5 = :SEMESTER1) and (ucgns5  = :UCH_GOD2) and (ucgns6 = :SEMESTER2) and (ucsn2=:ST1)
+            group by us2)
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':U1_VIB_DISC', $u1_vib_disc);
+        $command->bindValue(':UCH_GOD1', $uch_god);
+        $command->bindValue(':SEMESTER1', $semester);
+        $command->bindValue(':UCH_GOD2', $uch_god);
+        $command->bindValue(':SEMESTER2', $semester);
+        $kol = $command->queryScalar();
+
+        return $kol;
+    }
+
+    public function getDisciplines($u1_vib_disc, $uch_god, $semester, $gr1_kod)
+    {
+        $sql = <<<SQL
+            select d2,ucgn1 as UCGN1_KOD, ucsn2
+            from d
+            inner join uo on (d.d1 = uo.uo3)
+            inner join us on (uo.uo1 = us.us2)
+            inner join sem on (us.us3 = sem.sem1)
+            inner join (select ucx1 from ucx where ucx5>1) on (uo.uo19 = ucx1)
+            inner join ucxg on (ucx1 = ucxg1)
+            inner join ucgn on (ucxg2 = ucgn1)
+            inner join ucgns on (ucgn1 = ucgns2)
+            where (uo22 = :U1_VIB_DISC) and (sem3 = :UCH_GOD1) and (sem5 = :SEMESTER1) and (ucgns5  = :UCH_GOD2) and (ucgns6 = :SEMESTER2) and ucgn2 = :GR1_KOD
+            group by d2,UCGN1, ucsn2
+            order by d2 collate UNICODE
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':U1_VIB_DISC', $u1_vib_disc);
+        $command->bindValue(':UCH_GOD1', $uch_god);
+        $command->bindValue(':SEMESTER1', $semester);
+        $command->bindValue(':UCH_GOD2', $uch_god);
+        $command->bindValue(':SEMESTER2', $semester);
+        $command->bindValue(':GR1_KOD', $gr1_kod);
+        $disciplines  = $command->queryAll();
+
+        return $disciplines;
+    }
 }

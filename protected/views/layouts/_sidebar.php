@@ -28,6 +28,10 @@
         <i data-icon2="icon-double-angle-right" data-icon1="icon-double-angle-left" class="icon-double-angle-left"></i>
     </div>
 
+    <a href="https://play.google.com/store/apps/details?id=scheduleMKP.scheduleMKP" target="_blank">
+        <img src="/images/googleplay.png" style="max-width:90%;padding:5%"/>
+    </a>
+
     <script type="text/javascript">
         try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
     </script>
