@@ -95,7 +95,8 @@ $(document).ready(function(){
                     $tr.find('[name=stus7]').val(sheet.number).change();
                 }
 
-                setTimeout(function() { $td.removeClass('success') }, 1000);
+                setTimeout(function() {
+                    $td.removeClass('success') }, 1000);
             }
 
             $spinner1.hide();
@@ -221,8 +222,9 @@ $(document).ready(function(){
                         if ($that.attr('name') == 'stusp7')
                             $tr.find('[name=stus7]').val($that.val()).change();
                     }
-                    setTimeout(function() { $td.removeClass('success') }, 1000);
                 }
+
+                setTimeout(function() { $td.removeClass('success') }, 1000);
             }
             $spinner1.hide();
         })
