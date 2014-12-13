@@ -751,7 +751,7 @@ SQL;
             inner join std on (gr.gr1 = std.std3)
             inner join st on (std.std2 = st.st1)
             inner join stus on (st.st1 = stus.stus1)
-            where gr1=:GR1 and std7 is null and std11 <> 1 and stus18 = :STUS18 AND stus19 = :STUS19 AND stus20 = :STUS20 AND stus21 = :STUS21
+            where gr1=:GR1 and std7 is null and std11 in (0,5,6,8) and stus18 = :STUS18 AND stus19 = :STUS19 AND stus20 = :STUS20 AND stus21 = :STUS21
             order by st2 collate UNICODE
 SQL;
         $command = Yii::app()->db->createCommand($sql);
