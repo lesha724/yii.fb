@@ -15,6 +15,38 @@ $(document).ready(function(){
             else
                 window.location.reload();
         });
+    });
+
+    $('input[type=button][name=vibor_discipline]').click(function(){
+
+        var values = [];
+        $(':checkbox[name="disciplines[]"]:checked').each(function() {
+            values.push($(this).val())
+        });
+
+        var min = $(this).data('min');
+
+        if (values.length != min) {
+            alert(msg3);
+            return;
+        }
+
+        $.getJSON(url2, {'disciplines' : values}, function(data){
+            if (! data.res)
+                alert(msg1)
+            else
+                window.location.reload();
+        });
+    });
+
+    $('#cancelSubscription').click(function(){
+
+        $.getJSON(url3, {}, function(data){
+            if (! data.res)
+                alert(msg1)
+            else
+                window.location.reload();
+        });
 
     });
 

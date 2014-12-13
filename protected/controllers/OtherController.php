@@ -23,7 +23,9 @@ class OtherController extends Controller
                     'gostem',
                     'deleteGostem',
                     'subscription',
-                    'ciklVBloke'
+                    'saveCiklVBloke',
+                    'saveDisciplines',
+                    'cancelSubscription',
                 ),
                 'expression' => 'Yii::app()->user->isStd',
             ),
@@ -290,14 +292,12 @@ SQL;
     {
         $model = Yii::app()->user->dbModel;
 
-        //unset($_SESSION['u1_vib'], $_SESSION['u1_vib_disc'], $_SESSION['func']);
-        die(var_dump('отменить все чтто выбрал студент'));
         $this->render('subscription', array(
             'model' => $model,
         ));
     }
 
-    public function actionCiklVBloke()
+    public function actionSaveCiklVBloke()
     {
         $u1_cikl = Yii::app()->request->getParam('u1_cikl', null);
 
@@ -305,12 +305,9 @@ SQL;
         if (! empty($u1_cikl)) {
 
             $_SESSION['u1_vib'] .= ','.$u1_cikl;
+            $_SESSION['u1_vib_disc'] = $u1_cikl;
 
-            if (! isset($_SESSION['u1_vib_disc']))
-                $_SESSION['u1_vib_disc'] = $u1_cikl;
-            else
-                $_SESSION['u1_vib_disc'] .= $u1_cikl;
-
+            $_SESSION['min_block']++;
             $_SESSION['func'] = 'PROCEDURA_VIBOR_DISCIPLIN';
 
             $res = true;
@@ -319,5 +316,32 @@ SQL;
         Yii::app()->end(CJSON::encode(array('res' => $res)));
     }
 
+    public function actionSaveDisciplines()
+    {
+        $disciplines = Yii::app()->request->getParam('disciplines', null);
+
+        $res = false;
+        if (! empty($disciplines)) {
+
+            foreach ($disciplines as $ucg1_kod) {
+                U::model()->doUpdates($ucg1_kod);
+            }
+
+            $_SESSION['min_block']++;
+            $_SESSION['func'] = 'PROCEDURA_CIKL_PO_BLOKAM';
+
+            $res = true;
+        }
+
+        Yii::app()->end(CJSON::encode(array('res' => $res)));
+    }
+
+    public function actionCancelSubscription()
+    {
+        U::model()->cancelSubscription();
+        unset($_SESSION['u1_vib'], $_SESSION['u1_vib_disc'], $_SESSION['func'], $_SESSION['min_block']);
+
+        Yii::app()->end(CJSON::encode(array('res' => true)));
+    }
 
 }

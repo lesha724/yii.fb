@@ -10,13 +10,20 @@ $this->breadcrumbs=array(
 
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/other/subscription.js', CClientScript::POS_HEAD);
 
-$url1 = Yii::app()->createUrl('other/ciklVBloke');
+$url1 = Yii::app()->createUrl('other/saveCiklVBloke');
+$url2 = Yii::app()->createUrl('other/saveDisciplines');
+$url3 = Yii::app()->createUrl('other/cancelSubscription');
 $msg1 = tt('Произошла ошибка!');
 $msg2 = tt('Необходимо выбрать один из вариантов!');
+$msg3 = tt('Выберите нужное количество дисциплин!');
+
 Yii::app()->clientScript->registerScript('orderLesson-messages', <<<JS
     var url1 = '{$url1}';
+    var url2 = '{$url2}';
+    var url3 = '{$url3}';
     var msg1 = '{$msg1}';
     var msg2 = '{$msg2}';
+    var msg3 = '{$msg3}';
 
 JS
     , CClientScript::POS_HEAD);
@@ -24,7 +31,13 @@ JS
 $params = $model->subscriptionParams;
 $params['st1'] = $model->st1;
 
-$_SESSION['u1_vib'] = isset($_SESSION['u1_vib']) ? $_SESSION['u1_vib'] : '';
+$_SESSION['u1_vib']       = isset($_SESSION['u1_vib']) ? $_SESSION['u1_vib'] : '';
+$_SESSION['u1_vib_disc']  = isset($_SESSION['u1_vib_disc']) ? $_SESSION['u1_vib_disc'] : '';
+$_SESSION['uch_god']      = $params['uch_god'];
+$_SESSION['semester']     = $params['semester'];
+$_SESSION['st1']          = $params['st1'];
+$_SESSION['gr1_kod']      = $params['gr1_kod'];
+$_SESSION['data_nachala'] = $params['data_nachala'];
 
 if (isset($_SESSION['func'])) {
     $_SESSION['func']($params);
@@ -35,6 +48,7 @@ if (isset($_SESSION['func'])) {
 
 function PROCEDURA_CIKL_PO_BLOKAM($params)
 {
+    unset($_SESSION['func']);
     extract($params);// $sg1_kod, $gr1_kod, $uch_god, $semestr, $data_nachala
 
     if (! $sg1_kod) {
@@ -43,9 +57,7 @@ function PROCEDURA_CIKL_PO_BLOKAM($params)
     }
 
     list($min_block, $max_block) = U::model()->getMinMAxBlocks($sg1_kod);
-    $min_block = isset($_SESSION['min_block'])
-                    ? $_SESSION['min_block']+1
-                    : $min_block;
+    $min_block = isset($_SESSION['min_block']) ? $_SESSION['min_block'] : (int)$min_block;
 
     for ($block = $min_block; $block <= $max_block; $block ++) {
 
@@ -99,13 +111,12 @@ function PROCEDURA_CIKL_PO_BLOKAM($params)
 
                         $_ul = U::model()->get_U1($block, $sg1_kod);
                         $_SESSION['u1_vib'] .= ','.$_ul;
-                        isset($_SESSION['u1_vib_disc'])
-                            ? $_SESSION['u1_vib_disc'] .= ','.$_ul
-                            : $_SESSION['u1_vib_disc'] = $_ul;
+                        $_SESSION['u1_vib_disc'] = $_ul;
 
                         $_SESSION['min_block'] = $block;
-                        // TODO *вызов PROCEDURA_VIBOR_DISCIPLIN
-                        die(var_dump(1));
+                        PROCEDURA_VIBOR_DISCIPLIN($params);
+                        break;
+
                     } else {
 
                         $_SESSION['min_block'] = $block;
@@ -115,13 +126,11 @@ function PROCEDURA_CIKL_PO_BLOKAM($params)
 
                 } else {
                     $_SESSION['u1_vib'] .= ','.$u1_d;
-                    isset($_SESSION['u1_vib_disc'])
-                        ? $_SESSION['u1_vib_disc'] .= ','.$u1_d
-                        : $_SESSION['u1_vib_disc'] = $u1_d;
+                    $_SESSION['u1_vib_disc'] = $u1_d;
 
                     $_SESSION['min_block'] = $block;
-                    // TODO *вызов PROCEDURA_VIBOR_DISCIPLIN
-                    die(var_dump(3));
+                    PROCEDURA_VIBOR_DISCIPLIN($params);
+                    break;
                 }
 
 
@@ -133,19 +142,54 @@ function PROCEDURA_CIKL_PO_BLOKAM($params)
 
 function PROCEDURA_VIBOR_CIKLA_V_BLOKE($params)
 {
+    $widget = <<<HTML
+<div class="widget-box" style="margin:0 0 10px 0">
+    <div class="widget-header">
+        <h4>%s</h4>
+    </div>
+    <div class="widget-body">
+        <div class="widget-main no-padding">
+            %s
+        </div>
+    </div>
+</div>
+HTML;
+
+    unset($_SESSION['func']);
     extract($params);// $sg1_kod, $gr1_kod, $uch_god, $semestr, $data_nachala
 
     $block = $_SESSION['min_block'];
 
     $blocks = U::model()->getCiklList($block, $sg1_kod);
 
-    echo CHtml::radioButtonList('cikl_v_bloke', false, $blocks);
+    $options = array(
+        'labelOptions' => array('class' => 'lbl'),
+        'class' => 'ace',
+        'template' => '<div class="cikl">{input}{label}</div>',
+        'separator' => ''
+    );
+    $controls =  CHtml::radioButtonList('cikl_v_bloke', false, $blocks, $options);
 
-    echo CHtml::button(tt('Сохранить'), array('name' => 'cikl_v_bloke'));
+    echo sprintf($widget, tt('Выберите один из блоков'), $controls);
+    echo CHtml::button(tt('Сохранить'), array('name' => 'cikl_v_bloke', 'class' => 'btn btn-small btn-success', 'style'=>'margin:0 1% 0 0'));
 }
 
 function PROCEDURA_VIBOR_DISCIPLIN($params)
 {
+    $widget = <<<HTML
+<div class="widget-box" style="margin:0 0 10px 0">
+    <div class="widget-header">
+        <h4>%s</h4>
+    </div>
+    <div class="widget-body">
+        <div class="widget-main no-padding">
+            %s
+        </div>
+    </div>
+</div>
+HTML;
+
+    unset($_SESSION['func']);
     extract($params);// $sg1_kod, $gr1_kod, $uch_god, $semestr, $data_nachala
     // Проверяю, если ли дисциплины в выбранном цикле для выбора
     $nado_vibrat = U::model()->getNADO_VIBRAT($_SESSION['u1_vib_disc'], $uch_god, $semester);
@@ -153,19 +197,28 @@ function PROCEDURA_VIBOR_DISCIPLIN($params)
     if ($nado_vibrat > 0) {
 
         // Проверяю, выбрал ли студент необходимое количество дисциплин
-        $kol = U::model()->getKOL2($_SESSION['u1_vib_disc'], $uch_god, $semester);
+        $kol = U::model()->getKOL2($_SESSION['u1_vib_disc'], $uch_god, $semester, $st1);
 
         // не выбрал нужное количество дисциплин
         if ($nado_vibrat != $kol) {
 
             $disciplines = U::model()->getDisciplines($_SESSION['u1_vib_disc'], $uch_god, $semester, $gr1_kod);
 
-            // todo here smt is wrong skype...
+            // ставиш точку напротив дисциплины, которую студент ранее выбрал (если изменили количество дисциплин для выбора)
+            $alreadyCheckedDisc = U::model()->getAlreadyChecked($_SESSION['u1_vib_disc'], $uch_god, $semester, $st1);
+
+            $controls = '';
             foreach ($disciplines as $discipline) {
-                $isChecked = ! is_null($discipline['ucsn2']);
-                $value = $discipline['ucgn1_kod'];
-                echo CHtml::checkBox('disciplines[]', $isChecked, array('value' => $value));
+                $isChecked = in_array($discipline['d1'], $alreadyCheckedDisc);
+                $value     = $discipline['ucgn1_kod'];
+                $controls .= '<div class="subscription-disc">'.
+                                CHtml::checkBox('disciplines[]', $isChecked, array('value' => $value)).
+                                '<span>'.$discipline['d2'].'</span>'.
+                             '</div>';
             }
+
+            echo sprintf($widget, tt('Количество дисциплин, которые необходимо выбрать').': '.$nado_vibrat, $controls).
+                 CHtml::button(tt('Сохранить'), array('name' => 'vibor_discipline', 'data-min' => $nado_vibrat, 'class' => 'btn btn-small btn-success', 'style'=>'margin:0 1% 0 0'));
 
         } else {
             PROCEDURA_CIKL_PO_BLOKAM($params);
@@ -176,7 +229,6 @@ function PROCEDURA_VIBOR_DISCIPLIN($params)
     }
 }
 
-var_dump($_SESSION);
+echo CHtml::button(tt('Отмена'), array('id' => 'cancelSubscription', 'class' => 'btn btn-small btn-danger'));
 
-
-
+//var_dump($_SESSION);

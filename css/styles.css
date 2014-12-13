@@ -351,3 +351,20 @@ table.tr-h-25 tr td{
 div.exam-session-div {
     overflow-x: scroll;
 }
+
+div.cikl {
+    padding: 1%;
+}
+
+div.subscription-disc {
+    padding: 1%;
+    font-size: 14px;
+}
+
+div.subscription-disc span {
+    margin: 0 0 0 5px;
+}
+
+div.subscription-disc input {
+    margin:0;
+}

@@ -337,7 +337,7 @@ SQL;
             inner join us on (uo1 = us2)
             inner join u on (uo22 = u1)
             inner join sem on (us3 = sem1)
-            where (uo22 in (:U1_VIB_DISC)) and (sem3 = :UCH_GOD) and (sem5 = :SEMESTER)
+            where (uo22 = (:U1_VIB_DISC)) and (sem3 = :UCH_GOD) and (sem5 = :SEMESTER)
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':U1_VIB_DISC', $u1_vib_disc);
@@ -348,7 +348,7 @@ SQL;
         return $u8;
     }
 
-    public function getKOL2($u1_vib_disc, $uch_god, $semester)
+    public function getKOL2($u1_vib_disc, $uch_god, $semester, $st1)
     {
         $sql = <<<SQL
             select count(*)  as KOL from
@@ -371,6 +371,7 @@ SQL;
         $command->bindValue(':SEMESTER1', $semester);
         $command->bindValue(':UCH_GOD2', $uch_god);
         $command->bindValue(':SEMESTER2', $semester);
+        $command->bindValue(':ST1', $st1);
         $kol = $command->queryScalar();
 
         return $kol;
@@ -379,7 +380,7 @@ SQL;
     public function getDisciplines($u1_vib_disc, $uch_god, $semester, $gr1_kod)
     {
         $sql = <<<SQL
-            select d2,ucgn1 as UCGN1_KOD, ucsn2
+            select d1,d2,ucgn1 as UCGN1_KOD
             from d
             inner join uo on (d.d1 = uo.uo3)
             inner join us on (uo.uo1 = us.us2)
@@ -389,7 +390,7 @@ SQL;
             inner join ucgn on (ucxg2 = ucgn1)
             inner join ucgns on (ucgn1 = ucgns2)
             where (uo22 = :U1_VIB_DISC) and (sem3 = :UCH_GOD1) and (sem5 = :SEMESTER1) and (ucgns5  = :UCH_GOD2) and (ucgns6 = :SEMESTER2) and ucgn2 = :GR1_KOD
-            group by d2,UCGN1, ucsn2
+            group by d1,d2,UCGN1
             order by d2 collate UNICODE
 SQL;
 
@@ -404,4 +405,150 @@ SQL;
 
         return $disciplines;
     }
+
+    public function getAlreadyChecked($u1_vib_disc, $uch_god, $semester, $st1)
+    {
+        $sql = <<<SQL
+            select uo3
+            from uo
+            inner join us on (uo.uo1 = us.us2)
+            inner join sem on (us.us3 = sem.sem1)
+            inner join (select ucx1 from ucx where ucx5>1) on (uo.uo19 = ucx1)
+            inner join ucxg on (ucx1 = ucxg.ucxg1)
+            inner join ucgn on (ucxg.ucxg2 = ucgn.ucgn1)
+            inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
+            inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
+            where (uo22 = (:U1_VIB_DISC)) and (sem3 = :UCH_GOD1) and (sem5 = :SEMESTER1) and (ucgns5  = :UCH_GOD2) and (ucgns6 = :SEMESTER2) and (ucsn2=:ST1)
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':U1_VIB_DISC', $u1_vib_disc);
+        $command->bindValue(':UCH_GOD1', $uch_god);
+        $command->bindValue(':SEMESTER1', $semester);
+        $command->bindValue(':UCH_GOD2', $uch_god);
+        $command->bindValue(':SEMESTER2', $semester);
+        $command->bindValue(':ST1', $st1);
+        $disciplines  = $command->queryColumn();
+
+        return $disciplines;
+    }
+
+    public function doUpdates($ucgn1_kod)
+    {
+        $uch_god  = $_SESSION['uch_god'];
+        $semester = $_SESSION['semester'];
+        $st1      = $_SESSION['st1'];
+        $gr1_kod  = $_SESSION['gr1_kod'];
+
+        $sql = <<<SQL
+            SELECT ucgns1 as UCGNS1_VIB,ucgns5,ucgns6
+            FROM ucgns
+            WHERE ucgns2=:UCGN1_KOD and ucgns5>=:UCH_GOD
+            ORDER BY ucgns5,ucgns6
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':UCGN1_KOD', $ucgn1_kod);
+        $command->bindValue(':UCH_GOD', $uch_god);
+        $codes  = $command->queryAll();
+
+        $start = false;
+        foreach ($codes as $code) {
+
+            if (! $start)
+                if ($code['ucgns5'] == $uch_god && $code['ucgns6'] == $semester)
+                    $start = true;
+
+            if (! $start)
+                continue;
+
+            $sql = <<<SQL
+UPDATE or INSERT INTO ucsn (ucsn1,ucsn2,ucsn3,ucsn4,ucsn5)
+VALUES (:UCGNS1_VIB,:ST1,:GR1_KOD,current_timestamp,0) MATCHING(ucsn1,ucsn2)
+SQL;
+            $params = array(
+                ':UCGNS1_VIB' => $code['ucgns1_vib'],
+                ':ST1' => $st1,
+                ':GR1_KOD' => $gr1_kod
+            );
+            Yii::app()->db->createCommand($sql)->execute($params);
+
+            // записываю количество бюджетников и контрактников
+            $sql = <<<SQL
+UPDATE ucgns SET
+        ucgns3=(SELECT  count( *) as BUDGET
+              FROM UCSN
+                 INNER JOIN ST ON (UCSN2 = ST1)
+                 INNER JOIN SK ON (ST1 = SK2)
+              WHERE sk3=0 and sk5 is null and ucsn1=:UCGNS1_VIB1)
+        ,ucgns4=(SELECT count( *) as KONTR
+              FROM UCSN
+                 INNER JOIN ST ON (UCSN2 = ST1)
+                 INNER JOIN SK ON (ST1 = SK2)
+              WHERE sk3=1 and sk5 is null and ucsn1=:UCGNS1_VIB2)
+      WHERE ucgns1=:UCGNS1_VIB3
+SQL;
+            $params = array(
+                ':UCGNS1_VIB1' => $code['ucgns1_vib'],
+                ':UCGNS1_VIB2' => $code['ucgns1_vib'],
+                ':UCGNS1_VIB3' => $code['ucgns1_vib'],
+            );
+            Yii::app()->db->createCommand($sql)->execute($params);
+        }
+
+    }
+
+    public function cancelSubscription()
+    {
+        $st1          = $_SESSION['st1'];
+        $data_nachala = $_SESSION['data_nachala'];
+
+        $sql = <<<SQL
+            SELECT ucsn1 as KOD_UCGNS1
+            FROM ucsn
+            WHERE ucsn2=:ST1 and ucsn4>=:DATA_NACHALA and ucsn5=0
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ST1', $st1);
+        $command->bindValue(':DATA_NACHALA', $data_nachala);
+        $codes  = $command->queryColumn();
+
+        $sql = <<<SQL
+        DELETE FROM ucsn WHERE ucsn2=:ST1 and ucsn4>=:DATA_NACHALA and ucsn5=0
+SQL;
+        $params = array(
+            ':ST1' => $st1,
+            ':DATA_NACHALA' => $data_nachala,
+        );
+        Yii::app()->db->createCommand($sql)->execute($params);
+
+
+
+        foreach ($codes as $code) {
+
+            $sql = <<<SQL
+UPDATE ucgns SET
+      ucgns3=(SELECT  count( *) as BUDGET
+            FROM UCSN
+               INNER JOIN ST ON (UCSN2 = ST1)
+               INNER JOIN SK ON (ST1 = SK2)
+            WHERE sk3=0 and sk5 is null and ucsn1=:UCGNS1_VIB1)
+      ,ucgns4=(SELECT count( *) as KONTR
+            FROM UCSN
+               INNER JOIN ST ON (UCSN2 = ST1)
+               INNER JOIN SK ON (ST1 = SK2)
+            WHERE sk3=1 and sk5 is null and ucsn1=:UCGNS1_VIB2)
+     WHERE ucgns1=:UCGNS1_VIB3
+SQL;
+
+            $params = array(
+                ':UCGNS1_VIB1' => $code,
+                ':UCGNS1_VIB2' => $code,
+                ':UCGNS1_VIB3' => $code,
+            );
+            Yii::app()->db->createCommand($sql)->execute($params);
+        }
+    }
+
 }
