@@ -231,5 +231,10 @@ HTML;
     }
 }
 
+$disciplines = U::model()->getSubscribedDisciplines();
+foreach ($disciplines as $discipline) {
+    echo $discipline;
+}
+
 echo CHtml::button(tt('Отмена'), array('id' => 'cancelSubscription', 'class' => 'btn btn-small btn-danger'));
 

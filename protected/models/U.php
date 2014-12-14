@@ -551,4 +551,31 @@ SQL;
         }
     }
 
+    public function getSubscribedDisciplines()
+    {
+        $st1          = $_SESSION['st1'];
+        $data_nachala = $_SESSION['data_nachala'];
+
+        $sql = <<<SQL
+            select d2
+            from d
+            inner join uo on (d.d1 = uo.uo3)
+            inner join us on (uo.uo1 = us.us2)
+            inner join nr on (us.us1 = nr.nr2)
+            inner join ug on (nr.nr1 = ug.ug3)
+            inner join ucgn on (ug.ug4 = ucgn.ucgn1)
+            inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
+            inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
+            where ucsn2=:ST1 and ucsn4>=:DATA_NACHALA and ucsn5=0
+            group by d2
+            order by d2 collate UNICODE
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ST1', $st1);
+        $command->bindValue(':DATA_NACHALA', $data_nachala);
+        $disciplines  = $command->queryColumn();
+
+        return $disciplines;
+    }
 }

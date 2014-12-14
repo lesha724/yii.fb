@@ -23,7 +23,17 @@
                         <?php if (Yii::app()->user->isGuest) : ?>
                             <i class="icon-user"></i><?=tt('Войти')?>
                         <?php else: ?>
-                            <img alt="User's Photo" src="/theme/ace/assets/avatars/avatar2.png" class="nav-user-photo">
+                            <?php
+                                if (Yii::app()->user->isTch) {
+                                    $id   = Yii::app()->user->dbModel->p1;
+                                    $type = Users::FOTO_P1;
+                                } else {
+                                    $id   = Yii::app()->user->dbModel->st1;
+                                    $type = Users::FOTO_ST1;
+                                }
+                                $url = $this->createUrl('site/userPhoto', array('_id' => $id, 'type' => $type));
+                            ?>
+                            <img alt="photo" src="<?=$url?>" class="nav-user-photo">
                             <span class="user-info">
                                 <small>Welcome,</small>
                                 <?=Yii::app()->user->name?>
