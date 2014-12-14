@@ -221,14 +221,15 @@ HTML;
                  CHtml::button(tt('Сохранить'), array('name' => 'vibor_discipline', 'data-min' => $nado_vibrat, 'class' => 'btn btn-small btn-success', 'style'=>'margin:0 1% 0 0'));
 
         } else {
+            $_SESSION['min_block']++;
             PROCEDURA_CIKL_PO_BLOKAM($params);
         }
 
     } else {
+        $_SESSION['min_block']++;
         PROCEDURA_CIKL_PO_BLOKAM($params);
     }
 }
 
 echo CHtml::button(tt('Отмена'), array('id' => 'cancelSubscription', 'class' => 'btn btn-small btn-danger'));
 
-//var_dump($_SESSION);
