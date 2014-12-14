@@ -106,6 +106,9 @@ class Cxmb extends CActiveRecord
         if (is_null($cxmb0))
             return null;
 
+        if ((int)$mark < 0)
+            return array('cxmb3' => '', 'cxmb2' => 0);
+
         $sql = <<<SQL
             select cxmb2,cxmb3
             from cxmb

@@ -599,6 +599,10 @@ class ProgressController extends Controller
                     $model->stusp12 = '';
 
                     $model->$field = $value;
+                    if (isset($attr['stusp11'])) {
+                        $model->stusp11 = $attr['stusp11'];
+                        $model->stusp8  = $attr['stusp8'];
+                    }
 
                     $error = ! $model->save();
                 } else

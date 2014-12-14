@@ -111,6 +111,7 @@ $(document).ready(function(){
         var stus0  = $that.parents('[data-stus0]').data('stus0');
         var stusp5 = $that.parents('[data-stusp5]').data('stusp5');
         var k1     = $that.parents('[data-k1]').data('k1');
+        var cxmb0  = $that.parents('[data-cxmb0]').data('cxmb0');
 
         var sheet = {
             date  : $('#date').val(),
@@ -125,7 +126,8 @@ $(document).ready(function(){
             k1    : k1,
             value : $that.val(),
             stus6 : sheet.date,
-            stus7 : sheet.number
+            stus7 : sheet.number,
+            cxmb0 : cxmb0
         }
 
         var stName = $('table.exam-session-table-1 tr[data-st1='+st1+'] td:eq(1)').text();
