@@ -231,10 +231,24 @@ HTML;
     }
 }
 
-$disciplines = U::model()->getSubscribedDisciplines();
-foreach ($disciplines as $discipline) {
-    echo $discipline;
-}
+
+$html = <<<HTML
+
+HTML;
+
 
 echo CHtml::button(tt('Отмена'), array('id' => 'cancelSubscription', 'class' => 'btn btn-small btn-danger'));
 
+$disciplines = U::model()->getSubscribedDisciplines();
+if (! empty($disciplines)) : ?>
+    <table class="table table-striped table-bordered subscription">
+        <caption><?=tt('Дисциплины, на которые Вы уже записались')?></caption>
+        <tbody>
+         <?php
+            foreach ($disciplines as $discipline) {
+                echo '<tr><td>'.$discipline.'</td></tr>';
+            }
+         ?>
+        </tbody>
+    </table>
+<?php endif;

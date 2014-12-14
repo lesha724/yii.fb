@@ -560,10 +560,9 @@ SQL;
             select d2
             from d
             inner join uo on (d.d1 = uo.uo3)
-            inner join us on (uo.uo1 = us.us2)
-            inner join nr on (us.us1 = nr.nr2)
-            inner join ug on (nr.nr1 = ug.ug3)
-            inner join ucgn on (ug.ug4 = ucgn.ucgn1)
+            inner join ucx on (uo.uo19 = ucx.ucx1)
+            inner join ucxg on (ucx.ucx1 = ucxg.ucxg1)
+            inner join ucgn on (ucxg.ucxg2 = ucgn.ucgn1)
             inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
             inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
             where ucsn2=:ST1 and ucsn4>=:DATA_NACHALA and ucsn5=0

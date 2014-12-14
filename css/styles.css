@@ -368,3 +368,7 @@ div.subscription-disc span {
 div.subscription-disc input {
     margin:0;
 }
+
+table.subscription caption {
+    font-size: 16px;
+}
