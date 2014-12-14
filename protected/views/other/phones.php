@@ -48,7 +48,7 @@ $this->breadcrumbs=array(
             $html .= <<<HTML
 <tr>
     <td>$phone[tsg2]</td>
-    <td>$phone[tso3]</td>
+    <td>$phone[k3]</td>
     <td>$phone[b2]</td>
     <td>$phone[teacher]</td>
     <td>

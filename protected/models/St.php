@@ -744,7 +744,7 @@ SQL;
     public function getStudentsForExamSession($params)
     {
         extract($params);
-        // todo collate UNICODE
+
         $sql = <<<SQL
             select stus.*, st1,st2,st3,st4
             from gr
@@ -752,7 +752,7 @@ SQL;
             inner join st on (std.std2 = st.st1)
             inner join stus on (st.st1 = stus.stus1)
             where gr1=:GR1 and std7 is null and std11 in (0,5,6,8) and stus18 = :STUS18 AND stus19 = :STUS19 AND stus20 = :STUS20 AND stus21 = :STUS21
-            order by st2
+            order by st2 collate UNICODE
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':GR1', $gr1);

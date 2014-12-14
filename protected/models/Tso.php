@@ -124,7 +124,7 @@ class Tso extends CActiveRecord
             $condition = ' AND tsg1 = :DEPARTMENT';
 
         $sql = <<<SQL
-        SELECT tso.*, b1, b2, k1, tsg2
+        SELECT tso.*, b1, b2, k1, tsg2, k3
         FROM tso
            INNER JOIN k on (k.k1 = tso.tso4)
            INNER JOIN tsg on (tso.tso2 = tsg.tsg1)

@@ -512,7 +512,7 @@ SQL;
 
         $model = P::model()->findByPk($p1);
 
-        return $model->getShortName();
+        return implode(' ', array($model->p3, $model->p4, $model->p5));
     }
 
     public function getTeacherNameByPd1($pd1)
@@ -543,7 +543,7 @@ SQL;
 
         $names = array();
         foreach ($teachers as $teacher) {
-            $names[] = SH::getShortName($teacher['p3'], $teacher['p4'], $teacher['p5']);
+            $names[] = implode(' ', array($teacher['p3'], $teacher['p4'], $teacher['p5']));
         }
 
         $name = implode('<br/>', $names);
