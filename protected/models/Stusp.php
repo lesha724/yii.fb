@@ -119,7 +119,7 @@ class Stusp extends CActiveRecord
     {
         if (empty($allSt1))
             return array();
-        
+
         $stus1 = implode(',', $allSt1);
         $sql = <<<SQL
            SELECT stusp.*, stus1, stus19,stus0
