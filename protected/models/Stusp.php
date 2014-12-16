@@ -117,6 +117,9 @@ class Stusp extends CActiveRecord
 
     public function getAllStusP($allSt1)
     {
+        if (empty($allSt1))
+            return array();
+        
         $stus1 = implode(',', $allSt1);
         $sql = <<<SQL
            SELECT stusp.*, stus1, stus19,stus0

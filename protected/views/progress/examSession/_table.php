@@ -102,7 +102,6 @@ HTML;
     return $td1;
 }
 
-
 function getAllSt1($students)
 {
     $res = array();

@@ -234,11 +234,11 @@ SQL;
     }
 
     public function getDisciplinesForExamSession($type = null)
-    {
+    {//collate UNICODE collate UNICODE
         $sql = <<<SQL
             select *
             from LIST_DISC_PREP(:P1, :YEAR, :SEM)
-            order by d2 collate UNICODE, vid collate UNICODE, gr3
+            order by d2 , vid , gr3
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
