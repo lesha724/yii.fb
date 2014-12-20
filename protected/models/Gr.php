@@ -165,26 +165,50 @@ class Gr extends CActiveRecord
         if (empty($discipline))
             return array();
 
-        $sql = <<<SQL
-            select gr1,gr3,  sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28,gr7
-            from sem
-               inner join us on (sem1 = us12)
-               inner join uo on (us2 = uo1)
-               inner join u on (uo22 = u1)
-               inner join sg on (u2 = sg1)
-               inner join
-                          (select nr1,nr2
-                          from pd
-                             inner join nr on (pd1 = nr6) or (pd1 = nr7) or (pd1 = nr8) or (pd1 = nr9)
-                             inner join us on (nr2 = us1)
-                          where pd1>0 and pd2=:P1
-                          group by nr1,nr2)
-                on (us1 = nr2)
-               inner join ug on (ug3 = nr1)
-               inner join r on (nr1 = r1)
-               inner join gr on (ug2 = gr1)
-            where sg4=0 and sem3=:YEAR and sem5=:SEM and uo3=:D1 and us4 in (2,3,4)
-            group by sem4,gr3,gr7,gr1,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28
+        $today = date('Y-m-d 00:00');
+
+        if ($type == 0)
+            $sql = <<<SQL
+                select gr1,gr3,  sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28,gr7
+                from sem
+                   inner join us on (sem1 = us12)
+                   inner join uo on (us2 = uo1)
+                   inner join u on (uo22 = u1)
+                   inner join sg on (u2 = sg1)
+                   inner join
+                              (select nr1,nr2
+                              from pd
+                                 inner join nr on (pd1 = nr6) or (pd1 = nr7) or (pd1 = nr8) or (pd1 = nr9)
+                                 inner join us on (nr2 = us1)
+                              where pd1>0 and pd2=:P1
+                              group by nr1,nr2)
+                    on (us1 = nr2)
+                   inner join ug on (ug3 = nr1)
+                   inner join r on (nr1 = r1)
+                   inner join gr on (ug2 = gr1)
+                where sg4=0 and sem3=:YEAR and sem5=:SEM and uo3=:D1 and us4 in (2,3,4)
+                group by sem4,gr3,gr7,gr1,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28
+SQL;
+        elseif ($type == 1)
+            $sql = <<<SQL
+                select gr1,gr3,sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28,gr7
+                from sem
+                   inner join us on (sem1 = us12)
+                   inner join uo on (us2 = uo1)
+                   inner join u on (uo22 = u1)
+                   inner join sg on (u2 = sg1)
+                   inner join nr on (us1 = nr2)
+                   inner join ug on (ug3 = nr1)
+                   inner join r on (nr1 = r1)
+                   inner join gr on (ug2 = gr1)
+                where sg4=0 and sem3=:YEAR and sem5=:SEM and uo3=:D1 and us4 in (2,3,4) and uo4 in (
+                      select pd4
+                      from pd
+                      WHERE  (PD2 = :P1) and (PD28 in (0, 2, 5, 9)) and (PD13 IS NULL or PD13>'{$today}')
+                      group by pd4
+                     )
+                group by sem4,gr3,gr7,gr1,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28
+                order by gr7,gr3 collate UNICODE
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);

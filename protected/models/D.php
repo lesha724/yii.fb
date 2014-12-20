@@ -204,6 +204,8 @@ class D extends CActiveRecord
 
     public function getDisciplines($type = null)
     {
+        $today = date('Y-m-d 00:00');
+        if ($type == 0)
         $sql = <<<SQL
             select d1,d2
             from u
@@ -220,10 +222,32 @@ class D extends CActiveRecord
                 on (us1 = nr2)
                inner join sem on (us.us12 = sem.sem1)
                inner join sg on (u.u2 = sg.sg1)
+               inner join ug on (ug3 = nr1)
+               inner join r on (nr1 = r1)
             where sg4=0 and sem3=:YEAR and sem5=:SEM
             group by d1,d2
+            order by d2 collate UNICODE
 SQL;
-
+        elseif ($type == 1)
+            $sql = <<<SQL
+            select d1,d2
+            from u
+               inner join uo on (u.u1 = uo.uo22)
+               inner join d on (uo.uo3 = d.d1)
+               inner join us on (uo.uo1 = us.us2)
+               inner join nr on (us1 = nr2)
+               inner join sem on (us.us12 = sem.sem1)
+               inner join sg on (u.u2 = sg.sg1)
+               inner join ug on (ug3 = nr1)
+               inner join r on (nr1 = r1)
+            where sg4=0 and sem3=:YEAR and sem5=:SEM and uo4 in (
+                  select pd4
+                  from pd
+                  WHERE PD2 = :P1 and PD28 in (0, 2, 5, 9) and (PD13 IS NULL or PD13>'{$today}')
+                  group by pd4)
+            group by d1,d2
+            order by d2 collate UNICODE
+SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
         $command->bindValue(':YEAR', Yii::app()->session['year']);

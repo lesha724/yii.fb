@@ -15,7 +15,7 @@ class OtherController extends Controller
             array('allow',
                 'actions' => array(
                     'orderLesson', 'freeRooms', 'saveLessonOrder', 'deleteComment',
-                    'antiplagiat'
+                    'antiPlagiarism'
                 ),
                 'expression' => 'Yii::app()->user->isTch',
             ),
@@ -345,9 +345,13 @@ SQL;
         Yii::app()->end(CJSON::encode(array('res' => true)));
     }
 
-    public function actionAntiplagiat()
+    public function actionAntiPlagiarism()
     {
+        if (! empty($_FILES)) {
+            $file = CUploadedFile::getInstanceByName('files');
+        }
 
+        $this->render('antiPlagiarism');
     }
 
 }

@@ -277,11 +277,6 @@ table.small-rows tr td {
     padding: 2px 8px;
 }
 
-table.small-table-1{
-    width: 15%;
-    float:left;
-}
-
 table.attendance-statistic-table-2 tr.second-row th{
     padding: 2px;
     font-size: 10px;

@@ -25,7 +25,7 @@ JS
 ?>
 
 
-
+<div class="row-fluid"></div>
 <div class="row-fluid" >
     <div class="hr hr-18 dotted hr-double"></div>
 

@@ -15,7 +15,7 @@ if (! empty($model->group)):
         $type
     );
 
-    $uo1 = !empty($dates) ? $dates[0]['uo1'] : -1;
+    $uo1 = ! empty($dates) ? $dates[0]['uo1'] : -1;
 
     $nr1 = array();
     foreach ($dates as $date) {
@@ -27,7 +27,6 @@ if (! empty($model->group)):
     $ps20 = PortalSettings::model()->findByPk(20)->ps2;// use sub modules
 
     $students = St::model()->getStudentsForJournal($model->group, $uo1);
-
     $pbal     = Pbal::model()->getAllInArray();
 
 echo <<<HTML
@@ -59,7 +58,9 @@ echo <<<HTML
 HTML;
 
     $journalType = PortalSettings::model()->findByPk(8)->ps2;
-    if ($journalType == 1)
+    if (empty($nr1))
+        Yii::app()->user->setFlash('error', "Empty nr1 array!");
+    elseif ($journalType == 1)
         $this->renderPartial('journal/_modules', array(
             'students' => $students,
             'dates' => $dates,

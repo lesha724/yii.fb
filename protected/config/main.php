@@ -195,6 +195,10 @@ $config = array(
         'defaultLanguage'=>'ru',
         'siteUrl' => '',
         'code' => null,
+        'antiPlagiarism' => array(
+            'company_name' => null,
+            'apicorp_address' => null,
+        )
     ),
 );
 
