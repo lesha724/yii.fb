@@ -52,7 +52,6 @@ class ProgressController extends Controller
         if (! empty($grants))
             $type = $grants->getGrantsFor(Grants::EL_JOURNAL);
 
-
         $model = new FilterForm;
         $model->scenario = 'journal';
         if (isset($_REQUEST['FilterForm']))

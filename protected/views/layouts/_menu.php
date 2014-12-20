@@ -32,7 +32,6 @@ $isStd   = Yii::app()->user->isStd;
 $isTch   = Yii::app()->user->isTch;
 $isAdmin = Yii::app()->user->isAdmin;
 
-
 $this->widget('zii.widgets.CMenu', array(
     'encodeLabel' => false,
     'htmlOptions' => array(
@@ -328,6 +327,12 @@ $this->widget('zii.widgets.CMenu', array(
                     'url'     => _u('/other/subscription'),
                     'active'  => $_c=='other' && $_a=='subscription',
                     'visible' => _ch('other', 'subscription') && $isStd,
+                ),
+                array(
+                    'label'   => $_l2.tt('Антиплагиат'),
+                    'url'     => _u('/other/antiplagiat'),
+                    'active'  => $_c=='other' && $_a=='antiplagiat',
+                    'visible' => _ch('other', 'antiplagiat') && $isTch && Yii::app()->params['code'] == U_URFAK,
                 ),
             ),
             'visible' => _ch('other', 'main')

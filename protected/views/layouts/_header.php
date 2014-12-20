@@ -22,16 +22,17 @@
                     <a class="dropdown-toggle" href="#" data-toggle="dropdown" >
                         <?php if (Yii::app()->user->isGuest) : ?>
                             <i class="icon-user"></i><?=tt('Войти')?>
-                        <?php else: ?>
-                            <?php
+                        <?php else:
                                 if (Yii::app()->user->isTch) {
                                     $id   = Yii::app()->user->dbModel->p1;
                                     $type = Users::FOTO_P1;
-                                } else {
+                                    $url = $this->createUrl('site/userPhoto', array('_id' => $id, 'type' => $type));
+                                } elseif (Yii::app()->user->isStd) {
                                     $id   = Yii::app()->user->dbModel->st1;
                                     $type = Users::FOTO_ST1;
-                                }
-                                $url = $this->createUrl('site/userPhoto', array('_id' => $id, 'type' => $type));
+                                    $url = $this->createUrl('site/userPhoto', array('_id' => $id, 'type' => $type));
+                                } else
+                                    $url = '/theme/ace/assets/avatars/avatar2.png';
                             ?>
                             <img alt="photo" src="<?=$url?>" class="nav-user-photo">
                             <span class="user-info">

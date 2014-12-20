@@ -30,7 +30,7 @@ $(document).ready(function(){
             url:  url,
             data: data,
             success:function(data){
-                $that.find('button').button('reset')
+                //$that.find('button').button('reset')
                 if (data == 'ok') {
                     window.location.reload();
                 } else if (data == 'registered') {

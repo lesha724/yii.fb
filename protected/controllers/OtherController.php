@@ -14,7 +14,8 @@ class OtherController extends Controller
         return array(
             array('allow',
                 'actions' => array(
-                    'orderLesson', 'freeRooms', 'saveLessonOrder', 'deleteComment'
+                    'orderLesson', 'freeRooms', 'saveLessonOrder', 'deleteComment',
+                    'antiplagiat'
                 ),
                 'expression' => 'Yii::app()->user->isTch',
             ),
@@ -342,6 +343,11 @@ SQL;
         unset($_SESSION['u1_vib'], $_SESSION['u1_vib_disc'], $_SESSION['func'], $_SESSION['min_block']);
 
         Yii::app()->end(CJSON::encode(array('res' => true)));
+    }
+
+    public function actionAntiplagiat()
+    {
+
     }
 
 }

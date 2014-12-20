@@ -126,7 +126,7 @@ class Users extends CActiveRecord
      */
     public function getIsAdmin()
     {
-        return $this->u7 == 1;
+        return $this->u7 === '1';
     }
 
     /**
@@ -135,7 +135,7 @@ class Users extends CActiveRecord
      */
     public function getIsTeacher()
     {
-        return $this->u5 == 1;
+        return $this->u5 === '1';
     }
 
     /**
@@ -144,17 +144,17 @@ class Users extends CActiveRecord
      */
     public function getIsStudent()
     {
-        return $this->u5 == 0;
+        return $this->u5 === '0';
     }
 
     public function getName()
     {
         $id = $this->u6;
 
-        if ($this->u5 === 0 || $this->u5 === 2) { // student or parent
+        if ($this->u5 === '0' || $this->u5 === '2') { // student or parent
             $model = St::model()->findByPk($id);
             $name  = $model->getShortName();
-        } elseif ($this->u5 == 1) {             // teacher
+        } elseif ($this->u5 === '1') {                // teacher
             $model = P::model()->findByPk($id);
             $name  = $model->getShortName();
         } elseif (empty($this->u5) && empty($this->u6))

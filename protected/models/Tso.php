@@ -142,7 +142,7 @@ SQL;
             if ($phone['tso4'] == 0) {
                 $teacher = $phone['tso11'];
             } elseif ($phone['tso10'] == 1) {
-                $teacher = P::model()->getTeacherNameBy($phone['tso6']);
+                $teacher = P::model()->getTeacherNameBy($phone['tso6'], false);
             } else
                 $teacher = P::model()->getTeacherNameForPhones($phone['b1'], $phone['k1']);
 

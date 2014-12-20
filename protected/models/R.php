@@ -115,31 +115,9 @@ class R extends CActiveRecord
 
     public function getDatesForJournal($p1, $d1, $year, $sem, $gr1, $type = null)
     {
-        /*$sql = <<<SQL
-        select r2,nr1,us4,uo1
-        from sem
-           inner join us on (sem1 = us12)
-           inner join
-                     (select uo1,uo22
-                      from pd
-                         inner join nr on (pd1 = nr6) or (pd1 = nr7) or (pd1 = nr8) or (pd1 = nr9)
-                         inner join us on (nr2 = us1)
-                         inner join uo on (us2 = uo1)
-                      where pd1>0 and pd2=:P1 and uo3=:D1
-                      group by uo1,uo22)
-             on (us2 = uo1)
-           inner join nr on (us1 = nr2)
-           inner join ug on (ug3 = nr1)
-           inner join r on (nr1 = r1)
-           inner join u on (uo22 = u1)
-           inner join sg on (u2 = sg1)
-        where sg4=0 and sem3=:YEAR and sem5=:SEM and ug2=:GR1 and us4 in (2,3,4)
-        group by r2,nr1,us4,uo1
-SQL;*/
         $sql = <<<SQL
         select * from LIST_DATA_EL_JURNAL(:P1, :D1, :YEAR, :SEM, :GR1);
 SQL;
-
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':P1', $p1);

@@ -505,14 +505,19 @@ SQL;
         return $timeTable;
     }
 
-    public function getTeacherNameBy($p1)
+    public function getTeacherNameBy($p1, $short = true)
     {
         if (empty($p1))
             return '';
 
         $model = P::model()->findByPk($p1);
 
-        return implode(' ', array($model->p3, $model->p4, $model->p5));
+        if ($short)
+            $name = $model->getShortName();
+        else
+            $name = implode(' ', array($model->p3, $model->p4, $model->p5));
+
+        return $name;
     }
 
     public function getTeacherNameByPd1($pd1)
