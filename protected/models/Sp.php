@@ -190,4 +190,23 @@ SQL;
 
         return $specialities;
     }
+
+    public function getSpecializations($speciality)
+    {
+        if (empty($speciality))
+            return array();
+
+        $sql=<<<SQL
+            SELECT SPC1,SPC4
+            FROM spc
+            INNER JOIN pnsp on (spc.spc11 = pnsp.pnsp1)
+            WHERE spc11 = :SPC11 and spc1>0
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':SPC11', $speciality);
+        $specializations = $command->queryAll();
+        return $specializations;
+    }
+
 }

@@ -329,10 +329,10 @@ $this->widget('zii.widgets.CMenu', array(
                     'visible' => _ch('other', 'subscription') && $isStd,
                 ),
                 array(
-                    'label'   => $_l2.tt('Антиплагиат'),
-                    'url'     => _u('/other/antiPlagiarism'),
-                    'active'  => $_c=='other' && $_a=='antiPlagiarism',
-                    'visible' => _ch('other', 'antiPlagiarism') && $isTch && Yii::app()->params['code'] == U_URFAK,
+                    'label'   => $_l2.tt('Данные студенты'),
+                    'url'     => _u('/other/studentInfo'),
+                    'active'  => $_c=='other' && $_a=='studentInfo',
+                    'visible' => _ch('other', 'studentInfo') && ($isTch || $isStd),
                 ),
             ),
             'visible' => _ch('other', 'main')

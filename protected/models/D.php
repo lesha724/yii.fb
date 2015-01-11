@@ -744,4 +744,80 @@ SQL;
         return $name;
     }
 
+    public function getDisciplineForCourseWork($st1)
+    {
+        if (! $st1)
+            return;
+
+        $sql = <<<SQL
+            select us1,d2
+            from d
+              inner join uo on (d.d1 = uo.uo3)
+              inner join us on (uo.uo1 = us.us2)
+              inner join sem on (us.us3 = sem.sem1)
+              inner join ucx on (uo.uo19 = ucx.ucx1)
+              inner join ucg on (ucx.ucx1 = ucg.ucg2)
+              inner join ucs on (ucg.ucg1 = ucs.ucs2)
+              inner join u on (uo.uo22 = u.u1)
+            where us4 = 8 and ucs3 = :ST1 and u38<=current_timestamp and u39>=current_timestamp
+            group by us1,d2
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ST1', $st1);
+        $discipline = $command->queryRow();
+
+        return $discipline;
+    }
+
+    public function getFirstCourseWork($st1, $us1)
+    {
+        $sql = <<<SQL
+           SELECT nkrs1,nkrs6,nkrs7
+           FROM nkrs
+           WHERE nkrs2 = :ST1 and nkrs3 = :US1
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ST1', $st1);
+        $command->bindValue(':US1', $us1);
+        $discipline = $command->queryRow();
+
+        if (empty($discipline)) {
+            $sql = <<<SQL
+                insert into NKRS(NKRS1,NKRS2,NKRS3)
+                values (GEN_ID(GEN_NKRS, 1), :ST1, :US1)
+SQL;
+            Yii::app()->db->createCommand($sql)->execute(array(
+                ':ST1' => $st1,
+                ':US1' => $us1
+            ));
+
+            $sql = <<<SQL
+                select NKRS1 FIRST
+                from NKRS
+                order by NKRS1 DESC
+SQL;
+            $discipline = Yii::app()->db->createCommand($sql)->queryRow();
+        }
+
+        return $discipline;
+    }
+
+    public function updateNkrs($nkrs1, $field, $value)
+    {
+        $sql = <<<SQL
+           UPDATE nkrs SET {$field} = :VALUE
+           WHERE nkrs1 = :NKRS1
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':VALUE', $value);
+        $command->bindValue(':NKRS1', $nkrs1);
+        $res = $command->execute();
+
+        return $res;
+    }
+
+
 }

@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * @var TimeTableForm || FilterForm $model
  * @var CActiveForm $form
  */

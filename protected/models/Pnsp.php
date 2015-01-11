@@ -177,4 +177,29 @@ SQL;
 
         return $specialities;
     }
+
+    public function getSpecialityFor($st1)
+    {
+        if (empty($st1))
+            return array();
+
+        $sql=<<<SQL
+            select pnsp1
+			from sdp
+			   inner join st on (sdp.sdp1 = st.st65)
+			   inner join std on (st.st1 = std.std2)
+			   inner join gr on (std.std3 = gr.gr1)
+			   inner join sg on (gr.gr2 = sg.sg1)
+			   inner join sp on (sg.sg2 = sp.sp1)
+			   inner join pnsp on (sp.sp11 = pnsp.pnsp1)
+			where st1 = :ST1
+			group by pnsp1
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ST1', $st1);
+        $pnsp1 = $command->queryScalar();
+
+        return $pnsp1;
+    }
 }

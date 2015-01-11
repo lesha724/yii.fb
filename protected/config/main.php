@@ -153,6 +153,11 @@ $config = array(
                     ),
                     'depends'=>array('jquery'),
                 ),
+                'autocomplete' => array(
+                    'baseUrl' => 'js/',
+                    'js' => array('jquery.autocomplete.js'),
+                    'depends'=>array('jquery'),
+                ),
             ),
 			'behaviors' => array(
 				array(

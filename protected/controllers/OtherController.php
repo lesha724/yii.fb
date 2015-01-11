@@ -15,7 +15,6 @@ class OtherController extends Controller
             array('allow',
                 'actions' => array(
                     'orderLesson', 'freeRooms', 'saveLessonOrder', 'deleteComment',
-                    'antiPlagiarism'
                 ),
                 'expression' => 'Yii::app()->user->isTch',
             ),
@@ -33,7 +32,10 @@ class OtherController extends Controller
             array('allow',
                 'actions' => array(
                     'phones',
-                    'employment'
+                    'employment',
+                    'studentInfo',
+                    'autocompleteTeachers',
+                    'updateNkrs',
                 ),
             ),
             array('deny',
@@ -345,13 +347,165 @@ SQL;
         Yii::app()->end(CJSON::encode(array('res' => true)));
     }
 
-    public function actionAntiPlagiarism()
+    public function actionStudentInfo()
     {
+        $model = new TimeTableForm;
+        $model->scenario = 'student';
+        if (isset($_REQUEST['TimeTableForm']))
+            $model->attributes=$_REQUEST['TimeTableForm'];
+
+        $canSelectSt = false;
+        if (Yii::app()->user->isTch) {
+
+            $grants = Yii::app()->user->dbModel->grants;
+
+            if (empty($grants))
+                throw new CHttpException(404, 'You don\'t have an access to this service');
+
+            $type = $grants->getGrantsFor(Grants::STUDENT_INFO);
+
+            if ($type == 0)
+                throw new CHttpException(404, 'You don\'t have an access to this service');
+
+            $canSelectSt = true;
+
+        } elseif (Yii::app()->user->isStd) {
+
+            $model->student = Yii::app()->user->dbModel->st1;
+
+        } else
+            throw new CHttpException(404, 'You don\'t have an access to this service');
+
+
         if (! empty($_FILES)) {
-            $file = CUploadedFile::getInstanceByName('files');
+
+            $nkrs1 = Yii::app()->request->getParam('nkrs1', null);
+
+            $document = CUploadedFile::getInstanceByName('document');
+            $tmpName = tempnam(sys_get_temp_dir(), '_');
+            $saved = $document->saveAs($tmpName);
+
+
+            if ($saved) {
+                list($id, $url) = $this->sendToAntiPlagiarism($document, $tmpName);
+                if ($nkrs1)
+                    D::model()->updateNkrs($nkrs1, 'nkrs8', $id);
+                Yii::app()->user->setFlash('success', tt('Документ был отправлен на проверку в Антиплагиат'));
+                Yii::app()->user->setFlash('info', tt('Результат можно посмотреть здесь:') .' '. CHtml::link(tt('Отчет'), $url, array('target' => '_blank')));
+            }
         }
 
-        $this->render('antiPlagiarism');
+        $stInfoForm = new StInfoForm();
+        $stInfoForm->fillData($model);
+        if (isset($_REQUEST['StInfoForm'])) {
+            $stInfoForm->attributes=$_REQUEST['StInfoForm'];
+            if ($stInfoForm->validate())
+                $stInfoForm->customSave($model);
+        }
+
+        $this->render('studentInfo', array(
+            'canSelectSt' => $canSelectSt,
+            'stInfoForm'  => $stInfoForm,
+            'model' => $model
+        ));
     }
 
+    public function sendToAntiPlagiarism($document, $tmpName)
+    {
+        $ANTIPLAGIAT_URI = 'http://testapi.antiplagiat.ru';
+
+        // Создать клиента сервиса(http, unsecured)
+        $COMPANY_NAME = Yii::app()->params['antiPlagiarism']['company_name'];
+        $APICORP_ADDRESS = Yii::app()->params['antiPlagiarism']['apicorp_address'];
+        $client = new SoapClient("http://$APICORP_ADDRESS/apiCorp/$COMPANY_NAME?singleWsdl",
+            array("trace"=>1,
+                "soap_version" => SOAP_1_1,
+                "features" => SOAP_SINGLE_ELEMENT_ARRAYS));
+
+        // Описание загружаемого файла
+        $data = array(
+            "Data"     => file_get_contents($tmpName),
+            "FileName" => $document->name,
+            "FileType" => '.'.$document->extensionName
+        );
+
+        // Загрузка файла
+        $uploadResult = $client->UploadDocument(array("data"=>$data));
+
+        // Идентификатор документа. Если загружается не архив, то список загруженных документов будет состоять из одного элемента.
+        $id = $uploadResult->UploadDocumentResult->Uploaded[0]->Id;
+
+        // Иницировать проверку с использованием собственного модуля поиска и модуля поиска "wikipedia"
+        $client->CheckDocument(array("docId" => $id, "checkServicesList" => array($COMPANY_NAME, "wikipedia")));
+
+        // Получить текущий статус последней проверки
+        $status = $client->GetCheckStatus(array("docId" => $id));
+
+        // Цикл ожидания окончания проверки
+        while ($status->GetCheckStatusResult->Status === "InProgress")
+        {
+            sleep($status->GetCheckStatusResult->EstimatedWaitTime * 0.1);
+            $status = $client->GetCheckStatus(array("docId" => $id));
+        }
+
+        // Проверка закончилась неудачно.
+        if ($status->GetCheckStatusResult->Status === "Failed")
+        {
+            echo("При проверке документа произошла ошибка:" + $status->GetCheckStatusResult->FailDetails);
+            return;
+        }
+
+        $url = $ANTIPLAGIAT_URI.$status->GetCheckStatusResult->Summary->ReportWebId;
+        return array($id->Id, $url);
+    }
+
+    public function actionAutocompleteTeachers()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $query = Yii::app()->request->getParam('query', null);
+
+        $teachers = P::model()->findTeacherByName($query);
+
+        foreach($teachers as $tch)
+        {
+            $t = '';
+            if ($tch['pd7'] == 1)
+                $t = 'совм.';
+            elseif ($tch['pd7'] == 3 || $tch['pd7'] == 5)
+                $t = 'почас.';
+            elseif ($tch['pd7'] == 4)
+                $t = 'совмещ.';
+
+            $suggestions[] = array(
+                'value' => implode(' ', array($tch['dol2'], SH::getShortName($tch['p3'], $tch['p4'], $tch['p5']))) .' '. $t,
+                'p1'    => $tch['p1']
+            );
+        }
+
+        $res = array(
+            'query'       => $query,
+            'suggestions' => $suggestions,
+        );
+
+        Yii::app()->end(CJSON::encode($res));
+    }
+
+    public function actionUpdateNkrs()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $field = Yii::app()->request->getParam('field', null);
+        $value = Yii::app()->request->getParam('value', null);
+        $nkrs1 = Yii::app()->request->getParam('nkrs1', null);
+
+        if (! in_array($field, array('nkrs6', 'nkrs7')))
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $res = D::model()->updateNkrs($nkrs1, $field, $value);
+
+        Yii::app()->end(CJSON::encode(array('res' => $res)));
+    }
 }

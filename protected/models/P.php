@@ -651,4 +651,20 @@ SQL;
         return $pd1;
     }
 
+    public function getTeacherNameWithDol($p1)
+    {
+        $sql = <<<SQL
+        select P3,P4,P5,DOL2
+        from dol
+        inner join pd on (dol.dol1 = pd.pd45)
+        inner join p on (pd.pd2 = p.p1)
+        where P1=:P1
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', $p1);
+        $tch = $command->queryRow();
+
+        return implode(' ', array($tch['dol2'], SH::getShortName($tch['p3'], $tch['p4'], $tch['p5'])));
+    }
+
 }

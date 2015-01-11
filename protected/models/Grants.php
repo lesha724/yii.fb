@@ -20,6 +20,7 @@ class Grants extends CActiveRecord
     const MODULES = 'grant4';
     const DOCS = 'grant5';
     const EXAM_SESSION = 'grant6';
+    const STUDENT_INFO = 'grant7';
 	/**
 	 * @return string the associated database table name
 	 */
@@ -36,7 +37,7 @@ class Grants extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('grants1, grants2, grants3, grants4, grants5', 'numerical', 'integerOnly'=>true),
+			array('grants1, grants2, grants3, grants4, grants5, grants6, grants7', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('grants1, grants2, grants3', 'safe', 'on'=>'search'),
@@ -66,6 +67,8 @@ class Grants extends CActiveRecord
 			'grants3' => tt('Эл. журнал'),
 			'grants4' => tt('Ведомости'),
 			'grants5' => tt('Документооборот'),
+			'grants6' => tt('Экз. сессия'),
+			'grants7' => tt('Данные студента'),
 		);
 	}
 
@@ -122,6 +125,9 @@ class Grants extends CActiveRecord
                 break;
             case self::EXAM_SESSION:
                 $grants = $this->grants6;
+                break;
+            case self::STUDENT_INFO:
+                $grants = $this->grants7;
                 break;
             default:
                 $grants = null;

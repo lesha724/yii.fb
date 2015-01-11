@@ -1,7 +1,5 @@
 $(document).ready(function(){
 
-    initSpinner('spinner1');
-
     initPopovers();
 
     $spinner1 = $('#spinner1');
