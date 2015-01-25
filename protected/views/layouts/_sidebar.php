@@ -29,7 +29,7 @@
     </div>
 
     <a href="https://play.google.com/store/apps/details?id=scheduleMKP.scheduleMKP" target="_blank">
-        <img src="images/googleplay.png" style="max-width:90%;padding:5%"/>
+        <img src="<?php echo Yii::app()->request->baseUrl ?>/images/googleplay.png" style="max-width:90%;padding:5%"/>
     </a>
 
     <script type="text/javascript">
