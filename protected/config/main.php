@@ -203,6 +203,7 @@ $config = array(
         'antiPlagiarism' => array(
             'company_name' => null,
             'apicorp_address' => null,
+            'antiplagiat_uri' => null,
         )
     ),
 );

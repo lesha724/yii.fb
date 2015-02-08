@@ -132,13 +132,13 @@ class SiteController extends Controller
 
                 $user = Users::model()->findByAttributes(array('u4'=>$model->email));
 
-                Apostle::setup("476ca3d42516c6f85057e24daa889f5cf538afbe");
+                Apostle::setup("a596c9f9cb4066dd716911ef92be9bd040b0664d");
                 $mail = new Mail( "forgot-password", array( "email" => $user->u4 ) );
                 $mail->name = $user->name;
                 $mail->url  = Yii::app()->createAbsoluteUrl('site/index');
                 $mail->login    = $user->u2;
                 $mail->password = $user->u3;
-                $mail->deliver();
+                $t = $mail->deliver();
 
                 Yii::app()->end('send');
             }

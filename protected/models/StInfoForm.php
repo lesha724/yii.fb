@@ -37,7 +37,7 @@ class StInfoForm extends CFormModel
         if (! $model->student)
             return;
 
-        $res = St::model()->updateByPk($model->student, array(
+        $res1 = St::model()->updateByPk($model->student, array(
             'st34' => $this->st34,
             'st74' => $this->st74,
             'st75' => $this->st75,
@@ -45,7 +45,11 @@ class StInfoForm extends CFormModel
             'st107' => $this->st107,
         ));
 
-        return $res;
+        $res2 = Users::model()->updateAll(array(
+            'u4' => $this->st107
+        ), 'u5 =0 and u6 = '.$model->student);
+
+        return $res1 && $res2;
     }
 
     public function fillData(TimeTableForm $model)

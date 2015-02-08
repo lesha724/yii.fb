@@ -80,6 +80,7 @@ $form=$this->beginWidget('CActiveForm', array(
                     $courseWork = D::model()->getFirstCourseWork($model->student, $discipline['us1']);
 
                     $nkrs1 = $courseWork['nkrs1'];
+                    $p1    = $courseWork['nkrs6'];
                     $nkrs6 = P::model()->getTeacherNameWithDol($courseWork['nkrs6']);
                     $nkrs7 = $courseWork['nkrs7'];
 
@@ -139,6 +140,7 @@ $form=$this->beginWidget('CActiveForm', array(
                     <fieldset>
                         <?= CHtml::fileField('document', '', array('id' => 'id-input-file-3')) ?>
                         <?= CHtml::hiddenField('nkrs1', $nkrs1) ?>
+                        <?= CHtml::hiddenField('nkrs6', isset($p1)?$p1:null) ?>
                     </fieldset>
 
                     <div class="form-actions center">

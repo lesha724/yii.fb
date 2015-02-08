@@ -1,5 +1,8 @@
 <?php
 
+// Grab the Apostle namespace
+use Apostle\Mail;
+
 class OtherController extends Controller
 {
     public function filters() {
@@ -380,6 +383,7 @@ SQL;
         if (! empty($_FILES)) {
 
             $nkrs1 = Yii::app()->request->getParam('nkrs1', null);
+            $nkrs6 = Yii::app()->request->getParam('nkrs6', null);
 
             $document = CUploadedFile::getInstanceByName('document');
             $tmpName = tempnam(sys_get_temp_dir(), '_');
@@ -392,6 +396,7 @@ SQL;
                     D::model()->updateNkrs($nkrs1, 'nkrs8', $id);
                 Yii::app()->user->setFlash('success', tt('Документ был отправлен на проверку в Антиплагиат'));
                 Yii::app()->user->setFlash('info', tt('Результат можно посмотреть здесь:') .' '. CHtml::link(tt('Отчет'), $url, array('target' => '_blank')));
+                $this->sendEmails($model->student, $nkrs6, $url);
             }
         }
 
@@ -412,7 +417,7 @@ SQL;
 
     public function sendToAntiPlagiarism($document, $tmpName)
     {
-        $ANTIPLAGIAT_URI = 'http://testapi.antiplagiat.ru';
+        $ANTIPLAGIAT_URI = Yii::app()->params['antiPlagiarism']['antiplagiat_uri'];
 
         // Создать клиента сервиса(http, unsecured)
         $COMPANY_NAME = Yii::app()->params['antiPlagiarism']['company_name'];
@@ -507,5 +512,40 @@ SQL;
         $res = D::model()->updateNkrs($nkrs1, $field, $value);
 
         Yii::app()->end(CJSON::encode(array('res' => $res)));
+    }
+
+    public function sendEmails($st1, $p1, $url)
+    {
+        $student = Users::model()->find('u5 = 0 and u6 = '.$st1);
+
+        if (! empty($student)) {
+
+            if ($student->u4) {
+                $st = St::model()->findByPk($st1);
+
+                Apostle::setup("a596c9f9cb4066dd716911ef92be9bd040b0664d");
+                $mail = new Mail( "antiplagiat-notification", array( "email" => $student->u4 ) );
+                $mail->url  = $url;
+                $mail->from = implode(' ', array($st->st2, $st->st3, $st->st4));
+                $mail->deliver();
+            }
+
+        }
+
+        if ($p1) {
+            $teacher = Users::model()->find('u5 = 1 and u6 = '.$p1);
+
+            if ($teacher->u4) {
+
+                $st = St::model()->findByPk($st1);
+
+                Apostle::setup("a596c9f9cb4066dd716911ef92be9bd040b0664d");
+                $mail = new Mail( "antiplagiat-notification", array( "email" => $teacher->u4 ) );
+                $mail->url  = $url;
+                $mail->from = implode(' ', array($st->st2, $st->st3, $st->st4));
+                $mail->deliver();
+            }
+        }
+
     }
 }
