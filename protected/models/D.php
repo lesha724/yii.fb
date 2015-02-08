@@ -749,6 +749,8 @@ SQL;
         if (! $st1)
             return;
 
+        list($sg40, $sg41) = $this->getSg40Sg41($st1);
+
         $sql = <<<SQL
             select us1,d2
             from d
@@ -760,11 +762,14 @@ SQL;
               inner join ucs on (ucg.ucg1 = ucs.ucs2)
               inner join u on (uo.uo22 = u.u1)
             where us4 = 8 and ucs3 = :ST1 and u38<=current_timestamp and u39>=current_timestamp
+                  and sem3=:SG40 and sem5=:SG41
             group by us1,d2
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':ST1', $st1);
+        $command->bindValue(':SG40', $sg40);
+        $command->bindValue(':SG41', $sg41);
         $discipline = $command->queryRow();
 
         return $discipline;
@@ -819,5 +824,34 @@ SQL;
         return $res;
     }
 
+    public function getSg40Sg41($st1)
+    {
+        if (! $st1)
+            return;
 
+        $sql = <<<SQL
+            select sg40,sg41
+            from uo
+              inner join ucx on (uo.uo19 = ucx.ucx1)
+              inner join ucg on (ucx.ucx1 = ucg.ucg2)
+              inner join ucs on (ucg.ucg1 = ucs.ucs2)
+              inner join u on (uo.uo22 = u.u1)
+              inner join sg on (u2 = sg1)
+            where ucs3 = :ST1
+            group by sg40,sg41
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ST1', $st1);
+        $params = $command->queryRow();
+
+        list($year, $sem) = ShortCodes::getCurrentYearAndSem();
+
+        if (empty($params['sg40']))
+            $params['sg40'] = $year;
+
+        if (empty($params['sg41']))
+            $params['sg41'] = $sem;
+
+        return array($params['sg40'], $params['sg41']);
+    }
 }
