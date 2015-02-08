@@ -441,7 +441,7 @@ SQL;
 
         $sql = <<<SQL
               SELECT ab1,ab2,ab3,ab4,abd20,abd33,abd28,abd29,abd23,
-                     abd66,abd54,abd1,abd9,abd24,abd25,abd26,abd27,abd52
+                     abd66,abd54,abd1,abd9,abd24,abd25,abd26,abd27,abd52,abd13
               {$from}
               WHERE spab4 = :SEL_1 AND spab5 = :SEL_2 AND spab6 = :SEL_3 AND
                     spab1 = :SEL_6 AND spab2 = :YEAR_1 AND

@@ -13,9 +13,9 @@
 // колонка - № личного дела
 global $showColumn;
 $showColumn = PortalSettings::model()->findByPk(26)->ps2;
-$colspan = 10;
+$colspan = 11;
 if ($showColumn)
-    $colspan = 11;
+    $colspan = 12;
 
 function getDocumentTypeFor($st, $model)
 {
@@ -65,6 +65,7 @@ HTML;
                 <td>$st[ind4]</td>
                 <td>{$td1}</td>
                 <td>{$td2}</td>
+                <td>$st[abd13]</td>
                 <td>$st[notice]</td>
             </tr>
 HTML;
@@ -125,6 +126,7 @@ if (! empty($model->cn1))
                 <th rowspan="2" style="width:5%"><?=tt('Сумма баллов')?></th>
                 <th colspan="2" style="width:14%"><?=tt('Учет инд. достижений')?></th>
                 <th colspan="2"><?=tt('Документы')?></th>
+                <th rowspan="2"><?=tt('Приоритет')?></th>
                 <th rowspan="2"><?=tt('Примечание')?></th>
             </tr>
             <tr>
