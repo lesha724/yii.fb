@@ -13,9 +13,9 @@
 // колонка - № личного дела
 global $showColumn;
 $showColumn = PortalSettings::model()->findByPk(26)->ps2;
-$colspan = 8;
+$colspan = 10;
 if ($showColumn)
-    $colspan = 9;
+    $colspan = 11;
 
 function getDocumentTypeFor($st, $model)
 {
@@ -61,6 +61,8 @@ HTML;
                 <td>$st[ab3]</td>
                 <td>$st[ab4]</td>
                 <td>$mark</td>
+                <td>$st[ind1_3]</td>
+                <td>$st[ind4]</td>
                 <td>{$td1}</td>
                 <td>{$td2}</td>
                 <td>$st[notice]</td>
@@ -121,10 +123,13 @@ if (! empty($model->cn1))
                 <th rowspan="2"><?=tt('Имя')?></th>
                 <th rowspan="2"><?=tt('Отчество')?></th>
                 <th rowspan="2" style="width:5%"><?=tt('Сумма баллов')?></th>
+                <th colspan="2" style="width:14%"><?=tt('Учет инд. достижений')?></th>
                 <th colspan="2"><?=tt('Документы')?></th>
                 <th rowspan="2"><?=tt('Примечание')?></th>
             </tr>
             <tr>
+                <th style="width:7%"><?=tt('П.1-3')?></th>
+                <th style="width:7%"><?=tt('П.4')?></th>
                 <th style="width:5%"><?=tt('Копия')?></th>
                 <th style="width:5%"><?=tt('Оригинал')?></th>
             </tr>

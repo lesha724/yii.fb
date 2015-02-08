@@ -64,7 +64,7 @@ class EntranceController extends Controller
         $model->currentYear = date('Y', strtotime($dateEntranceBegin));
 
         $list_1 = $list_3 = $list_4 = $list_5 = array();
-        //var_dump();
+
         if (isset($_REQUEST['FilterForm'])) {
             $model->attributes=$_REQUEST['FilterForm'];
 

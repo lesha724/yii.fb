@@ -447,7 +447,7 @@ SQL;
                     spab1 = :SEL_6 AND spab2 = :YEAR_1 AND
                     ab1>0 AND abd12 is null AND
                     {$extras}
-		      ORDER BY abd20 DESC, {$extraOrder} abd28 DESC, ab2
+		      ORDER BY abd20 DESC, {$extraOrder} abd28 DESC, ab2 COLLATE unicode
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
@@ -460,11 +460,30 @@ SQL;
 
         $students = $command->queryAll();
 
+        $allSpol = $this->getAllSpol();
+
         foreach ($students as $key => $st) {
 
             list($notice, $color) = $this->getNotice($st, $mp32);
 
             $students[$key] = array_merge($st, array('notice' => $notice, 'color' => $color));
+
+            // инд. достижения {{{
+            $students[$key]['ind1_3'] = '';
+            $students[$key]['ind4'] = '';
+
+            if (isset($allSpol[$st['abd1']])) {
+
+                $spol = $allSpol[$st['abd1']];
+
+                if (isset($spol['ind1_3']))
+                    $students[$key]['ind1_3'] = implode('<br>', $spol['ind1_3']);
+
+                if (isset($spol['ind4']))
+                    $students[$key]['ind4'] = implode('<br>', $spol['ind4']);
+            }
+            // }}}
+
         }
 
         $sortByStatus = Yii::app()->request->getParam('sortByStatus', null);
@@ -575,4 +594,29 @@ SQL;
         }
         return $a_status > $b_status ? -1 : 1;
     }
+
+    public function getAllSpol()
+    {
+        $sql = <<<SQL
+          SELECT bspol1,spol1,spol2
+          FROM spol
+          JOIN bspol ON spol1=bspol2
+          ORDER BY spol2
+SQL;
+        $rows = Yii::app()->db->createCommand($sql)->queryAll();
+
+        $data = array();
+        foreach ($rows as $row) {
+
+            $key = $row['bspol1']; // abd1
+
+            if ($row['spol1'] == '10')
+                $data[$key]['ind4'][] = $row['spol2'];
+            else
+                $data[$key]['ind1_3'][] = $row['spol2'];
+        }
+
+        return $data;
+    }
+
 }
