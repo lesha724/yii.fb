@@ -680,7 +680,7 @@ SQL;
                 INNER JOIN u ON (UO.uo22 = U.U1)
                 INNER JOIN d ON (UO.uo3 = D.D1)
                 INNER JOIN k ON (UO.uo4 = K.K1)
-                WHERE us4<>13 and u2=:ID and us3=:SEM1
+                WHERE us4<>13 and u2=:ID and us3=:SEM1 and us6<>0 and us4<>17 and us4<>18
                 ORDER BY d2,us4,uo3
 SQL;
             $id  = $model->group;
@@ -694,7 +694,7 @@ SQL;
                 INNER JOIN k ON (uo.uo4 = k.k1)
                 INNER JOIN ucx ON (uo.uo19 = ucx.ucx1)
                 INNER JOIN ucg ON (ucx.ucx1 = ucg.ucg2)
-                WHERE us4<>13 and ucg3=:ID and us3=:SEM1
+                WHERE us4<>13 and ucg3=:ID and us3=:SEM1 and us6<>0 and us4<>17 and us4<>18
                 ORDER BY d2,us4,uo3
 SQL;
             $id  = $model->group;
@@ -709,7 +709,7 @@ SQL;
                 INNER JOIN ucx ON (uo.uo19 = ucx.ucx1)
                 INNER JOIN ucg ON (ucx.ucx1 = ucg.ucg2)
                 INNER JOIN ucs ON (ucg.ucg1 = ucs.ucs2)
-                WHERE us4<>13 and ucg4=0 and ucs3=:ID and us3=:SEM1
+                WHERE us4<>13 and ucg4=0 and ucs3=:ID and us3=:SEM1 and us6<>0 and us4<>17 and us4<>18
                 ORDER BY d2,us4,uo3
 SQL;
             $id  = $model->student;
