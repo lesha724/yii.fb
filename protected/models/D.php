@@ -680,10 +680,11 @@ SQL;
                 INNER JOIN u ON (UO.uo22 = U.U1)
                 INNER JOIN d ON (UO.uo3 = D.D1)
                 INNER JOIN k ON (UO.uo4 = K.K1)
-                WHERE us4<>13 and u2=:ID and us3=:SEM1
+                WHERE us4<>13 and u2=:ID and us3=:SEM1 and us6<>0 and us4<>17 and us4<>18
                 ORDER BY d2,us4,uo3
 SQL;
             $id  = $model->group;
+			
         } elseif ($type == WorkPlanController::GROUP) {
             $sql = <<<SQL
                 SELECT d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1
@@ -694,7 +695,7 @@ SQL;
                 INNER JOIN k ON (uo.uo4 = k.k1)
                 INNER JOIN ucx ON (uo.uo19 = ucx.ucx1)
                 INNER JOIN ucg ON (ucx.ucx1 = ucg.ucg2)
-                WHERE us4<>13 and ucg3=:ID and us3=:SEM1
+                WHERE us4<>13 and ucg3=:ID and us3=:SEM1 and us6<>0 and us4<>17 and us4<>18
                 ORDER BY d2,us4,uo3
 SQL;
             $id  = $model->group;
@@ -709,7 +710,7 @@ SQL;
                 INNER JOIN ucx ON (uo.uo19 = ucx.ucx1)
                 INNER JOIN ucg ON (ucx.ucx1 = ucg.ucg2)
                 INNER JOIN ucs ON (ucg.ucg1 = ucs.ucs2)
-                WHERE us4<>13 and ucg4=0 and ucs3=:ID and us3=:SEM1
+                WHERE us4<>13 and ucg4=0 and ucs3=:ID and us3=:SEM1 and us6<>0 and us4<>17 and us4<>18
                 ORDER BY d2,us4,uo3
 SQL;
             $id  = $model->student;
@@ -744,114 +745,4 @@ SQL;
         return $name;
     }
 
-    public function getDisciplineForCourseWork($st1)
-    {
-        if (! $st1)
-            return;
-
-        list($sg40, $sg41) = $this->getSg40Sg41($st1);
-
-        $sql = <<<SQL
-            select us1,d2
-            from d
-              inner join uo on (d.d1 = uo.uo3)
-              inner join us on (uo.uo1 = us.us2)
-              inner join sem on (us.us3 = sem.sem1)
-              inner join ucx on (uo.uo19 = ucx.ucx1)
-              inner join ucg on (ucx.ucx1 = ucg.ucg2)
-              inner join ucs on (ucg.ucg1 = ucs.ucs2)
-              inner join u on (uo.uo22 = u.u1)
-            where us4 = 8 and ucs3 = :ST1 and u38<=current_timestamp and u39>=current_timestamp
-                  and sem3=:SG40 and sem5=:SG41
-            group by us1,d2
-SQL;
-
-        $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':ST1', $st1);
-        $command->bindValue(':SG40', $sg40);
-        $command->bindValue(':SG41', $sg41);
-        $discipline = $command->queryRow();
-
-        return $discipline;
-    }
-
-    public function getFirstCourseWork($st1, $us1)
-    {
-        $sql = <<<SQL
-           SELECT nkrs1,nkrs6,nkrs7
-           FROM nkrs
-           WHERE nkrs2 = :ST1 and nkrs3 = :US1
-SQL;
-
-        $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':ST1', $st1);
-        $command->bindValue(':US1', $us1);
-        $discipline = $command->queryRow();
-
-        if (empty($discipline)) {
-            $sql = <<<SQL
-                insert into NKRS(NKRS1,NKRS2,NKRS3)
-                values (GEN_ID(GEN_NKRS, 1), :ST1, :US1)
-SQL;
-            Yii::app()->db->createCommand($sql)->execute(array(
-                ':ST1' => $st1,
-                ':US1' => $us1
-            ));
-
-            $sql = <<<SQL
-                select NKRS1 FIRST
-                from NKRS
-                order by NKRS1 DESC
-SQL;
-            $discipline = Yii::app()->db->createCommand($sql)->queryRow();
-        }
-
-        return $discipline;
-    }
-
-    public function updateNkrs($nkrs1, $field, $value)
-    {
-        $sql = <<<SQL
-           UPDATE nkrs SET {$field} = :VALUE
-           WHERE nkrs1 = :NKRS1
-SQL;
-
-        $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':VALUE', $value);
-        $command->bindValue(':NKRS1', $nkrs1);
-        $res = $command->execute();
-
-        return $res;
-    }
-
-    public function getSg40Sg41($st1)
-    {
-        if (! $st1)
-            return;
-
-        $sql = <<<SQL
-            select sg40,sg41
-            from uo
-              inner join ucx on (uo.uo19 = ucx.ucx1)
-              inner join ucg on (ucx.ucx1 = ucg.ucg2)
-              inner join ucs on (ucg.ucg1 = ucs.ucs2)
-              inner join u on (uo.uo22 = u.u1)
-              inner join sg on (u2 = sg1)
-            where ucs3 = :ST1
-            group by sg40,sg41
-SQL;
-        $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':ST1', $st1);
-        $params = $command->queryRow();
-
-        list($year, $sem) = ShortCodes::getCurrentYearAndSem();
-
-        if (empty($params['sg40']))
-            $params['sg40'] = $year;
-
-        if (empty($params['sg41']))
-            $params['sg41'] = $sem;
-
-        return array($params['sg40'], $params['sg41']);
-    }
 }
