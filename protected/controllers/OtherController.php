@@ -542,7 +542,7 @@ SQL;
                 Apostle::setup("a596c9f9cb4066dd716911ef92be9bd040b0664d");
                 $mail = new Mail( "antiplagiat-notification", array( "email" => $teacher->u4 ) );
                 $mail->url  = $url;
-                $mail->from = implode(' ', array($st->st2, $st->st3, $st->st4));
+                $mail->textFrom = implode(' ', array($st->st2, $st->st3, $st->st4));
                 $mail->deliver();
             }
         }
