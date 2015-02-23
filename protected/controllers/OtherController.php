@@ -1,5 +1,6 @@
 <?php
 
+
 // Grab the Apostle namespace
 use Apostle\Mail;
 
