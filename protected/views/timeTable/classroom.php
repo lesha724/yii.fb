@@ -23,7 +23,7 @@ $form=$this->beginWidget('CActiveForm', array(
     $html .= '<fieldset>';
     $filials = CHtml::listData(Ks::model()->findAll(), 'ks1', 'ks2');
     if (count($filials) > 1) {
-        $html .= '<div class="row-fluid span2">';
+        $html .= '<div class="span3 ace-select">';
         $html .= $form->label($model, 'filial');
         $html .= $form->dropDownList($model, 'filial', $filials, $options);
         $html .= '</div>';
@@ -31,7 +31,7 @@ $form=$this->beginWidget('CActiveForm', array(
 
     $housings = CHtml::listData(Ka::model()->getHousingFor($model->filial), 'ka1', 'ka2');
     if (count($housings) > 1) {
-        $html .= '<div class="row-fluid span2">';
+        $html .= '<div class="span3 ace-select">';
         $html .= $form->label($model, 'housing');
         $html .= $form->dropDownList($model, 'housing', $housings, $options);
         $html .= '</div>';
@@ -39,7 +39,7 @@ $form=$this->beginWidget('CActiveForm', array(
 
 
     $classrooms = CHtml::listData(A::model()->getClassRooms($model->filial, $model->housing), 'a1', 'a2');
-    $html .= '<div class="row-fluid span2">';
+    $html .= '<div class="span3 ace-select">';
     $html .= $form->label($model, 'classroom');
     $html .= $form->dropDownList($model, 'classroom', $classrooms, $options);
     $html .= '</div>';
@@ -56,7 +56,7 @@ $form=$this->beginWidget('CActiveForm', array(
         'r11'   => $model->r11,
     ), true);
 
-    $html .= '<div class="row-fluid span3" style="margin-left: 0">';
+    $html .= '<div class="span3 ace-block">';
     $html .= $form->label($model, 'r11');
     $html .= ' '.$form->textField($model, 'r11', array('class'=>'input-mini span2', 'placeholder' => tt('дней'), 'style'=>'background:'.TimeTableForm::r11Color));
     $html .= '</div>';

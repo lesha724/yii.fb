@@ -694,7 +694,7 @@ SQL;
         if (empty($st1))
             $st1 = $this->st1;
 
-        $sql = <<<SQL
+        /*$sql = <<<SQL
             SELECT pnsp2,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,st56,pnsp13,PNSP17, PNSP18, PNSP19,PNSP20
             FROM pnsp
             INNER JOIN sp on (pnsp.pnsp1 = sp.sp11)
@@ -704,8 +704,20 @@ SQL;
             INNER JOIN st on (std.std2 = st.st1)
             WHERE std2 = :ST1
             GROUP BY pnsp2 collate UNICODE,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,st56,pnsp13,PNSP17, PNSP18, PNSP19,PNSP20
+SQL;*/
+		
+		$sql = <<<SQL
+		SELECT pnsp2,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,st56,pnsp13,PNSP17, PNSP18, PNSP19,PNSP20
+            FROM pnsp
+            INNER JOIN sp on (pnsp.pnsp1 = sp.sp11)
+            INNER JOIN sg on (sp.sp1 = sg.sg2)
+            INNER JOIN gr on (sg.sg1 = gr.gr2)
+            INNER JOIN std on (gr.gr1 = std.std3)
+            INNER JOIN st on (std.std2 = st.st1)
+            WHERE std2 = :ST1
+            GROUP BY pnsp2,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,st56,pnsp13,PNSP17, PNSP18, PNSP19,PNSP20
+            ORDER BY pnsp2 collate UNICODE
 SQL;
-
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':ST1', $st1);

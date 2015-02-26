@@ -30,7 +30,7 @@
 
     $options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;', 'style' => 'width:200px');
 
-    $html  = '<div class="row-fluid span2 no-margin">';
+    $html  = '<div class="ace-select span3 no-margin">';
     $html .= CHtml::label(tt('Учебный год'), 'FilterForm_year');
     $html .= CHtml::dropDownList('FilterForm[year]', $model->year, $data, $options);
     $html .= '</div>';

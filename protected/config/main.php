@@ -179,6 +179,10 @@ $config = array(
 					'class'=>'CFileLogRoute',
 					'levels'=>'error, warning',
 				),
+				/*array(
+					'class'=>'application.extensions.yii-debug-toolbar.YiiDebugToolbarRoute',
+					'ipFilters'=>array('77.121.11.10','192.168.1.215'),
+				),*/
 			),
 		),
         'bootstrap' => array(

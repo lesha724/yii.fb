@@ -23,7 +23,7 @@ $form=$this->beginWidget('CActiveForm', array(
 $html  = '<div>';
     $html .= '<fieldset>';
 
-    $html .= '<div class="row-fluid span1">';
+    $html .= '<div class="span1 ace-date">';
     $html .= $form->label($model, 'date1');
     $html .= '<div class="input-append">';
     $html .= $form->textField($model, 'date1', array('class' => 'datepicker input-small input-mask-date'));
@@ -32,7 +32,7 @@ $html  = '<div>';
 
     $filials = CHtml::listData(Ks::model()->findAll(), 'ks1', 'ks2');
     if (count($filials) > 1) {
-        $html .= '<div class="row-fluid span2">';
+        $html .= '<div class="span3 ace-select">';
         $html .= $form->label($model, 'filial');
         $html .= $form->dropDownList($model, 'filial', $filials, $options);
         $html .= '</div>';
@@ -40,7 +40,7 @@ $html  = '<div>';
 
     $housings = CHtml::listData(Ka::model()->getHousingFor($model->filial), 'ka1', 'ka2');
     if (count($housings) > 1) {
-        $html .= '<div class="row-fluid span2">';
+        $html .= '<div class="span3 ace-select">';
         $html .= $form->label($model, 'housing');
         $html .= $form->dropDownList($model, 'housing', $housings, $options);
         $html .= '</div>';
@@ -48,17 +48,17 @@ $html  = '<div>';
 
     $lessons = CHtml::listData(Rz::model()->getRzForDropdown(), 'rz1', 'name');
 
-    $html .= '<div class="row-fluid span2">';
+    $html .= '<div class="span3 ace-select">';
     $html .= $form->label($model, 'lessonStart');
     $html .= $form->dropDownList($model, 'lessonStart', $lessons, $options);
     $html .= '</div>';
 
-    $html .= '<div class="row-fluid span2">';
+    $html .= '<div class="span3 ace-select">';
     $html .= $form->label($model, 'lessonEnd');
     $html .= $form->dropDownList($model, 'lessonEnd', $lessons, $options);
     $html .= '</div>';
 
-    $html .= '<div class="row-fluid">
+    $html .= '<div class="">
                 <button class="btn btn-info btn-small" type="submit" style="margin:22px 0 0 0">
                 Ок <i class="icon-arrow-right icon-on-right"></i>
                </button></div>';

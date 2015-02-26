@@ -30,20 +30,20 @@ $html = '<div>';
     $html .= '<fieldset>';
     $filials = CHtml::listData(Ks::model()->findAll(), 'ks1', 'ks2');
     if (count($filials) > 1) {
-        $html .= '<div class="row-fluid span2">';
+        $html .= '<div class="span3 ace-select">';
         $html .= $form->label($model, 'filial');
         $html .= $form->dropDownList($model, 'filial', $filials, $attr);
         $html .= '</div>';
     }
 
     $chairs = CHtml::listData(K::model()->getOnlyChairsFor($model->filial), 'k1', 'k3');
-    $html .= '<div class="row-fluid span2">';
+    $html .= '<div class="span3 ace-select">';
     $html .= $form->label($model, 'chair');
     $html .= $form->dropDownList($model, 'chair', $chairs, $attr);
     $html .= '</div>';
 
     $teachers = P::model()->getTeachersForTimeTable($model->chair);
-    $html .= '<div class="row-fluid span2">';
+    $html .= '<div class="span3 ace-select">';
     $html .= $form->label($model, 'teacher');
     $html .= $form->dropDownList($model, 'teacher', $teachers, $attr);
     $html .= '</div>';
@@ -60,7 +60,7 @@ $html = '<div>';
         'r11'   => $model->r11,
     ), true);
 
-    $html .= '<div class="row-fluid span3" style="margin-left: 0">';
+    $html .= '<div class="span3 ace-block">';
     $html .= $form->label($model, 'r11');
     $html .= ' '.$form->textField($model, 'r11', array('class'=>'input-mini span2', 'placeholder' => tt('дней'), 'style'=>'background:'.TimeTableForm::r11Color));
     $html .= '</div>';

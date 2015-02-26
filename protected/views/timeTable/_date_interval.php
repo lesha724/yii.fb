@@ -13,7 +13,7 @@ JS
 ?>
 
 
-<div class="row-fluid span3">
+<div class="span3 ace-block ace-datepicker-block">
     <div class="input-prepend">
         <span class="add-on">
             <i class="icon-calendar"></i>

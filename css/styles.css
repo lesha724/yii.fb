@@ -367,3 +367,27 @@ div.subscription-disc input {
 table.subscription caption {
     font-size: 16px;
 }
+
+.ace-select{
+	min-width:220px;
+	margin-left:4px;
+}
+
+.ace-select label{
+	width:220px;
+}
+.ace-block{
+	min-width:220px;
+	margin-left:4px;
+}
+.ace-datepicker-block input{
+	width:180px;
+}
+
+.ace-date{
+	min-width:100px;
+}
+
+.ace-date input{
+	height:18px!important;
+}
