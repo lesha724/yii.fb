@@ -1,5 +1,6 @@
 <?php
 
+
 Yii::import('system.cli.commands.MigrateCommand');
  
 class ChMigrateCommand extends MigrateCommand
