@@ -198,7 +198,8 @@ $config = array(
 
     'sourceLanguage'=>'ru',
 
-	'params'=>array(
+	'params'=>
+		array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@example.com',
         'defaultLanguage'=>'ru',
@@ -209,7 +210,7 @@ $config = array(
             'apicorp_address' => null,
             'antiplagiat_uri' => null,
         )
-    ),
+    )+require(dirname(__FILE__).'/params.php'),
 );
 
 // Apply local config modifications

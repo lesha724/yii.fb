@@ -503,10 +503,10 @@ class ProgressController extends Controller
 
         if (isset($_REQUEST['FilterForm']))
             $model->attributes=$_REQUEST['FilterForm'];
-
-        $this->render('attendanceStatistic', array(
-            'model' => $model,
-        ));
+			$this->render('attendanceStatistic', array(
+				'model' => $model,
+				'type_statistic'=>Yii::app()->params['attendanceStatistic']
+			));
     }
 
     public function actionExamSession()

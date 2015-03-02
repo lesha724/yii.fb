@@ -45,6 +45,28 @@ class DefaultController extends AdminController
             'model' => $model,
         ));
     }
+	
+	public function actionSettings()
+    {
+        $file = YiiBase::getPathOfAlias('application.config').'/params.inc';
+        $content = file_get_contents($file);
+        $arr = unserialize(base64_decode($content));
+        $model = new ConfigForm();
+        $model->setAttributes($arr);
+
+        if (isset($_POST['ConfigForm']))
+        {
+            $config = array(
+                'attendanceStatistic'=>$_POST['ConfigForm']['attendanceStatistic'],
+            );
+            $str = base64_encode(serialize($config));
+            file_put_contents($file, $str);
+            Yii::app()->user->setFlash('config', tt('Новые настройки сохранены!'));
+            $model->setAttributes($config);
+        }
+
+        $this->render('settings',array('model'=>$model));
+    }
 
     public function actionStGrants($id)
     {

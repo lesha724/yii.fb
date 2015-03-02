@@ -88,6 +88,11 @@ $this->widget('zii.widgets.CMenu', array(
                     'url'    => _u('/admin/default/menu'),
                     'active' => $_a=='menu' && $_m=='admin'
                 ),
+				array(
+                    'label'  => $_l2.tt('Настройки'),
+                    'url'    => _u('/admin/default/settings'),
+                    'active' => $_a=='settings' && $_m=='admin'
+                ),
             ),
             'visible' => $isAdmin,
         ),
