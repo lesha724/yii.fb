@@ -60,8 +60,10 @@ class DefaultController extends AdminController
                 'attendanceStatistic'=>$_POST['ConfigForm']['attendanceStatistic'],
             );
             $str = base64_encode(serialize($config));
-            file_put_contents($file, $str);
-            Yii::app()->user->setFlash('config', tt('Новые настройки сохранены!'));
+            if(file_put_contents($file, $str))
+				Yii::app()->user->setFlash('config', tt('Новые настройки сохранены!'));
+			else
+				Yii::app()->user->setFlash('config_error', tt('Ошибка! Новые настройки не сохранены!'));
             $model->setAttributes($config);
         }
 

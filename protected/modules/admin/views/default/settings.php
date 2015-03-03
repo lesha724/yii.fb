@@ -12,6 +12,13 @@
         </div>
     <?php
 	}else
+	if(Yii::app()->user->hasFlash('config_error'))
+		{ ?>
+        <div class="alert in fade alert-danger">
+            <?php echo Yii::app()->user->getFlash('config_error'); ?>
+        </div>
+    <?php
+	}else
 	{ 
 		$form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 			'id'=>'config-form',

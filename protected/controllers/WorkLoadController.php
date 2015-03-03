@@ -87,6 +87,7 @@ class WorkLoadController extends Controller
         $ids  = Yii::app()->request->getParam('ids', null);
         $year = Yii::app()->request->getParam('year', null);
         $sem  = Yii::app()->request->getParam('sem', null);
+		$d1  = Yii::app()->request->getParam('disp', null);
 
         if (empty($ids) || empty($year) || is_null($sem))
             throw new CHttpException(404, 'Please, do not repeat this request nay more!');
@@ -100,6 +101,7 @@ class WorkLoadController extends Controller
             'models' => $models,
             'year'   => $year,
             'sem'    => $sem,
+			'd1'=>$d1
         ), true);
 
         Yii::app()->end(CJSON::encode(array('html' => $html)));

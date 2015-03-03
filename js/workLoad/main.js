@@ -54,6 +54,7 @@ $(document).ready(function(){
 
         var $that = $(this);
         var url   = $that.closest('table').data('getgroupurl');
+		var disp = $that.data('type');
         var ids   = $that.siblings(':hidden').val();
         var year  = $('#FilterForm_year').val();
         var sem   = $('td.label-yellow a').data('semester');
@@ -61,7 +62,8 @@ $(document).ready(function(){
         var obj = {
             ids: ids,
             year:year,
-            sem: sem
+            sem: sem,
+			disp: disp
         }
 
         $spinner1.show();
