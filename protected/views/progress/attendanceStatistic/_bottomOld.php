@@ -29,8 +29,7 @@ if ($model->semester) {
 $html .= '</div>';
 echo $html;
 
-$tooltip = tt('Зн - суммарное кол-во занятий').'&nbsp;&nbsp;&nbsp;'.
-           tt('Ну - кол-во пропусков по неуважительной причине').'&nbsp;&nbsp;&nbsp;'.
+$tooltip = tt('Всего - кол-во пропусков всего').'&nbsp;&nbsp;&nbsp;'.
            tt('Ув - кол-во пропусков по уважительной причине').'&nbsp;&nbsp;&nbsp;';
 $text = tt('в процентах');
 

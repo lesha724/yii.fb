@@ -258,8 +258,8 @@ SQL;
                     //$td1++;                  // whole
                     //if ($steg6 == 1) $td2++; // with reason
                     //if ($steg6 == 2) $td3++; // without reason
-					$td2+=$stpz4;
-					$td3+=$stpz3-$stpz4;
+					$td2+=$stpz3;
+					$td3+=$stpz4;
                 }
             }
 

@@ -4,7 +4,7 @@
  * @var FilterForm $model
  */
 $th  = '<th class="center" colspan="2">%s</th>';
-$th2 = '<th class="center">Ув</th><th class="center">Ну</th>';
+$th2 = '<th class="center">Всего</th><th class="center">Ув</th>';
 
 function tds($start, $attendance, $monthStatistic)
 {
@@ -38,8 +38,8 @@ function tds($start, $attendance, $monthStatistic)
 
 HTML;*/
 return <<<HTML
-<td class="center {$weekend}">{$td2}</td>
-<td class="center {$weekend}">{$td3}</td>
+<td class="center {$weekend} table-cell">{$td2}</td>
+<td class="center {$weekend} table-cell">{$td3}</td>
 
 HTML;
 
