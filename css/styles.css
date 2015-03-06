@@ -395,3 +395,15 @@ table.subscription caption {
 .table-cell{
 	width:30px;
 }
+.lesson, .start, .finish{
+	display:block;
+}
+.start{
+	font-size:15px;
+}
+.cell-vertical{
+	text-align: center;
+}
+.printSelected div {display: none }
+.printSelected div.printSelection {display: block; } 
+.printSelected div.printSelection div {display: block; }

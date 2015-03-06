@@ -30,12 +30,19 @@ foreach(range(1,7) as $dayOfWeek) {// дни недели 1-пн
                   <div>'.$name.'</div>';
     foreach (range($min, $max) as $lesson) {
         $interval = isset($rz[$lesson]) ? $rz[$lesson]['rz2'].' - '.$rz[$lesson]['rz3'] : null;
+		$start=isset($rz[$lesson]) ? $rz[$lesson]['rz2']: null;
+		$finish=isset($rz[$lesson]) ? $rz[$lesson]['rz3']: null;
         $h = countHeight($maxLessons, $dayOfWeek, $lesson);
-        $html .= <<<HTML
+		$tmp='<span class="lesson">'.$lesson.' '.tt('пара').'</span><span class="start">'.$start.'</span><span class="finish">'.$finish.'</span>';
+        /*$html .= <<<HTML
 <div class="lh-{$h} mh-{$h} cell tooltip-info" data-rel="tooltip" data-placement="left" data-original-title="{$interval}">{$lesson}</div>
 HTML;
 
-    }
+    */
+$html .= <<<HTML
+<div class="mh-{$h} cell cell-vertical">{$tmp}</div>
+HTML;
+	}
     $html .= '</td>';
 
     // колонки с занятиями
@@ -78,6 +85,39 @@ HTML;
     $html .= '</tr>';
 }
 $html .= '</table>';
+
+/*?>
+	<button id="print-table" class="btn btn-info btn-small">
+        <i class="icon-print bigger-110"></i>
+    </button>
+<?php*/
+Yii::app()->clientScript->registerScript('print', "
+	
+	$('#print-table').click(
+		function(){
+			printBlock();
+		}
+	);
+	
+	function printBlock()
+	{
+		productDesc = $('.timeTable').html();
+		$('body').addClass('printSelected');
+		$('.timeTable').addClass('printSelection');
+		
+		//$('body').append('<div class=\"printSelection\">' + productDesc + '</div>');
+		window.print();
+		window.setTimeout(pageCleaner, 0); 
+		return false;
+	}
+	
+	function pageCleaner()
+	{
+		$('body').removeClass('printSelected');
+		$('.timeTable').removeClass('printSelection');
+		//$('.printSelection').remove();
+	}
+");
 
 echo $html;
 

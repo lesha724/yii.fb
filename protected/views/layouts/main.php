@@ -56,7 +56,7 @@
         <?php require_once('_sidebar.php')?>
 
         <div class="main-content">
-
+		
             <?php require_once('_breadcrumbs.php')?>
 
             <div class="page-content">
