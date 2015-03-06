@@ -1,3 +1,4 @@
+<div class="noprint">
 <div id="breadcrumbs" class="breadcrumbs breadcrumbs-fixed">
     <script type="text/javascript">
         try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
@@ -9,4 +10,5 @@
         'htmlOptions' => array('class' => ''),
         'homeLink' => '<i class="icon-home home-icon"></i>'.CHtml::link(Yii::t('zii','Home'), Yii::app()->homeUrl),
     )); ?>
+</div>
 </div>

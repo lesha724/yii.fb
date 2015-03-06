@@ -5,7 +5,7 @@
 
     Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/authorization.js', CClientScript::POS_END);
 ?>
-<div class="navbar navbar-fixed-top">
+<div class="navbar navbar-fixed-top noprint">
     <script type="text/javascript">
         try{ace.settings.check('navbar' , 'fixed')}catch(e){}
     </script>

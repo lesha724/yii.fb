@@ -13,7 +13,7 @@ $timestamps    = array_keys($timeTable);
 $amountOfWeeks =  ceil(((current($timestamps) - end($timestamps))/86400) / -7);
 reset($timestamps);
 
-$html = '<table class="timeTable">';
+$html = '<table class="timeTable" id="timeTableGroup">';
 
 foreach(range(1,7) as $dayOfWeek) {// дни недели 1-пн
 
@@ -86,37 +86,20 @@ HTML;
 }
 $html .= '</table>';
 
-/*?>
+?>
 	<button id="print-table" class="btn btn-info btn-small">
         <i class="icon-print bigger-110"></i>
     </button>
-<?php*/
+<?php
 Yii::app()->clientScript->registerScript('print', "
 	
 	$('#print-table').click(
 		function(){
-			printBlock();
+			$('#sidebar').addClass('menu-min');
+			window.print();
 		}
 	);
 	
-	function printBlock()
-	{
-		productDesc = $('.timeTable').html();
-		$('body').addClass('printSelected');
-		$('.timeTable').addClass('printSelection');
-		
-		//$('body').append('<div class=\"printSelection\">' + productDesc + '</div>');
-		window.print();
-		window.setTimeout(pageCleaner, 0); 
-		return false;
-	}
-	
-	function pageCleaner()
-	{
-		$('body').removeClass('printSelected');
-		$('.timeTable').removeClass('printSelection');
-		//$('.printSelection').remove();
-	}
 ");
 
 echo $html;

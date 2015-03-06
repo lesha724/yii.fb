@@ -404,6 +404,7 @@ table.subscription caption {
 .cell-vertical{
 	text-align: center;
 }
-.printSelected div {display: none }
-.printSelected div.printSelection {display: block; } 
-.printSelected div.printSelection div {display: block; }
+
+@media print {
+ .noprint { display: none; }
+}
