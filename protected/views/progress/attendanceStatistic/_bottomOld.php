@@ -9,19 +9,19 @@
  * @var FilterForm $model
  */
 
-$options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;', 'style' => 'width:200px');
+$options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;');
 
 $data = CHtml::listData(Sem::model()->getSemestersForAttendanceStatistic($model->group), 'us3', 'sem7', 'name');
 
 $html  = '<div class="row-fluid" style="margin-bottom:2%">';
-$html .= '<div style="width:20%; float:left">';
+$html .= '<div class="span3 ace-select">';
 $html .= CHtml::label(tt('Семестр'), 'FilterForm_semester');
 $html .= CHtml::dropDownList('FilterForm[semester]', $model->semester, $data, $options);
 $html .= '</div>';
 
 if ($model->semester) {
     $data = CHtml::listData(Sem::model()->getMonthsNamesForAttendanceStatistic($model->semester), 'firstDay', 'name');
-    $html .= '<div>';
+    $html .= '<div class="span3 ace-select">';
     $html .= CHtml::label(tt('Месяц'), 'FilterForm_month');
     $html .= CHtml::dropDownList('FilterForm[month]', $model->month, $data, $options);
     $html .= '</div>';
@@ -53,6 +53,7 @@ if (! empty($model->semester)) :
 
     $this->renderPartial('attendanceStatistic/_table_1', array(
         'students' => $students
+		'type_statistic'=>$type_statistic,
     ));
 
     $this->renderPartial('attendanceStatistic/_table_2Old', array(

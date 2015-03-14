@@ -327,7 +327,7 @@ SQL;
     {
         $sql = <<<SQL
             SELECT d1, d2, us4, uo1, ug2, nr3, sem4,ug3,gr2,gr1,d27,d32,d34,d36,
-                   gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28
+                   gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,nr1
 			FROM sem
 		    INNER JOIN us ON (sem.sem1 = us.us12)
 		    INNER JOIN nr ON (us.us1 = nr.nr2)

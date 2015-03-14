@@ -1,6 +1,6 @@
 <?php
 $pattern = <<<HTML
-<tr data-st1="%s"><td class="center">%s</td><td>%s</td></tr>
+<tr><td class="center">%s</td><td>%s</td></tr>
 HTML;
 
 $columnName = tt('ФИО');
@@ -22,9 +22,12 @@ HTML;
 $tr = '';
 foreach($students as $key => $st) {
     $name = ShortCodes::getShortName($st['st2'], $st['st3'], $st['st4']);
-    $name = mb_strimwidth($name, 0, 15, '...');
+	if($type_statistic==0)
+		$name = '<a href="#" class="student-statistic" data-st1="'.$st['st1'].'">'.mb_strimwidth($name, 0, 15, '...').'</a>';
+	else
+		$name = mb_strimwidth($name, 0, 15, '...');
     $num  = $key+1;
 
-    $tr .= sprintf($pattern, $st['st1'], $num, $name);
+    $tr .= sprintf($pattern, $num, $name);
 }
 echo sprintf($table, $tr); // 1 table

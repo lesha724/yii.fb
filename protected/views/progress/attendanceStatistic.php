@@ -28,9 +28,11 @@ if (! empty($model->group))
     if($type_statistic==0)
 		$this->renderPartial('attendanceStatistic/_bottom', array(
 			'model' => $model,
+			'type_statistic'=>$type_statistic,
 		));
 	else
 		$this->renderPartial('attendanceStatistic/_bottomOld', array(
 			'model' => $model,
+			'type_statistic'=>$type_statistic,
 		));	
 }

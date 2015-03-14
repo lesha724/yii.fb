@@ -550,7 +550,50 @@ SQL;
 
         return $students;
     }
+	
+	public function getStatisticForStudent($st1, $sem1)
+    {
+        $sql = <<<SQL
+        select 
+			p.p3,
+			p.p4,
+			p.p5,
+			d.d2,us4,steg3,steg4,steg6
+		from us
+		   inner join nr on (us.us1 = nr.nr2)
+		   inner join steg on (nr.nr1 = steg.steg2)
+		   inner join pd on (nr.nr6 = pd.pd1)
+		   inner join p on (pd.pd2 = p.p1)
+		   inner join uo on (us.us2 = uo.uo1)
+		   inner join d on (uo.uo3 = d.d1)
+		where steg1=:st1 and us3=:sem1 and steg6>0
+SQL;
 
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':st1', $st1);
+        $command->bindValue(':sem1', $sem1);
+        $statistic = $command->queryAll();
+
+        return $statistic;
+    }
+	
+	public function getStudentName($st1)
+    {
+        $sql = <<<SQL
+        select 
+			st2,
+			st3,
+			st4
+		from st
+		where st1=:st1
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':st1', $st1);
+        $student = $command->queryAll();
+        return $student;
+    }
+	
     public function getStudentsOfGroup($gr1)
     {
         if (empty($gr1))
@@ -575,6 +618,33 @@ SQL;
         foreach($students as $key => $student) {
             $students[$key]['name'] = SH::getShortName($student['st2'], $student['st3'], $student['st4']);
         }
+
+        return $students;
+    }
+	
+	public function getStudentsOfNr($nr1,$year,$sem)
+    {
+        if (empty($nr1))
+            return array();
+
+        $sql=<<<SQL
+            select 
+				gr3,st2||' '||st3||'.'||st4||'.' as stud
+			from gr
+			   inner join ug on (gr.gr1 = ug.ug2)
+			   inner join ucgn on (ug.ug4 = ucgn.ucgn1)
+			   inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
+			   inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
+			   inner join st on (ucsn.ucsn2 = st.st1)
+			   inner join nr on (ug.ug3 = nr.nr1)
+			where nr1=:nr1 and ucgns5=:sem3 and ucgns6=:sem5
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':nr1', $nr1);
+		$command->bindValue(':sem3', $year);
+		$command->bindValue(':sem5', $sem);
+        $students = $command->queryAll();
 
         return $students;
     }

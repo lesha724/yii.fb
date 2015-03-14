@@ -134,7 +134,7 @@
                     $td3 = SH::convertUS4($discipline['us4']);
                     $td4 = array_sum($discipline['hours']);
                     $td5 = implode(', ', $discipline['groups']);
-					$d1=$discipline['d1'];
+					$nr1=$discipline['nr1'];
 
                     if (! empty($td5)) {
                         $tip  = tt('Нажмите для просмотра списка студентов');
@@ -144,7 +144,7 @@
                         <button class="btn btn-minier btn-yellow tooltip-info"
                                 data-rel="tooltip"
                                 data-placement="bottom"
-								data-type="{$d1}"
+								data-type="{$nr1}"
                                 data-original-title="{$tip}">
                             <i class="icon-eye-open"></i>
                         </button>

@@ -52,7 +52,7 @@ class FilterForm extends CFormModel
             array('filial, faculty, course, group, student, semester', 'required', 'on' => 'workPlan-student'),
             array('filial, faculty, course, group, semester', 'required', 'on' => 'workPlan-group'),
             array('filial, faculty, speciality, course, group, semester', 'required', 'on' => 'workPlan-speciality'),
-            array('filial, faculty, course, group, semester, month', 'required', 'on' => 'attendanceStatistic'),
+            array('filial, faculty, course, group, semester, month, student', 'required', 'on' => 'attendanceStatistic'),
             array('filial, faculty, speciality, course, group, category, year', 'required', 'on' => 'employment'),
 		);
 	}
