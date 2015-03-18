@@ -622,6 +622,25 @@ SQL;
         return $students;
     }
 	
+	public function getListGroup($gr1)
+    {
+
+        $sql=<<<SQL
+            SELECT st2,st3,st4,st5,sk3
+			 FROM ST
+			   LEFT JOIN SK ON (SK.SK2 = ST.ST1)
+			   LEFT JOIN STD ON (ST.ST1 = STD.STD2)
+			 WHERE std7 is null and sk5 is null and std11 in (0,6,8) and std3=:gr1
+			 ORDER BY st2 collate UNICODE
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':gr1', $gr1);
+        $students = $command->queryAll();
+
+        return $students;
+    }
+	
 	public function getStudentsOfNr($nr1,$year,$sem)
     {
         if (empty($nr1))

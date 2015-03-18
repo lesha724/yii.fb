@@ -162,6 +162,21 @@ $this->widget('zii.widgets.CMenu', array(
             ),
             'visible' => _ch('workPlan', 'main')
         ),
+		array(
+            'label' => _l('Списки', 'user'),
+            'url' => '#',
+            'linkOptions'=> $_l,
+            'itemOptions'=>_i('list'),
+            'items' => array(
+                array(
+                    'label'   => $_l2.tt('Группы'),
+                    'url'     => _u('/list/group'),
+                    'active'  => $_c=='list' && $_a=='group',
+                    'visible' => _ch('list', 'group')
+                ),
+            ),
+            'visible' => _ch('list', 'main')
+        ),
         array(
             'label' => _l('Успеваемость', 'list'),
             'url' => '#',
