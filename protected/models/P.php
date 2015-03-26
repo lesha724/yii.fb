@@ -666,5 +666,17 @@ SQL;
 
         return implode(' ', array($tch['dol2'], SH::getShortName($tch['p3'], $tch['p4'], $tch['p5'])));
     }
+	
+	public static function getPermition($p1)
+	{
+		$sql = <<<SQL
+		SELECT p120 FROM users JOIN p ON u6=:p1 WHERE u5=1 AND u6>0
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':p1', $p1);
+        $permition = $command->queryRow();
+		return $permition['p120'];
+	}
+
 
 }

@@ -58,6 +58,7 @@ class DefaultController extends AdminController
         {
             $config = array(
                 'attendanceStatistic'=>$_POST['ConfigForm']['attendanceStatistic'],
+				'timeTable'=>$_POST['ConfigForm']['timeTable'],
             );
             $str = base64_encode(serialize($config));
             if(file_put_contents($file, $str))
@@ -94,7 +95,7 @@ class DefaultController extends AdminController
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $model = $this->loadGrantsModel($id);
-
+		$model->scenario = 'admin-teachers';
         if (isset($_REQUEST['Grants'])) {
             $model->attributes = $_REQUEST['Grants'];
             $model->save();
@@ -142,6 +143,7 @@ class DefaultController extends AdminController
             $model = new Grants();
             $model->grants1 = new CDbExpression('GEN_ID(GEN_GRANTS, 1)');
             $model->grants2 = $id;
+			$model->grants7 = 0;
             $model->save(false);
         }
 

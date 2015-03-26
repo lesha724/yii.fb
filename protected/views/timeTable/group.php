@@ -24,10 +24,19 @@ HTML;
 
 
 if (! empty($model->group))
-    $this->renderPartial('/timeTable/schedule', array(
-        'model'      => $model,
-        'timeTable'  => $timeTable,
-        'minMax'     => $minMax,
-        'maxLessons' => $maxLessons,
-        'rz'         => $rz,
-    ));
+	if($type==0)
+		$this->renderPartial('/timeTable/schedule', array(
+			'model'      => $model,
+			'timeTable'  => $timeTable,
+			'minMax'     => $minMax,
+			'maxLessons' => $maxLessons,
+			'rz'         => $rz,
+		));
+	else
+		$this->renderPartial('/timeTable/calendar', array(
+			'model'      => $model,
+			'timeTable'  => $timeTable,
+			'minMax'     => $minMax,
+			'maxLessons' => $maxLessons,
+			'rz'         => $rz,
+		));

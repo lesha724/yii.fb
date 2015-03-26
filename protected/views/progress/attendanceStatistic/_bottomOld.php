@@ -52,8 +52,8 @@ if (! empty($model->semester)) :
     $students = St::model()->getStudentsOfGroup($model->group);
 
     $this->renderPartial('attendanceStatistic/_table_1', array(
-        'students' => $students
-		'type_statistic'=>$type_statistic,
+        'students' => $students,
+		'type_statistic'=>$type_statistic
     ));
 
     $this->renderPartial('attendanceStatistic/_table_2Old', array(

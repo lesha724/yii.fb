@@ -202,7 +202,33 @@ class D extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+	
+	public function getDisciplinesByStream($sg1,$k1)
+	{
+		if (empty($sg1)||empty($k1))
+            return array();
+	 $sql = <<<SQL
+	 select d2, d1, uo1, uo4, c2
+                from us
+					inner join uo on (us.us2 = uo.uo1)
+                    inner join u on (uo.uo22 = u.u1)
+					inner join d on (uo.uo3 = d.d1)
+					inner join sg on (u2=sg1)
+					inner join sem on (us12 = sem1)
+					inner join c on (u15 = c1)
+				where sg1=:sg1 AND us4 in (1,2,3,4) and sem3=:year AND uo4=:k1 and sem5=:sem
+                GROUP BY d2, d1, uo1, uo4, c2 ORDER BY d2 collate UNICODE
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':sg1',$sg1);
+		$command->bindValue(':k1', $k1);
+        $command->bindValue(':year', Yii::app()->session['year']);
+        $command->bindValue(':sem', Yii::app()->session['sem']);
+        $disciplines = $command->queryAll();
 
+        return $disciplines;
+	
+	}
     public function getDisciplines($type = null)
     {
         $today = date('Y-m-d 00:00');

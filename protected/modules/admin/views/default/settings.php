@@ -28,7 +28,9 @@
 
     <?php echo $form->errorSummary($model); ?>
 
-	<?php echo $form->DropDownListRow($model, 'attendanceStatistic',array('0'=>tt('По электронному журналу'),'1'=>'По деканату')); ?>
+	<?php echo $form->DropDownListRow($model, 'attendanceStatistic',array('0'=>tt('По электронному журналу'),'1'=>tt('По деканату'))); ?>
+	
+	<?php echo $form->DropDownListRow($model, 'timeTable',array('0'=>tt('Таблица'),'1'=>tt('Календарь'))); ?>
 	
     <div class="form-actions">
         <?php $this->widget('bootstrap.widgets.TbButton', array(

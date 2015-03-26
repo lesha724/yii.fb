@@ -208,5 +208,19 @@ SQL;
         $specializations = $command->queryAll();
         return $specializations;
     }
+	
+	public function getStreams($year,$kaf)
+	{
+	    if (empty($kaf))
+            return array();
+		$sql=<<<SQL
+            SELECT sp8,sp2,sg4,sg3,sg1,sem4 FROM SP JOIN SG ON (SP1=SG2) JOIN SEM ON (SG1=SEM2) JOIN u ON (u2=sg1) JOIN uo on uo22=u1 WHERE sem3=:year and uo4=:kaf and sp7 is null GROUP BY sp8,sp2,sg4,sg3,sg1,sem4
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':year', $year);
+		$command->bindValue(':kaf', $kaf);
+        $streams = $command->queryAll();
+        return $streams;
+	}
 
 }

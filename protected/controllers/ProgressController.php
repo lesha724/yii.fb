@@ -22,6 +22,7 @@ class ProgressController extends Controller
                     'insertMejModule',
                     'deleteMejModule',
                     'modules',
+					'module',
                     'updateVvmp',
                     'insertVmpMark',
                     'updateStus',
@@ -244,6 +245,23 @@ class ProgressController extends Controller
             'model'      => $model,
             'type'       => $type,
             'moduleInfo' => $moduleInfo,
+        ));
+    }
+	
+	public function actionModule()
+    {
+        $type = 0; // own modules
+
+		$type = P::getPermition(Yii::app()->user->dbModel->p1);	
+		
+        $model = new FilterForm;
+        $model->scenario = 'module';
+        if (isset($_REQUEST['FilterForm']))
+            $model->attributes=$_REQUEST['FilterForm'];
+
+        $this->render('module', array(
+            'model'      => $model,
+            'type'       => $type,
         ));
     }
 

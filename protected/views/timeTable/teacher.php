@@ -23,7 +23,7 @@ JS
 $attr = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;');
 $form=$this->beginWidget('CActiveForm', array(
     'id'=>'timeTable-form',
-    'htmlOptions' => array('class' => 'form-inline')
+    'htmlOptions' => array('class' => 'form-inline noprint')
 ));
 
 $html = '<div>';
@@ -84,7 +84,7 @@ if (! empty($model->teacher)) {
 
     $text = tt('Нажмите на иконку для просмотра фотографии преподавателя');
     echo <<<HTML
-<h3 class="blue header lighter tooltip-info">
+<h3 class="blue header lighter tooltip-info noprint">
     <i class="icon-info-sign show-info" style="cursor:pointer"></i>
     <small>
         <i class="icon-double-angle-right"></i> {$text}

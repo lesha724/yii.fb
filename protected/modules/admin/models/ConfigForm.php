@@ -8,12 +8,13 @@
 class ConfigForm extends CFormModel
 {
     public $attendanceStatistic;
+	public $timeTable;
 	
     public function rules()
     {
         return array(
-            array('attendanceStatistic','required'),
-			array('attendanceStatistic', 'numerical', 'integerOnly'=>true),			
+            array('attendanceStatistic,timeTable','required'),
+			array('attendanceStatistic,timeTable', 'numerical', 'integerOnly'=>true),			
 		);
     }
 
@@ -22,6 +23,7 @@ class ConfigForm extends CFormModel
         return array(
             //'adminEmail' => 'Email адміністратора',
             'attendanceStatistic' => tt('Статистика посещаемости'),
+			'timeTable'=>tt('Расписание')
         );
     }
 }

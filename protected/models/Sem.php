@@ -319,4 +319,30 @@ SQL;
 
         return $semesters;
     }
+	
+	public function getModule($uo1)
+	{
+		if (empty($uo1))
+            return array();
+		$sql = <<<SQL
+		SELECT sem7,sem3,sem5,vvmp6,sem1,vvmp1,vvmp8,vvmp9,vvmp10,vvmp24
+                    FROM sem
+                      JOIN us ON (sem1=us3)
+                      JOIN uo ON (us2=uo1)
+                      JOIN u ON (uo22=u1)
+                      JOIN nr ON (us1=nr2)
+                      JOIN ug ON (nr1=ug1)
+                      JOIN gr ON (ug2=gr1)
+                      JOIN vvmp ON (vvmp2=uo1 AND vvmp4=sem7)
+                    WHERE uo1=:uo1 AND us4 in (1,2,3,4) AND (vvmp4=sem7 or vvmp4 is null)
+                    GROUP BY sem7,sem3,sem5,vvmp6,sem1,vvmp1,vvmp8,vvmp9,vvmp10,vvmp24
+	
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':uo1', $uo1);
+        $modules = $command->queryAll();
+
+        return $modules;
+		//return array();
+	}
 }

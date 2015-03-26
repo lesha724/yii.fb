@@ -205,4 +205,16 @@ class Pd extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+	
+	public function getChairs()
+    {
+		$sql = <<<SQL
+            SELECT pd1,pd4,k2,k3 FROM pd JOIN k ON pd4=k1 WHERE pd2=:p1  AND pd4>0 and pd28 in (0,2,5,9) and pd11<=current_timestamp and (pd13 is null or pd13>current_timestamp) GROUP BY pd1,pd4,k2,k3
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':p1', Yii::app()->user->dbModel->p1);
+        $chairs = $command->queryAll();
+
+        return $chairs;
+	}
 }

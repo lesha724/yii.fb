@@ -11,12 +11,12 @@ $this->breadcrumbs=array(
 );
 
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/timetable/timetable.js', CClientScript::POS_HEAD);
-
+echo '<div class="noprint">';
 $this->renderPartial('/filter_form/timeTable/student', array(
     'model' => $model,
     'showDateRangePicker' => true
 ));
-
+echo '</div>';
 
 echo <<<HTML
     <span id="spinner1"></span>
