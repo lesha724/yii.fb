@@ -4,14 +4,16 @@
         $previousYear = date('Y', strtotime('-1 year'));
         $currentYear  = date('Y');
         $nextYear     = date('Y', strtotime('+1 year'));
-
+		
         $options = array(
             $previousYear => $previousYear,
             $currentYear  => $currentYear,
             $nextYear     => $nextYear,
         );
+		
         echo CHtml::dropDownList('year', Yii::app()->session['year'], $options, array('class'=>'input-small'));
-
+	
+		//echo CHtml::dropDownList('year', '2014', $options, array('class'=>'input-small'));
         $options = array(
             tt('Осенний'),
             tt('Весенний')

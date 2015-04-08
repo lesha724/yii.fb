@@ -160,23 +160,62 @@ class Gr extends CActiveRecord
 		return parent::model($className);
 	}
 	
-	public function getGroupsByDisp($uo1)
+	public function getStatements($gr1,$vvmp1)
 	{
-		if (empty($uo1))
+		if (empty($gr1)||empty($vvmp1))
             return array();
 		$sql=<<<SQL
-           select gr7,gr3,gr1,sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28
+          SELECT vmpv3,vmpv4,vmpv6,vmpv1 FROM vmpv WHERE vmpv2=:vvmp1 AND vmpv7=:gr1 ORDER BY vmpv8, vmpv4 DESC
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':vvmp1', $vvmp1);
+        $command->bindValue(':gr1', $gr1);
+        $statements = $command->queryAll();
+		return $statements;
+	}
+	
+	public function getStatement($gr1,$vmpv1)
+	{
+		if (empty($gr1)||empty($vmpv1))
+            return array();
+		$sql=<<<SQL
+          select st2,st3,st4,st1,st5,vmp4
+                   from ucgn
+                   inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
+                   inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
+                   inner join st on (ucsn.ucsn2 = st.st1)
+                   inner join std on (st1=std2)
+                   inner join vmp ON (st1=vmp2 AND vmp1=:vmpv1)
+                   where st1>0 AND std11 in (0,5,6,8) and std7 is null AND ucgn2=:gr1 AND ucgns6=:SEM 
+                   GROUP BY st2,st3,st4,st1,st5,vmp4
+                   ORDER BY st2 collate UNICODE
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':vmpv1', $vmpv1);
+        $command->bindValue(':gr1', $gr1);
+		$command->bindValue(':SEM', Yii::app()->session['sem']);
+        $statements = $command->queryAll();
+		return $statements;
+	}
+	
+	public function getGroupsByModule($uo1,$vvmp1)
+	{
+		if (empty($uo1)||empty($vvmp1))
+            return array();
+		$sql=<<<SQL
+          select gr7,gr3,gr1,sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28
                    from us
                    inner join nr on (us.us1 = nr.nr2)
                    inner join ug on (nr.nr1 = ug.ug3)
                    inner join gr on (ug.ug2 = gr.gr1)
                    inner join sem on (us.us3 = sem.sem1)
-                   where us2=:uo1 and sem3=:YEAR and sem5=:SEM
+                   JOIN uo ON (us2=uo1)
+                   JOIN vvmp ON (vvmp2=uo1 AND vvmp4=sem7)
+                   where us2=:uo1 and vvmp1=:vvmp1
                    group by gr7,gr3,gr1,sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28
 SQL;
         $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':YEAR', Yii::app()->session['year']);
-        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $command->bindValue(':vvmp1', $vvmp1);
         $command->bindValue(':uo1', $uo1);
         $groups = $command->queryAll();
 		foreach($groups as $key => $group) {

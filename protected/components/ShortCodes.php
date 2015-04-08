@@ -117,6 +117,52 @@ class ShortCodes extends CApplicationComponent
         }
         return $color;
     }
+	
+	public static function getClassColor($type)
+    {
+        $type = mb_strtolower($type);
+        switch($type){
+            case 'лк':
+            case 'улк':
+                $color = '1'; break;
+            case 'пз':
+            case 'пз1':
+            case 'пз2':
+            case 'пз3':
+            case 'пз4':
+            case 'упз':
+                $color = '2'; break;
+            case 'сем':
+            case 'сем1':
+            case 'сем2':
+            case 'сем3':
+            case 'сем4':
+                $color = '3'; break;
+            case 'лб':
+            case 'лб1':
+            case 'лб2':
+            case 'лб3':
+            case 'лб4':
+            case 'улб':
+            case 'улб1':
+            case 'улб2':
+            case 'улб3':
+            case 'улб4':
+                $color = '4'; break;
+            case 'экз':	$color = '5'; break;
+            case 'зач':	$color = '6'; break;
+            case 'кр':	$color = '7'; break;
+            case 'кп':	$color = '8'; break;
+            case 'доп': $color = '9'; break;
+            case 'инд': $color = '10'; break;
+            case 'гек': $color = '11'; break;
+            case 'кнч': $color = '12'; break;
+            case 'конс': $color = '13'; break;
+            case 'пер': $color = '14'; break;
+            default: $color = '';
+        }
+        return $color;
+    }
 
     public static function getCurrentYearAndSem()
     {

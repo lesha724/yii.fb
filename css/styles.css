@@ -4,6 +4,53 @@
 .login-container {
     width:auto !important;
 }
+#calendar .events{
+	/*border: 1px solid black;*/
+	margin-bottom:2px;
+	color:black!Important;
+}
+#calendar .event1{
+	background-color:#fffadb!Important;
+}
+#calendar .event2{
+background-color:#e2ffe2!Important;
+}
+#calendar .event3{
+background-color:#fff0ff!Important;
+}
+#calendar .event4{
+background-color:#c4e5ff!Important;
+}
+#calendar .event5{
+background-color:#ffe1e1!Important;
+}
+#calendar .event6{
+background-color:#ddffdd!Important;
+}
+#calendar .event7{
+background-color:#d6d6bd!Important;
+}
+#calendar .event8{
+background-color:#d4d4b9!Important;
+}
+#calendar .event9{
+background-color:#e3ebe4!Important;
+}
+#calendar .event10{
+background-color:#fffadd!Important;
+}
+#calendar .event11{
+background-color:#ff0000!Important;
+}
+#calendar .event12{
+background-color:#dfefff!Important;
+}
+#calendar .event13{
+background-color:#ffe2ff!Important;
+}
+#calendar .event14{
+background-color:#e2ffe2!Important;
+}
 #login-box {
     font-size: 15px;
 }
@@ -368,9 +415,9 @@ table.subscription caption {
     font-size: 16px;
 }
 
-.ace-select{
+#filter-form .ace-select{
 	min-width:220px;
-	margin-left:4px;
+	margin-left:0px;
 }
 
 .ace-select label{

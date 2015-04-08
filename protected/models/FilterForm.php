@@ -7,6 +7,7 @@ class FilterForm extends CFormModel
 	
 	public $module;
 	public $stream;
+	public $statement;
 	
 	public $filial = 0;
     public $faculty;
@@ -45,7 +46,7 @@ class FilterForm extends CFormModel
 	{
 		return array(
 			array('discipline, group', 'required', 'on' => 'journal, modules'),
-			array('module, chair,stream, discipline, group', 'required', 'on' => 'module'),
+			array('module, chair,stream, discipline, group,statement', 'required', 'on' => 'module'),
 			array('discipline', 'required', 'on' => 'exam-session'),
 			array('filial, faculty, speciality, year, discipline, semester', 'required', 'on' => 'thematicPlan'),
             array('duration, teacher, code, course', 'safe', 'on' => 'thematicPlan'),
@@ -101,6 +102,7 @@ class FilterForm extends CFormModel
             'month' => tt('Месяц'),
 			'module'=>tt('Модуль'),
 			'stream'=>tt('Поток'),
+			'statement'=>tt('Ведомость'),
 		);
 	}
 }

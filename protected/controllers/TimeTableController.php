@@ -52,10 +52,13 @@ class TimeTableController extends Controller
     {
         $model = new TimeTableForm;
         $model->scenario = 'group';
-
+		if (isset($_REQUEST['timeTable'])) {
+            Yii::app()->user->setState('timeTable',(int)$_REQUEST['timeTable']);
+            unset($_REQUEST['timeTable']);
+        }
         if (isset($_REQUEST['TimeTableForm']))
             $model->attributes=$_REQUEST['TimeTableForm'];
-		$type = Yii::app()->params['timeTable'];
+		$type=Yii::app()->user->getState('timeTable',Yii::app()->params['timeTable']);
         $model->date1 = Yii::app()->session['date1'];
         $model->date2 = Yii::app()->session['date2'];
 		

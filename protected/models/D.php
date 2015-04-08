@@ -210,7 +210,7 @@ class D extends CActiveRecord
 	 $sql = <<<SQL
 	 select d2, d1, uo1, uo4, c2
                 from us
-					inner join uo on (us.us2 = uo.uo1)
+					inner join uo on (us.us2 = uo.uo1 and uo.uo34=1)
                     inner join u on (uo.uo22 = u.u1)
 					inner join d on (uo.uo3 = d.d1)
 					inner join sg on (u2=sg1)
@@ -779,18 +779,18 @@ SQL;
         list($sg40, $sg41) = $this->getSg40Sg41($st1);
 
         $sql = <<<SQL
-            select us1,d2
-            from d
-              inner join uo on (d.d1 = uo.uo3)
-              inner join us on (uo.uo1 = us.us2)
-              inner join sem on (us.us3 = sem.sem1)
-              inner join ucx on (uo.uo19 = ucx.ucx1)
-              inner join ucg on (ucx.ucx1 = ucg.ucg2)
-              inner join ucs on (ucg.ucg1 = ucs.ucs2)
-              inner join u on (uo.uo22 = u.u1)
-            where us4 = 8 and ucs3 = :ST1 and u38<=current_timestamp and u39>=current_timestamp
-                  and sem3=:SG40 and sem5=:SG41
-            group by us1,d2
+			select us1,d2
+			from u
+			   inner join uo on (u.u1 = uo.uo22)
+			   inner join us on (uo.uo1 = us.us2)
+			   inner join nr on (us.us1 = nr.nr2)
+			   inner join ug on (nr.nr1 = ug.ug3)
+			   inner join ucgn on (ug.ug4 = ucgn.ucgn1)
+			   inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
+			   inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
+			   inner join d on (uo.uo3 = d.d1)
+			where us4 = 8 and ucsn2=:ST1 and u38<=current_timestamp and u39>=current_timestamp
+			group by us1,d2
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);

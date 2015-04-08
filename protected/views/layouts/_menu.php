@@ -191,9 +191,9 @@ $this->widget('zii.widgets.CMenu', array(
                 ),
                 array(
                     'label'   => $_l2.tt('Ведение модулей'),
-                    'url'     => _u('/progress/modules'),
+                    'url'     => _u('/progress/module'),
                     'visible' => _ch('progress', 'modules') && $isTch,
-                    'active'  => $_c=='progress' && $_a=='modules'
+                    'active'  => $_c=='progress' && $_a=='module'
                 ),
                 array(
                     'label'   => $_l2.tt('Тематический план'),

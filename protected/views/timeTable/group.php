@@ -14,16 +14,31 @@ echo '<div class="noprint">';
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/timetable/timetable.js', CClientScript::POS_HEAD);
 $this->renderPartial('/filter_form/timeTable/group', array(
     'model' => $model,
-    'showDateRangePicker' => true
+    'showDateRangePicker' => true,
+	'type'=>$type,
+	'showCheckBoxCalendar'=>true
 ));
+Yii::app()->clientScript->registerScript('calendar-checkbox', "
+				$(document).on('change', '#checkbox-timeTable', function(){
+					if($(this).is(':checked')) {
+						$('#timeTable').val(1);
+					}else
+					{
+						$('#timeTable').val(0);
+					}
+					$(this).closest('form').submit();
+				});
+			
+		");
 echo '</div>';
 echo <<<HTML
     <span id="spinner1"></span>
 HTML;
 
+	
 
-
-if (! empty($model->group))
+if (!empty($model->group))
+{
 	if($type==0)
 		$this->renderPartial('/timeTable/schedule', array(
 			'model'      => $model,
@@ -40,3 +55,4 @@ if (! empty($model->group))
 			'maxLessons' => $maxLessons,
 			'rz'         => $rz,
 		));
+}

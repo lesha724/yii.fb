@@ -677,6 +677,22 @@ SQL;
         $permition = $command->queryRow();
 		return $permition['p120'];
 	}
+	
+	public static function getPerm()
+	{
+		switch ($i) {
+			case 0:
+				break;
+			case 1:
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			case 4:
+				break;
+		}
+	}
 
 
 }

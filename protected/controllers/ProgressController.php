@@ -32,7 +32,8 @@ class ProgressController extends Controller
                     'renderUstemTheme',
                     'deleteUstemTheme',
                     'examSession',
-                    'insertStus'
+                    'insertStus',
+					'insertVmp'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -253,7 +254,6 @@ class ProgressController extends Controller
         $type = 0; // own modules
 
 		$type = P::getPermition(Yii::app()->user->dbModel->p1);	
-		
         $model = new FilterForm;
         $model->scenario = 'module';
         if (isset($_REQUEST['FilterForm']))
@@ -338,6 +338,45 @@ class ProgressController extends Controller
         if (! $error && in_array($field, array('vmp5', 'vmp6', 'vmp7')))
             $model->recalculateVmp4();
 
+        Yii::app()->end(CJSON::encode(array('error' => $error, 'errors' => $model->getErrors())));
+    }
+	
+	public function actionInsertVmp()
+    {
+        /*if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');*/
+
+        $vmp1  = Yii::app()->request->getParam('vmpv1', null);
+        $vmp2  = Yii::app()->request->getParam('st1', null);
+        $value = (int)Yii::app()->request->getParam('value', null);
+		
+		$criteria = new CDbCriteria();
+		$criteria->compare('vmp1', $vmp1);
+		$criteria->compare('vmp2', $vmp2);
+		$sql=<<<SQL
+			select * from vmpp where vmpp1=:vmpv1 and vmpp2=:p1 and vmpp4=1
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':vmpv1', $vmp1);
+		$command->bindValue(':p1', Yii::app()->user->dbModel->p1);
+        $permition = $command->queryAll();
+		if($permition==null)
+			throw new CHttpException(403, 'Error.');
+		$model = Vmp::model()->find($criteria);
+		if (empty($model))
+			$error = true;
+		else
+		{
+			if($value>=0&&$value<=5)
+			{
+				$model->vmp4=$value;
+				$error = !$model->save();
+			}else
+			{
+				$error = true;
+			}
+		}
+		
         Yii::app()->end(CJSON::encode(array('error' => $error, 'errors' => $model->getErrors())));
     }
 
