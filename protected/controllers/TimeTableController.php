@@ -52,6 +52,7 @@ class TimeTableController extends Controller
     {
         $model = new TimeTableForm;
         $model->scenario = 'group';
+		
 		if (isset($_REQUEST['timeTable'])) {
             Yii::app()->user->setState('timeTable',(int)$_REQUEST['timeTable']);
             unset($_REQUEST['timeTable']);
@@ -69,9 +70,9 @@ class TimeTableController extends Controller
 				list($minMax, $timeTable, $maxLessons) = $model->generateGroupTimeTable();
 			else
 				$timeTable=Gr::getTimeTable($model->group, $model->date1, $model->date2);
+			
 		}
-
-
+		
         $this->render('group', array(
             'model'      => $model,
             'timeTable'  => $timeTable,

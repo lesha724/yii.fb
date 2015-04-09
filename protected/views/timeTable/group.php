@@ -18,6 +18,7 @@ $this->renderPartial('/filter_form/timeTable/group', array(
 	'type'=>$type,
 	'showCheckBoxCalendar'=>true
 ));
+
 Yii::app()->clientScript->registerScript('calendar-checkbox', "
 				$(document).on('change', '#checkbox-timeTable', function(){
 					if($(this).is(':checked')) {
@@ -26,6 +27,14 @@ Yii::app()->clientScript->registerScript('calendar-checkbox', "
 					{
 						$('#timeTable').val(0);
 					}
+					$(this).closest('form').submit();
+				});
+				
+				$(document).on('click', '#sem-date', function(){
+					$('#TimeTableForm_date1').val($(this).data('date1'));
+					$('#TimeTableForm_date2').val($(this).data('date2'));
+					alert($('#TimeTableForm_date1').val());
+					alert($('#TimeTableForm_date2').val());
 					$(this).closest('form').submit();
 				});
 			

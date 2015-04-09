@@ -143,7 +143,30 @@ class Sem extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+	
+	public function getSemestrForGroup($gr1)
+{
+		 if (empty($gr1))
+            return array();
+		$sql='select sem10,sem11 from sg
+			   inner join sem on (sg.sg1 = sem.sem2)
+			   inner join gr on (sg.sg1 = gr.gr2)
+			where gr.gr1='.$gr1.' and sem.sem10<=\''.date('d.m.Y',strtotime("+15 day")).'\' and sem.sem11>=\''.date('d.m.Y',strtotime("+15 day")).'\'';
+		$command = Yii::app()->db->createCommand($sql);
+		//print_r($sql);
+		/*$command->bindValue(':gr1', $gr1);
+		$command->bindValue(':nac', date('d.m.Y'));*/
+		$sem = $command->queryRow();
+		
+		$date1 = $sem['sem10'];
+        $date2 = $sem['sem11'];
 
+        /*if (empty($date1) || empty($date2))
+            Yii::app()->user->setFlash('error', tt('Неуказаны дата начала и/или дата окончания семестра'));*/
+
+        return array($date1, $date2);
+	}
+	
     public function getYearsForThematicPlan($speciality)
     {
         if (empty($speciality))

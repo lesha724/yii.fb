@@ -20,8 +20,23 @@ JS
         </span>
         <input  type="text" id="id-date-range-picker-1" value="<?=$date1.' - '.$date2?>"/>
     </div>
+	
     <button id="addNewModule" class="btn btn-info btn-small" type="submit">
         <i class="icon-plus bigger-110"></i>
         <?=tt('Изменить')?>
     </button>
+	<?php if(isset($showSem)&&($showSem))
+	{
+		if(!empty($gr1))
+		{
+			$sem=Sem::getSemestrForGroup($gr1);
+			if (empty($sem[0]) || empty($sem[1]))
+			{
+			
+			}else
+				echo CHtml::link(tt('Семестр'),'#',array('class'=>'btn btn-info btn-small','id'=>'sem-date','data-date1'=>date('d.m.Y',strtotime($sem[0])),'data-date2'=>date('d.m.Y',strtotime($sem[1]))));
+			
+		}
+	}
+	?>
 </div>

@@ -48,8 +48,10 @@ $form=$this->beginWidget('CActiveForm', array(
             'date1' => $model->date1,
             'date2' => $model->date2,
             'r11'   => $model->r11,
+			'showSem'=>true,
+			'gr1'=>$model->group,
         ), true);
-
+		
         $html .= $form->hiddenField($model, 'date1');
         $html .= $form->hiddenField($model, 'date2');
 

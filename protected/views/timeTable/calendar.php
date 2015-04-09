@@ -39,7 +39,7 @@
 		$class = SH::getClassColor($event['tip']);
 		//$events.="title:' <div id=\"cell{$i}\" style=\"background:{$color}\" data-rel=\"tooltip\" data-placement=\"right\" data-content=\"{$fullText}\">".$event['d3']."[".$event['tip']."</br>".$event['fio']."</br>".$event['a2']."</div>',";
 		$events.="title:' ".$event['d3']."[".$event['tip']."] \u000A ".$event['fio']." \u000A ".$event['a2']."',";
-		$events.="className:'events event{$class}',";
+		$events.="className:'event-num{$i} events event{$class}',";
 		$events.="start:'".date("Y-m-d",strtotime($event['r2']))." ".$event['rz2']."',";
 		$events.="end:'".date("Y-m-d",strtotime($event['r2']))." ".$event['rz3']."',";
 		$events.='},';
@@ -50,7 +50,17 @@
 	<button id="print-table" class="btn btn-info btn-small">
         <i class="icon-print bigger-110"></i>
     </button>
-	<div id="calendar"></div>
+	<div id="calendar">
+	<div id="info-event" class="popover right" style="top:100px;left:100px;display:none">
+		<div class="arrow"></div>
+		<button id="close-info-event" class="close">&times;</button>
+		<h4 class="popover-title" id="info-event-header"></h4>
+		<div class="popover-content">
+			<h5 id="info-event-body-header"></h5>
+			<p id="info-event-body"></p>
+		</div>
+	</div>
+	</div>
 <?php
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/theme/ace/assets/js/moment.min.js', CClientScript::POS_HEAD);
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/theme/ace/assets/js/jquery-ui.custom.min.js', CClientScript::POS_HEAD);
@@ -77,20 +87,24 @@ Yii::app()->clientScript->registerScript('calendar', "
 			],
 			eventClick: function(calEvent, jsEvent, view) {
 				
-				/*$('#myModal-header').text(arr[calEvent.id][4]+\" \"+arr[calEvent.id][5]+\"-\"+arr[calEvent.id][6]);
-				$('#myModal-body-header').text(arr[calEvent.id][0]+\"[\"+arr[calEvent.id][1]+\"]\");
-				$('#myModal-body').html(arr[calEvent.id][2]+\" </br>\"+arr[calEvent.id][3]);
-				$('#myModal').modal({'show':true});*/
-				$('#cell'+calEvent.id).tooltip('show');
+				$('#info-event-header').text(arr[calEvent.id][4]+\" \"+arr[calEvent.id][5]+\"-\"+arr[calEvent.id][6]);
+				$('#info-event-body-header').text(arr[calEvent.id][0]+\"[\"+arr[calEvent.id][1]+\"]\");
+				$('#info-event-body').html(arr[calEvent.id][2]+\" </br>\"+arr[calEvent.id][3]);
+				showEnevtInfo(calEvent.id);
 				/*alert('#cell'+calEvent.id);*/
 			},
-			/*eventRender: function (event, element) {
-				element.find('span.fc-event-title').html(element.find('span.fc-event-title').text());           
-			}*/
 		});
 		
 	});
 	
+	function showEnevtInfo(id){
+		event=$('.event-num'+id);
+		_left=event.offset().left;
+		_top=event.offset().top;
+		info=$('#info-event');
+		info.offset({top:_top-info.height()/2+10, left:_left+event.width()+10})
+		info.show();
+	}
 	
 	$('#print-table').click(
 		function(){
@@ -99,6 +113,11 @@ Yii::app()->clientScript->registerScript('calendar', "
 		}
 	);
 	
+	$('#close-info-event').click(
+		function(){
+			$('#info-event').hide();
+		}
+	);
 ");
-?>
 
+?>
