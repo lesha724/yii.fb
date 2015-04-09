@@ -38,7 +38,7 @@
 		$color = SH::getLessonColor($event['tip']);
 		$class = SH::getClassColor($event['tip']);
 		//$events.="title:' <div id=\"cell{$i}\" style=\"background:{$color}\" data-rel=\"tooltip\" data-placement=\"right\" data-content=\"{$fullText}\">".$event['d3']."[".$event['tip']."</br>".$event['fio']."</br>".$event['a2']."</div>',";
-		$events.="title:' ".$event['d3']."[".$event['tip']."] \u000A ".$event['fio']." \u000A ".$event['a2']."',";
+		$events.="title:' ".$event['d3']."[".$event['tip']."]  ".$event['a2']." \u000A ".$event['fio']."',";
 		$events.="className:'event-num{$i} events event{$class}',";
 		$events.="start:'".date("Y-m-d",strtotime($event['r2']))." ".$event['rz2']."',";
 		$events.="end:'".date("Y-m-d",strtotime($event['r2']))." ".$event['rz3']."',";
