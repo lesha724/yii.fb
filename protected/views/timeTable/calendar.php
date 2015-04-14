@@ -34,7 +34,6 @@
 		$events.='{';
 		$fullText='';
 		$events.="id:'".$i."',";
-		$fullText='----';
 		$color = SH::getLessonColor($event['tip']);
 		$class = SH::getClassColor($event['tip']);
 		//$events.="title:' <div id=\"cell{$i}\" style=\"background:{$color}\" data-rel=\"tooltip\" data-placement=\"right\" data-content=\"{$fullText}\">".$event['d3']."[".$event['tip']."</br>".$event['fio']."</br>".$event['a2']."</div>',";
@@ -51,15 +50,16 @@
         <i class="icon-print bigger-110"></i>
     </button>
 	<div id="calendar">
-	<div id="info-event" class="popover right" style="top:100px;left:100px;display:none">
-		<div class="arrow"></div>
-		<button id="close-info-event" class="close">&times;</button>
-		<h4 class="popover-title" id="info-event-header"></h4>
-		<div class="popover-content">
-			<h5 id="info-event-body-header"></h5>
-			<p id="info-event-body"></p>
+		<div id="info-event" class="popover bottom">
+			<div class="arrow"></div>
+			<button id="close-info-event" class="close" style="margin:5px;">&times;</button>
+			<h4 class="popover-title" id="info-event-header"></h4>
+			<div class="popover-content">
+				<h5 id="info-event-body-header"></h5>
+				<p id="info-event-body"></p>
+				<p id="cor"></p>
+			</div>
 		</div>
-	</div>
 	</div>
 <?php
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/theme/ace/assets/js/moment.min.js', CClientScript::POS_HEAD);
@@ -99,10 +99,13 @@ Yii::app()->clientScript->registerScript('calendar', "
 	
 	function showEnevtInfo(id){
 		event=$('.event-num'+id);
-		_left=event.offset().left;
-		_top=event.offset().top;
+		_left=event.css('left');
+		_top=event.css('top');
 		info=$('#info-event');
-		info.offset({top:_top-info.height()/2+10, left:_left+event.width()+10})
+		_top=_top.replace(/px/g, '');
+		topp=parseInt(_top)+$('#calendar').offset().top;
+		info.css('top',topp);
+		info.css('left', _left );		
 		info.show();
 	}
 	

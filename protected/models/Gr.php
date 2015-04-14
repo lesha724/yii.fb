@@ -400,14 +400,15 @@ SQL;
     public function getGroupsBySg1ForWorkPlan($sg1, $year, $sem)
     {
         $sql= <<<SQL
-              SELECT gr1,sem4, gr19,gr20,gr21,gr22,gr23,gr24,gr28
-              FROM sem
-              INNER JOIN sg on (sem.sem2 = sg.sg1)
-		      INNER JOIN gr on (sg.sg1 = gr.gr2)
-		      INNER JOIN grk on (gr.gr1 = grk.grk1)
-		      WHERE gr2 = :SG1 and grk2 = :YEAR1 and grk3 = :SEM1 and sem3 = :YEAR2 and sem5 = :SEM2
-			  GROUP BY gr1,sem4, gr19,gr20,gr21,gr22,gr23,gr24,gr28
-
+				SELECT gr1,sem4, gr19,gr20,gr21,gr22,gr23,gr24,gr28
+				 from ucgns
+				   inner join ucgn on (ucgns2 = ucgn1)
+				   inner join ucxg on (ucgn1 = ucxg2)
+				   inner join gr on (ucgn2 = gr1)
+				   inner join sg on (gr2 = sg1)
+				   INNER JOIN sem on (sg.sg1 = sem.sem2)
+				WHERE ucxg3=0 and gr2 = :SG1 and UCGNS5 = :YEAR1 and UCGNS6 = :SEM1 and sem3 = :YEAR2 and sem5 = :SEM2
+				GROUP BY gr1,sem4, gr19,gr20,gr21,gr22,gr23,gr24,gr28
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);

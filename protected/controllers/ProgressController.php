@@ -343,8 +343,8 @@ class ProgressController extends Controller
 	
 	public function actionInsertVmp()
     {
-        /*if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');*/
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $vmp1  = Yii::app()->request->getParam('vmpv1', null);
         $vmp2  = Yii::app()->request->getParam('st1', null);

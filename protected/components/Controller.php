@@ -89,15 +89,15 @@ class Controller extends CController
         if ($date2 === null)
             $date2 = Yii::app()->session['date2'];
         if ($date2 === null)
-            $date2 = date('d.m.Y', strtotime('+22 week', strtotime($date1)));
+            $date2 = date('d.m.Y', strtotime('+8 week', strtotime($date1)));
 
 
         $datetime1 = new DateTime($date1);
         $datetime2 = new DateTime($date2);
         $interval = $datetime1->diff($datetime2);
 
-        if ($interval->days >= 100)
-            $date2 = date('d.m.Y', strtotime('+22 week', strtotime($date1)));
+        if ($interval->days >= 150)
+            $date2 = date('d.m.Y', strtotime('+8 week', strtotime($date1)));
 
         Yii::app()->session['date2'] = $date2;
     }

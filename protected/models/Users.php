@@ -41,7 +41,6 @@ class Users extends CActiveRecord
 			array('u1, u5, u6, u7', 'numerical', 'integerOnly'=>true),
 			array('u2, u3', 'length', 'max'=>200),
 			array('u4', 'length', 'max'=>400),
-
             array('u2, u4', 'checkIfUnique'),
             array('u4', 'email'),
 

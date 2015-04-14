@@ -32,6 +32,28 @@
 	
 	<?php echo $form->DropDownListRow($model, 'timeTable',array('0'=>tt('Таблица'),'1'=>tt('Календарь'))); ?>
 	
+	<?php echo $form->checkBoxRow($model, 'fixedCountLesson'); ?>
+	
+	<?php 
+	$style='';
+	if($model->fixedCountLesson!=1)
+		$style='display:none';
+	?>
+	<div id="countLesson" style="<?=$style?>">
+		<label for="ConfigForm_countLesson" class="required"><?=$model->getAttributeLabel('countLesson')?> <span class="required">*</span></label>
+		<?php
+		echo $form->numberField($model, 'countLesson',array('min'=>'1','max'=>'8')); ?>
+	</div>
+	<?php 
+		Yii::app()->clientScript->registerScript('fixedCountLesson',"
+			$('#ConfigForm_fixedCountLesson').change(function() {
+				if(this.checked)
+					$('#countLesson').show();
+				else
+					$('#countLesson').hide();
+			});
+		");
+	?>
     <div class="form-actions">
         <?php $this->widget('bootstrap.widgets.TbButton', array(
             'buttonType'=>'submit',

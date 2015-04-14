@@ -13,6 +13,7 @@
 !/uploads/docs/.gitkeep
 # Local config file
 /protected/config/main-local.php
+/protected/config/params.inc
 # Svn files
 .svn
 # Windows folder metadata

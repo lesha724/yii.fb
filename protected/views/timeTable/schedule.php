@@ -21,8 +21,16 @@ foreach(range(1,7) as $dayOfWeek) {// дни недели 1-пн
 
     // первая колонка - название дня + пары 1-7
     $name = $minMax['names'][$dayOfWeek];
-    $min  = $minMax['min'][$dayOfWeek];
-    $max  = $minMax['max'][$dayOfWeek];
+	if(Yii::app()->params['fixedCountLesson']!=1)
+	{
+		$min  = $minMax['min'][$dayOfWeek];
+		$max  = $minMax['max'][$dayOfWeek];
+	}else
+	{
+		$min  = 1;
+		$max  = Yii::app()->params['countLesson'];
+	}
+	
 
 
 

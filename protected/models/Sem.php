@@ -357,12 +357,14 @@ SQL;
                       JOIN ug ON (nr1=ug1)
                       JOIN gr ON (ug2=gr1)
                       JOIN vvmp ON (vvmp2=uo1 AND vvmp4=sem7)
-                    WHERE uo1=:uo1 AND us4 in (1,2,3,4) AND (vvmp4=sem7 or vvmp4 is null)
+                    WHERE uo1=:uo1 AND us4 in (1,2,3,4) AND sem3=:YEAR AND sem5=:SEM
                     GROUP BY sem7,sem3,sem5,vvmp6,sem1,vvmp1,vvmp8,vvmp9,vvmp10,vvmp24
 	
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':uo1', $uo1);
+		$command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
         $modules = $command->queryAll();
 
         return $modules;
