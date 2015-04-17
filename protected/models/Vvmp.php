@@ -150,7 +150,7 @@ class Vvmp extends CActiveRecord
     public function loadBillBy($nr1, $students)
     {
         $sql=<<<SQL
-                select uo.uo3, uo.uo4, sem.sem7,ug.ug2
+                select uo.uo1,uo.uo3,sem.sem7,ug.ug2
                 from ug
                    inner join nr on (ug.ug3 = nr.nr1)
                    inner join us on (nr.nr2 = us.us1)
@@ -166,15 +166,16 @@ SQL;
             return false;
 
         $gr1  = $data['ug2'];
+		$uo1 = $data['uo1']; 
         $d1   = $data['uo3'];
-        $k1   = $data['uo4'];
+        //$k1   = $data['nr30'];
         $sem7 = $data['sem7'];
 
         $params = array(
-            'vvmp2'=>$gr1,
+            'vvmp2'=>$uo1,
             'vvmp3'=>$d1,
             'vvmp4'=>$sem7,
-            'vvmp5'=>$k1,
+            'vvmp5'=>0,
         );
         $vvmp = $this->findByAttributes($params);
 
