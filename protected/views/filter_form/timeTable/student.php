@@ -56,6 +56,8 @@ $form=$this->beginWidget('CActiveForm', array(
             'date1' => $model->date1,
             'date2' => $model->date2,
             'r11'   => $model->r11,
+			'showSem'=>true,
+			'gr1'=>$model->group,
         ), true);
 
         $html .= $form->hiddenField($model, 'date1');
@@ -67,7 +69,22 @@ $form=$this->beginWidget('CActiveForm', array(
         $html .= '</div>';
 
         $html .= '</fieldset>';
+		
     }
+	if ($showCheckBoxCalendar) {
+			$text=tt('Календарь');
+			$checked='';
+			if($type==1)
+				$checked='checked';
+			$html .= CHtml::hiddenField('timeTable',$type);
+			$html .= <<<HTML
+				<label class="pull-right inline">
+					<small class="muted">{$text}</small>
+					<input id="checkbox-timeTable" type="checkbox" {$checked} class="ace ace-switch ace-switch-6">
+					<span class="lbl"></span>
+				</label>
+HTML;
+		}
 
     $html .= '</div>';
 

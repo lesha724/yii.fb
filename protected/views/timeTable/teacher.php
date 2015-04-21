@@ -54,12 +54,28 @@ $html = '<div>';
     $html .= '</fieldset>';
 
     $html .= '<fieldset style="margin-top:1%;">';
-    $html .= $this->renderPartial('_date_interval', array(
-        'date1' => $model->date1,
-        'date2' => $model->date2,
-        'r11'   => $model->r11,
-    ), true);
-
+		$html .= $this->renderPartial('_date_interval', array(
+			'date1' => $model->date1,
+			'date2' => $model->date2,
+			'r11'   => $model->r11,
+			'showSem'=>true,
+			'teacher'=>$model->teacher,
+		), true);
+if (! empty($model->teacher))
+{
+	$text=tt('Календарь');
+	$checked='';
+	if($type==1)
+		$checked='checked';
+	$html .= CHtml::hiddenField('timeTable',$type);
+	$html .= <<<HTML
+		<label class="pull-right inline">
+			<small class="muted">{$text}</small>
+			<input id="checkbox-timeTable" type="checkbox" {$checked} class="ace ace-switch ace-switch-6">
+			<span class="lbl"></span>
+		</label>
+HTML;
+}
     $html .= '<div class="span3 ace-block">';
     $html .= $form->label($model, 'r11');
     $html .= ' '.$form->textField($model, 'r11', array('class'=>'input-mini span2', 'placeholder' => tt('дней'), 'style'=>'background:'.TimeTableForm::r11Color));
@@ -74,10 +90,27 @@ $this->endWidget();
 echo <<<HTML
     <span id="spinner1"></span>
 HTML;
+Yii::app()->clientScript->registerScript('calendar-checkbox', "
+				$(document).on('change', '#checkbox-timeTable', function(){
+					if($(this).is(':checked')) {
+						$('#timeTable').val(1);
+					}else
+					{
+						$('#timeTable').val(0);
+					}
+					$(this).closest('form').submit();
+				});
+				
+				$(document).on('click', '#sem-date', function(){
+					$('#TimeTableForm_date1').val($(this).data('date1'));
+					$('#TimeTableForm_date2').val($(this).data('date2'));
+					$(this).closest('form').submit();
+				});
+			
+		");
 
 
 
-if (! empty($model->teacher))
 
 
 if (! empty($model->teacher)) {
@@ -91,14 +124,22 @@ if (! empty($model->teacher)) {
     </small>
 </h3>
 HTML;
-
-    $this->renderPartial('schedule', array(
-        'model'      => $model,
-        'timeTable'  => $timeTable,
-        'minMax'     => $minMax,
-        'rz'         => $rz,
-        'maxLessons' => array(),
-    ));
+	if($type==0)
+		$this->renderPartial('schedule', array(
+			'model'      => $model,
+			'timeTable'  => $timeTable,
+			'minMax'     => $minMax,
+			'rz'         => $rz,
+			'maxLessons' => array(),
+		));
+	else
+		$this->renderPartial('calendar', array(
+			'model'      => $model,
+			'timeTable'  => $timeTable,
+			'minMax'     => $minMax,
+			'maxLessons' => $maxLessons,
+			'rz'         => $rz,
+		));
 
     $url = $this->createUrl('site/userPhoto', array('_id' => $model->teacher, 'type' => Users::FOTO_P1));
     echo <<<HTML

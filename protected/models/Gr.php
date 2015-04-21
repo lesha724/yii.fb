@@ -351,17 +351,24 @@ SQL;
         return $groups;
     }
 
-    public static function getTimeTable($gr1, $date1, $date2)
+    public static function getTimeTable($id, $date1, $date2,$type)
     {
-        $sql = <<<SQL
-        SELECT *
-        FROM RAGR(:LANG, :GR1, :DATE_1, :DATE_2)
-        ORDER BY r2,r3
-SQL;
-
+        switch($type)
+		{
+			case 0:
+				$sql ='SELECT * FROM RAGR(:LANG, :ID, :DATE_1, :DATE_2) ORDER BY r2,r3';
+				break;
+			case 1:
+				$sql ='SELECT * FROM RAST(:LANG, :ID, :DATE_1, :DATE_2) ORDER BY r2,r3';
+				break;
+			case 2:
+				$sql ='SELECT * FROM RAPR(:ID, :DATE_1, :DATE_2) ORDER BY r2,r3';
+				break;
+		}
         $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':LANG', 1);
-        $command->bindValue(':GR1', $gr1);
+		if($type!=2)
+			$command->bindValue(':LANG', 1);
+        $command->bindValue(':ID', $id);
         $command->bindValue(':DATE_1', $date1);
         $command->bindValue(':DATE_2', $date2);
         $timeTable = $command->queryAll();

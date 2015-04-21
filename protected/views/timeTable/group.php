@@ -33,8 +33,6 @@ Yii::app()->clientScript->registerScript('calendar-checkbox', "
 				$(document).on('click', '#sem-date', function(){
 					$('#TimeTableForm_date1').val($(this).data('date1'));
 					$('#TimeTableForm_date2').val($(this).data('date2'));
-					alert($('#TimeTableForm_date1').val());
-					alert($('#TimeTableForm_date2').val());
 					$(this).closest('form').submit();
 				});
 			

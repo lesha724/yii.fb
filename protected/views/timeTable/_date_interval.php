@@ -37,6 +37,9 @@ JS
 				echo CHtml::link(tt('Семестр'),'#',array('class'=>'btn btn-info btn-small','id'=>'sem-date','data-date1'=>date('d.m.Y',strtotime($sem[0])),'data-date2'=>date('d.m.Y',strtotime($sem[1]))));
 			
 		}
+		if(!empty($teacher)){
+		
+		}
 	}
 	?>
 </div>

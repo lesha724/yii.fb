@@ -99,16 +99,55 @@ Yii::app()->clientScript->registerScript('calendar', "
 	
 	function showEnevtInfo(id){
 		event=$('.event-num'+id);
-		_left=event.css('left');
-		_top=event.css('top');
+		sum=getOffset(event[0]);
 		info=$('#info-event');
-		_top=_top.replace(/px/g, '');
-		topp=parseInt(_top)+$('#calendar').offset().top;
-		info.css('top',topp);
-		info.css('left', _left );		
+		info.css('top',sum.top-60);
+		info.css('left',sum.left);		
 		info.show();
+		visible=true;
 	}
 	
+	function getOffset(elem) {
+		if (elem.getBoundingClientRect) {
+			return getOffsetRect(elem)
+		} else {
+			return getOffsetSum(elem)
+		}
+	}
+
+	function getOffsetSum(elem) {
+		var top=0, left=0
+		while(elem) {
+			top = top + parseInt(elem.offsetTop)
+			left = left + parseInt(elem.offsetLeft)
+			elem = elem.offsetParent
+		}
+		return {top: top, left: left}
+	}
+
+	function getOffsetRect(elem) {
+		// (1)
+		var box = elem.getBoundingClientRect()
+
+		// (2)
+		var body = document.body
+		var docElem = document.documentElement
+
+		// (3)
+		var scrollTop = window.pageYOffset || docElem.scrollTop || body.scrollTop
+		var scrollLeft = window.pageXOffset || docElem.scrollLeft || body.scrollLeft
+
+		// (4)
+		var clientTop = docElem.clientTop || body.clientTop || 0
+		var clientLeft = docElem.clientLeft || body.clientLeft || 0
+
+		// (5)
+		var top  = box.top +  scrollTop - clientTop
+		var left = box.left + scrollLeft - clientLeft
+
+		return { top: Math.round(top), left: Math.round(left) }
+	}
+
 	$('#print-table').click(
 		function(){
 			$('#sidebar').addClass('menu-min');
