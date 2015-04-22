@@ -326,14 +326,12 @@ SQL;
     {
         $sql = <<<SQL
             SELECT sem7
-            FROM ucs
-            INNER JOIN ucg on (ucs.ucs2 = ucg.ucg1)
-            INNER JOIN ucx on (ucg.ucg2 = ucx.ucx1)
-            INNER JOIN uo on (ucx.ucx1 = uo.uo19)
-            INNER JOIN us on (uo.uo1 = us.us2)
-            INNER JOIN sem on (us.us12 = sem.sem1)
-            WHERE ucg4 = 0 and ucs3 = :ST1
-            GROUP BY sem7
+				from gr
+				   inner join ucsn on (gr.gr1 = ucsn.ucsn3)
+				   inner join sg on (gr.gr2 = sg.sg1)
+				   inner join sem on (sg.sg1 = sem.sem2)
+				WHERE ucsn2 = :ST1
+				GROUP BY sem7
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);

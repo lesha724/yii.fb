@@ -61,6 +61,7 @@ class DefaultController extends AdminController
 				'timeTable'=>$_POST['ConfigForm']['timeTable'],
 				'fixedCountLesson'=>$_POST['ConfigForm']['fixedCountLesson'],
 				'countLesson'=>$_POST['ConfigForm']['countLesson'],
+				'analytics'=>$_POST['ConfigForm']['analytics'],
             );
             $str = base64_encode(serialize($config));
             if(file_put_contents($file, $str))

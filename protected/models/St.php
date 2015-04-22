@@ -533,14 +533,19 @@ class St extends CActiveRecord
     public function getStudentsForJournal($gr1, $uo1)
     {
         $sql = <<<SQL
-        select st1,st2,st3,st4
-        from st
-           inner join ucs on (st.st1 = ucs.ucs3)
-           inner join ucg on (ucs.ucs2 = ucg.ucg1)
-           inner join ucx on (ucg.ucg2 = ucx.ucx1)
-           inner join uo on (ucx.ucx1 = uo.uo19)
-        where ucg3=:GR1 and uo1=:UO1 and ucg4=0
-        order by st2 collate UNICODE, st3 collate UNICODE
+       select st1,st2,st3,st4
+		FROM us
+		   INNER JOIN uo ON (us.us2 = uo.uo1)
+		   INNER JOIN nr ON (us.us1 = nr2)
+		   INNER JOIN ug ON (nr1 = ug3)
+		   inner join ucgn on (ug.ug4 = ucgn.ucgn1)
+		   inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
+		   inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
+		   inner join ucxg on (ucgn.ucgn1 = ucxg.ucxg2)
+		   INNER JOIN st ON (ucsn2 = st1)
+		 where ucgn2=:GR1 and uo1=:UO1 and ucxg3=0
+		 group by st1,st2,st3,st4
+		 order by st2 collate UNICODE, st3 collate UNICODE
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
@@ -692,12 +697,13 @@ SQL;
     public function getStudentsAmountFor($gr1)
     {
        $sql = <<<SQL
-            SELECT count(distinct st1)
-            FROM st
-            INNER JOIN ucs on (st.st1 = ucs.ucs3)
-            INNER JOIN ucg on (ucs.ucs2 = ucg.ucg1)
-            INNER JOIN gr on (ucg.ucg3 = gr.gr1)
-            WHERE gr1 = :GR1
+           SELECT count(distinct st1)
+			FROM ucgn
+			   inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
+			   inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
+			   inner join ucxg on (ucgn.ucgn1 = ucxg.ucxg2)
+			   INNER JOIN st ON (ucsn2 = st1)
+			 where ucgn2=:GR1
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':GR1', $gr1);

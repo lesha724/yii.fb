@@ -728,16 +728,19 @@ SQL;
         } elseif ($type == WorkPlanController::STUDENT) {
             $sql = <<<SQL
                 SELECT d2,us4,us6,k2,uo3,u16,u1,d27,d32,d34,d36
-                FROM us
-                INNER JOIN uo ON (us.us2 = uo.uo1)
-                INNER JOIN u ON (uo.uo22 = u.u1)
-                INNER JOIN d ON (uo.uo3 = d.d1)
-                INNER JOIN k ON (uo.uo4 = k.k1)
-                INNER JOIN ucx ON (uo.uo19 = ucx.ucx1)
-                INNER JOIN ucg ON (ucx.ucx1 = ucg.ucg2)
-                INNER JOIN ucs ON (ucg.ucg1 = ucs.ucs2)
-                WHERE us4<>13 and ucg4=0 and ucs3=:ID and us3=:SEM1 and us6<>0 and us4<>17 and us4<>18
-                ORDER BY d2,us4,uo3
+					FROM us
+					   INNER JOIN uo ON (us.us2 = uo.uo1)
+					   INNER JOIN nr ON (us.us1 = nr2)
+					   INNER JOIN ug ON (nr1 = ug3)
+					   INNER JOIN u ON (uo.uo22 = u.u1)
+					   INNER JOIN d ON (uo.uo3 = d.d1)
+					   INNER JOIN k ON (uo.uo4 = k.k1)
+					   inner join ucgn on (ug.ug4 = ucgn.ucgn1)
+					   inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
+					   inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
+					   inner join ucxg on (ucgn.ucgn1 = ucxg.ucxg2)
+					WHERE us4<>13 and ucxg3=0 and ucsn2=:ID and us3=:SEM1 and us6<>0 and us4<>17 and us4<>18
+					ORDER BY d2,us4,uo3
 SQL;
             $id  = $model->student;
         }
@@ -858,14 +861,11 @@ SQL;
 
         $sql = <<<SQL
             select sg40,sg41
-            from uo
-              inner join ucx on (uo.uo19 = ucx.ucx1)
-              inner join ucg on (ucx.ucx1 = ucg.ucg2)
-              inner join ucs on (ucg.ucg1 = ucs.ucs2)
-              inner join u on (uo.uo22 = u.u1)
-              inner join sg on (u2 = sg1)
-            where ucs3 = :ST1
-            group by sg40,sg41
+				from sg
+				   inner join gr on (sg.sg1 = gr.gr2)
+				   inner join ucsn on (gr.gr1 = ucsn.ucsn3)
+				where ucs3 = :ST1
+				group by sg40,sg41
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':ST1', $st1);

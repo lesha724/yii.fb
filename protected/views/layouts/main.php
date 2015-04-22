@@ -97,6 +97,8 @@
     <script src="<?=Yii::app()->baseUrl?>/theme/ace/assets/js/uncompressed/ace-elements.js"></script>
     <script src="<?=Yii::app()->baseUrl?>/theme/ace/assets/js/ace.min.js"></script>
     <script src="<?=Yii::app()->baseUrl?>/theme/ace/assets/js/uncompressed/bootbox.js"></script>
-
+	<?php if(!empty(Yii::app()->params['analytics']))
+			echo '<script>'.Yii::app()->params['analytics'].'</script>';
+	?>
 </body>
 </html>
