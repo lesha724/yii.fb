@@ -783,17 +783,33 @@ SQL;
 
         $sql = <<<SQL
 			select us1,d2
-			from u
-			   inner join uo on (u.u1 = uo.uo22)
-			   inner join us on (uo.uo1 = us.us2)
-			   inner join nr on (us.us1 = nr.nr2)
-			   inner join ug on (nr.nr1 = ug.ug3)
-			   inner join ucgn on (ug.ug4 = ucgn.ucgn1)
-			   inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
-			   inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
-			   inner join d on (uo.uo3 = d.d1)
-			where us4 = 8 and ucsn2=:ST1 and u38<=current_timestamp and u39>=current_timestamp
-			group by us1,d2
+			   from u
+				  inner join uo on (u.u1 = uo.uo22)
+				  inner join us on (uo.uo1 = us.us2)
+				  inner join nr on (us.us1 = nr.nr2)
+				  inner join ug on (nr.nr1 = ug.ug3)
+				  inner join sem on (us.us3 = sem.sem1)
+				  inner join ucgn on (ug.ug4 = ucgn.ucgn1)
+				  inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
+				  inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
+				  inner join d on (uo.uo3 = d.d1)
+			   where us4 = 8 and ucsn2=:st1 and u38<=current_timestamp and u39>=current_timestamp and
+			   sem3=(select first 1 sg40
+					 from st
+						inner join std on (st.st1 = std.std2)
+						inner join gr on (std.std3 = gr.gr1)
+						inner join sg on (gr.gr2 = sg.sg1)
+					 where st1=:ST1 and std7 is null and std11 in (0,5,6,8)
+					 )
+			   and
+			   sem5=(select first 1 sg41
+					 from st
+						inner join std on (st.st1 = std.std2)
+						inner join gr on (std.std3 = gr.gr1)
+						inner join sg on (gr.gr2 = sg.sg1)
+					 where st1=:ST1 and std7 is null and std11 in (0,5,6,8)
+					 )
+			   group by us1,d2
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);

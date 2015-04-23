@@ -25,6 +25,13 @@ JS
 
 <?php
     $this->renderPartial('/filter_form/default/year_sem');
+	
+	echo '<div class="alert alert-error">
+-		<h3>Внимание!</h3>
+-			Выберите нужный	 учебный год (<strong>2014</strong>- это "2014/2015 уч.г.") и нажмите "ОК"!
+-			</br>
+-			Кафедра->Поток->Дисциплина->Модуль->Группа->Ведомость
+-	</div>';
 
     $this->renderPartial('/filter_form/default/module', array(
         'model' => $model,

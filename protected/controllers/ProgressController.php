@@ -359,21 +359,25 @@ SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':vmpv1', $vmp1);
 		$command->bindValue(':p1', Yii::app()->user->dbModel->p1);
-        $permition = $command->queryAll();
-		if($permition==null)
-			throw new CHttpException(403, 'Error.');
+        
 		$model = Vmp::model()->find($criteria);
 		if (empty($model))
 			$error = true;
 		else
 		{
-			if($value>=0&&$value<=5)
-			{
-				$model->vmp4=$value;
-				$error = !$model->save();
-			}else
-			{
+			$permition = $command->queryAll();
+			if($permition==null)
 				$error = true;
+			else
+			{
+				if($value>=0&&$value<=5)
+				{
+					$model->vmp4=$value;
+					$error = !$model->save();
+				}else
+				{
+					$error = true;
+				}
 			}
 		}
 		
