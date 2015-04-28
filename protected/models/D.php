@@ -714,15 +714,17 @@ SQL;
         } elseif ($type == WorkPlanController::GROUP) {
             $sql = <<<SQL
                 SELECT d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1
-                FROM us
-                INNER JOIN uo ON (us.us2 = uo.uo1)
-                INNER JOIN u ON (uo.uo22 = u.u1)
-                INNER JOIN d ON (uo.uo3 = d.d1)
-                INNER JOIN k ON (uo.uo4 = k.k1)
-                INNER JOIN ucx ON (uo.uo19 = ucx.ucx1)
-                INNER JOIN ucg ON (ucx.ucx1 = ucg.ucg2)
-                WHERE us4<>13 and ucg3=:ID and us3=:SEM1 and us6<>0 and us4<>17 and us4<>18
-                ORDER BY d2,us4,uo3
+				from ucxg
+				   inner join ucgn on (ucxg.ucxg2 = ucgn.ucgn1)
+				   inner join ucx on (ucxg.ucxg1 = ucx.ucx1)
+				   inner join uo on (ucx.ucx1 = uo.uo19)
+				   inner join us on (uo.uo1 = us.us2)
+				   inner join u on (uo.uo22 = u.u1)
+				   inner join d on (uo.uo3 = d.d1)
+				   inner join k on (uo.uo4 = k.k1)
+				WHERE us4<>13 and ucgn2=:ID and us3=:SEM1 and us6<>0 and us4<>17 and us4<>18
+				group by d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1
+				ORDER BY d2,us4,uo3
 SQL;
             $id  = $model->group;
         } elseif ($type == WorkPlanController::STUDENT) {
