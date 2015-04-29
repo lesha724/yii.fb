@@ -1,15 +1,15 @@
 <?php /* @var $this Controller */ 
 	function getStyleName($name)
 	{
-		if(file_exists())
-			return 'user/'.$name;
+		if(!file_exists('/css/user/'.$name))
+			return 'css/'.$name;
 		else
-			return $name;
+			return 'css/user/'.$name;
 	}
 	
 	function getAceStyleName($name)
 	{
-		if(file_exists())
+		if(!file_exists('/css/user/ace/'.$name))
 			return 'theme/ace/assets/css/'.$name;
 		else
 			return 'css/user/ace/'.$name;
@@ -23,7 +23,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" type="text/css" href="<?=Yii::app()->baseUrl?>/css/<?=getStyleName('styles.css')?>" />
+    <link rel="stylesheet" type="text/css" href="<?=Yii::app()->baseUrl?>/<?=getStyleName('styles.css')?>" />
 
     <title><?php echo CHtml::encode($this->pageTitle); ?></title>
 
