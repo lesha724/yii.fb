@@ -11,6 +11,8 @@
 !/uploads/.gitkeep
 /uploads/docs/*
 !/uploads/docs/.gitkeep
+/css/user/*
+!/css/user/.gitkeep
 # Local config file
 /protected/config/main-local.php
 /protected/config/params.inc
