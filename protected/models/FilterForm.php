@@ -77,12 +77,28 @@ class FilterForm extends CFormModel
             $sel_1 = tt('Направление подготовки');
             $sel_2 = tt('Форма обучения');
         }
-
+		
+		$arr= array(
+			'filial'=> tt('Учебн. заведение'),
+			'faculty'=> tt('Факультет'),
+		);
+		
+		$sql=<<<SQL
+			select b15 from b where b1=0
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$id=$command->queryRow();
+		if(!empty($id['b15'])&&$id['b15']==7)
+			$arr= array(
+				'filial'=> tt('Факультет'),
+				'faculty'=> tt('Вид подготовки'),
+			);
+			
 		return array(
 			'discipline'=> tt('Дисциплина'),
 			'group'=> tt('Группа'),
-			'filial'=> tt('Филиал'),
-			'faculty'=> tt('Факультет'),
+			//'filial'=> tt('Филиал'),
+			//'faculty'=> tt('Факультет'),
 			'speciality'=> tt('Специальность'),
 			'year'=> tt('Год'),
 			'type'=> tt('Вид'),
@@ -103,6 +119,6 @@ class FilterForm extends CFormModel
 			'module'=>tt('Модуль'),
 			'stream'=>tt('Поток'),
 			'statement'=>tt('Ведомость'),
-		);
+		)+$arr;
 	}
 }

@@ -627,9 +627,18 @@ SQL;
 SQL;
 
         $teachers = Yii::app()->db->createCommand($sql)->queryAll();
+		$type=array(
+			0=>tt('штатный'),
+			1=>tt('внешн. совмест. '),
+			2=>tt('внутр. совмест.'),
+			3=>tt('почасовик внутр.'),
+			4=>tt('совмещение'),
+			5=>tt('почасовик внешн.'),
+			6=>tt('специалист'),
+		);
         $res = array();
         foreach ($teachers as $tch) {
-            $res[ $tch[$keyFieldName] ] = SH::getShortName($tch['p3'], $tch['p4'], $tch['p5']).' '.$tch['dol2'];
+            $res[ $tch[$keyFieldName] ] = SH::getShortName($tch['p3'], $tch['p4'], $tch['p5']).' ('.$type[$tch['pd7']].')'.$tch['dol2'];
         }
         return $res;
     }

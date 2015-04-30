@@ -450,8 +450,7 @@ class St extends CActiveRecord
     {
         $criteria=new CDbCriteria;
 
-        $criteria->select = 'st2, st3, st4';
-
+        $criteria->select = 't.st2, t.st3, t.st4';
         $with = array(
             'account' => array(
                 'select' => 'u2, u3, u4'
@@ -460,11 +459,12 @@ class St extends CActiveRecord
 
         $criteria->addCondition("st1 > 0");
         $criteria->addCondition("st2 <> ''");
-
-
+		$criteria->join = 'INNER JOIN std ON st1=std2 and std7 is null';
+		$criteria->addCondition("std11 in (0,3,5,6,8)");
         $criteria->addSearchCondition('st2', $this->st2);
         $criteria->addSearchCondition('st3', $this->st3);
         $criteria->addSearchCondition('st4', $this->st4);
+		
 
         $criteria->addSearchCondition('account.u2', Yii::app()->request->getParam('login'));
         $criteria->addSearchCondition('account.u3', Yii::app()->request->getParam('password'));
@@ -475,7 +475,7 @@ class St extends CActiveRecord
         return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
             'sort' => array(
-                'defaultOrder' => 'st2 collate UNICODE',
+                'defaultOrder' => 'st2 collate UNICODE,st3 collate UNICODE,st4 collate UNICODE',
                 'attributes' => array(
                     'st2',
                     'st3',
