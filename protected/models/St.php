@@ -445,7 +445,37 @@ class St extends CActiveRecord
             )
         );
     }
-
+	
+	public function getSearchStudents($name)
+    {
+        if (empty($name))
+            return array();
+			
+		list($year, $sem) = SH::getCurrentYearAndSem();
+		$sql = <<<SQL
+        SELECT st1,st2,st3,st4,gr1,gr3,f1,f2,ks1,ks3,sem4, gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26 FROM ks
+			inner join f on (ks.ks1 = f.f14)
+			inner join sp on (f.f1 = sp.sp5)
+			inner join sg on (sp.sp1 = sg.sg2)
+			inner join gr on (sg.sg1 = gr.gr2)
+			inner join std on (gr.gr1 = std.std3)
+			inner join st on (std.std2 = st.st1)
+			inner join sem on (sg.sg1 = sem.sem2)
+		where std7 is null and std11 in (0, 5, 6, 8) and st2 CONTAINING :name and sem3=:YEAR1 and sem5=:SEM1
+		GROUP BY st1,st2,st3,st4,gr1,gr3,f1,f2,ks1,ks3,sem4, gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26
+        ORDER BY st2 collate UNICODE,ks3,gr3,f2
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':name', $name);
+		$command->bindValue(':YEAR1', $year);
+        $command->bindValue(':SEM1', $sem);
+        $students= $command->queryAll();
+		foreach($students as $key => $student) {
+            $students[$key]['group_name'] = Gr::model()->getGroupName($students[$key]['sem4'], $student);
+        }
+        return $students;
+    }
+	
     public function getStudentsForAdmin()
     {
         $criteria=new CDbCriteria;
@@ -461,9 +491,12 @@ class St extends CActiveRecord
         $criteria->addCondition("st2 <> ''");
 		$criteria->join = 'INNER JOIN std ON st1=std2 and std7 is null';
 		$criteria->addCondition("std11 in (0,3,5,6,8)");
-        $criteria->addSearchCondition('st2', $this->st2);
-        $criteria->addSearchCondition('st3', $this->st3);
-        $criteria->addSearchCondition('st4', $this->st4);
+        //$criteria->addSearchCondition('st2', $this->st2);
+        //$criteria->addSearchCondition('st3', $this->st3);
+        //$criteria->addSearchCondition('st4', $this->st4);
+		$criteria->addCondition("st2 CONTAINING '".$this->st2."'");
+		$criteria->addCondition("st3 CONTAINING '".$this->st3."'");
+		$criteria->addCondition("st4 CONTAINING '".$this->st4."'");
 		
 
         $criteria->addSearchCondition('account.u2', Yii::app()->request->getParam('login'));

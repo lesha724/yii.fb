@@ -696,7 +696,29 @@ SQL;
 
         return $data;
     }
-
+	
+	public function getLinkDisciplinesForWorkPlan($model, $uo1)
+	{
+		if(empty($uo1))
+			return '';
+		$sql = <<<SQL
+            select mtmo11
+			from mtz
+			   inner join mtmo on (mtz1 = mtmo1)
+			where mtz2 = :sem1 and mtz3 = :uo1
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':uo1', $uo1);
+        $command->bindValue(':sem1', $model->semester);
+        $link = $command->queryRow();
+		if($link==null)
+			return '';
+		
+		if(!empty($link['mtmo11']))
+			return CHtml::link('I',$link['mtmo11'], array('class'=>'link-disp','target'=>'_blank'));
+		
+	}
+	
     private function getWorkPlanDisciplinesFor($model, $type)
     {
         if ($type == WorkPlanController::SPECIALITY) {
@@ -729,7 +751,7 @@ SQL;
             $id  = $model->group;
         } elseif ($type == WorkPlanController::STUDENT) {
             $sql = <<<SQL
-                SELECT d2,us4,us6,k2,uo3,u16,u1,d27,d32,d34,d36
+                SELECT d2,us4,us6,k2,uo3,u16,u1,d27,d32,d34,d36,uo1
 					FROM us
 					   INNER JOIN uo ON (us.us2 = uo.uo1)
 					   INNER JOIN nr ON (us.us1 = nr2)

@@ -22,7 +22,30 @@ class TimeTableController extends Controller
             ),
         );
     }
-
+	
+	public function actionSearchTeacher()
+    {
+        $model = new P;
+        $model->unsetAttributes();
+        if (isset($_REQUEST['P']))
+            $model->attributes = $_REQUEST['P'];
+		
+        $this->render('search_teacher', array(
+            'model' => $model,
+        ));
+	}
+	
+	public function actionSearchStudent()
+    {
+        $model = new St;
+        $model->unsetAttributes();
+        if (isset($_REQUEST['St']))
+            $model->attributes = $_REQUEST['St'];
+		
+        $this->render('search_student', array(
+            'model' => $model,
+        ));
+	}
 
     public function actionTeacher()
     {
@@ -46,9 +69,12 @@ class TimeTableController extends Controller
 			else
 				$timeTable=Gr::getTimeTable($model->teacher, $model->date1, $model->date2, 2);
 
-
+		$teacher = new P;
+        $teacher->unsetAttributes();
+		
         $this->render('teacher', array(
             'model'      => $model,
+			'teacher'	 =>$teacher,
             'timeTable'  => $timeTable,
             'minMax'     => $minMax,
             'rz'         => Rz::model()->getRzArray(),
@@ -115,13 +141,16 @@ class TimeTableController extends Controller
 			else
 				$timeTable=Gr::getTimeTable($model->student, $model->date1, $model->date2, 1);
 
-
+		$student = new St;
+        $student->unsetAttributes();
+		
         $this->render('student', array(
             'model'      => $model,
             'timeTable'  => $timeTable,
             'minMax'     => $minMax,
             'rz'         => Rz::model()->getRzArray(),
-			'type'=>$type
+			'type'=>$type,
+			'student'=>$student
         ));
     }
 

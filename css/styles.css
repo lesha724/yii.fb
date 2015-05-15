@@ -7,6 +7,9 @@
 #info-event{
 	z-index:1100;
 }
+#calendar{
+position: relative;
+}
 #calendar .events{
 	border: 1px solid #3a87ad!Important;
 	border-radius: 5px!Important;

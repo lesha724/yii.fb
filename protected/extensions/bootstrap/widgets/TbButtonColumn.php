@@ -59,7 +59,15 @@ class TbButtonColumn extends CButtonColumn
 		$label = isset($button['label']) ? $button['label'] : $id;
 		$url = isset($button['url']) ? $this->evaluateExpression($button['url'], array('data'=>$data, 'row'=>$row)) : '#';
 		$options = isset($button['options']) ? $button['options'] : array();
-
+		if (isset($button['options']) AND !(empty($button['options']))) {
+            foreach ($button['options'] as $key => $value) {
+                if (preg_match('#\$(data|row)#', $value)) {
+                    $options["$key"] = $this->evaluateExpression($button['options'][$key], array('data' => $data, 'row' => $row));
+                } else {
+                    $options["$key"] = $value;
+                }
+            }
+        }
 		if (!isset($options['title']))
 			$options['title'] = $label;
 

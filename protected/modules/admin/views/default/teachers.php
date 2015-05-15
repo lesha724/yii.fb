@@ -26,11 +26,24 @@
         'dataProvider' => $provider,
         'filter' => $model,
         'type' => 'striped bordered',
+		'afterAjaxUpdate' => 'reinstallDatePicker',
         'ajaxUrl' => Yii::app()->createAbsoluteUrl('/admin/default/teachers'),
         'columns' => array(
             'p3',
             'p4',
             'p5',
+			'p9'=>array(
+				'name' => 'p9',
+				'value'=>'$data->getP9String()',
+				'filter' => '',
+				'htmlOptions' => array(
+					'style' => 'min-width:130px;',
+				),
+			),
+			'p13'=>array(
+				'name' => 'p13',
+				'filter' => '',
+			),
             array(
                 'header' => 'Login',
                 'filter' => CHtml::textField('login', Yii::app()->request->getParam('login')),
@@ -80,3 +93,4 @@
             ),
         ),
     ));
+

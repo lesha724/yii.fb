@@ -64,11 +64,12 @@ if (! empty($model->semester)) :
     <?php
         $html = '';
         foreach ($disciplines as $key => $discipline) {
-
+			
+			$link = D::model()->getLinkDisciplinesForWorkPlan($model, $discipline['uo1']);
             $html .= <<<HTML
                 <tr>
                     <td>{$key}</td>
-                    <td>{$discipline['d2']}</td>
+                    <td>{$discipline['d2']}{$link}</td>
 HTML;
 
             foreach ($types as $type => $name) {

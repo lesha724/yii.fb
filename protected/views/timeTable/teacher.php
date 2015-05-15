@@ -19,8 +19,30 @@ Yii::app()->clientScript->registerScript('teacher-messages', <<<JS
     tt.popupTitle = '{$popupTitle}';
 JS
     , CClientScript::POS_READY);
-
+	
 $attr = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;');
+
+$form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+    'id'=>'search-form',
+    'htmlOptions' => array('class' => 'form-inline noprint'),
+	'method'=>'post',
+	'action'=> array('timeTable/searchTeacher'),
+));
+?>
+	<?php echo $form->textField($teacher,'p3',array('size'=>60,'maxlength'=>255)); ?>
+	
+	<?php $this->widget('bootstrap.widgets.TbButton', array(
+		'buttonType'=>'submit',
+		'type'=>'primary',
+		'icon'=>'search',
+		'label'=>tt('Поиск'),
+		'htmlOptions'=>array(
+			'class'=>'btn-small'
+		)
+	)); ?>
+	<?php
+$this->endWidget();
+
 $form=$this->beginWidget('CActiveForm', array(
     'id'=>'timeTable-form',
     'htmlOptions' => array('class' => 'form-inline noprint')
@@ -47,7 +69,6 @@ $html = '<div>';
     $html .= $form->label($model, 'teacher');
     $html .= $form->dropDownList($model, 'teacher', $teachers, $attr);
     $html .= '</div>';
-
 
     $html .= $form->hiddenField($model, 'date1');
     $html .= $form->hiddenField($model, 'date2');
