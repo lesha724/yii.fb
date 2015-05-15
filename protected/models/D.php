@@ -715,7 +715,7 @@ SQL;
 			return '';
 		
 		if(!empty($link['mtmo11']))
-			return CHtml::link('I',$link['mtmo11'], array('class'=>'link-disp','target'=>'_blank'));
+			return CHtml::link('<i class="icon-file"></i>',$link['mtmo11'], array('class'=>'link-disp btn btn-info btn-small','target'=>'_blank'));
 		
 	}
 	
