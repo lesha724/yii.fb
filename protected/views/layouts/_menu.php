@@ -163,7 +163,7 @@ $this->widget('zii.widgets.CMenu', array(
             'visible' => _ch('workPlan', 'main')
         ),
 		array(
-            'label' => _l('Списки', 'user'),
+            'label' => _l('Список', 'user'),
             'url' => '#',
             'linkOptions'=> $_l,
             'itemOptions'=>_i('list'),

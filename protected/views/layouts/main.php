@@ -116,5 +116,10 @@
 	<?php if(!empty(Yii::app()->params['analytics']))
 			echo '<script>'.Yii::app()->params['analytics'].'</script>';
 	?>
+	<script>
+		$(function () {
+		  $('[data-toggle="tooltip"]').tooltip()
+		});
+	</script>
 </body>
 </html>

@@ -4,11 +4,22 @@
 .login-container {
     width:auto !important;
 }
+.navbar .brand {
+	padding: 5px 20px 5px!important;
+}
+#logo-image,#logo-image-right{
+	height:35px;
+}
+#logo-image-right{
+	padding: 5px 20px 5px;
+	position:absolute;
+	right:140px;
+}
 #info-event{
 	z-index:1100;
 }
 #calendar{
-position: relative;
+	position: relative;
 }
 #calendar .events{
 	border: 1px solid #3a87ad!Important;
@@ -20,10 +31,10 @@ position: relative;
 	background-color:#fffadb!Important;
 }
 #calendar .event2{
-background-color:#e2ffe2!Important;
+	background-color:#e2ffe2!Important;
 }
 #calendar .event3{
-background-color:#fff0ff!Important;
+	background-color:#fff0ff!Important;
 }
 #calendar .event4{
 background-color:#c4e5ff!Important;

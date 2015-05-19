@@ -11,12 +11,46 @@
     </script>
     <div class="navbar-inner">
         <div class="container-fluid">
-            <a class="brand" href="#">
+            <a class="brand" href="<?=Yii::app()->createUrl(array('site/index'))?>">
                 <small>
-                    <i class="icon-leaf"></i>
-                    <?=tt('АСУ')?>
+					<?php
+						$logo='images/'.Yii::app()->params['logo'];
+						if(!empty($logo))
+						{
+							if(!file_exists($logo))
+							{
+								echo '<i class="icon-leaf"></i>';
+							}else
+							{
+								echo CHtml::image(Yii::app()->baseUrl.'/'.$logo, '',array('id'=>'logo-image'));
+							}
+						}else
+						{
+							echo '<i class="icon-leaf"></i>';
+						}
+					?>
+                    
+                    <?php
+						if(!empty(Yii::app()->params['title'.Yii::app()->language]))
+						{
+							echo Yii::app()->params['title'.Yii::app()->language];
+						}
+						else
+						{
+							echo tt('АСУ');
+						};
+						?>
+						
+					
                 </small>
             </a><!-- /.brand -->
+			<?php
+			$logo='images/'.Yii::app()->params['logo_right'];					
+			if(file_exists($logo))
+			{
+				echo CHtml::image(Yii::app()->baseUrl.'/'.$logo, '',array('id'=>'logo-image-right'));
+			}	
+			?>
             <ul class="nav ace-nav pull-right">
                 <li class="light-blue">
                     <a class="dropdown-toggle" href="#" data-toggle="dropdown" >

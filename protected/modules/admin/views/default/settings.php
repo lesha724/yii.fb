@@ -23,49 +23,61 @@
 		$form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 			'id'=>'config-form',
 			'enableAjaxValidation'=>false,
-			'htmlOptions' => array('class' => 'well'),
+			'htmlOptions' => array('class' => 'well','enctype'=>'multipart/form-data'),
 		)); ?>
+		
+			<?php echo $form->errorSummary($model); ?>
+			
+			<?php echo $form->textFieldRow($model, 'titleuk'); ?>
+			
+			<?php echo $form->textFieldRow($model, 'titleen'); ?>
+			
+			<?php echo $form->textFieldRow($model, 'titleru'); ?>
+			
+			<?php 
+			echo $form->fileFieldRow($model,'logo'); ?>
 
-    <?php echo $form->errorSummary($model); ?>
+			<?php 
+			echo $form->fileFieldRow($model,'logo_right'); ?>
+			
+			<?php echo $form->DropDownListRow($model, 'attendanceStatistic',array('0'=>tt('По электронному журналу'),'1'=>tt('По деканату'))); ?>
+			
+			<?php echo $form->DropDownListRow($model, 'timeTable',array('0'=>tt('Таблица'),'1'=>tt('Календарь'))); ?>
+			
+			<?php echo $form->checkBoxRow($model, 'fixedCountLesson'); ?>
+			
+			<?php 
+			$style='';
+			if($model->fixedCountLesson!=1)
+				$style='display:none';
+			?>
+			<div id="countLesson" style="<?=$style?>">
+				<label for="ConfigForm_countLesson" class="required"><?=$model->getAttributeLabel('countLesson')?> <span class="required">*</span></label>
+				<?php
+				echo $form->numberField($model, 'countLesson',array('min'=>'1','max'=>'8')); ?>
+			</div>
+			<?php 
+				Yii::app()->clientScript->registerScript('fixedCountLesson',"
+					$('#ConfigForm_fixedCountLesson').change(function() {
+						if(this.checked)
+							$('#countLesson').show();
+						else
+							$('#countLesson').hide();
+					});
+				");
+			?>
+			
+			<?php echo $form->textAreaRow($model,'analytics',array('rows'=>6, 'cols'=>50)); ?>
+			
+			<div class="form-actions">
+				<?php $this->widget('bootstrap.widgets.TbButton', array(
+					'buttonType'=>'submit',
+					'type'=>'primary',
+					'label'=>tt('Сохранить'),
+				)); ?>
+			</div>
 
-	<?php echo $form->DropDownListRow($model, 'attendanceStatistic',array('0'=>tt('По электронному журналу'),'1'=>tt('По деканату'))); ?>
-	
-	<?php echo $form->DropDownListRow($model, 'timeTable',array('0'=>tt('Таблица'),'1'=>tt('Календарь'))); ?>
-	
-	<?php echo $form->checkBoxRow($model, 'fixedCountLesson'); ?>
-	
-	<?php 
-	$style='';
-	if($model->fixedCountLesson!=1)
-		$style='display:none';
-	?>
-	<div id="countLesson" style="<?=$style?>">
-		<label for="ConfigForm_countLesson" class="required"><?=$model->getAttributeLabel('countLesson')?> <span class="required">*</span></label>
-		<?php
-		echo $form->numberField($model, 'countLesson',array('min'=>'1','max'=>'8')); ?>
-	</div>
-	<?php 
-		Yii::app()->clientScript->registerScript('fixedCountLesson',"
-			$('#ConfigForm_fixedCountLesson').change(function() {
-				if(this.checked)
-					$('#countLesson').show();
-				else
-					$('#countLesson').hide();
-			});
-		");
-	?>
-	
-	<?php echo $form->textAreaRow($model,'analytics',array('rows'=>6, 'cols'=>50)); ?>
-	
-    <div class="form-actions">
-        <?php $this->widget('bootstrap.widgets.TbButton', array(
-            'buttonType'=>'submit',
-            'type'=>'primary',
-            'label'=>tt('Сохранить'),
-        )); ?>
-    </div>
-
-<?php $this->endWidget(); 
+		<?php $this->endWidget(); 
 	}
 ?>
 

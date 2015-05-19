@@ -715,8 +715,7 @@ SQL;
 			return '';
 		
 		if(!empty($link['mtmo11']))
-			return CHtml::link('<i class="icon-file"></i>',$link['mtmo11'], array('data-toggle'=>"tooltip", 'data-placement'=>"right",'data-original-title'=>tt("Отобразить файл"),'class'=>'link-disp btn btn-info btn-mini','style'=>'margin-left:10px','target'=>'_blank'));
-		
+			return CHtml::link('<i class="icon-file"></i>',$link['mtmo11'], array('data-toggle'=>"tooltip", 'data-placement'=>"right",'data-original-title'=>tt("Отобразить файл"),'class'=>'link-disp','style'=>'margin-left:10px','target'=>'_blank'));
 	}
 	
     private function getWorkPlanDisciplinesFor($model, $type)
