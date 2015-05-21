@@ -11,6 +11,8 @@
 !/uploads/.gitkeep
 /uploads/docs/*
 !/uploads/docs/.gitkeep
+/images/uploads/*
+!/images/uploads/.gitkeep
 /css/user/*
 !/css/user/.gitkeep
 # Local config file
