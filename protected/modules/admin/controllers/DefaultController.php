@@ -55,7 +55,6 @@ class DefaultController extends AdminController
         $model->setAttributes($arr);
 		if (isset($_POST['ConfigForm']))
 		{
-			$model->attributes=$_POST['ConfigForm'];
 			$config = array(
 				'attendanceStatistic'=>$_POST['ConfigForm']['attendanceStatistic'],
 				'timeTable'=>$_POST['ConfigForm']['timeTable'],
@@ -68,25 +67,6 @@ class DefaultController extends AdminController
 				'logo'=>$_POST['ConfigForm']['logo'],
 				'logo_right'=>$_POST['ConfigForm']['logo_right'],
 			);
-			$errors=false;
-			$uploader=CUploadedFile::getInstance($model,'logo');
-			if($uploader!=null)
-			{
-				$path=Yii::getPathOfAlias('webroot').'/images/'.$uploader->getName();
-				$upload=$uploader->saveAs($path);
-				if(!$errors)
-					$errors=!$upload;
-			}
-			$config['logo']=$uploader->getName();
-			$uploader=CUploadedFile::getInstance($model,'logo_right');
-			if($uploader!=null)
-			{
-				$path=Yii::getPathOfAlias('webroot').'/images/'.$uploader->getName();
-				$upload=$uploader->saveAs($path);
-				if(!$errors)
-					$errors=!$upload;
-			}
-			$config['logo_right']=$uploader->getName();
 			$str = base64_encode(serialize($config));
 			$errors=!file_put_contents($file, $str);
 			if(!$errors)

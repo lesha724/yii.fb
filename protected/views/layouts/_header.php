@@ -14,15 +14,15 @@
             <a class="brand" href="<?=Yii::app()->createUrl(array('site/index'))?>">
                 <small>
 					<?php
-						$logo='images/'.Yii::app()->params['logo'];
-						if(!empty($logo))
+						$logo=Yii::getPathOfAlias('webroot').Yii::app()->params['logo'];
+						if(!empty($logo)&&!empty(Yii::app()->params['logo']))
 						{
 							if(!file_exists($logo))
 							{
 								echo '<i class="icon-leaf"></i>';
 							}else
 							{
-								echo CHtml::image(Yii::app()->baseUrl.'/'.$logo, '',array('id'=>'logo-image'));
+								echo CHtml::image(Yii::app()->params['logo'], '',array('id'=>'logo-image'));
 							}
 						}else
 						{
@@ -45,10 +45,10 @@
                 </small>
             </a><!-- /.brand -->
 			<?php
-			$logo='images/'.Yii::app()->params['logo_right'];					
-			if(file_exists($logo))
+			$logo=Yii::getPathOfAlias('webroot').Yii::app()->params['logo_right'];					
+			if(file_exists($logo)&&!empty(Yii::app()->params['logo_right']))
 			{
-				echo CHtml::image(Yii::app()->baseUrl.'/'.$logo, '',array('id'=>'logo-image-right'));
+				echo CHtml::image(Yii::app()->params['logo_right'], '',array('id'=>'logo-image-right'));
 			}	
 			?>
             <ul class="nav ace-nav pull-right">

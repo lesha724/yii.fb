@@ -34,11 +34,23 @@
 			
 			<?php echo $form->textFieldRow($model, 'titleru'); ?>
 			
-			<?php 
-			echo $form->fileFieldRow($model,'logo'); ?>
-
-			<?php 
-			echo $form->fileFieldRow($model,'logo_right'); ?>
+			<?php echo $form->labelEx($model,'logo'); ?>
+			<?php $this->widget('ext.elFinder.ServerFileInput', array(
+					'model' => $model,
+					'attribute' => 'logo',
+					'connectorRoute' => '/site/connector',
+					)
+				);?></br>
+			<?php echo $form->error($model,'logo'); ?>
+			
+			<?php echo $form->labelEx($model,'logo_right'); ?>
+			<?php $this->widget('ext.elFinder.ServerFileInput', array(
+					'model' => $model,
+					'attribute' => 'logo_right',
+					'connectorRoute' => '/site/connector',
+					)
+				);?></br>
+			<?php echo $form->error($model,'logo_right'); ?>
 			
 			<?php echo $form->DropDownListRow($model, 'attendanceStatistic',array('0'=>tt('По электронному журналу'),'1'=>tt('По деканату'))); ?>
 			

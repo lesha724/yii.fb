@@ -26,7 +26,6 @@
         'dataProvider' => $provider,
         'filter' => $model,
         'type' => 'striped bordered',
-		'afterAjaxUpdate' => 'reinstallDatePicker',
         'ajaxUrl' => Yii::app()->createAbsoluteUrl('/admin/default/teachers'),
         'columns' => array(
             'p3',

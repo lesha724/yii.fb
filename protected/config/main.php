@@ -23,7 +23,7 @@ $config = array(
 		'application.components.*',
 		'application.extensions.bootstrap.*',
 		'application.extensions.behaviors.*',
-
+		'ext.elFinder.*',
 		'ext.EScriptBoost.*',
 		'ext.LangPick.*',
 	),

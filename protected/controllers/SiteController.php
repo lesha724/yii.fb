@@ -9,6 +9,23 @@ class SiteController extends Controller
 	 * This is the default 'index' action that is invoked
 	 * when an action is not explicitly requested by users.
 	 */
+	 
+	public function actions()
+    {
+        return array(
+            // captcha action renders the CAPTCHA image displayed on the contact page
+            'connector' => array(
+                'class' => 'ext.elFinder.ElFinderConnectorAction',
+                'settings' => array(
+                    'root' => Yii::getPathOfAlias('webroot') . '/images/uploads/',
+                    'URL' => Yii::app()->request->baseUrl . '/images/uploads/',
+                    'rootAlias' => 'Home',
+                    'mimeDetect' => 'none',
+                )
+            ),
+        );
+    }
+	
 	public function actionIndex()
 	{
 		// renders the view file 'protected/views/site/index.php'
