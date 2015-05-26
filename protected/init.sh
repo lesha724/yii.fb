@@ -2,6 +2,7 @@
 chmod 777 ./assets
 chmod 777 ./protected/runtime
 chmod 777 ./protected/runtime/cache
+chmod 777 ./protected/config/params.inc
 chmod 755 ./protected/yiic
 
 # Create local config file if not exits
