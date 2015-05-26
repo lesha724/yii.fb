@@ -11,7 +11,7 @@
     </script>
     <div class="navbar-inner">
         <div class="container-fluid">
-            <a class="brand" href="<?=Yii::app()->createUrl(array('site/index'))?>">
+            <a class="brand" href="<?=Yii::app()->createUrl('site/index')?>">
                 <small>
 					<?php
 						$logo=Yii::getPathOfAlias('webroot').Yii::app()->params['logo'];

@@ -257,6 +257,40 @@ SQL;
 
         return $semesters;
     }
+	
+	public function getSemestersForRating($gr1, $type)
+    {
+        if ($type == ProgressController::SPECIALITY)
+            $sql = <<<SQL
+                SELECT sem3,sem4,sem5,sem7,us3
+                FROM us
+                INNER JOIN sem on (us.us3 = sem.sem1)
+                INNER JOIN sg on (sem.sem2 = sg.sg1)
+                INNER JOIN gr on (sg.sg1 = gr.gr2)
+                WHERE sg1=:ID
+                GROUP BY sem3,sem4,sem5,sem7,us3
+SQL;
+        else
+            $sql = <<<SQL
+                SELECT sem3,sem4,sem5,sem7,us3
+                FROM us
+                INNER JOIN sem on (us.us3 = sem.sem1)
+                INNER JOIN sg on (sem.sem2 = sg.sg1)
+                INNER JOIN gr on (sg.sg1 = gr.gr2)
+                WHERE gr1=:ID
+                GROUP BY sem3,sem4,sem5,sem7,us3
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ID', $gr1);
+        $semesters = $command->queryAll();
+
+        foreach ($semesters as $key => $sem) {
+            $semesters[$key]['name'] = $sem['sem3'].' ('.$sem['sem4'].' '.tt('курс').')';
+        }
+
+        return $semesters;
+    }
 
     public function getSemestersForAttendanceStatistic($gr1)
     {

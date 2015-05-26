@@ -2,7 +2,10 @@
 
 class ProgressController extends Controller
 {
-    public function filters() {
+    const SPECIALITY = 1;
+    const GROUP = 2;
+	
+	public function filters() {
 
         return array(
             'accessControl',
@@ -38,14 +41,25 @@ class ProgressController extends Controller
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
             array('allow',
-                'actions' => array('attendanceStatistic')
+                'actions' => array('attendanceStatistic','rating')
             ),
             array('deny',
                 'users' => array('*'),
             ),
         );
     }
-
+	
+	public function actionRating()
+    {
+        $model = new FilterForm();
+        $model->scenario = 'rating-group';
+        if (isset($_REQUEST['FilterForm']))
+            $model->attributes=$_REQUEST['FilterForm'];
+        $this->render('rating', array(
+            'model' => $model,
+        ));
+    }
+	
     public function actionJournal()
     {
         $type = 0; // own disciplines

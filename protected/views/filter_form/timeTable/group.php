@@ -42,7 +42,7 @@ $form=$this->beginWidget('CActiveForm', array(
 
     $html .= '</fieldset>';
 
-    if ($showDateRangePicker) {
+    if (isset($showDateRangePicker)&&$showDateRangePicker) {
         $html .= '<fieldset style="margin-top:1%;">';
         $html .= $this->renderPartial('/timeTable/_date_interval', array(
             'date1' => $model->date1,
@@ -62,7 +62,7 @@ $form=$this->beginWidget('CActiveForm', array(
         $html .= '</fieldset>';
 
     }
-	if ($showCheckBoxCalendar) {
+	if (isset($showCheckBoxCalendar)&&$showCheckBoxCalendar) {
 		$text=tt('Календарь');
 		$checked='';
 		if($type==1)

@@ -183,6 +183,12 @@ $this->widget('zii.widgets.CMenu', array(
             'linkOptions'=> $_l,
             'itemOptions'=>_i('progress'),
             'items' => array(
+				array(
+                    'label'   => $_l2.tt('Рейтинг'),
+                    'url'     => _u('/progress/rating'),
+                    'active'  => $_c=='progress' && $_a=='rating',
+                    'visible' => _ch('progress', 'rating')
+                ),
                 array(
                     'label'   => $_l2.tt('Эл. журнал'),
                     'url'     => _u('/progress/journal'),
