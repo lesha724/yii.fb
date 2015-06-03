@@ -158,7 +158,7 @@ HTML;
 			'model'      => $model,
 			'timeTable'  => $timeTable,
 			'minMax'     => $minMax,
-			'maxLessons' => $maxLessons,
+			//'maxLessons' => $maxLessons,
 			'rz'         => $rz,
 		));
 

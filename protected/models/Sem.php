@@ -199,7 +199,7 @@ SQL;
         return array($years, $dataAttrs);
     }
 
-    public function getSemestersForThematicPlan($uo1)
+    public function getSemestersForThematicPlan1($uo1)
     {
         if (empty($uo1))
             return array();
@@ -249,6 +249,29 @@ SQL;
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':ID', $gr1);
+        $semesters = $command->queryAll();
+
+        foreach ($semesters as $key => $sem) {
+            $semesters[$key]['name'] = $sem['sem3'].' ('.$sem['sem4'].' '.tt('курс').')';
+        }
+
+        return $semesters;
+    }
+	
+	public function getSemestersForThematicPlan($sg1)
+    {
+            $sql = <<<SQL
+                SELECT sem3,sem4,sem5,sem7,us3
+                FROM us
+                INNER JOIN sem on (us.us3 = sem.sem1)
+                INNER JOIN sg on (sem.sem2 = sg.sg1)
+                INNER JOIN gr on (sg.sg1 = gr.gr2)
+                WHERE sg1=:ID
+                GROUP BY sem3,sem4,sem5,sem7,us3
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ID', $sg1);
         $semesters = $command->queryAll();
 
         foreach ($semesters as $key => $sem) {

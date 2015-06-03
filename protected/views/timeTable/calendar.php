@@ -26,43 +26,48 @@
 	$arr='[';
 	$i=0;
 	$groups='';
-	$r1=$timeTable[0]['r1'];
-	$r2=$timeTable[0]['r2'];
-	$r3=$timeTable[0]['r3'];
-	foreach($timeTable as $event)
-	{
-		if(isset($event['fio']))
-			$fio=$event['fio'];
-		else
-			$fio='';
-		if(($r1!=$event['r1'])||($r2!=$event['r2'])||($r3!=$event['r3']))
-		{		
-			if($arr=='[')
-				$arr.=$fullText;
-			else
-				$arr.=','.$fullText;
-			$groups='';
-			$events.=$text;
-			$r1=$event['r1'];
-			$r2=$event['r2'];
-			$r3=$event['r3'];
-			$i++;
-		}
-		if($groups=='')
-			$groups=$event['gr3'];
-		else
-			$groups.=','.$event['gr3'];
-		$text='{';
-		$text.="id:'".$i."',";
-		$color = SH::getLessonColor($event['tip']);
-		$class = SH::getClassColor($event['tip']);
-		$text.="title:' ".$event['d3']."[".$event['tip']."]\u000A ".$event['a2']." ".$fio."\u000A".$groups."',";
-		$text.="className:'event-num{$i} events event{$class}',";
-		$text.="start:'".date("Y-m-d",strtotime($event['r2']))." ".$event['rz2']."',";
-		$text.="end:'".date("Y-m-d",strtotime($event['r2']))." ".$event['rz3']."',";
-		$text.='},';
-		$fullText='["'.$event['d2'].'","'.$event['tip'].'","'.$fio.'","'.$event['a2'].'","'.date("Y-m-d",strtotime($event['r2'])).'","'.$event['rz2'].'","'.$event['rz3'].'","'.$groups.'"]';
-	}
+        $text='';
+        $fullText='';
+        if(!empty($timeTable))
+        {
+            //$r1=$timeTable[0]['R1'];
+            $r2=$timeTable[0]['r2'];
+            $r3=$timeTable[0]['r3'];
+            foreach($timeTable as $event)
+            {
+                    if(isset($event['fio']))
+                            $fio=$event['fio'];
+                    else
+                            $fio='';
+                    if(($r2!=$event['r2'])||($r3!=$event['r3']))
+                    {		
+                            if($arr=='[')
+                                    $arr.=$fullText;
+                            else
+                                    $arr.=','.$fullText;
+                            $groups='';
+                            $events.=$text;
+                            //$r1=$event['r1'];
+                            $r2=$event['r2'];
+                            $r3=$event['r3'];
+                            $i++;
+                    }
+                    if($groups=='')
+                            $groups=$event['gr3'];
+                    else
+                            $groups.=','.$event['gr3'];
+                    $text='{';
+                    $text.="id:'".$i."',";
+                    $color = SH::getLessonColor($event['tip']);
+                    $class = SH::getClassColor($event['tip']);
+                    $text.="title:' ".$event['d3']."[".$event['tip']."]\u000A ".$event['a2']." ".$fio."\u000A".$groups."',";
+                    $text.="className:'event-num{$i} events event{$class}',";
+                    $text.="start:'".date("Y-m-d",strtotime($event['r2']))." ".$event['rz2']."',";
+                    $text.="end:'".date("Y-m-d",strtotime($event['r2']))." ".$event['rz3']."',";
+                    $text.='},';
+                    $fullText='["'.$event['d2'].'","'.$event['tip'].'","'.$fio.'","'.$event['a2'].'","'.date("Y-m-d",strtotime($event['r2'])).'","'.$event['rz2'].'","'.$event['rz3'].'","'.$groups.'"]';
+            }
+        }
 	$events.=$text;
 	$arr.=$fullText;
 	$arr.=']';

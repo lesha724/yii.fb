@@ -109,32 +109,40 @@ class Ustem extends CActiveRecord
 		return parent::model($className);
 	}
 
-    public function getThemesBy(FilterForm $model)
+    public function getTheme($us1)
     {
         $sql=<<<SQL
-            SELECT * FROM TEM_PLAN(:US1, :CODE, :DURATION, :PD1);
+            select * from ustem where ustem2=:us1 order by ustem4
 SQL;
         $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':US1', $model->semester);
-        $command->bindValue(':CODE', 1);
-        $command->bindValue(':DURATION', $model->duration > 0 ? $model->duration : 1);
-        $command->bindValue(':PD1', $model->teacher);
+        $command->bindValue(':us1', $us1);
         $themes = $command->queryAll();
-
         return $themes;
     }
-
+	
     public function deleteThematicPlan($model)
     {
-        $sql=<<<SQL
-            SELECT * FROM TEM_PLAN(:US1, :CODE, :DURATION, :PD1);
+        if(!empty($model->type_lesson))
+        {
+            $sql=<<<SQL
+                DELETE  FROM ustem WHERE ustem2=:us1;
 SQL;
-        $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':US1', $model->semester);
-        $command->bindValue(':CODE', 2);
-        $command->bindValue(':DURATION', 0);
-        $command->bindValue(':PD1', 0);
-        $command->queryAll();
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':us1', $model->type_lesson);
+            $command->queryAll();
+        }
+    }
+    
+    public function recalculation($us1)
+    {
+        $themes=Ustem::model()->findAllByAttributes(array('ustem2'=>$us1),array('order'=>'ustem4 ASC,ustem1 ASC'));
+        foreach($themes as $key => $theme) {
+            if($theme->ustem4!=((int)$key+1))
+            {
+                $theme->ustem4=(int)$key+1;
+                $theme->save();
+            }
+        }
     }
 
 }

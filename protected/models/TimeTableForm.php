@@ -398,7 +398,7 @@ HTML;
 
     public function generateGroupTimeTable()
     {
-        $timeTable = Gr::getTimeTable($this->group, $this->date1, $this->date2);
+        $timeTable = Gr::getTimeTable($this->group, $this->date1, $this->date2,0);
         $minMax    = $this->getMinMaxLessons($timeTable);
 
         list($fullTimeTable, $maxLessons) = $this->fillTameTableForGroup($timeTable);

@@ -407,6 +407,7 @@ table.exam-session-table-1 {
 
 table.tr-h-25 tr td{
     height:25px !important;
+	  white-space: nowrap;
 }
 div.exam-session-div {
     overflow-x: scroll;

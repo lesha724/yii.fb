@@ -27,38 +27,26 @@ $form=$this->beginWidget('CActiveForm', array(
     $html .= $form->dropDownList($model, 'faculty', $faculties, $options);
     $html .= '</div>';
 
-    $specialities = CHtml::listData(Sp::model()->getSpecialitiesForFaculty($model->faculty), 'sp1', 'name');
+    $specialities = CHtml::listData(Pnsp::model()->getSpecialitiesFor($model->faculty), 'pnsp1', 'name');
     $html .= '<div class="span3 ace-select">';
     $html .= $form->label($model, 'speciality');
     $html .= $form->dropDownList($model, 'speciality', $specialities, $options);
     $html .= '</div>';
 
-    list($years_of_admission, $dataAttrs) = Sem::model()->getYearsForThematicPlan($model->speciality);
-    $years_of_admission = CHtml::listData($years_of_admission, 'sg1', 'name');
+    $courses = Sp::model()->getCoursesFor($model->faculty, $model->speciality);
     $html .= '<div class="span3 ace-select">';
-    $html .= $form->label($model, 'year');
-    $html .= $form->dropDownList($model, 'year', $years_of_admission, $options + array('options' => $dataAttrs));
-    $html .= '</div>';
-    $html .= '</fieldset>';
-
-    $html .= '<fieldset>';
-    list($disciplines, $dataAttrs) = D::model()->getDisciplineBySg1($model->year);
-    $disciplines = CHtml::listData($disciplines, 'uo1', 'd2');
-    $html .= '<div class="span3 ace-select">';
-    $html .= $form->label($model, 'discipline');
-    $html .= $form->dropDownList($model, 'discipline', $disciplines, $options + array('options' => $dataAttrs));
+    $html .= $form->label($model, 'course');
+    $html .= $form->dropDownList($model, 'course', $courses, $options);
     $html .= '</div>';
 
-    $semesters = CHtml::listData(Sem::model()->getSemestersForThematicPlan($model->discipline), 'us1', 'name');
+    $groups = CHtml::listData(Gr::model()->getGroupsForWorkPlan($model), 'sg1', 'name');
     $html .= '<div class="span3 ace-select">';
-    $html .= $form->label($model, 'semester');
-    $html .= $form->dropDownList($model, 'semester', $semesters, $options);
+    $html .= $form->label($model, 'group');
+    $html .= $form->dropDownList($model, 'group', $groups, $options);
     $html .= '</div>';
-
-    $html .= '</fieldset>';
 
     //if (! empty($model->semester)) {
-        $html .= '<fieldset style="margin-top:2%;">';
+        /*$html .= '<fieldset style="margin-top:2%;">';
 
         $html .= '<div class="span3 ace-select">';
         $html .= $form->label($model, 'duration');
@@ -85,7 +73,7 @@ HTML;
 
         $html .= $form->hiddenField($model, 'code');
 
-        $html .= '</fieldset>';
+        $html .= '</fieldset>';*/
     //}
     $html .= '</div>';
 

@@ -41,7 +41,7 @@ $options = array(
                 ));
                 $html .= $form->errorSummary($model, null, null, array('class' => 'alert alert-error'));
 
-                $chairId  = K::model()->getChairByUo1($d1);
+                /*$chairId  = K::model()->getChairByUo1($d1);
                 $teachers = P::model()->getTeachersForTimeTable($chairId, 'pd1');
                 $label = $form->label($model, 'groups', $options);
                 $input = '';
@@ -51,26 +51,25 @@ $options = array(
                     $input .= $group['name'].' '.Chtml::dropDownList('Nr['.$group['nr1'].']', $group['nr6'], $teachers, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => array('&nbsp;'))).'<br/>';
                     $model->nr18 = $group['nr18'];
                 }
+                $html .= sprintf($pattern, $label, $input);*/
+				$label = $form->label($model, 'ustem4', $options);
+                $input = $form->textField($model, 'ustem4');
                 $html .= sprintf($pattern, $label, $input);
-
+				
                 $label = $form->label($model, 'ustem3', $options);
                 $input = $form->textField($model, 'ustem3');
-                $html .= sprintf($pattern, $label, $input);
-
-                $label = $form->label($model, 'ustem4', $options);
-                $input = $form->textField($model, 'ustem4');
                 $html .= sprintf($pattern, $label, $input);
 
                 $label = $form->label($model, 'ustem5', $options);
                 $input = $form->textArea($model, 'ustem5');
                 $html .= sprintf($pattern, $label, $input);
 
-                $label = $form->label($model, 'nr18', $options);
+                /*$label = $form->label($model, 'nr18', $options);
                 $input = $form->textField($model, 'nr18');
-                $html .= sprintf($pattern, $label, $input);
+                $html .= sprintf($pattern, $label, $input);*/
 
                 $label = $form->label($model, 'ustem6', $options);
-                $input = $form->dropDownList($model, 'ustem6', array('Занятие', 'Субмодуль'));
+                $input = $form->dropDownList($model, 'ustem6', array(tt('Занятие'), tt('Субмодуль')));
                 $html .= sprintf($pattern, $label, $input);
 
 

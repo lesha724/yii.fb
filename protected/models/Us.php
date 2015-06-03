@@ -210,7 +210,35 @@ SQL;
 
         return $data;
     }
+	
+	public function getLessonsForThematicPlan($sem1, $d1)
+    {
+        if (empty($sem1) || empty($d1))
+            return array();
+		$sql = <<<SQL
+          select us4,us1
+			from us
+			   inner join sem on (us.us3 = sem.sem1)
+			where us2=:uo1 and sem1=:sem1 and us4>=1 and us4<=4
+			group by us4,us1
+SQL;
 
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':sem1', $sem1);
+        $command->bindValue(':uo1', $d1);
+        $lessons = $command->queryAll();
+		$type=array(
+			1=> tt('Лк'),
+			2=> tt('Пз'),
+			3=> tt('Сем'),
+			4=> tt('Лб')
+		);
+		foreach ($lessons as $key => $lesson) {
+            $lessons[$key]['type'] = $type[$lesson['us4']];
+        }
+        return $lessons;
+    }
+	
     private function getPrakFor($pd1, $year, $sem5)
     {
         $sql = <<<SQL

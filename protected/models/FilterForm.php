@@ -42,6 +42,8 @@ class FilterForm extends CFormModel
 	
 	public $type_rating = 0;
 	public $st_rating = 0;
+	
+	public $type_lesson = 0;
 	/**
 	 * Declares the validation rules.
 	 */
@@ -51,7 +53,7 @@ class FilterForm extends CFormModel
 			array('discipline, group', 'required', 'on' => 'journal, modules'),
 			array('module, chair,stream, discipline, group,statement', 'required', 'on' => 'module'),
 			array('discipline', 'required', 'on' => 'exam-session'),
-			array('filial, faculty, speciality, year, discipline, semester', 'required', 'on' => 'thematicPlan'),
+			array('filial, faculty, speciality, course, group, semester, discipline,type_lesson', 'required', 'on' => 'thematicPlan'),
             array('duration, teacher, code, course', 'safe', 'on' => 'thematicPlan'),
             array('chair, gostem1, nr1, d1', 'safe', 'on' => 'gostem'),
             array('sel_1, sel_2, course, extendedForm', 'safe', 'on' => 'documentReception'),
@@ -124,6 +126,7 @@ SQL;
 			'stream'=>tt('Поток'),
 			'statement'=>tt('Ведомость'),
 			'type_rating'=>tt('Рейтинг потока'),
+			'type_lesson'=>tt('Тип занять')
 		)+$arr;
 	}
 }

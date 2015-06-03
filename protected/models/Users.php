@@ -193,7 +193,7 @@ SQL;
         $string = Yii::app()->db->connectionString;
         $parts  = explode('=', $string);
 
-        $host     = $parts[1].'D';
+        $host     = trim($parts[1].'d');
         $login    = Yii::app()->db->username;
         $password = Yii::app()->db->password;
         $dbh      = ibase_connect($host, $login, $password);

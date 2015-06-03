@@ -29,7 +29,7 @@ JS
 	{
 		if(!empty($gr1))
 		{
-			$sem=Sem::getSemestrForGroup($gr1);
+			$sem=Sem::model()->getSemestrForGroup($gr1);
 			if (empty($sem[0]) || empty($sem[1]))
 			{
 			

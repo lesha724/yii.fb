@@ -218,7 +218,7 @@ SQL;
         $command->bindValue(':vvmp1', $vvmp1);
         $command->bindValue(':uo1', $uo1);
         $groups = $command->queryAll();
-		foreach($groups as $key => $group) {
+        foreach($groups as $key => $group) {
             $groups[$key]['name'] = $this->getGroupName($group['sem4'], $group);
         }
 		return $groups;
@@ -354,17 +354,17 @@ SQL;
     public static function getTimeTable($id, $date1, $date2,$type)
     {
         switch($type)
-		{
-			case 0:
-				$sql ='SELECT * FROM RAGR(:LANG, :ID, :DATE_1, :DATE_2) ORDER BY r2,r3';
-				break;
-			case 1:
-				$sql ='SELECT * FROM RAST(:LANG, :ID, :DATE_1, :DATE_2) ORDER BY r2,r3';
-				break;
-			case 2:
-				$sql ='SELECT * FROM RAPR(:ID, :DATE_1, :DATE_2) ORDER BY r2,r3';
-				break;
-		}
+        {
+                case 0:
+                        $sql ='SELECT * FROM RAGR(:LANG, :ID, :DATE_1, :DATE_2) ORDER BY r2,r3';
+                        break;
+                case 1:
+                        $sql ='SELECT * FROM RAST(:LANG, :ID, :DATE_1, :DATE_2) ORDER BY r2,r3';
+                        break;
+                case 2:
+                        $sql ='SELECT * FROM RAPR(:ID, :DATE_1, :DATE_2) ORDER BY r2,r3';
+                        break;
+        }
         $command = Yii::app()->db->createCommand($sql);
 		if($type!=2)
 			$command->bindValue(':LANG', 1);

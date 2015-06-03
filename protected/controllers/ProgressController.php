@@ -25,7 +25,7 @@ class ProgressController extends Controller
                     'insertMejModule',
                     'deleteMejModule',
                     'modules',
-					'module',
+                    'module',
                     'updateVvmp',
                     'insertVmpMark',
                     'updateStus',
@@ -33,10 +33,11 @@ class ProgressController extends Controller
                     'renderExtendedModule',
                     'thematicPlan',
                     'renderUstemTheme',
+                    'insertUstemTheme',
                     'deleteUstemTheme',
                     'examSession',
                     'insertStus',
-					'insertVmp'
+                    'insertVmp'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -49,7 +50,7 @@ class ProgressController extends Controller
         );
     }
 	
-	public function actionRating()
+    public function actionRating()
     {
         $model = new FilterForm();
         $model->scenario = 'rating-group';
@@ -494,7 +495,7 @@ SQL;
     {
         $model = new FilterForm();
         $model->scenario = 'thematicPlan';
-
+        
         if (isset($_REQUEST['FilterForm'])) {
             $model->attributes=$_REQUEST['FilterForm'];
 
@@ -502,7 +503,8 @@ SQL;
             if ($deleteThematicPlan)
                 Ustem::model()->deleteThematicPlan($model);
         }
-
+        if(!empty($model->type_lesson))
+            Ustem::model()->recalculation($model->type_lesson);
         $this->render('thematicPlan', array(
             'model' => $model
         ));
@@ -511,6 +513,36 @@ SQL;
     public function actionRenderUstemTheme()
     {
         if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $ustem1 = Yii::app()->request->getParam('ustem1', null);
+        $d1     = Yii::app()->request->getParam('d1', null);
+
+        if (empty($ustem1) || empty($d1))
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+
+        $model = Ustem::model()->findByAttributes(array('ustem1' => $ustem1));
+
+        if (isset($_REQUEST['Ustem'])) {
+
+            $model->attributes = $_REQUEST['Ustem'];
+            $model->save();
+
+        }
+
+        $html = $this->renderPartial('thematicPlan/_theme', array(
+            'model' => $model,
+            'd1'    => $d1
+        ), true);
+
+        $res = array(
+            'html' => $html,
+            'errors' => $model->getErrors(),
+        );
+
+        Yii::app()->end(CJSON::encode($res));
+		/*if (! Yii::app()->request->isAjaxRequest)
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $ustem1 = Yii::app()->request->getParam('ustem1', null);
@@ -552,6 +584,45 @@ SQL;
             'errors' => $model->getErrors(),
         );
 
+        Yii::app()->end(CJSON::encode($res));*/
+    }
+    
+    public function actionInsertUstemTheme()
+    {
+        /*if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');*/
+
+        $ustem2 = Yii::app()->request->getParam('us1', null);
+        $ustem3 = Yii::app()->request->getParam('ustem3', null);
+        $ustem4 = Yii::app()->request->getParam('ustem4', null);
+        $ustem5 = Yii::app()->request->getParam('ustem5', null);
+        $ustem6 = Yii::app()->request->getParam('ustem6', null);
+
+        if (empty($ustem2))
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $sql=<<<SQL
+                SELECT MAX(USTEM1) FROM USTEM
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        //$command->bindValue(':us1', $ustem2);
+        $ustem1 = (int)$command->queryScalar();
+        
+        $model = new Ustem;
+        $model->ustem1=$ustem1+1;
+        $model->ustem2=$ustem2;
+        $model->ustem3=$ustem3;
+        $model->ustem4=$ustem4;
+        $model->ustem5=$ustem5;
+        $model->ustem6=$ustem6;
+        $error=!$model->save();
+        
+        $res = array(
+            'error'=>$error,
+            'errors' => $model->getErrors(),
+            'ustem1'=>$model->ustem1
+        );
+
         Yii::app()->end(CJSON::encode($res));
     }
 
@@ -561,7 +632,7 @@ SQL;
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $ustem1 = Yii::app()->request->getParam('ustem1', null);
-
+        
         $deleted = (bool)Ustem::model()->deleteByPk($ustem1);
 
         $res = array(
