@@ -223,7 +223,53 @@ SQL;
         }
 		return $groups;
 	}
-	
+    
+    public function getGroupsForJournal($discipline)
+    {
+        if (empty($discipline))
+            return array();
+            $sql = <<<SQL
+                    
+                select us4,ug3,us1,  sem4,gr3,gr7,gr1,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28
+                from sem
+                  inner join us on (sem1 = us3)
+                  inner join uo on (us2 = uo1)
+                  inner join u on (uo22 = u1)
+                  inner join sg on (u2 = sg1)
+                  inner join (
+                     select nr1,nr2
+                     from pd
+                       inner join nr on (pd1 = nr6) or (pd1 = nr7) or (pd1 = nr8) or (pd1 = nr9)
+                       inner join us on (nr2 = us1)
+                     where pd1>0 and pd2=:P1
+                     group by nr1,nr2) on (us1 = nr2)
+                  inner join ug on (ug3 = nr1)
+                  inner join r on (nr1 = r1)
+                  inner join gr on (ug2 = gr1)
+                where sg4=0 and sem3=:YEAR and sem5=:SEM and uo3=:D1 and us4>=1 and us4<=4
+                group by us4,ug3,us1,  sem4,gr3,gr7,gr1,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
+        $command->bindValue(':D1', $discipline);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $groups = $command->queryAll();
+        $type=array(
+			1=> tt('Лк'),
+			2=> tt('Пз'),
+			3=> tt('Сем'),
+			4=> tt('Лб')
+		);
+        foreach($groups as $key => $group) {
+            $groups[$key]['name'] = $type[$group['us4']].', '.$this->getGroupName($group['sem4'], $group);
+            $groups[$key]['group'] = $group['us1'].'/'.$group['gr1'];
+        }
+
+        return $groups;
+    }
+    
     public function getGroupsFor($discipline, $type = null)
     {
         if (empty($discipline))

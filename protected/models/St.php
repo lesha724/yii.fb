@@ -563,27 +563,26 @@ SQL;
         ));
     }
 
-    public function getStudentsForJournal($gr1, $uo1)
+    public function getStudentsForJournal($gr1, $us1)
     {
         $sql = <<<SQL
        select st1,st2,st3,st4
-		FROM us
-		   INNER JOIN uo ON (us.us2 = uo.uo1)
-		   INNER JOIN nr ON (us.us1 = nr2)
-		   INNER JOIN ug ON (nr1 = ug3)
-		   inner join ucgn on (ug.ug4 = ucgn.ucgn1)
-		   inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
-		   inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
-		   inner join ucxg on (ucgn.ucgn1 = ucxg.ucxg2)
-		   INNER JOIN st ON (ucsn2 = st1)
-		 where ucgn2=:GR1 and uo1=:UO1 and ucxg3=0
-		 group by st1,st2,st3,st4
-		 order by st2 collate UNICODE, st3 collate UNICODE
+        from st
+           inner join ucsn on (st.st1 = ucsn.ucsn2)
+           inner join ucgns on (ucsn.ucsn1 = ucgns.ucgns1)
+           inner join ucgn on (ucgns.ucgns2 = ucgn.ucgn1)
+           inner join ug on (ucgn.ucgn1 = ug.ug4)
+           inner join nr on (ug.ug3 = nr.nr1)
+           inner join us on (nr.nr2 = us.us1)
+        where UCGNS5=:YEAR and UCGNS6=:SEM and us1=:US1 and ug2=:GR1
+        order by st2 collate UNICODE
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':GR1', $gr1);
-        $command->bindValue(':UO1', $uo1);
+        $command->bindValue(':US1', $us1);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
         $students = $command->queryAll();
 
         return $students;

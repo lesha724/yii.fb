@@ -252,6 +252,37 @@ SQL;
         return $disciplines;
 	
 	}
+        
+     public function getDisciplinesForJournal()
+    {
+
+        $sql = <<<SQL
+                select d1,d2
+                from u
+                  inner join uo on (u.u1 = uo.uo22)
+                  inner join d on (uo.uo3 = d.d1)
+                  inner join us on (uo.uo1 = us.us2)
+                  inner join (
+                    select nr2
+                    from pd
+                      inner join nr on (pd1 = nr6) or (pd1 = nr7) or (pd1 = nr8) or (pd1 = nr9)
+                    where pd1>0 and pd2=:P1
+                    group by nr2)             on (us1 = nr2)
+                  inner join sem on (us.us3 = sem.sem1)
+                  inner join sg on (u.u2 = sg.sg1)
+                where sg4=0 and sem3=:YEAR and sem5=:SEM
+                group by d1,d2
+                order by d2 collate UNICODE
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $disciplines = $command->queryAll();
+
+        return $disciplines;
+    }
+    
     public function getDisciplines($type = null)
     {
         $today = date('Y-m-d 00:00');

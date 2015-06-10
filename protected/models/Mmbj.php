@@ -116,6 +116,22 @@ class Mmbj extends CActiveRecord
 
         return $res;
     }
+    
+    public function getDataForJournal($us1)
+    {
+        $raws = Yii::app()->db->createCommand()
+                ->select('*')
+                ->from('mmbj')
+                ->where(array('in', 'mmbj2', $us1))
+                ->queryAll();
+
+        $res = array();
+        foreach ($raws as $raw) {
+            $res[ $raw['mmbj3'] ] = $raw;
+        };
+
+        return $res;
+    }
 
     public function getTotalFor($nr1)
     {
@@ -130,6 +146,22 @@ class Mmbj extends CActiveRecord
 
         return $res;
     }
-
+    
+    public function insertMark($mmbj2,$mmbj3,$field,$value)
+    {
+            if($field == 'mmbj4')
+                $sql = <<<SQL
+                    UPDATE or INSERT INTO mmbj (mmbj2,mmbj3,mmbj4) VALUES (:mmbj2,:mmbj3,:value) MATCHING (mmbj2,mmbj3);
+SQL;
+            elseif ($field == 'mmbj5')
+                $sql = <<<SQL
+                    UPDATE or INSERT INTO mmbj (mmbj2,mmbj3,mmbj5) VALUES (:mmbj2,:mmbj3,:value) MATCHING (mmbj2,mmbj3);
+SQL;
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':mmbj2', $mmbj2);
+            $command->bindValue(':mmbj3', $mmbj3);
+            $command->bindValue(':value', $value);
+            $command->execute();
+        }
 
 }

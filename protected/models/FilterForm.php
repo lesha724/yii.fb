@@ -49,24 +49,25 @@ class FilterForm extends CFormModel
 	 */
 	public function rules()
 	{
-		return array(
-			array('discipline, group', 'required', 'on' => 'journal, modules'),
-			array('module, chair,stream, discipline, group,statement', 'required', 'on' => 'module'),
-			array('discipline', 'required', 'on' => 'exam-session'),
-			array('filial, faculty, speciality, course, group, semester, discipline,type_lesson', 'required', 'on' => 'thematicPlan'),
-            array('duration, teacher, code, course', 'safe', 'on' => 'thematicPlan'),
-            array('chair, gostem1, nr1, d1', 'safe', 'on' => 'gostem'),
-            array('sel_1, sel_2, course, extendedForm', 'safe', 'on' => 'documentReception'),
-            array('sel_1, sel_2, course, adp1, cn1, speciality', 'safe', 'on' => 'rating'),
-            array('filial, teacher, chair, year, semester, extendedForm', 'required', 'on' => 'workLoad-teacher'),
-            array('filial, faculty, course, group, student, semester', 'required', 'on' => 'workPlan-student'),
-            array('filial, faculty, course, group, semester', 'required', 'on' => 'workPlan-group'),
-			array('filial, faculty, course, group, semester, type_rating, st_rating', 'required', 'on' => 'rating-group'),
-			array('filial, faculty, course, group', 'required', 'on' => 'list-group'),
-            array('filial, faculty, speciality, course, group, semester', 'required', 'on' => 'workPlan-speciality'),
-            array('filial, faculty, course, group, semester, month, student', 'required', 'on' => 'attendanceStatistic'),
-            array('filial, faculty, speciality, course, group, category, year', 'required', 'on' => 'employment'),
-		);
+            return array(
+                array('discipline, group', 'required', 'on' => 'journal, modules'),
+                array('type_lesson', 'required', 'on' => 'journal'),
+                array('module, chair,stream, discipline, group,statement', 'required', 'on' => 'module'),
+                array('discipline', 'required', 'on' => 'exam-session'),
+                array('filial, faculty, speciality, course, group, semester, discipline,type_lesson', 'required', 'on' => 'thematicPlan'),
+                array('duration, teacher, code, course', 'safe', 'on' => 'thematicPlan'),
+                array('chair, gostem1, nr1, d1', 'safe', 'on' => 'gostem'),
+                array('sel_1, sel_2, course, extendedForm', 'safe', 'on' => 'documentReception'),
+                array('sel_1, sel_2, course, adp1, cn1, speciality', 'safe', 'on' => 'rating'),
+                array('filial, teacher, chair, year, semester, extendedForm', 'required', 'on' => 'workLoad-teacher'),
+                array('filial, faculty, course, group, student, semester', 'required', 'on' => 'workPlan-student'),
+                array('filial, faculty, course, group, semester', 'required', 'on' => 'workPlan-group'),
+                array('filial, faculty, course, group, semester, type_rating, st_rating', 'required', 'on' => 'rating-group'),
+                array('filial, faculty, course, group', 'required', 'on' => 'list-group'),
+                array('filial, faculty, speciality, course, group, semester', 'required', 'on' => 'workPlan-speciality'),
+                array('filial, faculty, course, group, semester, month, student', 'required', 'on' => 'attendanceStatistic'),
+                array('filial, faculty, speciality, course, group, category, year', 'required', 'on' => 'employment'),
+            );
 	}
 
 	/**
@@ -78,7 +79,7 @@ class FilterForm extends CFormModel
 	{
         $sel_1 = $sel_2 = '';
         $isEntrance = $this->scenario == 'documentReception' ||
-                      $this->scenario == 'rating';
+        $this->scenario == 'rating';
         if ($isEntrance) {
             $sel_1 = tt('Направление подготовки');
             $sel_2 = tt('Форма обучения');

@@ -12,26 +12,23 @@ $(document).ready(function(){
 
         var params = {
             field : $that.data('name'),
-            date  : $that.parent().data('r2'),
-            nr1   : $that.parent().data('nr1'),
+            nom  : $that.parent().data('nom'),
+            us1   : $that.parent().data('us1'),
             st1   : st1,
             value : $that.is(':checkbox')
                         ? $that.is(':checked') ? 0 : 1
                         : parseFloat( $that.val().replace(',','.') )
         }
-
         var stName = $('table.journal_table_1 tr[data-st1='+st1+'] td:eq(1)').text();
         var index  = $that.parent().index();
-        var date   = $that.parents('table').find('th:eq('+index+')').html();
-        var title  = stName+'<br>'+date+'<br>';
+        var nom   = $that.parents('table').find('th:eq('+index+')').html();
+        var title  = stName+'<br>'+nom+'<br>';
         var $td    = $that.parent();
-
         if (isNaN(params.value)) {
             addGritter(title, tt.error, 'error')
             $td.addClass('error')
             return false;
         }
-
         // min max check
         // ps9 - portal settings
         if (ps9 == '1' && $that.parents('.journal_div_table2').length > 0) {
@@ -80,7 +77,8 @@ $(document).ready(function(){
         var params = {
             value : parseFloat( $that.val().replace(',','.') ),
             field : $that.data('name'),
-            mmbj1 : $that.data('mmbj1')
+            mmbj2 : $that.data('mmbj2'),
+            mmbj3 : $that.data('mmbj3'),
         }
 
         var $td = $that.parent();
@@ -148,15 +146,15 @@ function recalculateBothTotal(st1)
             total_2 += mark;
     });
 
-    if (ps20 == 1) {
+    /*if (ps20 == 1) {
         if (submodules.length > 0) {
-            total_1 = (total_1/submodules.length).toFixed(1);
-            if (typeof pbal[total_1] != "undefined"){
+            //total_1 = (total_1/submodules.length).toFixed(1);
+            total_1 = (total_1).toFixed(0);
+            /*if (typeof pbal[total_1] != "undefined"){
                 total_1 = pbal[total_1]; // convert mark
-            }
-        }
-    }
-
+            }*/
+        /*}
+    }*/
     $(table_3 +' td[data-total=1]').text(total_1);
     $(table_3 +' td[data-total=2]').text(total_1 + total_2);
 }

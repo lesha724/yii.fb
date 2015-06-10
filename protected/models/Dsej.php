@@ -119,4 +119,30 @@ class Dsej extends CActiveRecord
 
         return $res;
     }
+    
+    public function insertMark($dsej2,$dsej3,$field,$value)
+    {   
+        if($field == 'dsej4')
+            $sql = <<<SQL
+                UPDATE or INSERT INTO dsej (dsej2,dsej3,dsej4) VALUES (:dsej2,:dsej3,:value) MATCHING (dsej2,dsej3);
+SQL;
+        elseif ($field == 'dsej5')
+               $sql = <<<SQL
+                UPDATE or INSERT INTO dsej (dsej2,dsej3,dsej5) VALUES (:dsej2,:dsej3,:value) MATCHING (dsej2,dsej3);
+SQL;
+        elseif ($field == 'dsej6')
+               $sql = <<<SQL
+                UPDATE or INSERT INTO dsej (dsej2,dsej3,dsej6) VALUES (:dsej2,:dsej3,:value) MATCHING (dsej2,dsej3);
+SQL;
+        elseif ($field == 'dsej7')
+               $sql = <<<SQL
+                UPDATE or INSERT INTO dsej (dsej2,dsej3,dsej7) VALUES (:dsej2,:dsej3,:value) MATCHING (dsej2,dsej3);
+SQL;
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':dsej2', $dsej2);
+            $command->bindValue(':dsej3', $dsej3);
+            //$command->bindValue(':field', $field);
+            $command->bindValue(':value', $value);
+            $command->execute();
+        }
 }

@@ -238,7 +238,7 @@ SQL;
         }
         return $lessons;
     }
-	
+    
     private function getPrakFor($pd1, $year, $sem5)
     {
         $sql = <<<SQL

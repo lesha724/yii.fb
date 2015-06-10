@@ -1,9 +1,8 @@
 <?php
-function table3Tr($column, $marks)
+function table3Tr($column, $marks,$us1)
 {
-    $nr1 = $marks['dsej3'];
     $tr= <<<HTML
-<td data-nr1="{$nr1}"><input value="%s" data-name="%s" maxlength="3"></td>
+<td data-us1="{$us1}"><input value="%s" data-name="%s" maxlength="3"></td>
 HTML;
 
     list($field, $name) = $column;
@@ -79,7 +78,7 @@ HTML;
     $showTotal   = !empty($columns);
 
     $th  = generateTotal1Header($ps20);
-    $th2 = table3Th2($nr1, $ps9);
+    $th2 = table3Th2($us1, $ps9);
 
     foreach($columns as $column) {
         list($field, $name) = $column;
@@ -95,14 +94,14 @@ HTML;
 
         $st1 = $st['st1'];
 
-        $marks = Dsej::model()->getMarksForStudent($st['st1'], $nr1);
+        $marks = Dsej::model()->getMarksForStudent($st['st1'], $us1);
         $total_2[$st1] = $total_1[$st1] + countDSEJTotal($marks, $columns);
 
         $tr .= '<tr data-st1="'.$st1.'">';
 
             $tr .= '<td data-total=1 colspan="2">'.$total_1[$st1].'</td>'; // total 1
             foreach($columns as $column) {
-                $tr .= table3Tr($column, $marks);
+                $tr .= table3Tr($column, $marks, $us1);
             }
             $tr .= '<td data-total=2>'.$total_2[$st1].'</td>'; // total 2
 

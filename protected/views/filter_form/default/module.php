@@ -12,7 +12,7 @@ JS
         'id'=>'filter-form',
 		'htmlOptions' => array('class' => 'form-inline')
     ));
-		$perm = P::getPerm();
+		//$perm = P::getPerm();
 		$chairs = CHtml::listData(Pd::model()->getChairs($type), 'pd4', 'k2');
 		$streams = CHtml::listData(Sp::model()->getStreams(Yii::app()->session['year'],$model->chair), 'sg1',function($data){return $data['sp2'].'('.$data['sg3'].' '.$data['sem4'].'к.)';} );
 		$disciplines = CHtml::listData(D::model()->getDisciplinesByStream($model->stream,$model->chair), 'uo1', 'd2');

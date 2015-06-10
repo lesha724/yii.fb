@@ -26,7 +26,7 @@ JS
 <?php
     $this->renderPartial('/filter_form/default/year_sem');
 
-    $this->renderPartial('/filter_form/default/discipline_group', array(
+    $this->renderPartial('/filter_form/default/discipline_group_type', array(
         'model' => $model,
         'type'  => $type
     ));
