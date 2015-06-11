@@ -22,6 +22,7 @@ $(document).ready(function(){
 		var disp=$(this).data('disp');
 		$('#myModal .modal-header h3').val(disp);
 		$('#myModal .modal-body p').val(content);
+		$('#myModal').modal('show');
     });
 
     $('input[type=button][name=vibor_discipline]').click(function(){

@@ -244,6 +244,7 @@ $html = <<<HTML
 	</div>
 HTML;
 
+echo $html;
 
 echo CHtml::button(tt('Отмена'), array('id' => 'cancelSubscription', 'class' => 'btn btn-small btn-danger'));
 
