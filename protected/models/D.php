@@ -537,7 +537,9 @@ SQL;
      public function getAd($d1)
     {
         $sql= <<<SQL
-                SELECT AD4 FROM AD WHERE AD2=:d1
+                SELECT ad4,d2 FROM AD
+					JOIN d ON d1=ad2
+				WHERE ad2=:d1
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':d1', $d1);
@@ -545,9 +547,9 @@ SQL;
         if($ad==null)
             return '';
         else {
-			return CHtml::link('<i class="icon-file"></i>','#', array('data-toggle'=>"popover", 'data-placement'=>"bottom",'data-content'=>$ad['ad4'],'class'=>'disp-ad','style'=>'margin-left:10px'));
+			return CHtml::link('<i class="icon-file"></i>','#', array('data-disp'=>$ad['d2'],'data-content'=>$ad['ad4'],'class'=>'disp-ad','style'=>'margin-left:10px'));
 	
-            //return '<a class="disp-ad" data-rel="popover" data-placement="bottom" data-content="'.$ad['ad4'].'"><i class="icon-file"></i></a>';
+            //return '<a class="disp-ad" data-toggle="popover" data-placement="bottom" data-content="'.$ad['ad4'].'"><i class="icon-file"></i></a>';
         }
     }
 
