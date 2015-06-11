@@ -87,6 +87,10 @@ table.journal_table tr {
     height:40px;
 }
 
+table.journal_table thead tr {
+    height:56px;
+}
+
 table.journal_table td {
     padding: 4px;
     vertical-align: middle;
@@ -139,7 +143,7 @@ div.journal_div_table3 {
     display: none;
 }
 tr.min-max {
-    height: 28px !important;
+    height: 29px !important;
 
 }
 
@@ -154,7 +158,7 @@ tr.min-max th {
 }
 
 .journal_table_1 thead tr {
-    height: 68px;
+    height: 85px!Important;
 }
 
 table.modules_table_2 td{

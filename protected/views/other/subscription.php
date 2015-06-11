@@ -213,7 +213,7 @@ HTML;
                 $value     = $discipline['ucgn1_kod'];
                 $controls .= '<div class="subscription-disc">'.
                                 CHtml::checkBox('disciplines[]', $isChecked, array('value' => $value)).
-                                '<span>'.$discipline['d2'].'</span>'.
+                                '<span>'.$discipline['d2'].' '.D::model()->getAd($discipline['d1']).'</span>'.
                              '</div>';
             }
 
@@ -252,3 +252,9 @@ if (! empty($disciplines)) : ?>
         </tbody>
     </table>
 <?php endif;
+
+Yii::app()->clientScript->registerScript('popover', "
+    $(function () {
+        $('[data-toggle=\"popover\"]').popover()
+      })
+",CClientScript::POS_READY);

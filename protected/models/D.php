@@ -533,6 +533,21 @@ SQL;
 
         return $disciplines;
     }
+    
+     public function getAd($d1)
+    {
+        $sql= <<<SQL
+                SELECT AD4 FROM AD WHERE AD2=:d1
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':d1', $d1);
+        $ad = $command->queryRow();
+        if($ad==null)
+            return '';
+        else {
+            return '<i class="icon-file disp-ad" data-rel="popover" data-placement="bottom" data-content="'.$ad['ad4'].'"></i>';
+        }
+    }
 
     public function getDiplName($dipn6)
     {
