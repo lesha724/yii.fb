@@ -253,8 +253,8 @@ if (! empty($disciplines)) : ?>
     </table>
 <?php endif;
 
-Yii::app()->clientScript->registerScript('popover', "
+/*Yii::app()->clientScript->registerScript('popover', "
     $(function () {
-        $('[data-toggle=\"popover\"]').popover()
+        jQuery('body').popover({'.disp-ad':'a[rel=popover]'});
       })
-",CClientScript::POS_READY);
+",CClientScript::POS_END);*/

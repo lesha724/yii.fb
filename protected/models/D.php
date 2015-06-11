@@ -545,7 +545,9 @@ SQL;
         if($ad==null)
             return '';
         else {
-            return '<a class="disp-ad" data-rel="popover" data-placement="bottom" data-content="'.$ad['ad4'].'"><i class="icon-file"></i></a>';
+			return CHtml::link('<i class="icon-file"></i>','#', array('data-toggle'=>"popover", 'data-placement'=>"bottom",'data-content'=>tt("Отобразить файл"),'class'=>'disp-ad','style'=>'margin-left:10px'));
+	
+            //return '<a class="disp-ad" data-rel="popover" data-placement="bottom" data-content="'.$ad['ad4'].'"><i class="icon-file"></i></a>';
         }
     }
 
