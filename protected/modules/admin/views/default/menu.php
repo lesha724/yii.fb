@@ -62,6 +62,13 @@
                         'thematicPlan' => 'Тематический план',
                     ),
                 ),
+				array(
+                    'name'       => 'Список',
+                    'controller' => 'list',
+                    'items' => array(
+                        'group'      => 'Группы',
+                    ),
+                ),
                 array(
                     'name'       => 'Док.-оборот',
                     'controller' => 'docs',
