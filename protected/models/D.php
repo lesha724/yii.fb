@@ -545,7 +545,7 @@ SQL;
         if($ad==null)
             return '';
         else {
-            return '<a class="disp-ad" data-rel="popover" data-placement="bottom" data-content="'.$ad['ad4'].'"><i class="icon-file"/></a>';
+            return '<a class="disp-ad" data-rel="popover" data-placement="bottom" data-content="'.$ad['ad4'].'"><i class="icon-file"></i></a>';
         }
     }
 
