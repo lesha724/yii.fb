@@ -20,11 +20,8 @@ $(document).ready(function(){
 	$('.disp-ad').click(function(){
 		var content=$(this).data('content');
 		var disp=$(this).data('disp');
-		alert(disp);
-		alert(content);
-		
-		$('#myModal .modal-header h3').val(disp);
-		$('#myModal .modal-body p').val(content);
+		$('#myModal .modal-header h3').html(disp);
+		$('#myModal .modal-body p').html(content);
 		$('#myModal').modal('show');
     });
 
