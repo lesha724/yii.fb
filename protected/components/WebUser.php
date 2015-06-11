@@ -37,7 +37,7 @@ class WebUser extends CWebUser
 
     public function getIsStd()
     {
-        //return !$this->isGuest && $this->model->isStudent;
+        return !$this->isGuest && $this->model->isStudent;
     }
 
     public function getDbModel()
