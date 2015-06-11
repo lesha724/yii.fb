@@ -22,6 +22,7 @@ $(document).ready(function(){
 		var disp=$(this).data('disp');
 		alert(disp);
 		alert(content);
+		
 		$('#myModal .modal-header h3').val(disp);
 		$('#myModal .modal-body p').val(content);
 		$('#myModal').modal('show');
