@@ -149,7 +149,8 @@ HTML;
     }
     else
         $pattern = <<<HTML
-<th colspan="2">%s</th>
+	<th colspan="2"><i class="icon-hand-right icon-animated-hand-pointer blue"></i>
+    <span data-rel="popover" data-placement="top" data-content="{$date['tema']}" class="green">%s</span></th>
 HTML;
      
  }
