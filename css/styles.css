@@ -15,6 +15,9 @@
 	position:absolute;
 	right:140px;
 }
+.exam-session-div table>tbody>tr>td>input{
+	line-height:15px;
+}
 #info-event{
 	z-index:1100;
 }
