@@ -884,7 +884,7 @@ SQL;
     {
         extract($params);
 
-        $sql = <<<SQL
+        /*$sql = <<<SQL
             select stus.*, st1,st2,st3,st4
             from gr
             inner join std on (gr.gr1 = std.std3)
@@ -892,6 +892,16 @@ SQL;
             inner join stus on (st.st1 = stus.stus1)
             where gr1=:GR1 and std7 is null and std11 in (0,5,6,8) and stus18 = :STUS18 AND stus19 = :STUS19 AND stus20 = :STUS20 AND stus21 = :STUS21
             order by st2 collate UNICODE
+SQL;*/
+		$sql = <<<SQL
+			select stus.stus0,stus.stus1,stus.stus3,stus.stus6,stus.stus7,stus.stus19, st1,st2,st3,st4
+			from ucgn
+			   inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
+			   inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
+			   inner join st on (ucsn.ucsn2 = st.st1)
+			   inner join stus on (st.st1 = stus.stus1)
+			where ucgn2=:GR1 and stus18 = :STUS18 AND stus19 =:STUS19 AND stus20 = :STUS20 AND stus21 = :STUS21 
+			GROUP BY stus.stus0,stus.stus1,stus.stus3,stus.stus6,stus.stus7,stus.stus19,st1,st2,st3,st4 order by st2 collate UNICODE
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':GR1', $gr1);

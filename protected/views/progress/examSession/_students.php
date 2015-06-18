@@ -7,7 +7,7 @@ HTML;
     $table = <<<HTML
 <table class="table table-striped table-bordered table-hover small-rows exam-session-table-1 tr-h-25" >
     <thead>
-        <tr style="height:70px">
+        <tr style="height:73px">
             <th class="center">№</th>
             <th>{$columnName}</th>
         </tr>
