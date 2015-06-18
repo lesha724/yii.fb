@@ -95,19 +95,20 @@ class ProgressController extends Controller
 
     public function actionInsertStegMark()
     {
-        if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        /*if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');*/
 
         $stegn1 = Yii::app()->request->getParam('st1', null);
         $stegn2 = Yii::app()->request->getParam('us1', null);
         $stegn3 = Yii::app()->request->getParam('nom', null);
+		$stegn9 = Yii::app()->request->getParam('date', null);
         $field = Yii::app()->request->getParam('field', null);
         $value = Yii::app()->request->getParam('value', null);
 
-        if($stegn1==null || $stegn2==null || $stegn3==null || $field==null || $value==null)
+        if($stegn1==null || $stegn2==null || $stegn3==null || $field==null || $value==null|| $stegn9==null)
             $error = true;
         else {
-            Stegn::model()->insertMark($stegn1,$stegn2,$stegn3,$field,$value);
+            Stegn::model()->insertMark($stegn1,$stegn2,$stegn3,$field,$value,$stegn9);
             $error = false;
         }
         Yii::app()->end(CJSON::encode(array('error' => $error)));

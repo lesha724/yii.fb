@@ -137,11 +137,11 @@ class Stegn extends CActiveRecord
             return $res;
         }
         
-        public function insertMark($stegn1,$stegn2,$stegn3,$field,$value){
+        public function insertMark($stegn1,$stegn2,$stegn3,$field,$value,$stegn9){
             if ($field == 'stegn4')
             {
                 $sql = <<<SQL
-                    UPDATE or INSERT INTO stegn (stegn1,stegn2,stegn3,stegn4,stegn7,stegn8) VALUES (:st1,:us1,:nom,:value,current_timestamp,:p1) MATCHING (stegn1,stegn2,stegn3);
+                    UPDATE or INSERT INTO stegn (stegn1,stegn2,stegn3,stegn4,stegn7,stegn8,stegn9) VALUES (:st1,:us1,:nom,:value,current_timestamp,:p1,:stegn9) MATCHING (stegn1,stegn2,stegn3);
 SQL;
                 if($value==0)
                 {
@@ -153,17 +153,18 @@ SQL;
             }
             elseif ($field == 'stegn5')
                 $sql = <<<SQL
-                    UPDATE or INSERT INTO stegn (stegn1,stegn2,stegn3,stegn5,stegn7,stegn8) VALUES (:st1,:us1,:nom,:value,current_timestamp,:p1) MATCHING (stegn1,stegn2,stegn3);
+                    UPDATE or INSERT INTO stegn (stegn1,stegn2,stegn3,stegn5,stegn7,stegn8,stegn9) VALUES (:st1,:us1,:nom,:value,current_timestamp,:p1,:stegn9) MATCHING (stegn1,stegn2,stegn3);
 SQL;
             elseif ($field == 'stegn6')
                 $sql = <<<SQL
-                    UPDATE or INSERT INTO stegn (stegn1,stegn2,stegn3,stegn6,stegn7,stegn8) VALUES (:st1,:us1,:nom,:value,current_timestamp,:p1) MATCHING (stegn1,stegn2,stegn3);
+                    UPDATE or INSERT INTO stegn (stegn1,stegn2,stegn3,stegn6,stegn7,stegn8,stegn9) VALUES (:st1,:us1,:nom,:value,current_timestamp,:p1,:stegn9) MATCHING (stegn1,stegn2,stegn3);
 SQL;
             $command = Yii::app()->db->createCommand($sql);
             $command->bindValue(':st1', $stegn1);
             $command->bindValue(':us1', $stegn2);
             $command->bindValue(':nom', $stegn3);
             $command->bindValue(':value', $value);
+			$command->bindValue(':stegn9', $stegn9);
             $command->bindValue(':p1', Yii::app()->user->dbModel->p1);
             $command->execute();
         }

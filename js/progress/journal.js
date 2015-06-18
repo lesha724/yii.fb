@@ -15,6 +15,7 @@ $(document).ready(function(){
             nom  : $that.parent().data('nom'),
             us1   : $that.parent().data('us1'),
             st1   : st1,
+			date:$that.parent().data('date'),
             value : $that.is(':checkbox')
                         ? $that.is(':checked') ? 0 : 1
                         : parseFloat( $that.val().replace(',','.') )
@@ -67,6 +68,27 @@ $(document).ready(function(){
             }
 
             $spinner1.hide();
+			if ($that.is(':checkbox'))
+			{
+				if ($that.is(':checked'))
+				{
+					$td.find(':text').attr('disabled','disabled');
+				}else
+				{
+					$td.find(':text').removeAttr('disabled');
+				}
+			}
+			
+			if (!$that.is(':checkbox'))
+			{
+				if(parseFloat( $that.val().replace(',','.') )>0)
+				{
+					$that.removeClass('not-value');
+				}else
+				{
+					$that.addClass('not-value');
+				}
+			}
         }, 'json')
     });
 

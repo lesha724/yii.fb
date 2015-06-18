@@ -9,6 +9,7 @@ function table2Tr($date,$us1,$gr1,$st1,$marks)
     $r2  = $date['r2'];
     $ps2 = PortalSettings::model()->getSettingFor(27);
     $nom=$date['nom'];
+	$date_lesson=$date['r2'];
     $disabled = null;
     $type=$date['priz'];
 
@@ -19,14 +20,6 @@ function table2Tr($date,$us1,$gr1,$st1,$marks)
         if ($diff > $ps2)
             $disabled = 'disabled="disabled"';
     }
-
-    $pattern= <<<HTML
-    <td colspan="2" data-nom="{$nom}" data-priz="{$type}" data-us1="{$us1}" data-gr1="{$gr1}">
-        <input type="checkbox" %s data-name="stegn4" {$disabled}>
-        <input value="%s" maxlength="3" data-name="stegn5" {$disabled}>
-        <input value="%s" maxlength="3" data-name="stegn6" {$disabled}>
-    </td>
-HTML;
     $key = $us1.'/'.$date['nom']; // 0 - r3
 
     $stegn4 = isset($marks[$key]) && $marks[$key]['stegn4'] != 0
@@ -40,6 +33,27 @@ HTML;
     $stegn6 = isset($marks[$key]) && $marks[$key]['stegn6'] != 0
                 ? round($marks[$key]['stegn6'], 1)
                 : '';
+	$disabled_input=$disabled;
+	$class_1='';
+	$class_2='';
+	if($stegn4=='checked')
+	{
+		$disabled_input = 'disabled="disabled"';
+	}
+	if($disabled != 'disabled="disabled"')
+	{
+		if($stegn5=='')
+			$class_1 = 'class="not-value"';
+		if($stegn6=='')
+			$class_2 = 'class="not-value"';
+	}
+	$pattern= <<<HTML
+    <td colspan="2" data-nom="{$nom}" data-priz="{$type}" data-us1="{$us1}"  data-date="{$date_lesson}" data-gr1="{$gr1}">
+        <input type="checkbox" %s data-name="stegn4" {$disabled}>
+        <input value="%s" {$class_1} maxlength="3" data-name="stegn5" {$disabled_input}>
+        <input value="%s" {$class_2} maxlength="3" data-name="stegn6" {$disabled_input}>
+    </td>
+HTML;
 
     return sprintf($pattern, $stegn4, $stegn5, $stegn6);
 }
