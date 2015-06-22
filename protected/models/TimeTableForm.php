@@ -33,10 +33,10 @@ class TimeTableForm extends CFormModel
             array('chair, teacher', 'numerical', 'allowEmpty' => false, 'on' => 'teacher'),
 			array('chair, teacher', 'required', 'on' => 'teacher'),
 
-            array('faculty, course, group', 'numerical', 'allowEmpty' => false, 'on' => 'group, student'),
-            array('faculty, course, group', 'required', 'on' => 'group, student'),
+            array('faculty, course, group', 'numerical', 'allowEmpty' => false, 'on' => 'group, student,omissions'),
+            array('faculty, course, group', 'required', 'on' => 'group, student,omissions'),
 
-            array('student', 'required', 'on' => 'student'),
+            array('student', 'required', 'on' => 'student,omissions'),
 
             array('housing, classroom', 'required', 'on' => 'classroom'),
 

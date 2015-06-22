@@ -214,6 +214,12 @@ $this->widget('zii.widgets.CMenu', array(
                     'active'  => $_c=='progress' && $_a=='attendanceStatistic'
                 ),
                 array(
+                    'label'   => $_l2.tt('Уважительные пропуски'),
+                    'url'     => _u('/progress/omissions'),
+                    'visible' => _ch('progress', 'omissions'),
+                    'active'  => $_c=='progress' && $_a=='omissions'
+                ),
+                array(
                     'label'   => $_l2.tt('Экз. сессия'),
                     'url'     => _u('/progress/examSession'),
                     'visible' => _ch('progress', 'examSession') && $isTch,

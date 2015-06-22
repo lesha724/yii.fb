@@ -37,7 +37,11 @@ class ProgressController extends Controller
                     'deleteUstemTheme',
                     'examSession',
                     'insertStus',
-                    'insertVmp'
+                    'insertVmp',
+                    'omissions',
+                    'searchStudent',
+                    'insertOmissionsStegMark',
+                    'updateOmissionsStegMark'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -49,7 +53,110 @@ class ProgressController extends Controller
             ),
         );
     }
-	
+    
+    public function actionOmissions()
+    {
+        $model = new TimeTableForm;
+        $model->scenario = 'omissions';
+		
+        if (isset($_REQUEST['TimeTableForm']))
+            $model->attributes=$_REQUEST['TimeTableForm'];
+        $model->date1 = Yii::app()->session['date1'];
+        $model->date2 = Yii::app()->session['date2'];
+        $student = new St;
+        $student->unsetAttributes();
+        $this->render('omissions', array(
+            'model'      => $model,
+            'student'	 =>$student,
+        ));
+    }
+    
+    public function actionUpdateOmissionsStegMark()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $stegn1 = Yii::app()->request->getParam('stegn1', null);
+        $date1 = Yii::app()->request->getParam('date1', null);
+        $date2 = Yii::app()->request->getParam('date2', null);
+        $check = Yii::app()->request->getParam('check', null);
+        $number = Yii::app()->request->getParam('number', null);
+        $type = Yii::app()->request->getParam('type_omissions', null);
+
+        if($stegn1==null || $date1==null || $date2==null || $check==null || $type==null)
+            $error = true;
+        else {
+            
+            $attr = array(
+                'stegn4' => $check,
+                'stegn10' => $type,
+                'stegn11' => $number,
+            );
+            $criteria = new CDbCriteria();
+            $criteria->compare('stegn1', $stegn1);
+            
+            $criteria->compare('stegn9','>='.$date1);
+            $criteria->compare('stegn9', '<='.$date2);
+
+            $count = Stegn::model()->updateAll($attr,$criteria);
+            if ($count==-1)
+                $error = true;
+            else
+                $error = false;
+        }
+        Yii::app()->end(CJSON::encode(array('error' => $error)));
+    }
+    
+    public function actionInsertOmissionsStegMark()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $stegn1 = Yii::app()->request->getParam('stegn1', null);
+        $stegn2 = Yii::app()->request->getParam('stegn2', null);
+        $stegn3 = Yii::app()->request->getParam('stegn3', null);
+        $field = Yii::app()->request->getParam('field', null);
+        $value = Yii::app()->request->getParam('value', null);
+
+        if($stegn1==null || $stegn2==null || $stegn3==null || $field==null || $value==null)
+            $error = true;
+        else {
+            $whiteList = array(
+                'stegn4', 'stegn10','stegn11',
+            );
+            if (in_array($field, $whiteList))
+                $attr = array(
+                    $field => $value
+                );
+            else
+               throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.'); 
+
+            $criteria = new CDbCriteria();
+            $criteria->compare('stegn1', $stegn1);
+            $criteria->compare('stegn2', $stegn2);
+            $criteria->compare('stegn3', $stegn3);
+
+            $model = Stegn::model()->find($criteria);
+            if (empty($model))
+                $error = true;
+            else
+                $error = !$model->saveAttributes($attr);
+        }
+        Yii::app()->end(CJSON::encode(array('error' => $error)));
+    }
+    
+    public function actionSearchStudent()
+    {
+        $model = new St;
+        $model->unsetAttributes();
+        if (isset($_REQUEST['St']))
+            $model->attributes = $_REQUEST['St'];
+		
+        $this->render('omissions/search_student', array(
+            'model' => $model,
+        ));
+    }
+    
     public function actionRating()
     {
         $model = new FilterForm();
@@ -95,8 +202,8 @@ class ProgressController extends Controller
 
     public function actionInsertStegMark()
     {
-        /*if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');*/
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $stegn1 = Yii::app()->request->getParam('st1', null);
         $stegn2 = Yii::app()->request->getParam('us1', null);

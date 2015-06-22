@@ -119,6 +119,28 @@ class Stegn extends CActiveRecord
 		return parent::model($className);
 	}
         
+        public function getOmissions($st1,$date1,$date2)
+        {
+            if (empty($st1) || empty($date1) || empty($date2))
+            return array();
+
+            $sql=<<<SQL
+                SELECT stegn1,stegn2,stegn3,stegn4,stegn9,stegn10,stegn11,d2,us4
+                FROM stegn
+                    INNER JOIN us on (stegn.stegn2 = us.us1)
+                    INNER JOIN uo on (us.us2 = uo.uo1)
+                    INNER JOIN d on (d.d1 = uo.uo3)
+                WHERE stegn1=:STEG1 and stegn9 >= :DATE1 and stegn9 <= :DATE2 and stegn4!=0
+SQL;
+
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':STEG1', $st1);
+            $command->bindValue(':DATE1', $date1);
+            $command->bindValue(':DATE2', $date2);
+            $rows = $command->queryAll();
+            return $rows;
+        }
+        
         public function getMarksForStudent($st1, $us1)
         {
             $raws = Yii::app()->db->createCommand()
