@@ -104,7 +104,7 @@ if (! empty($firstDay) && !empty($lastDay)) :
                 $html = '';
                 foreach ($students as $student) {
 
-                    $attendance = Steg::model()->getAttendanceStatisticFor($student['st1'], $firstDay, $lastDay, $monthStatistic);
+                    $attendance = Stegn::model()->getAttendanceStatisticFor($student['st1'], $firstDay, $lastDay, $monthStatistic);
 
                     $html .= '<tr>';
                     foreach ($columns as $start => $name) {

@@ -592,18 +592,13 @@ SQL;
     {
         $sql = <<<SQL
         select 
-			p.p3,
-			p.p4,
-			p.p5,
-			d.d2,us4,steg3,steg4,steg6
+                d.d2,us4,stegn9,stegn3,stegn4
 		from us
-		   inner join nr on (us.us1 = nr.nr2)
-		   inner join steg on (nr.nr1 = steg.steg2)
-		   inner join pd on (nr.nr6 = pd.pd1)
-		   inner join p on (pd.pd2 = p.p1)
+		   inner join stegn on (stegn.stegn2 = us.us1)
 		   inner join uo on (us.us2 = uo.uo1)
 		   inner join d on (uo.uo3 = d.d1)
-		where steg1=:st1 and us3=:sem1 and steg6>0
+		where stegn1=:st1 and us3=:sem1 and stegn4>0
+                group by d.d2,us4,stegn9,stegn3,stegn4;
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
