@@ -91,6 +91,8 @@ class ProgressController extends Controller
                 'stegn4' => $check,
                 'stegn10' => $type,
                 'stegn11' => $number,
+                'stegn8' =>  Yii::app()->user->dbModel->p1,
+                'stegn7' =>  date('Y-m-d H:i:s'),
             );
             $criteria = new CDbCriteria();
             $criteria->compare('stegn1', $stegn1);
@@ -126,7 +128,9 @@ class ProgressController extends Controller
             );
             if (in_array($field, $whiteList))
                 $attr = array(
-                    $field => $value
+                    $field => $value,
+                    'stegn8' =>  Yii::app()->user->dbModel->p1,
+                    'stegn7' =>  date('Y-m-d H:i:s'),
                 );
             else
                throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.'); 

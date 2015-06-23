@@ -186,7 +186,7 @@ SQL;
             $command->bindValue(':us1', $stegn2);
             $command->bindValue(':nom', $stegn3);
             $command->bindValue(':value', $value);
-			$command->bindValue(':stegn9', $stegn9);
+            $command->bindValue(':stegn9', $stegn9);
             $command->bindValue(':p1', Yii::app()->user->dbModel->p1);
             $command->execute();
         }
