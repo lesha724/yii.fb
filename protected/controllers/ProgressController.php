@@ -40,8 +40,14 @@ class ProgressController extends Controller
                     'insertVmp',
                     'omissions',
                     'searchStudent',
+                    'filterStudent',
                     'insertOmissionsStegMark',
-                    'updateOmissionsStegMark'
+                    'updateOmissionsStegMark',
+                    'retake',
+                    'searchRetake',
+                    'addRetake',
+                    'saveRetake',
+                    'showRetake',
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -52,6 +58,43 @@ class ProgressController extends Controller
                 'users' => array('*'),
             ),
         );
+    }
+    
+    public function actionSearchRetake($us1)
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        $model = new Stegn('search');
+        $model->unsetAttributes();
+        if (isset($_GET['pageSize'])) {
+            Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
+            unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
+        }
+        $model->stegn2=$us1;
+        if (isset($_REQUEST['Stegn']))
+            $model->attributes = $_REQUEST['Stegn'];
+
+
+        $this->render('retake/_grid', array(
+            'model' => $model,
+        )); 
+    }
+    
+    public function actionRetake()
+    {
+        $model = new FilterForm();
+        $model->scenario = 'retake';
+        if (isset($_REQUEST['FilterForm']))
+            $model->attributes=$_REQUEST['FilterForm'];
+        $retake = new Stegn;
+        $retake->unsetAttributes();
+        $student = new St;
+        $student->unsetAttributes();
+        $this->render('retake', array(
+            'model'      => $model,
+            'retake'      => $retake,
+            'student'	 =>$student,
+        ));
     }
     
     public function actionOmissions()
@@ -120,7 +163,7 @@ class ProgressController extends Controller
         $field = Yii::app()->request->getParam('field', null);
         $value = Yii::app()->request->getParam('value', null);
 
-        if($stegn1==null || $stegn2==null || $stegn3==null || $field==null || $value==null)
+        if($stegn1==null || $stegn2==null || $stegn3==null || $field==null || ($value==null &&$field!='stegn11'))
             $error = true;
         else {
             $whiteList = array(
@@ -147,6 +190,18 @@ class ProgressController extends Controller
                 $error = !$model->saveAttributes($attr);
         }
         Yii::app()->end(CJSON::encode(array('error' => $error)));
+    }
+    
+    public function actionFilterStudent()
+    {
+        $model = new St;
+        $model->unsetAttributes();
+        if (isset($_REQUEST['St']))
+            $model->attributes = $_REQUEST['St'];
+		
+        $this->render('retake/filter_student', array(
+            'model' => $model,
+        ));
     }
     
     public function actionSearchStudent()
@@ -190,7 +245,100 @@ class ProgressController extends Controller
             'type' => $type,
         ));
     }
+    
+    public function actionSaveRetake()
+    {
+        /*if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');*/
+        $stego1 = Yii::app()->request->getParam('stego1', null);
+        $stego2 = Yii::app()->request->getParam('value', null);
+        $stego3 = Yii::app()->request->getParam('date', null);
+        $stego4 = Yii::app()->request->getParam('p1', null);
+        $error=false;
+        if(empty($stego1)||empty($stego2)||empty($stego3)||empty($stego4))
+            $error=true;
+        if(!$error)
+        {
+            $stegn=Stegn::model()->findByPk($stego1);
+            if($stegn->stegn6<=$stegn->getMin())
+            {
+                $model=new Stego;
+                $model->stego1=$stego1;
+                $model->stego2=$stego2;
+                $model->stego3=$stego3;
+                $model->stego4=$stego4;
+                $error=!$model->save();
+                if(!$error)
+                {
+                    $stegn->stegn6=$stego2;
+                    $stegn->save();
+                }
+            }  else {
+                $error= true;
+            }
+            
+        }
+        $res = array(
+            'errors' => $error,
+        );
+        
 
+        Yii::app()->end(CJSON::encode($res));
+    }
+    
+    public function actionAddRetake()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        $stegn0 = Yii::app()->request->getParam('stegn0', null);
+        $stegn2 = Yii::app()->request->getParam('disp', null);
+        if(empty($stegn0)||empty($stegn2))
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        $error=false;
+        $model=new Stego;
+        $model->unsetAttributes();
+        $model->stego1=$stegn0;
+        $html = $this->renderPartial('retake/_add_retake', array(
+            'model' => $model,
+            'us1'=>$stegn2
+        ), true);
+        /*$html = $this->render('retake/_add_retake', array(
+            'model' => $model,
+            'us1'=>$stegn2
+        ));*/
+
+        $res = array(
+            'html' => $html,
+            'errors' => $error,
+            'show'=>true,
+        );
+
+        Yii::app()->end(CJSON::encode($res));
+    }
+    
+    public function actionShowRetake()
+    {
+        /*if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');*/
+        $stegn0 = Yii::app()->request->getParam('stegn0', null);
+        $stegn2 = Yii::app()->request->getParam('disp', null);
+        if(empty($stegn0)||empty($stegn2))
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        $error=false;
+        $models=Stego::model()->findAllByAttributes(array('stego1'=>$stegn0));
+        
+        $html = $this->renderPartial('retake/_show_retake', array(
+            'models' => $models,
+        ), true);
+        $res = array(
+            'html'=>$html,
+            'errors' => $error,
+            'show'=>false,
+        );
+
+        Yii::app()->end(CJSON::encode($res));
+    }
+    
     public function actionGetGroups()
     {
         if (! Yii::app()->request->isAjaxRequest)
@@ -212,17 +360,61 @@ class ProgressController extends Controller
         $stegn1 = Yii::app()->request->getParam('st1', null);
         $stegn2 = Yii::app()->request->getParam('us1', null);
         $stegn3 = Yii::app()->request->getParam('nom', null);
-		$stegn9 = Yii::app()->request->getParam('date', null);
+        $stegn9 = Yii::app()->request->getParam('date', null);
         $field = Yii::app()->request->getParam('field', null);
         $value = Yii::app()->request->getParam('value', null);
 
         if($stegn1==null || $stegn2==null || $stegn3==null || $field==null || $value==null|| $stegn9==null)
             $error = true;
         else {
-            Stegn::model()->insertMark($stegn1,$stegn2,$stegn3,$field,$value,$stegn9);
-            $error = false;
+            $whiteList = array(
+                'stegn4', 'stegn5','stegn6',
+            );
+            if (!in_array($field, $whiteList))
+               throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+            if ($field == 'stegn4')
+            {
+                if($value==0)
+                {
+                    $value=1;
+                }
+                else {
+                    $value=0;
+                } 
+            }
+            $stegn=  Stegn::model()->findByAttributes(array('stegn1'=>$stegn1,'stegn2'=>$stegn2,'stegn3'=>$stegn3));
+            if($stegn!=null)
+            {
+                $attr = array(
+                    $field => $value,
+                    'stegn8' =>  Yii::app()->user->dbModel->p1,
+                    'stegn7' =>  date('Y-m-d H:i:s'),
+                );
+                $error =!$stegn->saveAttributes($attr);
+            }else
+            {
+                $stegn= new Stegn();
+                $stegn->stegn0=new CDbExpression('GEN_ID(GEN_STEGN, 1)');
+                $stegn->stegn1=$stegn1;
+                $stegn->stegn2=$stegn2;
+                $stegn->stegn3=$stegn3;
+                $stegn->stegn9=$stegn9;
+                $stegn->stegn10=0;
+                $stegn->stegn11='';
+                $stegn->stegn8=Yii::app()->user->dbModel->p1;
+                $stegn->stegn7=date('Y-m-d H:i:s');
+                $stegn->stegn5=0;
+                $stegn->stegn6=0;
+                $stegn->stegn4=0;
+                $stegn->$field=$value;    
+                
+                $error =!$stegn->save();
+            }
+            
+            
+            //Stegn::model()->insertMark($stegn1,$stegn2,$stegn3,$field,$value,$stegn9);
         }
-        Yii::app()->end(CJSON::encode(array('error' => $error)));
+        Yii::app()->end(CJSON::encode(array('error' => $error, 'errors' => $stegn->getErrors())));
     }
 
     public function actionInsertDsejMark()

@@ -27,7 +27,7 @@ class Stegn extends CActiveRecord
 	{
 		return 'stegn';
 	}
-
+        public $st2,$st3,$st4,$count_stego;
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -36,12 +36,12 @@ class Stegn extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('stegn1, stegn2, stegn3, stegn4, stegn8', 'numerical', 'integerOnly'=>true),
+			array('stegn1, stegn2, stegn3, stegn4, stegn8,stegn10', 'numerical', 'integerOnly'=>true),
 			array('stegn5, stegn6', 'numerical'),
-			array('stegn7', 'length', 'max'=>8),
+                        array('stegn9,stegn11,stegn7', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('stegn1, stegn2, stegn3, stegn4, stegn5, stegn6, stegn7, stegn8', 'safe', 'on'=>'search'),
+			array('stegn1,st2, stegn2, stegn3, stegn4, stegn5, stegn6, stegn7, stegn8,stegn10,stegn9,stegn11', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -67,12 +67,16 @@ class Stegn extends CActiveRecord
 		return array(
 			'stegn1' => 'Stegn1',
 			'stegn2' => 'Stegn2',
-			'stegn3' => 'Stegn3',
-			'stegn4' => 'Stegn4',
+			'stegn3' => tt('Номер занятия'),
+			'stegn4' => tt('Уваж./Неув.'),
 			'stegn5' => 'Stegn5',
 			'stegn6' => 'Stegn6',
 			'stegn7' => 'Stegn7',
 			'stegn8' => 'Stegn8',
+                        'stegn9' => tt('Дата'),
+                        'stegn10' => tt('Тип'),
+                        'stegn11' => tt('Номер справки'),
+                        'count_stego'=>tt('Количество отработок')
 		);
 	}
 
@@ -105,6 +109,106 @@ class Stegn extends CActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+		));
+	}
+        
+        public function getMin()
+        {
+            return 2;
+        }
+        
+        public function checkMinRetakeForGrid()
+        {
+            return $this->count_stego==0||$this->stegn6<=$this->getMin();
+        }
+        
+        public function getType()
+        {
+            return Stegn::model()->getTypes()[$this->stegn10];
+        }
+        
+        public function getTypes()
+        {
+            return array(0=>tt('Тип1'),1=>tt('Тип2'),2=>tt('Тип3'),3=>tt('Тип4'));
+        }
+        
+        public function getStegn4()
+        {
+            return Stegn::model()->getStegn4s()[$this->stegn4];
+        }
+        
+        public function getStegn4s()
+        {
+            return array(0=>tt('Двойка'),1=>tt('Неув'),2=>tt('Уваж'));
+        }
+        
+        public function searchRetake()
+	{
+		// @todo Please modify the following code to remove attributes that should not be searched.
+
+		$criteria=new CDbCriteria;
+                $table = St::model()->tableName();
+                $criteria->select = 't.*,'.$table.'.st2,'.$table.'.st3,'.$table.'.st4,(SELECT COUNT(*) FROM stego WHERE stego.stego1=t.stegn0) as count_stego';
+		$criteria->join = 'JOIN '.$table.' ON ('.$table.'.st1= t.stegn1)';
+		$criteria->compare('stegn1',$this->stegn1);
+		$criteria->compare('stegn2',$this->stegn2);
+		$criteria->compare('stegn3',$this->stegn3);
+                $criteria->compare('stegn4',$this->stegn4);
+                $criteria->compare('stegn11',$this->stegn11);
+                $criteria->compare('stegn10',$this->stegn10);
+                $criteria->addCondition("st2 CONTAINING '".$this->st2."'");
+		$criteria->addCondition("stegn4 > 0 OR stegn5<=".Stegn::model()->getMin());
+		//$criteria->compare('stegn7',$this->stegn7,true);
+                //$criteria->compare('stegn9',$this->stegn9,true);
+                ///$criteria->compare('stegn11',$this->stegn11,true);
+                
+                $sort = new CSort();
+                $sort->sortVar = 'sort';
+		$sort->defaultOrder = 'st2 ASC';
+                //$sort->route='progress/searchRetake?us1='+$this->stegn2;
+                $sort->attributes = array(
+                        'st2'=>array(
+                            'asc'=>$table.'.st2 ASC',
+                            'desc'=>$table.'.st2 DESC',
+                            'default'=>'ASC',
+                        ),
+                        'stegn3'=>array(
+                            'asc'=>'t.stegn3 ASC',
+                            'desc'=>'t.stegn3 DESC',
+                            'default'=>'ASC',
+                        ),
+                        'stegn4'=>array(
+                                        'asc'=>'t.stegn4 ASC',
+                                        'desc'=>'t.stegn4 DESC',
+                                        'default'=>'ASC',
+                        ),
+                        'stegn9'=>array(
+                                        'asc'=>'t.stegn9 ASC',
+                                        'desc'=>'t.stegn9 DESC',
+                                        'default'=>'ASC',
+                        ),
+                        'stegn10'=>array(
+                                        'asc'=>'t.stegn10 ASC',
+                                        'desc'=>'t.stegn10 DESC',
+                                        'default'=>'ASC',
+                        ),
+                        'stegn11'=>array(
+                                        'asc'=>'t.stegn11 ASC',
+                                        'desc'=>'t.stegn11 DESC',
+                                        'default'=>'ASC',
+                        ),
+                        'count_stego'=>array(
+                            'asc'=>'count_stego asc',
+                            'desc'=>'count_stego DESC',
+                            'default'=>'ASC',
+                        )
+                    );
+		return new CActiveDataProvider($this, array(
+			'criteria'=>$criteria,
+                        'sort'=>$sort,
+                        'pagination'=>array(
+                            'pageSize'=> Yii::app()->user->getState('pageSize',10),
+                        ),
 		));
 	}
 
@@ -160,35 +264,48 @@ SQL;
         }
         
         public function insertMark($stegn1,$stegn2,$stegn3,$field,$value,$stegn9){
-            if ($field == 'stegn4')
+            $stegn=  Stegn::model()->findByAttributes(array('stegn1'=>$stegn1,'stegn2'=>$stegn2,'stegn3'=>$stegn3));
+            if($stegn!=null)
             {
-                $sql = <<<SQL
-                    UPDATE or INSERT INTO stegn (stegn1,stegn2,stegn3,stegn4,stegn7,stegn8,stegn9) VALUES (:st1,:us1,:nom,:value,current_timestamp,:p1,:stegn9) MATCHING (stegn1,stegn2,stegn3);
-SQL;
-                if($value==0)
+                $attr = array(
+                    $field => $value,
+                    'stegn8' =>  Yii::app()->user->dbModel->p1,
+                    'stegn7' =>  date('Y-m-d H:i:s'),
+                );
+                $stegn->saveAttributes($attr);
+            }else
+            {
+                
+                if ($field == 'stegn4')
                 {
-                    $value=1;
+                    $sql = <<<SQL
+                        INSERT INTO stegn (stegn0,stegn1,stegn2,stegn3,stegn4,stegn7,stegn8,stegn9) VALUES (gen_id(GEN_STEGN,1),:st1,:us1,:nom,:value,current_timestamp,:p1,:stegn9);
+SQL;
+                    if($value==0)
+                    {
+                        $value=1;
+                    }
+                    else {
+                        $value=0;
+                    } 
                 }
-                else {
-                    $value=0;
-                } 
+                elseif ($field == 'stegn5')
+                    $sql = <<<SQL
+                        INSERT INTO stegn (stegn0,stegn1,stegn2,stegn3,stegn5,stegn7,stegn8,stegn9) VALUES (gen_id(GEN_STEGN,1),:st1,:us1,:nom,:value,current_timestamp,:p1,:stegn9);
+SQL;
+                elseif ($field == 'stegn6')
+                    $sql = <<<SQL
+                        INSERT INTO stegn (stegn0,stegn1,stegn2,stegn3,stegn6,stegn7,stegn8,stegn9) VALUES (gen_id(GEN_STEGN,1),:st1,:us1,:nom,:value,current_timestamp,:p1,:stegn9);
+SQL;
+                $command = Yii::app()->db->createCommand($sql);
+                $command->bindValue(':st1', $stegn1);
+                $command->bindValue(':us1', $stegn2);
+                $command->bindValue(':nom', $stegn3);
+                $command->bindValue(':value', $value);
+                $command->bindValue(':stegn9', $stegn9);
+                $command->bindValue(':p1', Yii::app()->user->dbModel->p1);
+                $command->execute();
             }
-            elseif ($field == 'stegn5')
-                $sql = <<<SQL
-                    UPDATE or INSERT INTO stegn (stegn1,stegn2,stegn3,stegn5,stegn7,stegn8,stegn9) VALUES (:st1,:us1,:nom,:value,current_timestamp,:p1,:stegn9) MATCHING (stegn1,stegn2,stegn3);
-SQL;
-            elseif ($field == 'stegn6')
-                $sql = <<<SQL
-                    UPDATE or INSERT INTO stegn (stegn1,stegn2,stegn3,stegn6,stegn7,stegn8,stegn9) VALUES (:st1,:us1,:nom,:value,current_timestamp,:p1,:stegn9) MATCHING (stegn1,stegn2,stegn3);
-SQL;
-            $command = Yii::app()->db->createCommand($sql);
-            $command->bindValue(':st1', $stegn1);
-            $command->bindValue(':us1', $stegn2);
-            $command->bindValue(':nom', $stegn3);
-            $command->bindValue(':value', $value);
-            $command->bindValue(':stegn9', $stegn9);
-            $command->bindValue(':p1', Yii::app()->user->dbModel->p1);
-            $command->execute();
         }
         
          public function getAttendanceStatisticFor($st1, $start, $end, $monthStatistic)

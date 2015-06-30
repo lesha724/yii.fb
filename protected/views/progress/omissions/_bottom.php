@@ -1,15 +1,5 @@
 <?php
-$this->widget('bootstrap.widgets.TbButton', array(
-		'buttonType'=>'button',
-		'type'=>'success',
-		'icon'=>'list-alt',
-		'label'=>tt('Ввести уважительные пропуски'),
-		'htmlOptions'=>array(
-			'class'=>'btn-small',
-                        'data-toggle' => 'modal',
-                        'data-target' => '#myModal',
-		)
-	));
+
 
 /* 
  * To change this license header, choose License Headers in Project Properties.
@@ -32,10 +22,13 @@ function getSelect($type,$i)
     }  else {
         $html='<select name="select-type" id="select-type">';
     }
-    $html.=getOptions(tt('Тип1'), 0, $type); 
-    $html.=getOptions(tt('Тип2'), 1, $type); 
+    $array = Stegn::model()->getTypes();
+    foreach ($array as $key => $value) {
+        $html.=getOptions($value, $key, $type); 
+    }    
+    /*$html.=getOptions(tt('Тип2'), 1, $type); 
     $html.=getOptions(tt('Тип3'), 2, $type); 
-    $html.=getOptions(tt('Тип4'), 3, $type); 
+    $html.=getOptions(tt('Тип4'), 3, $type);*/ 
     $html.='</select>'; 
     return $html;
     
@@ -46,6 +39,18 @@ if($omissions==null)
 {
     echo '<span class="label label-success" style="font-size:16px">'.tt('Зарегистрированных пропусков нет').'</span>';
 }  else {
+    
+    $this->widget('bootstrap.widgets.TbButton', array(
+		'buttonType'=>'button',
+		'type'=>'success',
+		'icon'=>'list-alt',
+		'label'=>tt('Ввести уважительные пропуски'),
+		'htmlOptions'=>array(
+			'class'=>'btn-small',
+                        'data-toggle' => 'modal',
+                        'data-target' => '#myModal',
+		)
+	));
     $url       = Yii::app()->createUrl('/progress/insertOmissionsStegMark');
     $table = '<table data-url="'.$url.'" id="omissions" class="table table-striped table-bordered table-hover">
                 <thead>
@@ -82,7 +87,7 @@ if($omissions==null)
         $i++;
     }
     echo sprintf($table, $tr); // 2 table
-}
+
 
 $this->beginWidget(
     'bootstrap.widgets.TbModal',
@@ -135,5 +140,8 @@ $this->beginWidget(
         ); ?>
     </div>
  
-<?php $this->endWidget(); ?>
+<?php $this->endWidget();
+
+}
+?>
 

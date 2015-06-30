@@ -453,16 +453,17 @@ class St extends CActiveRecord
 			
 		list($year, $sem) = SH::getCurrentYearAndSem();
 		$sql = <<<SQL
-        SELECT st1,st2,st3,st4,gr1,gr3,f1,f2,ks1,ks3,sem4, gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26 FROM ks
+        SELECT st1,st2,st3,st4,gr1,gr3,f1,f2,ks1,ks3,sem4,sg1,sp1,pnsp1, gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26 FROM ks
 			inner join f on (ks.ks1 = f.f14)
 			inner join sp on (f.f1 = sp.sp5)
+                        inner join pnsp on (sp.sp11 = pnsp.pnsp1)
 			inner join sg on (sp.sp1 = sg.sg2)
 			inner join gr on (sg.sg1 = gr.gr2)
 			inner join std on (gr.gr1 = std.std3)
 			inner join st on (std.std2 = st.st1)
 			inner join sem on (sg.sg1 = sem.sem2)
 		where std7 is null and std11 in (0, 5, 6, 8) and st2 CONTAINING :name and sem3=:YEAR1 and sem5=:SEM1
-		GROUP BY st1,st2,st3,st4,gr1,gr3,f1,f2,ks1,ks3,sem4, gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26
+		GROUP BY st1,st2,st3,st4,gr1,gr3,f1,f2,ks1,ks3,sem4,sg1,sp1,pnsp1, gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26
         ORDER BY st2 collate UNICODE,ks3,gr3,f2
 SQL;
 		$command = Yii::app()->db->createCommand($sql);

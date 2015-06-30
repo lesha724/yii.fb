@@ -203,7 +203,34 @@ class D extends CActiveRecord
 		return parent::model($className);
 	}
 	
-	public function getDisciplineForThematicPlan($sg1,$sem1)
+	public function getDisciplineForRetake($sg1)
+    {
+        if (empty($sg1))
+            return array();
+		$sql = <<<SQL
+			select d2,us4,us1
+			from d
+			   inner join uo on (d.d1 = uo.uo3)
+			   inner join us on (uo.uo1 = us.us2)
+			   inner join sem on (us.us3 = sem.sem1)
+			   inner join u on (uo.uo22 = u.u1)
+			where u2=:sg1 and sem3=:year AND sem5=:sem AND us4 in (1,2,3,4)
+			group by d2,us4,us1
+			order by d2 collate UNICODE
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':sg1', $sg1);
+	$command->bindValue(':year', Yii::app()->session['year']);
+        $command->bindValue(':sem', Yii::app()->session['sem']);
+        $disciplines = $command->queryAll();
+        
+        foreach ($disciplines as $key => $d) {
+            $disciplines[$key]['name'] = $d['d2'].'('.SH::convertUS4($d['us4']).')';
+        }
+        return $disciplines;
+    }
+        public function getDisciplineForThematicPlan($sg1,$sem1)
     {
         if (empty($sg1)||empty($sem1))
             return array();

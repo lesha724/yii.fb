@@ -220,6 +220,12 @@ $this->widget('zii.widgets.CMenu', array(
                     'active'  => $_c=='progress' && $_a=='omissions'
                 ),
                 array(
+                    'label'   => $_l2.tt('Отработка'),
+                    'url'     => _u('/progress/retake'),
+                    'visible' => _ch('progress', 'retake'),
+                    'active'  => $_c=='progress' && $_a=='retake'
+                ),
+                array(
                     'label'   => $_l2.tt('Экз. сессия'),
                     'url'     => _u('/progress/examSession'),
                     'visible' => _ch('progress', 'examSession') && $isTch,

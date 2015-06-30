@@ -4,11 +4,11 @@
  */
     $this->pageHeader=tt('Ведение модулей');
     $this->breadcrumbs=array(
-        tt('Успеваемость'),
+        tt('Ведение модулей'),
     );
 
     Yii::app()->clientScript->registerPackage('gritter');
-	Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/progress/module.js', CClientScript::POS_HEAD);
+    Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/progress/module.js', CClientScript::POS_HEAD);
 
     $error       = tt('Ошибка! Проверьте правильность вводимых данных!');
     $success     = tt('Cохранено!');

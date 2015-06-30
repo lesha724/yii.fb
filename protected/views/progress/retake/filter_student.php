@@ -5,9 +5,9 @@
  * @var TimeTableForm $model
  * @var CActiveForm $form
  */
-$this->pageHeader=tt('Уважительные пропуски: Поиск');
+$this->pageHeader=tt('Отработка: Поиск');
 $this->breadcrumbs=array(
-    tt('Уважительные пропуски'),
+    tt('Отработка'),
 );
 	
 $students = $model->getSearchStudents($model->st2);
@@ -15,7 +15,7 @@ $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id'=>'search-form',
     'htmlOptions' => array('class' => 'form-inline noprint'),
 	'method'=>'post',
-	'action'=> array('progress/searchStudent'),
+	'action'=> array('progress/filterStudent'),
 ));
 ?>
 	<?php echo $form->textField($model,'st2',array('size'=>60,'maxlength'=>255)); ?>
@@ -32,19 +32,19 @@ $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 	<?php
 $this->endWidget();
 
-$timTable=new TimeTableForm;
+$timTable=new FilterForm;
 $form1=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id'=>'timeTable-form',
     'htmlOptions' => array('style'=>'display:none'),
 	'method'=>'post',
-	'action'=> array('progress/omissions'),
+	'action'=> array('progress/retake'),
 ));
 ?>
 	<?php echo $form1->hiddenField($timTable,'filial'); ?>
 	<?php echo $form1->hiddenField($timTable,'faculty'); ?>
+	<?php echo $form1->hiddenField($timTable,'speciality'); ?>
 	<?php echo $form1->hiddenField($timTable,'course'); ?>
 	<?php echo $form1->hiddenField($timTable,'group'); ?>
-	<?php echo $form1->hiddenField($timTable,'student'); ?>
 	<?php
 $this->endWidget();
 
@@ -82,7 +82,7 @@ if(!empty($students))
           <td>'.$student['f2'].'</td>';
 		  if($filial)
 			echo '<td>'.$teacher['ks3'].'</td>';
-          echo '<td><a class="btn-check btn btn-small btn-success" href="#" data-st1="'.$student['st1'].'" data-ks1="'.$student['ks1'].'" data-sem4="'.$student['sem4'].'" data-f1="'.$student['f1'].'" data-gr1="'.$student['gr1'].'"><i class="icon-check"> '.tt('Выбрать').'</i></td>
+          echo '<td><a class="btn-check btn btn-small btn-success" href="#" data-pnsp1="'.$student['pnsp1'].'" data-ks1="'.$student['ks1'].'" data-sem4="'.$student['sem4'].'" data-f1="'.$student['f1'].'" data-sg1="'.$student['sg1'].'"><i class="icon-check"> '.tt('Выбрать').'</i></td>
         </tr>';
 		$i++;
 	}
@@ -112,15 +112,15 @@ Yii::app()->clientScript->registerScript('check', "
 	
 	$(document).on('click', '.btn-check',function(event) {
 		var f1=$(this).data('f1');
-		var st1=$(this).data('st1');
+		var pnsp1=$(this).data('pnsp1');
 		var ks1=$(this).data('ks1');
-		var gr1=$(this).data('gr1');
+		var sg1=$(this).data('sg1');
 		var sem4=$(this).data('sem4');
-		$('#TimeTableForm_filial').val(ks1);
-		$('#TimeTableForm_group').val(gr1);
-		$('#TimeTableForm_course').val(sem4);
-		$('#TimeTableForm_faculty').val(f1);
-		$('#TimeTableForm_student').val(st1);
+		$('#FilterForm_filial').val(ks1);
+		$('#FilterForm_group').val(sg1);
+		$('#FilterForm_course').val(sem4);
+		$('#FilterForm_faculty').val(f1);
+		$('#FilterForm_speciality').val(pnsp1);
         $('#timeTable-form').submit();
     });
 ");
