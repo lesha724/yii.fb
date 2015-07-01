@@ -124,7 +124,8 @@ class Stegn extends CActiveRecord
         
         public function getType()
         {
-            return Stegn::model()->getTypes()[$this->stegn10];
+            $arr=Stegn::model()->getTypes();
+            return $arr[$this->stegn10];
         }
         
         public function getTypes()
@@ -134,7 +135,8 @@ class Stegn extends CActiveRecord
         
         public function getStegn4()
         {
-            return Stegn::model()->getStegn4s()[$this->stegn4];
+            $arr=Stegn::model()->getStegn4s();
+            return $arr[$this->stegn4];
         }
         
         public function getStegn4s()
