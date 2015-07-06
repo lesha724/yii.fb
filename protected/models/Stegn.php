@@ -27,7 +27,7 @@ class Stegn extends CActiveRecord
 	{
 		return 'stegn';
 	}
-        public $st2,$st3,$st4,$count_stego;
+        public $st2,$st3,$st4,$count_stego,$tema;
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -41,7 +41,7 @@ class Stegn extends CActiveRecord
                         array('stegn9,stegn11,stegn7', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('stegn1,st2, stegn2, stegn3, stegn4, stegn5, stegn6, stegn7, stegn8,stegn10,stegn9,stegn11', 'safe', 'on'=>'search'),
+			array('stegn1,st2,tema,count_stego, stegn2, stegn3, stegn4, stegn5, stegn6, stegn7, stegn8,stegn10,stegn9,stegn11', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -76,7 +76,8 @@ class Stegn extends CActiveRecord
                         'stegn9' => tt('Дата'),
                         'stegn10' => tt('Тип'),
                         'stegn11' => tt('Номер справки'),
-                        'count_stego'=>tt('Количество отработок')
+                        'count_stego'=>tt('Количество отработок'),
+                        'tema'=>tt('Тема')
 		);
 	}
 
@@ -150,15 +151,21 @@ class Stegn extends CActiveRecord
 
 		$criteria=new CDbCriteria;
                 $table = St::model()->tableName();
-                $criteria->select = 't.*,'.$table.'.st2,'.$table.'.st3,'.$table.'.st4,(SELECT COUNT(*) FROM stego WHERE stego.stego1=t.stegn0) as count_stego';
-		$criteria->join = 'JOIN '.$table.' ON ('.$table.'.st1= t.stegn1)';
-		$criteria->compare('stegn1',$this->stegn1);
+                $table2 = Ustem::model()->tableName();
+                $criteria->select = 't.*,'.$table.'.st2,'.$table.'.st3,'.$table.'.st4,(SELECT COUNT(*) FROM stego WHERE stego.stego1=t.stegn0) as count_stego,'.$table2.'.USTEM5 as tema';
+                $criteria->join = 'LEFT JOIN '.$table2.' ON (t.stegn2='.$table2.'.USTEM2 AND t.stegn3='.$table2.'.USTEM4) ';
+                $criteria->join .= 'JOIN '.$table.' ON (t.stegn1='.$table.'.st1) ';
+                $criteria->compare('stegn1',$this->stegn1);
 		$criteria->compare('stegn2',$this->stegn2);
 		$criteria->compare('stegn3',$this->stegn3);
                 $criteria->compare('stegn4',$this->stegn4);
                 $criteria->compare('stegn11',$this->stegn11);
                 $criteria->compare('stegn10',$this->stegn10);
                 $criteria->addCondition("st2 CONTAINING '".$this->st2."'");
+                if(!empty($this->tema))
+                    $criteria->addCondition("ustem5 CONTAINING '".$this->tema."'");
+                /*if(!empty($this->count_stego))
+                    $criteria->addCondition("count_stego =".$this->count_stego);*/
 		$criteria->addCondition("stegn4 > 0 OR stegn5<=".Stegn::model()->getMin());
 		//$criteria->compare('stegn7',$this->stegn7,true);
                 //$criteria->compare('stegn9',$this->stegn9,true);
@@ -172,6 +179,11 @@ class Stegn extends CActiveRecord
                         'st2'=>array(
                             'asc'=>$table.'.st2 ASC',
                             'desc'=>$table.'.st2 DESC',
+                            'default'=>'ASC',
+                        ),
+                        'tema'=>array(
+                            'asc'=>$table2.'.ustem5 ASC',
+                            'desc'=>$table2.'.ustem5 DESC',
                             'default'=>'ASC',
                         ),
                         'stegn3'=>array(
@@ -205,6 +217,8 @@ class Stegn extends CActiveRecord
                             'default'=>'ASC',
                         )
                     );
+                
+                $stegn = Stegn::model()->findAll($criteria);
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
                         'sort'=>$sort,

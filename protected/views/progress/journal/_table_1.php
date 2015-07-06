@@ -22,7 +22,7 @@ HTML;
     $tr = '';
     foreach($students as $key => $st) {
         $name = ShortCodes::getShortName($st['st2'], $st['st3'], $st['st4']);
-        $name = mb_substr($name, 0, 10);
+        //$name = mb_substr($name, 0, 10);
         $num  = $key+1;
 
         $tr .= sprintf($pattern, $st['st1'], $num, $name);

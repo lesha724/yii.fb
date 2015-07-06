@@ -79,15 +79,26 @@ $(document).ready(function(){
 				}
 			}
 			
-			if (!$that.is(':checkbox'))
+			if ($that.is(':text'))
 			{
-				if(parseFloat( $that.val().replace(',','.') )>0)
-				{
-					$that.removeClass('not-value');
-				}else
-				{
-					$that.addClass('not-value');
-				}
+                            if(parseFloat( $that.val().replace(',','.') )>0)
+                            {
+                                    $that.removeClass('not-value');
+                            }else
+                            {
+                                    $that.addClass('not-value');
+                            }
+                            if($that.data('name')=='stegn5')
+                            {
+                                if(parseFloat( $that.val().replace(',','.') )>0)
+                                {
+                                    $td.find(':checkbox').attr('disabled','disabled');
+                                    
+                                }else
+                                {
+                                    $td.find(':checkbox').removeAttr('disabled');
+                                }
+                            }
 			}
         }, 'json')
     });

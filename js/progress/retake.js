@@ -50,6 +50,26 @@ $(document).ready(function(){
       });        
     });
     
+    $(document).on('click','.delete-retake', function(e) {
+        e.preventDefault();
+        var params = {
+            stego1:$(this).data("stego1"),
+            p1:$(this).data("stego4"),
+            date:$(this).data("stego3"),
+            value :$(this).data("stego2"),
+        }
+        var url = $(this).data('url');
+        $.get(url, params, function(data){
+            $('#myModal').modal('hide');
+            if (data.error) {
+                addGritter('', tt.error, 'error')
+            } else {
+                addGritter('', tt.success, 'success');
+                $.fn.yiiGridView.update('retake');
+            }
+        }, 'json')
+    });
+    
     $(document).on('click','#save-stego', function(e) {
         var params = {
             stego1:$('#Stego_stego1').val(),

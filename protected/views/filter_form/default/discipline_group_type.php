@@ -10,7 +10,7 @@ JS
     $form=$this->beginWidget('CActiveForm', array(
         'id'=>'filter-form',
     ));
-        $disciplines = CHtml::listData(D::model()->getDisciplinesForJournal(), 'd1', 'd2');
+        $disciplines = CHtml::listData(D::model()->getDisciplinesForJournal(), 'd1', 'name');
         $groups = CHtml::listData(Gr::model()->getGroupsForJournal($model->discipline), 'group', 'name');
         echo '<div>'.
                 $form->label($model, 'discipline').

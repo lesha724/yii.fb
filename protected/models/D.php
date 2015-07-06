@@ -284,21 +284,22 @@ SQL;
     {
 
         $sql = <<<SQL
-                select d1,d2
+                select d1,d2,nr2,nr30,k2,k3
                 from u
                   inner join uo on (u.u1 = uo.uo22)
                   inner join d on (uo.uo3 = d.d1)
                   inner join us on (uo.uo1 = us.us2)
                   inner join (
-                    select nr2
+                    select nr2,nr30
                     from pd
                       inner join nr on (pd1 = nr6) or (pd1 = nr7) or (pd1 = nr8) or (pd1 = nr9)
                     where pd1>0 and pd2=:P1
-                    group by nr2)             on (us1 = nr2)
+                    group by nr2,nr30)             on (us1 = nr2)
+                  inner join k on (nr30=k1)
                   inner join sem on (us.us3 = sem.sem1)
                   inner join sg on (u.u2 = sg.sg1)
                 where sg4=0 and sem3=:YEAR and sem5=:SEM
-                group by d1,d2
+                group by d1,d2,nr2,nr30,k2,k3
                 order by d2 collate UNICODE
 SQL;
         $command = Yii::app()->db->createCommand($sql);
@@ -306,7 +307,9 @@ SQL;
         $command->bindValue(':YEAR', Yii::app()->session['year']);
         $command->bindValue(':SEM', Yii::app()->session['sem']);
         $disciplines = $command->queryAll();
-
+        foreach ($disciplines as $key => $d) {
+            $disciplines[$key]['name'] = $d['d2'].' ('.$d['k2'].')';
+        }    
         return $disciplines;
     }
     

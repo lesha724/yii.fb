@@ -56,11 +56,12 @@ class Controller extends CController
 
     private function processYearAndSem()
     {
+        $arr = ShortCodes::getCurrentYearAndSem();
         $year = Yii::app()->request->getParam('year', null);
         if ($year === null)
             $year = Yii::app()->session['year'];
         if ($year === null)
-            $year = date('Y');
+            $year = $arr[0];
 
         Yii::app()->session['year'] = $year;
 

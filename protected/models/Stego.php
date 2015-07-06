@@ -62,7 +62,7 @@ class Stego extends CActiveRecord
 			'stego1' => 'Stego1',
 			'stego2' => tt('Оценка'),
 			'stego3' => tt('Дата'),
-			'stego4' => tt('Преподователь'),
+			'stego4' => tt('Преподаватель'),
 		);
 	}
 

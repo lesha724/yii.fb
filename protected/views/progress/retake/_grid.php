@@ -13,6 +13,10 @@
             'value'=>'SH::getShortName($data->st2,$data->st3,$data->st4)',
             'htmlOptions'=>array('class'=>'student'),
         ),
+        'tema'=>array(
+            'name'=>'tema',
+            'htmlOptions'=>array('class'=>'tema'),
+        ),
         'stegn3'=>array(
             'name'=>'stegn3',
             'htmlOptions'=>array('class'=>'number'),
@@ -34,7 +38,10 @@
             'value'=>'$data->getType()',
             'filter'=>Stegn::model()->getTypes(),
         ),
-        'count_stego',
+        'count_stego'=>array(
+            'name'=>'count_stego',
+            'filter'=>''
+        ),
         array(
                 'class'=>'bootstrap.widgets.TbButtonColumn',
                 'template'=>'{update} {view}',

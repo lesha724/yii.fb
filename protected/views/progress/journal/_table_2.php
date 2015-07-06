@@ -115,6 +115,17 @@ function getSubModulesMark($date, $marks,$us1)
     return $mark;
 }
 
+function countSTEGTotal($marks)
+{
+    $total = 0;
+    foreach ($marks as $mark) {
+        $total += $mark['stegn6'] != 0
+                    ? $mark['stegn6']
+                    : $mark['stegn5'];
+    }
+    return $total;
+}
+
 function countTotal1($ps20, $dates, $marks, $pbal,$us1)
 {
     $res = 0;
@@ -170,7 +181,7 @@ HTML;
  }
 
 
-    $name = $date['formatted_date'].$type;
+    $name = '№'.$date['nom'].' '.$date['formatted_date'].$type;
 
     return sprintf($pattern, $name);
 }

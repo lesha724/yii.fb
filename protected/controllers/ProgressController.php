@@ -48,6 +48,7 @@ class ProgressController extends Controller
                     'addRetake',
                     'saveRetake',
                     'showRetake',
+                    'deleteRetake'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -246,10 +247,50 @@ class ProgressController extends Controller
         ));
     }
     
+    public function actionDeleteRetake()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        $stego1 = Yii::app()->request->getParam('stego1', null);
+        $stego2 = Yii::app()->request->getParam('value', null);
+        $stego3 = Yii::app()->request->getParam('date', null);
+        $stego4 = Yii::app()->request->getParam('p1', null);
+        $error=false;
+        if(empty($stego1)||empty($stego2)||empty($stego3)||empty($stego4))
+            $error=true;
+        if(!$error)
+        {
+            $stegn=Stegn::model()->findByPk($stego1);
+            //Stego::model()->deleteAllByAttributes(array('stego1'=>$stego1,'stego2'=>$stego2,'stego3'=>$stego3,'stego4'=>$stego4));
+            $command = Yii::app()->db->createCommand();
+            $command->delete(Stego::model()->tableName(), 'stego1=:stego1 AND stego2=:stego2 AND stego3=:stego3 AND stego4=:stego4' ,array(':stego1'=>$stego1,':stego2'=>$stego2,':stego3'=>$stego3,':stego4'=>$stego4));
+            if(!$error)
+            {
+                $last_model=Stego::model()->findByAttributes(array('stego1'=>$stego1),array('order'=>'stego3 DESC,stego2 DESC'));
+                if($last_model!=null)
+                {
+                    $stego2=$last_model->stego2;
+                }
+                else {
+                    $stego2=0;
+                }
+                $stegn->stegn6=$stego2;
+                $stegn->save();
+            }
+            
+        }
+        $res = array(
+            'errors' => $error,
+        );
+        
+
+        Yii::app()->end(CJSON::encode($res));
+    }
+    
     public function actionSaveRetake()
     {
-        /*if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');*/
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
         $stego1 = Yii::app()->request->getParam('stego1', null);
         $stego2 = Yii::app()->request->getParam('value', null);
         $stego3 = Yii::app()->request->getParam('date', null);
@@ -318,8 +359,8 @@ class ProgressController extends Controller
     
     public function actionShowRetake()
     {
-        /*if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');*/
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
         $stegn0 = Yii::app()->request->getParam('stegn0', null);
         $stegn2 = Yii::app()->request->getParam('disp', null);
         if(empty($stegn0)||empty($stegn2))
