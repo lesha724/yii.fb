@@ -18,7 +18,9 @@ function table2Tr($date,$us1,$gr1,$st1,$marks)
         $date2  = new DateTime($date['r2']);
         $diff = $date1->diff($date2)->days;
         if ($diff > $ps2)
+        {
             $disabled = 'disabled="disabled"';
+        }
     }
     $key = $us1.'/'.$date['nom']; // 0 - r3
 
@@ -34,11 +36,13 @@ function table2Tr($date,$us1,$gr1,$st1,$marks)
                 ? round($marks[$key]['stegn6'], 1)
                 : '';
 	$disabled_input=$disabled;
+        $disabled_input_1=$disabled;
 	$class_1='';
 	$class_2='';
 	if($stegn4=='checked')
 	{
 		$disabled_input = 'disabled="disabled"';
+                $disabled_input_1 = 'disabled="disabled"';
 	}
 	if($disabled != 'disabled="disabled"')
 	{
@@ -47,11 +51,15 @@ function table2Tr($date,$us1,$gr1,$st1,$marks)
 		if($stegn6=='')
 			$class_2 = 'class="not-value"';
 	}
+       if(PortalSettings::model()->findByPk(29)->ps2==1)
+       {
+           $disabled_input_1 = 'disabled="disabled"';
+       }
 	$pattern= <<<HTML
     <td colspan="2" data-nom="{$nom}" data-priz="{$type}" data-us1="{$us1}"  data-date="{$date_lesson}" data-gr1="{$gr1}">
         <input type="checkbox" %s data-name="stegn4" {$disabled}>
         <input value="%s" {$class_1} maxlength="3" data-name="stegn5" {$disabled_input}>
-        <input value="%s" {$class_2} maxlength="3" data-name="stegn6" {$disabled_input}>
+        <input value="%s" {$class_2} maxlength="3" data-name="stegn6" {$disabled_input_1}>
     </td>
 HTML;
 

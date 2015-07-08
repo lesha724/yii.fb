@@ -39,6 +39,12 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     </div>
 
     <div class="control-group">
+        <?=CHtml::checkBox('', PortalSettings::model()->findByPk(29)->ps2, $htmlOptions2)?>
+        <span class="lbl"> <?=tt('Блокировать поле пересдач')?></span>
+        <?=CHtml::hiddenField('settings[29]', PortalSettings::model()->findByPk(29)->ps2)?>
+    </div>
+
+    <div class="control-group">
         <span class="lbl"> <?=tt('Количество дней на редактирование оценок')?>:</span>
         <?=CHtml::textField('settings[27]', PortalSettings::model()->findByPk(27)->ps2)?>
     </div>

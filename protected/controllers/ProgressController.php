@@ -413,6 +413,17 @@ class ProgressController extends Controller
             );
             if (!in_array($field, $whiteList))
                throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+            $ps2 = PortalSettings::model()->getSettingFor(27);
+            
+            if(! empty($ps2)){
+                $date1  = new DateTime(date('Y-m-d H:i:s'));
+                $date2  = new DateTime($date['r2']);
+                $diff = $date1->diff($date2)->days;
+                if ($diff > $ps2)
+                {
+                    throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+                } 
+            }
             if ($field == 'stegn4')
             {
                 if($value==0)
@@ -423,33 +434,39 @@ class ProgressController extends Controller
                     $value=0;
                 } 
             }
-            $stegn=  Stegn::model()->findByAttributes(array('stegn1'=>$stegn1,'stegn2'=>$stegn2,'stegn3'=>$stegn3));
-            if($stegn!=null)
+            $stegn=  Stegn::model()->findByAttributes(array('stegn1'=>$stegn1,'stegn2'=>$stegn2,'stegn3'=>$stegn3)); 
+            if($field=='stegn6' && PortalSettings::model()->findByPk(29)->ps2==1)
             {
-                $attr = array(
-                    $field => $value,
-                    'stegn8' =>  Yii::app()->user->dbModel->p1,
-                    'stegn7' =>  date('Y-m-d H:i:s'),
-                );
-                $error =!$stegn->saveAttributes($attr);
+                $error=true;
             }else
             {
-                $stegn= new Stegn();
-                $stegn->stegn0=new CDbExpression('GEN_ID(GEN_STEGN, 1)');
-                $stegn->stegn1=$stegn1;
-                $stegn->stegn2=$stegn2;
-                $stegn->stegn3=$stegn3;
-                $stegn->stegn9=$stegn9;
-                $stegn->stegn10=0;
-                $stegn->stegn11='';
-                $stegn->stegn8=Yii::app()->user->dbModel->p1;
-                $stegn->stegn7=date('Y-m-d H:i:s');
-                $stegn->stegn5=0;
-                $stegn->stegn6=0;
-                $stegn->stegn4=0;
-                $stegn->$field=$value;    
-                
-                $error =!$stegn->save();
+               if($stegn!=null)
+                {
+                    $attr = array(
+                        $field => $value,
+                        'stegn8' =>  Yii::app()->user->dbModel->p1,
+                        'stegn7' =>  date('Y-m-d H:i:s'),
+                    );
+                    $error =!$stegn->saveAttributes($attr);
+                }else
+                {
+                    $stegn= new Stegn();
+                    $stegn->stegn0=new CDbExpression('GEN_ID(GEN_STEGN, 1)');
+                    $stegn->stegn1=$stegn1;
+                    $stegn->stegn2=$stegn2;
+                    $stegn->stegn3=$stegn3;
+                    $stegn->stegn9=$stegn9;
+                    $stegn->stegn10=0;
+                    $stegn->stegn11='';
+                    $stegn->stegn8=Yii::app()->user->dbModel->p1;
+                    $stegn->stegn7=date('Y-m-d H:i:s');
+                    $stegn->stegn5=0;
+                    $stegn->stegn6=0;
+                    $stegn->stegn4=0;
+                    $stegn->$field=$value;    
+
+                    $error =!$stegn->save();
+                }
             }
             
             
