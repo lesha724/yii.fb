@@ -131,7 +131,19 @@ class Stegn extends CActiveRecord
         
         public function getTypes()
         {
-            return array(0=>tt('Тип1'),1=>tt('Тип2'),2=>tt('Тип3'),3=>tt('Тип4'));
+            return array(0=>tt('без відробок (п.)'),1=>tt('по хворобі (п.)'),2=>tt('чергування (п.)'),3=>tt('інше (п.)'),4=>tt('по оплаті (н.)'));
+        }
+        
+        public function getTypesByGroup()
+        {
+            //return array(0=>tt('без відробок'),1=>tt('по хворобі'),2=>tt('чергування'),3=>tt('інше'),4=>tt('по оплаті'));
+            return array(
+                        array('id'=>4,'text'=>tt('по оплаті'),'group'=>tt('не поважні')),
+                        array('id'=>0,'text'=>tt('без відробок'),'group'=>tt('поважні')),
+                        array('id'=>1,'text'=>tt('по хворобі'),'group'=>tt('поважні')),
+                        array('id'=>2,'text'=>tt('чергування'),'group'=>tt('поважні')),
+                        array('id'=>3,'text'=>tt('інше'),'group'=>tt('поважні')),
+                );
         }
         
         public function getStegn4()

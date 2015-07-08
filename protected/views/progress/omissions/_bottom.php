@@ -16,7 +16,7 @@ function getOptions($title,$type,$val)
 }
 function getSelect($type,$i)
 {
-    if($i==0)
+    /*if($i==0)
     {
         $html='<select data-field="stegn10" class="select-stegn10">';
     }  else {
@@ -29,8 +29,18 @@ function getSelect($type,$i)
     /*$html.=getOptions(tt('Тип2'), 1, $type); 
     $html.=getOptions(tt('Тип3'), 2, $type); 
     $html.=getOptions(tt('Тип4'), 3, $type);*/ 
-    $html.='</select>'; 
-    return $html;
+    /*$html.='</select>'; 
+    return $html;*/
+    if($i==0)
+    {
+        $options=array('data-field'=>"stegn10",'class'=>"select-stegn10",'id'=>"select-stegn10");
+        $name ='select-stegn10';
+    }  else {
+        $options=array('id'=>"select-type");
+        $name ='select-type';
+    }
+    $data = CHtml::listData(Stegn::model()->getTypesByGroup(),'id','text','group');
+    return CHtml::dropDownList($name,$type,$data,$options);
     
 }
 $omissions = Stegn::model()->getOmissions($model->student,$model->date1,$model->date2);

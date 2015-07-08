@@ -77,15 +77,6 @@ $(document).ready(function(){
         var date   = $that.parents('tr').find('.date').html();
         var title  = date;
 
-        /*if ($that.is(':text')) {
-
-            if (params.value=="") {
-                addGritter(title, tt.error, 'error')
-                $td.addClass('error')
-                return false;
-            }
-        }*/
-
         var url = $that.parents('[data-url]').data('url');
 
         $spinner1.show();
