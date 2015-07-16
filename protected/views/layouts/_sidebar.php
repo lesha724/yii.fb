@@ -1,4 +1,5 @@
-<div id="sidebar" class="sidebar sidebar-fixed noprint">
+<?php /*<div id="sidebar" class="sidebar sidebar-fixed noprint">*/?>
+<div id="sidebar" class="sidebar h-sidebar navbar-collapse collapse noprint"  data-sidebar="true" data-sidebar-scroll="true" data-sidebar-hover="true">
     <script type="text/javascript">
         try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
     </script>
@@ -31,6 +32,14 @@
     <a href="https://play.google.com/store/apps/details?id=scheduleMKP.scheduleMKP" target="_blank">
         <img src="<?php echo Yii::app()->request->baseUrl ?>/images/googleplay.png" style="max-width:90%;padding:5%"/>
     </a>
+    
+    <?php
+       if(!empty(Yii::app()->params['banner'])):
+    ?>
+    <div class="banner-block" id="banner">
+        <?= Yii::app()->params['banner']?>
+    </div>
+    <?php endif; ?>
 
     <script type="text/javascript">
         try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}

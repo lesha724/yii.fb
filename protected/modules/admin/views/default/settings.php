@@ -81,6 +81,25 @@
 			
 			<?php echo $form->textAreaRow($model,'analytics',array('rows'=>6, 'cols'=>50)); ?>
 			
+                        <?php echo $form->labelEx($model,'banner'); ?>
+                        <?php $this->widget('application.extensions.elFinderTinyMce.TinyMce',
+                            array(
+                                'model'=>$model,
+                                'attribute'=>'banner',
+                                'htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'tinymce'),
+                                'fileManager' => array(
+                                    'class' => 'ext.elFinder.TinyMceElFinder',
+                                    'connectorRoute'=>'/site/connector',
+                                ),
+                                /*'settings'=>array(
+                                    'theme' => "advanced",
+                                    'skin' => 'default',
+                                    'language' => Yii::app()->language,
+                                ),*/
+                            )); ?>
+                        <?php echo $form->error($model,'banner'); ?>
+                        </br>
+                        
 			<div class="form-actions">
 				<?php $this->widget('bootstrap.widgets.TbButton', array(
 					'buttonType'=>'submit',

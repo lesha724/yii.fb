@@ -73,13 +73,13 @@ class ServerFileInput extends CInputWidget
         $contHtmlOptions = $this->htmlOptions;
         $contHtmlOptions['id'] = $id . 'container';
         echo CHtml::openTag('div', $contHtmlOptions);
-        $inputOptions = array('id' => $id, 'style' => 'float:left;' /*, 'readonly' => 'readonly'*/);
+        $inputOptions = array('id' => $id,'class'=>'form-control','style' => 'width:200px;float:left;', 'readonly' => 'readonly');
         if ($this->hasModel())
             echo CHtml::activeTextField($this->model, $this->attribute, $inputOptions);
         else
             echo CHtml::textField($name, $this->value, $inputOptions);
 
-        echo CHtml::button(tt('Выбрать'), array('id' => $id . 'browse', 'class' => 'btn btn-primary btn-mini'));
+        echo CHtml::button(Yii::t('main','Выбрать'), array('id' => $id . 'browse', 'class' => 'btn btn-mini btn-theme'));
         echo CHtml::closeTag('div');
 
         $settings = array_merge(array(

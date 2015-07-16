@@ -17,6 +17,7 @@ class ConfigForm extends CFormModel
 	public $titleru;
 	public $logo;
 	public $logo_right;
+        public $banner;
 	
     public function rules()
     {
@@ -24,7 +25,7 @@ class ConfigForm extends CFormModel
             //array('attendanceStatistic,timeTable,fixedCountLesson,titleua,titleen,titleru','required'),
 			array('attendanceStatistic,timeTable,fixedCountLesson,countLesson', 'numerical', 'integerOnly'=>true),
 			array('titleuk,titleen,titleru,logo,logo_right','length', 'max'=>150),
-			array('analytics', 'length', 'max'=>10000),		
+			array('analytics,banner', 'length', 'max'=>100000),		
 		);
     }
 
@@ -41,7 +42,8 @@ class ConfigForm extends CFormModel
 			'titleen'=>tt('Название Анг.'),
 			'titleru'=>tt('Название Рус.'),
 			'logo'=>tt('Логотип'),
-			'logo_right'=>tt('Логотип пр.'),
+			'logo_right'=>tt('Логотип правый'),
+                        'banner'=>tt('Баннер'),
         );
     }
 }

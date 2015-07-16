@@ -64,10 +64,13 @@
 
     <?php require_once('_header.php')?>
 
-    <div class="main-container container-fluid">
+    <div class="main-container">
         <a href="#" id="menu-toggler" class="menu-toggler">
             <span class="menu-text"></span>
         </a>
+        <script type="text/javascript">
+                try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+        </script>
 
         <?php require_once('_sidebar.php')?>
 
