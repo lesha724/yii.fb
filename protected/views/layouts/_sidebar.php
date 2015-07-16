@@ -28,7 +28,7 @@
     <div id="sidebar-collapse" class="sidebar-collapse">
         <i data-icon2="icon-double-angle-right" data-icon1="icon-double-angle-left" class="icon-double-angle-left"></i>
     </div>
-
+    <label id="app-title"><?=tt('Расписание занятий для мобильных устройств')?></label>
     <a href="https://play.google.com/store/apps/details?id=scheduleMKP.scheduleMKP" target="_blank">
         <img src="<?php echo Yii::app()->request->baseUrl ?>/images/googleplay.png" style="max-width:90%;padding:5%"/>
     </a>

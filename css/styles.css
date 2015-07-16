@@ -1,5 +1,8 @@
-.menu-min #banner{
+.menu-min #banner,.menu-min #app-title{
     display: none;
+}
+#app-title{
+    padding: 5%;
 }
 #banner{
     width: 100%;
