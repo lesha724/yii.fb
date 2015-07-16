@@ -1,6 +1,9 @@
 .menu-min #banner{
     display: none;
 }
+#banner{
+    width: 100%;
+}
 .hide {
     display: none;
 }
