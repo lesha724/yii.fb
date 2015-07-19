@@ -58,6 +58,7 @@
                     'controller' => 'progress',
                     'items' => array(
                         'journal'      => 'Эл. журнал',
+                        'test'=>'Тестирование',
                         'modules'      => 'Ведение модулей',
                         'thematicPlan' => 'Тематический план',
                         'omissions' => 'Уважительные пропуски',

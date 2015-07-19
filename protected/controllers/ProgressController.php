@@ -53,12 +53,28 @@ class ProgressController extends Controller
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
             array('allow',
+                'actions' => array(
+                    'test',
+                ),
+                'expression' => 'Yii::app()->user->isStd',
+            ),
+            array('allow',
                 'actions' => array('attendanceStatistic','rating')
             ),
             array('deny',
                 'users' => array('*'),
             ),
         );
+    }
+    
+    public function actionTest()
+    {
+        $model = new Test('search');
+        $model->unsetAttributes();
+        $model->test4=Yii::app()->user->DbModel->st1;
+        $this->render('test', array(
+            'model' => $model,
+        )); 
     }
     
     public function actionSearchRetake($us1)

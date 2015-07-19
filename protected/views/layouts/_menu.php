@@ -190,6 +190,12 @@ $this->widget('zii.widgets.CMenu', array(
                     'visible' => _ch('progress', 'rating')
                 ),
                 array(
+                    'label'   => $_l2.tt('Тестирование'),
+                    'url'     => _u('/progress/test'),
+                    'visible' => _ch('progress', 'test') && $isStd,
+                    'active'  => $_c=='progress' && $_a=='test'
+                ),
+                array(
                     'label'   => $_l2.tt('Эл. журнал'),
                     'url'     => _u('/progress/journal'),
                     'visible' => _ch('progress', 'journal') && $isTch,
@@ -216,13 +222,13 @@ $this->widget('zii.widgets.CMenu', array(
                 array(
                     'label'   => $_l2.tt('Уважительные пропуски'),
                     'url'     => _u('/progress/omissions'),
-                    'visible' => _ch('progress', 'omissions'),
+                    'visible' => _ch('progress', 'omissions')&& $isTch,
                     'active'  => $_c=='progress' && $_a=='omissions'
                 ),
                 array(
                     'label'   => $_l2.tt('Отработка'),
                     'url'     => _u('/progress/retake'),
-                    'visible' => _ch('progress', 'retake'),
+                    'visible' => _ch('progress', 'retake')&& $isTch,
                     'active'  => $_c=='progress' && $_a=='retake'
                 ),
                 array(

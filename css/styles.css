@@ -98,8 +98,14 @@ div.journal_div_table2 {
     float:left;
 }
 
+.test-bottom div.journal_div_table2 {
+    width:70%;
+    overflow-x:scroll;
+    float:left;
+}
+
 table.journal_table tr {
-    height:40px;
+    height:20px;
 }
 
 table.journal_table thead tr {
@@ -107,7 +113,7 @@ table.journal_table thead tr {
 }
 
 table.journal_table td {
-    padding: 4px;
+    padding: 2px;
     vertical-align: middle;
 }
 
@@ -126,6 +132,16 @@ table.small-table-1{
     text-align: center !important;
     font-size:10px;
 }
+.test-bottom .journal_div_table2 th
+{
+    min-width: 10px;
+    text-align: center !important;
+}
+
+.test-bottom .journal_div_table2 tbody td
+{
+    text-align: center !important;
+}
 
 .journal-bottom td.error, .exam-session-table-2 td.error {
     border:1px solid red;
@@ -134,7 +150,10 @@ table.small-table-1{
 .journal-bottom td.success, .exam-session-table-2 td.success {
     border:1px solid green;
 }
-
+.test-bottom div.journal_div_table3 {
+    width:15%;
+    float:right;
+}
 div.journal_div_table3 {
     width:25%;
     float:right;
@@ -170,6 +189,14 @@ tr.min-max input {
 
 tr.min-max th {
     padding:1px 0
+}
+
+.test-bottom .journal_table_1 thead tr {
+    height: 113px!Important;
+}
+
+.test-bottom tr {
+    height: 56px;
 }
 
 .journal_table_1 thead tr {
