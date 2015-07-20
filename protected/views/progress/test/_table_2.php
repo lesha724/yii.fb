@@ -23,7 +23,7 @@ HTML;
 
 $table = <<<HTML
 <div class="journal_div_table2">
-    <table class="table table-striped table-bordered table-hover journal_table">
+    <table class="table table-bordered journal_table">
         <thead>
             <tr>
                 %s
@@ -47,7 +47,7 @@ HTML;
         <th>'.  getTh(3).'</th>';
     
     $pattern = <<<HTML
-<td>%s</td><td>%s</td><td>%s</td><td>%s</td>
+<td class="mark-td">%s</td><td>%s</td><td>%s</td><td>%s</td>
 HTML;
     
     /*** 2 table ***/
