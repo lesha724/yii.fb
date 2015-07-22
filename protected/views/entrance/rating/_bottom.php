@@ -12,6 +12,10 @@
 
 // колонка - № личного дела
 global $showColumn;
+global $showColumn30;
+global $showColumn31;
+global $showColumn32;
+
 $showColumn = PortalSettings::model()->findByPk(26)->ps2;
 $showColumn30 = PortalSettings::model()->findByPk(30)->ps2;
 $showColumn31 = PortalSettings::model()->findByPk(31)->ps2;
@@ -48,7 +52,10 @@ function getDocumentTypeFor($st, $model)
 function generateTr($i, $st, $model)
 {
     global $showColumn;
-
+    global $showColumn30;
+    global $showColumn31;
+    global $showColumn32;
+    
     list($td1, $td2) = getDocumentTypeFor($st, $model);
 
     $mark = round($st['abd20'], 3);
