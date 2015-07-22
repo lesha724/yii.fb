@@ -12,6 +12,7 @@ $html = $this->renderPartial('/timeTable/group', array(
     'minMax'     => $minMax,
     'maxLessons' => $maxLessons,
     'rz'         => Rz::model()->getRzArray(),
+    'type'=>$type
 ), true);
 
 

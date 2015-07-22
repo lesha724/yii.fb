@@ -87,25 +87,25 @@ class TimeTableController extends Controller
         $model = new TimeTableForm;
         $model->scenario = 'group';
 		
-		if (isset($_REQUEST['timeTable'])) {
+        if (isset($_REQUEST['timeTable'])) {
             Yii::app()->user->setState('timeTable',(int)$_REQUEST['timeTable']);
             unset($_REQUEST['timeTable']);
         }
         if (isset($_REQUEST['TimeTableForm']))
             $model->attributes=$_REQUEST['TimeTableForm'];
-		$type=Yii::app()->user->getState('timeTable',Yii::app()->params['timeTable']);
+        $type=Yii::app()->user->getState('timeTable',Yii::app()->params['timeTable']);
         $model->date1 = Yii::app()->session['date1'];
         $model->date2 = Yii::app()->session['date2'];
 		
         $timeTable = $minMax = $maxLessons = array();
         if (! empty($model->group))
-		{
-			if($type==0)
-				list($minMax, $timeTable, $maxLessons) = $model->generateGroupTimeTable();
-			else
-				$timeTable=Gr::getTimeTable($model->group, $model->date1, $model->date2, 0);
-			
-		}
+        {
+            if($type==0)
+                    list($minMax, $timeTable, $maxLessons) = $model->generateGroupTimeTable();
+            else
+                    $timeTable=Gr::getTimeTable($model->group, $model->date1, $model->date2, 0);
+
+        }
 		
         $this->render('group', array(
             'model'      => $model,
@@ -113,7 +113,7 @@ class TimeTableController extends Controller
             'minMax'     => $minMax,
             'maxLessons' => $maxLessons,
             'rz'         => Rz::model()->getRzArray(),
-			'type'=>$type
+            'type'=>$type
         ));
     }
 

@@ -11,32 +11,38 @@ $this->breadcrumbs=array(
     tt('Расписание'),
 );
 echo '<div class="noprint">';
+$showCheckBoxCalendar=true;
+if($type==-1)
+{
+   $showCheckBoxCalendar=false; 
+   $type=0;
+}
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/timetable/timetable.js', CClientScript::POS_HEAD);
 $this->renderPartial('/filter_form/timeTable/group', array(
     'model' => $model,
     'showDateRangePicker' => true,
-	'type'=>$type,
-	'showCheckBoxCalendar'=>true
+    'type'=>$type,
+    'showCheckBoxCalendar'=>$showCheckBoxCalendar
 ));
+if($showCheckBoxCalendar)
+    Yii::app()->clientScript->registerScript('calendar-checkbox', "
+        $(document).on('change', '#checkbox-timeTable', function(){
+                if($(this).is(':checked')) {
+                        $('#timeTable').val(1);
+                }else
+                {
+                        $('#timeTable').val(0);
+                }
+                $(this).closest('form').submit();
+        });
 
-Yii::app()->clientScript->registerScript('calendar-checkbox', "
-				$(document).on('change', '#checkbox-timeTable', function(){
-					if($(this).is(':checked')) {
-						$('#timeTable').val(1);
-					}else
-					{
-						$('#timeTable').val(0);
-					}
-					$(this).closest('form').submit();
-				});
-				
-				$(document).on('click', '#sem-date', function(){
-					$('#TimeTableForm_date1').val($(this).data('date1'));
-					$('#TimeTableForm_date2').val($(this).data('date2'));
-					$(this).closest('form').submit();
-				});
-			
-		");
+        $(document).on('click', '#sem-date', function(){
+                $('#TimeTableForm_date1').val($(this).data('date1'));
+                $('#TimeTableForm_date2').val($(this).data('date2'));
+                $(this).closest('form').submit();
+        });
+
+    ");
 echo '</div>';
 echo <<<HTML
     <span id="spinner1"></span>

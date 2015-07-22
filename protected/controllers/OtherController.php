@@ -114,16 +114,16 @@ class OtherController extends Controller
     {
         $model = new TimeTableForm;
         $model->scenario = 'group';
-
         if (isset($_REQUEST['TimeTableForm']))
             $model->attributes=$_REQUEST['TimeTableForm'];
-
         $model->date1 = Yii::app()->session['date1'];
         $model->date2 = Yii::app()->session['date2'];
 
         $timeTable = $minMax = $maxLessons = array();
         if (! empty($model->group))
-            list($minMax, $timeTable, $maxLessons) = $model->generateGroupTimeTable($model);
+        {
+            list($minMax, $timeTable, $maxLessons) = $model->generateGroupTimeTable();;
+        }
 
 
         $this->render('orderLesson', array(
@@ -132,6 +132,7 @@ class OtherController extends Controller
             'minMax'     => $minMax,
             'maxLessons' => $maxLessons,
             'rz'         => Rz::model()->getRzArray(),
+            'type'=>-1
         ));
     }
 
