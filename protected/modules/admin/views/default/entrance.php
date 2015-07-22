@@ -67,6 +67,24 @@ HTML;
                     <span class="lbl"> <?=tt('Отображать колонку - № личного дела')?></span>
                     <?=CHtml::hiddenField('settings[26]', PortalSettings::model()->findByPk(26)->ps2)?>
                 </div>
+                
+                <div class="control-group">
+                    <?=CHtml::checkBox('', PortalSettings::model()->findByPk(30)->ps2, $htmlOptions);?>
+                    <span class="lbl"> <?=tt('Отображать колонку - Учет инд.достижений')?></span>
+                    <?=CHtml::hiddenField('settings[30]', PortalSettings::model()->findByPk(30)->ps2)?>
+                </div>
+                
+                <div class="control-group">
+                    <?=CHtml::checkBox('', PortalSettings::model()->findByPk(31)->ps2, $htmlOptions);?>
+                    <span class="lbl"> <?=tt('Отображать колонку - Приоритет')?></span>
+                    <?=CHtml::hiddenField('settings[31]', PortalSettings::model()->findByPk(31)->ps2)?>
+                </div>
+                
+                <div class="control-group">
+                    <?=CHtml::checkBox('', PortalSettings::model()->findByPk(32)->ps2, $htmlOptions);?>
+                    <span class="lbl"> <?=tt('Отображать колонку - Примечание')?></span>
+                    <?=CHtml::hiddenField('settings[32]', PortalSettings::model()->findByPk(32)->ps2)?>
+                </div>
 
                 <div class="form-actions">
                     <button type="submit" class="btn btn-info btn-small">

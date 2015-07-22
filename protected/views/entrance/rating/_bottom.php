@@ -13,9 +13,18 @@
 // колонка - № личного дела
 global $showColumn;
 $showColumn = PortalSettings::model()->findByPk(26)->ps2;
-$colspan = 11;
+$showColumn30 = PortalSettings::model()->findByPk(30)->ps2;
+$showColumn31 = PortalSettings::model()->findByPk(31)->ps2;
+$showColumn32 = PortalSettings::model()->findByPk(32)->ps2;
+$colspan = 7;
 if ($showColumn)
-    $colspan = 12;
+    $colspan++;
+if ($showColumn30)
+    $colspan+=2;
+if ($showColumn31)
+    $colspan++;
+if ($showColumn32)
+    $colspan++;
 
 function getDocumentTypeFor($st, $model)
 {
@@ -45,7 +54,8 @@ function generateTr($i, $st, $model)
     $mark = round($st['abd20'], 3);
 
     $bgColor = '';
-    if ($st['color'])
+    //if ($st['color'])
+    if ($td2=="+")
         $bgColor = 'background-color:'.$st['color'].' !important';
 
     $tr = <<<HTML
@@ -61,12 +71,25 @@ HTML;
                 <td>$st[ab3]</td>
                 <td>$st[ab4]</td>
                 <td>$mark</td>
+HTML;
+    if ($showColumn30)
+    $tr .= <<<HTML
                 <td>$st[ind1_3]</td>
                 <td>$st[ind4]</td>
+HTML;
+    $tr .= <<<HTML
                 <td>{$td1}</td>
                 <td>{$td2}</td>
+HTML;
+    if ($showColumn31)
+    $tr .= <<<HTML
                 <td>$st[abd13]</td>
+HTML;
+    if ($showColumn32)
+    $tr .= <<<HTML
                 <td>$st[notice]</td>
+HTML;
+    $tr .= <<<HTML
             </tr>
 HTML;
 
@@ -124,14 +147,22 @@ if (! empty($model->cn1))
                 <th rowspan="2"><?=tt('Имя')?></th>
                 <th rowspan="2"><?=tt('Отчество')?></th>
                 <th rowspan="2" style="width:5%"><?=tt('Сумма баллов')?></th>
-                <th colspan="2" style="width:14%"><?=tt('Учет инд. достижений')?></th>
+                <?php if ($showColumn30) :?>
+                    <th colspan="2" style="width:14%"><?=tt('Учет инд. достижений')?></th>
+                <?php endif; ?>
                 <th colspan="2"><?=tt('Документы')?></th>
-                <th rowspan="2"><?=tt('Приоритет')?></th>
-                <th rowspan="2"><?=tt('Примечание')?></th>
+                <?php if ($showColumn31) :?>
+                    <th rowspan="2"><?=tt('Приоритет')?></th>
+                <?php endif; ?>
+                <?php if ($showColumn32) :?>
+                    <th rowspan="2"><?=tt('Примечание')?></th>
+                <?php endif; ?>
             </tr>
             <tr>
-                <th style="width:7%"><?=tt('П.1-3')?></th>
-                <th style="width:7%"><?=tt('П.4')?></th>
+                <?php if ($showColumn30) :?>
+                    <th style="width:7%"><?=tt('П.1-3')?></th>
+                    <th style="width:7%"><?=tt('П.4')?></th>
+                 <?php endif; ?>
                 <th style="width:5%"><?=tt('Копия')?></th>
                 <th style="width:5%"><?=tt('Оригинал')?></th>
             </tr>
