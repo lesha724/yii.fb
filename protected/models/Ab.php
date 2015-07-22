@@ -505,22 +505,22 @@ SQL;
         elseif($st['abd27'] == 1 && $mp2 == 3)
         {
             $notice = tt("Рекомендован");
-            $color = '#D6FED6';
+            $color = '#E4FEE4';
         }
         elseif($st['abd26'] == 1 && $mp2 == 2)
         {
             $notice = tt("Рекомендован");
-            $color = '#D6FED6';
+            $color = '#E4FEE4';
         }
         elseif($st['abd25'] == 1 && $mp2 == 1)
         {
             $notice = tt("Рекомендован");
-            $color = '#D6FED6';
+            $color = '#E4FEE4';
         }
         elseif($st['abd24'] == 1 && $mp2 == 0)
         {
             $notice = tt("Рекомендован");
-            $color = '#D6FED6';
+            $color = '#E4FEE4';
         }
 
         else {
