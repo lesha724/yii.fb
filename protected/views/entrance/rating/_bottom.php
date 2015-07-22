@@ -61,9 +61,13 @@ function generateTr($i, $st, $model)
     $mark = round($st['abd20'], 3);
 
     $bgColor = '';
-    //if ($st['color'])
-    if ($td2=="+")
+    if ($st['color'])
         $bgColor = 'background-color:'.$st['color'].' !important';
+    if ($td2=="+")
+    {
+        $st['color']="#A8FFA8";
+        $bgColor = 'background-color:'.$st['color'].' !important';
+    }
 
     $tr = <<<HTML
             <tr style="$bgColor">
