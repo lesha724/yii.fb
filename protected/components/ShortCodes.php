@@ -71,7 +71,37 @@ class ShortCodes extends CApplicationComponent
         }
         return $type;
     }
-
+    
+    public static function getSel1ForRating($i)
+    {
+         $sel_1 = array(
+            0 => tt('Младший специалист'),
+            1 => tt('Бакалавр'),
+            2 => tt('Специалист'),
+            3 => tt('Магистр'),
+        );
+        if(isset($sel_1[$i]))
+            return $sel_1[$i];
+        else {
+            return '-';
+        }
+    }
+    
+    public static function getSel2ForRating($i)
+    {
+        $sel_2 = array(
+            0 => tt('Дневная'),
+            1 => tt('Заочная'),
+            2 => tt('Вечерняя'),
+            3 => tt('Экстернат')
+        );
+        if(isset($sel_2[$i]))
+            return $sel_2[$i];
+        else {
+            return '-';
+        }
+    }
+    
     public static function getLessonColor($type)
     {
         $type = mb_strtolower($type);

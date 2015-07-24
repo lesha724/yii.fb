@@ -1,6 +1,6 @@
 <?php
     $pattern = <<<HTML
-<tr><td class="center">%s</td><td>%s</td></tr>
+<tr><td class="center">%s</td><td><label data-toggle="tooltip" data-placement="right" title="" data-original-title="%s">%s</label></td></tr>
 HTML;
 
     $columnName = tt('Дисциплина');
@@ -23,6 +23,12 @@ HTML;
     $key=0;
     foreach($disciplines as $disp) {
         $key++;
-        $tr .= sprintf($pattern, $key, $disp['d2']);
+        $name=$disp['d2'];
+        $len=strlen(utf8_decode($name));
+        if($len>15)
+        {
+            $name=mb_substr($disp['d2'], 0, 15,'UTF-8')."...";
+        }
+        $tr .= sprintf($pattern, $key, $disp['d2'],$name);
     }
     echo sprintf($table, $tr); // 1 table

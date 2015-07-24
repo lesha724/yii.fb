@@ -5,52 +5,75 @@
 
     Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/authorization.js', CClientScript::POS_END);
 ?>
-<div class="navbar navbar-fixed-top noprint">
+<?php
+        $logo=Yii::getPathOfAlias('webroot').Yii::app()->params['logo'];
+?>
+<div id="fixed-top">
+   <a class="brand" href="<?=Yii::app()->createUrl('site/index')?>">
+        <small>
+        <?php
+            if(!empty($logo)&&!empty(Yii::app()->params['logo']))
+            {
+                    /*if(!file_exists($logo))
+                    {
+                            echo '<i class="icon-leaf"></i>';
+                    }else
+                    {*/
+                            echo CHtml::image(Yii::app()->params['logo'], '',array('class'=>'logo-image'));
+                    //}
+            }else
+            {
+                    echo '<i class="icon-leaf"></i>';
+            }
+        ?>
+	<?php
+            if(!empty(Yii::app()->params['title'.Yii::app()->language]))
+            {
+                    echo Yii::app()->params['title'.Yii::app()->language];
+            }
+            else
+            {
+                    echo tt('АСУ');
+            };
+        ?>
+        <?php
+            $logo2=Yii::getPathOfAlias('webroot').Yii::app()->params['logo_right'];					
+            if(file_exists($logo2)&&!empty(Yii::app()->params['logo_right']))
+            {
+                    echo CHtml::image(Yii::app()->params['logo_right'], '',array('id'=>'logo-image-right'));
+            }	
+        ?>
+        </small>
+    </a><!-- /.brand --> 
+</div>
+<div id="header-fixed-top-block" class="navbar navbar-fixed-top noprint">
     <script type="text/javascript">
         try{ace.settings.check('navbar' , 'fixed')}catch(e){}
     </script>
     <div class="navbar-inner">
         <div class="container-fluid">
-            <a class="brand" href="<?=Yii::app()->createUrl('site/index')?>">
+            <a id="brand" class="brand" href="<?=Yii::app()->createUrl('site/index')?>">
                 <small>
-					<?php
-						$logo=Yii::getPathOfAlias('webroot').Yii::app()->params['logo'];
-						if(!empty($logo)&&!empty(Yii::app()->params['logo']))
-						{
-							if(!file_exists($logo))
-							{
-								echo '<i class="icon-leaf"></i>';
-							}else
-							{
-								echo CHtml::image(Yii::app()->params['logo'], '',array('id'=>'logo-image'));
-							}
-						}else
-						{
-							echo '<i class="icon-leaf"></i>';
-						}
-					?>
-                    
-                    <?php
-						if(!empty(Yii::app()->params['title'.Yii::app()->language]))
-						{
-							echo Yii::app()->params['title'.Yii::app()->language];
-						}
-						else
-						{
-							echo tt('АСУ');
-						};
-						?>
-						
+					
+		<?php
+                    if(!empty($logo)&&!empty(Yii::app()->params['logo']))
+                    {
+                            if(!file_exists($logo))
+                            {
+                                    echo '<i class="icon-leaf"></i>';
+                            }else
+                            {
+                                    echo CHtml::image(Yii::app()->params['logo'], '',array('id'=>'logo-image'));
+                            }
+                    }else
+                    {
+                            echo '<i class="icon-leaf"></i>';
+                    }
+                ?>
 					
                 </small>
             </a><!-- /.brand -->
-			<?php
-			$logo=Yii::getPathOfAlias('webroot').Yii::app()->params['logo_right'];					
-			if(file_exists($logo)&&!empty(Yii::app()->params['logo_right']))
-			{
-				echo CHtml::image(Yii::app()->params['logo_right'], '',array('id'=>'logo-image-right'));
-			}	
-			?>
+			
             <ul class="nav ace-nav pull-right">
                 <li class="light-blue">
                     <a class="dropdown-toggle" href="#" data-toggle="dropdown" >

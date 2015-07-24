@@ -1,3 +1,32 @@
+#header-fixed-top-block{
+    top:60px;
+}
+#brand{
+    display: none;
+}
+#fixed-top .brand{
+    font-size: 20px;
+    text-decoration: none;
+}
+#fixed-top .logo-image
+{
+    height:50px;
+    padding: 5px 20px 5px;
+}
+#fixed-top{
+    top:0px;
+    height: 60px;
+    position: fixed;
+    width: 100%;
+    background-color: #BCE8F1;
+    z-index: 1000;
+}
+#sidebar{
+    top:60px;
+}
+#breadcrumbs{
+    top:105px;
+}
 .menu-min #banner,.menu-min #app-title{
     display: none;
 }
@@ -524,4 +553,13 @@ table.subscription caption {
 
 @media print {
  .noprint { display: none; }
+}
+
+@media only screen and (max-width: 980px), only screen and (max-device-width: 980px)  {
+    #fixed-top{
+        display: none;
+    }
+    #brand{
+        display: block;
+    }
 }

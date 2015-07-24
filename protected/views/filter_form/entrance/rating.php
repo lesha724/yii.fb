@@ -23,26 +23,28 @@ $form=$this->beginWidget('CActiveForm', array(
         $html .= '</div>';
     }
 
-    $sel_1 = array(
+    /*$sel_1 = array(
         0 => tt('Младший специалист'),
         1 => tt('Бакалавр'),
         2 => tt('Специалист'),
         3 => tt('Магистр'),
-    );
+    );*/
+    $sel_1 = CHtml::listData(Spab::model()->getSel1ForRating($model->currentYear), 'spab4', 'name');
     $html .= '<div class="span3 ace-select">';
     $html .= $form->label($model, 'sel_1');
     $html .= $form->dropDownList($model, 'sel_1', $sel_1, $options);
     $html .= '</div>';
 
 
-    $sel_2 = array(
+    /*$sel_2 = array(
         0 => tt('Дневная'),
         1 => tt('Заочная'),
     );
     if (! SH::is(U_NULAU))
         $sel_2 += array(2 => tt('Вечерняя'));
-    $sel_2 += array(3 => tt('Экстернат'));
-
+    $sel_2 += array(3 => tt('Экстернат'));*/
+    $sel_2 = CHtml::listData(Spab::model()->getSel2ForRating($model->currentYear), 'spab5', 'name');
+    
     $html .= '<div class="span3 ace-select">';
     $html .= $form->label($model, 'sel_2');
     $html .= $form->dropDownList($model, 'sel_2', $sel_2, $options);

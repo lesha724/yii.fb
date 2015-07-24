@@ -400,4 +400,40 @@ SQL;
 
         return $specialities;
     }
+    
+    public function getSel1ForRating($year)
+    {
+        $sql = <<<SQL
+            SELECT distinct(spab4) FROM spab WHERE spab15=0 AND spab2=:year
+SQL;
+        //$year=date("Y", strtotime($date));
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':year',  $year);
+        $array = $command->queryAll();
+        
+        foreach($array as $k => $val)
+        {
+            $array[$k]['name'] = SH::getSel1ForRating($val['spab4']);
+        }
+        
+        return $array;
+    }
+    
+    public function getSel2ForRating($year)
+    {
+        $sql = <<<SQL
+            SELECT distinct(spab5) FROM spab WHERE spab15=0 AND spab2=:year
+SQL;
+        //$year=date("Y", strtotime($date));
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':year',  $year);
+        $array = $command->queryAll();
+        
+        foreach($array as $k => $val)
+        {
+            $array[$k]['name'] = SH::getSel2ForRating($val['spab5']);
+        }
+        
+        return $array;
+    }
 }
