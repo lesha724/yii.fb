@@ -13,5 +13,4 @@
        initPopovers();
 JS
     , CClientScript::POS_READY);
-    
     $this->renderPartial('test/index', array('model' => $model));

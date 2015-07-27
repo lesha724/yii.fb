@@ -46,7 +46,33 @@ class TimeTableController extends Controller
             'model' => $model,
         ));
 	}
+    
+    public function actionChair()
+    {
+        $model = new TimeTableForm;
+        $model->scenario = 'chair';	
+        if (isset($_REQUEST['TimeTableForm']))
+            $model->attributes=$_REQUEST['TimeTableForm'];
+        $model->date1 = Yii::app()->session['date1'];
+        $model->date2 = Yii::app()->session['date2'];
+        $datetime1 = new DateTime($model->date1);
+        $datetime2 = new DateTime($model->date2);
+        $interval = $datetime1->diff($datetime2);
 
+        if ($interval->days >= 23)
+        {
+            $date2 = date('d.m.Y', strtotime('+3 week', strtotime($model->date1)));
+            Yii::app()->session['date2'] = $date2;
+            $model->date2 = Yii::app()->session['date2'];
+        }
+
+        
+		
+        $this->render('chair', array(
+            'model'      => $model,
+        ));
+    }
+    
     public function actionTeacher()
     {
         $model = new TimeTableForm;

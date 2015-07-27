@@ -1,6 +1,46 @@
 #header-fixed-top-block{
     top:60px;
 }
+#time-table-chair .time-table-chair-1
+{
+    width: 20%;
+}
+#time-table-chair .time-table-chair-1 thead tr
+{
+    height: 73px;
+}
+#time-table-chair .time-table-chair-2 tbody td div
+{
+    //padding: 8px;
+    //height: 36px;
+    text-align: center;
+    cursor: pointer; 
+}
+#time-table-chair .time-table-chair-2 thead tr
+{
+    height: 36px;
+}
+
+#time-table-chair .time-table-chair-2 .weekends,#time-table-chair .time-table-chair-1 .weekends
+{
+    background-color:#f1f1f1!important;
+}
+
+#time-table-chair .time-table-chair-2 .new
+{
+    color:#EFBCEF;
+}
+
+#time-table-chair .time-table-chair-2 td,#time-table-chair .time-table-chair-1 td
+{
+    padding: 0px;
+}
+
+#time-table-chair .div-time-table-chair-2{
+    width:80%;
+    overflow-x:scroll;
+    float:left;
+}
 #brand{
     display: none;
 }
@@ -138,8 +178,12 @@ div.journal_div_table2 {
     float:left;
 }
 
-table.journal_table tr {
+.test-bottom .journal_table tbody tr {
     height:20px;
+}
+
+.journal-bottom .journal_table tbody tr {
+    height:31px;
 }
 
 table.journal_table thead tr {

@@ -514,6 +514,29 @@ SQL;
         }
         return $res;
     }
+    
+     public function getTeachersForTimeTableChair($chairId, $keyFieldName = 'p1')
+    {
+        if (empty($chairId))
+            return array();
+
+        $today = date('d.m.Y 00:00');
+        $sql = <<<SQL
+            SELECT P1,P3,P4,P5
+            FROM P
+                INNER JOIN PD ON (P1=PD2)
+            WHERE PD4 = {$chairId} and PD28 in (0,2,5,9) and PD3=0 and (PD13 IS NULL or PD13>'{$today}')
+            group by P1,P3,P4,P5
+            ORDER BY P3 collate UNICODE
+SQL;
+
+        $teachers = Yii::app()->db->createCommand($sql)->queryAll();
+        foreach ($teachers as $key => $teacher) {
+            $name = SH::getShortName($teacher['p3'], $teacher['p4'], $teacher['p5']);
+            $teachers[$key]['name'] = $name;
+        }
+        return $teachers;
+    }
 
     public static function getTimeTable($p1, $date1, $date2)
     {

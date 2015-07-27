@@ -399,6 +399,7 @@ SQL;
 
     public static function getTimeTable($id, $date1, $date2,$type)
     {
+        $max=8;
         switch($type)
         {
                 case 0:
@@ -408,6 +409,10 @@ SQL;
                         $sql ='SELECT * FROM RAST(:LANG, :ID, :DATE_1, :DATE_2) ORDER BY r2,r3';
                         break;
                 case 2:
+                        $sql ='SELECT * FROM RAPR(:ID, :DATE_1, :DATE_2) ORDER BY r2,r3';
+                        break;
+                case 3:
+                        //$sql ="SELECT *,(DATEDIFF(DAY,r2, :DATE_1)*{$max}+r3) as colonka  FROM RAPR(:ID, :DATE_1, :DATE_2) ORDER BY colonka";
                         $sql ='SELECT * FROM RAPR(:ID, :DATE_1, :DATE_2) ORDER BY r2,r3';
                         break;
         }
@@ -421,7 +426,16 @@ SQL;
 
         if (empty($timeTable))
             return array();
-
+        if($type==3)
+        {
+            $datetime1 = new DateTime($date1);
+            foreach($timeTable as $key => $val) {
+                
+                $datetime2 = new DateTime($val['r2']);
+                $interval = $datetime1->diff($datetime2);
+                $timeTable[$key]['colonka'] = $interval->days*8+$val['r3'];
+            }
+        }
         return $timeTable;
     }
 	
@@ -436,9 +450,9 @@ SQL;
         $rating = $command->queryAll();
         if (empty($rating))
             return array();
-		foreach($rating as $key => $group) {
-            $rating[$key]['group_name'] = Gr::model()->getGroupName($rating[$key]['kyrs'], $group);
-        }
+            foreach($rating as $key => $group) {
+                $rating[$key]['group_name'] = Gr::model()->getGroupName($rating[$key]['kyrs'], $group);
+            }
         return $rating;
     }
 

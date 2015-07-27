@@ -31,8 +31,9 @@ class TimeTableForm extends CFormModel
             array('filial, date1, date2, r11', 'required'),
 
             array('chair, teacher', 'numerical', 'allowEmpty' => false, 'on' => 'teacher'),
-			array('chair, teacher', 'required', 'on' => 'teacher'),
-
+            array('chair', 'numerical', 'allowEmpty' => false, 'on' => 'chair'),
+            array('chair, teacher', 'required', 'on' => 'teacher'),
+            array('chair', 'required', 'on' => 'chair'),        
             array('faculty, course, group', 'numerical', 'allowEmpty' => false, 'on' => 'group, student,omissions'),
             array('faculty, course, group', 'required', 'on' => 'group, student,omissions'),
 
@@ -69,20 +70,20 @@ SQL;
 			);
 			
 		return array(
-			//'filial'=> tt('Филиал'),
-			'chair'=> tt('Кафедра'),
-			//'faculty'=> tt('Факультет'),
-			'course'=> tt('Курс'),
-			'group'=> tt('Группа'),
-			'teacher'=> tt('Преподаватель'),
-			'student'=> tt('Студент'),
-			'classroom'=> tt('Аудитория'),
-			'housing'=> tt('Корпус'),
-            'r11' => tt('Индикация изменений в расписании'),
-            'date1' => tt('Дата'),
-            'lessonStart' => tt('Начало'),
-            'lessonEnd' => tt('Окончание'),
-		)+$arr;
+                    //'filial'=> tt('Филиал'),
+                    'chair'=> tt('Кафедра'),
+                    //'faculty'=> tt('Факультет'),
+                    'course'=> tt('Курс'),
+                    'group'=> tt('Группа'),
+                    'teacher'=> tt('Преподаватель'),
+                    'student'=> tt('Студент'),
+                    'classroom'=> tt('Аудитория'),
+                    'housing'=> tt('Корпус'),
+                    'r11' => tt('Индикация изменений в расписании'),
+                    'date1' => tt('Дата'),
+                    'lessonStart' => tt('Начало'),
+                    'lessonEnd' => tt('Окончание'),
+                        )+$arr;
 	}
 
     public function getMinMaxLessons($timeTable)

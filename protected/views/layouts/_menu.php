@@ -115,6 +115,12 @@ $this->widget('zii.widgets.CMenu', array(
                     'visible' => _ch('timeTable', 'teacher')
                 ),
                 array(
+                    'label'   => $_l2.tt('Кафедры'),
+                    'url'     => _u('/timeTable/chair'),
+                    'active'  => $_c=='timeTable' && $_a=='chair',
+                    'visible' => _ch('timeTable', 'chair')
+                ),
+                array(
                     'label'   => $_l2.tt('Студента'),
                     'url'     => _u('/timeTable/student'),
                     'active'  => $_c=='timeTable' && $_a=='student',
