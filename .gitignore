@@ -35,3 +35,4 @@ Thumbs.db
 /protected/data/*
 !/protected/data/.gitkeep
 /kiosk
+protected/config/params.inc
