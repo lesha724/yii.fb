@@ -306,6 +306,21 @@ class ShortCodes extends CApplicationComponent
         }
         return $name;
     }
+    
+    public static function russianDayName($month)
+    {
+        switch($month){
+            case 0:	 $name=tt('Вс'); break;
+            case 1:	 $name=tt('Пн'); break;
+            case 2:	 $name=tt('Вт'); break;
+            case 3:	 $name=tt('Ср'); break;
+            case 4:	 $name=tt('Чт'); break;
+            case 5:	 $name=tt('Пт'); break;
+            case 6:	 $name=tt('Сб'); break;
+            default: $name='';
+        }
+        return $name;
+    }
 }
 
 class SH extends ShortCodes
