@@ -5,17 +5,43 @@
 
     Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/authorization.js', CClientScript::POS_END);
 ?>
+<?php
+        $logo=Yii::getPathOfAlias('webroot').Yii::app()->params['logo'];
+?>
 <div id="fixed-top">
    <a class="brand" href="<?=Yii::app()->createUrl('site/index')?>">
         <small>
         <?php
-            if(!empty(Yii::app()->params['top1']))
+            if(!empty($logo)&&!empty(Yii::app()->params['logo']))
             {
-                echo Yii::app()->params['top1'];
+                    /*if(!file_exists($logo))
+                    {
+                            echo '<i class="icon-leaf"></i>';
+                    }else
+                    {*/
+                            echo CHtml::image(Yii::app()->params['logo'], '',array('class'=>'logo-image'));
+                    //}
             }else
             {
-                echo '<i class="icon-leaf"></i>';
+                    echo '<i class="icon-leaf"></i>';
             }
+        ?>
+	<?php
+            if(!empty(Yii::app()->params['title'.Yii::app()->language]))
+            {
+                    echo Yii::app()->params['title'.Yii::app()->language];
+            }
+            else
+            {
+                    echo tt('АСУ');
+            };
+        ?>
+        <?php
+            $logo2=Yii::getPathOfAlias('webroot').Yii::app()->params['logo_right'];					
+            if(file_exists($logo2)&&!empty(Yii::app()->params['logo_right']))
+            {
+                    echo CHtml::image(Yii::app()->params['logo_right'], '',array('id'=>'logo-image-right'));
+            }	
         ?>
         </small>
     </a><!-- /.brand --> 
@@ -26,15 +52,28 @@
     </script>
     <div class="navbar-inner">
         <div class="container-fluid">
-            <?php
-            if(!empty(Yii::app()->params['top2']))
-            {
-                echo '<div id="top2">'.Yii::app()->params['top2'].'</div>';
-            } /*else
-            {
-                echo '<i class="icon-leaf"></i>';
-            }*/
-            ?> 	
+            <a id="brand" class="brand" href="<?=Yii::app()->createUrl('site/index')?>">
+                <small>
+					
+		<?php
+                    if(!empty($logo)&&!empty(Yii::app()->params['logo']))
+                    {
+                            if(!file_exists($logo))
+                            {
+                                    echo '<i class="icon-leaf"></i>';
+                            }else
+                            {
+                                    echo CHtml::image(Yii::app()->params['logo'], '',array('id'=>'logo-image'));
+                            }
+                    }else
+                    {
+                            echo '<i class="icon-leaf"></i>';
+                    }
+                ?>
+					
+                </small>
+            </a><!-- /.brand -->
+			
             <ul class="nav ace-nav pull-right">
                 <li class="light-blue">
                     <a class="dropdown-toggle" href="#" data-toggle="dropdown" >
@@ -44,11 +83,11 @@
                                 if (Yii::app()->user->isTch) {
                                     $id   = Yii::app()->user->dbModel->p1;
                                     $type = Users::FOTO_P1;
-                                    $url = $this->createUrl('/site/userPhoto', array('_id' => $id, 'type' => $type));
+                                    $url = $this->createUrl('site/userPhoto', array('_id' => $id, 'type' => $type));
                                 } elseif (Yii::app()->user->isStd) {
                                     $id   = Yii::app()->user->dbModel->st1;
                                     $type = Users::FOTO_ST1;
-                                    $url = $this->createUrl('/site/userPhoto', array('_id' => $id, 'type' => $type));
+                                    $url = $this->createUrl('site/userPhoto', array('_id' => $id, 'type' => $type));
                                 } else
                                     $url = '/theme/ace/assets/avatars/avatar2.png';
                             ?>

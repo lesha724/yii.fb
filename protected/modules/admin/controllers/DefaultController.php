@@ -61,8 +61,11 @@ class DefaultController extends AdminController
 				'fixedCountLesson'=>$_POST['ConfigForm']['fixedCountLesson'],
 				'countLesson'=>$_POST['ConfigForm']['countLesson'],
 				'analytics'=>$_POST['ConfigForm']['analytics'],
-				'top1'=>$_POST['ConfigForm']['top1'],
-				'top2'=>$_POST['ConfigForm']['top2'],
+				'titleuk'=>$_POST['ConfigForm']['titleuk'],
+				'titleen'=>$_POST['ConfigForm']['titleen'],
+				'titleru'=>$_POST['ConfigForm']['titleru'],
+				'logo'=>$_POST['ConfigForm']['logo'],
+				'logo_right'=>$_POST['ConfigForm']['logo_right'],
                                 'banner'=>$_POST['ConfigForm']['banner'],
 			);
 			$str = base64_encode(serialize($config));

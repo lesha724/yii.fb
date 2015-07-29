@@ -262,11 +262,6 @@ HTML;
         if (isset($day['fio']))
             $fio = $day['fio'];
         $link = "<a href='#'>Доп. материалы</a>";
-        
-        $time="";
-        $pos=stripos($day['d3'],"(!)");
-        if($pos!==false)
-            $time='<br>'.$day['rz2'].'-'.$day['rz3'].'<br>';
         if ($type == 1) // teacher
             $pattern = <<<HTML
 {$d2}[{$tip}]<br>
@@ -276,12 +271,11 @@ HTML;
 HTML;
         elseif($type == 2) // group / student
             $pattern = <<<HTML
-{$time}
- <br>{$d2}[{$tip}]<br>
+<br>{$d2}[{$tip}]<br>
 {$class}. {$a2}<br>
 {$fio}<br>
 {$text}: {$added}<br>
-{$link}<br>
+{$link}
 HTML;
         elseif($type == 3) // classroom
             $pattern = <<<HTML

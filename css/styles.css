@@ -1,21 +1,13 @@
 #header-fixed-top-block{
     top:60px;
 }
-#top2{
-    float:left;
-}
 #time-table-chair .time-table-chair-1
 {
     width: 20%;
 }
 #time-table-chair .time-table-chair-1 thead tr
 {
-    height: 72px;
-    
-}
-#time-table-chair .time-table-chair-2 td,#time-table-chair .time-table-chair-2 th
-{
-    padding: 2px;
+    height: 73px;
 }
 #time-table-chair .time-table-chair-2 tbody td div
 {
