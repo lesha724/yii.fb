@@ -12,11 +12,8 @@ class ConfigForm extends CFormModel
 	public $fixedCountLesson;
 	public $countLesson;
 	public $analytics;
-	public $titleuk;
-	public $titleen;
-	public $titleru;
-	public $logo;
-	public $logo_right;
+        public $top1;
+        public $top2;
         public $banner;
 	
     public function rules()
@@ -24,8 +21,7 @@ class ConfigForm extends CFormModel
         return array(
             //array('attendanceStatistic,timeTable,fixedCountLesson,titleua,titleen,titleru','required'),
 			array('attendanceStatistic,timeTable,fixedCountLesson,countLesson', 'numerical', 'integerOnly'=>true),
-			array('titleuk,titleen,titleru,logo,logo_right','length', 'max'=>150),
-			array('analytics,banner', 'length', 'max'=>100000),		
+			array('analytics,banner,top1,top2', 'length', 'max'=>100000),		
 		);
     }
 
@@ -34,16 +30,13 @@ class ConfigForm extends CFormModel
         return array(
             //'adminEmail' => 'Email адміністратора',
             'attendanceStatistic' => tt('Статистика посещаемости'),
-			'timeTable'=>tt('Расписание'),
-			'fixedCountLesson'=>tt('Фиксированное количество пар'),
-			'countLesson'=>tt('Количество пар'),
-			'analytics'=>tt('Скрипт для подключения Аналитики(google analytics,yandex metrika и т.д.)'),
-			'titleuk'=>tt('Название Укр.'),
-			'titleen'=>tt('Название Анг.'),
-			'titleru'=>tt('Название Рус.'),
-			'logo'=>tt('Логотип'),
-			'logo_right'=>tt('Логотип правый'),
-                        'banner'=>tt('Баннер'),
+            'timeTable'=>tt('Расписание'),
+            'fixedCountLesson'=>tt('Фиксированное количество пар'),
+            'countLesson'=>tt('Количество пар'),
+            'analytics'=>tt('Скрипт для подключения Аналитики(google analytics,yandex metrika и т.д.)'),
+            'banner'=>tt('Баннер'),
+            'top1'=>tt('Топ1'),
+            'top2'=>tt('Топ2')
         );
     }
 }

@@ -13,12 +13,13 @@ function getTh($val)
 }
 function generateColumnName($i)
 {
+    $num = date('w', strtotime($i));
     $pattern = <<<HTML
-	<th colspan="8"><span class="green">%s</span></th>
+	<th colspan="8"><span class="green">%s (%s)</span></th>
 HTML;
     $name = $i;
 
-    return sprintf($pattern, $name);
+    return sprintf($pattern, $name,SH::russianDayName($num));
 }
 
 $table = <<<HTML

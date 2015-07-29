@@ -28,30 +28,6 @@
 		
 			<?php echo $form->errorSummary($model); ?>
 			
-			<?php echo $form->textFieldRow($model, 'titleuk'); ?>
-			
-			<?php echo $form->textFieldRow($model, 'titleen'); ?>
-			
-			<?php echo $form->textFieldRow($model, 'titleru'); ?>
-			
-			<?php echo $form->labelEx($model,'logo'); ?>
-			<?php $this->widget('ext.elFinder.ServerFileInput', array(
-					'model' => $model,
-					'attribute' => 'logo',
-					'connectorRoute' => '/site/connector',
-					)
-				);?></br>
-			<?php echo $form->error($model,'logo'); ?>
-			
-			<?php echo $form->labelEx($model,'logo_right'); ?>
-			<?php $this->widget('ext.elFinder.ServerFileInput', array(
-					'model' => $model,
-					'attribute' => 'logo_right',
-					'connectorRoute' => '/site/connector',
-					)
-				);?></br>
-			<?php echo $form->error($model,'logo_right'); ?>
-			
 			<?php echo $form->DropDownListRow($model, 'attendanceStatistic',array('0'=>tt('По электронному журналу'),'1'=>tt('По деканату'))); ?>
 			
 			<?php echo $form->DropDownListRow($model, 'timeTable',array('0'=>tt('Таблица'),'1'=>tt('Календарь'))); ?>
@@ -98,6 +74,44 @@
                                 ),*/
                             )); ?>
                         <?php echo $form->error($model,'banner'); ?>
+                        </br>
+                        
+                        <?php echo $form->labelEx($model,'top1'); ?>
+                        <?php $this->widget('application.extensions.elFinderTinyMce.TinyMce',
+                            array(
+                                'model'=>$model,
+                                'attribute'=>'top1',
+                                'htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'tinymce'),
+                                'fileManager' => array(
+                                    'class' => 'ext.elFinder.TinyMceElFinder',
+                                    'connectorRoute'=>'/site/connector',
+                                ),
+                                /*'settings'=>array(
+                                    'theme' => "advanced",
+                                    'skin' => 'default',
+                                    'language' => Yii::app()->language,
+                                ),*/
+                            )); ?>
+                        <?php echo $form->error($model,'top1'); ?>
+                        </br>
+                        
+                        <?php echo $form->labelEx($model,'top2'); ?>
+                        <?php $this->widget('application.extensions.elFinderTinyMce.TinyMce',
+                            array(
+                                'model'=>$model,
+                                'attribute'=>'top2',
+                                'htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'tinymce'),
+                                'fileManager' => array(
+                                    'class' => 'ext.elFinder.TinyMceElFinder',
+                                    'connectorRoute'=>'/site/connector',
+                                ),
+                                /*'settings'=>array(
+                                    'theme' => "advanced",
+                                    'skin' => 'default',
+                                    'language' => Yii::app()->language,
+                                ),*/
+                            )); ?>
+                        <?php echo $form->error($model,'top2'); ?>
                         </br>
                         
 			<div class="form-actions">
