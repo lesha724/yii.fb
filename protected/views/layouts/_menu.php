@@ -2,7 +2,47 @@
 $_m = isset(Yii::app()->controller->module) ? Yii::app()->controller->module->id : '';
 $_c = Yii::app()->controller->id;
 $_a = Yii::app()->controller->action->id;
-
+function getLabelItem($item)
+{
+    $label='';
+    switch (Yii::app()->language) {
+        case 'uk':
+            $label=$item->pm2;
+            break;
+        case 'ru':
+            $label=$item->pm3;
+            break;
+        case 'en':
+            $label=$item->pm4;
+            break;
+        default:
+            $label=$item->pm5;    
+            break;
+    }
+    return $label;
+}
+function getDopItem($controller)
+{
+    if(empty($controller))
+        return array();
+    $items=Pm::model()->findAllByAttributes(array('pm7'=>1,'pm10'=>$controller),array('order'=>'pm9 DESC'));
+    if(!empty($items))
+    {
+       $array=array();
+       //'linkOptions' => array('target'=>'_blank')
+       foreach ($items as $item) {
+          array_push($array,array(
+              'label'  => getLabelItem($item),
+              'url'    => $item->pm6,
+              'linkOptions' => array('target'=>($item->pm8==1)?'_blank':'_self'),
+          ));
+       }
+       //print_r($array);
+       return $array;
+    }    
+    else
+        return array();
+}
 function _l($name, $icon)
 {
     return '<i class="icon-'.$icon.'"></i><span class="menu-text">'.tt($name).'</span><b class="arrow icon-angle-down"></b>';
@@ -88,10 +128,15 @@ $this->widget('zii.widgets.CMenu', array(
                     'url'    => _u('/admin/default/menu'),
                     'active' => $_a=='menu' && $_m=='admin'
                 ),
-				array(
+                array(
                     'label'  => $_l2.tt('Настройки'),
                     'url'    => _u('/admin/default/settings'),
                     'active' => $_a=='settings' && $_m=='admin'
+                ),
+                array(
+                    'label'  => $_l2.tt('Пункты меню (доп.)'),
+                    'url'    => _u('/admin/menuItem'),
+                    'active' => $_c=='menuItem' && $_m=='admin'
                 ),
             ),
             'visible' => $isAdmin,
@@ -101,7 +146,7 @@ $this->widget('zii.widgets.CMenu', array(
             'url' => '#',
             'linkOptions'=> $_l,
             'itemOptions'=>_i('timeTable'),
-            'items' => array(
+            'items' =>array_merge( array(
                 array(
                     'label'   => $_l2.tt('Академ. группы'),
                     'url'     => _u('/timeTable/group'),
@@ -138,7 +183,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'active'  => $_c=='timeTable' && $_a=='freeClassroom',
                     'visible' => _ch('timeTable', 'freeClassroom')
                 ),
-            ),
+            ),getDopItem('timeTable')),
             'visible' => _ch('timeTable', 'main')
         ),
         array(
@@ -146,7 +191,7 @@ $this->widget('zii.widgets.CMenu', array(
             'url' => '#',
             'linkOptions'=> $_l,
             'itemOptions'=>_i('workPlan'),
-            'items' => array(
+            'items' => array_merge(array(
                 array(
                     'label'   => $_l2.tt('Специальности'),
                     'url'     => _u('/workPlan/speciality'),
@@ -165,22 +210,22 @@ $this->widget('zii.widgets.CMenu', array(
                     'active'  => $_c=='workPlan' && $_a=='student',
                     'visible' => _ch('workPlan', 'student')
                 ),
-            ),
+            ),getDopItem('workPlan')),
             'visible' => _ch('workPlan', 'main')
         ),
-		array(
+	array(
             'label' => _l('Список', 'user'),
             'url' => '#',
             'linkOptions'=> $_l,
             'itemOptions'=>_i('list'),
-            'items' => array(
+            'items' =>array_merge( array(
                 array(
                     'label'   => $_l2.tt('Группы'),
                     'url'     => _u('/list/group'),
                     'active'  => $_c=='list' && $_a=='group',
                     'visible' => _ch('list', 'group')
                 ),
-            ),
+            ),getDopItem('list')),
             'visible' => _ch('list', 'main')
         ),
         array(
@@ -188,7 +233,7 @@ $this->widget('zii.widgets.CMenu', array(
             'url' => '#',
             'linkOptions'=> $_l,
             'itemOptions'=>_i('progress'),
-            'items' => array(
+            'items' => array_merge(array(
 				array(
                     'label'   => $_l2.tt('Рейтинг'),
                     'url'     => _u('/progress/rating'),
@@ -243,7 +288,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'visible' => _ch('progress', 'examSession') && $isTch,
                     'active'  => $_c=='progress' && $_a=='examSession'
                 ),
-            ),
+            ),getDopItem('progress')),
             'visible' => _ch('progress', 'main')
         ),
         array(
@@ -266,7 +311,7 @@ $this->widget('zii.widgets.CMenu', array(
             'url' => '#',
             'linkOptions'=> $_l,
             'itemOptions'=>_i('entrance'),
-            'items' => array(
+            'items' => array_merge(array(
                 array(
                     'label'   => $_l2.tt('Ход приема документов'),
                     'url'     => _u('/entrance/documentReception'),
@@ -291,7 +336,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'visible' => _ch('entrance', 'registration'),
                     'active'  => $_c=='entrance' && $_a=='registration'
                 ),
-            ),
+            ),getDopItem('entrance')),
             'visible' => _ch('entrance', 'main')
         ),
         array(
@@ -299,7 +344,7 @@ $this->widget('zii.widgets.CMenu', array(
             'url' => '#',
             'linkOptions'=> $_l,
             'itemOptions'=>_i('workLoad'),
-            'items' => array(
+            'items' =>array_merge( array(
                 array(
                     'label'   => $_l2.tt('Личная'),
                     'url'     => _u('/workLoad/self'),
@@ -318,7 +363,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'visible' => _ch('workLoad', 'amount'),
                     'active'  => $_c=='workLoad' && $_a=='amount'
                 ),
-            ),
+            ),getDopItem('workLoad')),
             'visible' => _ch('workLoad', 'main')
         ),
         array(
@@ -326,7 +371,7 @@ $this->widget('zii.widgets.CMenu', array(
             'url' => '#',
             'linkOptions'=> $_l,
             'itemOptions'=>_i('payment'),
-            'items' => array(
+            'items' => array_merge(array(
                 array(
                     'label'   => $_l2.tt('Общежитие'),
                     'url'     => _u('/payment/hostel'),
@@ -339,7 +384,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'visible' => _ch('payment', 'education'),
                     'active'  => $_c=='payment' && $_a=='education',
                 ),
-            ),
+            ),getDopItem('payment')),
             'visible' => _ch('payment', 'main') && $isStd
         ),
         array(
@@ -347,7 +392,7 @@ $this->widget('zii.widgets.CMenu', array(
             'url' => '#',
             'linkOptions'=> $_l,
             'itemOptions'=>_i('other'),
-            'items' => array(
+            'items' =>array_merge( array(
                 array(
                     'label'   => $_l2.tt('Телефонный справочник'),
                     'url'     => _u('/other/phones'),
@@ -384,7 +429,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'active'  => $_c=='other' && $_a=='studentInfo',
                     'visible' => _ch('other', 'studentInfo') && ($isTch || $isStd),
                 ),
-            ),
+            ),getDopItem('other')),
             'visible' => _ch('other', 'main')
         ),
     ),

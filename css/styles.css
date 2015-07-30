@@ -1,6 +1,9 @@
 #header-fixed-top-block{
     top:60px;
 }
+.main-container .main-content .page-header{
+    margin-top: 50px;
+}
 #top2{
     float:left;
 }

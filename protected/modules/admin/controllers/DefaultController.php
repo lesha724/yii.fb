@@ -46,7 +46,7 @@ class DefaultController extends AdminController
         ));
     }
 	
-	public function actionSettings()
+    public function actionSettings()
     {
         $file = YiiBase::getPathOfAlias('application.config').'/params.inc';
         $content = file_get_contents($file);
