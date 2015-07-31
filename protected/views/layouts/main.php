@@ -1,7 +1,7 @@
 <?php /* @var $this Controller */ 
 	function getStyleName($name)
 	{
-		if(!file_exists(Yii::getPathOfAlias('webroot').'/css/user/'.$name))
+		if(!file_exists('/css/user/'.$name))
 			return 'css/'.$name;
 		else
 			return 'css/user/'.$name;
@@ -9,7 +9,7 @@
 	
 	function getAceStyleName($name)
 	{
-		if(!file_exists(Yii::getPathOfAlias('webroot').'/css/user/ace/'.$name))
+		if(!file_exists('/css/user/ace/'.$name))
 			return 'theme/ace/assets/css/'.$name;
 		else
 			return 'css/user/ace/'.$name;
