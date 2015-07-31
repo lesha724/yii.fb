@@ -22,4 +22,5 @@ HTML;
 if (! empty($model->teacher))
     $this->renderPartial('_bottom/_teacher', array(
         'model' => $model,
+        //'type'=>$type
     ));

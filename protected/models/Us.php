@@ -126,19 +126,18 @@ class Us extends CActiveRecord
     {
         if (empty($pd1) || empty($year))
             return array();
-
-        $sql= <<<SQL
-           SELECT sem5, us4, nr6, nr7, nr8, nr9, sum(nr3)
-		   FROM sem
-            INNER JOIN us on (sem.sem1 = us.us12)
-            INNER JOIN nr on (us.us1 = nr.nr2)
-            INNER JOIN uo on (us.us2 = uo.uo1)
-            INNER JOIN u on (uo.uo22 = u.u1)
-            INNER JOIN c on (u.u15 = c.c1)
-            INNER JOIN pd ON (nr.nr6 = pd.pd1) OR (nr.nr7 = pd.pd1) OR (nr.nr8 = pd.pd1)
-		   WHERE pd1=:PD1 AND sem3=:SEM3 AND c8 != 3
-		   GROUP BY sem5, us4, nr6, nr7, nr8, nr9
-		   ORDER BY sem5, us4
+            $sql= <<<SQL
+               SELECT sem5, us4, nr6, nr7, nr8, nr9, sum(nr3)
+                       FROM sem
+                INNER JOIN us on (sem.sem1 = us.us12)
+                INNER JOIN nr on (us.us1 = nr.nr2)
+                INNER JOIN uo on (us.us2 = uo.uo1)
+                INNER JOIN u on (uo.uo22 = u.u1)
+                INNER JOIN c on (u.u15 = c.c1)
+                INNER JOIN pd ON (nr.nr6 = pd.pd1) OR (nr.nr7 = pd.pd1) OR (nr.nr8 = pd.pd1)
+                       WHERE pd1=:PD1 AND sem3=:SEM3 AND c8 != 3
+                       GROUP BY sem5, us4, nr6, nr7, nr8, nr9
+                       ORDER BY sem5, us4
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':PD1', $pd1);

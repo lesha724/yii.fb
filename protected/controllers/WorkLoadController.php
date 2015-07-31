@@ -2,6 +2,9 @@
 
 class WorkLoadController extends Controller
 {
+    //const SELF = 1;
+    //const TEACHER = 2;
+    
     public function filters() {
 
         return array(
@@ -40,6 +43,7 @@ class WorkLoadController extends Controller
 
         $this->render('teacher', array(
             'model' => $model,
+            //'type'=>self::TEACHER
         ));
     }
 
@@ -59,6 +63,7 @@ class WorkLoadController extends Controller
 
         $this->render('self', array(
             'model' => $model,
+            //'type'=>self::SELF
         ));
     }
 
