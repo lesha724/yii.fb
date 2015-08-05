@@ -196,7 +196,10 @@ class ShortCodes extends CApplicationComponent
 
     public static function getCurrentYearAndSem()
     {
-        if (date('n') >= 8) {
+        $month=8;
+        if(isset(Yii::app()->params['month'])&&Yii::app()->params['month']!='')
+            $month=(int)Yii::app()->params['month'];
+        if (date('n') >= $month) {
             $year = date('Y');
             $sem  = 0;
         } else {

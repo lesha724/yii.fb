@@ -755,6 +755,30 @@ SQL;
 				break;
 		}
 	}
+        
+        public function getArrayPd($p1)
+        {
+            $sql = <<<SQL
+                SELECT pd1,pd6,pd7,pd5 FROM pd WHERE pd2=:p1 AND pd13 is null AND pd28 in (0,2,5,9) ORDER by pd7
+SQL;
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':p1', $p1);
+            $teachers = $command->queryAll();
+            $types=array(
+			0=>tt('штатный'),
+			1=>tt('внешн. совмест. '),
+			2=>tt('внутр. совмест.'),
+			3=>tt('почасовик внутр.'),
+			4=>tt('совмещение'),
+			5=>tt('почасовик внешн.'),
+			6=>tt('специалист'),
+		);
+            foreach ($teachers as $key => $teacher) {
+                $type=$types[$teacher['pd7']];
+                $teachers[$key]['title'] = $type.' '.(float)$teacher['pd6'];
+            }
+            return $teachers;
+        }
 
 
 }

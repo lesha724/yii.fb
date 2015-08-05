@@ -15,12 +15,13 @@ class ConfigForm extends CFormModel
         public $top1;
         public $top2;
         public $banner;
+        public $month;
 	
     public function rules()
     {
         return array(
             //array('attendanceStatistic,timeTable,fixedCountLesson,titleua,titleen,titleru','required'),
-			array('attendanceStatistic,timeTable,fixedCountLesson,countLesson', 'numerical', 'integerOnly'=>true),
+			array('attendanceStatistic,timeTable,fixedCountLesson,countLesson,month', 'numerical', 'integerOnly'=>true),
 			array('analytics,banner,top1,top2', 'length', 'max'=>100000),		
 		);
     }
@@ -36,7 +37,8 @@ class ConfigForm extends CFormModel
             'analytics'=>tt('Скрипт для подключения Аналитики(google analytics,yandex metrika и т.д.)'),
             'banner'=>tt('Баннер'),
             'top1'=>tt('Топ1'),
-            'top2'=>tt('Топ2')
+            'top2'=>tt('Топ2'),
+            'month'=>tt('Месяц перевода на следующий курс')
         );
     }
 }

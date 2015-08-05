@@ -151,6 +151,36 @@ SQL;
             if (!Yii::app()->user->IsStd||empty($uo1))
                 return array();
             $res=  Test::model()->find('test4='.Yii::app()->user->DbModel->st1.' AND test2='.$uo1.' AND test5<=0');
+            $res=$this->changeValKod($res);
+            return $res;
+        }
+        
+        public function changeValKod($res)
+        {
+            $arr=array(
+                -1=>tt('неув.'),
+                -2=>tt('уваж.'),
+                -3=>tt(''),
+            );
+            if($res!=null)
+            {
+                if($res->test6<0&&isset($arr[$res->test6]))
+                {
+                   $res->test6=$arr[$res->test6]; 
+                }
+                if($res->test7<0&&isset($arr[$res->test7]))
+                {
+                   $res->test7=$arr[$res->test7]; 
+                }
+                if($res->test8<0&&isset($arr[$res->test8]))
+                {
+                   $res->test8=$arr[$res->test8]; 
+                }
+                if($res->test9<0&&isset($arr[$res->test9]))
+                {
+                   $res->test9=$arr[$res->test9]; 
+                }
+            }
             return $res;
         }
         
@@ -159,6 +189,7 @@ SQL;
             if (!Yii::app()->user->IsStd||empty($uo1))
                 return array();
             $res=  Test::model()->find('test4='.Yii::app()->user->DbModel->st1.' AND test2='.$uo1.' AND test5='.$number);
+            $res=$this->changeValKod($res);
             return $res;
         }
         

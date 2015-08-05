@@ -55,7 +55,8 @@ class WorkLoadController extends Controller
         list($year,$semester) = SH::getCurrentYearAndSem();
         $model->year     = $year;
         $model->semester = $semester;
-        $model->teacher  = Yii::app()->user->dbModel->p1;
+        $teachers=P::model()->getArrayPd(Yii::app()->user->dbModel->p1);
+        //$model->teacher  = Yii::app()->user->dbModel->p1;
 
         if (isset($_REQUEST['FilterForm']))
             $model->attributes=$_REQUEST['FilterForm'];
@@ -63,6 +64,7 @@ class WorkLoadController extends Controller
 
         $this->render('self', array(
             'model' => $model,
+            'teachers'=>$teachers
             //'type'=>self::SELF
         ));
     }

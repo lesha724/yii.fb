@@ -64,6 +64,7 @@ class DefaultController extends AdminController
 				'top1'=>$_POST['ConfigForm']['top1'],
 				'top2'=>$_POST['ConfigForm']['top2'],
                                 'banner'=>$_POST['ConfigForm']['banner'],
+                                'month'=>$_POST['ConfigForm']['month'],
 			);
 			$str = base64_encode(serialize($config));
 			$errors=!file_put_contents($file, $str);

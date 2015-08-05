@@ -195,6 +195,18 @@ SQL;
         $r11   = $day['r11'];
         $class = tt('ауд');
         $hiddenParams = null;
+        $tem_name='';
+        if(isset($day['r1_']))
+        {
+            $tem = $this->getTem($day['r1_'],$day['r2']);
+            if(!empty($tem))
+            {
+                $tem_name='&nbsp;'.tt('т.').$tem['nom_temi'];
+                if($tem['nom_zan']>0)
+                    $tem_name.='&nbsp;'.tt('з.').$tem['nom_zan'];
+                //$tem_name.='</br>';
+            }
+        }
 
         // for order lesson service {{{
         if (Yii::app()->controller->action->id == 'orderLesson')
@@ -232,7 +244,7 @@ HTML;
         elseif($type == 2) // group / student
             $pattern = <<<HTML
 <div style="background:{$color}">
-    <span>{$rowDisc}</span><br>
+    <span>{$rowDisc}{$tem_name}</span><br>
     {$rowClass}<br>
     {$fio}
     <span class="hidden">{$hiddenParams}</span>
@@ -249,13 +261,41 @@ HTML;
 
         return trim($pattern);
     }
-
+    
+    public function getTem($r1,$r2)
+    {
+        $arr=array(32,38,40,43,44,45);
+        $sql=<<<SQL
+            select b15 from b where b1=0
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $id=$command->queryRow();
+        if(!empty($id['b15'])&&in_array($id['b15'], $arr))
+        {
+            $sql ='SELECT * FROM TEMA_NAME(:r1, :r2)';
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':r1', $r1);
+            $command->bindValue(':r2', $r2);
+            $tem = $command->queryRow();
+            return $tem;
+        }  else {
+            return null;
+        }
+    }
+    
     private function cellFullTextFor($day, $type)
     {
         $d2  = $day['d2'];
         $tip = $day['tip'];
         $gr3 = $day['gr3'];
         $a2  = $day['a2'];
+        $tem_name='';
+        if(isset($day['r1_']))
+        {
+            $tem = $this->getTem($day['r1_'],$day['r2']);
+            if(!empty($tem))
+                $tem_name=$tem['name_temi'];
+        }
         $class = tt('ауд');
         $text  = tt('Добавлено');
         $added = date('d.m.Y H:i', strtotime($day['r11']));
@@ -277,6 +317,7 @@ HTML;
         elseif($type == 2) // group / student
             $pattern = <<<HTML
 {$time}
+ {$tem_name}
  <br>{$d2}[{$tip}]<br>
 {$class}. {$a2}<br>
 {$fio}<br>

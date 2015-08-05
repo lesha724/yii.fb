@@ -35,6 +35,20 @@
             $r3=$timeTable[0]['r3'];
             foreach($timeTable as $event)
             {
+                    
+                    $tem_name_full='';
+                    $tem_name='';
+                    if(isset($event['r1_']))
+                    {
+                        $tem = $model->getTem($event['r1_'],$event['r2']);
+                        if(!empty($tem))
+                        {
+                            $tem_name_full=$tem['name_temi'];
+                            $tem_name=' '.tt('т.').$tem['nom_temi'];
+                            if($tem['nom_zan']>0)
+                                $tem_name.=' '.tt('з.').$tem['nom_zan'];
+                        }
+                    }
                     if(isset($event['fio']))
                             $fio=$event['fio'];
                     else
@@ -60,12 +74,12 @@
                     $text.="id:'".$i."',";
                     $color = SH::getLessonColor($event['tip']);
                     $class = SH::getClassColor($event['tip']);
-                    $text.="title:' ".$event['d3']."[".$event['tip']."]\u000A ".$event['a2']." ".$fio."\u000A".$groups."',";
+                    $text.="title:' ".$event['d3'].' '.$tem_name."[".$event['tip']."]\u000A ".$event['a2']." ".$fio."\u000A".$groups."',";
                     $text.="className:'event-num{$i} events event{$class}',";
                     $text.="start:'".date("Y-m-d",strtotime($event['r2']))." ".$event['rz2']."',";
                     $text.="end:'".date("Y-m-d",strtotime($event['r2']))." ".$event['rz3']."',";
                     $text.='},';
-                    $fullText='["'.$event['d2'].'","'.$event['tip'].'","'.$fio.'","'.$event['a2'].'","'.date("Y-m-d",strtotime($event['r2'])).'","'.$event['rz2'].'","'.$event['rz3'].'","'.$groups.'"]';
+                    $fullText='["'.$tem_name_full.'\u000A'.$event['d2'].'","'.$event['tip'].'","'.$fio.'","'.$event['a2'].'","'.date("Y-m-d",strtotime($event['r2'])).'","'.$event['rz2'].'","'.$event['rz3'].'","'.$groups.'"]';
             }
         }
 	$events.=$text;
@@ -76,16 +90,6 @@
         <i class="icon-print bigger-110"></i>
     </button>
 	<div id="calendar">
-		<div id="info-event" class="popover bottom">
-			<div class="arrow"></div>
-			<button id="close-info-event" class="close" style="margin:5px;">&times;</button>
-			<h4 class="popover-title" id="info-event-header"></h4>
-			<div class="popover-content">
-				<h5 id="info-event-body-header"></h5>
-				<p id="info-event-body"></p>
-				<p id="cor"></p>
-			</div>
-		</div>
 	</div>
 <?php
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/theme/ace/assets/js/moment.min.js', CClientScript::POS_HEAD);
@@ -111,79 +115,21 @@ Yii::app()->clientScript->registerScript('calendar', "
 			eventLimit: true,
 			events: [".$events."
 			],
-			eventClick: function(calEvent, jsEvent, view) {
-				
-				$('#info-event-header').text(arr[calEvent.id][4]+\" \"+arr[calEvent.id][5]+\"-\"+arr[calEvent.id][6]);
-				$('#info-event-body-header').text(arr[calEvent.id][0]+\"[\"+arr[calEvent.id][1]+\"]\");
-				$('#info-event-body').html(arr[calEvent.id][2]+\" </br>\"+arr[calEvent.id][3]);
-				showEnevtInfo(calEvent.id);
-				/*alert('#cell'+calEvent.id);*/
+                        eventRender: function(calEvent, element) {
+				element.popover({
+					title: arr[calEvent.id][4]+\" \"+arr[calEvent.id][5]+\"-\"+arr[calEvent.id][6],
+					placement: 'bottom',
+					content:arr[calEvent.id][0]+\"[\"+arr[calEvent.id][1]+\"]\"+\"\u000A\"+arr[calEvent.id][2]+\" \u000A\"+arr[calEvent.id][3],
+				});
 			},
 		});
 		
 	});
-	
-	function showEnevtInfo(id){
-		event=$('.event-num'+id);
-		sum=getOffset(event[0]);
-		info=$('#info-event');
-		info.css('top',sum.top-60);
-		info.css('left',sum.left);		
-		info.show();
-		visible=true;
-	}
-	
-	function getOffset(elem) {
-		if (elem.getBoundingClientRect) {
-			return getOffsetRect(elem)
-		} else {
-			return getOffsetSum(elem)
-		}
-	}
-
-	function getOffsetSum(elem) {
-		var top=0, left=0
-		while(elem) {
-			top = top + parseInt(elem.offsetTop)
-			left = left + parseInt(elem.offsetLeft)
-			elem = elem.offsetParent
-		}
-		return {top: top, left: left}
-	}
-
-	function getOffsetRect(elem) {
-		// (1)
-		var box = elem.getBoundingClientRect()
-
-		// (2)
-		var body = document.body
-		var docElem = document.documentElement
-
-		// (3)
-		var scrollTop = window.pageYOffset || docElem.scrollTop || body.scrollTop
-		var scrollLeft = window.pageXOffset || docElem.scrollLeft || body.scrollLeft
-
-		// (4)
-		var clientTop = docElem.clientTop || body.clientTop || 0
-		var clientLeft = docElem.clientLeft || body.clientLeft || 0
-
-		// (5)
-		var top  = box.top +  scrollTop - clientTop
-		var left = box.left + scrollLeft - clientLeft
-
-		return { top: Math.round(top), left: Math.round(left) }
-	}
 
 	$('#print-table').click(
 		function(){
 			$('#sidebar').addClass('menu-min');
 			window.print();
-		}
-	);
-	
-	$('#close-info-event').click(
-		function(){
-			$('#info-event').hide();
 		}
 	);
 ");

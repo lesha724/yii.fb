@@ -54,7 +54,10 @@
 					});
 				");
 			?>
-			
+    
+                        <?php echo $form->labelEx($model,'month'); ?>
+			<?php echo $form->numberField($model, 'month',array('min'=>'1','max'=>'12')); ?>
+    
 			<?php echo $form->textAreaRow($model,'analytics',array('rows'=>6, 'cols'=>50)); ?>
 			
                         <?php echo $form->labelEx($model,'banner'); ?>
