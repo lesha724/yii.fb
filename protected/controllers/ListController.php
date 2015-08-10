@@ -19,7 +19,7 @@ class ListController extends Controller
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),*/
             array('allow',
-                'actions' => array('group')
+                'actions' => array('group','chair')
             ),
             array('deny',
                 'users' => array('*'),
@@ -27,7 +27,7 @@ class ListController extends Controller
         );
     }
 	
-	public function actionGroup()
+    public function actionGroup()
     {
         $model = new FilterForm();
         $model->scenario = 'list-group';
@@ -36,6 +36,19 @@ class ListController extends Controller
             $model->attributes=$_REQUEST['FilterForm'];
 
         $this->render('group', array(
+            'model' => $model,
+        ));
+    }
+    
+    public function actionChair()
+    {
+        $model = new FilterForm();
+        $model->scenario = 'list-chair';
+
+        if (isset($_REQUEST['FilterForm']))
+            $model->attributes=$_REQUEST['FilterForm'];
+
+        $this->render('chair', array(
             'model' => $model,
         ));
     }

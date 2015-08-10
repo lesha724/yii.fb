@@ -25,6 +25,6 @@ HTML;
 
 
 if (! empty($model->group))
-    $this->renderPartial('_bottom', array(
+    $this->renderPartial('group/_bottom', array(
         'model' => $model,
     ));

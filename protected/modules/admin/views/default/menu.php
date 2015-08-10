@@ -58,13 +58,15 @@
                     'name'       => 'Успеваемость',
                     'controller' => 'progress',
                     'items' => array(
+                        'rating'      => 'Рейтинг',
                         'journal'      => 'Эл. журнал',
                         'test'=>'Тестирование',
                         'modules'      => 'Ведение модулей',
                         'thematicPlan' => 'Тематический план',
                         'omissions' => 'Уважительные пропуски',
                         'retake' => 'Отработка',
-                        'test' => 'Тестирование',
+                        'attendanceStatistic'=>'Статистика посещаемости',
+                        'examSession'=>'Экз. сессия'
                     ),
                 ),
 				array(
@@ -72,6 +74,7 @@
                     'controller' => 'list',
                     'items' => array(
                         'group'      => 'Группы',
+                        'chair'      => 'Кафедры',
                     ),
                 ),
                 array(
@@ -105,6 +108,9 @@
                         'phones' => 'Телефонный справочник',
                         'gostem' => 'Запись на гос. экзамены',
                         'employment' => 'Трудоустройство',
+                        'subscription' => 'Запись на дисциплины',
+                        'orderLesson' => 'Заказ переноса заняти',
+                        'studentInfo' => 'Данные студенты',
                     ),
                 ),
             )

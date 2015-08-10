@@ -68,7 +68,7 @@ HTML;
             }
             else
             {
-                $tr .= sprintf($pattern,  '', '', '', '');
+                $tr .= sprintf($pattern,  '&nbsp;', '&nbsp;', '&nbsp;', '&nbsp;');
             }
         }
         $tr .='</tr>';

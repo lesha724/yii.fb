@@ -225,6 +225,12 @@ $this->widget('zii.widgets.CMenu', array(
                     'active'  => $_c=='list' && $_a=='group',
                     'visible' => _ch('list', 'group')
                 ),
+                array(
+                    'label'   => $_l2.tt('Кафедры'),
+                    'url'     => _u('/list/chair'),
+                    'active'  => $_c=='list' && $_a=='chair',
+                    'visible' => _ch('list', 'chair')
+                ),
             ),getDopItem('list')),
             'visible' => _ch('list', 'main')
         ),

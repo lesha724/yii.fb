@@ -65,7 +65,7 @@ HTML;
         {
             $tr .= sprintf($pattern,  '', '', '', '');
         }*/
-        $itog='';
+        $itog='&nbsp;';
         if($val1!=null)
         {
             $itog= $val1->test6;
@@ -76,7 +76,7 @@ HTML;
         }
         else
         {
-            $tr .= sprintf($pattern1,  '', '',$itog);
+            $tr .= sprintf($pattern1,  '&nbsp;', '&nbsp;',$itog);
         }
         
     }
