@@ -3,7 +3,12 @@ $(document).ready(function(){
     initPopovers();
 
     $spinner1 = $('#spinner1');
-
+    
+    $('#journal-print').click(function(){
+        $("#filter-form").attr("action", $(this).data('url'));
+        $("#filter-form").submit();
+    });
+    
     $('div[class*=journal_div_table] tr:not(.min-max) input').change(function(){
 
         var $that = $(this);
@@ -25,7 +30,7 @@ $(document).ready(function(){
         var nom   = $that.parents('table').find('th:eq('+index+')').html();
         var title  = stName+'<br>'+nom+'<br>';
         var $td    = $that.parent();
-        if (isNaN(params.value)) {
+        if (isNaN(params.value)||params.value<0) {
             addGritter(title, tt.error, 'error')
             $td.addClass('error')
             return false;
@@ -50,59 +55,208 @@ $(document).ready(function(){
         }
 
         var url = $that.parents('[data-url]').data('url');
+        var url_check = $that.parents('[data-url-check]').data('url-check');
 
         $spinner1.show();
-
-        $.get(url, params, function(data){
-
-            if (data.error) {
-                addGritter(title, tt.error, 'error')
-                $td.addClass('error');
-            } else {
-                addGritter(title, tt.success, 'success')
-                $td.removeClass('error').addClass('success');
-
-                setTimeout(function() { $td.removeClass('success') }, 1000)
-
-                recalculateBothTotal(st1);
-            }
-
-            $spinner1.hide();
-			if ($that.is(':checkbox'))
-			{
-				if ($that.is(':checked'))
-				{
-					$td.find(':text').attr('disabled','disabled');
-				}else
-				{
-					$td.find(':text').removeAttr('disabled');
-				}
-			}
-			
-			if ($that.is(':text'))
-			{
-                            if(parseFloat( $that.val().replace(',','.') )>0)
+        if ($that.is(':checkbox')&&params.value==1)
+        {
+            $.ajax({
+                url: url_check,
+                dataType: 'json',
+                data:params,
+                success: function( data ) {
+                       if (data.error) {
+                            addGritter(title, tt.error, 'error')
+                            $td.addClass('error');
+                            $enable=false;
+                        } else {
+                            if(data.count)
                             {
-                                    $that.removeClass('not-value');
+                                $( "#dialog-confirm" ).dialog({
+                                    resizable: false,
+                                    modal: true,
+                                    title: "<div class='widget-header'><h4 class='smaller'><i class='icon-warning-sign red'></i>Удаление</h4></div>",
+                                    title_html: true,
+                                    buttons: [
+                                        {
+                                            html: "<i class='icon-trash bigger-110'></i>&nbsp; Удалить",
+                                            "class" : "btn btn-danger btn-mini",
+                                            click: function() {
+                                                    $( this ).dialog( "close" );
+                                                    $.get(url, params, function(data){
+
+                                                        if (data.error) {
+                                                            addGritter(title, tt.error, 'error')
+                                                            $td.addClass('error');
+                                                        } else {
+                                                            addGritter(title, tt.success, 'success')
+                                                            $td.removeClass('error').addClass('success');
+
+                                                            setTimeout(function() { $td.removeClass('success') }, 1000)
+
+                                                            recalculateBothTotal(st1);
+                                                        }
+
+                                                        $spinner1.hide();
+                                                                    if ($that.is(':checkbox'))
+                                                                    {
+                                                                            if ($that.is(':checked'))
+                                                                            {
+                                                                                    $td.find(':text').attr('disabled','disabled');
+                                                                            }else
+                                                                            {
+                                                                                    $td.find(':text').removeAttr('disabled');
+                                                                            }
+                                                                    }
+
+                                                                    if ($that.is(':text'))
+                                                                    {
+                                                                        if(parseFloat( $that.val().replace(',','.') )>0)
+                                                                        {
+                                                                                $that.removeClass('not-value');
+                                                                        }else
+                                                                        {
+                                                                                $that.addClass('not-value');
+                                                                        }
+                                                                        if($that.data('name')=='stegn5')
+                                                                        {
+                                                                            if(parseFloat( $that.val().replace(',','.') )>0)
+                                                                            {
+                                                                                $td.find(':checkbox').attr('disabled','disabled');
+
+                                                                            }else
+                                                                            {
+                                                                                $td.find(':checkbox').removeAttr('disabled');
+                                                                            }
+                                                                        }
+                                                                    }
+                                                    }, 'json');
+                                                    
+                                            }
+                                        }
+                                        ,
+                                        {
+                                            html: "<i class='icon-remove bigger-110'></i>&nbsp; Отмена",
+                                            "class" : "btn btn-mini",
+                                            click: function() {
+                                                $( this ).dialog( "close" );
+                                                $spinner1.hide();
+                                                $that.prop( 'checked', true );
+                                            }
+                                        }
+                                    ]
+                                });
                             }else
                             {
-                                    $that.addClass('not-value');
+                                $.get(url, params, function(data){
+
+                                    if (data.error) {
+                                        addGritter(title, tt.error, 'error')
+                                        $td.addClass('error');
+                                    } else {
+                                        addGritter(title, tt.success, 'success')
+                                        $td.removeClass('error').addClass('success');
+
+                                        setTimeout(function() { $td.removeClass('success') }, 1000)
+
+                                        recalculateBothTotal(st1);
+                                    }
+
+                                    $spinner1.hide();
+                                                if ($that.is(':checkbox'))
+                                                {
+                                                        if ($that.is(':checked'))
+                                                        {
+                                                                $td.find(':text').attr('disabled','disabled');
+                                                        }else
+                                                        {
+                                                                $td.find(':text').removeAttr('disabled');
+                                                        }
+                                                }
+
+                                                if ($that.is(':text'))
+                                                {
+                                                    if(parseFloat( $that.val().replace(',','.') )>0)
+                                                    {
+                                                            $that.removeClass('not-value');
+                                                    }else
+                                                    {
+                                                            $that.addClass('not-value');
+                                                    }
+                                                    if($that.data('name')=='stegn5')
+                                                    {
+                                                        if(parseFloat( $that.val().replace(',','.') )>0)
+                                                        {
+                                                            $td.find(':checkbox').attr('disabled','disabled');
+
+                                                        }else
+                                                        {
+                                                            $td.find(':checkbox').removeAttr('disabled');
+                                                        }
+                                                    }
+                                                }
+                                }, 'json')
                             }
-                            if($that.data('name')=='stegn5')
+
+                        } 
+                },
+                error: function( data ) {
+                    addGritter(title, tt.error, 'error');
+                    
+                }
+              }); 
+        }
+        else
+            $.get(url, params, function(data){
+
+                if (data.error) {
+                    addGritter(title, tt.error, 'error')
+                    $td.addClass('error');
+                } else {
+                    addGritter(title, tt.success, 'success')
+                    $td.removeClass('error').addClass('success');
+
+                    setTimeout(function() { $td.removeClass('success') }, 1000)
+
+                    recalculateBothTotal(st1);
+                }
+
+                $spinner1.hide();
+                            if ($that.is(':checkbox'))
+                            {
+                                    if ($that.is(':checked'))
+                                    {
+                                            $td.find(':text').attr('disabled','disabled');
+                                    }else
+                                    {
+                                            $td.find(':text').removeAttr('disabled');
+                                    }
+                            }
+
+                            if ($that.is(':text'))
                             {
                                 if(parseFloat( $that.val().replace(',','.') )>0)
                                 {
-                                    $td.find(':checkbox').attr('disabled','disabled');
-                                    
+                                        $that.removeClass('not-value');
                                 }else
                                 {
-                                    $td.find(':checkbox').removeAttr('disabled');
+                                        $that.addClass('not-value');
+                                }
+                                if($that.data('name')=='stegn5')
+                                {
+                                    if(parseFloat( $that.val().replace(',','.') )>0)
+                                    {
+                                        $td.find(':checkbox').attr('disabled','disabled');
+
+                                    }else
+                                    {
+                                        $td.find(':checkbox').removeAttr('disabled');
+                                    }
                                 }
                             }
-			}
-        }, 'json')
+            }, 'json')
     });
-
+    
     $('tr.min-max input').change(function(){
 
         var $that = $(this);

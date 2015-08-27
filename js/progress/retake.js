@@ -3,6 +3,17 @@ $(document).ready(function(){
     $spinner1 = $('#spinner1');
     
     initFilterForm($spinner1);
+    
+    $(document).on('click', '.datepicker', function(event) {
+        $(this).datepicker({
+            'format': 'dd.mm.yy',
+            'language':'ru'
+        })
+        .on('changeDate', function(ev){
+            $(this).datepicker('hide');
+        })
+        .focus();
+    });
 	
     $('#FilterForm_discipline').change(function(){
 

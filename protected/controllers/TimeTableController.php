@@ -35,7 +35,7 @@ class TimeTableController extends Controller
         ));
 	}
 	
-	public function actionSearchStudent()
+    public function actionSearchStudent()
     {
         $model = new St;
         $model->unsetAttributes();
@@ -44,8 +44,9 @@ class TimeTableController extends Controller
 		
         $this->render('search_student', array(
             'model' => $model,
+            'url'=>array('timeTable/student')
         ));
-	}
+    }
     
     public function actionChair()
     {

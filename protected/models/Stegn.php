@@ -178,7 +178,7 @@ class Stegn extends CActiveRecord
                     $criteria->addCondition("ustem5 CONTAINING '".$this->tema."'");
                 /*if(!empty($this->count_stego))
                     $criteria->addCondition("count_stego =".$this->count_stego);*/
-		$criteria->addCondition("stegn4 > 0 OR stegn5<=".Stegn::model()->getMin());
+		$criteria->addCondition("stegn4 > 0 OR (stegn5<=".Stegn::model()->getMin()." AND stegn5>0)");
 		//$criteria->compare('stegn7',$this->stegn7,true);
                 //$criteria->compare('stegn9',$this->stegn9,true);
                 ///$criteria->compare('stegn11',$this->stegn11,true);

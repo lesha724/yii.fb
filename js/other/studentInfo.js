@@ -90,4 +90,114 @@ $(document).ready(function(){
                 addGritter('', 'Произошла ошибка!', 'error')
         }, 'json')
     });
+    
+    $(document).on('click', '.show-passport', function(){
+
+        var $that = $(this);
+        var url = $that.data('url');
+        var data = {
+            psp1 : $that.data('psp1'),
+            type : $that.data('type')
+        };
+        
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            data: data,
+            success: function(html){
+                if (!html.error) {
+                    $('#myModal #modal-content').html(html.html);
+                    $('#myModal .modal-header h4').html(html.title);
+                    $('#myModal').modal('show');
+                }else
+                    addGritter('', 'Произошла ошибка!', 'error')
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                if (jqXHR.status == 500) {
+                    addGritter('', 'Internal error: ' + jqXHR.responseText, 'error')
+                } else {
+                    if (jqXHR.status == 403) {
+                    addGritter('', 'Access error: ' + jqXHR.responseText, 'error')
+                    } else {
+                         addGritter('', 'Unexpected error.', 'error')
+                    }
+                }
+                
+            },
+          });
+       
+    });
+    
+    $(document).on('click', '.change-passport', function(){
+
+        var $that = $(this);
+        var url = $that.data('url');
+        var data = {
+            psp1 : $that.data('psp1'),
+            type : $that.data('type')
+        };
+        
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            data: data,
+            success: function(html){
+                if (!html.error) {
+                    $('#myModal #modal-content').html(html.html);
+                    $('#myModal .modal-header h4').html(html.title);
+                    $('#myModal').modal('show');
+                }else
+                    addGritter('', 'Произошла ошибка!', 'error')
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                if (jqXHR.status == 500) {
+                    addGritter('', 'Internal error: ' + jqXHR.responseText, 'error')
+                } else {
+                    if (jqXHR.status == 403) {
+                    addGritter('', 'Access error: ' + jqXHR.responseText, 'error')
+                    } else {
+                         addGritter('', 'Unexpected error.', 'error')
+                    }
+                }
+                
+            },
+          });
+       
+    });
+    
+    $(document).on('click', '.delete-passport', function(){
+
+        var $that = $(this);
+        var url = $that.data('url');
+        var data = {
+            psp1 : $that.data('psp1'),
+            type : $that.data('type')
+        };
+        
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            data: data,
+            success: function(html){
+                if (!html.error) {
+                    addGritter('', 'Успешно!', 'success')
+                    location.reload();
+                }else
+                    addGritter('', 'Произошла ошибка!', 'error')
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                if (jqXHR.status == 500) {
+                    addGritter('', 'Internal error: ' + jqXHR.responseText, 'error')
+                } else {
+                    if (jqXHR.status == 403) {
+                    addGritter('', 'Access error: ' + jqXHR.responseText, 'error')
+                    } else {
+                         addGritter('', 'Unexpected error.', 'error')
+                    }
+                }
+                
+            },
+          });
+       
+    });
 });

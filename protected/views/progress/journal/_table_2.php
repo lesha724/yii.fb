@@ -194,9 +194,10 @@ HTML;
     return sprintf($pattern, $name);
 }
     $url       = Yii::app()->createUrl('/progress/insertStegMark');
+    $url_check       = Yii::app()->createUrl('/progress/checkCountRetake');
     $minMaxUrl = Yii::app()->createUrl('/progress/insertMmbjMark');
     $table = <<<HTML
-<div class="journal_div_table2" data-url="{$url}">
+<div class="journal_div_table2" data-url="{$url}" data-url-check="{$url_check}">
     <table class="table table-striped table-bordered table-hover journal_table">
         <thead>
             <tr>

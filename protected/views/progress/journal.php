@@ -8,6 +8,7 @@
     );
 
     Yii::app()->clientScript->registerPackage('gritter');
+    Yii::app()->clientScript->registerPackage('jquery.ui');
     Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/progress/journal.js', CClientScript::POS_HEAD);
 
     $error       = tt('Ошибка! Проверьте правильность вводимых данных!');
@@ -30,5 +31,6 @@ JS
         'model' => $model,
         'type'  => $type
     ));
-
+    
+    
     $this->renderPartial('journal/_bottom', array('model' => $model, 'type' => $type));

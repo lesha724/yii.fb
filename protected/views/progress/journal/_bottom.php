@@ -6,6 +6,18 @@
 
 if (! empty($model->group)):
 
+    $this->widget('bootstrap.widgets.TbButton', array(
+		'buttonType'=>'button',
+		'type'=>'primary',
+                
+		'icon'=>'print',
+		'label'=>tt('Печать'),
+		'htmlOptions'=>array(
+                    'class'=>'btn-small',
+                    'data-url'=>Yii::app()->createUrl('/progress/journalExcel'),
+                    'id'=>'journal-print',
+		)
+	));
     $arr = explode("/", $model->group);
     $us1=$arr[0];
     $gr1=$arr[1];
@@ -78,3 +90,16 @@ HTML;
 JS
     , CClientScript::POS_HEAD);
 endif;
+?>
+<div id="dialog-confirm" class="hide" title="Empty the recycle bin?">
+    <div class="alert alert-info bigger-110">
+        <?=tt('По данному пропуску есть отработки. Все отработки будут удалены!')?>
+    </div>
+
+    <div class="space-6"></div>
+
+    <p class="bigger-110 bolder center grey">
+        <i class="icon-hand-right blue bigger-120"></i>
+        <?=tt('Вы уверены?')?>
+    </p>
+</div><!-- #dialog-confirm -->

@@ -38,8 +38,14 @@ class OtherController extends Controller
                     'phones',
                     'employment',
                     'studentInfo',
+                    'studentPassport',
+                    'deletePassport',
+                    'showPassport',
+                    'uploadPassport',
+                    'changePassport',
                     'autocompleteTeachers',
                     'updateNkrs',
+                    'searchStudent'
                 ),
             ),
             array('deny',
@@ -351,7 +357,226 @@ SQL;
 
         Yii::app()->end(CJSON::encode(array('res' => true)));
     }
+    
+    private function checkAccessPasport($psp1)
+    {
+        if (Yii::app()->user->isTch) {
 
+            $grants = Yii::app()->user->dbModel->grants;
+
+            if (empty($grants))
+                throw new CHttpException(403, 'You don\'t have an access to this service');
+
+            $type = $grants->getGrantsFor(Grants::STUDENT_INFO);
+
+            if ($type == 0)
+                throw new CHttpException(403, 'You don\'t have an access to this service');
+
+        } elseif (Yii::app()->user->isStd) {
+             if(Yii::app()->user->dbModel->st1!=$psp1)   
+                 throw new CHttpException(403, 'You don\'t have an access to this service');
+        } else
+            throw new CHttpException(403, 'You don\'t have an access to this service');
+    }
+    
+    public function actionStudentPassport($type,$psp1)
+    {
+        $this->checkAccessPasport($psp1);
+        $stInfoForm= new StInfoForm;
+        $stInfoForm->getPassport($psp1,$type);
+    }
+    
+    public function actionDeletePassport()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        
+        $error=false;
+        
+        $psp1 = Yii::app()->request->getParam('psp1', null);
+        $type = Yii::app()->request->getParam('type', null);
+        
+        if($psp1!=null && $type!=null)
+        {
+            $this->checkAccessPasport($psp1);
+            $stInfoForm= new StInfoForm;
+            $stInfoForm->deletePassport($psp1,$type); 
+        }else
+           $error=true;  
+
+        $res = array(
+            'error'       => $error,
+        );
+        
+        Yii::app()->end(CJSON::encode($res));
+    }
+    
+    public function actionShowPassport()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        
+        $error=false;
+        $html='';
+        
+        $psp1 = Yii::app()->request->getParam('psp1', null);
+        $type = Yii::app()->request->getParam('type', null);
+        
+        if($psp1!=null && $type!=null)
+        {
+            $this->checkAccessPasport($psp1);
+            $stInfoForm= new StInfoForm;
+            $html = $this->renderPartial('studentInfo/_show',array(
+                'psp1'=>$psp1,
+                'type'=>$type
+            ), true);
+        }else
+           $error=true;  
+
+        $res = array(
+            'error'       => $error,
+            'html'=>$html,
+            'title'=>tt('Просмотр')
+        );
+        
+        Yii::app()->end(CJSON::encode($res));
+    }
+    
+     public function actionChangePassport()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        
+        $error=false;
+        $html='';
+        
+        $psp1 = Yii::app()->request->getParam('psp1', null);
+        $type = Yii::app()->request->getParam('type', null);
+        
+        if($psp1!=null && $type!=null)
+        {
+            $this->checkAccessPasport($psp1);
+            $stInfoForm= new StInfoForm;
+            $html = $this->renderPartial('studentInfo/_change',array(
+                'psp1'=>$psp1,
+                'type'=>$type
+            ), true);
+        }else
+           $error=true;  
+
+        $res = array(
+            'error'       => $error,
+            'html'=>$html,
+            'title'=>tt('Изменить')
+        );
+        
+        Yii::app()->end(CJSON::encode($res));
+    }
+    
+     public function actionUploadPassport()
+    {
+        if (! Yii::app()->request->isPostRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        
+        $html='';
+        
+        $psp1 = Yii::app()->request->getParam('psp1', null);
+        $type = Yii::app()->request->getParam('type', null);
+        
+        $error = "";
+        $msg = "";
+        $result = "";
+        $fileElementName = 'document_psp';
+        
+        if($psp1!=null && $type!=null)
+        {
+            $this->checkAccessPasport($psp1);
+            $stInfoForm= new StInfoForm;
+            $files_count = (isset($_FILES[$fileElementName]["name"])) ? count($_FILES[$fileElementName]["name"]) : 0;
+            for ($i = 0; $i < $files_count; $i++) {
+		if($i > 0) break;
+
+		$_FILES[$fileElementName]['name'][$i] = mb_strtolower($_FILES[$fileElementName]['name'][$i]);
+		$_FILES[$fileElementName]['name'][$i] = str_replace(" ","_",$_FILES[$fileElementName]['name'][$i]);		
+			
+			$res=1;
+                        if(!empty($_FILES[$fileElementName]['error'][$i]))
+			{
+				switch($_FILES[$fileElementName]['error'][$i])
+				{
+					case '1':
+						$error = 'размер загруженного файла превышает размер установленный параметром upload_max_filesize  в php.ini ';
+						break;
+					case '2':
+						$error = 'размер загруженного файла превышает размер установленный параметром MAX_FILE_SIZE в HTML форме. ';
+						break;
+					case '3':
+						$error = 'загружена только часть файла ';
+						break;
+					case '4':
+						$error = 'файл не был загружен (Пользователь в форме указал неверный путь к файлу). ';					
+						break;
+					case '6':
+						$error = 'неверная временная дирректория';
+						break;
+					case '7':
+						$error = 'ошибка записи файла на диск';
+						break;
+					case '8':
+						$error = 'загрузка файла прервана';
+						break;
+					case '999':
+					default:
+						$error = 'No error code avaiable';
+				}
+			}elseif(empty($_FILES[$fileElementName]['tmp_name'][$i]) || $_FILES[$fileElementName]['tmp_name'][$i] == 'none')
+			{
+				$error = 'No file was uploaded..';
+                                echo $error;
+			}else 
+			{				
+                            $res=$stInfoForm->setPassport($psp1,$type);
+                                
+                        }   
+                        if(empty($error)&&$res>-1)
+                        {
+                            Yii::app()->user->setFlash("upload_passport_success", tt('Загрузка успешна!'));
+                        }else
+                        {
+                            if(!empty($error))
+                            {
+                                Yii::app()->user->setFlash("upload_passport_error", $error);
+                            }else
+                            {
+                                Yii::app()->user->setFlash("upload_passport_error", tt('Ошибка сохранения'));
+                            }
+                        }
+			unset($error);
+		}
+		echo $result;
+            
+            $this->redirect(array('/other/studentinfo'));
+            
+        }else
+        {
+            throw new CHttpException(404, '');
+        }
+        
+    }
+    
+    public function actionSearchStudent()
+    {
+        $model = new St;
+        $model->unsetAttributes();
+        if (isset($_REQUEST['St']))
+            $model->attributes = $_REQUEST['St'];
+		
+        $this->render('/timeTable/search_student', array(
+            'model' => $model,
+            'url'=>array('other/studentInfo')
+        ));
+    }
+    
     public function actionStudentInfo()
     {
         $model = new TimeTableForm;
@@ -409,11 +634,14 @@ SQL;
             if ($stInfoForm->validate())
                 $stInfoForm->customSave($model);
         }
-
+        $student = new St;
+        $student->unsetAttributes();
+        
         $this->render('studentInfo', array(
             'canSelectSt' => $canSelectSt,
             'stInfoForm'  => $stInfoForm,
-            'model' => $model
+            'model' => $model,
+            'student'=>$student
         ));
     }
 

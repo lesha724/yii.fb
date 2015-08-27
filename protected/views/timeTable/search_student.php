@@ -5,9 +5,9 @@
  * @var TimeTableForm $model
  * @var CActiveForm $form
  */
-$this->pageHeader=tt('Расписание студента: Поиск');
+$this->pageHeader=tt('Поиск студента:');
 $this->breadcrumbs=array(
-    tt('Расписание'),
+    tt('Поиск'),
 );
 	
 $students = $model->getSearchStudents($model->st2);
@@ -15,7 +15,7 @@ $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id'=>'search-form',
     'htmlOptions' => array('class' => 'form-inline noprint'),
 	'method'=>'post',
-	'action'=> array('timeTable/searchStudent'),
+	'action'=> array(Yii::app()->controller->id.'/searchStudent'),
 ));
 ?>
 	<?php echo $form->textField($model,'st2',array('size'=>60,'maxlength'=>255)); ?>
@@ -37,7 +37,7 @@ $form1=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id'=>'timeTable-form',
     'htmlOptions' => array('style'=>'display:none'),
 	'method'=>'post',
-	'action'=> array('timeTable/student'),
+	'action'=> $url,
 ));
 ?>
 	<?php echo $form1->hiddenField($timTable,'filial'); ?>

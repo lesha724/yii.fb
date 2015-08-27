@@ -11,7 +11,7 @@
     Yii::app()->clientScript->registerPackage('datepicker');
     Yii::app()->clientScript->registerPackage('gritter');
     Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/progress/examSession.js', CClientScript::POS_HEAD);
-
+    
     $error       = tt('Ошибка! Проверьте правильность вводимых данных!');
     $success     = tt('Cохранено!');
     $minMaxError1 = tt('Оценка за пределами допустимого интервала!');

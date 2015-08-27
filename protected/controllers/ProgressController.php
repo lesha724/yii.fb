@@ -48,7 +48,9 @@ class ProgressController extends Controller
                     'addRetake',
                     'saveRetake',
                     'showRetake',
-                    'deleteRetake'
+                    'deleteRetake',
+                    'checkCountRetake',
+                    'journalExcel'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -263,6 +265,184 @@ class ProgressController extends Controller
         ));
     }
     
+    public function actionJournalExcel()
+    {
+        $type = 0; // own disciplines
+
+        $grants = Yii::app()->user->dbModel->grants;
+        if (! empty($grants))
+            $type = $grants->getGrantsFor(Grants::EL_JOURNAL);
+
+        $model = new FilterForm;
+        $model->scenario = 'journal';
+        if (isset($_REQUEST['FilterForm']))
+            $model->attributes=$_REQUEST['FilterForm'];
+        if(!empty($model->group))
+        {
+            $arr = explode("/", $model->group);
+            $us1=$arr[0];
+            $gr1=$arr[1];
+            $sql = <<<SQL
+                    
+                select sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28,gr3,f3,f2
+                from sem
+                  inner join sg on (sem2 = sg1)
+                  inner join gr on (sg1 = gr2)
+                  inner join sp on (sg2 = sp1)
+                  inner join f on (sp5 = f1)
+                where gr1=:gr1 and sem3=:YEAR and sem5=:SEM
+SQL;
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':gr1', $gr1);
+            $command->bindValue(':YEAR', Yii::app()->session['year']);
+            $command->bindValue(':SEM', Yii::app()->session['sem']);
+            $res = $command->queryRow();
+            $course='-';
+            $group='-';
+            $faculty='-';
+            if($res!=null)
+            {
+                $course=$res['sem4'];
+                $group=Gr::model()->getGroupName($res['sem4'], $res);
+                $faculty=$res['f3'];
+            }
+            
+            $students = St::model()->getStudentsForJournal($gr1, $us1);
+            $dates = R::model()->getDatesForJournal(
+                    $us1,
+                    $gr1
+            );
+            $year=(int)Yii::app()->session['year'];
+            $first_title='%s семестр %s - %s навчальний рік %s курс';
+            $second_title='%s факультет %s група';
+            
+            Yii::import('ext.phpexcel.XPHPExcel');    
+            $objPHPExcel= XPHPExcel::createPHPExcel();
+            $objPHPExcel->getProperties()->setCreator("ACY")
+                                   ->setLastModifiedBy("ACY ".date('Y-m-d H-i'))
+                                   ->setTitle("Jornal ".date('Y-m-d H-i'))
+                                   ->setSubject("Jornal ".date('Y-m-d H-i'))
+                                   ->setDescription("Jornal document, generated using ACY Portal. ".date('Y-m-d H:i:'))
+                                   ->setKeywords("")
+                                   ->setCategory("Result file");
+            $objPHPExcel->setActiveSheetIndex(0);
+            $sheet=$objPHPExcel->getActiveSheet();
+            $sheet->mergeCells('A1:J1');
+            $sheet->setCellValue('A1', sprintf($first_title,SH::convertSem5(Yii::app()->session['sem']),$year,($year+1),$course));
+            $sheet->mergeCells('K1:Z1');
+            $sheet->setCellValue('K1', sprintf($second_title,$faculty,$group));
+            //таблица
+            $sheet->getColumnDimension('A')->setWidth(4);
+            $sheet->mergeCells('A2:A3')->setCellValue('A2','№ з/п')->getStyle('A2')->getAlignment()->setTextRotation(90)-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $sheet->getColumnDimension('B')->setWidth(30);
+            $sheet->mergeCells('B2:B3')->setCellValue('B2','Прізвище, ім`я, по батькові')->getStyle('B2')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $sheet->getRowDimension(2)->setRowHeight(26);
+            $sheet->getRowDimension(3)->setRowHeight(93);
+            //колонка с фио студентов
+            $i=0;
+            $count_st=0;
+            foreach ($students as $key => $student)
+            {
+                //$name = ShortCodes::getShortName($student['st2'], $student['st3'], $student['st4']);
+                $name = $student['st2'].' '.$student['st3'].' '.$student['st4'];
+                $num  = $key+1;
+                $sheet->mergeCellsByColumnAndRow(0, $i+ 4, 0, $i+5);
+                $sheet->mergeCellsByColumnAndRow(1, $i+ 4, 1, $i+5);
+                $sheet->setCellValueByColumnAndRow(0,$i + 4,$num);
+                $sheet->setCellValueByColumnAndRow(1,$i + 4,$name)->getStyleByColumnAndRow(1,$i + 4)->getAlignment()->setWrapText(true);
+                $i++;
+                $i++;
+                $count_st++;
+            }
+            $count_st_column=$i;
+            //верх таблицы с датами
+            $i=0;
+            foreach($dates as $date) {
+                $type='';
+                switch ($date['priz']) {
+                    case 1:
+                        $type=tt('Субмодуль');
+                        break;
+                    case 2:
+                        $type=tt('Модуль');
+                        break;
+                    default:
+                        $type=tt('Занятие');
+                        break;
+                }
+                $title='№'.$date['nom'].' '.$date['formatted_date'].' '.$type;
+                $sheet->setCellValueByColumnAndRow($i+2,3,$title);
+                $sheet->setCellValueByColumnAndRow($i+2,4+$count_st_column,$date['tema']);
+                $i++;
+            }
+            $sheet->mergeCellsByColumnAndRow(2, 2, 1+$i, 2)->setCellValueByColumnAndRow(2, 2,'Дата')->getStyleByColumnAndRow(2, 2)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $sheet->getStyleByColumnAndRow(2, 3, 1+$i, 3)->getAlignment()->setWrapText(true)->setTextRotation(90)-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $sheet->setCellValueByColumnAndRow(1,4+$count_st_column,'Тема')->getStyleByColumnAndRow(1,4+$count_st_column)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $sheet->getStyleByColumnAndRow(2, 4+$count_st_column, 1+$i, 4+$count_st_column)->getAlignment()->setWrapText(true)->setTextRotation(90)-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $sheet->getRowDimension(4+$count_st_column)->setRowHeight(93);
+            $sheet->setCellValueByColumnAndRow(1,5+$count_st_column,'Підпис викладача')->getStyleByColumnAndRow(1,5+$count_st_column)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $sheet->getRowDimension(5+$count_st_column)->setRowHeight(93);
+            $i=0;
+            $k=0;
+            foreach($students as $st) {
+                $st1 = $st['st1'];
+                $marks = Stegn::model()->getMarksForStudent($st1, $us1);
+                $k=0;
+                foreach($dates as $key => $date) {
+                    $key = $us1.'/'.$date['nom']; // 0 - r3
+                    $stegn4 = isset($marks[$key]) && $marks[$key]['stegn4'] != 0
+                                ? 'нб'
+                                : '';
+                    $stegn5 = isset($marks[$key]) && $marks[$key]['stegn5'] != 0
+                                ? round($marks[$key]['stegn5'], 1)
+                                : '';
+                    $stegn6 = isset($marks[$key]) && $marks[$key]['stegn6'] != 0
+                                ? round($marks[$key]['stegn6'], 1)
+                                : '';
+                    if(($stegn6!='')||($stegn4!=''))
+                    {
+                        if($stegn4!='')
+                        {
+                            $sheet->setCellValueByColumnAndRow($k+2,$i*2 + 4,$stegn4);
+                            $sheet->setCellValueByColumnAndRow($k+2,$i*2 + 5,$stegn6);
+                        }else
+                        {
+                            $sheet->setCellValueByColumnAndRow($k+2,$i*2 + 4,$stegn5);
+                            $sheet->setCellValueByColumnAndRow($k+2,$i*2 + 5,$stegn6);
+                        }
+                    }else
+                    {
+                        $sheet->mergeCellsByColumnAndRow($k+2, $i*2+ 4, $k+2, $i*2+5);
+                        $sheet->setCellValueByColumnAndRow($k+2,$i*2 + 4,$stegn5);
+                    }
+                    $k++;
+                }
+                $i++;
+            }
+            $sheet->getStyleByColumnAndRow(0,1,$k+1,5+$count_st_column)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
+            $sheet->setTitle('Jornal '.date('Y-m-d H-i'));
+
+            // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+            $objPHPExcel->setActiveSheetIndex(0);
+
+            // Redirect output to a clientâ€™s web browser (Excel5)
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="ACY_JORNAL_'.date('Y-m-d H-i').'.xls"');
+            header('Cache-Control: max-age=0');
+            // If you're serving to IE 9, then the following may be needed
+            header('Cache-Control: max-age=1');
+            // If you're serving to IE over SSL, then the following may be needed
+            header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+            header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+            header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+            header ('Pragma: public'); // HTTP/1.0
+
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            $objWriter->save('php://output');
+        }
+        Yii::app()->end();
+    }
+    
     public function actionDeleteRetake()
     {
         if (! Yii::app()->request->isAjaxRequest)
@@ -408,7 +588,30 @@ class ProgressController extends Controller
 
         echo CHtml::dropDownList('FilterForm[group]', '',$groups, array('id'=>'FilterForm_group', 'class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;'));
     }
-
+    
+    public function actionCheckCountRetake()
+    {
+        /* if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');*/
+        $stegn1 = Yii::app()->request->getParam('st1', null);
+        $stegn2 = Yii::app()->request->getParam('us1', null);
+        $stegn3 = Yii::app()->request->getParam('nom', null);
+        $count=0;
+        $error = false;
+        if($stegn1==null || $stegn2==null || $stegn3==null)
+            $error = true;
+        if(!$error)
+        {
+            $stegn=  Stegn::model()->findByAttributes(array('stegn1'=>$stegn1,'stegn2'=>$stegn2,'stegn3'=>$stegn3)); 
+            if($stegn!=null)
+            $count=Stego::model()->countByAttributes(array('stego1'=>$stegn->stegn0));
+        }
+        $count_result=false;
+        if($count>0)
+            $count_result=true;
+        Yii::app()->end(CJSON::encode(array('error' => $error,'count'=>$count_result)));
+    }
+    
     public function actionInsertStegMark()
     {
         if (! Yii::app()->request->isAjaxRequest)
@@ -433,7 +636,7 @@ class ProgressController extends Controller
             
             if(! empty($ps2)){
                 $date1  = new DateTime(date('Y-m-d H:i:s'));
-                $date2  = new DateTime($date['r2']);
+                $date2  = new DateTime($stegn9);
                 $diff = $date1->diff($date2)->days;
                 if ($diff > $ps2)
                 {
@@ -483,7 +686,12 @@ class ProgressController extends Controller
 
                     $error =!$stegn->save();
                 }
+                if($field == 'stegn4'&&$value==0)
+                {
+                    Stego::model()->deleteAllByAttributes(array('stego1'=>$stegn->stegn0));
+                }
             }
+            
             
             
             //Stegn::model()->insertMark($stegn1,$stegn2,$stegn3,$field,$value,$stegn9);
