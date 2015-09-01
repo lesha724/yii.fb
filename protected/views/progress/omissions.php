@@ -5,9 +5,11 @@
  * @var TimeTableForm $model
  */
 
-$this->pageHeader=tt('Уважительные пропуски');
+$this->pageHeader=tt('Региистрация пропусков занятий
+');
 $this->breadcrumbs=array(
-    tt('Уважительные пропуски'),
+    tt('Региистрация пропусков занятий
+'),
 );
 Yii::app()->clientScript->registerPackage('dataTables');
 Yii::app()->clientScript->registerPackage('gritter');

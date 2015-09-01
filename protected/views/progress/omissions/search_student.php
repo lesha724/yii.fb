@@ -5,9 +5,11 @@
  * @var TimeTableForm $model
  * @var CActiveForm $form
  */
-$this->pageHeader=tt('Уважительные пропуски: Поиск');
+$this->pageHeader=tt('Региистрация пропусков занятий
+: Поиск');
 $this->breadcrumbs=array(
-    tt('Уважительные пропуски'),
+    tt('Региистрация пропусков занятий
+'),
 );
 	
 $students = $model->getSearchStudents($model->st2);

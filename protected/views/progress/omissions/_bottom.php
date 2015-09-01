@@ -1,5 +1,5 @@
 <?php
-
+$this->renderPartial('/filter_form/default/_refresh_filter_form_button');
 
 /* 
  * To change this license header, choose License Headers in Project Properties.
@@ -87,7 +87,7 @@ if($omissions==null)
             $checked="checked";
         $tr.='<tr data-stegn1="'.$key['stegn1'].'" data-stegn2="'.$key['stegn2'].'" data-stegn3="'.$key['stegn3'].'">'.
                 '<td>'.$i.'</td>'.
-                '<td class="date">'.date('Y-m-d', strtotime($key['stegn9'])).'</td>'.
+                '<td class="date">'.date('d.m.Y', strtotime($key['stegn9'])).'</td>'.
                 '<td>'.$key['d2'].'</td>'.
                 '<td>'.  ShortCodes::convertUS4($key['us4']).'</td>'.
                 '<td><input data-field="stegn4" class="ckbox-stegn4" '.$checked.' type="checkbox"/></td>'.

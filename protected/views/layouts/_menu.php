@@ -277,7 +277,8 @@ $this->widget('zii.widgets.CMenu', array(
                     'active'  => $_c=='progress' && $_a=='attendanceStatistic'
                 ),
                 array(
-                    'label'   => $_l2.tt('Уважительные пропуски'),
+                    'label'   => $_l2.tt('Региистрация пропусков занятий
+'),
                     'url'     => _u('/progress/omissions'),
                     'visible' => _ch('progress', 'omissions')&& $isTch,
                     'active'  => $_c=='progress' && $_a=='omissions'

@@ -15,6 +15,7 @@ $html .='<div class="span3 ace-select">'.
 echo $html;
 
 if (!empty($model->discipline)) {
+    $this->renderPartial('/filter_form/default/_refresh_filter_form_button');
     $retake->stegn2=$model->discipline;
     $this->renderPartial('retake/_grid', array(
         'model' =>  $retake

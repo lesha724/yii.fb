@@ -21,6 +21,10 @@ $(document).ready(function(){
         appendSelect();
         $form.submit();
     });
+
+    $('#filter-form').submit(function(e) {
+        appendSelect();
+    });
     
     function appendSelect()
     {

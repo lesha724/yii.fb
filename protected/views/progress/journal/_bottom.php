@@ -18,6 +18,8 @@ if (! empty($model->group)):
                     'id'=>'journal-print',
 		)
 	));
+    $this->renderPartial('/filter_form/default/_refresh_filter_form_button');
+
     $arr = explode("/", $model->group);
     $us1=$arr[0];
     $gr1=$arr[1];

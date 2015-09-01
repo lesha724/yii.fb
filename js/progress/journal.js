@@ -105,7 +105,9 @@ $(document).ready(function(){
                                                                                     $td.find(':text').attr('disabled','disabled');
                                                                             }else
                                                                             {
-                                                                                    $td.find(':text').removeAttr('disabled');
+                                                                                    $td.find('[data-name="stegn5"]').removeAttr('disabled');
+                                                                                    //$td.find(':text').removeAttr('disabled');
+                                                                                    $td.find('[data-name="stegn6"]').val('');
                                                                             }
                                                                     }
 

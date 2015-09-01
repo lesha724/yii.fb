@@ -643,6 +643,7 @@ SQL;
                     throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
                 } 
             }
+            $arr=array();
             if ($field == 'stegn4')
             {
                 if($value==0)
@@ -651,6 +652,7 @@ SQL;
                 }
                 else {
                     $value=0;
+                    $arr=array('stegn6'=>'0');
                 } 
             }
             $stegn=  Stegn::model()->findByAttributes(array('stegn1'=>$stegn1,'stegn2'=>$stegn2,'stegn3'=>$stegn3)); 
@@ -661,11 +663,11 @@ SQL;
             {
                if($stegn!=null)
                 {
-                    $attr = array(
+                    $attr = array_merge(array(
                         $field => $value,
                         'stegn8' =>  Yii::app()->user->dbModel->p1,
                         'stegn7' =>  date('Y-m-d H:i:s'),
-                    );
+                    ),$arr);
                     $error =!$stegn->saveAttributes($attr);
                 }else
                 {

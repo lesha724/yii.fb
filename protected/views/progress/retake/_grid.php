@@ -29,7 +29,7 @@
         ),
         'stegn9'=>array(
             'name'=>'stegn9',
-            'value'=>'date_format(date_create_from_format("Y-m-d H:i:s", $data->stegn9), "d-m-Y")',
+            'value'=>'date_format(date_create_from_format("Y-m-d H:i:s", $data->stegn9), "d.m.Y")',
             'htmlOptions'=>array('class'=>'date'),
         ),
         'stegn11',
