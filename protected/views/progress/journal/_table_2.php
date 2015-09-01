@@ -6,64 +6,83 @@ function table2Tr($date,$us1,$gr1,$st1,$marks)
     if (strtotime($date['r2']) > strtotime('now'))
         return '<td colspan="2"></td>';
 
-    $r2  = $date['r2'];
-    $ps2 = PortalSettings::model()->getSettingFor(27);
-    $nom=$date['nom'];
-	$date_lesson=$date['r2'];
-    $disabled = null;
-    $type=$date['priz'];
+    $us=Us::model()->findByPk($us1);
+    if($us!=null)
+    {
 
-    if (! empty($ps2)) {
-        $date1  = new DateTime(date('Y-m-d H:i:s'));
-        $date2  = new DateTime($date['r2']);
-        $diff = $date1->diff($date2)->days;
-        if ($diff > $ps2)
-        {
-            $disabled = 'disabled="disabled"';
+        $r2  = $date['r2'];
+        $ps2 = PortalSettings::model()->getSettingFor(27);
+        $nom=$date['nom'];
+        $date_lesson=$date['r2'];
+        $disabled = null;
+        $type=$date['priz'];
+
+        if (! empty($ps2)) {
+            $date1  = new DateTime(date('Y-m-d H:i:s'));
+            $date2  = new DateTime($date['r2']);
+            $diff = $date1->diff($date2)->days;
+            if ($diff > $ps2)
+            {
+                $disabled = 'disabled="disabled"';
+            }
         }
-    }
-    $key = $us1.'/'.$date['nom']; // 0 - r3
+        $key = $us1.'/'.$date['nom']; // 0 - r3
 
-    $stegn4 = isset($marks[$key]) && $marks[$key]['stegn4'] != 0
-                ? 'checked'
-                : '';
+        $stegn4 = isset($marks[$key]) && $marks[$key]['stegn4'] != 0
+                    ? 'checked'
+                    : '';
 
-    $stegn5 = isset($marks[$key]) && $marks[$key]['stegn5'] != 0
-                ? round($marks[$key]['stegn5'], 1)
-                : '';
+        $stegn5 = isset($marks[$key]) && $marks[$key]['stegn5'] != 0
+                    ? round($marks[$key]['stegn5'], 1)
+                    : '';
 
-    $stegn6 = isset($marks[$key]) && $marks[$key]['stegn6'] != 0
-                ? round($marks[$key]['stegn6'], 1)
-                : '';
-	$disabled_input=$disabled;
-        $disabled_input_1=$disabled;
-	$class_1='';
-	$class_2='';
-	if($stegn4=='checked')
-	{
-		$disabled_input = 'disabled="disabled"';
-                $disabled_input_1 = 'disabled="disabled"';
-	}
-	if($disabled != 'disabled="disabled"')
-	{
-		if($stegn5=='')
-			$class_1 = 'class="not-value"';
-		if($stegn6=='')
-			$class_2 = 'class="not-value"';
-	}
-       if(PortalSettings::model()->findByPk(29)->ps2==1)
-       {
-           $disabled_input_1 = 'disabled="disabled"';
-       }
-	$pattern= <<<HTML
-    <td colspan="2" data-nom="{$nom}" data-priz="{$type}" data-us1="{$us1}"  data-date="{$date_lesson}" data-gr1="{$gr1}">
-        <input type="checkbox" %s data-name="stegn4" {$disabled}>
-        <input value="%s" {$class_1} maxlength="3" data-name="stegn5" {$disabled_input}>
-        <input value="%s" {$class_2} maxlength="3" data-name="stegn6" {$disabled_input_1}>
-    </td>
+        $stegn6 = isset($marks[$key]) && $marks[$key]['stegn6'] != 0
+                    ? round($marks[$key]['stegn6'], 1)
+                    : '';
+        $disabled_input=$disabled;
+            $disabled_input_1=$disabled;
+        $class_1='';
+        $class_2='';
+        if($stegn4=='checked')
+        {
+            $disabled_input = 'disabled="disabled"';
+                    $disabled_input_1 = 'disabled="disabled"';
+        }
+        if($disabled != 'disabled="disabled"')
+        {
+            if($stegn5=='')
+                $class_1 = 'class="not-value"';
+            if($stegn6=='')
+                $class_2 = 'class="not-value"';
+        }
+           if(PortalSettings::model()->findByPk(29)->ps2==1)
+           {
+               $disabled_input_1 = 'disabled="disabled"';
+           }
+        $tooltip=tt('присутствие/отсутствие');
+        if($us->us4!=1)
+        {
+            $pattern= <<<HTML
+            <td colspan="2" data-nom="{$nom}" data-priz="{$type}" data-us1="{$us1}"  data-date="{$date_lesson}" data-gr1="{$gr1}">
+                <input type="checkbox" data-toggle="tooltip" data-placement="right" data-original-title="{$tooltip}" %s data-name="stegn4" {$disabled}>
+                <input value="%s" {$class_1} maxlength="3" data-name="stegn5" {$disabled_input}>
+                <input value="%s" {$class_2} maxlength="3" data-name="stegn6" {$disabled_input_1}>
+            </td>
 HTML;
 
-    return sprintf($pattern, $stegn4, $stegn5, $stegn6);
+            return sprintf($pattern, $stegn4, $stegn5, $stegn6);
+        }else
+        {
+            $pattern= <<<HTML
+            <td colspan="2" data-nom="{$nom}" data-priz="{$type}" data-us1="{$us1}"  data-date="{$date_lesson}" data-gr1="{$gr1}">
+                <input data-toggle="tooltip" data-placement="right" data-original-title="{$tooltip}" type="checkbox" %s data-name="stegn4" {$disabled}>
+            </td>
+HTML;
+
+            return sprintf($pattern, $stegn4);
+        }
+
+    }
 }
 
 function getMarksForTotalSubModule($date,$us1,$marks)

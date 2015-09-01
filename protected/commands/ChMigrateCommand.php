@@ -8,7 +8,8 @@ class ChMigrateCommand extends MigrateCommand
     public function run($args)
     {
         parent::run($args);
- 
+
+        Yii::app()->cache->flush();
         $this->flushCache();
     }
  
@@ -21,5 +22,6 @@ class ChMigrateCommand extends MigrateCommand
             if ($cacher)
                 $cacher->flush();
         }
+
     }
 }

@@ -633,7 +633,11 @@ SQL;
             if (!in_array($field, $whiteList))
                throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
             $ps2 = PortalSettings::model()->getSettingFor(27);
-            
+
+            $us=Us::model()->findByPk($stegn2);
+            if($us->us4==1&&$field!='stegn4')
+                throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
             if(! empty($ps2)){
                 $date1  = new DateTime(date('Y-m-d H:i:s'));
                 $date2  = new DateTime($stegn9);

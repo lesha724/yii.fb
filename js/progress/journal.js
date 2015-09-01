@@ -83,56 +83,7 @@ $(document).ready(function(){
                                             "class" : "btn btn-danger btn-mini",
                                             click: function() {
                                                     $( this ).dialog( "close" );
-                                                    $.get(url, params, function(data){
-
-                                                        if (data.error) {
-                                                            addGritter(title, tt.error, 'error')
-                                                            $td.addClass('error');
-                                                        } else {
-                                                            addGritter(title, tt.success, 'success')
-                                                            $td.removeClass('error').addClass('success');
-
-                                                            setTimeout(function() { $td.removeClass('success') }, 1000)
-
-                                                            recalculateBothTotal(st1);
-                                                        }
-
-                                                        $spinner1.hide();
-                                                                    if ($that.is(':checkbox'))
-                                                                    {
-                                                                            if ($that.is(':checked'))
-                                                                            {
-                                                                                    $td.find(':text').attr('disabled','disabled');
-                                                                            }else
-                                                                            {
-                                                                                    $td.find('[data-name="stegn5"]').removeAttr('disabled');
-                                                                                    //$td.find(':text').removeAttr('disabled');
-                                                                                    $td.find('[data-name="stegn6"]').val('');
-                                                                            }
-                                                                    }
-
-                                                                    if ($that.is(':text'))
-                                                                    {
-                                                                        if(parseFloat( $that.val().replace(',','.') )>0)
-                                                                        {
-                                                                                $that.removeClass('not-value');
-                                                                        }else
-                                                                        {
-                                                                                $that.addClass('not-value');
-                                                                        }
-                                                                        if($that.data('name')=='stegn5')
-                                                                        {
-                                                                            if(parseFloat( $that.val().replace(',','.') )>0)
-                                                                            {
-                                                                                $td.find(':checkbox').attr('disabled','disabled');
-
-                                                                            }else
-                                                                            {
-                                                                                $td.find(':checkbox').removeAttr('disabled');
-                                                                            }
-                                                                        }
-                                                                    }
-                                                    }, 'json');
+                                                    send(url,params,title,$td,$that,$spinner1,st1);
                                                     
                                             }
                                         }
@@ -150,54 +101,7 @@ $(document).ready(function(){
                                 });
                             }else
                             {
-                                $.get(url, params, function(data){
-
-                                    if (data.error) {
-                                        addGritter(title, tt.error, 'error')
-                                        $td.addClass('error');
-                                    } else {
-                                        addGritter(title, tt.success, 'success')
-                                        $td.removeClass('error').addClass('success');
-
-                                        setTimeout(function() { $td.removeClass('success') }, 1000)
-
-                                        recalculateBothTotal(st1);
-                                    }
-
-                                    $spinner1.hide();
-                                                if ($that.is(':checkbox'))
-                                                {
-                                                        if ($that.is(':checked'))
-                                                        {
-                                                                $td.find(':text').attr('disabled','disabled');
-                                                        }else
-                                                        {
-                                                                $td.find(':text').removeAttr('disabled');
-                                                        }
-                                                }
-
-                                                if ($that.is(':text'))
-                                                {
-                                                    if(parseFloat( $that.val().replace(',','.') )>0)
-                                                    {
-                                                            $that.removeClass('not-value');
-                                                    }else
-                                                    {
-                                                            $that.addClass('not-value');
-                                                    }
-                                                    if($that.data('name')=='stegn5')
-                                                    {
-                                                        if(parseFloat( $that.val().replace(',','.') )>0)
-                                                        {
-                                                            $td.find(':checkbox').attr('disabled','disabled');
-
-                                                        }else
-                                                        {
-                                                            $td.find(':checkbox').removeAttr('disabled');
-                                                        }
-                                                    }
-                                                }
-                                }, 'json')
+                                send(url,params,title,$td,$that,$spinner1,st1);
                             }
 
                         } 
@@ -209,56 +113,73 @@ $(document).ready(function(){
               }); 
         }
         else
-            $.get(url, params, function(data){
+        {
+            send(url,params,title,$td,$that,$spinner1,st1);
+        }
 
-                if (data.error) {
-                    addGritter(title, tt.error, 'error')
-                    $td.addClass('error');
-                } else {
-                    addGritter(title, tt.success, 'success')
-                    $td.removeClass('error').addClass('success');
-
-                    setTimeout(function() { $td.removeClass('success') }, 1000)
-
-                    recalculateBothTotal(st1);
-                }
-
-                $spinner1.hide();
-                            if ($that.is(':checkbox'))
-                            {
-                                    if ($that.is(':checked'))
-                                    {
-                                            $td.find(':text').attr('disabled','disabled');
-                                    }else
-                                    {
-                                            $td.find(':text').removeAttr('disabled');
-                                    }
-                            }
-
-                            if ($that.is(':text'))
-                            {
-                                if(parseFloat( $that.val().replace(',','.') )>0)
-                                {
-                                        $that.removeClass('not-value');
-                                }else
-                                {
-                                        $that.addClass('not-value');
-                                }
-                                if($that.data('name')=='stegn5')
-                                {
-                                    if(parseFloat( $that.val().replace(',','.') )>0)
-                                    {
-                                        $td.find(':checkbox').attr('disabled','disabled');
-
-                                    }else
-                                    {
-                                        $td.find(':checkbox').removeAttr('disabled');
-                                    }
-                                }
-                            }
-            }, 'json')
     });
-    
+
+    function send(url,params,title,$td,$that,$spinner1,st1)
+    {
+        $.get(url, params, function(data){
+
+            if (data.error) {
+                addGritter(title, tt.error, 'error')
+                $td.addClass('error');
+            } else {
+                addGritter(title, tt.success, 'success')
+                $td.removeClass('error').addClass('success');
+
+                setTimeout(function() { $td.removeClass('success') }, 1000)
+
+                recalculateBothTotal(st1);
+            }
+
+            $spinner1.hide();
+            if ($that.is(':checkbox'))
+            {
+                if ($that.is(':checked'))
+                {
+                    $td.find('[data-name="stegn5"]').attr('disabled','disabled');
+                }else
+                {
+                    $td.find('[data-name="stegn5"]').removeAttr('disabled');
+                    //$td.find(':text').removeAttr('disabled');
+                    $td.find('[data-name="stegn6"]').val('');
+                }
+                /*if(params.value==1)
+                {
+                    $that.data('original-title','+=');
+                }else
+                {
+                    $that.data('original-title','--');
+                }*/
+            }
+
+            if ($that.is(':text'))
+            {
+                if(parseFloat( $that.val().replace(',','.') )>0)
+                {
+                    $that.removeClass('not-value');
+                }else
+                {
+                    $that.addClass('not-value');
+                }
+                if($that.data('name')=='stegn5')
+                {
+                    if(parseFloat( $that.val().replace(',','.') )>0)
+                    {
+                        $td.find(':checkbox').attr('disabled','disabled');
+
+                    }else
+                    {
+                        $td.find(':checkbox').removeAttr('disabled');
+                    }
+                }
+            }
+        }, 'json')
+    }
+
     $('tr.min-max input').change(function(){
 
         var $that = $(this);
@@ -267,7 +188,7 @@ $(document).ready(function(){
             value : parseFloat( $that.val().replace(',','.') ),
             field : $that.data('name'),
             mmbj2 : $that.data('mmbj2'),
-            mmbj3 : $that.data('mmbj3'),
+            mmbj3 : $that.data('mmbj3')
         }
 
         var $td = $that.parent();

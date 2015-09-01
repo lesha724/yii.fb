@@ -14,6 +14,8 @@
     $error       = tt('Ошибка! Проверьте правильность вводимых данных!');
     $success     = tt('Cохранено!');
     $minMaxError = tt('Оценка за пределами допустимого интервала!');
+    $notenter = tt('отсутствие');
+    $enter = tt('присутствие');
 
     Yii::app()->clientScript->registerScript('translations', <<<JS
         tt.error       = "{$error}"
