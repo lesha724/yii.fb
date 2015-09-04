@@ -82,15 +82,18 @@ if($omissions==null)
     $i=1;
     foreach($omissions as $key)
     {
-        $checked="";
+        $type="";
+        if($key['stegn4']==1)
+            $type=tt("Не ув.");
         if($key['stegn4']==2)
-            $checked="checked";
-        $tr.='<tr data-stegn1="'.$key['stegn1'].'" data-stegn2="'.$key['stegn2'].'" data-stegn3="'.$key['stegn3'].'">'.
+            $type=tt("Уваж.");
+        $tr.='<tr data-type1="'.tt("Не ув.").'" data-type2="'.tt("Уваж.").'"data-stegn1="'.$key['stegn1'].'" data-stegn2="'.$key['stegn2'].'" data-stegn3="'.$key['stegn3'].'">'.
                 '<td>'.$i.'</td>'.
                 '<td class="date">'.date('d.m.Y', strtotime($key['stegn9'])).'</td>'.
                 '<td>'.$key['d2'].'</td>'.
                 '<td>'.  ShortCodes::convertUS4($key['us4']).'</td>'.
-                '<td><input data-field="stegn4" class="ckbox-stegn4" '.$checked.' type="checkbox"/></td>'.
+                //'<td><input data-field="stegn4" class="ckbox-stegn4" '.$checked.' type="checkbox"/></td>'.
+                '<td class="stegn4">'.$type.'</td>'.
                 '<td><input data-field="stegn11" class="input-stegn11" type="text" value="'.$key['stegn11'].'"/></td>'.
                 '<td>'. getSelect($key['stegn10'],0).'</td>'.
         '</tr>';
@@ -115,8 +118,8 @@ $this->beginWidget(
             echo CHtml::textField('date1_omissions_change', $model->date1, array('class' => 'datepicker', 'id'=>'date1_omissions_change'));
             echo CHtml::label(tt('по'), 'date2_omissions_change');
             echo CHtml::textField('date2_omissions_change', $model->date2, array('class' => 'datepicker', 'id'=>'date2_omissions_change'));
-            echo CHtml::label(tt('Уваж./Неув.'), 'ck_omissions');
-            echo CHtml::checkBox('ck_omissions', 'checked', array('id'=>'ck_omissions'));
+            //echo CHtml::label(tt('Уваж./Неув.'), 'ck_omissions');
+            //echo CHtml::checkBox('ck_omissions', 'checked', array('id'=>'ck_omissions'));
             echo CHtml::label(tt('Номер справки'), 'number_reference');
             echo CHtml::textField('number_reference', '', array('id'=>'number_reference'));
             echo CHtml::label(tt('Тип'), 'select_type');

@@ -1,12 +1,12 @@
 <?php
-function table2Tr($date,$us1,$gr1,$st1,$marks)
+function table2Tr($date,$us1,$gr1,$st1,$marks,$us)
 {
     /*if($date['priz']!=0)
        return '<td colspan="2"></td>'; */
     if (strtotime($date['r2']) > strtotime('now'))
         return '<td colspan="2"></td>';
 
-    $us=Us::model()->findByPk($us1);
+
     if($us!=null)
     {
 
@@ -103,9 +103,11 @@ function getMarksForTotalSubModule($date,$us1,$marks)
     }
 }
 
-function generateTh2($us1,$minMax, $column, $ps9)
+function generateTh2($us1,$minMax, $column, $ps9,$us)
 {
     if ($ps9 == '0')
+        return '<th></th><th></th>';
+    if($us->us4==1)
         return '<th></th><th></th>';
     if(!isset($minMax[$column]))
     {
@@ -232,7 +234,7 @@ HTML;
     </table>
 </div>
 HTML;
-    
+    $us=Us::model()->findByPk($us1);
     $minMax = Mmbj::model()->getDataForJournal($us1);
     
     /*** 2 table ***/
@@ -240,12 +242,12 @@ HTML;
     $column = 1;
     foreach($dates as $date) {
         $th    .= generateColumnName($date, $ps20);
-        $th2   .= generateTh2($us1,$minMax, $column, $ps9);
+        $th2   .= generateTh2($us1,$minMax, $column, $ps9,$us);
         $column++;
     }
 
     global $total_1;
-    
+
     foreach($students as $st) {
 
         $st1 = $st['st1'];
@@ -265,7 +267,7 @@ HTML;
                     $total_sub_module=0;
                 }
             }*/
-            $tr .= table2Tr($date,$us1,$gr1,$st1,$marks);
+            $tr .= table2Tr($date,$us1,$gr1,$st1,$marks,$us);
             
         }
         $tr .= '</tr>';

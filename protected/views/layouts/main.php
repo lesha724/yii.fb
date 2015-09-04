@@ -25,6 +25,7 @@
 
     <link rel="stylesheet" type="text/css" href="<?=Yii::app()->baseUrl?>/<?=getStyleName('styles.css')?>" />
 
+
     <title><?php echo CHtml::encode($this->pageTitle); ?></title>
 
     <?php Yii::app()->bootstrap->register(); ?>
@@ -57,6 +58,9 @@
     <?php
         Yii::app()->clientScript->registerPackage('chosen');
         Yii::app()->clientScript->registerPackage('spin');
+    ?>
+    <?php if(!empty(Yii::app()->params['analytics']))
+        echo '<script>'.Yii::app()->params['analytics'].'</script>';
     ?>
 </head>
 
@@ -116,9 +120,7 @@
     <script src="<?=Yii::app()->baseUrl?>/theme/ace/assets/js/uncompressed/ace-elements.js"></script>
     <script src="<?=Yii::app()->baseUrl?>/theme/ace/assets/js/ace.min.js"></script>
     <script src="<?=Yii::app()->baseUrl?>/theme/ace/assets/js/uncompressed/bootbox.js"></script>
-	<?php if(!empty(Yii::app()->params['analytics']))
-			echo '<script>'.Yii::app()->params['analytics'].'</script>';
-	?>
+
 	<script>
 		$(function () {
 		  $('[data-toggle="tooltip"]').tooltip();

@@ -95,7 +95,8 @@ $config = array(
                 ),
                 'dataTables' => array(
                     'baseUrl' => 'theme/ace/assets/',
-                    'js' => array('js/jquery.dataTables.min.js', 'js/jquery.dataTables.bootstrap.js'),
+                    'js' => array('js/jquery.dataTables.min1.js', 'js/jquery.dataTables.bootstrap.js'),
+                    //'css' => array('css/jquery.dataTables.min.css'),
                     'depends' => array('jquery')
                 ),
                 'daterangepicker' => array(

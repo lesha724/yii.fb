@@ -83,7 +83,7 @@
             }
         }
 	$events.=$text;
-	$arr.=$fullText;
+	$arr.=','.$fullText;
 	$arr.=']';
 ?>
 	<button id="print-table" class="btn btn-info btn-small">
@@ -97,7 +97,7 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/them
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/theme/ace/assets/js/fullcalendar2.min.js', CClientScript::POS_HEAD);
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/theme/ace/assets/js/lang-all.js', CClientScript::POS_HEAD);
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/theme/ace/assets/js/jquery.leanModal.min.js', CClientScript::POS_HEAD);
-Yii::app()->clientScript->registerCssFile('/theme/ace/assets/css/fullcalendar.min.css');
+Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/theme/ace/assets/css/fullcalendar.min.css');
 //Yii::app()->clientScript->registerCssFile('/theme/ace/assets/css/fullcalendar.print.css');
 Yii::app()->clientScript->registerScript('calendar', "
 	$(document).ready(function() {
@@ -115,11 +115,12 @@ Yii::app()->clientScript->registerScript('calendar', "
 			eventLimit: true,
 			events: [".$events."
 			],
-                        eventRender: function(calEvent, element) {
+            eventRender: function(calEvent, element) {
 				element.popover({
+
 					title: arr[calEvent.id][4]+\" \"+arr[calEvent.id][5]+\"-\"+arr[calEvent.id][6],
 					placement: 'bottom',
-					content:arr[calEvent.id][0]+\"[\"+arr[calEvent.id][1]+\"]\"+\"\u000A\"+arr[calEvent.id][2]+\" \u000A\"+arr[calEvent.id][3],
+					content:arr[calEvent.id][0]+\"[\"+arr[calEvent.id][1]+\"]\"+\" \u000A\"+arr[calEvent.id][2]+\" \u000A\"+arr[calEvent.id][3],
 				});
 			},
 		});

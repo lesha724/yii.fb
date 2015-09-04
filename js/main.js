@@ -89,7 +89,7 @@ function initFilterForm($spinner)
 
 function initDataTable(id)
 {
-    $('#'+id).dataTable({
+    $('#'+id).addClass( 'nowrap' ).dataTable({
         iDisplayLength: 20,
         aaSorting: [],
         bPaginate: true,
@@ -103,7 +103,11 @@ function initDataTable(id)
             sInfo: 'Общее кол-во записей _TOTAL_ отображено (_START_ - _END_)',
             sInfoEmpty: 'Ничего не найдено',
             sInfoFiltered: ' - отсортировано _MAX_ записей',
-            sZeroRecords: 'Ничего не найдено'
+            sZeroRecords: 'Ничего не найдено',
+            responsive: true,
+            columnDefs: [
+                { targets: [-1, -3], className: 'dt-body-right' }
+            ]
         }
     });
 }

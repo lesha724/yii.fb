@@ -141,14 +141,18 @@ class ProgressController extends Controller
         $stegn1 = Yii::app()->request->getParam('stegn1', null);
         $date1 = Yii::app()->request->getParam('date1', null);
         $date2 = Yii::app()->request->getParam('date2', null);
-        $check = Yii::app()->request->getParam('check', null);
+        //$check = Yii::app()->request->getParam('check', null);
         $number = Yii::app()->request->getParam('number', null);
         $type = Yii::app()->request->getParam('type_omissions', null);
 
-        if($stegn1==null || $date1==null || $date2==null || $check==null || $type==null)
+        if($stegn1==null || $date1==null || $date2==null /*|| $check==null*/ || $type==null)
             $error = true;
         else {
-            
+            $check=1;
+            if($type<4)
+            {
+                $check=2;
+            }
             $attr = array(
                 'stegn4' => $check,
                 'stegn10' => $type,
@@ -158,7 +162,7 @@ class ProgressController extends Controller
             );
             $criteria = new CDbCriteria();
             $criteria->compare('stegn1', $stegn1);
-            
+            $criteria->compare('stegn4','>=1');
             $criteria->compare('stegn9','>='.$date1);
             $criteria->compare('stegn9', '<='.$date2);
 
@@ -186,14 +190,24 @@ class ProgressController extends Controller
             $error = true;
         else {
             $whiteList = array(
-                'stegn4', 'stegn10','stegn11',
+                'stegn10','stegn11',
             );
+            $arr=array();
+            if($field=='stegn10')
+            {
+                $check=1;
+                if($value<4)
+                {
+                    $check=2;
+                }
+                $arr=array('stegn4'=>$check);
+            }
             if (in_array($field, $whiteList))
-                $attr = array(
+                $attr = array_merge(array(
                     $field => $value,
                     'stegn8' =>  Yii::app()->user->dbModel->p1,
                     'stegn7' =>  date('Y-m-d H:i:s'),
-                );
+                ),$arr);
             else
                throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.'); 
 

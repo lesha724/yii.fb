@@ -54,7 +54,7 @@ $(document).ready(function(){
         })
     });
     
-    $('#omissions .ckbox-stegn4, #omissions .input-stegn11, #omissions .select-stegn10').change(function(){
+    $('#omissions .input-stegn11, #omissions .select-stegn10').change(function(){
 
         var $that = $(this);
 
@@ -68,9 +68,7 @@ $(document).ready(function(){
             stegn1:stegn1,
             stegn2:stegn2,
             stegn3:stegn3,
-            value : $that.is(':checkbox')
-                        ? $that.is(':checked') ? 2 : 1
-                        : $that.val(),
+            value : $that.val()
         }
         var $td    = $that.parent();
         
@@ -91,6 +89,19 @@ $(document).ready(function(){
                 $td.removeClass('error').addClass('success');
                 setTimeout(function() {
                     $td.removeClass('success') }, 1000);
+                if($that.is("select"))
+                {
+                    $val='';
+                    if(params.value<4)
+                    {
+                        $val=$that.parents('[data-type2]').data('type2');
+                    }else
+                    {
+                        $val=$that.parents('[data-type1]').data('type1');
+                    }
+                    alert($val);
+                    $that.parents('tr').find('.stegn4').html($val);
+                }
             }
 
             $spinner1.hide();

@@ -132,7 +132,8 @@ $(document).ready(function(){
 	function getNew(number)
 	{
             return '<tr class="new-theme">'+
-                '<td><input type="number" class="ustem4" value="'+(number)+'"></td>'+
+                //'<td><input type="number" class="ustem4" value="'+(number)+'"></td>'+
+                '<td><input type="number" class="ustem4"></td>'+
                 '<td><input type="number" class="ustem3"></td>'+
                 '<td><input type="text" class="ustem5"></td>'+
                 '<td><input type="checkbox" class="ustem6">Субмодуль</td>'+
