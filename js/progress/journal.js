@@ -15,11 +15,14 @@ $(document).ready(function(){
 
         var st1  = $that.parents('[data-st1]').data('st1');
 
+        var gr1  = $that.parents('[data-gr1]').data('gr1');
+
         var params = {
             field : $that.data('name'),
             nom  : $that.parent().data('nom'),
             us1   : $that.parent().data('us1'),
             st1   : st1,
+            gr1   : gr1,
 			date:$that.parent().data('date'),
             value : $that.is(':checkbox')
                         ? $that.is(':checked') ? 0 : 1

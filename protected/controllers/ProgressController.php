@@ -636,6 +636,7 @@ SQL;
         $stegn3 = Yii::app()->request->getParam('nom', null);
         $stegn9 = Yii::app()->request->getParam('date', null);
         $field = Yii::app()->request->getParam('field', null);
+        $gr1 = Yii::app()->request->getParam('gr1', null);
         $value = Yii::app()->request->getParam('value', null);
 
         if($stegn1==null || $stegn2==null || $stegn3==null || $field==null || $value==null|| $stegn9==null)
@@ -658,7 +659,9 @@ SQL;
                 $diff = $date1->diff($date2)->days;
                 if ($diff > $ps2)
                 {
-                    throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+                    $stegr=Stegr::model()->findByAttributes(array('stegr1'=>$gr1,'stegr2'=>$stegn2,'stegr3'=>$stegn9));
+                    if(empty($stegr)||(strtotime($stegr->stegr4)<strtotime('now')))
+                        throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
                 } 
             }
             $arr=array();

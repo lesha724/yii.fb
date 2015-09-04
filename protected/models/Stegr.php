@@ -101,4 +101,29 @@ class Stegr extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+    public function getList($gr1,$us1)
+    {
+        $sql= <<<SQL
+                SELECT stegr3,stegr4
+				FROM stegr
+				WHERE stegr1 = :gr1 and stegr2 = :us1
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':gr1', $gr1);
+        $command->bindValue(':us1', $us1);
+        $res= $command->queryAll();
+
+        ///$res=self::model()->findAllByAttributes(array('stegr1'=>$gr1,'stegr2'=>$us1),array('order'=>'stegr3 ASC'));
+        if(!empty($res))
+        {
+            $arr = array();
+            foreach($res as $val)
+            {
+                $arr[$val['stegr3']]=$val['stegr4'];
+            }
+            return $arr;
+        }else
+            return array();
+    }
 }

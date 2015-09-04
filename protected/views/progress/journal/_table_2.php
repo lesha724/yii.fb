@@ -1,5 +1,5 @@
 <?php
-function table2Tr($date,$us1,$gr1,$st1,$marks,$us)
+function table2Tr($date,$us1,$gr1,$st1,$marks,$us,$permLesson)
 {
     /*if($date['priz']!=0)
        return '<td colspan="2"></td>'; */
@@ -23,7 +23,8 @@ function table2Tr($date,$us1,$gr1,$st1,$marks,$us)
             $diff = $date1->diff($date2)->days;
             if ($diff > $ps2)
             {
-                $disabled = 'disabled="disabled"';
+                if(!isset($permLesson[$date['r2']])||(strtotime($permLesson[$date['r2']]) < strtotime('now')))
+                    $disabled = 'disabled="disabled"';
             }
         }
         $key = $us1.'/'.$date['nom']; // 0 - r3
@@ -218,7 +219,7 @@ HTML;
     $url_check       = Yii::app()->createUrl('/progress/checkCountRetake');
     $minMaxUrl = Yii::app()->createUrl('/progress/insertMmbjMark');
     $table = <<<HTML
-<div class="journal_div_table2" data-url="{$url}" data-url-check="{$url_check}">
+<div class="journal_div_table2" data-gr1="{$gr1}" data-url="{$url}" data-url-check="{$url_check}">
     <table class="table table-striped table-bordered table-hover journal_table">
         <thead>
             <tr>
@@ -236,6 +237,7 @@ HTML;
 HTML;
     $us=Us::model()->findByPk($us1);
     $minMax = Mmbj::model()->getDataForJournal($us1);
+    $permLesson=Stegr::model()->getList($gr1,$us1);
     
     /*** 2 table ***/
     $th = $th2 = $tr = '';
@@ -267,7 +269,7 @@ HTML;
                     $total_sub_module=0;
                 }
             }*/
-            $tr .= table2Tr($date,$us1,$gr1,$st1,$marks,$us);
+            $tr .= table2Tr($date,$us1,$gr1,$st1,$marks,$us,$permLesson);
             
         }
         $tr .= '</tr>';
