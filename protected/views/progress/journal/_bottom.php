@@ -34,6 +34,7 @@ if (! empty($model->group)):
     }*/
     $ps9  = PortalSettings::model()->findByPk(9)->ps2;
     $ps20 = PortalSettings::model()->findByPk(20)->ps2;// use sub modules
+    $ps33=PortalSettings::model()->findByPk(33)->ps2;
 
     $students = St::model()->getStudentsForJournal($gr1, $us1);
     $pbal     = Pbal::model()->getAllInArray();
@@ -54,6 +55,7 @@ HTML;
         'gr1'=>$gr1,
         'ps9'   => $ps9,
         'ps20'  => $ps20,
+        'ps33'  => $ps33,
         'pbal'  => $pbal,
     ));
 
@@ -65,6 +67,7 @@ HTML;
         //'nr1'      => $nr1,
         'ps9'      => $ps9,
         'ps20'     => $ps20,
+        'ps33'  => $ps33,
     ));
 echo <<<HTML
 </div>

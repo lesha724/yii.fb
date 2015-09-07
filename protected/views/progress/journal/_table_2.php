@@ -219,7 +219,7 @@ HTML;
     $url_check       = Yii::app()->createUrl('/progress/checkCountRetake');
     $minMaxUrl = Yii::app()->createUrl('/progress/insertMmbjMark');
     $table = <<<HTML
-<div class="journal_div_table2" data-gr1="{$gr1}" data-url="{$url}" data-url-check="{$url_check}">
+<div class="journal_div_table2" data-ps33="{$ps33}" data-gr1="{$gr1}" data-url="{$url}" data-url-check="{$url_check}">
     <table class="table table-striped table-bordered table-hover journal_table">
         <thead>
             <tr>
@@ -238,14 +238,16 @@ HTML;
     $us=Us::model()->findByPk($us1);
     $minMax = Mmbj::model()->getDataForJournal($us1);
     $permLesson=Stegr::model()->getList($gr1,$us1);
-    
-    /*** 2 table ***/
+    global $count_dates;
+    $count_dates=0;
+/*** 2 table ***/
     $th = $th2 = $tr = '';
     $column = 1;
     foreach($dates as $date) {
         $th    .= generateColumnName($date, $ps20);
         $th2   .= generateTh2($us1,$minMax, $column, $ps9,$us);
         $column++;
+        $count_dates++;
     }
 
     global $total_1;

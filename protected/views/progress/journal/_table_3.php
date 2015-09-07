@@ -77,6 +77,7 @@ HTML;
     $columns     = PortalSettings::model()->getJournalExtraColumns();
     $showTotal   = !empty($columns);
 
+
     $th  = generateTotal1Header($ps20);
     $th2 = table3Th2($us1, $ps9);
 
@@ -89,17 +90,40 @@ HTML;
     $th2 .= '<th></th>';
 
     global $total_1;// calculating in journal/table_2
+    global $count_dates;
     $tr = '';
+
+    //$bals = SH::getBal();
+
     foreach ($students as $st) {
 
         $st1 = $st['st1'];
+        $val=  $total_1[$st1];
+
+
+       /* if($ps33==1)
+        {
+            $val=  $val/$count_dates;
+            if(!empty($bals))
+            {
+                foreach($bals as $bal)
+                {
+                    if((float)$bal['min']<=$val)
+                    {
+                        $val=$bal['value'];
+                        break;
+                    }
+                }
+            }else
+                $val=$total_1[$st1];
+        }*/
 
         $marks = Dsej::model()->getMarksForStudent($st['st1'], $us1);
-        $total_2[$st1] = $total_1[$st1] + countDSEJTotal($marks, $columns);
+        $total_2[$st1] = $val + countDSEJTotal($marks, $columns);
 
         $tr .= '<tr data-st1="'.$st1.'">';
 
-            $tr .= '<td data-total=1 colspan="2">'.$total_1[$st1].'</td>'; // total 1
+            $tr .= '<td data-total=1 colspan="2">'.$val.'</td>'; // total 1
             foreach($columns as $column) {
                 $tr .= table3Tr($column, $marks, $us1);
             }

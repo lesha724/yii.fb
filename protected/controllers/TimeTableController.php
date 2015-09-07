@@ -104,7 +104,7 @@ class TimeTableController extends Controller
 			'teacher'	 =>$teacher,
             'timeTable'  => $timeTable,
             'minMax'     => $minMax,
-            'rz'         => Rz::model()->getRzArray(),
+            'rz'         => Rz::model()->getRzArray($model->filial),
 			'type'=>$type
         ));
     }
@@ -139,7 +139,7 @@ class TimeTableController extends Controller
             'timeTable'  => $timeTable,
             'minMax'     => $minMax,
             'maxLessons' => $maxLessons,
-            'rz'         => Rz::model()->getRzArray(),
+            'rz'         => Rz::model()->getRzArray($model->filial),
             'type'=>$type
         ));
     }
@@ -175,7 +175,7 @@ class TimeTableController extends Controller
             'model'      => $model,
             'timeTable'  => $timeTable,
             'minMax'     => $minMax,
-            'rz'         => Rz::model()->getRzArray(),
+            'rz'         => Rz::model()->getRzArray($model->filial),
 			'type'=>$type,
 			'student'=>$student
         ));
@@ -201,7 +201,7 @@ class TimeTableController extends Controller
             'model'      => $model,
             'timeTable'  => $timeTable,
             'minMax'     => $minMax,
-            'rz'         => Rz::model()->getRzArray(),
+            'rz'         => Rz::model()->getRzArray($model->filial),
         ));
     }
 

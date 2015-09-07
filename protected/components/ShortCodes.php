@@ -290,6 +290,15 @@ class ShortCodes extends CApplicationComponent
         return $this->_menuSettings;
     }
 
+    /*public static function getBal()
+    {
+        $file     = Yii::getPathOfAlias('application') . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'bal.php';
+        $arr=array();
+        if(file_exists($file))
+            $arr=require($file);
+        return $arr;
+    }*/
+
     public static function russianMonthName($month)
     {
         switch($month){

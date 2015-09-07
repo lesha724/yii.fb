@@ -101,11 +101,14 @@ class Rz extends CActiveRecord
 		return parent::model($className);
 	}
 
-    public function getRzArray()
+    public function getRzArray($ks1)
     {
-        $rows = Yii::app()->db->createCommand()
+        if(empty($ks1))
+            $ks1=0;
+            $rows = Yii::app()->db->createCommand()
                 ->select('*')
                 ->from($this->tableName())
+                ->where('rz7=0 AND rz16=:id', array(':id'=>$ks1))
                 ->queryAll();
 
         $res = array();

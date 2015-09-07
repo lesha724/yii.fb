@@ -11,7 +11,7 @@ $html = $this->renderPartial('/timeTable/group', array(
     'timeTable'  => $timeTable,
     'minMax'     => $minMax,
     'maxLessons' => $maxLessons,
-    'rz'         => Rz::model()->getRzArray(),
+    'rz'         => Rz::model()->getRzArray($model->filial),
     'type'=>$type
 ), true);
 

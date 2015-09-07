@@ -269,6 +269,34 @@ SQL;
 
         return $groups;
     }
+
+    public function getGroupsForJournalPermition($discipline)
+    {
+        if (empty($discipline))
+            return array();
+        $sql = <<<SQL
+             SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,:D1,1,0);
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
+        $command->bindValue(':D1', $discipline);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $groups = $command->queryAll();
+        $type=array(
+            1=> tt('Лк'),
+            2=> tt('Пз'),
+            3=> tt('Сем'),
+            4=> tt('Лб')
+        );
+        foreach($groups as $key => $group) {
+            $groups[$key]['name'] = $type[$group['us4']].', '.$this->getGroupName($group['sem4'], $group);
+            $groups[$key]['group'] = $group['us1'].'/'.$group['gr1'];
+        }
+
+        return $groups;
+    }
     
     public function getGroupsFor($discipline, $type = null)
     {

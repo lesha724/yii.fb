@@ -10,8 +10,10 @@ JS
     $form=$this->beginWidget('CActiveForm', array(
         'id'=>'filter-form',
     ));
-        $disciplines = CHtml::listData(D::model()->getDisciplinesForJournal(), 'd1', 'name');
-        $groups = CHtml::listData(Gr::model()->getGroupsForJournal($model->discipline), 'group', 'name');
+        //$disciplines = CHtml::listData(D::model()->getDisciplinesForJournal(), 'd1', 'name');
+        $disciplines = CHtml::listData(D::model()->getDisciplinesForJournalPermition(), 'd1', 'name');
+        //$groups = CHtml::listData(Gr::model()->getGroupsForJournal($model->discipline), 'group', 'name');
+        $groups = CHtml::listData(Gr::model()->getGroupsForJournalPermition($model->discipline), 'group', 'name');
         echo '<div>'.
                 $form->label($model, 'discipline').
                 $form->dropDownList($model, 'discipline', $disciplines, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;')).
