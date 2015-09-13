@@ -36,7 +36,7 @@
         'stegn10'=>array(
             'name'=>'stegn10',
             'value'=>'$data->getType()',
-            'filter'=>Stegn::model()->getTypes(),
+            'filter'=>array_merge(array(0=>tt('-(інше)')),Stegn::model()->getTypes()),
         ),
         'count_stego'=>array(
             'name'=>'count_stego',

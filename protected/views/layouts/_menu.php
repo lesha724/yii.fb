@@ -109,6 +109,11 @@ $this->widget('zii.widgets.CMenu', array(
                     'active' => $_a=='journal' && $_m=='admin'
                 ),
                 array(
+                    'label'  => $_l2.tt('Список'),
+                    'url'    => _u('/admin/default/list'),
+                    'active' => $_a=='list' && $_m=='admin'
+                ),
+                array(
                     'label'  => $_l2.tt('Ведение модулей'),
                     'url'    => _u('/admin/default/modules'),
                     'active' => $_a=='modules' && $_m=='admin'
@@ -277,7 +282,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'active'  => $_c=='progress' && $_a=='attendanceStatistic'
                 ),
                 array(
-                    'label'   => $_l2.tt('Региистрация пропусков занятий
+                    'label'   => $_l2.tt('Регистрация пропусков занятий
 '),
                     'url'     => _u('/progress/omissions'),
                     'visible' => _ch('progress', 'omissions')&& $isTch,

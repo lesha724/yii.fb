@@ -23,4 +23,10 @@ $(document).ready(function(){
         $('#TimeTableForm_date2').val(end.format('DD.MM.YYYY'));
     });
 
+    $(document).on('click', '#sem-date', function(){
+        $('#TimeTableForm_date1').val($(this).data('date1'));
+        $('#TimeTableForm_date2').val($(this).data('date2'));
+        $(this).closest('form').submit();
+    });
+
 });

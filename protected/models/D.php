@@ -942,9 +942,10 @@ SQL;*/
         if (! $st1)
             return;
 
-        list($sg40, $sg41) = $this->getSg40Sg41($st1);
-
-        $sql = <<<SQL
+        //list($sg40, $sg41) = $this->getSg40Sg41($st1);
+        $sg40=2014;
+        $sg41=1;
+        /*$sql = <<<SQL
 			select us1,d2
 			   from u
 				  inner join uo on (u.u1 = uo.uo22)
@@ -957,6 +958,24 @@ SQL;*/
 				  inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
 				  inner join d on (uo.uo3 = d.d1)
 			   where us4 = 8 and ucsn2=:ST1 and u38<=current_timestamp and u39>=current_timestamp and
+			   sem3=:SG40
+			   and
+			   sem5=:SG41
+			   group by us1,d2
+SQL;*/
+        $sql = <<<SQL
+			select us1,d2
+			   from u
+				  inner join uo on (u.u1 = uo.uo22)
+				  inner join us on (uo.uo1 = us.us2)
+				  inner join nr on (us.us1 = nr.nr2)
+				  inner join ug on (nr.nr1 = ug.ug3)
+				  inner join sem on (us.us3 = sem.sem1)
+				  inner join ucgn on (ug.ug4 = ucgn.ucgn1)
+				  inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
+				  inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
+				  inner join d on (uo.uo3 = d.d1)
+			   where us4 = 8 and ucsn2=:ST1 and
 			   sem3=:SG40
 			   and
 			   sem5=:SG41
@@ -975,7 +994,7 @@ SQL;
     public function getFirstCourseWork($st1, $us1)
     {
         $sql = <<<SQL
-           SELECT nkrs1,nkrs6,nkrs7
+           SELECT nkrs1,nkrs6,nkrs7,nkrs4,nkrs5
            FROM nkrs
            WHERE nkrs2 = :ST1 and nkrs3 = :US1
 SQL;

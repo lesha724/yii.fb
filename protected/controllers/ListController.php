@@ -34,9 +34,26 @@ class ListController extends Controller
 
         if (isset($_REQUEST['FilterForm']))
             $model->attributes=$_REQUEST['FilterForm'];
+        $res=PortalSettings::model()->findByPk(35);
+        $ps35=0;
+        if(!empty($res))
+            $ps35 = $res->ps2;
+        $dbh=null;
+        if($ps35==1)
+        {
+            $string = Yii::app()->db->connectionString;
+            $parts  = explode('=', $string);
+
+            $host     = trim($parts[1].'d');
+            $login    = Yii::app()->db->username;
+            $password = Yii::app()->db->password;
+            $dbh      = ibase_connect($host, $login, $password);
+        }
 
         $this->render('group', array(
             'model' => $model,
+            'dbh'=> $dbh,
+            'ps35'=>$ps35
         ));
     }
     

@@ -646,12 +646,13 @@ SQL;
              SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,0,2,:US1);
 SQL;
             $command = Yii::app()->db->createCommand($sql);
+
             $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
             $command->bindValue(':US1', $stegn2);
             $command->bindValue(':YEAR', Yii::app()->session['year']);
             $command->bindValue(':SEM', Yii::app()->session['sem']);
             $res = $command->queryRow();
-            if(count($res)==0 || empty($res))
+            if(count($res)==0 || empty($res)||$res['us1']==0)
             {
                 throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
             }

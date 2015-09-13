@@ -33,7 +33,7 @@ $this->breadcrumbs=array(
 ?>
 
 <?php
-    if ($canSelectSt) :
+    if ($canSelectSt) {
 
         Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/timetable/timetable.js', CClientScript::POS_HEAD);
         
@@ -65,16 +65,16 @@ $this->breadcrumbs=array(
         ));
 
         echo <<<HTML
-    <div class="hr hr-18 dotted hr-double"></div>
+            <div class="hr hr-18 dotted hr-double"></div>
 HTML;
-
-    endif;
+    }
 
     if ($model->student) :
 
         $this->renderPartial('studentInfo/_bottom', array(
             'model' => $model,
-            'stInfoForm' => $stInfoForm
+            'stInfoForm' => $stInfoForm,
+            'canSelectSt' => $canSelectSt,
         ));
 
     endif;

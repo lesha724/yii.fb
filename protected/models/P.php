@@ -411,6 +411,38 @@ class P extends CActiveRecord
 		return parent::model($className);
 	}
 
+    public function getZavKavByTeacher($teacher)
+    {
+        if (empty($teacher))
+            return array(null,null);
+        $sql = <<<SQL
+        SELECT k1,k2,k3 FROM p
+			INNER JOIN PD ON (P1=PD2)
+			INNER JOIN K ON (PD4=K1)
+		WHERE pd2>0 and pd3='0' and pd28 in (0,2,5,9) and pd13 is null and p1=:p1
+		GROUP BY k1,k2,k3
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':p1', $teacher);
+        $k = $command->queryRow();
+        if(empty($k))
+        {
+            return array(null,null);
+        }
+
+        $sql = <<<SQL
+        SELECT pd2,p3,p4,p5 FROM pd
+			INNER JOIN B ON (PD5=B1)
+			INNER JOIN P ON (PD2=P1)
+		WHERE pd2>0 and pd3='0' and pd28 in (0,2,5,9) and pd13 is null and b11=1 and pd4=:k1
+		GROUP BY pd2,p3,p4,p5
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':k1', $k['k1']);
+        $res = $command->queryRow();
+        return array($res,$k);
+    }
+
 	public function getSearchTeachers($name)
     {
         if (empty($name))

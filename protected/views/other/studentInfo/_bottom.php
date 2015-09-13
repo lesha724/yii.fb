@@ -1,11 +1,11 @@
 <style>
-    .autocomplete-suggestions-w1 { background:url(img/shadow.png) no-repeat bottom right; position:absolute; top:0px; left:0px; margin:6px 0 0 6px; /* IE6 fix: */ _background:none; _margin:1px 0 0 0; }
     .autocomplete-suggestions { border:1px solid #999; background:#FFF; cursor:pointer; text-align:left; max-height:350px; overflow:auto; margin:-6px 6px 6px -6px; /* IE6 specific: */ _height:350px;  _margin:0; _overflow-x:hidden; }
     .autocomplete-selected { background:#F0F0F0; }
     .autocomplete-suggestions div { padding:2px 5px; white-space:nowrap; overflow:hidden; }
     .autocomplete-suggestions strong { font-weight:normal; color:#3399FF; }
 </style>
 <?php
+//.autocomplete-suggestions-w1 { background:url(img/shadow.png) no-repeat bottom right; position:absolute; top:0px; left:0px; margin:6px 0 0 6px; /* IE6 fix: */ _background:none; _margin:1px 0 0 0; }
 /**
  * @var CActiveForm $form
  * @var TimeTableForm $model
@@ -85,9 +85,11 @@ $form=$this->beginWidget('CActiveForm', array(
                     $nkrs7 = $courseWork['nkrs7'];
 
                     echo CHtml::tag('div', array('data-nkrs1' => $nkrs1)).
-                            CHtml::textField('nkrs6', $nkrs6, array('class' => 'autocomplete')).'<br>'.
                             CHtml::dropDownList('nkrs7', $nkrs7, $rus, array('id' => false, 'class' => 'chosen-select', 'style'=>'width:50%')).
+                            CHtml::label(tt('Научный руководитель'), '', array()).
+                            CHtml::textField('nkrs6', $nkrs6, array('class' => 'autocomplete')).'<br>'.
                          CHtml::closeTag('div');
+
                 }
             ?>
         </div>
@@ -114,6 +116,16 @@ $form=$this->beginWidget('CActiveForm', array(
             <i class="icon-ok bigger-110"></i>
             <?=tt('Сохранить')?>
         </button>
+        <?php
+        if (!$canSelectSt):
+        ?>
+        <a class="btn btn-primary" href="<?=Yii::app()->createUrl('/other/studentInfoExcel')?>">
+            <i class="icon-print bigger-110"></i>
+            <?=tt('Печать')?>
+        </a>
+        <?php
+            endif;
+        ?>
     </div>
 <?php $this->endWidget(); ?>
 

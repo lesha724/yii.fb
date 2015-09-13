@@ -126,23 +126,29 @@ class Stegn extends CActiveRecord
         public function getType()
         {
             $arr=Stegn::model()->getTypes();
-            return $arr[$this->stegn10];
+            if($this->stegn4<1)
+                return '-';
+            else
+                if(isset($arr[$this->stegn10]))
+                    return $arr[$this->stegn10];
+                else
+                    return '-';
         }
         
         public function getTypes()
         {
-            return array(0=>tt('без відробок (п.)'),1=>tt('по хворобі (п.)'),2=>tt('чергування (п.)'),3=>tt('інше (п.)'),4=>tt('по оплаті (н.)'));
+            return array(1=>tt('без відробок (п.)'),2=>tt('по хворобі (п.)'),3=>tt('чергування (п.)'),4=>tt('інше (п.)'),5=>tt('по оплаті (н.)'));
         }
         
         public function getTypesByGroup()
         {
             //return array(0=>tt('без відробок'),1=>tt('по хворобі'),2=>tt('чергування'),3=>tt('інше'),4=>tt('по оплаті'));
             return array(
-                        array('id'=>4,'text'=>tt('по оплаті'),'group'=>tt('не поважні')),
-                        array('id'=>0,'text'=>tt('без відробок'),'group'=>tt('поважні')),
-                        array('id'=>1,'text'=>tt('по хворобі'),'group'=>tt('поважні')),
-                        array('id'=>2,'text'=>tt('чергування'),'group'=>tt('поважні')),
-                        array('id'=>3,'text'=>tt('інше'),'group'=>tt('поважні')),
+                        array('id'=>5,'text'=>tt('по оплаті'),'group'=>tt('не поважні')),
+                        array('id'=>1,'text'=>tt('без відробок'),'group'=>tt('поважні')),
+                        array('id'=>2,'text'=>tt('по хворобі'),'group'=>tt('поважні')),
+                        array('id'=>3,'text'=>tt('чергування'),'group'=>tt('поважні')),
+                        array('id'=>4,'text'=>tt('інше'),'group'=>tt('поважні')),
                 );
         }
         
@@ -162,29 +168,28 @@ class Stegn extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-                $table = St::model()->tableName();
-                $table2 = Ustem::model()->tableName();
-                $criteria->select = 't.*,'.$table.'.st2,'.$table.'.st3,'.$table.'.st4,(SELECT COUNT(*) FROM stego WHERE stego.stego1=t.stegn0) as count_stego,'.$table2.'.USTEM5 as tema';
-                $criteria->join = 'LEFT JOIN '.$table2.' ON (t.stegn2='.$table2.'.USTEM2 AND t.stegn3='.$table2.'.USTEM4) ';
-                $criteria->join .= 'JOIN '.$table.' ON (t.stegn1='.$table.'.st1) ';
-                $criteria->compare('stegn1',$this->stegn1);
+        $table = St::model()->tableName();
+        $table2 = Ustem::model()->tableName();
+        $criteria->select = 't.*,'.$table.'.st2,'.$table.'.st3,'.$table.'.st4,(SELECT COUNT(*) FROM stego WHERE stego.stego1=t.stegn0) as count_stego,'.$table2.'.USTEM5 as tema';
+        $criteria->join = 'LEFT JOIN '.$table2.' ON (t.stegn2='.$table2.'.USTEM2 AND t.stegn3='.$table2.'.USTEM4) ';
+        $criteria->join .= 'JOIN '.$table.' ON (t.stegn1='.$table.'.st1) ';
+        $criteria->compare('stegn1',$this->stegn1);
 		$criteria->compare('stegn2',$this->stegn2);
 		$criteria->compare('stegn3',$this->stegn3);
-                $criteria->compare('stegn4',$this->stegn4);
-                $criteria->compare('stegn11',$this->stegn11);
-                $criteria->compare('stegn10',$this->stegn10);
-                $criteria->addCondition("st2 CONTAINING '".$this->st2."'");
-                if(!empty($this->tema))
-                    $criteria->addCondition("ustem5 CONTAINING '".$this->tema."'");
-                /*if(!empty($this->count_stego))
-                    $criteria->addCondition("count_stego =".$this->count_stego);*/
+        $criteria->compare('stegn4',$this->stegn4);
+        $criteria->compare('stegn11',$this->stegn11);
+        $criteria->compare('stegn10',$this->stegn10);
+        $criteria->addCondition("st2 CONTAINING '".$this->st2."'");
+        if(!empty($this->tema))
+            $criteria->addCondition("ustem5 CONTAINING '".$this->tema."'");
+        /*if(!empty($this->count_stego))
+            $criteria->addCondition("count_stego =".$this->count_stego);*/
 		$criteria->addCondition("stegn4 > 0 OR (stegn5<=".Stegn::model()->getMin()." AND stegn5>0)");
-		//$criteria->compare('stegn7',$this->stegn7,true);
-                //$criteria->compare('stegn9',$this->stegn9,true);
-                ///$criteria->compare('stegn11',$this->stegn11,true);
-                
-                $sort = new CSort();
-                $sort->sortVar = 'sort';
+        //$criteria->compare('stegn7',$this->stegn7,true);
+        //$criteria->compare('stegn9',$this->stegn9,true);
+        ///$criteria->compare('stegn11',$this->stegn11,true);
+        $sort = new CSort();
+        $sort->sortVar = 'sort';
 		$sort->defaultOrder = 'st2 ASC';
                 //$sort->route='progress/searchRetake?us1='+$this->stegn2;
                 $sort->attributes = array(

@@ -92,14 +92,14 @@ $(document).ready(function(){
                 if($that.is("select"))
                 {
                     $val='';
-                    if(params.value<4)
+                    if(params.value<5)
                     {
                         $val=$that.parents('[data-type2]').data('type2');
                     }else
                     {
                         $val=$that.parents('[data-type1]').data('type1');
                     }
-                    alert($val);
+                    //alert($val);
                     $that.parents('tr').find('.stegn4').html($val);
                 }
             }

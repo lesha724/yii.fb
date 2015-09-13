@@ -5,10 +5,10 @@
  * @var TimeTableForm $model
  * @var CActiveForm $form
  */
-$this->pageHeader=tt('Региистрация пропусков занятий
+$this->pageHeader=tt('Регистрация пропусков занятий
 : Поиск');
 $this->breadcrumbs=array(
-    tt('Региистрация пропусков занятий
+    tt('Регистрация пропусков занятий
 '),
 );
 	

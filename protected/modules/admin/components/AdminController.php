@@ -25,7 +25,8 @@ class AdminController extends Controller
                     'entrance',
                     'menu',
                     'employment',
-					'settings'
+					'settings',
+                    'list'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin',
             ),

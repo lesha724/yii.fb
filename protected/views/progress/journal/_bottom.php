@@ -38,6 +38,7 @@ if (! empty($model->group)):
 
     $students = St::model()->getStudentsForJournal($gr1, $us1);
     $pbal     = Pbal::model()->getAllInArray();
+    $us=Us::model()->findByPk($us1);
 
 echo <<<HTML
 <div class="journal-bottom">
@@ -54,16 +55,18 @@ HTML;
         //'us1_arr'=>$us1_arr,
         'gr1'=>$gr1,
         'ps9'   => $ps9,
+        'us'=>$us,
         'ps20'  => $ps20,
         'ps33'  => $ps33,
         'pbal'  => $pbal,
     ));
-
+    if($us->us4!=1)
     $this->renderPartial('journal/_table_3', array(
         'students' => $students,
         'dates'    => $dates,
         'us1'=>$us1,
         'gr1'=>$gr1,
+        'us'=>$us,
         //'nr1'      => $nr1,
         'ps9'      => $ps9,
         'ps20'     => $ps20,

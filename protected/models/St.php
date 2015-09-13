@@ -445,6 +445,76 @@ class St extends CActiveRecord
             )
         );
     }
+
+    public function checkPassport($dbh,$id,$type)
+    {
+        $sql = <<<SQL
+                    SELECT passport4 as foto
+                    FROM passport
+                    WHERE passport2 = {$id} AND passport3 = {$type}
+SQL;
+        $result = ibase_query($dbh, $sql);
+        $data   = ibase_fetch_object($result);
+        if (empty($data))
+            return false;
+        else
+            return true;
+    }
+
+    public function getShortCodesImage($st1)
+    {
+        $sql = <<<SQL
+        SELECT foto4 as foto
+        FROM foto
+        WHERE foto1 = {$st1} AND foto2 = 1
+SQL;
+
+        $string = Yii::app()->db->connectionString;
+        $parts  = explode('=', $string);
+
+        $host     = trim($parts[1].'d');
+        $login    = Yii::app()->db->username;
+        $password = Yii::app()->db->password;
+        $dbh      = ibase_connect($host, $login, $password);
+
+        $result = ibase_query($dbh, $sql);
+        $data   = ibase_fetch_object($result);
+        $blob_data = ibase_blob_info($data->FOTO);
+        $blob_hndl = ibase_blob_open($data->FOTO);
+        $foto=null;
+        if (!empty($data->FOTO)) {
+            $foto=ibase_blob_get($blob_hndl, $blob_data[0]);
+        }
+
+        ibase_free_result($result);
+        return $foto;
+    }
+
+    public function getInfoForStudentInfoExcel($st1)
+    {
+        if (empty($st1))
+            return array();
+        //list($sg40, $sg41) = $this->getSg40Sg41($st1);
+        $sg40=2014;
+        $sg41=1;
+
+
+        $sql = <<<SQL
+        SELECT gr1,gr3,sem4,sg4,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26 FROM std
+			inner join gr on (std.std3 = gr.gr1)
+			inner join sg on (gr.gr2 = sg.sg1)
+			inner join sem on (sg.sg1 = sem.sem2)
+		where std7 is null and std11 in (0, 5, 6, 8) and sem3=:YEAR1 and sem5=:SEM1 and std2=:st1
+		GROUP BY gr1,gr3,sem4,sg4,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':st1', $st1);
+        $command->bindValue(':YEAR1', $sg40);
+        $command->bindValue(':SEM1', $sg41);
+        $res= $command->queryRow();
+        $res['name']=Gr::model()->getGroupName($res['sem4'], $res);
+        return $res;
+    }
 	
 	public function getSearchStudents($name)
     {
@@ -659,7 +729,7 @@ SQL;
     {
 
         $sql=<<<SQL
-            SELECT st2,st3,st4,st5,sk3
+            SELECT st1,st2,st3,st4,st5,sk3
 			 FROM ST
 			   LEFT JOIN SK ON (SK.SK2 = ST.ST1)
 			   LEFT JOIN STD ON (ST.ST1 = STD.STD2)

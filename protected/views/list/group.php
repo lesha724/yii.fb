@@ -27,4 +27,6 @@ HTML;
 if (! empty($model->group))
     $this->renderPartial('group/_bottom', array(
         'model' => $model,
+        'dbh'=> $dbh,
+        'ps35'=>$ps35
     ));

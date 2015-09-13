@@ -36,12 +36,6 @@ if($showCheckBoxCalendar)
                 $(this).closest('form').submit();
         });
 
-        $(document).on('click', '#sem-date', function(){
-                $('#TimeTableForm_date1').val($(this).data('date1'));
-                $('#TimeTableForm_date2').val($(this).data('date2'));
-                $(this).closest('form').submit();
-        });
-
     ");
 echo '</div>';
 echo <<<HTML

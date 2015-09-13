@@ -180,6 +180,10 @@ div.journal_div_table2 {
     overflow-x:scroll;
     float:left;
 }
+
+div.journal_div_table2_1{
+    width:80%!important;
+}
 .test-bottom .mark-td{
     background-color: yellowgreen;
 }
@@ -194,10 +198,13 @@ div.journal_div_table2 {
 
 .test-bottom .journal_table tbody tr {
     height:20px;
+    word-wrap: normal;
 }
 
 .journal-bottom .journal_table tbody tr {
     height:31px;
+    word-wrap: normal;
+    white-space: nowrap;
 }
 
 table.journal_table thead tr {

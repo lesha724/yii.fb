@@ -5,10 +5,10 @@
  * @var TimeTableForm $model
  */
 
-$this->pageHeader=tt('Региистрация пропусков занятий
+$this->pageHeader=tt('Регистрация пропусков занятий
 ');
 $this->breadcrumbs=array(
-    tt('Региистрация пропусков занятий
+    tt('Регистрация пропусков занятий
 '),
 );
 Yii::app()->clientScript->registerPackage('dataTables');
