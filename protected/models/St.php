@@ -494,9 +494,9 @@ SQL;
     {
         if (empty($st1))
             return array();
-        //list($sg40, $sg41) = $this->getSg40Sg41($st1);
-        $sg40=2014;
-        $sg41=1;
+        list($sg40, $sg41) = $this->getSg40Sg41($st1);
+        /*$sg40=2014;
+        $sg41=1;*/
 
 
         $sql = <<<SQL

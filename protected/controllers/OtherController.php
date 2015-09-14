@@ -713,7 +713,7 @@ SQL;
                         ->setCellValue('C2', $k2);
                     $sheet->getRowDimension(2)->setRowHeight(40);
                     $sheet->mergeCells('C3:D3')
-                        ->setCellValue('C3',  '(заведующий - профессор '.SH::getShortName($zav['p3'],$zav['p4'],$zav['p5']).')');
+                        ->setCellValue('C3',  '(заведующий - профессор '. $zav_name.')');
                     $sheet->mergeCells('C4:D4')
                         ->setCellValue('C4', sprintf($pattern,$st_info['sem4'],$st_info['name']));
                     $sheet->mergeCells('C5:D5')

@@ -942,10 +942,10 @@ SQL;*/
         if (! $st1)
             return;
 
-        //list($sg40, $sg41) = $this->getSg40Sg41($st1);
-        $sg40=2014;
-        $sg41=1;
-        /*$sql = <<<SQL
+        list($sg40, $sg41) = $this->getSg40Sg41($st1);
+        //$sg40=2014;
+        //$sg41=1;
+        $sql = <<<SQL
 			select us1,d2
 			   from u
 				  inner join uo on (u.u1 = uo.uo22)
@@ -962,8 +962,8 @@ SQL;*/
 			   and
 			   sem5=:SG41
 			   group by us1,d2
-SQL;*/
-        $sql = <<<SQL
+SQL;
+        /*$sql = <<<SQL
 			select us1,d2
 			   from u
 				  inner join uo on (u.u1 = uo.uo22)
@@ -980,7 +980,7 @@ SQL;*/
 			   and
 			   sem5=:SG41
 			   group by us1,d2
-SQL;
+SQL;*/
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':ST1', $st1);
