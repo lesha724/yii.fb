@@ -716,8 +716,11 @@ SQL;
                         ->setCellValue('C3',  '(заведующий - профессор '. $zav_name.')');
                     $sheet->mergeCells('C4:D4')
                         ->setCellValue('C4', sprintf($pattern,$st_info['sem4'],$st_info['name']));
+                    /*$sheet->mergeCells('C5:D5')
+                        ->setCellValue('C5', 'Форма обучения: '.SH::convertEducationType($st_info['sg4']));*/
                     $sheet->mergeCells('C5:D5')
-                        ->setCellValue('C5', 'Форма обучения: '.SH::convertEducationType($st_info['sg4']));
+                        ->setCellValue('C5', $st_info['f3']);
+                    $sheet->getRowDimension(5)->setRowHeight(40);
                     $sheet->mergeCells('C6:D6')
                         ->setCellValue('C6', SH::getShortName($student->st2,$student->st3,$student->st4));
                     $sheet->getStyleByColumnAndRow(0,1,3,6)->getAlignment()->setWrapText(true)->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT)->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);

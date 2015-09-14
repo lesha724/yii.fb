@@ -495,17 +495,19 @@ SQL;
         if (empty($st1))
             return array();
         list($sg40, $sg41) = $this->getSg40Sg41($st1);
-        /*$sg40=2014;
-        $sg41=1;*/
+        //$sg40=2014;
+        //$sg41=1;
 
 
         $sql = <<<SQL
-        SELECT gr1,gr3,sem4,sg4,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26 FROM std
+        SELECT gr1,gr3,sem4,sg4,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,f2,f3 FROM std
 			inner join gr on (std.std3 = gr.gr1)
 			inner join sg on (gr.gr2 = sg.sg1)
+			inner join sp on (sg.sg2 = sp.sp1)
+			inner join f on (sp.sp5= f.f1)
 			inner join sem on (sg.sg1 = sem.sem2)
 		where std7 is null and std11 in (0, 5, 6, 8) and sem3=:YEAR1 and sem5=:SEM1 and std2=:st1
-		GROUP BY gr1,gr3,sem4,sg4,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26
+		GROUP BY gr1,gr3,sem4,sg4,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,f2,f3
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':st1', $st1);
