@@ -648,6 +648,7 @@ SQL;
            inner join nr on (ug.ug3 = nr.nr1)
            inner join us on (nr.nr2 = us.us1)
         where UCGNS5=:YEAR and UCGNS6=:SEM and us1=:US1 and ug2=:GR1
+        group by st1,st2,st3,st4
         order by st2 collate UNICODE
 SQL;
 
@@ -704,15 +705,15 @@ SQL;
         if (empty($gr1))
             return array();
 
-        $date1 = date("d.m.Y", strtotime("+ 20 days"));
-        $date2 = date('d.m.Y 00:00:00');
+        //$date1 = date("d.m.Y", strtotime("+ 20 days"));
+        //$date2 = date('d.m.Y 00:00:00');
 
         $sql=<<<SQL
             SELECT ST1,ST2,ST3,ST4,sgr2, ST117, ST118, ST119, ST120, ST121, ST122, ST123, ST124,ST125,ST139
             FROM st
             INNER JOIN std on (st.st1 = std.std2)
             INNER JOIN sgr on (st.st32 = sgr.sgr1)
-            WHERE st101<>7 and STD3=:GR1 and STD11 in (0,6,8) and STD4<='{$date1}' and (STD7 is null or STD7>'{$date2}')
+            WHERE st101<>7 and STD3=:GR1 and STD11 in (0,6,8) and (STD7 is null)
             ORDER BY ST2 collate UNICODE
 SQL;
 
@@ -752,8 +753,8 @@ SQL;
             return array();
 
         $sql=<<<SQL
-            select 
-				gr3,st2||' '||st3||'.'||st4||'.' as stud
+            select
+				gr1,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,st2||' '||st3||' '||st4||' ' as stud,st56
 			from gr
 			   inner join ug on (gr.gr1 = ug.ug2)
 			   inner join ucgn on (ug.ug4 = ucgn.ucgn1)
@@ -762,6 +763,7 @@ SQL;
 			   inner join st on (ucsn.ucsn2 = st.st1)
 			   inner join nr on (ug.ug3 = nr.nr1)
 			where nr1=:nr1 and ucgns5=:sem3 and ucgns6=:sem5
+			ORDER BY gr7,gr3,st2 collate UNICODE
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);

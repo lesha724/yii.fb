@@ -114,9 +114,9 @@ $this->beginWidget(
  
     <div class="modal-body">
         <?php
-            echo CHtml::label(tt('C'), 'date1_omissions_change');
+            echo CHtml::label(tt('Дата пропуска с'), 'date1_omissions_change');
             echo CHtml::textField('date1_omissions_change', $model->date1, array('class' => 'datepicker', 'id'=>'date1_omissions_change'));
-            echo CHtml::label(tt('по'), 'date2_omissions_change');
+            echo CHtml::label(tt('Дата пропуска по'), 'date2_omissions_change');
             echo CHtml::textField('date2_omissions_change', $model->date2, array('class' => 'datepicker', 'id'=>'date2_omissions_change'));
             //echo CHtml::label(tt('Уваж./Неув.'), 'ck_omissions');
             //echo CHtml::checkBox('ck_omissions', 'checked', array('id'=>'ck_omissions'));

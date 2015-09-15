@@ -630,7 +630,7 @@ SQL;
     {
         if (! Yii::app()->request->isAjaxRequest)
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
-
+        $error=false;
         $stegn1 = Yii::app()->request->getParam('st1', null);
         $stegn2 = Yii::app()->request->getParam('us1', null);
         $stegn3 = Yii::app()->request->getParam('nom', null);
@@ -691,44 +691,55 @@ SQL;
                     $arr=array('stegn6'=>'0');
                 } 
             }
-            $stegn=  Stegn::model()->findByAttributes(array('stegn1'=>$stegn1,'stegn2'=>$stegn2,'stegn3'=>$stegn3)); 
-            if($field=='stegn6' && PortalSettings::model()->findByPk(29)->ps2==1)
+            if ($field == 'stegn6'||$field == 'stegn5')
             {
-                $error=true;
-            }else
-            {
-               if($stegn!=null)
+               $bal=PortalSettings::model()->findByPk(36)->ps2;
+                if($bal!=0)
                 {
-                    $attr = array_merge(array(
-                        $field => $value,
-                        'stegn8' =>  Yii::app()->user->dbModel->p1,
-                        'stegn7' =>  date('Y-m-d H:i:s'),
-                    ),$arr);
-                    $error =!$stegn->saveAttributes($attr);
-                }else
-                {
-                    $stegn= new Stegn();
-                    $stegn->stegn0=new CDbExpression('GEN_ID(GEN_STEGN, 1)');
-                    $stegn->stegn1=$stegn1;
-                    $stegn->stegn2=$stegn2;
-                    $stegn->stegn3=$stegn3;
-                    $stegn->stegn9=$stegn9;
-                    $stegn->stegn10=0;
-                    $stegn->stegn11='';
-                    $stegn->stegn8=Yii::app()->user->dbModel->p1;
-                    $stegn->stegn7=date('Y-m-d H:i:s');
-                    $stegn->stegn5=0;
-                    $stegn->stegn6=0;
-                    $stegn->stegn4=0;
-                    $stegn->$field=$value;    
-
-                    $error =!$stegn->save();
-                }
-                if($field == 'stegn4'&&$value==0)
-                {
-                    Stego::model()->deleteAllByAttributes(array('stego1'=>$stegn->stegn0));
+                    if($value>$bal||$value<0)
+                        //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+                        $error=true;
                 }
             }
+            $stegn=  Stegn::model()->findByAttributes(array('stegn1'=>$stegn1,'stegn2'=>$stegn2,'stegn3'=>$stegn3));
+            if(!$error)
+                if($field=='stegn6' && PortalSettings::model()->findByPk(29)->ps2==1)
+                {
+                    $error=true;
+                }else
+                {
+                   if($stegn!=null)
+                    {
+                        $attr = array_merge(array(
+                            $field => $value,
+                            'stegn8' =>  Yii::app()->user->dbModel->p1,
+                            'stegn7' =>  date('Y-m-d H:i:s'),
+                        ),$arr);
+                        $error =!$stegn->saveAttributes($attr);
+                    }else
+                    {
+                        $stegn= new Stegn();
+                        $stegn->stegn0=new CDbExpression('GEN_ID(GEN_STEGN, 1)');
+                        $stegn->stegn1=$stegn1;
+                        $stegn->stegn2=$stegn2;
+                        $stegn->stegn3=$stegn3;
+                        $stegn->stegn9=$stegn9;
+                        $stegn->stegn10=0;
+                        $stegn->stegn11='';
+                        $stegn->stegn8=Yii::app()->user->dbModel->p1;
+                        $stegn->stegn7=date('Y-m-d H:i:s');
+                        $stegn->stegn5=0;
+                        $stegn->stegn6=0;
+                        $stegn->stegn4=0;
+                        $stegn->$field=$value;
+
+                        $error =!$stegn->save();
+                    }
+                    if($field == 'stegn4'&&$value==0)
+                    {
+                        Stego::model()->deleteAllByAttributes(array('stego1'=>$stegn->stegn0));
+                    }
+                }
             
             
             

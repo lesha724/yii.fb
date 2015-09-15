@@ -27,7 +27,7 @@ class Stegn extends CActiveRecord
 	{
 		return 'stegn';
 	}
-        public $st2,$st3,$st4,$count_stego,$tema;
+        public $st2,$st3,$st4,$count_stego,$tema,$status;
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -41,7 +41,7 @@ class Stegn extends CActiveRecord
                         array('stegn9,stegn11,stegn7', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('stegn1,st2,tema,count_stego, stegn2, stegn3, stegn4, stegn5, stegn6, stegn7, stegn8,stegn10,stegn9,stegn11', 'safe', 'on'=>'search'),
+			array('stegn1,st2,tema,status,count_stego, stegn2, stegn3, stegn4, stegn5, stegn6, stegn7, stegn8,stegn10,stegn9,stegn11', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -73,11 +73,12 @@ class Stegn extends CActiveRecord
 			'stegn6' => 'Stegn6',
 			'stegn7' => 'Stegn7',
 			'stegn8' => 'Stegn8',
-                        'stegn9' => tt('Дата'),
-                        'stegn10' => tt('Тип'),
-                        'stegn11' => tt('Номер справки'),
-                        'count_stego'=>tt('Количество отработок'),
-                        'tema'=>tt('Тема')
+            'stegn9' => tt('Дата'),
+            'stegn10' => tt('Тип'),
+            'stegn11' => tt('Номер справки'),
+            'count_stego'=>tt('Количество отработок'),
+            'tema'=>tt('Тема'),
+            'status'=>tt('Статус')
 		);
 	}
 
@@ -115,12 +116,17 @@ class Stegn extends CActiveRecord
         
         public function getMin()
         {
-            return 2;
+            $bal = PortalSettings::model()->findByPk(37)->ps2;
+            if($bal>0)
+                return $bal;
+            else
+                return 2;
         }
         
         public function checkMinRetakeForGrid()
         {
-            return $this->count_stego==0||$this->stegn6<=$this->getMin();
+            //return $this->count_stego==0||$this->stegn6<=$this->getMin();
+            return $this->stegn6<=$this->getMin();
         }
         
         public function getType()
@@ -134,7 +140,20 @@ class Stegn extends CActiveRecord
                 else
                     return '-';
         }
-        
+
+        public function getStatusArray()
+        {
+            return array(1=>tt('Отработано'),2=>tt('Не отработано'));
+        }
+
+        public function getStatus()
+        {
+            if(!$this->checkMinRetakeForGrid())
+                return tt('Отработано');
+            else
+                return tt('Не отработано');
+        }
+
         public function getTypes()
         {
             return array(1=>tt('без відробок (п.)'),2=>tt('по хворобі (п.)'),3=>tt('чергування (п.)'),4=>tt('інше (п.)'),5=>tt('по оплаті (н.)'));
@@ -182,6 +201,13 @@ class Stegn extends CActiveRecord
         $criteria->addCondition("st2 CONTAINING '".$this->st2."'");
         if(!empty($this->tema))
             $criteria->addCondition("ustem5 CONTAINING '".$this->tema."'");
+        if(!empty($this->status))
+        {
+            if($this->status==1)
+                $criteria->addCondition("stegn6>'".$this->getMin()."'");
+            else
+                $criteria->addCondition("(stegn6<'".$this->getMin()."')");
+        }
         /*if(!empty($this->count_stego))
             $criteria->addCondition("count_stego =".$this->count_stego);*/
 		$criteria->addCondition("stegn4 > 0 OR (stegn5<=".Stegn::model()->getMin()." AND stegn5>0)");

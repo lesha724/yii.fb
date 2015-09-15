@@ -42,6 +42,11 @@
             'name'=>'count_stego',
             'filter'=>''
         ),
+        'status'=>array(
+            'name'=>'status',
+            'value'=>'$data->getStatus()',
+            'filter'=>Stegn::model()->getStatusArray()
+        ),
         array(
                 'class'=>'bootstrap.widgets.TbButtonColumn',
                 'template'=>'{update} {view}',

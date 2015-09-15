@@ -55,6 +55,16 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         <?=CHtml::textField('settings[27]', PortalSettings::model()->findByPk(27)->ps2)?>
     </div>
 
+    <div class="control-group">
+        <span class="lbl"> <?=tt('Максимальный бал')?>:</span>
+        <?=CHtml::numberField('settings[36]', PortalSettings::model()->findByPk(36)->ps2)?>
+    </div>
+
+    <div class="control-group">
+        <span class="lbl"> <?=tt('Максимальный неудов. бал')?>:</span>
+        <?=CHtml::numberField('settings[37]', PortalSettings::model()->findByPk(37)->ps2)?>
+    </div>
+
     <div class="form-actions">
         <button type="submit" class="btn btn-info btn-small">
             <i class="icon-ok bigger-110"></i>

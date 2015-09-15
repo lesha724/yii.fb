@@ -138,10 +138,18 @@
 
                     if (! empty($td5)) {
                         $tip  = tt('Нажмите для просмотра списка студентов');
+                        $tip2  = tt('Распечатать в Excel');
                         $ids  = serialize($discipline['ids']);
-
+                        $url = Yii::app()->createUrl('workLoad/printGroups',array('type'=>$nr1));
                         $td5  = <<<HTML
-                        <button class="btn btn-minier btn-yellow tooltip-info"
+                        <a class="btn btn-minier btn-info tooltip-info btn-print"
+                                href="{$url}"
+                                data-rel="tooltip"
+                                data-placement="bottom"
+                                data-original-title="{$tip2}">
+                            <i class="icon-print"></i>
+                        </a>
+                        <button class="btn btn-minier btn-yellow tooltip-info btn-group"
                                 data-rel="tooltip"
                                 data-placement="bottom"
 								data-type="{$nr1}"

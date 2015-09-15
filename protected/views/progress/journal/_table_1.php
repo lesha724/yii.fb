@@ -1,6 +1,10 @@
 <?php
-    $pattern = <<<HTML
+    /*$pattern = <<<HTML
 <tr data-st1="%s"><td class="center">%s</td><td>%s</td></tr>
+HTML;*/
+$pattern = <<<HTML
+<tr data-st1="%s"><td class="center">%s</td><td data-toggle="tooltip" data-placement="right" title="" data-original-title="%s">%s</td></tr>
+
 HTML;
 
     $columnName = tt('ФИО');
@@ -25,6 +29,7 @@ HTML;
         //$name = mb_substr($name, 0, 10);
         $num  = $key+1;
 
-        $tr .= sprintf($pattern, $st['st1'], $num, $name);
+        //$tr .= sprintf($pattern, $st['st1'], $num, $name);
+        $tr .= sprintf($pattern, $st['st1'], $num,$st['st2'].' '.$st['st3'].' '.$st['st4'] ,$name);
     }
     echo sprintf($table, $tr); // 1 table

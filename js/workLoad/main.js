@@ -50,7 +50,7 @@ $(document).ready(function(){
 
     initTooltips();
 
-    $('#disciplines button').click(function(){
+    $('#disciplines .btn-group').click(function(){
 
         var $that = $(this);
         var url   = $that.closest('table').data('getgroupurl');
