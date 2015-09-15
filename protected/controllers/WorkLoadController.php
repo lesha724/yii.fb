@@ -202,7 +202,7 @@ SQL;
 
             // Redirect output to a clientâ€™s web browser (Excel5)
             header('Content-Type: application/vnd.ms-excel');
-            header('Content-Disposition: attachment;filename="ACY_JORNAL_'.date('Y-m-d H-i').'.xls"');
+            header('Content-Disposition: attachment;filename="ACY_WORKLOAD_'.date('Y-m-d H-i').'.xls"');
             header('Cache-Control: max-age=0');
             // If you're serving to IE 9, then the following may be needed
             header('Cache-Control: max-age=1');
