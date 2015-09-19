@@ -5,12 +5,14 @@
     'dataProvider' => $model->searchRetake(),
     'filter' => $model,
     'type' => 'striped bordered',
+    'afterAjaxUpdate' => 'function(id) { $(\'[data-toggle="tooltip"]\').tooltip();}',
     'ajaxUrl' => Yii::app()->createAbsoluteUrl('/progress/searchRetake',array('us1'=>$model->stegn2)),
     'columns' => array(
         'st2'=>array(
             'header'=>tt('Студент'),
             'name'=>'st2',
-            'value'=>'SH::getShortName($data->st2,$data->st3,$data->st4)',
+            'value'=>'"<label data-toggle=\'tooltip\' data-placement=\'right\' data-original-title=\'".$data->st2." ".$data->st3." ".$data->st4."\'>".SH::getShortName($data->st2,$data->st3,$data->st4)."</label>"',
+            'type'=>'raw',
             'htmlOptions'=>array('class'=>'student'),
         ),
         'tema'=>array(

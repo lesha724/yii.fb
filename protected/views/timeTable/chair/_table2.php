@@ -15,7 +15,7 @@ function generateColumnName($i)
 {
     $num = date('w', strtotime($i));
     $pattern = <<<HTML
-	<th colspan="8"><span class="green">%s (%s)</span></th>
+	<th colspan="8"><span class="green">%s %s</span></th>
 HTML;
     $name = $i;
 

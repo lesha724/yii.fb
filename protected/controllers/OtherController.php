@@ -18,7 +18,10 @@ class OtherController extends Controller
         return array(
             array('allow',
                 'actions' => array(
-                    'orderLesson', 'freeRooms', 'saveLessonOrder', 'deleteComment',
+                    'orderLesson', 'freeRooms', 'saveLessonOrder',
+                    'deleteComment',
+                    'renderAddSpkr',
+                    'addSpkr'
                 ),
                 'expression' => 'Yii::app()->user->isTch',
             ),
@@ -30,6 +33,8 @@ class OtherController extends Controller
                     'saveCiklVBloke',
                     'saveDisciplines',
                     'cancelSubscription',
+                    'renderAddSpkr',
+                    'addSpkr'
                 ),
                 'expression' => 'Yii::app()->user->isStd',
             ),
@@ -473,6 +478,65 @@ SQL;
         
         Yii::app()->end(CJSON::encode($res));
     }
+
+    public function actionRenderAddSpkr()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $error=false;
+        $html='';
+
+        $model=new Spkr;
+        $model->unsetAttributes();
+        $html = $this->renderPartial('studentInfo/_render_spkr',array('model'=>$model), true);
+
+        $res = array(
+            'error'=> $error,
+            'html'=>$html,
+            'title'=>tt('Добавить тему курсовой')
+        );
+
+        Yii::app()->end(CJSON::encode($res));
+    }
+
+    public function actionAddSpkr()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $error=false;
+        $html='';
+
+        $model=new Spkr;
+        $model->unsetAttributes();
+
+        $spkr2= Yii::app()->request->getParam('spkr2', null);
+        $spkr3 = Yii::app()->request->getParam('spkr3', null);
+
+        if(empty($spkr2)||empty($spkr3))
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $sql=<<<SQL
+                SELECT MAX(spkr1) FROM spkr
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        //$command->bindValue(':us1', $ustem2);
+        $spkr1 = (int)$command->queryScalar();
+
+        $model->spkr1= $spkr1+1;
+        $model->spkr2=$spkr2;
+        $model->spkr3=$spkr3;
+        $model->spkr4=1;
+        $model->spkr5=1;
+        $model->spkr6=0;
+
+        $res = array(
+            'error'=> !$model->save(),
+        );
+
+        Yii::app()->end(CJSON::encode($res));
+    }
     
      public function actionUploadPassport()
     {
@@ -885,11 +949,37 @@ SQL;
         $field = Yii::app()->request->getParam('field', null);
         $value = Yii::app()->request->getParam('value', null);
         $nkrs1 = Yii::app()->request->getParam('nkrs1', null);
+        $st1 = Yii::app()->request->getParam('st1', null);
+        $us1 = Yii::app()->request->getParam('us1', null);
 
         if (! in_array($field, array('nkrs6', 'nkrs7')))
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+            throw new CHttpException(404, '1Invalid request. Please do not repeat this request again.');
 
-        $res = D::model()->updateNkrs($nkrs1, $field, $value);
+        $nkrs=Nkrs::model()->findByPk($nkrs1);
+        if(!empty($nkrs))
+            $res = D::model()->updateNkrs($nkrs1, $field, $value);
+        else
+        {
+            $nkrs= new Nkrs();
+            $nkrs->nkrs1=new CDbExpression('GEN_ID(GEN_NKRS, 1)');
+            $nkrs->nkrs2=$st1;
+            $nkrs->nkrs3=$us1;
+            $nkrs->nkrs4='';
+            $nkrs->nkrs5='';
+            if($field=='nkrs6')
+                $nkrs->nkrs7=0;
+            else
+                $nkrs->nkrs6=0;
+            $nkrs->nkrs8='';
+            //$nkrs->$field=$value;
+            $res=$nkrs->save();
+            /*if(!$res)
+            {
+                print_r($nkrs->getErrors());
+               */ //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+            /*}*/
+
+        }
 
         Yii::app()->end(CJSON::encode(array('res' => $res)));
     }

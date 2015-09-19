@@ -34,15 +34,16 @@
 			'p9'=>array(
 				'name' => 'p9',
 				'value'=>'$data->getP9String()',
-				'filter' => '',
+				//'filter' => '',
 				'htmlOptions' => array(
 					'style' => 'min-width:130px;',
 				),
 			),
-			'p13'=>array(
+			/*'p13'=>array(
 				'name' => 'p13',
 				'filter' => '',
-			),
+			),*/
+            'p13',
             array(
                 'header' => 'Login',
                 'filter' => CHtml::textField('login', Yii::app()->request->getParam('login')),

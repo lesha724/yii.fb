@@ -33,6 +33,10 @@ $options = array(
     
     //$options_select = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;', 'style' => 'width:200px');
     $teacher = CHtml::listData(Stego::model()->getTeacher($us1), 'p1', 'name');
+    if(Yii::app()->user->isTch&&isset($teacher[Yii::app()->user->dbModel->p1]))
+    {
+        $model->stego4=Yii::app()->user->dbModel->p1;
+    }
     $label = $form->label($model, 'stego4', $options);
     $input = $form->dropDownList($model, 'stego4',$teacher);
     $html .= sprintf($pattern, $label, $input);

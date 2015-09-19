@@ -1,24 +1,32 @@
 <?php
 
 /**
- * This is the model class for table "spkr".
+ * This is the model class for table "nkrs".
  *
- * The followings are the available columns in table 'spkr':
- * @property integer $spkr1
- * @property string $spkr2
- * @property string $spkr3
- * @property integer $spkr4
- * @property integer $spkr5
- * @property integer $spkr6
+ * The followings are the available columns in table 'nkrs':
+ * @property integer $nkrs1
+ * @property integer $nkrs2
+ * @property integer $nkrs3
+ * @property string $nkrs4
+ * @property string $nkrs5
+ * @property integer $nkrs6
+ * @property integer $nkrs7
+ * @property string $nkrs8
+ *
+ * The followings are the available model relations:
+ * @property St $nkrs20
+ * @property Us $nkrs30
+ * @property P $nkrs60
+ * @property Spkr $nkrs70
  */
-class Spkr extends CActiveRecord
+class Nkrs extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'spkr';
+		return 'nkrs';
 	}
 
 	/**
@@ -29,12 +37,12 @@ class Spkr extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('spkr1', 'required'),
-			array(' spkr4, spkr5, spkr6', 'numerical', 'integerOnly'=>true),
-			array('spkr2, spkr3', 'length', 'max'=>1000),
+			array('nkrs2, nkrs3, nkrs6, nkrs7', 'numerical', 'integerOnly'=>true),
+			array('nkrs4, nkrs5', 'length', 'max'=>1000),
+			array('nkrs8', 'length', 'max'=>1400),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('spkr1, spkr2, spkr3, spkr4, spkr5, spkr6', 'safe', 'on'=>'search'),
+			array('nkrs1, nkrs2, nkrs3, nkrs4, nkrs5, nkrs6, nkrs7, nkrs8', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -46,6 +54,10 @@ class Spkr extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'nkrs20' => array(self::BELONGS_TO, 'St', 'nkrs2'),
+			'nkrs30' => array(self::BELONGS_TO, 'Us', 'nkrs3'),
+			'nkrs60' => array(self::BELONGS_TO, 'P', 'nkrs6'),
+			'nkrs70' => array(self::BELONGS_TO, 'Spkr', 'nkrs7'),
 		);
 	}
 
@@ -55,12 +67,14 @@ class Spkr extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'spkr1' => 'Spkr1',
-			'spkr2' => tt('Оригинальное название'),
-			'spkr3' => tt('Название на английском'),
-			'spkr4' => 'Spkr4',
-			'spkr5' => 'Spkr5',
-			'spkr6' => 'Spkr6',
+			'nkrs1' => 'Nkrs1',
+			'nkrs2' => 'Nkrs2',
+			'nkrs3' => 'Nkrs3',
+			'nkrs4' => 'Nkrs4',
+			'nkrs5' => 'Nkrs5',
+			'nkrs6' => 'Nkrs6',
+			'nkrs7' => 'Nkrs7',
+			'nkrs8' => 'Nkrs8',
 		);
 	}
 
@@ -82,12 +96,14 @@ class Spkr extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('spkr1',$this->spkr1);
-		$criteria->compare('spkr2',$this->spkr2,true);
-		$criteria->compare('spkr3',$this->spkr3,true);
-		$criteria->compare('spkr4',$this->spkr4);
-		$criteria->compare('spkr5',$this->spkr5);
-		$criteria->compare('spkr6',$this->spkr6);
+		$criteria->compare('nkrs1',$this->nkrs1);
+		$criteria->compare('nkrs2',$this->nkrs2);
+		$criteria->compare('nkrs3',$this->nkrs3);
+		$criteria->compare('nkrs4',$this->nkrs4,true);
+		$criteria->compare('nkrs5',$this->nkrs5,true);
+		$criteria->compare('nkrs6',$this->nkrs6);
+		$criteria->compare('nkrs7',$this->nkrs7);
+		$criteria->compare('nkrs8',$this->nkrs8,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -98,26 +114,10 @@ class Spkr extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Spkr the static model class
+	 * @return Nkrs the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
 	}
-
-    public function findAllInArray()
-    {
-        $rows = Yii::app()->db->createCommand()
-                ->select('*')
-                ->from($this->tableName())
-                ->queryAll();
-
-        $rus = array();
-        foreach ($rows as $row) {
-            $rus[$row['spkr1']] = $row['spkr2'];
-            $eng[$row['spkr1']] = $row['spkr3'];
-        }
-        return array($rus, $eng);
-    }
-
 }

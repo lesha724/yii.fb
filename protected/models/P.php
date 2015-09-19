@@ -128,7 +128,8 @@ class P extends CActiveRecord
 			array('p3, p27, p54, p76, p102, p105, p108', 'length', 'max'=>140),
 			array('p4, p5, p6, p7, p13, p14, p77, p78, p103, p104, p106, p107, p109, p110', 'length', 'max'=>80),
 			array('p8, p19, p20, p58', 'length', 'max'=>4),
-			array('p9, p49, p62, p63', 'length', 'max'=>8),
+			array('p49, p62, p63', 'length', 'max'=>8),
+            array('p9', 'length', 'max'=>20),
 			array('p10, p11, p17, p21, p22, p53', 'length', 'max'=>400),
 			array('p12, p16, p57, p65', 'length', 'max'=>60),
 			array('p15, p67, p68', 'length', 'max'=>20),
@@ -485,8 +486,10 @@ SQL;
 		$criteria->addCondition("p3 CONTAINING '".$this->p3."'");
 		$criteria->addCondition("p4 CONTAINING '".$this->p4."'");
 		$criteria->addCondition("p5 CONTAINING '".$this->p5."'");
-        //$criteria->addSearchCondition('p4', $this->p4);
-        //$criteria->addSearchCondition('p5', $this->p5);
+        $criteria->addSearchCondition('p13', $this->p13);
+        if(!empty($this->p9))
+            $criteria->addCondition("p9 CONTAINING '".date_format(date_create_from_format('d-m-Y', trim($this->p9)), 'Y-m-d')."'");
+            //$criteria->addSearchCondition('p9', date_format(date_create_from_format('d-m-Y', $this->p9), 'Y-m-d H:i:s'));
 
         $criteria->addSearchCondition('account.u2', Yii::app()->request->getParam('login'));
         $criteria->addSearchCondition('account.u3', Yii::app()->request->getParam('password'));

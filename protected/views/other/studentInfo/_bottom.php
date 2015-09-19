@@ -78,17 +78,26 @@ $form=$this->beginWidget('CActiveForm', array(
                     echo '<strong>'.$discipline['d2'].'</strong>'.'<br>';
 
                     $courseWork = D::model()->getFirstCourseWork($model->student, $discipline['us1']);
+                    if(!empty($courseWork))
+                    {
+                        $nkrs1 = $courseWork['nkrs1'];
+                        $p1    = $courseWork['nkrs6'];
+                        $nkrs6 = P::model()->getTeacherNameWithDol($courseWork['nkrs6']);
+                        $nkrs7 = $courseWork['nkrs7'];
+                    }
+                    else
+                    {
+                        $nkrs1 = -1;
+                        $nkrs6='';
+                        $nkrs7=-1;
 
-                    $nkrs1 = $courseWork['nkrs1'];
-                    $p1    = $courseWork['nkrs6'];
-                    $nkrs6 = P::model()->getTeacherNameWithDol($courseWork['nkrs6']);
-                    $nkrs7 = $courseWork['nkrs7'];
+                    }
+                        echo CHtml::tag('div', array('data-nkrs1' => $nkrs1,'data-st1' =>$model->student,'data-us1' =>$discipline['us1'])).
+                                CHtml::dropDownList('nkrs7', $nkrs7, $rus, array('id' => false, 'class' => 'chosen-select', 'style'=>'width:50%')).
+                                CHtml::label(tt('Научный руководитель'), '', array()).
+                                CHtml::textField('nkrs6', $nkrs6, array('class' => 'autocomplete')).'<br>'.
+                             CHtml::closeTag('div');
 
-                    echo CHtml::tag('div', array('data-nkrs1' => $nkrs1)).
-                            CHtml::dropDownList('nkrs7', $nkrs7, $rus, array('id' => false, 'class' => 'chosen-select', 'style'=>'width:50%')).
-                            CHtml::label(tt('Научный руководитель'), '', array()).
-                            CHtml::textField('nkrs6', $nkrs6, array('class' => 'autocomplete')).'<br>'.
-                         CHtml::closeTag('div');
 
                 }
             ?>
@@ -102,10 +111,9 @@ $form=$this->beginWidget('CActiveForm', array(
                 if ($discipline) {
 
                     echo '<strong>'.$discipline['d2'].'</strong>'.'<br>';
-
-                    echo CHtml::tag('div').
-                            CHtml::dropDownList('nkrs7-eng', $nkrs7, $eng, array('style'=>'width:72%', 'disabled' => true)).
-                         CHtml::closeTag('div');
+                        echo CHtml::tag('div').
+                                CHtml::dropDownList('nkrs7-eng', $nkrs7, $eng, array('style'=>'width:72%', 'disabled' => true)).
+                             CHtml::closeTag('div');
                 }
             ?>
         </div>
@@ -123,9 +131,14 @@ $form=$this->beginWidget('CActiveForm', array(
             <i class="icon-print bigger-110"></i>
             <?=tt('Печать')?>
         </a>
+
         <?php
             endif;
         ?>
+        <a type="submit" class="btn btn-warning btn-add-spkr" data-url="<?=$this->createUrl('/other/renderAddSpkr')?>">
+            <i class="icon-plus bigger-110"></i>
+            <?=tt('Добавить в справочник тему курсовой')?>
+        </a>
     </div>
 <?php $this->endWidget(); ?>
 

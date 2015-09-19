@@ -40,14 +40,22 @@ function table2Tr($date,$us1,$gr1,$st1,$marks,$us,$permLesson)
         $stegn6 = isset($marks[$key]) && $marks[$key]['stegn6'] != 0
                     ? round($marks[$key]['stegn6'], 1)
                     : '';
+        $stegr=Stegr::model()->findByAttributes(array('stegr1'=>$gr1,'stegr2'=>$us1,'stegr3'=>$date['r2']));
+        if(!empty($stegr))
+        {
+            if(strtotime($stegr->stegr4)<strtotime('now'))
+                $disabled='disabled="disabled"';
+            else
+                $disabled='';
+        }
         $disabled_input=$disabled;
-            $disabled_input_1=$disabled;
+        $disabled_input_1=$disabled;
         $class_1='';
         $class_2='';
         if($stegn4=='checked')
         {
             $disabled_input = 'disabled="disabled"';
-                    $disabled_input_1 = 'disabled="disabled"';
+            $disabled_input_1 = 'disabled="disabled"';
         }
         if($disabled != 'disabled="disabled"')
         {
@@ -56,10 +64,10 @@ function table2Tr($date,$us1,$gr1,$st1,$marks,$us,$permLesson)
             if($stegn6=='')
                 $class_2 = 'class="not-value"';
         }
-           if(PortalSettings::model()->findByPk(29)->ps2==1)
-           {
-               $disabled_input_1 = 'disabled="disabled"';
-           }
+        if(PortalSettings::model()->findByPk(29)->ps2==1)
+        {
+           $disabled_input_1 = 'disabled="disabled"';
+        }
         $tooltip=tt('присутствие/отсутствие');
         if($us->us4!=1)
         {

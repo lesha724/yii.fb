@@ -559,6 +559,7 @@ SQL;
         ));*/
 
         $res = array(
+            'title'=>tt('Отработка1'),
             'html' => $html,
             'errors' => $error,
             'show'=>true,
@@ -674,11 +675,12 @@ SQL;
                 $diff = $date1->diff($date2)->days;
                 if ($diff > $ps2)
                 {
-                    $stegr=Stegr::model()->findByAttributes(array('stegr1'=>$gr1,'stegr2'=>$stegn2,'stegr3'=>$stegn9));
-                    if(empty($stegr)||(strtotime($stegr->stegr4)<strtotime('now')))
-                        throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+                    throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
                 } 
             }
+            $stegr=Stegr::model()->findByAttributes(array('stegr1'=>$gr1,'stegr2'=>$stegn2,'stegr3'=>$stegn9));
+            if(empty($stegr)||(strtotime($stegr->stegr4)<strtotime('now')))
+                throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
             $arr=array();
             if ($field == 'stegn4')
             {

@@ -59,7 +59,9 @@ $(document).ready(function(){
             var post = {
                 'field' : 'nkrs6',
                 'value' : obj.p1,
-                'nkrs1' : $(this).parent().data('nkrs1')
+                'nkrs1' : $(this).parent().data('nkrs1'),
+                'st1' : $(this).parent().data('st1'),
+                'us1' : $(this).parent().data('us1')
             };
 
             $.post(url, post, function(data){
@@ -79,7 +81,9 @@ $(document).ready(function(){
         var post = {
             'field' : 'nkrs7',
             'value' : $that.val(),
-            'nkrs1' : $(this).parent().data('nkrs1')
+            'nkrs1' : $(this).parent().data('nkrs1'),
+            'st1' : $(this).parent().data('st1'),
+            'us1' : $(this).parent().data('us1')
         };
 
         $.post(url, post, function(data){
@@ -123,9 +127,79 @@ $(document).ready(function(){
                     }
                 }
                 
-            },
+            }
           });
        
+    });
+
+    $(document).on('click', '.btn-add-spkr', function(){
+
+        var $that = $(this);
+        var url = $that.data('url');
+
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            success: function(html){
+                if (!html.error) {
+                    $('#myModal #modal-content').html(html.html);
+                    $('#myModal .modal-header h4').html(html.title);
+                    $('#myModal').modal('show');
+                }else
+                    addGritter('', 'Произошла ошибка!', 'error')
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                if (jqXHR.status == 500) {
+                    addGritter('', 'Internal error: ' + jqXHR.responseText, 'error')
+                } else {
+                    if (jqXHR.status == 403) {
+                        addGritter('', 'Access error: ' + jqXHR.responseText, 'error')
+                    } else {
+                        addGritter('', 'Unexpected error.', 'error')
+                    }
+                }
+
+            }
+        });
+
+    });
+
+    $(document).on('click', '#spkr-form a', function(){
+
+        var $that = $(this);
+
+        var url =$that.parents('form').attr('action');
+
+        var data = {
+            spkr2 : $('#Spkr_spkr2').val(),
+            spkr3 : $('#Spkr_spkr3').val()
+        };
+        $('#myModal').modal('hide');
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            data:data,
+            success: function(html){
+                if (!html.error) {
+                    addGritter('', 'Сохранено!', 'success');
+                    $('#filter-form').submit();
+                }else
+                    addGritter('', 'Произошла ошибка!', 'error')
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                if (jqXHR.status == 500) {
+                    addGritter('', 'Internal error: ' + jqXHR.responseText, 'error')
+                } else {
+                    if (jqXHR.status == 403) {
+                        addGritter('', 'Access error: ' + jqXHR.responseText, 'error')
+                    } else {
+                        addGritter('', 'Unexpected error.', 'error')
+                    }
+                }
+
+            }
+        });
+
     });
     
     $(document).on('click', '.change-passport', function(){
@@ -160,7 +234,7 @@ $(document).ready(function(){
                     }
                 }
                 
-            },
+            }
           });
        
     });
@@ -196,7 +270,7 @@ $(document).ready(function(){
                     }
                 }
                 
-            },
+            }
           });
        
     });

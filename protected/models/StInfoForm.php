@@ -41,7 +41,8 @@ class StInfoForm extends CFormModel
     {
         if (! $model->student)
             return;
-
+        if($this->st34==null)
+            $this->st34=0;
         $res1 = St::model()->updateByPk($model->student, array(
             'st34' => $this->st34,
             'st74' => $this->st74,

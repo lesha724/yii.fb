@@ -47,6 +47,7 @@ $(document).ready(function(){
             dataType: 'json',
             success: function( data ) {
                     if (!data.error) {
+                        $('#myModal .modal-header h4').html(data.title);
                         $('#myModal #modal-content').html(data.html);
                         if(data.show){
                            $('#save-stego').show(); 

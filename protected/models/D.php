@@ -963,7 +963,7 @@ SQL;*/
 			   sem5=:SG41
 			   group by us1,d2
 SQL;
-        /*$sql = <<<SQL
+       /* $sql = <<<SQL
 			select us1,d2
 			   from u
 				  inner join uo on (u.u1 = uo.uo22)
@@ -1015,7 +1015,7 @@ SQL;
             ));
 
             $sql = <<<SQL
-                select NKRS1 FIRST
+                select nkrs1,nkrs6,nkrs7,nkrs4,nkrs5 FIRST
                 from NKRS
                 order by NKRS1 DESC
 SQL;

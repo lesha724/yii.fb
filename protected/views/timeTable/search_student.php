@@ -81,7 +81,7 @@ if(!empty($students))
 		  <td>'.$student['sem4'].'</td>
           <td>'.$student['f2'].'</td>';
 		  if($filial)
-			echo '<td>'.$teacher['ks3'].'</td>';
+			echo '<td>'.$student['ks3'].'</td>';
           echo '<td><a class="btn-check btn btn-small btn-success" href="#" data-st1="'.$student['st1'].'" data-ks1="'.$student['ks1'].'" data-sem4="'.$student['sem4'].'" data-f1="'.$student['f1'].'" data-gr1="'.$student['gr1'].'"><i class="icon-check"> '.tt('Выбрать').'</i></td>
         </tr>';
 		$i++;
