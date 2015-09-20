@@ -59,6 +59,8 @@ HTML;
         'ps20'  => $ps20,
         'ps33'  => $ps33,
         'pbal'  => $pbal,
+        'pbal'  => $pbal,
+        'read_only' => $read_only
     ));
     if($us->us4!=1)
     $this->renderPartial('journal/_table_3', array(
@@ -71,6 +73,7 @@ HTML;
         'ps9'      => $ps9,
         'ps20'     => $ps20,
         'ps33'  => $ps33,
+        'read_only' => $read_only
     ));
 echo <<<HTML
 </div>

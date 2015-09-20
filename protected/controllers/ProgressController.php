@@ -273,9 +273,32 @@ class ProgressController extends Controller
         if (isset($_REQUEST['FilterForm']))
             $model->attributes=$_REQUEST['FilterForm'];
 
+        $read_only=false;
+        if(!empty($model->group))
+        {
+            $arr = explode("/", $model->group);
+            $us1=$arr[0];
+            $gr1=$arr[1];
+            $sql = <<<SQL
+                     SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,0,2,:US1,0);
+SQL;
+            $command = Yii::app()->db->createCommand($sql);
+
+            $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
+            $command->bindValue(':US1', $us1);
+            $command->bindValue(':YEAR', Yii::app()->session['year']);
+            $command->bindValue(':SEM', Yii::app()->session['sem']);
+            $res = $command->queryRow();
+            if(empty($res)||$res['dostup']==0)
+            {
+                $read_only=true;
+            }
+        }
+
         $this->render('journal', array(
             'model' => $model,
             'type' => $type,
+            'read_only' => $read_only,
         ));
     }
     
@@ -629,10 +652,11 @@ SQL;
     
     public function actionInsertStegMark()
     {
-        if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        /*if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');*/
         $error=false;
         $stegn1 = Yii::app()->request->getParam('st1', null);
+        $r1 = Yii::app()->request->getParam('r1', null);
         $stegn2 = Yii::app()->request->getParam('us1', null);
         $stegn3 = Yii::app()->request->getParam('nom', null);
         $stegn9 = Yii::app()->request->getParam('date', null);
@@ -644,43 +668,54 @@ SQL;
             $error = true;
         else {
             $sql = <<<SQL
-             SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,0,2,:US1);
+             SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,0,3,:US1,:R1);
 SQL;
             $command = Yii::app()->db->createCommand($sql);
 
             $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
             $command->bindValue(':US1', $stegn2);
+            $command->bindValue(':R1', $r1);
             $command->bindValue(':YEAR', Yii::app()->session['year']);
             $command->bindValue(':SEM', Yii::app()->session['sem']);
             $res = $command->queryRow();
-            if(count($res)==0 || empty($res)||$res['us1']==0)
+            if(count($res)==0 || empty($res)||$res['dostup']==0)
             {
-                throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+                //throw new CHttpException(404, '1Invalid request. Please do not repeat this request again.');
+                $error=true;
             }
 
             $whiteList = array(
                 'stegn4', 'stegn5','stegn6',
             );
             if (!in_array($field, $whiteList))
-               throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+               throw new CHttpException(404, '2Invalid request. Please do not repeat this request again.');
             $ps2 = PortalSettings::model()->getSettingFor(27);
 
             $us=Us::model()->findByPk($stegn2);
             if($us->us4==1&&$field!='stegn4')
-                throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+                throw new CHttpException(404, '3Invalid request. Please do not repeat this request again.');
+            $stegr=Stegr::model()->findByAttributes(array('stegr1'=>$gr1,'stegr2'=>$stegn2,'stegr3'=>$stegn9));
+            $perm_enable=false;
+            if(!empty($stegr))
+            {
+                if(strtotime($stegr->stegr4)<strtotime('now'))
+                {
+                    throw new CHttpException(404, '5Invalid request. Please do not repeat this request again.');
+                }else
+                {
+                    $perm_enable=true;
+                }
+            }
 
-            if(! empty($ps2)){
+            if(! empty($ps2) &&!$perm_enable){
                 $date1  = new DateTime(date('Y-m-d H:i:s'));
                 $date2  = new DateTime($stegn9);
                 $diff = $date1->diff($date2)->days;
                 if ($diff > $ps2)
                 {
-                    throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+                    throw new CHttpException(404, '4Invalid request. Please do not repeat this request again.');
                 } 
             }
-            $stegr=Stegr::model()->findByAttributes(array('stegr1'=>$gr1,'stegr2'=>$stegn2,'stegr3'=>$stegn9));
-            if(empty($stegr)||(strtotime($stegr->stegr4)<strtotime('now')))
-                throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
             $arr=array();
             if ($field == 'stegn4')
             {
@@ -703,6 +738,7 @@ SQL;
                         $error=true;
                 }
             }
+            $errors=array();
             $stegn=  Stegn::model()->findByAttributes(array('stegn1'=>$stegn1,'stegn2'=>$stegn2,'stegn3'=>$stegn3));
             if(!$error)
                 if($field=='stegn6' && PortalSettings::model()->findByPk(29)->ps2==1)
@@ -741,13 +777,14 @@ SQL;
                     {
                         Stego::model()->deleteAllByAttributes(array('stego1'=>$stegn->stegn0));
                     }
+                    $errors=$stegn->getErrors();
                 }
             
             
             
             //Stegn::model()->insertMark($stegn1,$stegn2,$stegn3,$field,$value,$stegn9);
         }
-        Yii::app()->end(CJSON::encode(array('error' => $error, 'errors' => $stegn->getErrors())));
+        Yii::app()->end(CJSON::encode(array('error' => $error, 'errors' => $errors)));
     }
 
     public function actionInsertDsejMark()

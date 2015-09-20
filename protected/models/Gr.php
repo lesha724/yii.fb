@@ -275,7 +275,7 @@ SQL;
         if (empty($discipline))
             return array();
         $sql = <<<SQL
-             SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,:D1,1,0);
+             SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,:D1,1,0,0);
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);

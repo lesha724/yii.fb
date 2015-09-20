@@ -1,5 +1,5 @@
 <?php
-function table2Tr($date,$us1,$gr1,$st1,$marks,$us,$permLesson)
+function table2Tr($date,$us1,$gr1,$st1,$marks,$us,$permLesson,$read_only)
 {
     /*if($date['priz']!=0)
        return '<td colspan="2"></td>'; */
@@ -11,6 +11,9 @@ function table2Tr($date,$us1,$gr1,$st1,$marks,$us,$permLesson)
     {
 
         $r2  = $date['r2'];
+        $r1  = '';
+        if(isset($date['r1']))
+            $r1  = $date['r1'];
         $ps2 = PortalSettings::model()->getSettingFor(27);
         $nom=$date['nom'];
         $date_lesson=$date['r2'];
@@ -71,22 +74,57 @@ function table2Tr($date,$us1,$gr1,$st1,$marks,$us,$permLesson)
         $tooltip=tt('присутствие/отсутствие');
         if($us->us4!=1)
         {
-            $pattern= <<<HTML
-            <td colspan="2" data-nom="{$nom}" data-priz="{$type}" data-us1="{$us1}"  data-date="{$date_lesson}" data-gr1="{$gr1}">
-                <input type="checkbox" data-toggle="tooltip" data-placement="right" data-original-title="{$tooltip}" %s data-name="stegn4" {$disabled}>
-                <input value="%s" {$class_1} maxlength="3" data-name="stegn5" {$disabled_input}>
-                <input value="%s" {$class_2} maxlength="3" data-name="stegn6" {$disabled_input_1}>
-            </td>
+            if(!$read_only)
+                $pattern= <<<HTML
+                    <td colspan="2" data-nom="{$nom}" data-priz="{$type}" data-us1="{$us1}" data-r1="{$r1}" data-date="{$date_lesson}" data-gr1="{$gr1}">
+                        <input type="checkbox" data-toggle="tooltip" data-placement="right" data-original-title="{$tooltip}" %s data-name="stegn4" {$disabled}>
+                        <input value="%s" {$class_1} maxlength="3" data-name="stegn5" {$disabled_input}>
+                        <input value="%s" {$class_2} maxlength="3" data-name="stegn6" {$disabled_input_1}>
+                    </td>
 HTML;
+            else
+            {
+                if($stegn4=='checked')
+                {
+                    $stegn4='-';
+                }else
+                {
+                    $stegn4='+';
+                }
+                $pattern= <<<HTML
+                    <td colspan="2">
+                        <label class="label label-warning">%s</label>
+                        <label class="label label-success">%s</label>
+                        <label class="label label-inverse">%s</label>
+                    </td>
+HTML;
+            }
+
 
             return sprintf($pattern, $stegn4, $stegn5, $stegn6);
         }else
         {
-            $pattern= <<<HTML
-            <td colspan="2" data-nom="{$nom}" data-priz="{$type}" data-us1="{$us1}"  data-date="{$date_lesson}" data-gr1="{$gr1}">
+            if(!$read_only)
+                $pattern= <<<HTML
+            <td colspan="2" data-nom="{$nom}" data-priz="{$type}" data-us1="{$us1}" data-r1="{$r1}"  data-date="{$date_lesson}" data-gr1="{$gr1}">
                 <input data-toggle="tooltip" data-placement="right" data-original-title="{$tooltip}" type="checkbox" %s data-name="stegn4" {$disabled}>
             </td>
 HTML;
+            else
+            {
+                if($stegn4=='checked')
+                {
+                    $stegn4='-';
+                }else
+                {
+                    $stegn4='+';
+                }
+                $pattern= <<<HTML
+                    <td colspan="2">
+                        <label class="label label-warning">%s</label>
+                    </td>
+HTML;
+            }
 
             return sprintf($pattern, $stegn4);
         }
@@ -249,6 +287,8 @@ HTML;
 </div>
 HTML;
 
+
+
     $minMax = Mmbj::model()->getDataForJournal($us1);
     $permLesson=Stegr::model()->getList($gr1,$us1);
     global $count_dates;
@@ -284,7 +324,7 @@ HTML;
                     $total_sub_module=0;
                 }
             }*/
-            $tr .= table2Tr($date,$us1,$gr1,$st1,$marks,$us,$permLesson);
+            $tr .= table2Tr($date,$us1,$gr1,$st1,$marks,$us,$permLesson,$read_only);
             
         }
         $tr .= '</tr>';

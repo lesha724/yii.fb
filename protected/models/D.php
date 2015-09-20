@@ -317,7 +317,7 @@ SQL;
     {
 
         $sql = <<<SQL
-            SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,0,0,0);
+            SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,0,0,0,0);
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':P1', Yii::app()->user->dbModel->p1);

@@ -11,7 +11,7 @@
     Yii::app()->clientScript->registerPackage('jquery.ui');
     Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/progress/journal.js', CClientScript::POS_HEAD);
 
-    $error       = tt('Ошибка! Проверьте правильность вводимых данных!');
+    $error       = tt('Ошибка! Проверьте правильность вводимых данных или доступ для ввода!');
     $success     = tt('Cохранено!');
     $minMaxError = tt('Оценка за пределами допустимого интервала!');
     $notenter = tt('отсутствие');
@@ -35,4 +35,4 @@ JS
     ));
     
     
-    $this->renderPartial('journal/_bottom', array('model' => $model, 'type' => $type));
+    $this->renderPartial('journal/_bottom', array('model' => $model, 'type' => $type,'read_only' => $read_only));

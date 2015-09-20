@@ -286,6 +286,7 @@ SQL;
     private function cellFullTextFor($day, $type)
     {
         $d2  = $day['d2'];
+        $d2 = str_replace('"', "'", $d2);
         $tip = $day['tip'];
         $gr3 = $day['gr3'];
         $a2  = $day['a2'];

@@ -21,6 +21,7 @@ $(document).ready(function(){
             field : $that.data('name'),
             nom  : $that.parent().data('nom'),
             us1   : $that.parent().data('us1'),
+            r1   : $that.parent().data('r1'),
             st1   : st1,
             gr1   : gr1,
 			date:$that.parent().data('date'),
@@ -111,7 +112,7 @@ $(document).ready(function(){
                 },
                 error: function( data ) {
                     addGritter(title, tt.error, 'error');
-                    
+                    $td.addClass('error');
                 }
               }); 
         }
