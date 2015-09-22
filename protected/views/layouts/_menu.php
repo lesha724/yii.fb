@@ -2,6 +2,44 @@
 $_m = isset(Yii::app()->controller->module) ? Yii::app()->controller->module->id : '';
 $_c = Yii::app()->controller->id;
 $_a = Yii::app()->controller->action->id;
+function getDopGroup($_l)
+{
+    $res=Pmg::model()->findAllByAttributes(array('pmg7'=>1),array('order'=>'pmg9 DESC'));
+    if(!empty($res))
+    {
+        $arr=array();
+        foreach($res as $val)
+        {
+            array_push($arr,array(
+                'label' => _l(getLabelGroup($val), $val->pmg9),
+                'url' => '#',
+                'linkOptions'=> $_l,
+                'items' =>getDopItem($val->pmg1)
+            ));
+        }
+        return $arr;
+    }else
+        return array();
+}
+function getLabelGroup($item)
+{
+    $label='';
+    switch (Yii::app()->language) {
+        case 'uk':
+            $label=$item->pmg2;
+            break;
+        case 'ru':
+            $label=$item->pmg3;
+            break;
+        case 'en':
+            $label=$item->pmg4;
+            break;
+        default:
+            $label=$item->pmg5;
+            break;
+    }
+    return $label;
+}
 function getLabelItem($item)
 {
     $label='';
@@ -81,7 +119,7 @@ $this->widget('zii.widgets.CMenu', array(
     'submenuHtmlOptions' => array(
         'class' => 'submenu',
     ),
-    'items'=>array(
+    'items'=>array_merge(array(
         array(
             'label' => _l('Админ. панель', 'dashboard'),
             'url' => '#',
@@ -137,6 +175,11 @@ $this->widget('zii.widgets.CMenu', array(
                     'label'  => $_l2.tt('Настройки'),
                     'url'    => _u('/admin/default/settings'),
                     'active' => $_a=='settings' && $_m=='admin'
+                ),
+                array(
+                    'label'  => $_l2.tt('Группы пунктов меню (доп.)'),
+                    'url'    => _u('/admin/menuGroup'),
+                    'active' => $_c=='menuGroup' && $_m=='admin'
                 ),
                 array(
                     'label'  => $_l2.tt('Пункты меню (доп.)'),
@@ -444,6 +487,6 @@ $this->widget('zii.widgets.CMenu', array(
             ),getDopItem('other')),
             'visible' => _ch('other', 'main')
         ),
-    ),
+    ),getDopGroup($_l)),
 ));
 

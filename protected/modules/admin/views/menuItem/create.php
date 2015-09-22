@@ -10,7 +10,7 @@ $this->menu=array(
 );
 if(!empty($this->menu))
 {
-    echo $this->renderPartial('_menu');
+    echo $this->renderPartial('/default/_menu');
 }
 ?>
 

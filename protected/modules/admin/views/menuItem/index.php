@@ -10,7 +10,7 @@ $this->menu=array(
 
 if(!empty($this->menu))
 {
-    echo $this->renderPartial('_menu');
+    echo $this->renderPartial('/default/_menu');
 }
 $vis_arr=Pm::getPm7Array();
 $visible=$vis_arr[1];

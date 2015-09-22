@@ -125,7 +125,7 @@ class Pm extends CActiveRecord
         
         public static function getPm10Array()
         {
-           return array(
+           $arr=array(
                'timeTable'=>tt('Расписание'),
                'workPlan'=>tt('Рабочий план'),
                'list'=>tt('Список'),
@@ -135,6 +135,8 @@ class Pm extends CActiveRecord
                'payment'=>tt('Оплата'),
                'other'=>tt('Другое'),
            );
+            $pmg=CHtml::listData(Pmg::model()->findAll(),'pmg1','pmg2');
+            return $arr+$pmg;
         }
 
         public function getPm10()
