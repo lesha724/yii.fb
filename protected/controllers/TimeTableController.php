@@ -128,7 +128,7 @@ class TimeTableController extends Controller
         if (! empty($model->group))
         {
             if($type==0)
-                    list($minMax, $timeTable, $maxLessons) = $model->generateGroupTimeTable();
+               list($minMax, $timeTable, $maxLessons) = $model->generateGroupTimeTable();
             else
                     $timeTable=Gr::getTimeTable($model->group, $model->date1, $model->date2, 0);
 

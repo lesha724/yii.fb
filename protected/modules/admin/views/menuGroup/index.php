@@ -36,7 +36,12 @@ $this->widget('bootstrap.widgets.TbGridView',array(
             'value'=>function($data) use ($visible,$notVisible) {
                     return ($data->pmg7==0)?"<a class=\"visible-off\" href=\"".$data->pmg1."\"><i class=\"glyphicon glyphicon-remove-circle\"></i>".$notVisible."</a>":"<a class=\"visible-on\"  href=\"".$data->pmg1."\"><i class=\"glyphicon glyphicon-ok-circle\"></i>".$visible."</a>";
                 },
-            'filter'=>Pm::getPm7Array(),
+            'filter'=>Pmg::getPmg7Array(),
+        ),
+        'pmg6'=>array(
+            'name'=>'pmg6',
+            'value'=>'$data->getPmg6()',
+            'filter'=>Pmg::getPmg6Array(),
         ),
 		'pmg8',
 		'pmg9',

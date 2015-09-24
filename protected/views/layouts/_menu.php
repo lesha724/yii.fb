@@ -10,11 +10,18 @@ function getDopGroup($_l)
         $arr=array();
         foreach($res as $val)
         {
+            $visible=true;
+            if($val->pmg6>0)
+            {
+                if(!Yii::app()->user->isAdmin&&!Yii::app()->user->isStd&&!Yii::app()->user->isTch)
+                    $visible=false;
+            }
             array_push($arr,array(
                 'label' => _l(getLabelGroup($val), $val->pmg9),
                 'url' => '#',
                 'linkOptions'=> $_l,
-                'items' =>getDopItem($val->pmg1)
+                'items' =>getDopItem($val->pmg1),
+                'visible'=>$visible
             ));
         }
         return $arr;

@@ -52,7 +52,6 @@ $html .= <<<HTML
 HTML;
 	}
     $html .= '</td>';
-
     // колонки с занятиями
     $firstTs = $timestamps[0];
     for($week = 0; $week < $amountOfWeeks; $week++) {

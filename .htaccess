@@ -3,6 +3,7 @@ AddDefaultCharset UTF-8
 Options +FollowSymLinks
 IndexIgnore */*
 
+php_value date.timezone UTC
 # Make sure that only index.php is called
 DirectoryIndex index.php
 
@@ -41,4 +42,6 @@ DirectoryIndex index.php
     RewriteCond %{REQUEST_FILENAME} protected/ [OR]
     RewriteCond %{REQUEST_FILENAME} framework/
     RewriteRule . index.php [L]
+
+
 </IfModule>

@@ -16,6 +16,8 @@
 
 	<?php echo $form->textFieldRow($model,'pmg5',array('class'=>'span5','maxlength'=>400)); ?>
 
+    <?php echo $form->dropDownListRow($model,'pmg6',Pmg::getPmg6Array(),array('class'=>'span5','maxlength'=>80)); ?>
+
     <?php echo $form->checkBoxRow($model,'pmg7'); ?>
 
     <?php echo $form->labelEx($model, 'pmg8'); ?>

@@ -19,14 +19,22 @@ function table2Tr($date,$us1,$gr1,$st1,$marks,$us,$permLesson,$read_only)
         $date_lesson=$date['r2'];
         $disabled = null;
         $type=$date['priz'];
+        if(isset($permLesson[$date['r2']]))
+            if(strtotime($permLesson[$date['r2']]) <= strtotime('yesterday'))
+            {
+                $disabled = 'disabled="disabled"';
+            }else
+            {
+                $disabled = '';
+            }
 
-        if (! empty($ps2)) {
+        if (! empty($ps2)&&!isset($permLesson[$date['r2']])) {
             $date1  = new DateTime(date('Y-m-d H:i:s'));
             $date2  = new DateTime($date['r2']);
             $diff = $date1->diff($date2)->days;
             if ($diff > $ps2)
             {
-                if(!isset($permLesson[$date['r2']])||(strtotime($permLesson[$date['r2']]) < strtotime('now')))
+
                     $disabled = 'disabled="disabled"';
             }
         }
@@ -43,14 +51,14 @@ function table2Tr($date,$us1,$gr1,$st1,$marks,$us,$permLesson,$read_only)
         $stegn6 = isset($marks[$key]) && $marks[$key]['stegn6'] != 0
                     ? round($marks[$key]['stegn6'], 1)
                     : '';
-        $stegr=Stegr::model()->findByAttributes(array('stegr1'=>$gr1,'stegr2'=>$us1,'stegr3'=>$date['r2']));
+        /*$stegr=Stegr::model()->findByAttributes(array('stegr1'=>$gr1,'stegr2'=>$us1,'stegr3'=>$date['r2']));
         if(!empty($stegr))
         {
             if(strtotime($stegr->stegr4)<strtotime('now'))
                 $disabled='disabled="disabled"';
             else
                 $disabled='';
-        }
+        }*/
         $disabled_input=$disabled;
         $disabled_input_1=$disabled;
         $class_1='';

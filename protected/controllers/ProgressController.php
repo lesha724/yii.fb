@@ -652,8 +652,8 @@ SQL;
     
     public function actionInsertStegMark()
     {
-        /*if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');*/
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
         $error=false;
         $stegn1 = Yii::app()->request->getParam('st1', null);
         $r1 = Yii::app()->request->getParam('r1', null);
@@ -698,7 +698,7 @@ SQL;
             $perm_enable=false;
             if(!empty($stegr))
             {
-                if(strtotime($stegr->stegr4)<strtotime('now'))
+                if(strtotime($stegr->stegr4)<=strtotime('yesterday'))
                 {
                     throw new CHttpException(404, '5Invalid request. Please do not repeat this request again.');
                 }else

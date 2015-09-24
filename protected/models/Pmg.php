@@ -9,6 +9,7 @@
  * @property string $pmg3
  * @property string $pmg4
  * @property string $pmg5
+ * @property integer $pmg6
  * @property integer $pmg7
  * @property integer $pmg8
  * @property string $pmg9
@@ -32,11 +33,11 @@ class Pmg extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			//array('pmg1', 'required'),
-			array('pmg7, pmg8', 'numerical', 'integerOnly'=>true),
+			array('pmg6,pmg7, pmg8', 'numerical', 'integerOnly'=>true),
 			array('pmg2, pmg3, pmg4, pmg5, pmg9', 'length', 'max'=>400),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('pmg1, pmg2, pmg3, pmg4, pmg5, pmg7, pmg8, pmg9', 'safe', 'on'=>'search'),
+			array('pmg1, pmg2, pmg3, pmg4, pmg5, pmg6, pmg7, pmg8, pmg9', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -62,6 +63,7 @@ class Pmg extends CActiveRecord
             'pmg3' => tt('Заголовок рус.'),
             'pmg4' => tt('Заголовок анг.'),
             'pmg5' => tt('Заголовок др.'),
+            'pmg6' => tt('Видимость(авторизация)'),
 			'pmg7' => tt('Видимость'),
 			'pmg8' => tt('Приоритет'),
 			'pmg9' => 'bootstap icon',
@@ -91,6 +93,7 @@ class Pmg extends CActiveRecord
 		$criteria->compare('pmg3',$this->pmg3,true);
 		$criteria->compare('pmg4',$this->pmg4,true);
 		$criteria->compare('pmg5',$this->pmg5,true);
+        $criteria->compare('pmg6',$this->pmg6);
 		$criteria->compare('pmg7',$this->pmg7);
 		$criteria->compare('pmg8',$this->pmg8);
 		$criteria->compare('pmg9',$this->pmg9,true);
@@ -124,12 +127,34 @@ class Pmg extends CActiveRecord
 
     public function getPmg7()
     {
-        switch ($this->pm7) {
+        switch ($this->pmg7) {
             case 0:
                 return tt('Неопубликовано');
                 break;
             case 1:
                 return tt('Опубликовано');
+                break;
+            default:
+                return '-';
+        }
+    }
+
+    public static function getPmg6Array()
+    {
+        return array(
+            0=>tt('Доступен для всех пользователей'),
+            1=>tt('Доступен для авторизированых пользователей'),
+        );
+    }
+
+    public function getPmg6()
+    {
+        switch ($this->pmg6) {
+            case 0:
+                return tt('Доступен для всех пользователей');
+                break;
+            case 1:
+                return tt('Доступен для авторизированых пользователей');
                 break;
             default:
                 return '-';
