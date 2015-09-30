@@ -801,13 +801,15 @@ SQL;
                     $arr=array('stegn6'=>'0');
                 } 
             }
+
             //проверка на макимальный и минимальный бал
             if ($field == 'stegn6'||$field == 'stegn5')
             {
-               $bal=PortalSettings::model()->findByPk(36)->ps2;
+                $min=PortalSettings::model()->findByPk(37)->ps2;
+                $bal=PortalSettings::model()->findByPk(36)->ps2;
                 if($bal!=0)
                 {
-                    if($value>$bal||$value<0)
+                    if($value>$bal||$value<$min)
                         //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
                         $error=true;
                 }
