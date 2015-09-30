@@ -32,7 +32,7 @@ $options = array(
     $html .= sprintf($pattern, $label, $input);
     
     //$options_select = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;', 'style' => 'width:200px');
-    $teacher = CHtml::listData(Stego::model()->getTeacher($us1), 'p1', 'name');
+    $teacher = CHtml::listData(Stego::model()->getTeacher($stegn), 'p1', 'name');
     if(Yii::app()->user->isTch&&isset($teacher[Yii::app()->user->dbModel->p1]))
     {
         $model->stego4=Yii::app()->user->dbModel->p1;

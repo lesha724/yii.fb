@@ -71,7 +71,7 @@ $form=$this->beginWidget('CActiveForm', array(
         $html .= '</fieldset>';
 		
     }
-	if ($showCheckBoxCalendar) {
+	if (isset($showCheckBoxCalendar)&&$showCheckBoxCalendar) {
 			$text=tt('Календарь');
 			$checked='';
 			if($type==1)

@@ -54,8 +54,10 @@ class RegistrationForm extends CFormModel
 
         if (! $this->hasErrors($attribute)) {
 
-            $this->_u5 = $st ? 0 : 1;
-            $this->_u6 = $st ? $st[0]->st1 : $p[0]->p1;
+            //$this->_u5 = $st ? 0 : 1;
+            //$this->_u6 = $st ? $st[0]->st1 : $p[0]->p1;
+            $this->_u5 = $p ? 1 : 0;
+            $this->_u6 = $p ? $p[0]->p1 : $st[0]->st1;
 
             $alreadyRegistered = 1 <= Users::model()->countByAttributes(array('u5'=>$this->_u5,'u6'=>$this->_u6));
             if ($alreadyRegistered)

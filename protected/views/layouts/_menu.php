@@ -184,6 +184,11 @@ $this->widget('zii.widgets.CMenu', array(
                     'active' => $_a=='settings' && $_m=='admin'
                 ),
                 array(
+                    'label'  => $_l2.tt('Настройки Портала'),
+                    'url'    => _u('/admin/default/settingsPortal'),
+                    'active' => $_a=='settingsPortal' && $_m=='admin'
+                ),
+                array(
                     'label'  => $_l2.tt('Группы пунктов меню (доп.)'),
                     'url'    => _u('/admin/menuGroup'),
                     'active' => $_c=='menuGroup' && $_m=='admin'

@@ -135,8 +135,8 @@ class ProgressController extends Controller
     
     public function actionUpdateOmissionsStegMark()
     {
-        if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        /*if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');*/
 
         $stegn1 = Yii::app()->request->getParam('stegn1', null);
         $date1 = Yii::app()->request->getParam('date1', null);
@@ -144,6 +144,8 @@ class ProgressController extends Controller
         //$check = Yii::app()->request->getParam('check', null);
         $number = Yii::app()->request->getParam('number', null);
         $type = Yii::app()->request->getParam('type_omissions', null);
+        $stegnp4= Yii::app()->request->getParam('stegnp4', null);
+        $stegnp5 = Yii::app()->request->getParam('stegnp5', null);
 
         if($stegn1==null || $date1==null || $date2==null /*|| $check==null*/ || $type==null)
             $error = true;
@@ -155,8 +157,8 @@ class ProgressController extends Controller
             }
             $attr = array(
                 'stegn4' => $check,
-                'stegn10' => $type,
-                'stegn11' => $number,
+                //'stegn10' => $type,
+                //'stegn11' => $number,
                 'stegn8' =>  Yii::app()->user->dbModel->p1,
                 'stegn7' =>  date('Y-m-d H:i:s'),
             );
@@ -165,12 +167,44 @@ class ProgressController extends Controller
             $criteria->compare('stegn4','>=1');
             $criteria->compare('stegn9','>='.$date1);
             $criteria->compare('stegn9', '<='.$date2);
-
+            //редактируем стегн (все записи которые в это интревале, уваж или не уваж)
             $count = Stegn::model()->updateAll($attr,$criteria);
+
             if ($count==-1)
+            {
                 $error = true;
+            }
             else
+            {
                 $error = false;
+
+                $criteria->select='stegn0';
+                //находим все стегн в этом интервале
+                $models=Stegn::model()->findAll($criteria);
+                if(!empty($models)){
+                    $arr_id=array();
+                    foreach($models as $model)
+                    {
+                        //array_push($arr_id,$model->stegn0);
+                    }
+                    $new_attr=array(
+                        'stegnp2' => $type,
+                        'stegnp3' => $number,
+                        'stegnp4' => $stegnp4,
+                        'stegnp5' => $stegnp5,
+                        'stegnp7' =>  Yii::app()->user->dbModel->p1,
+                        'stegnp6' =>  date('Y-m-d H:i:s'),
+                    );
+                    $new_criteria = new CDbCriteria();
+                    $new_criteria->compare('stegnp1', $arr_id);
+                    //редактируем все стегнп коротые связы с этими стегн
+                    $count = Stegnp::model()->updateAll($new_attr,$new_criteria);
+                    if ($count==-1)
+                    {
+                        $error = true;
+                    }
+                }
+            }
         }
         Yii::app()->end(CJSON::encode(array('error' => $error)));
     }
@@ -190,7 +224,7 @@ class ProgressController extends Controller
             $error = true;
         else {
             $whiteList = array(
-                'stegn10','stegn11',
+                'stegn10','stegn11','stegnp4','stegnp5'
             );
             $arr=array();
             if($field=='stegn10')
@@ -220,7 +254,29 @@ class ProgressController extends Controller
             if (empty($model))
                 $error = true;
             else
+            {
                 $error = !$model->saveAttributes($attr);
+                if(!$error)
+                {
+                    $stegnp=Stegnp::model()->findByAttributes(array('stegnp1'=>$model->stegn0));
+                    switch ($field)
+                    {
+                        case 'stegn10':
+                            $field='stegnp2';
+                            break;
+                        case 'stegn11':
+                            $field='stegnp3';
+                            break;
+                    }
+                    $error = !$stegnp->saveAttributes(
+                        array(
+                            $field => $value,
+                            'stegnp7' =>  Yii::app()->user->dbModel->p1,
+                            'stegnp6' =>  date('Y-m-d H:i:s')
+                        )
+                    );
+                }
+            }
         }
         Yii::app()->end(CJSON::encode(array('error' => $error)));
     }
@@ -533,14 +589,28 @@ SQL;
             $error=true;
         if(!$error)
         {
+
             $stegn=Stegn::model()->findByPk($stego1);
-            if($stegn->stegn6<=$stegn->getMin())
+            $ps40=PortalSettings::model()->findByPk(40)->ps2;
+            if(! empty($ps40)){
+                $date1  = new DateTime(date('Y-m-d H:i:s'));
+                $date2  = new DateTime($stegn->stegn9);
+                $diff = $date1->diff($date2)->days;
+                if ($diff > $ps40)
+                {
+                    //throw new CHttpException(404, '4Invalid request. Please do not repeat this request again.');
+                    $error=true;
+                }
+            }
+            if($stegn->stegn6<=$stegn->getMin()&&!$error)
             {
                 $model=new Stego;
                 $model->stego1=$stego1;
                 $model->stego2=$stego2;
                 $model->stego3=$stego3;
                 $model->stego4=$stego4;
+                $model->stego6=Yii::app()->user->dbModel->p1;
+                $model->stego5=date('Y-m-d H:i:s');
                 $error=!$model->save();
                 if(!$error)
                 {
@@ -553,7 +623,7 @@ SQL;
             
         }
         $res = array(
-            'errors' => $error,
+            'error' => $error,
         );
         
 
@@ -569,12 +639,13 @@ SQL;
         if(empty($stegn0)||empty($stegn2))
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
         $error=false;
+        $stegn=Stegn::model()->findByAttributes(array('stegn0'=>$stegn0));
         $model=new Stego;
         $model->unsetAttributes();
         $model->stego1=$stegn0;
         $html = $this->renderPartial('retake/_add_retake', array(
             'model' => $model,
-            'us1'=>$stegn2
+            'stegn'=>$stegn
         ), true);
         /*$html = $this->render('retake/_add_retake', array(
             'model' => $model,
@@ -667,6 +738,7 @@ SQL;
         if($stegn1==null || $stegn2==null || $stegn3==null || $field==null || $value==null|| $stegn9==null)
             $error = true;
         else {
+            //проверка на достап к процедуре
             $sql = <<<SQL
              SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,0,3,:US1,:R1);
 SQL;
@@ -690,10 +762,11 @@ SQL;
             if (!in_array($field, $whiteList))
                throw new CHttpException(404, '2Invalid request. Please do not repeat this request again.');
             $ps2 = PortalSettings::model()->getSettingFor(27);
-
+            //если тип лекция не можем ничего менять кроме пропусков
             $us=Us::model()->findByPk($stegn2);
             if($us->us4==1&&$field!='stegn4')
                 throw new CHttpException(404, '3Invalid request. Please do not repeat this request again.');
+            //проверка на разрешение изменения оценок по этому занятию
             $stegr=Stegr::model()->findByAttributes(array('stegr1'=>$gr1,'stegr2'=>$stegn2,'stegr3'=>$stegn9));
             $perm_enable=false;
             if(!empty($stegr))
@@ -706,7 +779,7 @@ SQL;
                     $perm_enable=true;
                 }
             }
-
+            //проверка на количество дней после занятия, если прошло больше денй чем указано в настрйоках запрещаем вносить
             if(! empty($ps2) &&!$perm_enable){
                 $date1  = new DateTime(date('Y-m-d H:i:s'));
                 $date2  = new DateTime($stegn9);
@@ -728,6 +801,7 @@ SQL;
                     $arr=array('stegn6'=>'0');
                 } 
             }
+            //проверка на макимальный и минимальный бал
             if ($field == 'stegn6'||$field == 'stegn5')
             {
                $bal=PortalSettings::model()->findByPk(36)->ps2;
@@ -748,6 +822,7 @@ SQL;
                 {
                    if($stegn!=null)
                     {
+                        //редактируем существующую запись по текущему занятию
                         $attr = array_merge(array(
                             $field => $value,
                             'stegn8' =>  Yii::app()->user->dbModel->p1,
@@ -756,6 +831,7 @@ SQL;
                         $error =!$stegn->saveAttributes($attr);
                     }else
                     {
+                        //если нет записи в стегн по этому занятию создаем новую
                         $stegn= new Stegn();
                         $stegn->stegn0=new CDbExpression('GEN_ID(GEN_STEGN, 1)');
                         $stegn->stegn1=$stegn1;
@@ -773,10 +849,27 @@ SQL;
 
                         $error =!$stegn->save();
                     }
-                    if($field == 'stegn4'&&$value==0)
-                    {
-                        Stego::model()->deleteAllByAttributes(array('stego1'=>$stegn->stegn0));
-                    }
+                    if(!$error)
+                        if($field == 'stegn4'&&$value==0)
+                        {
+                            //если убираем пропуск удалем все записи с регитрацией пропусвов и отработок по этому занятию
+                            Stego::model()->deleteAllByAttributes(array('stego1'=>$stegn->stegn0));
+                            Stegnp::model()->deleteAllByAttributes(array('stegnp1'=>$stegn->stegn0));
+                        }elseif($field == 'stegn4')
+                        {
+                            //если ставим пропуск ищем есть ли у нас запись в таблице Stegnp ,если нет создаем
+                            $stegnp=Stegnp::model()->findByAttributes(array('stegnp1'=>$stegn->stegn0));
+                            if(empty($stegnp))
+                            {
+                                $stegnp= new Stegnp();
+                                $stegnp->stegnp0=new CDbExpression('GEN_ID(GEN_STEGNP, 1)');
+                                $stegnp->stegnp1=$stegn->stegn0;
+                                $stegnp->stegnp2=0;
+                                $stegnp->stegnp7=Yii::app()->user->dbModel->p1;
+                                $stegnp->stegnp6=date('Y-m-d H:i:s');
+                                $error =!$stegnp->save();
+                            }
+                        }
                     $errors=$stegn->getErrors();
                 }
             
@@ -1153,6 +1246,8 @@ SQL;
         if (isset($_REQUEST['Ustem'])) {
 
             $model->attributes = $_REQUEST['Ustem'];
+            $model->ustem9=Yii::app()->user->dbModel->p1;
+            $model->ustem8=date('Y-m-d H:i:s');
             $model->save();
 
         }
@@ -1241,6 +1336,8 @@ SQL;
         $model->ustem4=$ustem4;
         $model->ustem5=$ustem5;
         $model->ustem6=$ustem6;
+        $model->ustem9=Yii::app()->user->dbModel->p1;
+        $model->ustem8=date('Y-m-d H:i:s');
         $error=!$model->save();
         
         $res = array(
@@ -1259,11 +1356,44 @@ SQL;
 
         $ustem1 = Yii::app()->request->getParam('ustem1', null);
         
+        $ustem=Ustem::model()->findByPk($ustem1);
+        $ustem2='';
+        $ustem3='';
+        $ustem4='';
+        $ustem5='';
+        $ustem6='';
+        if(!empty($ustem))
+        {
+            $ustem2=$ustem->ustem2;
+            $ustem3=$ustem->ustem3;
+            $ustem4=$ustem->ustem4;
+            $ustem5=$ustem->ustem5;
+            $ustem6=$ustem->ustem6;
+        }
+
         $deleted = (bool)Ustem::model()->deleteByPk($ustem1);
 
         $res = array(
             'deleted' => $deleted
         );
+
+        if($deleted)
+        {
+            $text=P::model()->getTeacherNameBy(Yii::app()->user->dbModel->p1,false);
+            $text.=' Ustem1-'.$ustem1.' Ustem2-'.$ustem2.' Ustem3-'.$ustem3.' Ustem4-'.$ustem4.' Ustem5-'.$ustem5.' Ustem6-'.$ustem6;
+            $sql = <<<SQL
+              INSERT into adz (adz1,adz2,adz3,adz4,adz5,adz6) VALUES (:adz1,:adz2,:adz3,:adz4,:adz5,:adz6);
+SQL;
+            $command=Yii::app()->db->createCommand($sql);
+            $command->bindValue(':adz1', 0);
+            $command->bindValue(':adz2', 999);
+            $command->bindValue(':adz3', 1);
+            $command->bindValue(':adz4', date('Y-m-d H:i:s'));
+            $command->bindValue(':adz5', 0);
+            $command->bindValue(':adz6', $text);
+            $command->execute();
+
+        }
 
         Yii::app()->end(CJSON::encode($res));
     }

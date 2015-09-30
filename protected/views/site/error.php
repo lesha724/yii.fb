@@ -3,6 +3,7 @@
 /* @var $error array */
 
 $this->pageTitle=Yii::app()->name . ' - Error';
+$this->pageHeader=tt('Error');
 $this->breadcrumbs=array(
 	'Error',
 );
@@ -17,17 +18,17 @@ $this->breadcrumbs=array(
 <div class="error-container">
     <div class="well">
         <h1 class="grey lighter smaller">
-										<span class="blue bigger-125">
-											<i class="icon-sitemap"></i>
-                                            <?php echo $code; ?>
-										</span>
-            Page Not Found
+            <span class="blue bigger-125">
+                <i class="icon-exclamation-sign"></i>
+                <?php echo $code; ?>
+            </span>
+           <!--Page Not Found-->
         </h1>
 
         <hr>
         <h3 class="lighter smaller"><?php echo CHtml::encode($message); ?></h3>
 
-        <div>
+        <!--<div>
             <div class="space"></div>
             <h4 class="smaller">Try one of the following:</h4>
 
@@ -59,6 +60,6 @@ $this->breadcrumbs=array(
                     Go Back
                 </a>
             </div>
-        </div>
+        </div>-->
     </div>
 </div>

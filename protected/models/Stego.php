@@ -105,26 +105,35 @@ class Stego extends CActiveRecord
 		return parent::model($className);
 	}
         
-        public function getTeacher($us1)
+        public function getTeacher($stegn)
         {
-            if (empty($us1))
+            if (empty($stegn))
                 return array();
-            
-            $sql=<<<SQL
-                    
-SQL;
+
             $today = date('d.m.Y 00:00');
             $sql = <<<SQL
                 SELECT P1,P3,P4,P5
                 FROM P
                     INNER JOIN PD ON (P1=PD2)
-                WHERE PD4 = (SELECT FIRST 1 SKIP 0 uo4 FROM uo JOIN us ON (us2=uo1) WHERE us1 ={$us1} ) 
+                WHERE PD4 = (select first 1 nr30
+                    from us
+                       inner join stegn on (us.us1 = stegn.stegn2)
+                       inner join nr on (us.us1 = nr.nr2)
+                       inner join ug on (nr.nr1 = ug.ug3)
+                       inner join ucgn on (ug.ug4 = ucgn.ucgn1)
+                       inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
+                       inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
+                       inner join r on (nr.nr1 = r.r1)
+                    where r2 = :stegn9 and ucsn2 = :stegn1 and stegn2=:stegn2 )
                     and PD28 in (0,2,5,9) and PD3=0 and (PD13 IS NULL or PD13>'{$today}')
                 group by P1,P3,P4,P5
                 ORDER BY P3 collate UNICODE
 SQL;
-
-            $teachers = Yii::app()->db->createCommand($sql)->queryAll();
+            $command=Yii::app()->db->createCommand($sql);
+            $command->bindValue(':stegn9', $stegn->stegn9);
+            $command->bindValue(':stegn1', $stegn->stegn1);
+            $command->bindValue(':stegn2', $stegn->stegn2);
+            $teachers = $command->queryAll();
             foreach ($teachers as $key => $tch) {
                 $teachers[ $key ]['name'] = SH::getShortName($tch['p3'], $tch['p4'], $tch['p5']);
             }

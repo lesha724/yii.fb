@@ -27,7 +27,7 @@ class Stegn extends CActiveRecord
 	{
 		return 'stegn';
 	}
-        public $st2,$st3,$st4,$count_stego,$tema,$status;
+        public $st2,$st3,$st4,$count_stego,$tema,$status,$stegn10,$stegn11,$stegnp4,$stegnp5;
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -78,7 +78,9 @@ class Stegn extends CActiveRecord
             'stegn11' => tt('Номер справки'),
             'count_stego'=>tt('Количество отработок'),
             'tema'=>tt('Тема'),
-            'status'=>tt('Статус')
+            'status'=>tt('Статус'),
+            'stegnp4'=>tt('№ квитанции'),
+            'stegnp5'=>tt('Дата квитанции')
 		);
 	}
 
@@ -189,15 +191,17 @@ class Stegn extends CActiveRecord
 		$criteria=new CDbCriteria;
         $table = St::model()->tableName();
         $table2 = Ustem::model()->tableName();
-        $criteria->select = 't.*,'.$table.'.st2,'.$table.'.st3,'.$table.'.st4,(SELECT COUNT(*) FROM stego WHERE stego.stego1=t.stegn0) as count_stego,'.$table2.'.USTEM5 as tema';
-        $criteria->join = 'LEFT JOIN '.$table2.' ON (t.stegn2='.$table2.'.USTEM2 AND t.stegn3='.$table2.'.USTEM4) ';
+        $table3 = Stegnp::model()->tableName();
+        $criteria->select = 't.*,'.$table.'.st2,'.$table.'.st3,'.$table.'.st4,stegnp2 as stegn10,stegnp3 as stegn11, (SELECT COUNT(*) FROM stego WHERE stego.stego1=t.stegn0) as count_stego,'.$table2.'.USTEM5 as tema';
+        $criteria->join = 'LEFT JOIN '.$table2.' ON ('.$table2.'.USTEM2=t.stegn2 AND '.$table2.'.USTEM4= t.stegn3) ';
+        $criteria->join .= 'LEFT JOIN '.$table3.' ON ('.$table3.'.stegnp1=t.stegn0) ';
         $criteria->join .= 'JOIN '.$table.' ON (t.stegn1='.$table.'.st1) ';
         $criteria->compare('stegn1',$this->stegn1);
 		$criteria->compare('stegn2',$this->stegn2);
 		$criteria->compare('stegn3',$this->stegn3);
         $criteria->compare('stegn4',$this->stegn4);
-        $criteria->compare('stegn11',$this->stegn11);
-        $criteria->compare('stegn10',$this->stegn10);
+        $criteria->compare($table3.'.stegnp3',$this->stegn11);
+        $criteria->compare($table3.'.stegnp2',$this->stegn10);
         $criteria->addCondition("st2 CONTAINING '".$this->st2."'");
         if(!empty($this->tema))
             $criteria->addCondition("ustem5 CONTAINING '".$this->tema."'");
@@ -245,13 +249,13 @@ class Stegn extends CActiveRecord
                                         'default'=>'ASC',
                         ),
                         'stegn10'=>array(
-                                        'asc'=>'t.stegn10 ASC',
-                                        'desc'=>'t.stegn10 DESC',
+                                        'asc'=>$table3.'.stegnp3 ASC',
+                                        'desc'=>$table3.'.stegnp3 DESC',
                                         'default'=>'ASC',
                         ),
                         'stegn11'=>array(
-                                        'asc'=>'t.stegn11 ASC',
-                                        'desc'=>'t.stegn11 DESC',
+                                        'asc'=>$table3.'.stegnp3 ASC',
+                                        'desc'=>$table3.'.stegnp3 DESC',
                                         'default'=>'ASC',
                         ),
                         'count_stego'=>array(
@@ -288,9 +292,10 @@ class Stegn extends CActiveRecord
             return array();
 
             $sql=<<<SQL
-                SELECT stegn1,stegn2,stegn3,stegn4,stegn9,stegn10,stegn11,d2,us4
+                SELECT stegn0,stegn1,stegn2,stegn3,stegn4,stegn9,stegnp2 as stegn10,stegnp3 as stegn11,stegnp4,stegnp5,d2,us4
                 FROM stegn
                     INNER JOIN us on (stegn.stegn2 = us.us1)
+                    LEFT JOIN stegnp on (stegn.stegn0 = stegnp.stegnp1)
                     INNER JOIN uo on (us.us2 = uo.uo1)
                     INNER JOIN d on (d.d1 = uo.uo3)
                 WHERE stegn1=:STEG1 and stegn9 >= :DATE1 and stegn9 <= :DATE2 and stegn4!=0

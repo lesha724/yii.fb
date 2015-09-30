@@ -125,6 +125,37 @@ SQL;
         if(!empty($model->type_lesson))
         {
             $sql=<<<SQL
+                SELECT * FROM ustem WHERE ustem2=:us1;
+SQL;
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':us1', $model->type_lesson);
+            $res=$command->queryAll();
+
+            $name=P::model()->getTeacherNameBy(Yii::app()->user->dbModel->p1,false);
+            foreach($res as $val)
+            {
+                $ustem1=$val['ustem1'];
+                $ustem2=$val['ustem2'];
+                $ustem3=$val['ustem3'];
+                $ustem4=$val['ustem4'];
+                $ustem5=$val['ustem5'];
+                $ustem6=$val['ustem6'];
+
+                $text=$name.' Ustem1-'.$ustem1.' Ustem2-'.$ustem2.' Ustem3-'.$ustem3.' Ustem4-'.$ustem4.' Ustem5-'.$ustem5.' Ustem6-'.$ustem6;
+                $sql = <<<SQL
+              INSERT into adz (adz1,adz2,adz3,adz4,adz5,adz6) VALUES (:adz1,:adz2,:adz3,:adz4,:adz5,:adz6);
+SQL;
+                $command=Yii::app()->db->createCommand($sql);
+                $command->bindValue(':adz1', 0);
+                $command->bindValue(':adz2', 999);
+                $command->bindValue(':adz3', 1);
+                $command->bindValue(':adz4', date('Y-m-d H:i:s'));
+                $command->bindValue(':adz5', 0);
+                $command->bindValue(':adz6', $text);
+                $command->execute();
+            }
+
+            $sql=<<<SQL
                 DELETE  FROM ustem WHERE ustem2=:us1;
 SQL;
             $command = Yii::app()->db->createCommand($sql);

@@ -39,6 +39,7 @@ function getSelect($type,$i)
         $options=array('id'=>"select-type");
         $name ='select-type';
     }
+    $options=$options+array('empty' => tt('--Виберіть тип--'));
     $data = CHtml::listData(Stegn::model()->getTypesByGroup(),'id','text','group');
     return CHtml::dropDownList($name,$type,$data,$options);
     
@@ -72,6 +73,8 @@ if($omissions==null)
                         <th>'.tt('Уваж./Неув.').'</th>
                         <th>'.tt('Номер справки').'</th>
                         <th>'.tt('Тип').'</th>
+                        <th>'.tt('№ квитанции (тип оплата)').'</th>
+                        <th>'.tt('Дата квитанции(тип оплата)').'</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -83,6 +86,13 @@ if($omissions==null)
     foreach($omissions as $key)
     {
         $type="";
+        $stegnp4='';
+        $stegnp5='';
+        if($key['stegn10']==5)
+        {
+            $stegnp4='<input data-field="stegnp4" class="input-stegnp4" type="text" value="'.$key['stegnp4'].'"/>';
+            $stegnp5='<input data-field="stegnp5" class="input-stegnp5 datepicker" type="text" value="'.date('d.m.Y', strtotime($key['stegnp5'])).'"/>';
+        }
         if($key['stegn4']==1)
             $type=tt("Не ув.");
         if($key['stegn4']==2)
@@ -96,6 +106,8 @@ if($omissions==null)
                 '<td class="stegn4">'.$type.'</td>'.
                 '<td><input data-field="stegn11" class="input-stegn11" type="text" value="'.$key['stegn11'].'"/></td>'.
                 '<td>'. getSelect($key['stegn10'],0).'</td>'.
+                '<td>'.$stegnp4.'</td>'.
+                '<td>'.$stegnp5.'</td>'.
         '</tr>';
         $i++;
     }
@@ -124,6 +136,14 @@ $this->beginWidget(
             echo CHtml::textField('number_reference', '', array('id'=>'number_reference'));
             echo CHtml::label(tt('Тип'), 'select_type');
             echo getSelect(-1, 1);
+
+            echo '<div id="stegnp" style="display: none">';
+            echo CHtml::label(tt('Номер квитанции'), 'stegnp4');
+            echo CHtml::textField('stegnp4', '', array('id'=>'stegnp4'));
+            echo CHtml::label(tt('Дата квитанции'), 'stegnp5');
+            echo CHtml::textField('stegnp5', $model->date2, array('class' => 'datepicker', 'id'=>'stegnp5'));
+            echo '</div>';
+
         ?>
     </div>
  

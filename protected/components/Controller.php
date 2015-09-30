@@ -37,6 +37,8 @@ class Controller extends CController
 
     public function beforeAction($action)
     {
+        $this->checkClosePortal($action);
+
         $this->processAccess($action);
 
         $this->processYearAndSem();
@@ -48,6 +50,7 @@ class Controller extends CController
 
     private function processAccess($action)
     {
+
         if (! SH::checkServiceFor(MENU_ELEMENT_VISIBLE, Yii::app()->controller->id, $action->id, true))
             throw new CHttpException(500, tt('Сервис временно недоступен!'));
 
@@ -57,6 +60,29 @@ class Controller extends CController
 
         if (! SH::checkServiceFor(MENU_ELEMENT_VISIBLE, Yii::app()->controller->id, 'main', true))
             throw new CHttpException(404, tt('Сервис закрыт!'));
+    }
+
+    private function checkClosePortal($action)
+    {
+        $enable_close=true;
+        if(Yii::app()->user->isAdmin)
+            $enable_close=false;
+        if(Yii::app()->controller->id=='site'&&$action->id!='index')
+            $enable_close=false;
+
+        $close=PortalSettings::model()->findByPk(38)->ps2;
+        $text_close=PortalSettings::model()->findByPk(39)->ps2;
+        if(empty($text_close))
+            $text_close=tt('Портал закрыт на тех. обслуживание');
+        if($close&&$enable_close)
+        {
+            Yii::app()->setComponents(array(
+                'errorHandler'=>array(
+                    'errorAction'=>'site/close',
+                ),
+            ));
+            throw new CHttpException(403,$text_close);
+        }
     }
 
     private function processYearAndSem()

@@ -45,6 +45,27 @@ class DefaultController extends AdminController
             'model' => $model,
         ));
     }
+
+    public function actionSettingsPortal()
+    {
+        $settings = Yii::app()->request->getParam('settings', array());
+
+        foreach ($settings as $key => $value) {
+
+            /*if ($key == 38)
+                $value = intval($value);*/
+
+            PortalSettings::model()
+                ->findByPk($key)
+                ->saveAttributes(array(
+                    'ps2' => $value
+                ));
+        }
+
+
+        $this->render('portal_settings', array(
+        ));
+    }
 	
     public function actionSettings()
     {

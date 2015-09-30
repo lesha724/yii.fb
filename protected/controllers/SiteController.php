@@ -47,6 +47,18 @@ class SiteController extends Controller
 		}
 	}
 
+    public function actionClose()
+    {
+        $this->layout='//layouts/clear';
+        if($error=Yii::app()->errorHandler->error)
+        {
+            if(Yii::app()->request->isAjaxRequest)
+                echo $error['message'];
+            else
+                $this->render('close', $error);
+        }
+    }
+
 	/**
 	 * Displays the contact page
 	 */

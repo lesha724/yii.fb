@@ -39,3 +39,7 @@ HTML;
     $html  = $this->renderPartial('journal/_journal_type', array(), true);
     echo sprintf($widget, $title, $html);
 
+    $title = tt('Отработка');
+    $html  = $this->renderPartial('journal/_retake', array(), true);
+    echo sprintf($widget, $title, $html);
+

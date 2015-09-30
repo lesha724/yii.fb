@@ -26,6 +26,8 @@ $(document).ready(function(){
         var check=$('#ck_omissions').is(':checked') ? 2 : 1;
         var number=$('#number_reference').val();
         var type_omissions=$('#select-type').val();
+        var stegnp4=$('#stegnp4').val();
+        var stegnp5=$('#stegnp5').val();
         var title =$('#myModal .modal-header h4').html();
         var params = {
             stegn1:stegn1,
@@ -33,6 +35,8 @@ $(document).ready(function(){
             date2:date2,
             check:check,
             number:number,
+            stegnp4:stegnp4,
+            stegnp5:stegnp5,
             type_omissions:type_omissions
         }
         
@@ -53,8 +57,17 @@ $(document).ready(function(){
             $spinner1.hide();
         })
     });
-    
-    $('#omissions .input-stegn11, #omissions .select-stegn10').change(function(){
+
+
+    $('#select-type').change(function(){
+        var val = $(this).val();
+        if(val!=5)
+            $('#stegnp').hide();
+        else
+            $('#stegnp').show();
+    });
+
+    $('#omissions .input-stegn11, #omissions .select-stegn10,#omissions .input-stegnp4 ,#omissions .input-stegnp5').change(function(){
 
         var $that = $(this);
 
@@ -106,6 +119,7 @@ $(document).ready(function(){
 
             $spinner1.hide();
         })
+        $('#filter-form').submit();
     });
 });
 
