@@ -211,9 +211,10 @@ HTML;
             foreach ($disciplines as $discipline) {
                 $isChecked = in_array($discipline['d1'], $alreadyCheckedDisc);
                 $value     = $discipline['ucgn1_kod'];
+                $tooltip='<a href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="'.tt('Количество студентов записавшихся на дисциплину').'">'.$discipline['count_st'].'</a>';
                 $controls .= '<div class="subscription-disc">'.
                                 CHtml::checkBox('disciplines[]', $isChecked, array('value' => $value)).
-                                '<span>'.$discipline['d2'].' '.D::model()->getAd($discipline['d1']).'</span>'.
+                                '<span>'.$discipline['d2'].' '.D::model()->getAd($discipline['d1']).' ('.$tooltip.')</span>'.
                              '</div>';
             }
 

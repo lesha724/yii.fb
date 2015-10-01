@@ -402,8 +402,36 @@ SQL;
         $command->bindValue(':SEMESTER2', $semester);
         $command->bindValue(':GR1_KOD', $gr1_kod);
         $disciplines  = $command->queryAll();
-
+        foreach ($disciplines as $key => $d) {
+            $disciplines[$key]['count_st'] = $this->getCountSt($u1_vib_disc, $uch_god, $semester,$d['d1']);
+        }
         return $disciplines;
+    }
+
+    private function getCountSt($u1_vib_disc, $uch_god, $semester, $d1)
+    {
+        $sql = <<<SQL
+     select count(*)  as KOL from
+                (select ucsn2
+                from uo
+                   inner join us on (uo.uo1 = us.us2)
+                   inner join sem on (us.us3 = sem.sem1)
+                   inner join (select ucx1 from ucx where ucx5>1) on (uo.uo19 = ucx1)
+                   inner join ucxg on (ucx1 = ucxg1)
+                   inner join ucgn on (ucxg2 = ucgn1)
+                   inner join ucgns on (ucgn1 = ucgns2)
+                   inner join ucsn on (ucgns1 = ucsn1)
+                where (uo3=:d1) and (uo22 = :U1_VIB_DISC) and (sem3 = '{$uch_god}') and (sem5 = '{$semester}') and (ucgns5  = '{$uch_god}') and (ucgns6 = '{$semester}')
+                group by ucsn2)
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':U1_VIB_DISC', $u1_vib_disc);
+        $command->bindValue(':d1', $d1);
+        $kol  = $command->queryRow();
+        if(!empty($kol))
+            return $kol['kol'];
+        else
+            return 0;
     }
 
     public function getAlreadyChecked($u1_vib_disc, $uch_god, $semester, $st1)
