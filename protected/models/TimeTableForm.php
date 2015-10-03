@@ -288,7 +288,8 @@ SQL;
         $d2  = $day['d2'];
         $d2 = str_replace('"', "'", $d2);
         $tip = $day['tip'];
-        $gr3 = $day['gr3'];
+        //$gr3 = $day['gr3'];
+        $gr3 = '{$gr3}';
         $a2  = $day['a2'];
         $tem_name='';
         if(isset($day['r1_']))
@@ -359,7 +360,7 @@ HTML;
             if (! isset($res[$r2]['timeTable'][$r3])) {
 
                 $res[$r2]['timeTable'][$r3] = $day;
-
+                $res[$r2]['timeTable'][$r3]['gr3'] = $day['gr3'];
                 $res[$r2]['timeTable'][$r3]['shortText'] = $this->cellShortTextFor($day, $type);
                 $res[$r2]['timeTable'][$r3]['fullText']  = $this->cellFullTextFor($day, $type);
 

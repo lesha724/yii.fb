@@ -41,7 +41,7 @@
 
                                 <label>
                                     <span class="block input-icon input-icon-right">
-                                        <?=$form->textField($model, 'username', array('class' => 'span12', 'placeholder' => tt('Имя пользователя')))?>
+                                        <?=$form->textField($model, 'username', array('class' => 'span12', 'placeholder' =>$model->getAttributeLabel('username')))?>
                                         <?=$form->error($model, 'username')?>
                                         <i class="icon-user"></i>
                                     </span>

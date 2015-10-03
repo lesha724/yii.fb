@@ -8,9 +8,45 @@ $(document).ready(function(){
         $("#filter-form").attr("action", $(this).data('url'));
         $("#filter-form").submit();
     });
-    
-    $('div[class*=journal_div_table] tr:not(.min-max) input').change(function(){
 
+    $('div[class*=journal_div_table] tr:not(.min-max) input').keyup(function(event ){
+        if(event.keyCode == 46)
+        {
+            var $that = $(this);
+
+            var st1  = $that.parents('[data-st1]').data('st1');
+
+            var gr1  = $that.parents('[data-gr1]').data('gr1');
+
+            var params = {
+                field : $that.data('name'),
+                nom  : $that.parent().data('nom'),
+                us1   : $that.parent().data('us1'),
+                r1   : $that.parent().data('r1'),
+                st1   : st1,
+                gr1   : gr1,
+                date:$that.parent().data('date'),
+                value : 0
+            }
+
+            var stName = $('table.journal_table_1 tr[data-st1='+st1+'] td:eq(1)').text();
+            var index  = $that.parent().index();
+            var nom   = $that.parents('table').find('th:eq('+index+')').html();
+            var title  = stName+'<br>'+nom+'<br>';
+            var $td    = $that.parent();
+
+            var url = $that.parents('[data-url]').data('url');
+
+            $spinner1.show();
+            send(url,params,title,$td,$that,$spinner1,st1);
+            $that.val('');
+            $that.addClass('not-value');
+            $td.find(':checkbox').attr('disabled','disabled');
+        }
+
+    })
+
+    $('div[class*=journal_div_table] tr:not(.min-max) input').change(function(event){
         var $that = $(this);
 
         var st1  = $that.parents('[data-st1]').data('st1');
@@ -151,13 +187,13 @@ $(document).ready(function(){
                     //$td.find(':text').removeAttr('disabled');
                     $td.find('[data-name="stegn6"]').val('');
                 }
-                /*if(params.value==1)
+                if(params.value==1)
                 {
-                    $that.data('original-title','+=');
+                    $that.attr('data-original-title','Присутсвует');
                 }else
                 {
-                    $that.data('original-title','--');
-                }*/
+                    $that.attr('data-original-title','Отсутсвует');
+                }
             }
 
             if ($that.is(':text'))

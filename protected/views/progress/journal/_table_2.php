@@ -65,8 +65,16 @@ function table2Tr($date,$us1,$gr1,$st1,$marks,$us,$permLesson,$read_only)
         $class_2='';
         if($stegn4=='checked')
         {
+            $tooltip=tt('Отсутсвует');
             $disabled_input = 'disabled="disabled"';
             $disabled_input_1 = 'disabled="disabled"';
+        }else
+        {
+            $tooltip=tt('Присутсвует');
+            if(!empty($stegn5)&&$stegn5!=''&&$stegn5!=0)
+            {
+                $disabled = 'disabled="disabled"';
+            }
         }
         if($disabled != 'disabled="disabled"')
         {
@@ -79,7 +87,7 @@ function table2Tr($date,$us1,$gr1,$st1,$marks,$us,$permLesson,$read_only)
         {
            $disabled_input_1 = 'disabled="disabled"';
         }
-        $tooltip=tt('присутствие/отсутствие');
+
         if($us->us4!=1)
         {
             if(!$read_only)

@@ -33,7 +33,8 @@ class RegistrationForm extends CFormModel
 		return array(
             'identityCode' => tt('Идентификационный код'),
             'email' => tt('Эл. почта'),
-            'username' => tt('Имя пользователя'),
+            //'username' => tt('Имя пользователя'),
+            'username' => tt('Логин'),
             'password' => tt('Пароль'),
             'password2' => tt('Повторите пароль'),
 		);

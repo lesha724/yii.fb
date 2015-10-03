@@ -822,8 +822,10 @@ SQL;
                     $error=true;
                 }else
                 {
-                   if($stegn!=null)
+                    $isset=false;
+                    if($stegn!=null)
                     {
+                        $isset=true;
                         //редактируем существующую запись по текущему занятию
                         $attr = array_merge(array(
                             $field => $value,
@@ -850,11 +852,14 @@ SQL;
                         $stegn->$field=$value;
 
                         $error =!$stegn->save();
+                        if(!$error)
+                            $stegn=  Stegn::model()->findByAttributes(array('stegn1'=>$stegn1,'stegn2'=>$stegn2,'stegn3'=>$stegn3));
                     }
                     if(!$error)
                         if($field == 'stegn4'&&$value==0)
                         {
                             //если убираем пропуск удалем все записи с регитрацией пропусвов и отработок по этому занятию
+
                             Stego::model()->deleteAllByAttributes(array('stego1'=>$stegn->stegn0));
                             Stegnp::model()->deleteAllByAttributes(array('stegnp1'=>$stegn->stegn0));
                         }elseif($field == 'stegn4')

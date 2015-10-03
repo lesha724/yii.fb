@@ -192,7 +192,7 @@ class St extends CActiveRecord
 			'st12' => 'St12',
 			'st13' => 'St13',
 			'st14' => 'St14',
-			'st15' => 'St15',
+			'st15' => tt('ИНН'),
 			'st16' => 'St16',
 			'st17' => 'St17',
 			'st18' => 'St18',
@@ -553,7 +553,7 @@ SQL;
     {
         $criteria=new CDbCriteria;
 
-        $criteria->select = 't.st2, t.st3, t.st4';
+        $criteria->select = 't.st2, t.st3, t.st4, t.st15';
         $with = array(
             'account' => array(
                 'select' => 'u2, u3, u4'
@@ -570,6 +570,7 @@ SQL;
 		$criteria->addCondition("st2 CONTAINING '".$this->st2."'");
 		$criteria->addCondition("st3 CONTAINING '".$this->st3."'");
 		$criteria->addCondition("st4 CONTAINING '".$this->st4."'");
+        $criteria->addSearchCondition('st15', $this->st15);
 		
 
         $criteria->addSearchCondition('account.u2', Yii::app()->request->getParam('login'));
@@ -586,6 +587,7 @@ SQL;
                     'st2',
                     'st3',
                     'st4',
+                    'st15',
                     'account.u2',
                     'account.u3',
                     'account.u4',

@@ -23,6 +23,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         'st2',
         'st3',
         'st4',
+        'st15',
         array(
             'header' => 'Login',
             'filter' => CHtml::textField('login', Yii::app()->request->getParam('login')),
