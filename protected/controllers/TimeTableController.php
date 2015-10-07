@@ -220,7 +220,7 @@ class TimeTableController extends Controller
 
     private function countHeight($maxLessons, $dayOfWeek, $lesson)
     {
-        $h=60;
+        $h=50;
         $height = isset($maxLessons[$dayOfWeek][$lesson])
             ? $h*$maxLessons[$dayOfWeek][$lesson]
             : $h;
@@ -241,9 +241,19 @@ class TimeTableController extends Controller
             ->setCategory("Result file");
         $objPHPExcel->setActiveSheetIndex(0);
         $sheet=$objPHPExcel->getActiveSheet();
-
         $sheet->setTitle('timeTable '.date('Y-m-d H-i'));
-        $sheet->getColumnDimension('A')->setWidth(13);
+
+        $sheet->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
+        $sheet->getPageSetup()->SetPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A4);
+        $sheet->getPageMargins()->setTop(0.1);
+        $sheet->getPageMargins()->setRight(0.1);
+        $sheet->getPageMargins()->setLeft(0.1);
+        $sheet->getPageMargins()->setBottom(0.1);
+
+        //$sheet->getHeaderFooter()->setOddHeader("&C$title");
+        //$sheet->getHeaderFooter()->setOddFooter('&L&B'.$sheet->getTitle().'&RСтраница &P из &N');
+
+        $sheet->getColumnDimension('A')->setWidth(9);
 
         $sheet->mergeCells('A1:D1');
         $sheet->setCellValue('A1',$title);
@@ -258,15 +268,17 @@ class TimeTableController extends Controller
             setFillType(PHPExcel_Style_Fill::FILL_SOLID);
         /*$sheet->getStyleByColumnAndRow(0, 1,1,2)->getFill()->
             getStartColor()->applyFromArray(array('rgb' => '6FB3E0'));*/
-        $sheet->getRowDimension(0)->setRowHeight(30);
-        $sheet->getRowDimension(1)->setRowHeight(30);
+        $sheet->getRowDimension(1)->setRowHeight(13);
+        $sheet->getRowDimension(2)->setRowHeight(13);
 
         $timestamps    = array_keys($timeTable);
         $amountOfWeeks =  ceil(((current($timestamps) - end($timestamps))/86400) / -7);
         reset($timestamps);
-        $stroka=4;
-        $stroka_day=4;
+        $stroka=2;
+        $stroka_day=2;
         $str=0;
+        $header_height=19;
+        $column_width=25;
         foreach(range(1,7) as $dayOfWeek) {
             $str=$stroka;
             $name = $minMax['names'][$dayOfWeek];
@@ -291,7 +303,7 @@ class TimeTableController extends Controller
                 setFillType(PHPExcel_Style_Fill::FILL_SOLID);
             $sheet->getStyleByColumnAndRow(0, $stroka)->getFill()->
                 getStartColor()->applyFromArray(array('rgb' => '6FB3E0'));
-            $sheet->getRowDimension($stroka)->setRowHeight(30);
+            $sheet->getRowDimension($stroka)->setRowHeight($header_height);
 
             foreach (range($min, $max) as $lesson) {
                 //$interval = isset($rz[$lesson]) ? $rz[$lesson]['rz2'].' - '.$rz[$lesson]['rz3'] : null;
@@ -301,8 +313,8 @@ class TimeTableController extends Controller
                 $tmp=$lesson.' '.tt('пара').': '.$start.'-'.$finish;
                 $stroka++;
                 $sheet->setCellValueByColumnAndRow(0,$stroka,$tmp)->getStyleByColumnAndRow(0, $stroka)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER)->setWrapText(true);
-                $sheet->getStyleByColumnAndRow(0, $stroka)->getFont()->setName('Arial')->setSize(15)->getColor()->applyFromArray(array('rgb' => '000000'));
-                $sheet->getRowDimension($stroka)->setRowHeight($h);
+                $sheet->getStyleByColumnAndRow(0, $stroka)->getFont()->setName('Arial')->setSize(12)->getColor()->applyFromArray(array('rgb' => '000000'));
+                $sheet->getRowDimension($stroka)->setRowHeight(-1);
             }
 
             $stroka_day=$str;
@@ -325,7 +337,7 @@ class TimeTableController extends Controller
                     setFillType(PHPExcel_Style_Fill::FILL_SOLID);
                 $sheet->getStyleByColumnAndRow($week+1, $stroka_day+1)->getFill()->
                     getStartColor()->applyFromArray(array('rgb' => '6FB3E0'));
-                $sheet->getRowDimension($stroka_day+1)->setRowHeight(30);
+                $sheet->getRowDimension($stroka_day+1)->setRowHeight($header_height);
 
                 $k=1;
                 foreach (range($min, $max) as $lesson) {
@@ -343,11 +355,11 @@ class TimeTableController extends Controller
                     }
                     $sheet->setCellValueByColumnAndRow($week+1,$stroka_day+$k,$less)->getStyleByColumnAndRow($week+1,$stroka_day+$k)->getAlignment()->setWrapText(true);
                 }
-                $sheet->getColumnDimensionByColumn($week+1)->setWidth(40);
+                $sheet->getColumnDimensionByColumn($week+1)->setWidth($column_width);
             }
             array_shift($timestamps);
         }
-        $sheet->getStyleByColumnAndRow(0,5,$amountOfWeeks,$stroka)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
+        $sheet->getStyleByColumnAndRow(0,3,$amountOfWeeks,$stroka)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
 
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
         $objPHPExcel->setActiveSheetIndex(0);
