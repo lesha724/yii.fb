@@ -152,6 +152,7 @@ HTML;
 			'minMax'     => $minMax,
 			'rz'         => $rz,
 			'maxLessons' => array(),
+            'action' =>'teacherExcel'
 		));
 	else
 		$this->renderPartial('calendar', array(

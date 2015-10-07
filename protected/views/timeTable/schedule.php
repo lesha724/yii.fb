@@ -94,22 +94,15 @@ HTML;
     $html .= '</tr>';
 }
 $html .= '</table>';
+$class="print-btn";
+if('teacherExcel'==$action||'classroomExcel'==$action)
+    $class="print-btn-tch";
 
 ?>
-	<button id="print-table" class="btn btn-info btn-small">
+	<a id="print-table" data-url="<?=Yii::app()->createUrl('/timeTable/'.$action)?>" class="btn btn-info btn-small <?=$class?>">
         <i class="icon-print bigger-110"></i>
-    </button>
+    </a>
 <?php
-Yii::app()->clientScript->registerScript('print', "
-	
-	$('#print-table').click(
-		function(){
-			$('#sidebar').addClass('menu-min');
-			window.print();
-		}
-	);
-	
-");
 
 echo $html;
 

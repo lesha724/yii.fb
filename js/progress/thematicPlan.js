@@ -3,14 +3,7 @@ $(document).ready(function(){
     $spinner1 = $('#spinner1');
 
     initFilterForm($spinner1);
-	
-    $('#FilterForm_semester,#FilterForm_discipline,#FilterForm_type_lesson').change(function(){
 
-        var $form   = $('#filter-form');
-        appendSelect();
-        $form.submit();
-    });
-    
     function appendSelect()
     {
         var $select = $('#FilterForm_semester').clone();
@@ -26,6 +19,7 @@ $(document).ready(function(){
         $form.append($select2);
         $form.append($select3);
     }
+
 	initDataTable('themes');
 	
         $('#themes').on('click','.delete-new-theme',function(e){

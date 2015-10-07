@@ -139,4 +139,23 @@ SQL;
             }
             return $teachers;
         }
+
+    public function getStego2ArrByLk()
+    {
+        return array('0'=>tt('Не отрботано'),'-1'=>tt('Отработано'));
+    }
+
+    public function getStego2ByLk()
+    {
+        switch ($this->stego2) {
+            case 0:
+                return tt('Не отрботано');
+                break;
+            case -1:
+                return tt('Отработано');
+                break;
+            default:
+                return '-';
+        }
+    }
 }

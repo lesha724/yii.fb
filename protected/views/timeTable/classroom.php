@@ -81,4 +81,5 @@ if (! empty($model->classroom))
         'minMax'     => $minMax,
         'rz'         => $rz,
         'maxLessons' => array(),
+        'action' =>'classroomExcel'
     ));

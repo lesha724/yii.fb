@@ -317,7 +317,24 @@ SQL;
     {
 
         $sql = <<<SQL
-            SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,0,0,0,0);
+            SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,0,0,0,0,0);
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $disciplines = $command->queryAll();
+        foreach ($disciplines as $key => $d) {
+            $disciplines[$key]['name'] = $d['d2'].' ('.$d['k2'].')';
+        }
+        return $disciplines;
+    }
+
+    public function getDisciplinesForTPlanPermition()
+    {
+
+        $sql = <<<SQL
+            SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,0,0,0,0,1);
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':P1', Yii::app()->user->dbModel->p1);

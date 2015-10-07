@@ -128,7 +128,7 @@ class Stegn extends CActiveRecord
         public function checkMinRetakeForGrid()
         {
             //return $this->count_stego==0||$this->stegn6<=$this->getMin();
-            return $this->stegn6<=$this->getMin();
+            return $this->stegn6<=$this->getMin()||$this->stegn6!=-1;
         }
         
         public function getType()

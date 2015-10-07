@@ -20,6 +20,23 @@ $(document).ready(function(){
     })
 });
 
+$(document).on('click','.print-btn',
+    function(){
+        $("#filter-form").attr("action", $(this).data('url'));
+        $("#filter-form").submit();
+    }
+);
+
+$(document).on('click','.print-btn-tch',
+    function(){
+        var action=$("#timeTable-form").attr("action");
+        $("#timeTable-form").attr("action", $(this).data('url'));
+        $("#timeTable-form").submit();
+        $("#timeTable-form").attr("action", action);
+
+    }
+);
+
 function showDialog()
 {
     $( "#dialog-message" ).dialog({

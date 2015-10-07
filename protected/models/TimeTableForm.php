@@ -185,6 +185,64 @@ SQL;
         return array($monday, $sunday);
     }
 
+    private function cellColorFor($day)
+    {
+        $color = SH::getLessonColor($day['tip']);
+        // индикация изменений
+        $indicated = !empty($r11) &&
+            strtotime('today -'.$this->r11.' days') <= strtotime($r11);
+        if ($indicated)
+            $color = TimeTableForm::r11Color;
+
+        return $color;
+    }
+
+    private function cellPrintTextFor($day, $type)
+    {
+        $d2  = $day['d2'];
+        $d2 = str_replace('"', "'", $d2);
+        $tip = $day['tip'];
+        $gr3 = '{$gr3}';
+        $a2  = $day['a2'];
+        $tem_name='';
+        if(isset($day['r1_']))
+        {
+            $tem = $this->getTem($day['r1_'],$day['r2']);
+            if(!empty($tem))
+                $tem_name=$tem['name_temi'];
+        }
+        $class = tt('ауд');
+        if (isset($day['fio']))
+            $fio = $day['fio'];
+
+        $time="";
+        $pos=stripos($day['d3'],"(!)");
+        if($pos!==false)
+            $time=$day['rz2'].'-'.$day['rz3'];
+        if ($type == 1) // teacher
+            $pattern = <<<TEXT
+{$d2}[{$tip}]
+{$gr3}
+{$class}. {$a2}
+TEXT;
+        elseif($type == 2) // group / student
+            $pattern = <<<TEXT
+{$time}
+{$tem_name}
+{$d2}[{$tip}]
+{$class}. {$a2}
+{$fio}
+TEXT;
+        elseif($type == 3) // classroom
+            $pattern = <<<TEXT
+{$d2}[{$tip}]
+{$gr3}
+{$fio}
+TEXT;
+
+        return trim($pattern);
+    }
+
     private function cellShortTextFor($day, $type)
     {
         $maxLength = 17;
@@ -337,9 +395,6 @@ HTML;
         return trim($pattern);
     }
 
-
-
-
     public function fillTameTable($timeTable, $type)
     {
         $timeTable = $this->joinGroups($timeTable, $type);
@@ -363,6 +418,10 @@ HTML;
                 $res[$r2]['timeTable'][$r3]['gr3'] = $day['gr3'];
                 $res[$r2]['timeTable'][$r3]['shortText'] = $this->cellShortTextFor($day, $type);
                 $res[$r2]['timeTable'][$r3]['fullText']  = $this->cellFullTextFor($day, $type);
+
+                $res[$r2]['timeTable'][$r3]['color'] = $this->cellColorFor($day);
+                $res[$r2]['timeTable'][$r3]['printText']  = $this->cellPrintTextFor($day, $type);
+                //$res[$r2]['timeTable'][$r3]['printText']  = '=СЦЕПИТЬ("'.$this->cellPrintTextFor($day, $type).'";СИМВОЛ(10))';
 
             } else
                 $res[$r2]['timeTable'][$r3]['gr3'] .= ','.$day['gr3'];
@@ -402,12 +461,17 @@ HTML;
                 $res[$r2]['timeTable'][$r3]['shortText'] = $this->cellShortTextFor($day, $type);
                 $res[$r2]['timeTable'][$r3]['fullText']  = $this->cellFullTextFor($day, $type);
 
+                $res[$r2]['timeTable'][$r3]['color'] = $this->cellColorFor($day);
+                $res[$r2]['timeTable'][$r3]['printText']  = $this->cellPrintTextFor($day, $type);
+                //$res[$r2]['timeTable'][$r3]['printText']  = '=СЦЕПИТЬ("'.$this->cellPrintTextFor($day, $type).'";СИМВОЛ(10))';
+
                 $res[$r2]['timeTable'][$r3][] = $day;
 
             } else {
 
                 $res[$r2]['timeTable'][$r3]['shortText'] .= $this->cellShortTextFor($day, $type);
                 $res[$r2]['timeTable'][$r3]['fullText']  .= $this->cellFullTextFor($day, $type);
+                $res[$r2]['timeTable'][$r3]['printText']  .= ' '.$this->cellPrintTextFor($day, $type);
 
                 $res[$r2]['timeTable'][$r3][] = $day;
             }
@@ -425,7 +489,7 @@ HTML;
 
             foreach ($params['timeTable'] as $lessonNum => $data) {
 
-                unset($data['shortText'], $data['fullText']);
+                unset($data['shortText'], $data['fullText'], $data['printText'], $data['color']);
 
                 $lessonAmount = count($data);
 

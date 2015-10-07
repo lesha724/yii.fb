@@ -18,7 +18,7 @@ $(document).ready(function(){
     $('#FilterForm_discipline').change(function(){
 
         var $form   = $('#filter-form');
-        appendSelect();
+        //appendSelect();
         $form.submit();
     });
 

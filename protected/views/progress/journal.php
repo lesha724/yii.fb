@@ -31,8 +31,8 @@ JS
 
     $this->renderPartial('/filter_form/default/discipline_group_type', array(
         'model' => $model,
-        'type'  => $type
+        //'type'  => $type
     ));
     
     
-    $this->renderPartial('journal/_bottom', array('model' => $model, 'type' => $type,'read_only' => $read_only));
+    $this->renderPartial('journal/_bottom', array('model' => $model, /*'type' => $type,*/ 'read_only' => $read_only));

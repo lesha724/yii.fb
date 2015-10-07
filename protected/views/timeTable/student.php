@@ -72,6 +72,7 @@ if (! empty($model->student))
 			'minMax'     => $minMax,
 			'rz'         => $rz,
 			'maxLessons' => array(),
+            'action' =>'studentExcel'
 		));
 	else
 		$this->renderPartial('/timeTable/calendar', array(

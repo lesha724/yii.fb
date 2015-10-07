@@ -275,7 +275,7 @@ SQL;
         if (empty($discipline))
             return array();
         $sql = <<<SQL
-             SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,:D1,1,0,0) ORDER by us4 ASC,gr7 DESC;
+             SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,:D1,1,0,0,0) ORDER by us4 DESC,us1 ASC,gr7 DESC;
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
@@ -292,10 +292,51 @@ SQL;
         );
         foreach($groups as $key => $group) {
             $groups[$key]['name'] = $type[$group['us4']].', '.$this->getGroupName($group['sem4'], $group);
-            $groups[$key]['group'] = $group['us1'].'/'.$group['gr1'];
+            $groups[$key]['group'] = $group['us1'].'/'.$group['gr1'].'/'.$group['ug3'];
         }
 
         return $groups;
+    }
+
+    public function getGroupsForTPlanPermition($discipline)
+    {
+        if (empty($discipline))
+            return array();
+        $sql = <<<SQL
+             SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,:D1,1,0,0,1) ORDER by us4 DESC,us1 ASC,gr7 DESC;
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
+        $command->bindValue(':D1', $discipline);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $groups = $command->queryAll();
+        $type=array(
+            1=> tt('Лк'),
+            2=> tt('Пз'),
+            3=> tt('Сем'),
+            4=> tt('Лб')
+        );
+        $res=array();
+        $us1=-1;
+        $gr='';
+        $us4='';
+        foreach($groups as $group) {
+            if($us1!=$group['us1'])
+            {
+                if($us1!=-1)
+                    array_push($res,array('name'=>$us4.$gr,'group'=>$us1));
+                $us1=$group['us1'];
+                $gr='';
+            }
+            $gr.=$this->getGroupName($group['sem4'], $group).',';
+            $us4='('.$type[$group['us4']].')';
+        }
+        if($us1!=-1)
+            array_push($res,array('name'=>$us4.$gr,'group'=>$us1));
+
+        return $res;
     }
     
     public function getGroupsFor($discipline, $type = null)

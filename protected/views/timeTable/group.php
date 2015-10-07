@@ -53,6 +53,7 @@ if (!empty($model->group))
 			'minMax'     => $minMax,
 			'maxLessons' => $maxLessons,
 			'rz'         => $rz,
+            'action' =>'groupExcel'
 		));
 	else
 		$this->renderPartial('/timeTable/calendar', array(

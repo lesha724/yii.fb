@@ -318,11 +318,11 @@ class ProgressController extends Controller
 	
     public function actionJournal()
     {
-        $type = 0; // own disciplines
+        //$type = 0; // own disciplines
 
-        $grants = Yii::app()->user->dbModel->grants;
+        /*$grants = Yii::app()->user->dbModel->grants;
         if (! empty($grants))
-            $type = $grants->getGrantsFor(Grants::EL_JOURNAL);
+            $type = $grants->getGrantsFor(Grants::EL_JOURNAL);*/
 
         $model = new FilterForm;
         $model->scenario = 'journal';
@@ -335,13 +335,15 @@ class ProgressController extends Controller
             $arr = explode("/", $model->group);
             $us1=$arr[0];
             $gr1=$arr[1];
+            $ug3=$arr[2];
             $sql = <<<SQL
-                     SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,0,2,:US1,0);
+                     SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,0,2,:us1,:UG3,0);
 SQL;
             $command = Yii::app()->db->createCommand($sql);
 
             $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
-            $command->bindValue(':US1', $us1);
+            $command->bindValue(':us1', $us1);
+            $command->bindValue(':UG3', $ug3);
             $command->bindValue(':YEAR', Yii::app()->session['year']);
             $command->bindValue(':SEM', Yii::app()->session['sem']);
             $res = $command->queryRow();
@@ -353,7 +355,7 @@ SQL;
 
         $this->render('journal', array(
             'model' => $model,
-            'type' => $type,
+            //'type' => $type,
             'read_only' => $read_only,
         ));
     }
@@ -640,12 +642,14 @@ SQL;
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
         $error=false;
         $stegn=Stegn::model()->findByAttributes(array('stegn0'=>$stegn0));
+        $us=Us::model()->findByPk($stegn->stegn2);
         $model=new Stego;
         $model->unsetAttributes();
         $model->stego1=$stegn0;
         $html = $this->renderPartial('retake/_add_retake', array(
             'model' => $model,
-            'stegn'=>$stegn
+            'stegn'=>$stegn,
+            'us'=>$us
         ), true);
         /*$html = $this->render('retake/_add_retake', array(
             'model' => $model,
@@ -653,7 +657,7 @@ SQL;
         ));*/
 
         $res = array(
-            'title'=>tt('Отработка1'),
+            'title'=>tt('Отработка'),
             'html' => $html,
             'errors' => $error,
             'show'=>true,
@@ -672,9 +676,11 @@ SQL;
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
         $error=false;
         $models=Stego::model()->findAllByAttributes(array('stego1'=>$stegn0));
-        
+        $stegn=Stegn::model()->findByAttributes(array('stegn0'=>$stegn0));
+        $us=Us::model()->findByPk($stegn->stegn2);
         $html = $this->renderPartial('retake/_show_retake', array(
             'models' => $models,
+            'us'=>$us
         ), true);
         $res = array(
             'html'=>$html,
@@ -740,7 +746,7 @@ SQL;
         else {
             //проверка на достап к процедуре
             $sql = <<<SQL
-             SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,0,3,:US1,:R1);
+             SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,0,2,:US1,:R1,0);
 SQL;
             $command = Yii::app()->db->createCommand($sql);
 
@@ -1221,16 +1227,37 @@ SQL;
     {
         $model = new FilterForm();
         $model->scenario = 'thematicPlan';
-        
         if (isset($_REQUEST['FilterForm'])) {
             $model->attributes=$_REQUEST['FilterForm'];
-
-            $deleteThematicPlan = Yii::app()->request->getParam('delete-thematic-plan', null);
-            if ($deleteThematicPlan)
-                Ustem::model()->deleteThematicPlan($model);
         }
-        if(!empty($model->type_lesson))
-            Ustem::model()->recalculation($model->type_lesson);
+        $read_only=false;
+        $us1='';
+        if(!empty($model->group))
+        {
+            $us1=$model->group;
+            $sql = <<<SQL
+                     SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,0,3,:US1,0,1);
+SQL;
+            $command = Yii::app()->db->createCommand($sql);
+
+            $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
+            $command->bindValue(':US1', $us1);
+            $command->bindValue(':YEAR', Yii::app()->session['year']);
+            $command->bindValue(':SEM', Yii::app()->session['sem']);
+            $res = $command->queryRow();
+            if(empty($res)||$res['dostup']==0)
+            {
+                $read_only=true;
+            }
+        }
+
+        $deleteThematicPlan = Yii::app()->request->getParam('delete-thematic-plan', null);
+        if ($deleteThematicPlan&&!$read_only)
+            Ustem::model()->deleteThematicPlan($model);
+
+        if(!empty($model->group))
+            Ustem::model()->recalculation($us1);
+
         $this->render('thematicPlan', array(
             'model' => $model
         ));
@@ -1238,19 +1265,35 @@ SQL;
 
     public function actionRenderUstemTheme()
     {
-        if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        /*if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');*/
 
         $ustem1 = Yii::app()->request->getParam('ustem1', null);
         $d1     = Yii::app()->request->getParam('d1', null);
 
         if (empty($ustem1) || empty($d1))
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+            throw new CHttpException(404, '1Invalid request. Please do not repeat this request again.');
 
 
         $model = Ustem::model()->findByAttributes(array('ustem1' => $ustem1));
 
         if (isset($_REQUEST['Ustem'])) {
+
+            $read_only=false;
+            $sql = <<<SQL
+                     SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,0,3,:US1,0,1);
+SQL;
+            $command = Yii::app()->db->createCommand($sql);
+
+            $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
+            $command->bindValue(':US1', $model->ustem2);
+            $command->bindValue(':YEAR', Yii::app()->session['year']);
+            $command->bindValue(':SEM', Yii::app()->session['sem']);
+            $res = $command->queryRow();
+            if(empty($res)||$res['dostup']==0)
+            {
+                throw new CHttpException(404, '2Invalid request. Please do not repeat this request again.');
+            }
 
             $model->attributes = $_REQUEST['Ustem'];
             $model->ustem9=Yii::app()->user->dbModel->p1;
@@ -1261,7 +1304,7 @@ SQL;
 
         $html = $this->renderPartial('thematicPlan/_theme', array(
             'model' => $model,
-            'd1'    => $d1
+            //'d1'    => $d1
         ), true);
 
         $res = array(
@@ -1335,17 +1378,34 @@ SQL;
         $command = Yii::app()->db->createCommand($sql);
         //$command->bindValue(':us1', $ustem2);
         $ustem1 = (int)$command->queryScalar();
-        
-        $model = new Ustem;
-        $model->ustem1=$ustem1+1;
-        $model->ustem2=$ustem2;
-        $model->ustem3=$ustem3;
-        $model->ustem4=$ustem4;
-        $model->ustem5=$ustem5;
-        $model->ustem6=$ustem6;
-        $model->ustem9=Yii::app()->user->dbModel->p1;
-        $model->ustem8=date('Y-m-d H:i:s');
-        $error=!$model->save();
+        $error=false;
+        $sql = <<<SQL
+                     SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,0,3,:US1,0,1);
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+
+        $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
+        $command->bindValue(':US1', $ustem2);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $res = $command->queryRow();
+        if(empty($res)||$res['dostup']==0)
+        {
+            $error=true;
+        }
+        if(!$error)
+        {
+            $model = new Ustem;
+            $model->ustem1=$ustem1+1;
+            $model->ustem2=$ustem2;
+            $model->ustem3=$ustem3;
+            $model->ustem4=$ustem4;
+            $model->ustem5=$ustem5;
+            $model->ustem6=$ustem6;
+            $model->ustem9=Yii::app()->user->dbModel->p1;
+            $model->ustem8=date('Y-m-d H:i:s');
+            $error=!$model->save();
+        }
         
         $res = array(
             'error'=>$error,
@@ -1377,29 +1437,52 @@ SQL;
             $ustem5=$ustem->ustem5;
             $ustem6=$ustem->ustem6;
         }
-
-        $deleted = (bool)Ustem::model()->deleteByPk($ustem1);
-
-        $res = array(
-            'deleted' => $deleted
-        );
-
-        if($deleted)
-        {
-            $text=P::model()->getTeacherNameBy(Yii::app()->user->dbModel->p1,false);
-            $text.=' Ustem1-'.$ustem1.' Ustem2-'.$ustem2.' Ustem3-'.$ustem3.' Ustem4-'.$ustem4.' Ustem5-'.$ustem5.' Ustem6-'.$ustem6;
-            $sql = <<<SQL
-              INSERT into adz (adz1,adz2,adz3,adz4,adz5,adz6) VALUES (:adz1,:adz2,:adz3,:adz4,:adz5,:adz6);
+        $error=false;
+        $sql = <<<SQL
+                     SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,0,3,:US1,0,1);
 SQL;
-            $command=Yii::app()->db->createCommand($sql);
-            $command->bindValue(':adz1', 0);
-            $command->bindValue(':adz2', 999);
-            $command->bindValue(':adz3', 1);
-            $command->bindValue(':adz4', date('Y-m-d H:i:s'));
-            $command->bindValue(':adz5', 0);
-            $command->bindValue(':adz6', $text);
-            $command->execute();
+        $command = Yii::app()->db->createCommand($sql);
 
+        $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
+        $command->bindValue(':US1', $ustem2);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $res = $command->queryRow();
+        if(empty($res)||$res['dostup']==0)
+        {
+            $error=true;
+        }
+
+        if(!$error)
+        {
+            $deleted = (bool)Ustem::model()->deleteByPk($ustem1);
+
+            $res = array(
+                'deleted' => $deleted
+            );
+
+            if($deleted)
+            {
+                $text=P::model()->getTeacherNameBy(Yii::app()->user->dbModel->p1,false);
+                $text.=' Ustem1-'.$ustem1.' Ustem2-'.$ustem2.' Ustem3-'.$ustem3.' Ustem4-'.$ustem4.' Ustem5-'.$ustem5.' Ustem6-'.$ustem6;
+                $sql = <<<SQL
+                  INSERT into adz (adz1,adz2,adz3,adz4,adz5,adz6) VALUES (:adz1,:adz2,:adz3,:adz4,:adz5,:adz6);
+SQL;
+                $command=Yii::app()->db->createCommand($sql);
+                $command->bindValue(':adz1', 0);
+                $command->bindValue(':adz2', 999);
+                $command->bindValue(':adz3', 1);
+                $command->bindValue(':adz4', date('Y-m-d H:i:s'));
+                $command->bindValue(':adz5', 0);
+                $command->bindValue(':adz6', $text);
+                $command->execute();
+
+            }
+        }else
+        {
+            $res = array(
+                'deleted' => !$error
+            );
         }
 
         Yii::app()->end(CJSON::encode($res));

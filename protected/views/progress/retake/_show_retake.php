@@ -19,6 +19,8 @@
         $i=1;
         foreach ($models as $model) {
             $mark=round($model->stego2);
+            if($us->us4==1)
+                $mark=$model->getStego2ByLk();
             //if($model->stego2==-1)
                 //$mark='-';
             $tr.='<tr>'.

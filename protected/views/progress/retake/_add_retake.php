@@ -22,10 +22,17 @@ $options = array(
     
     $input = $form->hiddenField($model, 'stego1');
     $html .= $input;
-
-    $label = $form->label($model, 'stego2', $options);
-    $input = $form->textField($model, 'stego2');
-    $html .= sprintf($pattern, $label, $input);
+    if($us->us4!=1)
+    {
+        $label = $form->label($model, 'stego2', $options);
+        $input = $form->textField($model, 'stego2');
+        $html .= sprintf($pattern, $label, $input);
+    }else
+    {
+        $label = $form->label($model, 'stego2', $options);
+        $input = $form->dropDownList($model, 'stego2',Stego::model()->getStego2ArrByLk());
+        $html .= sprintf($pattern, $label, $input);
+    }
 
     $label = $form->label($model, 'stego3', $options);
     $input = $form->textField($model, 'stego3',array('class' => 'datepicker'));

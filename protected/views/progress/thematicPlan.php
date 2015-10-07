@@ -26,16 +26,19 @@
 JS
     , CClientScript::POS_READY);
 
-   $this->renderPartial('/filter_form/progress/thematicPlan', array(
-       'model' => $model,
-   ));
+
+    $this->renderPartial('/filter_form/default/year_sem');
+
+    $this->renderPartial('/filter_form/default/discipline_group_tplan', array(
+        'model' => $model,
+    ));
 
 echo <<<HTML
     <span id="spinner1"></span>
 HTML;
 
 
-if (! empty($model->group))
+//if (! empty($model->group))
     $this->renderPartial('thematicPlan/_bottom', array(
         'model' => $model,
     ));
