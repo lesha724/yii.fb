@@ -37,6 +37,7 @@
                     'name'       => 'Расписание',
                     'controller' => 'timeTable',
                     'items' => array(
+                        'self'         => 'Личное',
                         'group'         => 'Академ. группы',
                         'teacher'       => 'Преподавателя',
                         'chair'       => 'Кафедры',

@@ -4,7 +4,7 @@
  * @var ProgressController $this
  * @var FilterForm $model
  */
-
+//Не используеться
 $options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;');
 $form=$this->beginWidget('CActiveForm', array(
     'id'=>'filter-form',

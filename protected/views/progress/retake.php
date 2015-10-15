@@ -23,7 +23,7 @@ JS
         
 $this->renderPartial('/filter_form/default/year_sem');
 
-$form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+/*$form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id'=>'search-form',
     'htmlOptions' => array('class' => 'form-inline noprint'),
 	'method'=>'post',
@@ -46,7 +46,7 @@ $this->endWidget();
 
 $this->renderPartial('/filter_form/progress/retake', array(
         'model' => $model,
-    ));
+    ));*/
 
 echo <<<HTML
     <span id="spinner1"></span>

@@ -638,7 +638,7 @@ SQL;
         ));
     }
 
-    public function getStudentsForJournal($gr1, $us1)
+    public function getStudentsForJournal($gr1, $uo1)
     {
         $sql = <<<SQL
        select st1,st2,st3,st4
@@ -649,14 +649,14 @@ SQL;
            inner join ug on (ucgn.ucgn1 = ug.ug4)
            inner join nr on (ug.ug3 = nr.nr1)
            inner join us on (nr.nr2 = us.us1)
-        where UCGNS5=:YEAR and UCGNS6=:SEM and us1=:US1 and ug2=:GR1
+        where UCGNS5=:YEAR and UCGNS6=:SEM and us2=:UO1 and ug2=:GR1
         group by st1,st2,st3,st4
         order by st2 collate UNICODE
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':GR1', $gr1);
-        $command->bindValue(':US1', $us1);
+        $command->bindValue(':UO1', $uo1);
         $command->bindValue(':YEAR', Yii::app()->session['year']);
         $command->bindValue(':SEM', Yii::app()->session['sem']);
         $students = $command->queryAll();

@@ -93,7 +93,7 @@ $form=$this->beginWidget('CActiveForm', array(
 
                     }
                         echo CHtml::tag('div', array('data-nkrs1' => $nkrs1,'data-st1' =>$model->student,'data-us1' =>$discipline['us1'])).
-                                CHtml::dropDownList('nkrs7', $nkrs7, $rus, array('id' => false, 'class' => 'chosen-select', 'style'=>'width:50%')).
+                                CHtml::dropDownList('nkrs7', $nkrs7,  array('0' => '--Select--')+$rus, array('id' => false, 'class' => 'chosen-select', 'style'=>'width:50%')).
                                 CHtml::label(tt('Научный руководитель'), '', array()).
                                 CHtml::textField('nkrs6', $nkrs6, array('class' => 'autocomplete')).'<br>'.
                              CHtml::closeTag('div');
@@ -112,7 +112,7 @@ $form=$this->beginWidget('CActiveForm', array(
 
                     echo '<strong>'.$discipline['d2'].'</strong>'.'<br>';
                         echo CHtml::tag('div').
-                                CHtml::dropDownList('nkrs7-eng', $nkrs7, $eng, array('style'=>'width:72%', 'disabled' => true)).
+                                CHtml::dropDownList('nkrs7-eng', $nkrs7,  array('0' => '--Select--')+$eng, array('style'=>'width:72%', 'disabled' => true)).
                              CHtml::closeTag('div');
                 }
             ?>

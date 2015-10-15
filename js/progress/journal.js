@@ -26,7 +26,7 @@ $(document).ready(function(){
                 st1   : st1,
                 gr1   : gr1,
                 date:$that.parent().data('date'),
-                value : 0
+                value : '0'
             }
 
             var stName = $('table.journal_table_1 tr[data-st1='+st1+'] td:eq(1)').text();

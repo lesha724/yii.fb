@@ -135,8 +135,8 @@ class ProgressController extends Controller
     
     public function actionUpdateOmissionsStegMark()
     {
-        /*if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');*/
+        //if (! Yii::app()->request->isAjaxRequest)
+            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $stegn1 = Yii::app()->request->getParam('stegn1', null);
         $date1 = Yii::app()->request->getParam('date1', null);
@@ -162,14 +162,21 @@ class ProgressController extends Controller
                 'stegn8' =>  Yii::app()->user->dbModel->p1,
                 'stegn7' =>  date('Y-m-d H:i:s'),
             );
+            $us_arr=Stegn::model()->getUs1ForOmissions($stegn1,$date1,$date2);
+            //print_r($us_arr);
             $criteria = new CDbCriteria();
             $criteria->compare('stegn1', $stegn1);
             $criteria->compare('stegn4','>=1');
-            $criteria->compare('stegn9','>='.$date1);
-            $criteria->compare('stegn9', '<='.$date2);
+            $criteria->addCondition("stegn9>='".$date1."' and stegn9<='".$date2."'");
+            $criteria->addInCondition("stegn2",$us_arr);
+            //$criteria->compare('stegn9','>='.$date1);
+            //$criteria->compare('stegn9', '<='.$date2);
             //редактируем стегн (все записи которые в это интревале, уваж или не уваж)
+            //print_r($attr);
+            //print_r($criteria);
             $count = Stegn::model()->updateAll($attr,$criteria);
 
+            //print_r($count);
             if ($count==-1)
             {
                 $error = true;
@@ -185,7 +192,7 @@ class ProgressController extends Controller
                     $arr_id=array();
                     foreach($models as $model)
                     {
-                        //array_push($arr_id,$model->stegn0);
+                        array_push($arr_id,$model->stegn0);
                     }
                     $new_attr=array(
                         'stegnp2' => $type,
@@ -196,7 +203,7 @@ class ProgressController extends Controller
                         'stegnp6' =>  date('Y-m-d H:i:s'),
                     );
                     $new_criteria = new CDbCriteria();
-                    $new_criteria->compare('stegnp1', $arr_id);
+                    $new_criteria->addInCondition('stegnp1', $arr_id);
                     //редактируем все стегнп коротые связы с этими стегн
                     $count = Stegnp::model()->updateAll($new_attr,$new_criteria);
                     if ($count==-1)
@@ -330,20 +337,34 @@ class ProgressController extends Controller
             $model->attributes=$_REQUEST['FilterForm'];
 
         $read_only=false;
+        $us1=0;
         if(!empty($model->group))
         {
-            $arr = explode("/", $model->group);
-            $us1=$arr[0];
-            $gr1=$arr[1];
-            $ug3=$arr[2];
+            list($uo1,$gr1) = explode("/", $model->group);
+
             $sql = <<<SQL
-                     SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,0,2,:us1,:UG3,0);
+                       select first  1 us1 from EL_GURNAL_RASP (:TYPE_LESSON,:YEAR,:SEM,:UO1, :GR1)
+SQL;
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':UO1', $uo1);
+            $command->bindValue(':GR1', $gr1);
+            $command->bindValue(':TYPE_LESSON', $model->type_lesson);
+            $command->bindValue(':YEAR', Yii::app()->session['year']);
+            $command->bindValue(':SEM', Yii::app()->session['sem']);
+            $res = $command->queryRow();
+            if(!empty($res))
+                $us1=$res['us1'];
+
+            $sql = <<<SQL
+                     SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,2,:US1,0,0,:TYPE_LESSON);
 SQL;
             $command = Yii::app()->db->createCommand($sql);
 
             $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
-            $command->bindValue(':us1', $us1);
-            $command->bindValue(':UG3', $ug3);
+            $command->bindValue(':UO1', $uo1);
+            $command->bindValue(':US1', $us1);
+            $command->bindValue(':GR1', $gr1);
+            $command->bindValue(':TYPE_LESSON', $model->type_lesson);
             $command->bindValue(':YEAR', Yii::app()->session['year']);
             $command->bindValue(':SEM', Yii::app()->session['sem']);
             $res = $command->queryRow();
@@ -352,10 +373,11 @@ SQL;
                 $read_only=true;
             }
         }
-
+        $read_only=false;
         $this->render('journal', array(
             'model' => $model,
             //'type' => $type,
+            'us1'=>$us1,
             'read_only' => $read_only,
         ));
     }
@@ -374,9 +396,7 @@ SQL;
             $model->attributes=$_REQUEST['FilterForm'];
         if(!empty($model->group))
         {
-            $arr = explode("/", $model->group);
-            $us1=$arr[0];
-            $gr1=$arr[1];
+            list($uo1,$gr1) = explode("/", $model->group);
             $sql = <<<SQL
                     
                 select sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28,gr3,f3,f2
@@ -402,11 +422,16 @@ SQL;
                 $faculty=$res['f3'];
             }
             
-            $students = St::model()->getStudentsForJournal($gr1, $us1);
+            $students = St::model()->getStudentsForJournal($gr1, $uo1);
             $dates = R::model()->getDatesForJournal(
-                    $us1,
-                    $gr1
+                $uo1,
+                $gr1,
+                $model->type_lesson
             );
+            $us1_arr = array();
+            foreach ($dates as $date) {
+                $us1_arr[] = $date['us1'];
+            }
             $year=(int)Yii::app()->session['year'];
             $first_title='%s семестр %s - %s навчальний рік %s курс';
             $second_title='%s факультет %s група';
@@ -481,19 +506,19 @@ SQL;
             $k=0;
             foreach($students as $st) {
                 $st1 = $st['st1'];
-                $marks = Stegn::model()->getMarksForStudent($st1, $us1);
+                $marks = Stegn::model()->getMarksForStudent($st1, $us1_arr);
                 $k=0;
                 foreach($dates as $key => $date) {
-                    $key = $us1.'/'.$date['nom']; // 0 - r3
+                    $key = $date['us1'].'/'.$date['nom']; // 0 - r3
                     $stegn4 = isset($marks[$key]) && $marks[$key]['stegn4'] != 0
                                 ? 'нб'
                                 : '';
                     $stegn5 = isset($marks[$key]) && $marks[$key]['stegn5'] != 0
                                 ? round($marks[$key]['stegn5'], 1)
                                 : '';
-                    $stegn6 = isset($marks[$key]) && $marks[$key]['stegn6'] != 0
-                                ? round($marks[$key]['stegn6'], 1)
-                                : '';
+                    $stegn6 = isset($marks[$key]) && $marks[$key]['stegn6'] != 0 && $marks[$key]['stegn6']!=-1
+                        ? round($marks[$key]['stegn6'], 1)
+                        :( isset($marks[$key]) && $marks[$key]['stegn6']==-1?tt('Отработано'):'');
                     if(($stegn6!='')||($stegn4!=''))
                     {
                         if($stegn4!='')
@@ -610,6 +635,7 @@ SQL;
                 $model->stego1=$stego1;
                 $model->stego2=$stego2;
                 $model->stego3=$stego3;
+                $model->stego4=Yii::app()->user->dbModel->p1;
                 $model->stego4=$stego4;
                 $model->stego6=Yii::app()->user->dbModel->p1;
                 $model->stego5=date('Y-m-d H:i:s');
@@ -706,8 +732,8 @@ SQL;
     
     public function actionCheckCountRetake()
     {
-        /* if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');*/
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
         $stegn1 = Yii::app()->request->getParam('st1', null);
         $stegn2 = Yii::app()->request->getParam('us1', null);
         $stegn3 = Yii::app()->request->getParam('nom', null);
@@ -745,16 +771,23 @@ SQL;
             $error = true;
         else {
             //проверка на достап к процедуре
+            /*$us=Us::model()->findByPk($stegn2);
+            if(empty($us))
+                throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+            $type_lesson=0;
+            if($us->us4!=1)
+                $type_lesson=1;*/
             $sql = <<<SQL
-             SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,0,2,:US1,:R1,0);
+             SELECT * FROM  EL_GURNAL(:P1,0,0,0,2,0,:R1,0,0);
 SQL;
             $command = Yii::app()->db->createCommand($sql);
 
             $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
-            $command->bindValue(':US1', $stegn2);
+            //$command->bindValue(':US1', $stegn2);
             $command->bindValue(':R1', $r1);
-            $command->bindValue(':YEAR', Yii::app()->session['year']);
-            $command->bindValue(':SEM', Yii::app()->session['sem']);
+            //$command->bindValue(':TYPE_LESSON', $type_lesson);
+            //$command->bindValue(':YEAR', Yii::app()->session['year']);
+            //$command->bindValue(':SEM', Yii::app()->session['sem']);
             $res = $command->queryRow();
             if(count($res)==0 || empty($res)||$res['dostup']==0)
             {
@@ -817,7 +850,8 @@ SQL;
                 {
                     if($value>$bal||$value<$min)
                         //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
-                        $error=true;
+                        if($value!=0)
+                            $error=true;
                 }
             }
             $errors=array();
@@ -1231,7 +1265,7 @@ SQL;
             $model->attributes=$_REQUEST['FilterForm'];
         }
         $read_only=false;
-        $us1='';
+        /*$us1='';
         if(!empty($model->group))
         {
             $us1=$model->group;
@@ -1249,7 +1283,7 @@ SQL;
             {
                 $read_only=true;
             }
-        }
+        }*/
 
         $deleteThematicPlan = Yii::app()->request->getParam('delete-thematic-plan', null);
         if ($deleteThematicPlan&&!$read_only)

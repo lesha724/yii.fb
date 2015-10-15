@@ -15,6 +15,10 @@
             'type'=>'raw',
             'htmlOptions'=>array('class'=>'student'),
         ),
+        'group_st'=>array(
+            'name'=>'group_st',
+            'htmlOptions'=>array('class'=>'group_st'),
+        ),
         'tema'=>array(
             'name'=>'tema',
             'htmlOptions'=>array('class'=>'tema'),

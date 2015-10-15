@@ -1,12 +1,13 @@
 <?php
-function table2Tr($date,$us1,$gr1,$st1,$marks,$us,$permLesson,$read_only)
+function table2Tr($date,$gr1,$st1,$marks,$permLesson,$read_only)
 {
     /*if($date['priz']!=0)
        return '<td colspan="2"></td>'; */
     if (strtotime($date['r2']) > strtotime('now'))
         return '<td colspan="2"></td>';
 
-
+    $us1=$date['us1'];
+    $us=Us::model()->findByPk($us1);
     if($us!=null)
     {
 
@@ -48,9 +49,10 @@ function table2Tr($date,$us1,$gr1,$st1,$marks,$us,$permLesson,$read_only)
                     ? round($marks[$key]['stegn5'], 1)
                     : '';
 
-        $stegn6 = isset($marks[$key]) && $marks[$key]['stegn6'] != 0
+        $stegn6 = isset($marks[$key]) && $marks[$key]['stegn6'] != 0 && $marks[$key]['stegn6']!=-1
                     ? round($marks[$key]['stegn6'], 1)
-                    : '';
+                    :( isset($marks[$key]) && $marks[$key]['stegn6']==-1?tt('Отработано'):'');
+
         /*$stegr=Stegr::model()->findByAttributes(array('stegr1'=>$gr1,'stegr2'=>$us1,'stegr3'=>$date['r2']));
         if(!empty($stegr))
         {
@@ -124,6 +126,7 @@ HTML;
                 $pattern= <<<HTML
             <td colspan="2" data-nom="{$nom}" data-priz="{$type}" data-us1="{$us1}" data-r1="{$r1}"  data-date="{$date_lesson}" data-gr1="{$gr1}">
                 <input data-toggle="tooltip" data-placement="right" data-original-title="{$tooltip}" type="checkbox" %s data-name="stegn4" {$disabled}>
+                <label class="label label-warning">%s</label>
             </td>
 HTML;
             else
@@ -137,12 +140,12 @@ HTML;
                 }
                 $pattern= <<<HTML
                     <td colspan="2">
-                        <label class="label label-warning">%s</label>
+                        <label class="label label-warning">%s</label><label class="label label-warning">%s</label>
                     </td>
 HTML;
             }
 
-            return sprintf($pattern, $stegn4);
+            return sprintf($pattern, $stegn4,$stegn6);
         }
 
     }
@@ -166,11 +169,11 @@ function getMarksForTotalSubModule($date,$us1,$marks)
     }
 }
 
-function generateTh2($us1,$minMax, $column, $ps9,$us)
+function generateTh2($us1,$minMax, $column, $ps9,$us4)
 {
     if ($ps9 == '0')
         return '<th></th><th></th>';
-    if($us->us4==1)
+    if($us4==1)
         return '<th></th><th></th>';
     if(!isset($minMax[$column]))
     {
@@ -193,8 +196,9 @@ HTML;
     return sprintf($pattern);
 }
 
-function getSubModulesMark($date, $marks,$us1)
+function getSubModulesMark($date, $marks)
 {
+    $us1=$date['us1'];
     $key = $us1.'/'.$date['nom']; // 0 - r3
     if(isset($marks[$key]))
     {
@@ -218,7 +222,7 @@ function countSTEGTotal($marks)
     return $total;
 }
 
-function countTotal1($ps20, $dates, $marks, $pbal,$us1)
+function countTotal1($ps20, $dates, $marks, $pbal)
 {
     $res = 0;
     if ($ps20 == 0)
@@ -228,7 +232,7 @@ function countTotal1($ps20, $dates, $marks, $pbal,$us1)
         
         foreach($dates as $date) {
             if ($date['priz'] == 1) // is sub module?
-                $subModuleMarks[count($subModuleMarks)] = getSubModulesMark($date, $marks,$us1);
+                $subModuleMarks[count($subModuleMarks)] = getSubModulesMark($date, $marks);
         }
         if (! empty($subModuleMarks)) {
             //$res = (string)round(array_sum($subModuleMarks)/count($subModuleMarks), 1);
@@ -273,7 +277,7 @@ HTML;
  }
 
 
-    $name = '№'.$date['nom'].' '.$date['formatted_date'].$type;
+    $name = '№'.$date['nom'].' '.$date['formatted_date'].SH::convertUS4($date['us4']).$type;
 
     return sprintf($pattern, $name);
 }
@@ -281,10 +285,10 @@ HTML;
     $url_check       = Yii::app()->createUrl('/progress/checkCountRetake');
     $minMaxUrl = Yii::app()->createUrl('/progress/insertMmbjMark');
     $table_class='journal_div_table2';
-    if($us->us4==1)
-    {
+    /*if($us->us4==1)
+    {*/
         $table_class='journal_div_table2 journal_div_table2_1';
-    }
+    //}
     $table = <<<HTML
 <div class="{$table_class}" data-ps33="{$ps33}" data-gr1="{$gr1}" data-url="{$url}" data-url-check="{$url_check}">
     <table class="table table-striped table-bordered table-hover journal_table">
@@ -305,8 +309,8 @@ HTML;
 
 
 
-    $minMax = Mmbj::model()->getDataForJournal($us1);
-    $permLesson=Stegr::model()->getList($gr1,$us1);
+    $minMax = Mmbj::model()->getDataForJournal($us1_arr);
+    $permLesson=Stegr::model()->getList($gr1,$us1_arr);
     global $count_dates;
     $count_dates=0;
 /*** 2 table ***/
@@ -314,7 +318,7 @@ HTML;
     $column = 1;
     foreach($dates as $date) {
         $th    .= generateColumnName($date, $ps20);
-        $th2   .= generateTh2($us1,$minMax, $column, $ps9,$us);
+        $th2   .= generateTh2($date['us1'],$minMax, $column, $ps9,$date['us4']);
         $column++;
         $count_dates++;
     }
@@ -324,9 +328,9 @@ HTML;
     foreach($students as $st) {
 
         $st1 = $st['st1'];
-        $marks = Stegn::model()->getMarksForStudent($st1, $us1);
+        $marks = Stegn::model()->getMarksForStudent($st1, $us1_arr);
         $tr .= '<tr data-st1="'.$st1.'">';
-        $total_1[$st1] = countTotal1($ps20, $dates, $marks, $pbal,$us1);
+        $total_1[$st1] = countTotal1($ps20, $dates, $marks, $pbal);
         //$total_sub_module=0;
         foreach($dates as $key => $date) {
             /*if($date['priz']==0)
@@ -340,7 +344,7 @@ HTML;
                     $total_sub_module=0;
                 }
             }*/
-            $tr .= table2Tr($date,$us1,$gr1,$st1,$marks,$us,$permLesson,$read_only);
+            $tr .= table2Tr($date,$gr1,$st1,$marks,$permLesson,$read_only);
             
         }
         $tr .= '</tr>';

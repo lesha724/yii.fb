@@ -208,6 +208,12 @@ $this->widget('zii.widgets.CMenu', array(
             'itemOptions'=>_i('timeTable'),
             'items' =>array_merge( array(
                 array(
+                    'label'   => $_l2.tt('Личное'),
+                    'url'     => _u('/timeTable/self'),
+                    'active'  => $_c=='timeTable' && $_a=='self',
+                    'visible' => _ch('timeTable', 'self')&& ($isStd||$isTch)
+                ),
+                array(
                     'label'   => $_l2.tt('Академ. группы'),
                     'url'     => _u('/timeTable/group'),
                     'active'  => $_c=='timeTable' && $_a=='group',

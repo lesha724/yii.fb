@@ -51,7 +51,7 @@ class FilterForm extends CFormModel
 	{
             return array(
                 array('discipline, group', 'required', 'on' => 'journal, modules,thematicPlan'),
-                //array('type_lesson', 'required', 'on' => 'journal'),
+                array('type_lesson', 'required', 'on' => 'journal,thematicPlan,retake'),
                 array('module, chair,stream, discipline, group,statement', 'required', 'on' => 'module'),
                 array('discipline', 'required', 'on' => 'exam-session'),
                 array('filial, faculty, speciality, course, group,discipline', 'required', 'on' => 'retake'),
@@ -132,4 +132,13 @@ SQL;
 			'type_lesson'=>tt('Тип занять')
 		)+$arr;
 	}
+
+    public static function getTypesForJournal()
+    {
+        return array(
+            //'-1'=>'--Select type-- ',
+            '0'=>SH::convertUS4(1),
+            '1'=>tt('пз/лб/сем')
+        );
+    }
 }

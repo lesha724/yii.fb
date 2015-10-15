@@ -35,4 +35,4 @@ JS
     ));
     
     
-    $this->renderPartial('journal/_bottom', array('model' => $model, /*'type' => $type,*/ 'read_only' => $read_only));
+   $this->renderPartial('journal/_bottom', array('model' => $model, 'us1' => $us1, 'read_only' => $read_only));

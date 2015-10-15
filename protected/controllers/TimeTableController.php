@@ -5,7 +5,7 @@ class TimeTableController extends Controller
     public function filters() {
 
         return array(
-            //'accessControl',
+            'accessControl',
         );
     }
 
@@ -14,15 +14,89 @@ class TimeTableController extends Controller
         return array(
             array('allow',
                 'actions' => array(
+                    'self',
+                    'selfExcel'
                 ),
-                'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
+                'expression' => 'Yii::app()->user->isStd || Yii::app()->user->isTch',
             ),
-            array('deny',
+            /*array('deny',
                 'users' => array('*'),
-            ),
+            ),*/
         );
     }
-	
+
+    public  function actionSelf()
+    {
+        $model = new TimeTableForm;
+        //$model->scenario = 'self';
+        if (isset($_REQUEST['TimeTableForm']))
+            $model->attributes=$_REQUEST['TimeTableForm'];
+        $model->date1 = Yii::app()->session['date1'];
+        $model->date2 = Yii::app()->session['date2'];
+        $type=Yii::app()->user->getState('timeTable',Yii::app()->params['timeTable']);
+        $timeTable = $minMax = array();
+        $rasp=0;
+        if(Yii::app()->user->isStd)
+        {
+            $model->student=Yii::app()->user->dbModel->st1;
+            if($type==0)
+                list($minMax, $timeTable) = $model->generateStudentTimeTable();
+            else
+                $timeTable=Gr::getTimeTable($model->student, $model->date1, $model->date2, 1);
+            $rasp=1;
+        }
+        elseif(Yii::app()->user->isTch)
+        {
+            $model->teacher=Yii::app()->user->dbModel->p1;
+            if($type==0)
+                list($minMax, $timeTable) = $model->generateTeacherTimeTable();
+            else
+                $timeTable=Gr::getTimeTable($model->teacher, $model->date1, $model->date2, 2);
+            $rasp=2;
+
+        }else
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $this->render('self', array(
+            'model'      => $model,
+            'timeTable'  => $timeTable,
+            'minMax'     => $minMax,
+            'rasp'=>$rasp,
+            'rz'         => Rz::model()->getRzArray($model->filial),
+            'type'=>$type
+        ));
+    }
+
+    public function actionSelfExcel()
+    {
+        $model = new TimeTableForm;
+        //$model->scenario = 'self';
+        if (isset($_REQUEST['TimeTableForm']))
+            $model->attributes=$_REQUEST['TimeTableForm'];
+        $model->date1 = Yii::app()->session['date1'];
+        $model->date2 = Yii::app()->session['date2'];
+
+        $timeTable = $minMax = $maxLessons = array();
+        $title=tt('Расписание личное');
+        if(Yii::app()->user->isStd)
+        {
+            $title=tt('Расписание студента: Личное');
+            $model->student=Yii::app()->user->dbModel->st1;
+            list($minMax, $timeTable) = $model->generateStudentTimeTable();
+        }
+        elseif(Yii::app()->user->isTch)
+        {
+            $title=tt('Расписание преподователя: Личное');
+            $model->teacher=Yii::app()->user->dbModel->p1;
+            list($minMax, $timeTable) = $model->generateTeacherTimeTable();
+
+        }else
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        $rz= Rz::model()->getRzArray($model->filial);
+        $this->generateExcel($timeTable,$minMax,$maxLessons,$rz,$model,$title);
+
+    }
+
 	public function actionSearchTeacher()
     {
         $model = new P;

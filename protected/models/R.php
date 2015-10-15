@@ -113,15 +113,18 @@ class R extends CActiveRecord
 		return parent::model($className);
 	}
 
-    public function getDatesForJournal($us1, $gr1)
+    public function getDatesForJournal($uo1, $gr1,$type_lesson)
     {
         $sql = <<<SQL
-        select * from LIST_DATA_EL_JURNAL(:US1, :GR1) ORDER BY nom;
+        select * from EL_GURNAL_RASP (:TYPE_LESSON,:YEAR,:SEM,:UO1, :GR1) ORDER BY nom;
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':US1', $us1);
+        $command->bindValue(':UO1', $uo1);
         $command->bindValue(':GR1', $gr1);
+        $command->bindValue(':TYPE_LESSON', $type_lesson);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
         $dates = $command->queryAll();
 
         foreach($dates as $key => $date) {

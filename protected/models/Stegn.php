@@ -27,7 +27,7 @@ class Stegn extends CActiveRecord
 	{
 		return 'stegn';
 	}
-        public $st2,$st3,$st4,$count_stego,$tema,$status,$stegn10,$stegn11,$stegnp4,$stegnp5;
+        public $st2,$st3,$st4,$count_stego,$tema,$status,$stegn10,$stegn11,$stegnp4,$stegnp5,$group_st;
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -41,7 +41,7 @@ class Stegn extends CActiveRecord
                         array('stegn9,stegn11,stegn7', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('stegn1,st2,tema,status,count_stego, stegn2, stegn3, stegn4, stegn5, stegn6, stegn7, stegn8,stegn10,stegn9,stegn11', 'safe', 'on'=>'search'),
+			array('stegn1,st2,tema,group_st,status,count_stego, stegn2, stegn3, stegn4, stegn5, stegn6, stegn7, stegn8,stegn10,stegn9,stegn11', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -78,6 +78,7 @@ class Stegn extends CActiveRecord
             'stegn11' => tt('Номер справки'),
             'count_stego'=>tt('Количество отработок'),
             'tema'=>tt('Тема'),
+            'group_st'=>tt('Группа'),
             'status'=>tt('Статус'),
             'stegnp4'=>tt('№ квитанции'),
             'stegnp5'=>tt('Дата квитанции')
@@ -127,8 +128,8 @@ class Stegn extends CActiveRecord
         
         public function checkMinRetakeForGrid()
         {
-            //return $this->count_stego==0||$this->stegn6<=$this->getMin();
-            return $this->stegn6<=$this->getMin()||$this->stegn6!=-1;
+            return $this->count_stego==0||($this->stegn6<=$this->getMin()&&$this->stegn6!=-1);
+            //return $this->stegn6<=$this->getMin()||$this->stegn6!=-1;
         }
         
         public function getType()
@@ -185,95 +186,106 @@ class Stegn extends CActiveRecord
         }
         
         public function searchRetake()
-	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
-		$criteria=new CDbCriteria;
-        $table = St::model()->tableName();
-        $table2 = Ustem::model()->tableName();
-        $table3 = Stegnp::model()->tableName();
-        $criteria->select = 't.*,'.$table.'.st2,'.$table.'.st3,'.$table.'.st4,stegnp2 as stegn10,stegnp3 as stegn11, (SELECT COUNT(*) FROM stego WHERE stego.stego1=t.stegn0) as count_stego,'.$table2.'.USTEM5 as tema';
-        $criteria->join = 'LEFT JOIN '.$table2.' ON ('.$table2.'.USTEM2=t.stegn2 AND '.$table2.'.USTEM4= t.stegn3) ';
-        $criteria->join .= 'LEFT JOIN '.$table3.' ON ('.$table3.'.stegnp1=t.stegn0) ';
-        $criteria->join .= 'JOIN '.$table.' ON (t.stegn1='.$table.'.st1) ';
-        $criteria->compare('stegn1',$this->stegn1);
-		$criteria->compare('stegn2',$this->stegn2);
-		$criteria->compare('stegn3',$this->stegn3);
-        $criteria->compare('stegn4',$this->stegn4);
-        $criteria->compare($table3.'.stegnp3',$this->stegn11);
-        $criteria->compare($table3.'.stegnp2',$this->stegn10);
-        $criteria->addCondition("st2 CONTAINING '".$this->st2."'");
-        if(!empty($this->tema))
-            $criteria->addCondition("ustem5 CONTAINING '".$this->tema."'");
-        if(!empty($this->status))
         {
-            if($this->status==1)
-                $criteria->addCondition("stegn6>'".$this->getMin()."'");
-            else
-                $criteria->addCondition("(stegn6<'".$this->getMin()."')");
+            // @todo Please modify the following code to remove attributes that should not be searched.
+
+            $criteria=new CDbCriteria;
+            $table = St::model()->tableName();
+            $table2 = Ustem::model()->tableName();
+            $table3 = Stegnp::model()->tableName();
+            $table4 = Gr::model()->tableName();
+            $criteria->select = 't.*,gr.gr3 as group_st,'.$table.'.st2,'.$table.'.st3,'.$table.'.st4,stegnp2 as stegn10,stegnp3 as stegn11, (SELECT COUNT(*) FROM stego WHERE stego.stego1=t.stegn0) as count_stego,'.$table2.'.USTEM5 as tema';
+            $criteria->join = 'LEFT JOIN '.$table2.' ON ('.$table2.'.USTEM2=t.stegn2 AND '.$table2.'.USTEM4= t.stegn3) ';
+            $criteria->join .= 'LEFT JOIN '.$table3.' ON ('.$table3.'.stegnp1=t.stegn0) ';
+            $criteria->join .= 'JOIN '.$table.' ON (t.stegn1='.$table.'.st1) ';
+            $criteria->join .= 'JOIN std ON ('.$table.'.st1=std.std2) ';
+            $criteria->join .= 'JOIN '.$table4.' ON (std.std3='.$table4.'.gr1) ';
+            $criteria->addCondition("std7 is null and std11 in(0,5,6,8)");
+            $criteria->compare('stegn1',$this->stegn1);
+            $criteria->compare('stegn2',$this->stegn2);
+            $criteria->compare('stegn3',$this->stegn3);
+            $criteria->compare('stegn4',$this->stegn4);
+            $criteria->compare($table3.'.stegnp3',$this->stegn11);
+            $criteria->compare($table3.'.stegnp2',$this->stegn10);
+            $criteria->addCondition("st2 CONTAINING '".$this->st2."'");
+            if(!empty($this->tema))
+                $criteria->addCondition("ustem5 CONTAINING '".$this->tema."'");
+            if(!empty($this->group_st))
+                $criteria->addCondition("gr3 CONTAINING '".$this->group_st."'");
+            if(!empty($this->status))
+            {
+                if($this->status==1)
+                    $criteria->addCondition("stegn6>'".$this->getMin()."' or stegn6=-1");
+                else
+                    $criteria->addCondition("(stegn6<'".$this->getMin()."' and stegn6!=-1)");
+            }
+            /*if(!empty($this->count_stego))
+                $criteria->addCondition("count_stego =".$this->count_stego);*/
+            $criteria->addCondition("(stegn4 > 0) OR (stegn5<=".Stegn::model()->getMin()." and stegn5>0)");
+            //$criteria->compare('stegn7',$this->stegn7,true);
+            //$criteria->compare('stegn9',$this->stegn9,true);
+            ///$criteria->compare('stegn11',$this->stegn11,true);
+            $sort = new CSort();
+            $sort->sortVar = 'sort';
+            $sort->defaultOrder = 'st2 ASC';
+                    //$sort->route='progress/searchRetake?us1='+$this->stegn2;
+                    $sort->attributes = array(
+                            'st2'=>array(
+                                'asc'=>$table.'.st2 ASC',
+                                'desc'=>$table.'.st2 DESC',
+                                'default'=>'ASC',
+                            ),
+                            'tema'=>array(
+                                'asc'=>$table2.'.ustem5 ASC',
+                                'desc'=>$table2.'.ustem5 DESC',
+                                'default'=>'ASC',
+                            ),
+                            'stegn3'=>array(
+                                'asc'=>'t.stegn3 ASC',
+                                'desc'=>'t.stegn3 DESC',
+                                'default'=>'ASC',
+                            ),
+                            'stegn4'=>array(
+                                            'asc'=>'t.stegn4 ASC',
+                                            'desc'=>'t.stegn4 DESC',
+                                            'default'=>'ASC',
+                            ),
+                            'stegn9'=>array(
+                                            'asc'=>'t.stegn9 ASC',
+                                            'desc'=>'t.stegn9 DESC',
+                                            'default'=>'ASC',
+                            ),
+                            'stegn10'=>array(
+                                            'asc'=>$table3.'.stegnp3 ASC',
+                                            'desc'=>$table3.'.stegnp3 DESC',
+                                            'default'=>'ASC',
+                            ),
+                            'stegn11'=>array(
+                                            'asc'=>$table3.'.stegnp3 ASC',
+                                            'desc'=>$table3.'.stegnp3 DESC',
+                                            'default'=>'ASC',
+                            ),
+                            'count_stego'=>array(
+                                'asc'=>'count_stego asc',
+                                'desc'=>'count_stego DESC',
+                                'default'=>'ASC',
+                            ),
+                            'group_st'=>array(
+                                'asc'=>'group_st asc',
+                                'desc'=>'group_st DESC',
+                                'default'=>'ASC',
+                            )
+                        );
+
+                    $stegn = Stegn::model()->findAll($criteria);
+            return new CActiveDataProvider($this, array(
+                'criteria'=>$criteria,
+                            'sort'=>$sort,
+                            'pagination'=>array(
+                                'pageSize'=> Yii::app()->user->getState('pageSize',10),
+                            ),
+            ));
         }
-        /*if(!empty($this->count_stego))
-            $criteria->addCondition("count_stego =".$this->count_stego);*/
-		$criteria->addCondition("(stegn4 > 0 AND stegn5!=-1) OR (stegn5<=".Stegn::model()->getMin()." AND stegn5>0)");
-        //$criteria->compare('stegn7',$this->stegn7,true);
-        //$criteria->compare('stegn9',$this->stegn9,true);
-        ///$criteria->compare('stegn11',$this->stegn11,true);
-        $sort = new CSort();
-        $sort->sortVar = 'sort';
-		$sort->defaultOrder = 'st2 ASC';
-                //$sort->route='progress/searchRetake?us1='+$this->stegn2;
-                $sort->attributes = array(
-                        'st2'=>array(
-                            'asc'=>$table.'.st2 ASC',
-                            'desc'=>$table.'.st2 DESC',
-                            'default'=>'ASC',
-                        ),
-                        'tema'=>array(
-                            'asc'=>$table2.'.ustem5 ASC',
-                            'desc'=>$table2.'.ustem5 DESC',
-                            'default'=>'ASC',
-                        ),
-                        'stegn3'=>array(
-                            'asc'=>'t.stegn3 ASC',
-                            'desc'=>'t.stegn3 DESC',
-                            'default'=>'ASC',
-                        ),
-                        'stegn4'=>array(
-                                        'asc'=>'t.stegn4 ASC',
-                                        'desc'=>'t.stegn4 DESC',
-                                        'default'=>'ASC',
-                        ),
-                        'stegn9'=>array(
-                                        'asc'=>'t.stegn9 ASC',
-                                        'desc'=>'t.stegn9 DESC',
-                                        'default'=>'ASC',
-                        ),
-                        'stegn10'=>array(
-                                        'asc'=>$table3.'.stegnp3 ASC',
-                                        'desc'=>$table3.'.stegnp3 DESC',
-                                        'default'=>'ASC',
-                        ),
-                        'stegn11'=>array(
-                                        'asc'=>$table3.'.stegnp3 ASC',
-                                        'desc'=>$table3.'.stegnp3 DESC',
-                                        'default'=>'ASC',
-                        ),
-                        'count_stego'=>array(
-                            'asc'=>'count_stego asc',
-                            'desc'=>'count_stego DESC',
-                            'default'=>'ASC',
-                        )
-                    );
-                
-                $stegn = Stegn::model()->findAll($criteria);
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-                        'sort'=>$sort,
-                        'pagination'=>array(
-                            'pageSize'=> Yii::app()->user->getState('pageSize',10),
-                        ),
-		));
-	}
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -285,8 +297,39 @@ class Stegn extends CActiveRecord
 	{
 		return parent::model($className);
 	}
-        
-        public function getOmissions($st1,$date1,$date2)
+
+        public function getUs1ForOmissions($st1,$date1,$date2)
+        {
+            if (empty($st1) || empty($date1) || empty($date2))
+                return array();
+
+            $sql=<<<SQL
+                    SELECT us1
+                    FROM stegn
+                        INNER JOIN us on (stegn.stegn2 = us.us1)
+                        LEFT JOIN stegnp on (stegn.stegn0 = stegnp.stegnp1)
+                        INNER JOIN uo on (us.us2 = uo.uo1)
+                        INNER JOIN d on (d.d1 = uo.uo3)
+                    WHERE stegn1=:STEG1 and stegn9 >= :DATE1 and stegn9 <= :DATE2 and stegn4!=0 and d1 in (select d1 FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,0,0,0,3,0))
+                    group by us1
+SQL;
+
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':STEG1', $st1);
+            $command->bindValue(':DATE1', $date1);
+            $command->bindValue(':DATE2', $date2);
+            $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
+            $command->bindValue(':YEAR', Yii::app()->session['year']);
+            $command->bindValue(':SEM', Yii::app()->session['sem']);
+            $rows = $command->queryAll();
+            $res=array();
+            foreach($rows as $row)
+            {
+                array_push($res,$row['us1']);
+            }
+            return $res;
+        }
+         public function getOmissions($st1,$date1,$date2)
         {
             if (empty($st1) || empty($date1) || empty($date2))
             return array();
@@ -298,13 +341,16 @@ class Stegn extends CActiveRecord
                     LEFT JOIN stegnp on (stegn.stegn0 = stegnp.stegnp1)
                     INNER JOIN uo on (us.us2 = uo.uo1)
                     INNER JOIN d on (d.d1 = uo.uo3)
-                WHERE stegn1=:STEG1 and stegn9 >= :DATE1 and stegn9 <= :DATE2 and stegn4!=0
+                WHERE stegn1=:STEG1 and stegn9 >= :DATE1 and stegn9 <= :DATE2 and stegn4!=0 and d1 in (select d1 FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,0,0,0,3,0))
 SQL;
 
             $command = Yii::app()->db->createCommand($sql);
             $command->bindValue(':STEG1', $st1);
             $command->bindValue(':DATE1', $date1);
             $command->bindValue(':DATE2', $date2);
+            $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
+            $command->bindValue(':YEAR', Yii::app()->session['year']);
+            $command->bindValue(':SEM', Yii::app()->session['sem']);
             $rows = $command->queryAll();
             return $rows;
         }

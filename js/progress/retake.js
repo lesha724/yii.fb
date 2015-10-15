@@ -2,8 +2,9 @@ $(document).ready(function(){
 
     $spinner1 = $('#spinner1');
     
-    initFilterForm($spinner1);
-    
+    //initFilterForm($spinner1);
+
+
     $(document).on('click', '.datepicker', function(event) {
         $(this).datepicker({
             'format': 'dd.mm.yy',
@@ -14,15 +15,17 @@ $(document).ready(function(){
         })
         .focus();
     });
+
+
 	
-    $('#FilterForm_discipline').change(function(){
+    $('#FilterForm_type_lesson,#FilterForm_discipline').change(function(){
 
         var $form   = $('#filter-form');
         //appendSelect();
         $form.submit();
     });
 
-    $('#filter-form').submit(function(e) {
+    /*$('#filter-form').submit(function(e) {
         appendSelect();
     });
     
@@ -34,7 +37,7 @@ $(document).ready(function(){
         $select.find('option[value='+$('#FilterForm_discipline').val()+']').attr('selected', 'selected');
 
         $form.append($select);
-    }
+    }*/
     
     
     $(document).on('click','.btn-add-retake,.btn-view-retake', function(e) {
@@ -54,6 +57,7 @@ $(document).ready(function(){
                         }
                         $('.datepicker').datepicker({
                             format: 'dd.mm.yy',
+                            language:'ru'
                         });
                         $('#myModal').modal('show');
                     } else {
