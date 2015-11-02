@@ -6,7 +6,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'action' => '#'
 ));
 
-    $options = array(
+    /*$options = array(
         ' '.tt('Стандартный'),
         ' '.tt('C модулями'),
     );
@@ -15,16 +15,16 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         'labelOptions' => array(
             'class' => 'lbl'
         )
-    );
+    );*/
 
 
     $htmlOptions2 = array(
         'class'=>'ace',
     );
 ?>
-    <div class="control-group">
+    <?php /*<div class="control-group">
         <?=CHtml::radioButtonList('settings[8]', PortalSettings::model()->findByPk(8)->ps2, $options, $htmlOptions)?>
-    </div>
+    </div>*/ ?>
 
     <div class="control-group">
         <?=CHtml::checkBox('', PortalSettings::model()->findByPk(9)->ps2, $htmlOptions2)?>

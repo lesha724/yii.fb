@@ -14,7 +14,7 @@
     );
 ?>
 <?php
-
+    $pageSize=Yii::app()->user->getState('pageSize',10);
     $chairs = CHtml::listData(K::model()->getAllChairs(), 'k1', 'k3');
     //echo CHtml::label(tt('Кафедра'), 'chairs');
     echo CHtml::dropDownList('chairs', '', $chairs, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => ''));
@@ -80,7 +80,13 @@
             array(
                 'class'=>'CButtonColumn',
                 'template'=>'{grants}',
-                'header' => tt('Права доступа'),
+                //'header' => tt('Права доступа'),
+                'header'=>CHtml::dropDownList(
+                        'pageSize',
+                        $pageSize,
+                        $this->getPageSizeArray(),
+                        array('class'=>'change-pageSize')
+                    ),
                 'buttons'=>array
                 (
                     'grants' => array(
@@ -93,4 +99,9 @@
             ),
         ),
     ));
+
+Yii::app()->clientScript->registerScript('initPageSize',"
+	   $(document).on('change','.change-pageSize', function() {
+	        $.fn.yiiGridView.update('teachers',{ data:{ pageSize: $(this).val() }})
+	    });",CClientScript::POS_READY);
 

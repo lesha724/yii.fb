@@ -186,6 +186,11 @@ class TbActiveForm extends CActiveForm
 		return $this->inputRow(TbInput::TYPE_TEXT, $model, $attribute, null, $htmlOptions);
 	}
 
+    public function emailFieldRow($model, $attribute, $htmlOptions = array())
+    {
+        return $this->inputRow(TbInput::TYPE_EMAIL, $model, $attribute, null, $htmlOptions);
+    }
+
 	/**
 	 * Renders a text area input row.
 	 * @param CModel $model the data model

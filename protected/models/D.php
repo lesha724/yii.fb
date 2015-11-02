@@ -202,7 +202,7 @@ class D extends CActiveRecord
 	{
 		return parent::model($className);
 	}
-
+    //не используеться(В скорорм отработка)
     public function getUsFromDiscipline($d1)
     {
         if (empty($d1))
@@ -228,6 +228,36 @@ SQL;
 
         foreach ($res as $key => $us) {
             $res[$key]['name'] = SH::convertUS4($us['us4']).' '.$us['sp2'].' ('.$us['sg3'].')';
+        }
+        return $res;
+    }
+
+    public function getUоFromDiscipline($d1)
+    {
+        if (empty($d1))
+            return array();
+
+        $sql = <<<SQL
+			select uo1,us4,us1,sp2,sg3
+			from us
+			   inner join sem on (us.us3 = sem.sem1)
+			   inner join sg on (sem.sem2 = sg.sg1)
+			   inner join sp on (sg.sg2 = sp.sp1)
+			   inner join uo on (us.us2 = uo.uo1)
+			where uo3=:d1 and sem3=:year AND sem5=:sem AND us4 in (1,2,3,4)
+			group by uo1,us4,us1,sp2,sg3
+			order by us4
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':d1', $d1);
+        $command->bindValue(':year', Yii::app()->session['year']);
+        $command->bindValue(':sem', Yii::app()->session['sem']);
+        $res = $command->queryAll();
+
+        foreach ($res as $key => $us) {
+            $res[$key]['name'] = SH::convertUS4($us['us4']).' '.$us['sp2'].' ('.$us['sg3'].')';
+            $res[$key]['key'] = $us['uo1'].'/'.$us['us1'];
         }
         return $res;
     }
@@ -344,10 +374,6 @@ SQL;
 
     public function getDisciplinesForJournalPermition()
     {
-
-        /*$sql = <<<SQL
-            SELECT * FROM  EL_GURN_LIST_DISC(:P1,:YEAR,:SEM,0,0,0,0,0);
-SQL;*/
         $sql = <<<SQL
             SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,0,0,0,0,0);
 SQL;
@@ -356,9 +382,9 @@ SQL;
         $command->bindValue(':YEAR', Yii::app()->session['year']);
         $command->bindValue(':SEM', Yii::app()->session['sem']);
         $disciplines = $command->queryAll();
-        foreach ($disciplines as $key => $d) {
-            $disciplines[$key]['name'] = $d['d2'].' ('.$d['k2'].')';
-        }
+        /*foreach ($disciplines as $key => $d) {
+            $disciplines[$key]['name'] = $d['d2'];
+        }*/
         return $disciplines;
     }
 
@@ -373,9 +399,9 @@ SQL;
         $command->bindValue(':YEAR', Yii::app()->session['year']);
         $command->bindValue(':SEM', Yii::app()->session['sem']);
         $disciplines = $command->queryAll();
-        foreach ($disciplines as $key => $d) {
-            $disciplines[$key]['name'] = $d['d2'].' ('.$d['k2'].')';
-        }
+        /*foreach ($disciplines as $key => $d) {
+            $disciplines[$key]['name'] = $d['d2'];
+        }*/
         return $disciplines;
     }
 
@@ -390,9 +416,9 @@ SQL;
         $command->bindValue(':YEAR', Yii::app()->session['year']);
         $command->bindValue(':SEM', Yii::app()->session['sem']);
         $disciplines = $command->queryAll();
-        foreach ($disciplines as $key => $d) {
-            $disciplines[$key]['name'] = $d['d2'].' ('.$d['k2'].')';
-        }
+        /*foreach ($disciplines as $key => $d) {
+            $disciplines[$key]['name'] = $d['d2'];
+        }*/
         return $disciplines;
     }
     

@@ -1,0 +1,120 @@
+<?php
+
+/**
+ * This is the model class for table "elgz".
+ *
+ * The followings are the available columns in table 'elgz':
+ * @property integer $elgz1
+ * @property integer $elgz2
+ * @property integer $elgz3
+ * @property integer $elgz4
+ * @property double $elgz5
+ * @property double $elgz6
+ * @property integer $elgz7
+ *
+ * The followings are the available model relations:
+ * @property R[] $rs
+ * @property Elg $elgz20
+ * @property Ustem $elgz70
+ * @property Elgzst[] $elgzsts
+ */
+class Elgz extends CActiveRecord
+{
+	/**
+	 * @return string the associated database table name
+	 */
+	public function tableName()
+	{
+		return 'elgz';
+	}
+
+	/**
+	 * @return array validation rules for model attributes.
+	 */
+	public function rules()
+	{
+		// NOTE: you should only define rules for those attributes that
+		// will receive user inputs.
+		return array(
+			array('elgz1', 'required'),
+			array('elgz1, elgz2, elgz3, elgz4, elgz7', 'numerical', 'integerOnly'=>true),
+			array('elgz5, elgz6', 'numerical'),
+			// The following rule is used by search().
+			// @todo Please remove those attributes that should not be searched.
+			array('elgz1, elgz2, elgz3, elgz4, elgz5, elgz6, elgz7', 'safe', 'on'=>'search'),
+		);
+	}
+
+	/**
+	 * @return array relational rules.
+	 */
+	public function relations()
+	{
+		// NOTE: you may need to adjust the relation name and the related
+		// class name for the relations automatically generated below.
+		return array(
+			'rs' => array(self::HAS_MANY, 'R', 'r8'),
+			'elgz20' => array(self::BELONGS_TO, 'Elg', 'elgz2'),
+			'elgz70' => array(self::BELONGS_TO, 'Ustem', 'elgz7'),
+			'elgzsts' => array(self::HAS_MANY, 'Elgzst', 'elgzst2'),
+		);
+	}
+
+	/**
+	 * @return array customized attribute labels (name=>label)
+	 */
+	public function attributeLabels()
+	{
+		return array(
+			'elgz1' => 'Elgz1',
+			'elgz2' => 'Elgz2',
+			'elgz3' => 'Elgz3',
+			'elgz4' => 'Elgz4',
+			'elgz5' => 'Elgz5',
+			'elgz6' => 'Elgz6',
+			'elgz7' => 'Elgz7',
+		);
+	}
+
+	/**
+	 * Retrieves a list of models based on the current search/filter conditions.
+	 *
+	 * Typical usecase:
+	 * - Initialize the model fields with values from filter form.
+	 * - Execute this method to get CActiveDataProvider instance which will filter
+	 * models according to data in model fields.
+	 * - Pass data provider to CGridView, CListView or any similar widget.
+	 *
+	 * @return CActiveDataProvider the data provider that can return the models
+	 * based on the search/filter conditions.
+	 */
+	public function search()
+	{
+		// @todo Please modify the following code to remove attributes that should not be searched.
+
+		$criteria=new CDbCriteria;
+
+		$criteria->compare('elgz1',$this->elgz1);
+		$criteria->compare('elgz2',$this->elgz2);
+		$criteria->compare('elgz3',$this->elgz3);
+		$criteria->compare('elgz4',$this->elgz4);
+		$criteria->compare('elgz5',$this->elgz5);
+		$criteria->compare('elgz6',$this->elgz6);
+		$criteria->compare('elgz7',$this->elgz7);
+
+		return new CActiveDataProvider($this, array(
+			'criteria'=>$criteria,
+		));
+	}
+
+	/**
+	 * Returns the static model of the specified AR class.
+	 * Please note that you should have this exact method in all your CActiveRecord descendants!
+	 * @param string $className active record class name.
+	 * @return Elgz the static model class
+	 */
+	public static function model($className=__CLASS__)
+	{
+		return parent::model($className);
+	}
+}

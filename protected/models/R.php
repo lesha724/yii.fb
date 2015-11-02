@@ -116,12 +116,22 @@ class R extends CActiveRecord
     public function getDatesForJournal($uo1, $gr1,$type_lesson)
     {
         $sql = <<<SQL
-        select * from EL_GURNAL_RASP (:TYPE_LESSON,:YEAR,:SEM,:UO1, :GR1) ORDER BY nom;
+        select elgz3,r2,ustem5,elgz4,r1,us4,elgz1,elgz5,elgz6
+        from r
+            inner join ustem on (r.r8 = ustem.ustem1)
+            inner join us on (ustem.ustem2 = us.us1)
+            left join elgz on (ustem.ustem1 = elgz.elgz7)
+        where elgz2 =
+        (
+              SELECT elg1 FROM elg
+                INNER JOIN sem on (elg3 = sem1)
+              WHERE elg2=:UO1 AND sem3=:YEAR AND sem5=:SEM AND elg4 = :TYPE_LESSON
+        )
+        order by elgz3
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':UO1', $uo1);
-        $command->bindValue(':GR1', $gr1);
         $command->bindValue(':TYPE_LESSON', $type_lesson);
         $command->bindValue(':YEAR', Yii::app()->session['year']);
         $command->bindValue(':SEM', Yii::app()->session['sem']);

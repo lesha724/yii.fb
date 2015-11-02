@@ -25,6 +25,7 @@ abstract class TbInput extends CInputWidget
 	const TYPE_RADIOLIST_INLINE = 'radiobuttonlist_inline';
 	const TYPE_TEXTAREA = 'textarea';
 	const TYPE_TEXT = 'text';
+    const TYPE_EMAIL= 'email';
 	const TYPE_CAPTCHA = 'captcha';
 	const TYPE_UNEDITABLE = 'uneditable';
 
@@ -229,6 +230,9 @@ abstract class TbInput extends CInputWidget
 			case self::TYPE_TEXT:
 				$this->textField();
 				break;
+            case self::TYPE_EMAIL:
+                $this->emailField();
+                break;
 
 			case self::TYPE_CAPTCHA:
 				$this->captcha();
@@ -461,6 +465,8 @@ abstract class TbInput extends CInputWidget
 	 * @abstract
 	 */
 	abstract protected function textField();
+
+    abstract protected function emailField();
 
 	/**
 	 * Renders a CAPTCHA.

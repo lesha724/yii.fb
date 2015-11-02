@@ -15,6 +15,10 @@ class AdminController extends Controller
             array('allow',
                 'actions' => array(
                     'teachers',
+                    'admin',
+                    'adminCreate',
+                    'adminUpdate',
+                    'adminDelete',
                     'students',
                     'parents',
                     'stGrants',

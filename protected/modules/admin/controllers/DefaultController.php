@@ -9,7 +9,10 @@ class DefaultController extends AdminController
 
         $model = new P;
         $model->unsetAttributes();
-
+        if (isset($_GET['pageSize'])) {
+            Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
+            unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
+        }
         if (isset($_REQUEST['P']))
             $model->attributes = $_REQUEST['P'];
 
@@ -19,11 +22,105 @@ class DefaultController extends AdminController
         ));
 	}
 
+    public function actionAdmin()
+    {
+        $model = new Users();
+        $model->unsetAttributes();
+        if (isset($_GET['pageSize'])) {
+            Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
+            unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
+        }
+        if (isset($_POST['Users']))
+            $model->attributes = $_POST['Users'];
+
+        $model->u7=1;
+        $this->render('admin/admin', array(
+            'model' => $model,
+        ));
+    }
+
+    public function actionAdminCreate()
+    {
+        $model=new Users('admin-create');
+        $model->unsetAttributes();
+
+        if(isset($_POST['Users']))
+        {
+
+            $model->attributes=$_POST['Users'];
+            $model->u1=0;
+            //$model->u1=new CDbExpression('GEN_ID(GEN_USERS, 1)');
+            $model->u7=1;
+            $model->u6=0;
+            $model->u5=1;
+            if($model->validate())
+            {
+                $model->u1=new CDbExpression('GEN_ID(GEN_USERS, 1)');
+                if($model->save(false))
+                    $this->redirect(array('admin'));
+            }
+
+        }
+
+        $this->render('admin/create',array(
+            'model'=>$model,
+        ));
+    }
+
+    public function actionAdminUpdate($id)
+    {
+        $model=$this->loadAdminModel($id);
+        $model->scenario='admin-update';
+
+        if(isset($_POST['Users']))
+        {
+            $model->attributes=$_POST['Users'];
+            $model->u7=1;
+            $model->u6=0;
+            $model->u5=1;
+            if($model->save())
+                $this->redirect(array('admin'));
+        }
+
+
+        $this->render('admin/update',array(
+            'model'=>$model,
+        ));
+    }
+
+    public function actionAdminDelete($id)
+    {
+        if(Yii::app()->request->isPostRequest)
+        {
+            if(Yii::app()->user->id==$id)
+                throw new CHttpException(400,'Вы не можете удалить пользователя под которым авторизировались.');
+            // we only allow deletion via POST request
+            $this->loadAdminModel($id)->delete();
+
+            // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+            if(!isset($_GET['ajax']))
+                $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+        }
+        else
+            throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
+    }
+
+    public function loadAdminModel($id)
+    {
+        $model=Users::model()->findByAttributes(array('u1'=>$id,'u7'=>'1'));
+        if($model===null)
+            throw new CHttpException(404,'The requested page does not exist.');
+        return $model;
+    }
+
     public function actionStudents()
     {
         $model = new St;
         $model->unsetAttributes();
-
+        if (isset($_GET['pageSize'])) {
+            Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
+            unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
+        }
         if (isset($_REQUEST['St']))
             $model->attributes = $_REQUEST['St'];
 

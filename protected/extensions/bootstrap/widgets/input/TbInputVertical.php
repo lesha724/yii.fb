@@ -144,6 +144,15 @@ class TbInputVertical extends TbInput
 		echo $this->getError().$this->getHint();
 	}
 
+    protected function emailField()
+    {
+        echo $this->getLabel();
+        echo $this->getPrepend();
+        echo $this->form->emailField($this->model, $this->attribute, $this->htmlOptions);
+        echo $this->getAppend();
+        echo $this->getError().$this->getHint();
+    }
+
 	/**
 	 * Renders a CAPTCHA.
 	 * @return string the rendered content

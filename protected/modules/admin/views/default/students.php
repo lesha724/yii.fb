@@ -12,6 +12,7 @@ $this->breadcrumbs=array(
 ?>
 
 <?php
+$pageSize=Yii::app()->user->getState('pageSize',10);
 $provider = $model->getStudentsForAdmin();
 $this->widget('bootstrap.widgets.TbGridView', array(
     'id' => 'students',
@@ -51,7 +52,13 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         array(
             'class'=>'CButtonColumn',
             'template'=>'{grants}',
-            'header' => tt('Настройки'),
+            //'header' => tt('Настройки'),
+            'header'=>CHtml::dropDownList(
+                    'pageSize',
+                    $pageSize,
+                    $this->getPageSizeArray(),
+                    array('class'=>'change-pageSize')
+                ),
             'buttons'=>array
             (
                 'grants' => array(
@@ -64,3 +71,9 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         ),
     ),
 ));
+
+Yii::app()->clientScript->registerScript('initPageSize',"
+	   $(document).on('change','.change-pageSize', function() {
+	        $.fn.yiiGridView.update('students',{ data:{ pageSize: $(this).val() }})
+	    });",CClientScript::POS_READY);
+?>

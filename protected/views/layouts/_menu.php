@@ -134,6 +134,11 @@ $this->widget('zii.widgets.CMenu', array(
             'itemOptions'=>array('class'=> $_m=='admin' ? 'active open' : ''),
             'items' => array(
                 array(
+                    'label'  => $_l2.tt('Администраторы'),
+                    'url'    => _u('/admin/default/admin'),
+                    'active' => $_a=='admin'
+                ),
+                array(
                     'label'  => $_l2.tt('Преподаватели'),
                     'url'    => _u('/admin/default/teachers'),
                     'active' => $_a=='teachers' || $_a=='PGrants'
@@ -301,6 +306,39 @@ $this->widget('zii.widgets.CMenu', array(
             'visible' => _ch('list', 'main')
         ),
         array(
+            'label' => _l('Эл. журнал', 'list'),
+            'url' => '#',
+            'linkOptions'=> $_l,
+            'itemOptions'=>_i('journal'),
+            'items' => array_merge(array(
+                array(
+                    'label'   => $_l2.tt('Тематический план'),
+                    'url'     => _u('/journal/thematicPlan'),
+                    'visible' => _ch('journal', 'thematicPlan') && $isTch,
+                    'active'  => $_c=='journal' && $_a=='thematicPlan'
+                ),
+                array(
+                    'label'   => $_l2.tt('Эл. журнал'),
+                    'url'     => _u('/journal/journal'),
+                    'visible' => _ch('journal', 'journal') && $isTch,
+                    'active'  => $_c=='journal' && $_a=='journal'
+                ),
+                array(
+                    'label'   => $_l2.tt('Отработка'),
+                    'url'     => _u('/journal/retake'),
+                    'visible' => _ch('journal', 'retake')&& $isTch,
+                    'active'  => $_c=='journal' && $_a=='retake'
+                ),
+                array(
+                    'label'   => $_l2.tt('Регистрация пропусков занятий'),
+                    'url'     => _u('/journal/omissions'),
+                    'visible' => _ch('journal', 'omissions')&& $isTch,
+                    'active'  => $_c=='journal' && $_a=='omissions'
+                ),
+            ),getDopItem('journal')),
+            'visible' => _ch('journal', 'main')
+        ),
+        array(
             'label' => _l('Успеваемость', 'list'),
             'url' => '#',
             'linkOptions'=> $_l,
@@ -329,12 +367,6 @@ $this->widget('zii.widgets.CMenu', array(
                     'url'     => _u('/progress/module'),
                     'visible' => _ch('progress', 'modules') && $isTch,
                     'active'  => $_c=='progress' && $_a=='module'
-                ),
-                array(
-                    'label'   => $_l2.tt('Тематический план'),
-                    'url'     => _u('/progress/thematicPlan'),
-                    'visible' => _ch('progress', 'thematicPlan') && $isTch,
-                    'active'  => $_c=='progress' && $_a=='thematicPlan'
                 ),
                 array(
                     'label'   => $_l2.tt('Статистика посещаемости'),

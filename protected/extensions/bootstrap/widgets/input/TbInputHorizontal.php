@@ -184,6 +184,17 @@ class TbInputHorizontal extends TbInput
 		echo '</div>';
 	}
 
+    protected function emailField()
+    {
+        echo $this->getLabel();
+        echo '<div class="controls">';
+        echo $this->getPrepend();
+        echo $this->form->emailField($this->model, $this->attribute, $this->htmlOptions);
+        echo $this->getAppend();
+        echo $this->getError().$this->getHint();
+        echo '</div>';
+    }
+
 	/**
 	 * Renders a CAPTCHA.
 	 * @return string the rendered content

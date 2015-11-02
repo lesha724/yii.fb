@@ -581,6 +581,9 @@ SQL;
 
         return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
+            'pagination'=>array(
+                'pageSize'=> Yii::app()->user->getState('pageSize',10),
+            ),
             'sort' => array(
                 'defaultOrder' => 'st2 collate UNICODE,st3 collate UNICODE,st4 collate UNICODE',
                 'attributes' => array(
@@ -641,7 +644,7 @@ SQL;
     public function getStudentsForJournal($gr1, $uo1)
     {
         $sql = <<<SQL
-       select st1,st2,st3,st4
+       select st1,st2,st3,st4,st45
         from st
            inner join ucsn on (st.st1 = ucsn.ucsn2)
            inner join ucgns on (ucsn.ucsn1 = ucgns.ucgns1)
@@ -650,7 +653,7 @@ SQL;
            inner join nr on (ug.ug3 = nr.nr1)
            inner join us on (nr.nr2 = us.us1)
         where UCGNS5=:YEAR and UCGNS6=:SEM and us2=:UO1 and ug2=:GR1
-        group by st1,st2,st3,st4
+        group by st1,st2,st3,st4,st45
         order by st2 collate UNICODE
 SQL;
 

@@ -19,6 +19,7 @@ class RegistrationForm extends CFormModel
             array('email', 'email'),
             array('email', 'unique', 'className'=>'Users', 'attributeName'=>'u4'),
             array('username', 'unique', 'className'=>'Users', 'attributeName'=>'u2'),
+            array('username', 'match', 'pattern'=>'/^[A-z][\w]+$/','message'=>tt('В Логине могут быть только латинские символы')),
             array('username, password', 'length', 'max'=>50),
             array('email', 'length', 'max'=>100),
             array('password', 'compare', 'compareAttribute'=>'password2'),

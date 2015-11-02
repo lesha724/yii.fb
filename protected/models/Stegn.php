@@ -355,24 +355,29 @@ SQL;
             return $rows;
         }
         
-        public function getMarksForStudent($st1, $us1)
+        public function getMarksForStudent($st1, $elg1)
         {
-            $raws = Yii::app()->db->createCommand()
-                ->select('*')
-                ->from('stegn')
-                ->where(array('in', 'stegn2', $us1))
-                ->andWhere('stegn1 = :ST1', array(':ST1' => $st1))
-                ->queryAll();
+            $sql=<<<SQL
+                SELECT elgzst3,elgzst4,elgzst5,elgz3
+                FROM elgzst
+                    INNER JOIN elgz on (elgzst2 = elgz1)
+                WHERE elgz2=:ELG1 and elgzst1= :ST1
+                ORDER BY elgz3
+SQL;
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':ELGZ1', $elg1);
+            $command->bindValue(':ST1', $st1);
+            $raws = $command->queryAll();
 
             $res = array();
             foreach($raws as $raw) {
-                $key = $raw['stegn2'].'/'.$raw['stegn3'];
+                $key = $raw['elgz3'];
                 $res[$key] = $raw;
             }
 
             return $res;
         }
-        
+        //не испооьзуеться
         public function insertMark($stegn1,$stegn2,$stegn3,$field,$value,$stegn9){
             $stegn=  Stegn::model()->findByAttributes(array('stegn1'=>$stegn1,'stegn2'=>$stegn2,'stegn3'=>$stegn3));
             if($stegn!=null)

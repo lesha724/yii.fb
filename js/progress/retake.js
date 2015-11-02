@@ -76,7 +76,7 @@ $(document).ready(function(){
             stego1:$(this).data("stego1"),
             p1:$(this).data("stego4"),
             date:$(this).data("stego3"),
-            value :$(this).data("stego2"),
+            value :$(this).data("stego2")
         }
         var url = $(this).data('url');
         $.get(url, params, function(data){

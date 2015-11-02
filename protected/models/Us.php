@@ -168,10 +168,13 @@ SQL;
             // sub groups {{{
             $subGroups = array($arr['nr6'], $arr['nr7'], $arr['nr8'], $arr['nr9']);
             $countSubGroups = array_count_values($subGroups);
+
             $arr['sum'] = $arr['sum']*$countSubGroups[$pd1];
             // }}}
-
-            $data[$sem5][$us4] = $arr;
+            if(isset($data[$sem5][$us4]))
+                $data[$sem5][$us4]['sum'] += $arr['sum'];
+            else
+                $data[$sem5][$us4]= $arr;
 
             if (in_array($us4, array(9, 10, 11, 12))) {
 

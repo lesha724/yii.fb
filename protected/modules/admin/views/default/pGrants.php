@@ -9,7 +9,7 @@
 
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/admin/teachers.js', CClientScript::POS_HEAD);
 
-$this->pageHeader=tt('Права доступа');
+$this->pageHeader=tt('Права доступа:').P::model()->getTeacherNameBy($user->u6,true);
 $this->breadcrumbs=array(
     tt('Преподаватели') => array('/admin/default/teachers'),
     tt('Права доступа'),

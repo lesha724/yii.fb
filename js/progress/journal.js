@@ -124,7 +124,6 @@ $(document).ready(function(){
                                             click: function() {
                                                     $( this ).dialog( "close" );
                                                     send(url,params,title,$td,$that,$spinner1,st1);
-                                                    
                                             }
                                         }
                                         ,
@@ -176,48 +175,33 @@ $(document).ready(function(){
             }
 
             $spinner1.hide();
+
             if ($that.is(':checkbox'))
             {
                 if ($that.is(':checked'))
-                {
                     $td.find('[data-name="stegn5"]').attr('disabled','disabled');
-                }else
-                {
+                else
                     $td.find('[data-name="stegn5"]').removeAttr('disabled');
-                    //$td.find(':text').removeAttr('disabled');
                     $td.find('[data-name="stegn6"]').val('');
-                }
                 if(params.value==1)
-                {
                     $that.attr('data-original-title','Присутсвует');
-                }else
-                {
+                else
                     $that.attr('data-original-title','Отсутсвует');
-                }
             }
 
             if ($that.is(':text'))
             {
                 if(parseFloat( $that.val().replace(',','.') )>0)
-                {
                     $that.removeClass('not-value');
-                }else
-                {
+                else
                     $that.addClass('not-value');
-                }
                 if($that.data('name')=='stegn5')
-                {
                     if(parseFloat( $that.val().replace(',','.') )>0)
-                    {
                         $td.find(':checkbox').attr('disabled','disabled');
-
-                    }else
-                    {
+                    else
                         $td.find(':checkbox').removeAttr('disabled');
-                    }
-                }
             }
-        }, 'json')
+        }, 'json');
     }
 
     $('tr.min-max input').change(function(){

@@ -42,7 +42,11 @@ class Users extends CActiveRecord
 			array('u2, u3', 'length', 'max'=>200),
 			array('u4', 'length', 'max'=>400),
             array('u2, u4', 'checkIfUnique'),
+            //array('u2', 'length', 'min'=>5, 'max'=>30),
+            // Логин должен соответствовать шаблону
+            array('u2', 'match', 'pattern'=>'/^[A-z][\w]+$/','message'=>tt('В login могут быть только латинские символы'),'on'=>'admin-create,admin-update'),
             array('u4', 'email'),
+            array('u2, u3, u4', 'required', 'on'=>'admin-create,admin-update'),
 
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -105,6 +109,9 @@ class Users extends CActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+            'pagination'=>array(
+                'pageSize'=> Yii::app()->user->getState('pageSize',10),
+            ),
 		));
 	}
 

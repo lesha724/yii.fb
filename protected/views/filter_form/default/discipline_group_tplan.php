@@ -9,22 +9,24 @@ JS
 
     $form=$this->beginWidget('CActiveForm', array(
         'id'=>'filter-form',
+        'htmlOptions' => array('class' => 'form-inline row-fluid')
     ));
-        $disciplines = CHtml::listData(D::model()->getDisciplinesForTPlanPermition(), 'd1', 'name');
-        $type_lesson=FilterForm::getTypesForJournal();
-        $groups = CHtml::listData(Gr::model()->getGroupsForTPlanPermition($model->discipline,$model->type_lesson), 'group', 'name');
+        $options =  array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;');
+        $disciplines = CHtml::listData(D::model()->getDisciplinesForTPlanPermition(), 'd1', 'd2');
+        $groups = CHtml::listData(Gr::model()->getGroupsForTPlanPermition($model->discipline), 'group', 'name');
         echo '<div>'.
+                '<div class="span3 ace-select">'.
                 $form->label($model, 'discipline').
-                $form->dropDownList($model, 'discipline', $disciplines, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;')).
-                $form->label($model, 'type_lesson').
-                $form->dropDownList($model, 'type_lesson', $type_lesson, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;')).
+                $form->dropDownList($model, 'discipline', $disciplines,$options).
+                '</div>'.
+                '<div class="span3 ace-select">'.
                 $form->label($model, 'group').
-                $form->dropDownList($model, 'group', $groups, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;')).
-                //CHtml::hiddenField('type', $type).
+                $form->dropDownList($model, 'group', $groups,$options).
+                '</div>'.
             '</div>';
 
     $this->endWidget();
 
-echo <<<HTML
+/*echo <<<HTML
 <span id="spinner1"></span>
-HTML;
+HTML;*/

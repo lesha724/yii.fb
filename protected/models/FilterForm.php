@@ -51,7 +51,7 @@ class FilterForm extends CFormModel
 	{
             return array(
                 array('discipline, group', 'required', 'on' => 'journal, modules,thematicPlan'),
-                array('type_lesson', 'required', 'on' => 'journal,thematicPlan,retake'),
+                array('type_lesson', 'required', 'on' => 'journal'),
                 array('module, chair,stream, discipline, group,statement', 'required', 'on' => 'module'),
                 array('discipline', 'required', 'on' => 'exam-session'),
                 array('filial, faculty, speciality, course, group,discipline', 'required', 'on' => 'retake'),

@@ -58,4 +58,12 @@ class TbInputInline extends TbInputVertical
 		echo $this->form->textField($this->model, $this->attribute, $this->htmlOptions);
 		echo $this->getAppend();
 	}
+
+    protected function emailField()
+    {
+        $this->htmlOptions['placeholder'] = $this->model->getAttributeLabel($this->attribute);
+        echo $this->getPrepend();
+        echo $this->form->emailField($this->model, $this->attribute, $this->htmlOptions);
+        echo $this->getAppend();
+    }
 }

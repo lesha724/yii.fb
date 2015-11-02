@@ -89,7 +89,7 @@ HTML;
         insertMarkUrl = "{$insertMarkUrl}";
         pbal = {$arrayPbal};
 JS
-    , CClientScript::POS_HEAD);
+        , CClientScript::POS_HEAD);
 endif;
 ?>
 <div id="dialog-confirm" class="hide" title="Empty the recycle bin?">

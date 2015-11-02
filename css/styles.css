@@ -1,8 +1,57 @@
+#omissions .td-elgp3,#omissions .td-elgp4,#omissions .td-elgp5{
+    width: 100px;
+}
+#omissions .td-elgp2{
+    width: 150px;
+}
+#omissions input{
+    width: 80px;
+}
+#omissions select{
+   width: 130px;
+}
+.wd-20{
+    width: 20px;
+}
+.wd-25{
+    width: 25px;
+}
+.wd-30{
+    width: 30px;
+}
+.wd-35{
+    width: 35px;
+}
+.wd-40{
+    width: 40px;
+}
+.wd-45{
+    width: 45px;
+}
+.wd-50{
+    width: 50px;
+}
+.wd-55{
+    width: 55px;
+}
+.wd-60{
+    width: 60px;
+}
+.wd-65{
+    width: 65px;
+}
+
+#themes tr td:first-child,#themes tr th:first-child{
+    width: 30px;
+}
 #header-fixed-top-block{
     top:60px;
 }
 #calendar .popover{
     width:200px;
+}
+#retake{
+    margin-top: 20px;
 }
 .main-container .main-content .page-header{
     margin-top: 50px;

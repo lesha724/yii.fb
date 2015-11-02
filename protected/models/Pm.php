@@ -129,6 +129,7 @@ class Pm extends CActiveRecord
                'timeTable'=>tt('Расписание'),
                'workPlan'=>tt('Рабочий план'),
                'list'=>tt('Список'),
+               'journal'=>tt('Эл. журнал'),
                'progress'=>tt('Успеваемость'),
                'entrance'=>tt('Абитуриент'),
                'workLoad'=>tt('Нагрузка'),

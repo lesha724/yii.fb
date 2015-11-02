@@ -274,8 +274,6 @@ SQL;
     {
         if (empty($discipline))
             return array();
-        /*if($type_lesson==-1)
-            return array();*/
         $sql = <<<SQL
              SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,:D1,1,0,0,0,:TYPE_LESSON) ORDER by gr7 DESC;
 SQL;
@@ -287,12 +285,7 @@ SQL;
         $command->bindValue(':YEAR', Yii::app()->session['year']);
         $command->bindValue(':SEM', Yii::app()->session['sem']);
         $groups = $command->queryAll();
-        /*$type=array(
-            1=> tt('Лк'),
-            2=> tt('Пз'),
-            3=> tt('Сем'),
-            4=> tt('Лб')
-        );*/
+
         foreach($groups as $key => $group) {
             $groups[$key]['name'] = $this->getGroupName($group['sem4'], $group);
             $groups[$key]['group'] = $group['kod_uo1'].'/'.$group['gr1'];
@@ -301,46 +294,26 @@ SQL;
         return $groups;
     }
 
-    public function getGroupsForTPlanPermition($discipline,$type_lesson)
+    public function getGroupsForTPlanPermition($discipline)
     {
         if (empty($discipline))
             return array();
-        /*if($type_lesson==-1)
-            return array();*/
         $sql = <<<SQL
-             SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,:D1,1,0,0,1,:TYPE_LESSON) ORDER by gr7 DESC;
+             SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,:D1,3,0,0,1,0) ORDER by us1,us4 ASC;
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
         $command->bindValue(':D1', $discipline);
-        $command->bindValue(':TYPE_LESSON', $type_lesson);
+        //$command->bindValue(':TYPE_LESSON', $type_lesson);
         $command->bindValue(':YEAR', Yii::app()->session['year']);
         $command->bindValue(':SEM', Yii::app()->session['sem']);
-        $groups = $command->queryAll();
-        $type=array(
-            1=> tt('Лк'),
-            2=> tt('Пз'),
-            3=> tt('Сем'),
-            4=> tt('Лб')
-        );
-        $res=array();
-        $us1=-1;
-        $gr='';
-        $us4='';
-        foreach($groups as $group) {
-            if($us1!=$group['us1'])
-            {
-                if($us1!=-1)
-                    array_push($res,array('name'=>$us4.$gr,'group'=>$us1));
-                $us1=$group['us1'];
-                $gr='';
-            }
-            $gr.=$this->getGroupName($group['sem4'], $group).',';
-            //$us4='('.$type[$group['us4']].')';
+        $res = $command->queryAll();
+        $pattern='(%s) %s %s '.tt('ч.');
+        foreach($res as $key => $val) {
+            $res[$key]['name'] = sprintf($pattern,SH::convertUS4($val['us4']),$val['spec'],$val['chasi']);
+            $res[$key]['group'] = $val['us1'].'/'.$val['chasi'];
         }
-        if($us1!=-1)
-            array_push($res,array('name'=>$us4.$gr,'group'=>$us1));
 
         return $res;
     }
@@ -551,6 +524,34 @@ SQL;
 
         foreach($groups as $key => $group) {
             $groups[$key]['name'] = $this->getGroupName($course, $group);
+        }
+
+        return $groups;
+    }
+
+    public function getGroupsForCopyThematicPlan($d1, $year,$sem)
+    {
+        $sql = <<<SQL
+            select sp2,sg3,sg1,us1,us4
+            from sem
+               inner join us on (sem1 = us3)
+               inner join uo on (us2 = uo1)
+               inner join u on (uo22 = u1)
+               inner join sg on (u2 = sg1)
+               inner join sp on (sg2 = sp1)
+               inner join ustem on (us1 = ustem2)
+            where (sem3 = :uch_god) and (sem5 = :semestr) and (uo3 = :d1)
+            group by sp2,sg3,sg1,us1,us4
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':uch_god', $year);
+        $command->bindValue(':semestr', $sem);
+        $command->bindValue(':d1', $d1);
+        $groups = $command->queryAll();
+
+        foreach($groups as $key => $group) {
+            $groups[$key]['name'] = SH::convertUS4($group['us4']).' '.$group['sp2'].' '.$group['sg3'];
         }
 
         return $groups;

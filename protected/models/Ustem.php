@@ -31,9 +31,11 @@ class Ustem extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('ustem1', 'required'),
+            array('ustem7', 'numerical'),
 			array('ustem2, ustem3, ustem4, ustem6', 'numerical', 'integerOnly'=>true),
 			array('ustem5', 'length', 'max'=>1000),
             array('nr18', 'safe'),
+            array('ustem4', 'unsafe','on'=>'update'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('ustem1, ustem2, ustem3, ustem4, ustem5, ustem6', 'safe', 'on'=>'search'),
@@ -63,6 +65,7 @@ class Ustem extends CActiveRecord
             'ustem4' => tt('№ занятия'),
             'ustem5' => tt('Тема'),
             'ustem6' => tt('Тип'),
+            'ustem7' => tt('Длительность занятия'),
             'groups' => tt('Группы'),
             'nr18'   => tt('Длительность')
 		);
@@ -122,13 +125,14 @@ SQL;
 	
     public function deleteThematicPlan($model)
     {
-        if(!empty($model->type_lesson))
+        if(!empty($model->group))
         {
+            list($us1,$us6)=explode('/',$model->group);
             $sql=<<<SQL
                 SELECT * FROM ustem WHERE ustem2=:us1;
 SQL;
             $command = Yii::app()->db->createCommand($sql);
-            $command->bindValue(':us1', $model->type_lesson);
+            $command->bindValue(':us1', $us1);
             $res=$command->queryAll();
 
             $name=P::model()->getTeacherNameBy(Yii::app()->user->dbModel->p1,false);
@@ -159,8 +163,56 @@ SQL;
                 DELETE  FROM ustem WHERE ustem2=:us1;
 SQL;
             $command = Yii::app()->db->createCommand($sql);
-            $command->bindValue(':us1', $model->type_lesson);
+            $command->bindValue(':us1', $us1);
             $command->queryAll();
+            $this->noAcceptThematicPlan($us1);
+        }
+    }
+
+    public function selectAcceptThematicPlan($us1)
+    {
+        if(empty($us1))
+        return false;
+
+        $sql=<<<SQL
+            SELECT * FROM ustemp WHERE ustemp1=:us1;
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':us1', $us1);
+        $res=$command->queryRow();
+
+        if(empty($res))
+            return false;
+        else
+            return true;
+
+    }
+
+    public function noAcceptThematicPlan($us1)
+    {
+        if(!empty($us1))
+        {
+            $sql=<<<SQL
+                DELETE FROM ustemp WHERE ustemp1=:us1;
+SQL;
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':us1', $us1);
+            $command->execute();
+        }
+    }
+
+    public function acceptThematicPlan($model)
+    {
+        if(!empty($model->group))
+        {
+            list($us1,$us6)=explode('/',$model->group);
+            $this->noAcceptThematicPlan($us1);
+            $sql=<<<SQL
+                INSERT INTO ustemp(ustemp1) VALUES (:us1);
+SQL;
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':us1', $us1);
+            $res=$command->execute();
         }
     }
     
@@ -174,6 +226,72 @@ SQL;
                 $theme->save();
             }
         }
+    }
+
+    public function getUstem6Arr()
+    {
+        return array(
+            '0'=>tt('Занятие'),
+            '1'=>tt('Субмодуль'),
+            '2'=>tt('ПМК'),
+        );
+    }
+
+    public function getUstem7Arr()
+    {
+        $sql = <<<SQL
+              select rz8 from rz group by rz8
+SQL;
+        $command=Yii::app()->db->createCommand($sql);
+        $res = $command->queryAll();
+        foreach($res as $key => $val)
+        {
+            $res[$key]['rz8_']=round($val['rz8'], 2);
+        }
+        return $res;
+    }
+
+    public function getUstem6($type)
+    {
+        $arr=$this->getUstem6Arr();
+        if(isset($arr[$type]))
+            return $arr[$type];
+        else
+            return '-';
+    }
+
+    //фактичесое количетво часов по тем плану
+    public function getHours($us1,$ustem1)
+    {
+        $res = Ustem::model()->findAllByAttributes(
+            array('ustem2'=>$us1),
+            array(
+                'select'=>'ustem7',
+                'condition'=>'ustem1 != :ustem1',
+                'params'=>array(':ustem1'=>$ustem1)
+            ));
+
+        $hours=0;
+        foreach($res as $val)
+        {
+            $hours+=$val['ustem7'];
+        }
+        return $hours;
+    }
+
+    public function getLessonByRasp()
+    {
+        $sql = <<<SQL
+             select r2,rz8 as dlitelnost
+            from rz
+               inner join r on (rz.rz1 = r.r4)
+               inner join nr on (r.r1 = nr.nr1)
+               inner join us on (nr.nr2 = us.us1)
+               inner join ug on (nr.nr1 = ug.ug3)
+            where us1=:us1 and ug2=:gr1
+            order by r2,rz2
+SQL;
+
     }
 
 }

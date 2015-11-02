@@ -30,9 +30,9 @@
 </div>
 HTML;
 
-    $title = tt('Дополнительные колонки');
+    /*$title = tt('Дополнительные колонки');
     $html  = $this->renderPartial('journal/_extra_columns', array(), true);
-    echo sprintf($widget, $title, $html);
+    echo sprintf($widget, $title, $html);*/
 
 
     $title = tt('Внешний вид журнала');
