@@ -356,37 +356,36 @@ $this->widget('zii.widgets.CMenu', array(
                     'visible' => _ch('progress', 'test') && $isStd,
                     'active'  => $_c=='progress' && $_a=='test'
                 ),
-                array(
+                /*(
                     'label'   => $_l2.tt('Эл. журнал'),
                     'url'     => _u('/progress/journal'),
                     'visible' => _ch('progress', 'journal') && $isTch,
                     'active'  => $_c=='progress' && $_a=='journal'
-                ),
+                ),*/
                 array(
                     'label'   => $_l2.tt('Ведение модулей'),
                     'url'     => _u('/progress/module'),
                     'visible' => _ch('progress', 'modules') && $isTch,
                     'active'  => $_c=='progress' && $_a=='module'
                 ),
-                array(
+                /*array(
                     'label'   => $_l2.tt('Статистика посещаемости'),
                     'url'     => _u('/progress/attendanceStatistic'),
                     'visible' => _ch('progress', 'attendanceStatistic'),
                     'active'  => $_c=='progress' && $_a=='attendanceStatistic'
-                ),
-                array(
-                    'label'   => $_l2.tt('Регистрация пропусков занятий
-'),
+                ),*/
+                /*array(
+                    'label'   => $_l2.tt('Регистрация пропусков занятий'),
                     'url'     => _u('/progress/omissions'),
                     'visible' => _ch('progress', 'omissions')&& $isTch,
                     'active'  => $_c=='progress' && $_a=='omissions'
-                ),
-                array(
+                ),*/
+                /*array(
                     'label'   => $_l2.tt('Отработка'),
                     'url'     => _u('/progress/retake'),
                     'visible' => _ch('progress', 'retake')&& $isTch,
                     'active'  => $_c=='progress' && $_a=='retake'
-                ),
+                ),*/
                 array(
                     'label'   => $_l2.tt('Экз. сессия'),
                     'url'     => _u('/progress/examSession'),
