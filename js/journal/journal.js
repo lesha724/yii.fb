@@ -285,6 +285,7 @@ $(document).ready(function(){
             success: function( data ) {
                 if (!data.error) {
                     addGritter(title, tt.success, 'success');
+                    recalculateBothTotal(st1);
                 } else {
                     addGritter(title, tt.error, 'error');
                 }
@@ -309,7 +310,7 @@ $(document).ready(function(){
 
         var $that = $(this);
 
-        var url = $that.parents('[data-url-retake]').data('url');
+        var url = $that.parents('[data-url-retake]').data('url-retake');
 
         var st1  = $that.parents('[data-st1]').data('st1');
 
@@ -336,6 +337,11 @@ $(document).ready(function(){
                 if (!data.error) {
                     $('#modalRetake .modal-header h4').html(data.title);
                     $('#modalRetake #modal-content').html(data.html);
+                    $('.datepicker').datepicker({
+                        format: 'dd.mm.yy',
+                        language:'ru',
+                        autoclose:true
+                    });
                     if(data.show){
                         $('#save-retake').show();
                     }
@@ -400,7 +406,8 @@ function send(url,params,title,$td,$that,$spinner1,st1)
         } else {
             addGritter(title, tt.success, 'success')
             $td.removeClass('error').addClass('success');
-            setTimeout(function() { $td.removeClass('success') }, 1000)
+            setTimeout(function() { $td.removeClass('success') }, 1000);
+            recalculateBothTotal(st1);
         }
 
         $spinner1.hide();
@@ -443,3 +450,53 @@ function send(url,params,title,$td,$that,$spinner1,st1)
         }
     }, 'json');
 }
+
+function recalculateBothTotal(st1)
+{
+    var total_1 = 0;
+    var total_2 = 0;
+
+    var table_2 = 'div.journal_div_table2 tr[data-st1='+st1+']';
+    var table_3 = 'div.journal_div_table3 tr[data-st1='+st1+']';
+
+    $(table_2 +' td').each(function(){
+
+        var mark = calculateMarkFor(this);
+
+        if (! isNaN(mark))
+            total_1 += mark;
+    });
+
+    $(table_3 +' td').each(function(){
+
+        var mark = calculateMarkFor(this);
+
+        if (! isNaN(mark))
+            total_2 += mark;
+    });
+
+    $(table_3 +' td[data-total=1]').text(total_1);
+    $(table_3 +' td[data-total=2]').text(total_1 + total_2);
+}
+
+function calculateMarkFor(el)
+{
+    var $that = $(el);
+
+    var mark;
+    if ($that.children('input:text').length > 1) {
+
+        var $input_1 = $that.children('input:text:first');
+        var $input_2 = $that.children('input:text:last');
+
+        if ( parseFloat($input_2.val()) > 0 )
+            mark = $input_2.val();
+        else
+            mark = $input_1.val();
+
+    } else
+        mark = $that.children('input:text').val();
+
+    return parseFloat(mark);
+}
+

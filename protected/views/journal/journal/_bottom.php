@@ -118,3 +118,44 @@ JS
         <?=tt('Вы уверены?')?>
     </p>
 </div><!-- #dialog-confirm -->
+
+<?php  $this->beginWidget(
+        'bootstrap.widgets.TbModal',
+        array(
+            'id' => 'modalRetake',
+            'htmlOptions'=>array('data-url'=>Yii::app()->createUrl('/journal/saveJournalRetake'))
+        )
+    ); ?>
+
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">&times;</a>
+        <h4></h4>
+    </div>
+
+    <div class="modal-body">
+        <div id="modal-content">
+
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <?php $this->widget(
+            'bootstrap.widgets.TbButton',
+            array(
+                'label' => tt('Сохранить'),
+                'type'=>'info',
+                'url' => '#',
+                'htmlOptions' => array('id' => 'save-retake'),
+            )
+        ); ?>
+        <?php $this->widget(
+            'bootstrap.widgets.TbButton',
+            array(
+                'label' => tt('Отмена'),
+                'url' => '#',
+                'htmlOptions' => array('data-dismiss' => 'modal'),
+            )
+        ); ?>
+    </div>
+
+<?php $this->endWidget();

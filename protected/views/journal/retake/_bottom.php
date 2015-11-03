@@ -30,7 +30,10 @@ if (!empty($model->group)) {
     $this->renderPartial('/filter_form/default/_refresh_filter_form_button');
     list($uo1,$us1)=explode('/',$model->group);
     $retake->uo1=$uo1;
+    $us=Us::model()->findByPk($us1);
+    $retake->type_lesson=$us->us4;
     $this->renderPartial('retake/_grid', array(
-        'model' =>  $retake
+        'model' =>  $retake,
+        'us1'=>$us1
     ));
 } ?>

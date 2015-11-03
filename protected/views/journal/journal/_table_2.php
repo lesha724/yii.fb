@@ -173,6 +173,17 @@ HTML;
     return sprintf($pattern,$date['ustem5'], $name);
 }
 
+function countMarkTotal($marks)
+{
+    $total = 0;
+    foreach ($marks as $mark) {
+        $total += $mark['elgzst5'] != 0
+            ? $mark['elgzst5']
+            : $mark['elgzst4'];
+    }
+    return $total;
+}
+
 
     $url       = Yii::app()->createUrl('/journal/insertStMark');
     $url_check = Yii::app()->createUrl('/journal/checkCountRetake');
@@ -201,13 +212,17 @@ HTML;
 
     $elgz1_arr=array();
     $th = $th2 = $tr = '';
+
+    global $total_1;
+    global $count_dates;
+    $count_dates=0;
     //$column = 1;
     foreach($dates as $date) {
         $th    .= generateColumnName($date);
         $th2   .= generateTh2($ps9,$date,$model->type_lesson);
         array_push($elgz1_arr,$date['elgz1']);
         //$column++;
-        //$count_dates++;
+        $count_dates++;
     }
 
     $permLesson=Elgr::model()->getList($gr1,$elgz1_arr);
@@ -216,6 +231,7 @@ HTML;
         $st1 = $st['st1'];
         $marks = $elg->getMarksForStudent($st1);
         $tr .= '<tr data-st1="'.$st1.'">';
+        $total_1[$st1] = countMarkTotal($marks);
         foreach($dates as $key => $date) {
             $tr .= table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$model->type_lesson);
         }

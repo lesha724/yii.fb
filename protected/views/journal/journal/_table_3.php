@@ -17,8 +17,8 @@ HTML;
 function generate3Th($key)
 {
     $pattern_tr = <<<HTML
-	<th class="blue">
-        %s
+	<th>
+        <span class="blue">%s</span>
     </th>
 HTML;
     return sprintf($pattern_tr,$key['elgsd2']);
@@ -37,6 +37,16 @@ HTML;
     $name = tt('Итого');
 
     return sprintf($pattern, $name);
+}
+
+function countDopTotal($marks)
+{
+    $total = 0;
+    foreach ($marks as $mark) {
+        $total += $mark!=0?$mark:0;
+    }
+
+    return $total;
 }
 
     $elg1=$elg->elg1;
@@ -62,6 +72,11 @@ HTML;
 
 $th=$th2=$tr='';
 
+global $total_1;// calculating in journal/table_2
+global $count_dates;
+
+$total_2 =array();
+
 $th  .= generateTotal1Header();
 $th2.='<th colspan="2"></th>';
 
@@ -76,14 +91,16 @@ $th2 .= '<th></th>';
 
 foreach ($students as $st) {
     $st1 = $st['st1'];
+    $val=  $total_1[$st1];
     $marks=Elgdst::model()->getMarksForStudent($st1,$elg1);
+    $total_2[$st1] = $val+countDopTotal($marks);
     $tr.='<tr data-st1="'.$st1.'">';
-    $tr .= '<td data-total=1 colspan="2"></td>'; // total 1
+    $tr .= '<td data-total=1 colspan="2">'.$val.'</td>'; // total 1
         foreach($elgd as $key)
         {
             $tr .= table3Tr($key, $marks, $st1,$elg1);
         }
-    $tr .= '<td data-total=2></td>'; // total 2
+    $tr .= '<td data-total=2>'.$total_2[$st1].'</td>'; // total 2
     $tr .= '</tr>';
 }
 echo sprintf($table,$th,$th2,$tr); // 3 table

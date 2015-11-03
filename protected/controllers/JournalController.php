@@ -377,8 +377,8 @@ SQL;
 
     public function actionJournalRetake()
     {
-        if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        //if (! Yii::app()->request->isAjaxRequest)
+            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $error=false;
         $errorType=0;
@@ -398,7 +398,72 @@ SQL;
             $errorType=2;
         }else
         {
+            $elgzst=Elgzst::model()->findByAttributes(array('elgzst1'=>$st1,'elgzst2'=>$elgz1));
+            if(empty($elgzst))
+            {
+                $error = true;
+                $errorType=2;
+            }else
+            {
+                if(($elgzst->elgzst3!=0||($elgzst->elgzst4<=$elgzst->getMin()&&$elgzst->elgzst4!=0)))
+                {
+                    if($elgzst->checkMinRetakeForGrid())
+                    {
+                        $sql=<<<SQL
+                            SELECT us4 FROM elgz
+                               INNER JOIN r ON (elgz1=r8)
+                               INNER JOIN nr ON (r1=nr1)
+                               INNER JOIN us ON (us1=nr2)
+                            WHERE  elgz1=:ELGZ1
+SQL;
+                        $command=Yii::app()->db->createCommand($sql);
+                        $command->bindValue(':ELGZ1', $elgzst->elgzst2);
+                        $us4 = $command->queryRow();
 
+                        $info=$elgzst->getInfoByElgzst0();
+                        if(!empty($info))
+                            $title.=' '.SH::getShortName($info['st2'],$info['st3'],$info['st4']).' '.date('d.m.Y', strtotime($info['r2'])).' '.$info['d3'];
+
+                        if($elgzst->elgzst3>0)
+                        {
+                            $elgp=Elgp::model()->findByAttributes(array('elgp1'=>$elgzst->elgzst0));
+                            if(empty($elgp))
+                            {
+                                $error = true;
+                                $errorType=2;
+                            }else
+                            {
+                                $html .= $this->renderPartial('journal/_add_omissions', array(
+                                    'model'=>$elgp,
+                                    'us4'=>$us4['us4']
+                                ), true);
+                            }
+                        }
+
+                        if(!empty($elgzst)&&!empty($us4))
+                        {
+                            $model=new Elgotr();
+                            $model->unsetAttributes();
+                            $model->elgotr1=$elgzst->elgzst0;
+
+                            $html .= $this->renderPartial('journal/_add_retake', array(
+                                'model' => $model,
+                                'elgzst'=>$elgzst,
+                                'us4'=>$us4['us4']
+                            ), true);
+                        }else
+                            $error=true;
+                    }else
+                    {
+                        $error = true;
+                        $errorType=2;
+                    }
+                }else
+                {
+                    $error = true;
+                    $errorType=2;
+                }
+            }
         }
 
         $res = array(
@@ -626,7 +691,7 @@ SQL;
         else {
             $check=1;
 
-            if($type<4)
+            if($type<=4)
                 $check=2;
 
             $attr = array(
@@ -699,7 +764,7 @@ SQL;
             if($field=='elgp2')
             {
                 $check=1;
-                if($value<4)
+                if($value<=4)
                     $check=2;
 
                 $arr=array('elgzst3'=>$check);
@@ -760,7 +825,7 @@ SQL;
         ));
     }
 
-    public function actionSearchRetake($uo1)
+    public function actionSearchRetake($uo1,$us1)
     {
         if (! Yii::app()->request->isAjaxRequest)
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
@@ -771,12 +836,15 @@ SQL;
             unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
         }
         $model->uo1=$uo1;
+        $us=Us::model()->findByPk($us1);
+        $model->type_lesson=$us->us4;
         if (isset($_REQUEST['Elgzst']))
             $model->attributes = $_REQUEST['Elgzst'];
 
 
         $this->render('retake/_grid', array(
             'model' => $model,
+            'us1'=>$us1
         ));
     }
 

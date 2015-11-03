@@ -28,7 +28,7 @@ class Elgzst extends CActiveRecord
 		return 'elgzst';
 	}
 
-    public $st2,$st3,$st4,$us4,$count_elgotr,$tema,$status,$group_st,$uo1,$r2,$nom,$elgp2,$elgp3;
+    public $st2,$st3,$st4,$us4,$count_elgotr,$tema,$status,$group_st,$uo1,$r2,$nom,$elgp2,$elgp3,$type_lesson;
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -43,7 +43,7 @@ class Elgzst extends CActiveRecord
 			array('elgzst6', 'length', 'max'=>25),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('st2,group_st,status,nom,r2,elgp2,elgp3,count_elgotr,tema,elgzst0, elgzst1, elgzst2, elgzst3, elgzst4, elgzst5, elgzst6, elgzst7', 'safe', 'on'=>'search'),
+			array('st2,group_st,status,nom,r2,elgp2,type_lesson,elgp3,count_elgotr,tema,elgzst0, elgzst1, elgzst2, elgzst3, elgzst4, elgzst5, elgzst6, elgzst7', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -134,9 +134,14 @@ class Elgzst extends CActiveRecord
         $criteria->join .= 'JOIN std ON (st.st1=std.std2) ';
         $criteria->join .= 'JOIN '.$table4.' ON (std.std3='.$table4.'.gr1) ';
         $criteria->join .= 'JOIN '.$table3.' ON (t.elgzst2='.$table3.'.elgz1) ';
-        $criteria->join .= 'JOIN elg ON (elgz.elgz2=elg.elg1) ';
+        $criteria->join .= 'JOIN elg ON (elgz.elgz2=elg.elg1 and elg.elg2='.$this->uo1.') ';
+        $criteria->join .= 'JOIN sem ON (elg.elg3=sem.sem1 AND sem3='.Yii::app()->session['year'].' and sem5='.Yii::app()->session['sem'].') ';
         $criteria->join .= 'JOIN r ON (elgz.elgz1=r.r8) ';
         $criteria->join .= 'JOIN nr ON (r.r1=nr.nr1) ';
+        if(empty($this->type_lesson)||$this->type_lesson==1)
+            $criteria->compare('elg4',0);
+        else
+            $criteria->compare('elg4',1);
         //$criteria->join .= 'JOIN us ON (nr.nr2=us.us1) ';
         $criteria->join .= 'LEFT JOIN '.$table2.' ON ('.$table2.'.USTEM2=nr.nr2 AND '.$table2.'.USTEM4= elgz.elgz3) ';
         $criteria->addCondition("std7 is null and std11 in(0,5,6,8)");

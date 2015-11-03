@@ -2,14 +2,13 @@
     $pageSize=Yii::app()->user->getState('pageSize',10);
     if($pageSize==0)
         $pageSize=10;
-
     $this->widget('bootstrap.widgets.TbGridView', array(
     'id' => 'retake',
     'dataProvider' => $model->searchRetake(),
     'filter' => $model,
     'type' => 'striped bordered',
     'afterAjaxUpdate' => 'function(id) { $(\'[data-toggle="tooltip"]\').tooltip();}',
-    'ajaxUrl' => Yii::app()->createAbsoluteUrl('/journal/searchRetake',array('uo1'=>$model->uo1)),
+    'ajaxUrl' => Yii::app()->createAbsoluteUrl('/journal/searchRetake',array('uo1'=>$model->uo1,'us1'=>$us1)),
     'columns' => array(
         'st2'=>array(
             'header'=>tt('Студент'),

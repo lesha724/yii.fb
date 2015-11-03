@@ -5,10 +5,10 @@ class m151018_100544_alter_ustem_7_10 extends CDbMigration
 	public function safeUp()
 	{
         /* длительность занятия      если USTEM6=1 , то умолчанию автоматически USTEM7=0     и проверка, что сумма всех длительностей <= us6 */
-        $sql = <<<SQL
+        /*$sql = <<<SQL
         alter table USTEM add USTEM7 doub DEFAULT 2 NOT NULL;
 SQL;
-        $this->execute($sql);
+        $this->execute($sql);*/
 
         /* нагрузка PD1 */
         $sql = <<<SQL
