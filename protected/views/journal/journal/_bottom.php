@@ -145,7 +145,7 @@ JS
                 'label' => tt('Сохранить'),
                 'type'=>'info',
                 'url' => '#',
-                'htmlOptions' => array('id' => 'save-retake'),
+                'htmlOptions' => array('id' => 'save-retake-journal'),
             )
         ); ?>
         <?php $this->widget(

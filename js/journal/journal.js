@@ -339,6 +339,7 @@ $(document).ready(function(){
                     $('#modalRetake #modal-content').html(data.html);
                     $('.datepicker').datepicker({
                         format: 'dd.mm.yy',
+                        formatView: 'dd.mm.yy',
                         language:'ru',
                         autoclose:true
                     });
@@ -362,7 +363,72 @@ $(document).ready(function(){
         });
     });
 
+    $(document).on('change','#Elgp_elgp2',function(){
+        var val = $(this).val();
+        if(val!=5)
+            $('#elgp').hide();
+        else
+            $('#elgp').show();
+    });
 
+    $(document).on('click','#save-retake-journal',function(){
+
+        var $that =$(this);
+
+        var url = $that.parents('[data-url]').data('url');
+
+        var st1  = $that.parents('[data-st1]').data('st1');
+
+        var $td    = $that.parent();
+
+        var elgp2,elgp3,elgp4,elgp5='';
+        if($('form').is('#omissions-form'))
+        {
+            elgp2=$('#Elgp_elgp2').val();
+            elgp3=$('#Elgp_elgp3').val();
+            elgp4=$('#Elgp_elgp4').val();
+            elgp5=$('#Elgp_elgp5').val();
+        }
+
+        var elgotr1=$('#Elgotr_elgotr1').val();
+        var elgotr2=$('#Elgotr_elgotr2').val();
+        var elgotr3=$('#Elgotr_elgotr3').val();
+
+        var params = {
+            elgp2 :elgp2,
+            elgp3 :elgp3,
+            elgp4 :elgp4,
+            elgp5 :elgp5,
+            elgotr1:elgotr1,
+            elgotr2:elgotr2,
+            elgotr3:elgotr3
+        }
+
+        title='';
+
+        $.ajax({
+            url: url,
+            data:params,
+            dataType: 'json',
+            success: function( data ) {
+                if (!data.error) {
+                    addGritter(title, tt.success, 'success');
+                    //$td.find('[data-name="elgzst5"]').val(elgotr2);
+                    //recalculateBothTotal(st1);
+                    $('#filter-form').submit();
+                } else {
+                    addGritter(title, tt.error, 'error');
+                }
+                $spinner1.hide();
+                $('#modalRetake').modal('hide');
+            },
+            error: function( data ) {
+                addGritter(title, tt.error, 'error');
+                $spinner1.hide();
+                $('#modalRetake').modal('hide');
+            }
+        });
+    });
 
 });
 
@@ -444,9 +510,14 @@ function send(url,params,title,$td,$that,$spinner1,st1)
             }
 
             if($td.find('[data-name="elgzst3"]').is(':checked')||parseFloat($td.find('[data-name="elgzst4"]').val().replace(',','.'))<=min)
-                $td.find('.btn-retake').show();
+                if(parseFloat($td.find('[data-name="elgzst5"]').val().replace(',','.'))>min)
+                    $td.find('.btn-retake').hide();
+                else
+                    $td.find('.btn-retake').show();
             else
                 $td.find('.btn-retake').hide();
+
+
         }
     }, 'json');
 }

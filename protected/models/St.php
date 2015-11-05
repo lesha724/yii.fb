@@ -669,7 +669,7 @@ SQL;
 	
 	public function getStatisticForStudent($st1, $sem1)
     {
-        $sql = <<<SQL
+        /*$sql = <<<SQL
         select 
                 d.d2,us4,stegn9,stegn3,stegn4
 		from us
@@ -678,6 +678,20 @@ SQL;
 		   inner join d on (uo.uo3 = d.d1)
 		where stegn1=:st1 and us3=:sem1 and stegn4>0
                 group by d.d2,us4,stegn9,stegn3,stegn4;
+SQL;*/
+        $sql = <<<SQL
+        select
+                d.d2,us1,us4,r2,elgzst3,elgz3
+		from uo
+		   inner join elg on (uo.uo1 = elg2)
+		   inner join elgz on (elg1 = elgz2)
+		   inner join r on (elgz1=r8)
+		   inner join elgzst on (elgz1 = elgzst2)
+		   INNER JOIN nr on (r.r1 = nr.nr1)
+		   INNER JOIN us on (nr.nr2 = us.us1)
+		   inner join d on (uo.uo3 = d.d1)
+		where elgzst1=:st1 and elg3=:sem1 and elgzst3>0
+                group by d.d2,us1,us4,r2,elgzst3,elgz3;
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);

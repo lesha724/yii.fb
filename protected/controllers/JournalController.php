@@ -21,6 +21,7 @@ class JournalController extends Controller
                     'insertMinMaxMark',
                     'checkCountRetake',
                     'journalRetake',
+                    'saveJournalRetake',
                     'journalExcel',
 
                     'retake',
@@ -45,6 +46,9 @@ class JournalController extends Controller
                     'searchStudent'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
+            ),
+            array('allow',
+                'actions' => array('attendanceStatistic')
             ),
             array('deny',
                 'users' => array('*'),
@@ -377,8 +381,8 @@ SQL;
 
     public function actionJournalRetake()
     {
-        //if (! Yii::app()->request->isAjaxRequest)
-            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $error=false;
         $errorType=0;
@@ -469,6 +473,122 @@ SQL;
         $res = array(
             'title'=>$title,
             'html'=>$html,
+            'error' => $error,
+            'errorType'=>$errorType
+        );
+
+        Yii::app()->end(CJSON::encode($res));
+    }
+
+    public function actionSaveJournalRetake(){
+        //if (! Yii::app()->request->isAjaxRequest)
+            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $error=false;
+        $errorType=0;
+
+        $elgp2=Yii::app()->request->getParam('elgp2', null);
+        $elgp3=Yii::app()->request->getParam('elgp3', null);
+        $elgp4=Yii::app()->request->getParam('elgp4', null);
+        $elgp5=Yii::app()->request->getParam('elgp5', null);
+
+        $elgotr1=Yii::app()->request->getParam('elgotr1', null);
+        $elgotr2=Yii::app()->request->getParam('elgotr2', null);
+        $elgotr3=Yii::app()->request->getParam('elgotr3', null);
+
+        if($elgotr1==null || $elgotr2==null || $elgotr3==null)
+        {
+            $error = true;
+            $errorType=2;
+        }else
+        {
+            $elgzst=Elgzst::model()->findByPk($elgotr1);
+            if(empty($elgzst))
+            {
+                $error = true;
+                $errorType=2;
+            }else
+            {
+                if(($elgzst->elgzst3!=0||($elgzst->elgzst4<=$elgzst->getMin()&&$elgzst->elgzst4!=0)))
+                {
+                    if($elgzst->checkMinRetakeForGrid())
+                    {
+                        $sql=<<<SQL
+                            SELECT us4 FROM elgz
+                               INNER JOIN r ON (elgz1=r8)
+                               INNER JOIN nr ON (r1=nr1)
+                               INNER JOIN us ON (us1=nr2)
+                            WHERE  elgz1=:ELGZ1
+SQL;
+                        $command=Yii::app()->db->createCommand($sql);
+                        $command->bindValue(':ELGZ1', $elgzst->elgzst2);
+                        $us4 = $command->queryRow();
+
+
+                        if($elgzst->elgzst3>0)
+                        {
+                            $elgp=Elgp::model()->findByAttributes(array('elgp1'=>$elgzst->elgzst0));
+                            if(empty($elgp))
+                            {
+                                $error = true;
+                                $errorType=2;
+                            }else
+                            {
+                                $elgp->elgp2=$elgp2;
+                                $elgp->elgp3=$elgp3;
+                                $elgp->elgp4=$elgp4;
+                                $elgp->elgp5=$elgp5;
+                                $error=!$elgp->save();
+                                if($error)
+                                    $errorType=9;
+                            }
+                        }
+
+                        $ps40=PortalSettings::model()->findByPk(40)->ps2;
+                        if(! empty($ps40)){
+                            /*$date1  = new DateTime(date('Y-m-d H:i:s'));
+                            $date2  = new DateTime($stegn->stegn9);
+                            $diff = $date1->diff($date2)->days;
+                            if ($diff > $ps40)
+                                $error=true;*/
+                        }
+
+                        if(!$error&&!empty($elgzst)&&!empty($us4))
+                        {
+                            $model=new Elgotr();
+                            $model->elgotr0=new CDbExpression('GEN_ID(GEN_ELGOTR, 1)');
+                            $model->elgotr1=$elgzst->elgzst0;
+                            $model->elgotr2=$elgotr2;
+                            $model->elgotr3=$elgotr3;
+                            $model->elgotr4=Yii::app()->user->dbModel->p1;
+                            $model->elgotr5=date('Y-m-d H:i:s');
+                            $error=!$model->save();
+                            if(!$error)
+                            {
+                                $elgzst->elgzst5=$elgotr2;
+                                $elgzst->save();
+                            }else
+                            {
+                                $errorType=7;
+                            }
+                        }else
+                        {
+                            $error=true;
+                            $errorType=6;
+                        }
+                    }else
+                    {
+                        $error = true;
+                        $errorType=2;
+                    }
+                }else
+                {
+                    $error = true;
+                    $errorType=2;
+                }
+            }
+        }
+        $res = array(
             'error' => $error,
             'errorType'=>$errorType
         );
@@ -1000,7 +1120,7 @@ SQL;
                 }
             }  else {
                 $error= true;
-                print_r($elgzst->elgzst5);
+                //print_r($elgzst->elgzst5);
             }
 
         }
@@ -1484,6 +1604,20 @@ SQL;
         );
 
         Yii::app()->end(CJSON::encode($res));
+    }
+//----------------------------------------------------------------------------------------------
+//-------------------- attendanceStatistic---------------------------------------------------------------
+    public function actionAttendanceStatistic()
+    {
+        $model = new FilterForm();
+        $model->scenario = 'attendanceStatistic';
+
+        if (isset($_REQUEST['FilterForm']))
+            $model->attributes=$_REQUEST['FilterForm'];
+        $this->render('attendanceStatistic', array(
+            'model' => $model,
+            'type_statistic'=>PortalSettings::model()->findByPk(41)->ps2
+        ));
     }
 //----------------------------------------------------------------------------------------------
     public function actionSearchStudent()

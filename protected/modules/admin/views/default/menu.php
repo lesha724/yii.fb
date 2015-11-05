@@ -61,7 +61,8 @@
                     'items' => array(
                         'thematicPlan' => 'Тематический план',
                         'journal' => 'Эл. журнал',
-                        'retake' => 'Отработка'
+                        'retake' => 'Отработка',
+                        'attendanceStatistic'=>'Статистика посещаемости'
                     ),
                 ),
                 array(
@@ -74,7 +75,6 @@
                         'modules'      => 'Ведение модулей',
                         'omissions' => 'Регистрация пропусков занятий',
                         'retake' => 'Отработка',
-                        'attendanceStatistic'=>'Статистика посещаемости',
                         'examSession'=>'Экз. сессия'
                     ),
                 ),

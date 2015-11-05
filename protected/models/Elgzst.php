@@ -372,4 +372,72 @@ SQL;
         $res = $command->queryRow();
         return $res;
     }
+
+    public function getAttendanceStatisticFor($st1, $start, $end, $monthStatistic)
+    {
+        if (empty($st1) || empty($start) || empty($end))
+            return array();
+
+        $sql=<<<SQL
+                SELECT elgzst.*,r2,elgz3
+                FROM elgzst
+                inner join elgz on (elgzst2 = elgz1)
+                inner join r on (elgz1 = r8)
+                WHERE elgzst1=:ST1 and r2 >= :DATE1 and r2 <= :DATE2
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ST1', $st1);
+        $command->bindValue(':DATE1', $start);
+        $command->bindValue(':DATE2', $end);
+        $rows = $command->queryAll();
+
+        $statistic = array();
+
+        $statistic['summary'] = array(
+            'td1' => 0,
+            'td2' => 0,
+            'td3' => 0,
+        );
+
+        $start = strtotime($start);
+        $end   = strtotime($end);
+
+        while($start <= $end) {
+
+            $td1 = $td2 = $td3 = 0;
+            foreach ($rows as $row) {
+
+                $r2 = $row['r2'];
+                $elgzst3 = $row['elgzst3'];
+
+                $condition = $monthStatistic
+                    ? date('Y-m-d', $start) == date('Y-m-d', strtotime($r2))
+                    : date('Y-m', $start) == date('Y-m', strtotime($r2));
+
+                if ($condition) {
+                    $td1++;                  // whole
+                    if ($elgzst3 == 1) $td2++; // with reason
+                    if ($elgzst3 == 2) $td3++; // without reason
+                }
+            }
+
+            $statistic[$start] = array(
+                'td1' => $td1,
+                'td2' => $td2,
+                'td3' => $td3,
+            );
+
+            $statistic['summary']['td1'] += $td1;
+            $statistic['summary']['td2'] += $td2;
+            $statistic['summary']['td3'] += $td3;
+
+            $condition = $monthStatistic
+                ? 'next day'
+                : 'first day of next month';
+            $start = strtotime($condition, $start);
+        }
+
+        return $statistic;
+    }
 }

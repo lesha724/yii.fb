@@ -423,7 +423,7 @@ SQL;
             }
         }
         
-         public function getAttendanceStatisticFor($st1, $start, $end, $monthStatistic)
+        public function getAttendanceStatisticFor($st1, $start, $end, $monthStatistic)
         {
             if (empty($st1) || empty($start) || empty($end))
                 return array();

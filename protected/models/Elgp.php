@@ -66,10 +66,10 @@ class Elgp extends CActiveRecord
 		return array(
 			'elgp0' => 'Elgp0',
 			'elgp1' => 'Elgp1',
-			'elgp2' => 'Elgp2',
-			'elgp3' => 'Elgp3',
-			'elgp4' => 'Elgp4',
-			'elgp5' => 'Elgp5',
+			'elgp2' => tt('Тип пропуска'),
+            'elgp3' => tt('№ справки'),
+			'elgp4' => tt('№ квитанции (тип оплата)'),
+			'elgp5' => tt('Дата квитанции(тип оплата)'),
 			'elgp6' => 'Elgp6',
 			'elgp7' => 'Elgp7',
 		);

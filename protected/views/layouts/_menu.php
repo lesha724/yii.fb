@@ -335,6 +335,12 @@ $this->widget('zii.widgets.CMenu', array(
                     'visible' => _ch('journal', 'omissions')&& $isTch,
                     'active'  => $_c=='journal' && $_a=='omissions'
                 ),
+                array(
+                    'label'   => $_l2.tt('Статистика посещаемости'),
+                    'url'     => _u('/journal/attendanceStatistic'),
+                    'visible' => _ch('journal', 'attendanceStatistic'),
+                    'active'  => $_c=='journal' && $_a=='attendanceStatistic'
+                ),
             ),getDopItem('journal')),
             'visible' => _ch('journal', 'main')
         ),
