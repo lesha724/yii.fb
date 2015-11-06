@@ -45,10 +45,13 @@ $this->breadcrumbs=array(
     <?php
         $html = '';
         foreach ($phones as $phone) {
+            $name=$phone[k3];
+            if($phone['tso4']==0)
+                $name=$phone['tso12'];
             $html .= <<<HTML
 <tr>
     <td>$phone[tsg2]</td>
-    <td>$phone[k3]</td>
+    <td>$name</td>
     <td>$phone[b2]</td>
     <td>$phone[teacher]</td>
     <td>
