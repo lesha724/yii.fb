@@ -120,7 +120,7 @@ SQL;
         }
         else {
             $sql = <<<SQL
-             SELECT * FROM  EL_GURNAL(:P1,0,0,0,2,0,:R1,0,0);
+            SELECT * FROM  EL_GURNAL(:P1,0,0,0,2,0,:R1,0,0);
 SQL;
             $command = Yii::app()->db->createCommand($sql);
             $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
@@ -1183,7 +1183,7 @@ SQL;
             list($us1,$us6) = explode("/", $model->group);
 
         $sql = <<<SQL
-                SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,:US1,4,0,1,0);
+                SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,4,:US1,0,1,0);
 SQL;
         $command = Yii::app()->db->createCommand($sql);
 
@@ -1228,7 +1228,7 @@ SQL;
         if (isset($_REQUEST['Ustem'])) {
 
             $sql = <<<SQL
-                SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,:US1,4,0,1,0);
+                SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,4,:US1,0,1,0);
 SQL;
             $command = Yii::app()->db->createCommand($sql);
 
@@ -1295,7 +1295,7 @@ SQL;
 
             $model->attributes = $_REQUEST['Ustem'];
             $sql = <<<SQL
-                SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,:US1,4,0,1,0);
+                SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,4,:US1,0,1,0);
 SQL;
             $command = Yii::app()->db->createCommand($sql);
 
@@ -1366,7 +1366,7 @@ SQL;
         $errorType=0;
 
         $sql = <<<SQL
-                SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,:US1,4,0,1,0);
+                SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,4,:US1,0,1,0);
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
@@ -1458,7 +1458,7 @@ SQL;
         $errorType=0;
 
         $sql = <<<SQL
-                SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,:US1,4,0,1,0);
+                SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,4,:US1,0,1,0);
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
@@ -1520,7 +1520,7 @@ SQL;
         {
             $error=false;
             $sql = <<<SQL
-                    SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,:US1,4,0,1,0);
+                    SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,4,:US1,0,1,0);
 SQL;
             $command = Yii::app()->db->createCommand($sql);
 
