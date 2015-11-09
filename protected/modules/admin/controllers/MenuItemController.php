@@ -49,12 +49,12 @@ class MenuItemController extends Controller
 		if(isset($_POST['Pm']))
 		{
 			$model->attributes=$_POST['Pm'];
-                        if($model->validate())
-                        {
-                            $model->pm1=new CDbExpression('GEN_ID(GEN_PM, 1)');
-                            if($model->save())
-                                    $this->redirect(array('index'));
-                        }
+            if($model->validate())
+            {
+                $model->pm1=new CDbExpression('GEN_ID(GEN_PM, 1)');
+                if($model->save())
+                        $this->redirect(array('index'));
+            }
 		}
 
 		$this->render('create',array(
@@ -100,10 +100,10 @@ class MenuItemController extends Controller
 	{
 		$model=new Pm('search');
 		$model->unsetAttributes();  // clear any default values
-                if (isset($_GET['pageSize'])) {
-                    Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
-                    unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
-                }
+        if (isset($_GET['pageSize'])) {
+            Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
+            unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
+        }
 		if(isset($_GET['Pm']))
 			$model->attributes=$_GET['Pm'];
 

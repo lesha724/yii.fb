@@ -24,6 +24,8 @@ HTML;
         $input = $form->hiddenField($model, 'elgp0');
         $html .= $input;
 
+        if(empty($model->elgp2))
+            $model->elgp2=1;
 
         $label = $form->label($model, 'elgp2', $options);
         $input = $form->dropDownList($model, 'elgp2',CHtml::listData(Elgzst::model()->getTypesByGroup(),'id','text','group'));
@@ -32,9 +34,6 @@ HTML;
         $label = $form->label($model, 'elgp3', $options);
         $input = $form->textField($model, 'elgp3');
         $html .= sprintf($pattern, $label, $input);
-
-        if(empty($model->elgp2))
-            $model->elgp2=1;
 
         $style='';
         if($model->elgp2!=5)

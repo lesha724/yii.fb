@@ -76,6 +76,8 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson)
     if(PortalSettings::model()->findByPk(29)->ps2==1)
         $disabled_input_1 = 'disabled="disabled"';
 
+    if($elgzst5!='')
+        $disabled_input = 'disabled="disabled"';
 
     if(!$read_only)
         $elgzst3_input='<input type="checkbox" data-toggle="tooltip" data-placement="right" data-original-title="'.$tooltip.'" '.$elgzst3.' data-name="elgzst3" '.$disabled.'>';
@@ -144,7 +146,7 @@ HTML;
     return sprintf($pattern);
 }
 
-function generateColumnName($date)
+function generateColumnName($date,$type_lesson)
 {
     $pattern = <<<HTML
 	<th colspan="2">
@@ -168,7 +170,10 @@ HTML;
             $type='';
     }
     $type=' '.$type;
-    $name = '№'.$date['elgz3'].' '.$date['formatted_date'].' '.SH::convertUS4($date['us4']).$type;
+    $us4=SH::convertUS4(1);
+    if($type_lesson!=0)
+    $us4=SH::convertUS4($date['us4']);
+    $name = '№'.$date['elgz3'].' '.$date['formatted_date'].' '.$us4.$type;
 
     return sprintf($pattern,$date['ustem5'], $name);
 }
@@ -218,7 +223,7 @@ HTML;
     $count_dates=0;
     //$column = 1;
     foreach($dates as $date) {
-        $th    .= generateColumnName($date);
+        $th    .= generateColumnName($date,$model->type_lesson);
         $th2   .= generateTh2($ps9,$date,$model->type_lesson);
         array_push($elgz1_arr,$date['elgz1']);
         //$column++;

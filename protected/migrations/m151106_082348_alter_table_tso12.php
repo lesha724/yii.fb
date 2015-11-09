@@ -5,7 +5,7 @@ class m151106_082348_alter_table_tso12 extends CDbMigration
 	public function safeUp()
 	{
 		$sql = <<<SQL
-alter table tso add tso12 var50;
+alter table tso add tso12 var100;
 SQL;
 		$this->execute($sql);
 	}

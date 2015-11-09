@@ -56,7 +56,7 @@
                     ),
                 ),
                 array(
-                    'name'       => 'Электронный журнал',
+                    'name'       => 'Эл. журнал',
                     'controller' => 'journal',
                     'items' => array(
                         'thematicPlan' => 'Тематический план',
@@ -70,11 +70,8 @@
                     'controller' => 'progress',
                     'items' => array(
                         'rating'      => 'Рейтинг',
-                        'journal'      => 'Эл. журнал',
                         'test'=>'Тестирование',
                         'modules'      => 'Ведение модулей',
-                        'omissions' => 'Регистрация пропусков занятий',
-                        'retake' => 'Отработка',
                         'examSession'=>'Экз. сессия'
                     ),
                 ),

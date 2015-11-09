@@ -507,6 +507,14 @@ function send(url,params,title,$td,$that,$spinner1,st1)
                         $td.find(':checkbox').attr('disabled','disabled');
                     else
                         $td.find(':checkbox').removeAttr('disabled');
+
+                if($that.data('name')=='elgzst5')
+                {
+                    if(parseFloat( $that.val().replace(',','.') )>0)
+                        $td.find('[data-name="elgzst4"]').attr('disabled','disabled');
+                    else
+                        $td.find('[data-name="elgzst4"]').removeAttr('disabled');
+                }
             }
 
             if($td.find('[data-name="elgzst3"]').is(':checked')||parseFloat($td.find('[data-name="elgzst4"]').val().replace(',','.'))<=min)
