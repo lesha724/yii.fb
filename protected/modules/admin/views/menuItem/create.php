@@ -14,4 +14,4 @@ if(!empty($this->menu))
 }
 ?>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php echo $this->renderPartial('_form', array('model'=>$model,'parent'=>$parent)); ?>

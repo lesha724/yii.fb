@@ -10,6 +10,9 @@
  * @property integer $ustem4
  * @property string $ustem5
  * @property integer $ustem6
+ * @property integer $ustem7
+ * @property string $ustem8
+ * @property integer $ustem9
  */
 class Ustem extends CActiveRecord
 {
@@ -95,6 +98,7 @@ class Ustem extends CActiveRecord
 		$criteria->compare('ustem4',$this->ustem4);
 		$criteria->compare('ustem5',$this->ustem5,true);
 		$criteria->compare('ustem6',$this->ustem6);
+        $criteria->compare('ustem7',$this->ustem7);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

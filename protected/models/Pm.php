@@ -14,6 +14,7 @@
  * @property integer $pm8
  * @property integer $pm9
  * @property string $pm10
+ * @property integer $pm11
  */
 class Pm extends CActiveRecord
 {
@@ -33,15 +34,15 @@ class Pm extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('pm2, pm3, pm4, pm5, pm6, pm7, pm8, pm9,pm10', 'required'),
-			array('pm7, pm8, pm9', 'numerical', 'integerOnly'=>true),
+			array('pm2, pm3, pm4, pm5, pm6, pm7, pm8, pm9,pm10,pm11', 'required'),
+			array('pm7, pm8, pm9,pm11', 'numerical', 'integerOnly'=>true),
 			array('pm2, pm3, pm4, pm5', 'length', 'max'=>400),
 			array('pm6', 'length', 'max'=>1020),
-                        array('pm6', 'url'),
+            array('pm6', 'url'),
 			array('pm10', 'length', 'max'=>80),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('pm2, pm3, pm4, pm5, pm6, pm7, pm8, pm9,pm10', 'safe', 'on'=>'search'),
+			array('pm2, pm3, pm4, pm5, pm6, pm7, pm8, pm9,pm10,pm11', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -70,8 +71,9 @@ class Pm extends CActiveRecord
 			'pm6' => 'url',
 			'pm7' => tt('Видимость'),
 			'pm8' => tt('Открывать в новой вкладке'),
-                    	'pm9' => tt('Приоритет'),
-                        'pm10' => tt('Группа'),
+            'pm9' => tt('Приоритет'),
+            'pm10' => tt('Группа'),
+            'pm11' => tt('Тип'),
 		);
 	}
 
@@ -98,11 +100,12 @@ class Pm extends CActiveRecord
 		$criteria->compare('pm3',$this->pm3,true);
 		$criteria->compare('pm4',$this->pm4,true);
 		$criteria->compare('pm5',$this->pm5,true);
-                $criteria->compare('pm6',$this->pm6,true);
+        $criteria->compare('pm6',$this->pm6,true);
 		$criteria->compare('pm7',$this->pm7);
 		$criteria->compare('pm8',$this->pm8);
 		$criteria->compare('pm9',$this->pm9);
 		$criteria->compare('pm10',$this->pm10,true);
+        $criteria->compare('pm11',$this->pm11);
 
 		return new CActiveDataProvider($this, array(
                     'criteria'=>$criteria,
@@ -170,6 +173,39 @@ class Pm extends CActiveRecord
                     return '-';
             }
         }
+
+        public function getParents()
+        {
+            $table=$this->tableName();
+            if(!empty($this->pm1))
+                $parents=  $this->findAllBySql('SELECT * FROM '.$table.' WHERE pm11=0 AND pm1!='.$this->pm1);
+            else {
+                $parents=  $this->findAllBySql('SELECT * FROM '.$table.' WHERE pm11=0');
+            }
+            return $parents;
+        }
+
+        public static function getPm11Array()
+        {
+            return array(
+                0=>tt('Главный пункт'),
+                1=>tt('Дочерний пункт'),
+            );
+        }
+
+        public function getPm11()
+        {
+            switch ($this->pm11) {
+                case 0:
+                    return tt('Главный пункт');
+                    break;
+                case 1:
+                    return tt('Дочерний пункт');
+                    break;
+                default:
+                    return '-';
+            }
+        }
         
         public static function getPm7Array()
         {
@@ -192,4 +228,33 @@ class Pm extends CActiveRecord
                     return '-';
             }
         }
+
+    public function getParent()
+    {
+        if($this->type!=0)
+        {
+            $parent_=  Pmc::model()->findByAttributes(array('pmc2'=>$this->pm1));
+            $parent=null;
+            if( $parent_!=null)
+            {
+                $parent=$this->model()->findByPk($parent_->pmc1);
+            }
+            return $parent;
+        }else
+        {
+            return null;
+        }
+    }
+
+    public function getParentTitle()
+    {
+        $parent=$this->getParent();
+        if($parent==null)
+        {
+            return '-';
+        }else
+        {
+            return $parent->pm2;
+        }
+    }
 }

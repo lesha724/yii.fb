@@ -42,11 +42,21 @@ $this->widget('bootstrap.widgets.TbGridView',array(
                     'filter'=>Pm::getPm8Array(),
                 ),
 		'pm9',
-                'pm10'=>array(
-                    'name'=>'pm10',
-                    'value'=>'$data->getPm10()',
-                    'filter'=>Pm::getPm10Array(),
-                ),
+        'pm10'=>array(
+            'name'=>'pm10',
+            'value'=>'$data->getPm10()',
+            'filter'=>Pm::getPm10Array(),
+        ),
+        'pm11'=>array(
+            'name'=>'pm11',
+            'value'=>'$data->getPm11()',
+            'filter'=>Pm::getPm11Array(),
+        ),
+        array(
+            'header'=>  Pmc::model()->getAttributeLabel('pmc1'),
+            'value'=>'$data->getParentTitle()',
+            'filter'=>''
+        ),
 		array(
                     'class'=>'bootstrap.widgets.TbButtonColumn',
                     'template'=>'{update} {delete}',

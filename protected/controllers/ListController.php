@@ -19,7 +19,7 @@ class ListController extends Controller
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),*/
             array('allow',
-                'actions' => array('group','chair')
+                'actions' => array('group','chair','searchStudent')
             ),
             array('deny',
                 'users' => array('*'),
@@ -29,11 +29,11 @@ class ListController extends Controller
 	
     public function actionGroup()
     {
-        $model = new FilterForm();
+        $model = new TimeTableForm();
         $model->scenario = 'list-group';
 
-        if (isset($_REQUEST['FilterForm']))
-            $model->attributes=$_REQUEST['FilterForm'];
+        if (isset($_REQUEST['TimeTableForm']))
+            $model->attributes=$_REQUEST['TimeTableForm'];
         $res=PortalSettings::model()->findByPk(35);
         $ps35=0;
         if(!empty($res))
@@ -50,22 +50,38 @@ class ListController extends Controller
             $dbh      = ibase_connect($host, $login, $password);
         }
 
+        $student = new St;
+        $student->unsetAttributes();
+
         $this->render('group', array(
             'model' => $model,
             'dbh'=> $dbh,
-            'ps35'=>$ps35
+            'ps35'=>$ps35,
+            'student'=>$student
         ));
     }
     
     public function actionChair()
     {
-        $model = new FilterForm();
+        $model = new TimeTableForm();
         $model->scenario = 'list-chair';
 
-        if (isset($_REQUEST['FilterForm']))
-            $model->attributes=$_REQUEST['FilterForm'];
+        if (isset($_REQUEST['TimeTableForm']))
+            $model->attributes=$_REQUEST['TimeTableForm'];
 
         $this->render('chair', array(
+            'model' => $model,
+        ));
+    }
+
+    public function actionSearchStudent()
+    {
+        $model = new St;
+        $model->unsetAttributes();
+        if (isset($_REQUEST['St']))
+            $model->attributes = $_REQUEST['St'];
+
+        $this->render('/filter_form/default/search_student', array(
             'model' => $model,
         ));
     }

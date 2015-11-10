@@ -42,7 +42,10 @@ class TimeTableForm extends CFormModel
             array('housing, classroom', 'required', 'on' => 'classroom'),
 
             array('lessonStart, lessonEnd', 'required', 'on' => 'free-classroom'),
-            array('housing', 'safe', 'on' => 'free-classroom')
+            array('housing', 'safe', 'on' => 'free-classroom'),
+
+            array('filial, faculty, course, group', 'required', 'on' => 'list-group'),
+            array('filial, chair', 'required', 'on' => 'list-chair'),
 		);
 	}
 

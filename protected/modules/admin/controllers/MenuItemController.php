@@ -41,43 +41,83 @@ class MenuItemController extends Controller
 	public function actionCreate()
 	{
 		$model=new Pm;
-                $model->unsetAttributes();
-                $model->pm9=0;
-		// Uncomment the following line if AJAX validation is needed
+        $model->unsetAttributes();
+        $model->pm9=0;
+        $parent= new Pmc;
+        // Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['Pm']))
 		{
 			$model->attributes=$_POST['Pm'];
-            if($model->validate())
+            if(isset($_POST['Pmc']))
             {
-                $model->pm1=new CDbExpression('GEN_ID(GEN_PM, 1)');
+                $parent->attributes=$_POST['Pmc'];
+            }
+            $model->pm1=new CDbExpression('GEN_ID(GEN_PM, 1)');
+            if($model->pm11!=0)
+            {
+                if($model->validate())
+                    if($parent->validate())
+                        if($model->save())
+                        {
+                            $parent->pmc2=$model->pm1;
+                            if($parent->save())
+                                $this->redirect(array('index'));
+                        }
+            }else{
                 if($model->save())
-                        $this->redirect(array('index'));
+                    $this->redirect(array('index'));
             }
 		}
 
 		$this->render('create',array(
 			'model'=>$model,
+            'parent'=>$parent
 		));
 	}
 
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
+        if($model->pm11!=0)
+        {
+            $parent=  Pmc::model ()->findByAttributes (array('pmc2'=>$model->pm1));
+            if($parent==null)
+                $parent= new Pmc;
+        }
+        else
+            $parent= new Pmc;
 
-		// Uncomment the following line if AJAX validation is needed
+        // Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['Pm']))
 		{
 			$model->attributes=$_POST['Pm'];
-			if($model->save())
-				$this->redirect(array('index'));
+            if(isset($_POST['Pmc']))
+            {
+                $parent->attributes=$_POST['Pmc'];
+            }
+            if($model->pm11!=0)
+            {
+                if($model->validate())
+                    if($parent->validate())
+                        if($model->save())
+                        {
+                            $parent->pmc2=$model->pm1;
+                            if($parent->save())
+                                $this->redirect(array('index'));
+                        }
+            }else{
+                if($model->save())
+                    $this->redirect(array('index'));
+            }
 		}
 
 		$this->render('update',array(
 			'model'=>$model,
+            'parent'=>$parent
 		));
 	}
 
