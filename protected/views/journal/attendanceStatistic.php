@@ -11,7 +11,7 @@ $this->breadcrumbs=array(
 );
 
 Yii::app()->clientScript->registerPackage('dataTables');
-Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/progress/attendanceStatistic.js', CClientScript::POS_HEAD);
+Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/journal/attendanceStatistic.js', CClientScript::POS_HEAD);
 
 $this->renderPartial('/filter_form/timeTable/group', array(
     'model' => $model,
