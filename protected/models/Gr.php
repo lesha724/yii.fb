@@ -294,6 +294,29 @@ SQL;
         return $groups;
     }
 
+    public function getGroupsForModulesPermition($discipline)
+    {
+        if (empty($discipline))
+            return array();
+        $sql = <<<SQL
+             SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,:D1,1,0,0,5,0) ORDER by gr7 DESC;
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
+        $command->bindValue(':D1', $discipline);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $groups = $command->queryAll();
+
+        foreach($groups as $key => $group) {
+            $groups[$key]['name'] = $this->getGroupName($group['sem4'], $group);
+            $groups[$key]['group'] = $group['kod_uo1'].'/'.$group['gr1'];
+        }
+
+        return $groups;
+    }
+
     public function getGroupsForTPlanPermition($discipline)
     {
         if (empty($discipline))

@@ -388,6 +388,20 @@ SQL;
         return $disciplines;
     }
 
+    public function getDisciplinesForModulesPermition()
+    {
+        $sql = <<<SQL
+            SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,0,0,0,5,0);
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $disciplines = $command->queryAll();
+
+        return $disciplines;
+    }
+
     public function getDisciplinesForTPlanPermition()
     {
 

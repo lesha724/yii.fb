@@ -29,7 +29,6 @@ JS
 
     $this->renderPartial('/filter_form/default/discipline_group', array(
         'model' => $model,
-        'type'  => $type
     ));
 
 

@@ -77,9 +77,7 @@ function getDopItem($controller,$level)
     if($level==0)
         $items=Pm::model()->findAllByAttributes(array('pm7'=>1,'pm10'=>$controller,'pm11'=>$level),array('order'=>'pm9 DESC'));
     else
-    {
         $items=Pm::model()->findAllBySql('SELECT * FROM pm inner join pmc on (pm1=pmc2) WHERE pm7=1 AND pmc1=:pmc1 and pm11=1 ORDER BY pm9 DESC',array(':pmc1'=>$controller,'pm11'=>$level));
-    }
 
     if(!empty($items))
     {

@@ -17,11 +17,7 @@ class ProgressController extends Controller
         return array(
             array('allow',
                 'actions' => array(
-                    //'journal',
                     'getGroups',
-                    //'insertStegMark',
-                    //'insertDsejMark',
-                    //'insertMmbjMark',
                     'insertMejModule',
                     'deleteMejModule',
                     'modules',
@@ -34,19 +30,6 @@ class ProgressController extends Controller
                     'examSession',
                     'insertStus',
                     'insertVmp',
-                    //'omissions',
-                    //'searchStudent',
-                    //'filterStudent',
-                    //'insertOmissionsStegMark',
-                    //'updateOmissionsStegMark',
-                    //'retake',
-                    //'searchRetake',
-                    //'addRetake',
-                    //'saveRetake',
-                    //'showRetake',
-                    //'deleteRetake',
-                    //'checkCountRetake',
-                    //'journalExcel'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -138,31 +121,7 @@ class ProgressController extends Controller
             Vmp::model()->recalculateModulesFor($vvmp1, $nr1);
     }
 
-    public function actionModules()
-    {
-        $type = 0; // own modules
 
-        $grants = Yii::app()->user->dbModel->grants;
-        if (! empty($grants))
-            $type = $grants->getGrantsFor(Grants::MODULES);
-
-        $model = new FilterForm;
-        $model->scenario = 'modules';
-        if (isset($_REQUEST['FilterForm']))
-            $model->attributes=$_REQUEST['FilterForm'];
-
-
-        $moduleInfo = null;
-        if (! empty($model->group)) {
-            $moduleInfo = $this->fillModulesFor($model);
-        }
-
-        $this->render('modules', array(
-            'model'      => $model,
-            'type'       => $type,
-            'moduleInfo' => $moduleInfo,
-        ));
-    }
 	
 	public function actionModule()
     {
@@ -180,7 +139,7 @@ class ProgressController extends Controller
         ));
     }
 
-    private function fillModulesFor($model)
+    /*private function fillModulesFor($model)
     {
         $gr1  = $model->group;
         $d1   = $model->discipline;
@@ -188,7 +147,7 @@ class ProgressController extends Controller
         $sem  = Yii::app()->session['sem'];
         $res = Vvmp::model()->fillDataForGroup($gr1, $d1, $year, $sem);
         return $res;
-    }
+    }*/
 
     public function actionUpdateVvmp()
     {
@@ -492,4 +451,26 @@ SQL;
 
         Yii::app()->end(CJSON::encode(array('error' => $error)));
     }
+
+
+    /*-----------------------------------------------------------------*/
+    public function actionModules()
+    {
+        $model = new FilterForm;
+        $model->scenario = 'modules';
+        if (isset($_REQUEST['FilterForm']))
+            $model->attributes=$_REQUEST['FilterForm'];
+
+
+        /*$moduleInfo = null;
+        if (! empty($model->group)) {
+            $moduleInfo = $this->fillModulesFor($model);
+        }*/
+
+        $this->render('modules', array(
+            'model'      => $model,
+            //'moduleInfo' => $moduleInfo,
+        ));
+    }
+    /*------------------------------------------------------------------------*/
 }
