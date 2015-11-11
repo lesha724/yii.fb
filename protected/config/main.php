@@ -60,10 +60,10 @@ $config = array(
 		'cache' => array(
 			'class' => 'CFileCache',
 		),
-		'assetManager' => array(
+		/*'assetManager' => array(
 			'class' => 'ext.EAssetManagerBoostGz',
 			'minifiedExtensionFlags' => array('min.js', 'minified.js', 'packed.js'),
-		),
+		),*/
 		'clientScript'=>array(
 			'packages' => array(
 				'jquery' => array( // jQuery CDN - provided by (mt) Media Temple

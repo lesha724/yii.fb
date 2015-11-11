@@ -7,7 +7,7 @@
     ));
         $disciplines = CHtml::listData(D::model()->getDisciplinesForModulesPermition(), 'd1', 'd2');
         $groups = CHtml::listData(Gr::model()->getGroupsForJournalPermition($model->discipline,$model->type_lesson), 'group', 'name');
-        $module=FilterForm::getTypesForJournal();
+        $modules=FilterForm::getTypesForJournal();
 
         $options =  array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;');
         echo '<div>'.
@@ -21,7 +21,7 @@
                 '</div>'.
                 '<div class="span3 ace-select">'.
                 $form->label($model, 'module').
-                $form->dropDownList($model, 'module', $type_lesson, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;')).
+                $form->dropDownList($model, 'module', $modules, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;')).
                 '</div>'.
             '</div>';
 

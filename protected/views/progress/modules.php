@@ -27,14 +27,13 @@ JS
     $this->renderPartial('/filter_form/default/year_sem');
 
 
-    $this->renderPartial('/filter_form/default/discipline_group', array(
+    $this->renderPartial('/filter_form/default/discipline_group_modules', array(
         'model' => $model,
     ));
 
 
     $this->renderPartial('modules/_bottom', array(
         'model' => $model,
-        'type' => $type,
-        'moduleInfo' => $moduleInfo
+        //'moduleInfo' => $moduleInfo
     ));
 
