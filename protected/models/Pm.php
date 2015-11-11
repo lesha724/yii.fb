@@ -39,10 +39,10 @@ class Pm extends CActiveRecord
 			array('pm2, pm3, pm4, pm5', 'length', 'max'=>400),
 			array('pm6', 'length', 'max'=>1020),
             array('pm6', 'url'),
-			array('pm10', 'length', 'max'=>80),
+			array('pm10,pm1', 'length', 'max'=>80),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('pm2, pm3, pm4, pm5, pm6, pm7, pm8, pm9,pm10,pm11', 'safe', 'on'=>'search'),
+			array('pm1,pm2, pm3, pm4, pm5, pm6, pm7, pm8, pm9,pm10,pm11', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -231,7 +231,7 @@ class Pm extends CActiveRecord
 
     public function getParent()
     {
-        if($this->type!=0)
+        if($this->pm11!=0)
         {
             $parent_=  Pmc::model()->findByAttributes(array('pmc2'=>$this->pm1));
             $parent=null;
@@ -256,5 +256,23 @@ class Pm extends CActiveRecord
         {
             return $parent->pm2;
         }
+    }
+
+    protected function beforeSave()
+    {
+        if(!$this->isNewRecord&&$this->pm11==0)
+            Pmc::model ()->deleteAllByAttributes (array('pmc2'=>  $this->pm1));
+        return parent::beforeSave();
+    }
+
+    protected function afterDelete()
+    {
+        $res = Pmc::model()->findAllByAttributes(array('pmc1'=>$this->pm1));
+        foreach($res as $val)
+        {
+            Pm::model ()->deleteAllByAttributes (array('pm1'=>  $val->pmc2));
+        }
+        parent::afterDelete();
+
     }
 }

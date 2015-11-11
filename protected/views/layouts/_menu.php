@@ -20,7 +20,7 @@ function getDopGroup($_l)
                 'label' => _l(getLabelGroup($val), $val->pmg9),
                 'url' => '#',
                 'linkOptions'=> $_l,
-                'items' =>getDopItem($val->pmg1),
+                'items' =>getDopItem($val->pmg1,0),
                 'visible'=>$visible
             ));
         }
@@ -66,21 +66,33 @@ function getLabelItem($item)
     }
     return $label;
 }
-function getDopItem($controller)
+function getDopItem($controller,$level)
 {
     if(empty($controller))
         return array();
-    $items=Pm::model()->findAllByAttributes(array('pm7'=>1,'pm10'=>$controller),array('order'=>'pm9 DESC'));
+    if($level>1)
+        return array();
+    $items=Pm::model()->findAllByAttributes(array('pm7'=>1,'pm10'=>$controller,'pm11'=>$level),array('order'=>'pm9 DESC'));
     if(!empty($items))
     {
        $array=array();
        //'linkOptions' => array('target'=>'_blank')
        foreach ($items as $item) {
-          array_push($array,array(
+           $items=getDopItem($controller,$level+1);
+           if(empty($items))
+            array_push($array,array(
               'label'  => getLabelItem($item),
               'url'    => $item->pm6,
               'linkOptions' => array('target'=>($item->pm8==1)?'_blank':'_self'),
           ));
+           else
+               array_push($array,array(
+                   'label'  => _l(getLabelItem($item),'angle-down'),
+                   'url' => '#',
+                   'linkOptions'=> array('class' => 'dropdown-toggle'),
+                   'items' =>$items,
+               ));
+
        }
        //print_r($array);
        return $array;
@@ -254,7 +266,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'active'  => $_c=='timeTable' && $_a=='freeClassroom',
                     'visible' => _ch('timeTable', 'freeClassroom')
                 ),
-            ),getDopItem('timeTable')),
+            ),getDopItem('timeTable',0)),
             'visible' => _ch('timeTable', 'main')
         ),
         array(
@@ -281,7 +293,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'active'  => $_c=='workPlan' && $_a=='student',
                     'visible' => _ch('workPlan', 'student')
                 ),
-            ),getDopItem('workPlan')),
+            ),getDopItem('workPlan',0)),
             'visible' => _ch('workPlan', 'main')
         ),
 	array(
@@ -302,7 +314,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'active'  => $_c=='list' && $_a=='chair',
                     'visible' => _ch('list', 'chair')
                 ),
-            ),getDopItem('list')),
+            ),getDopItem('list',0)),
             'visible' => _ch('list', 'main')
         ),
         array(
@@ -341,7 +353,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'visible' => _ch('journal', 'attendanceStatistic'),
                     'active'  => $_c=='journal' && $_a=='attendanceStatistic'
                 ),
-            ),getDopItem('journal')),
+            ),getDopItem('journal',0)),
             'visible' => _ch('journal', 'main')
         ),
         array(
@@ -374,7 +386,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'visible' => _ch('progress', 'examSession') && $isTch,
                     'active'  => $_c=='progress' && $_a=='examSession'
                 ),
-            ),getDopItem('progress')),
+            ),getDopItem('progress',0)),
             'visible' => _ch('progress', 'main')
         ),
         array(
@@ -422,7 +434,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'visible' => _ch('entrance', 'registration'),
                     'active'  => $_c=='entrance' && $_a=='registration'
                 ),
-            ),getDopItem('entrance')),
+            ),getDopItem('entrance',0)),
             'visible' => _ch('entrance', 'main')
         ),
         array(
@@ -449,7 +461,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'visible' => _ch('workLoad', 'amount'),
                     'active'  => $_c=='workLoad' && $_a=='amount'
                 ),
-            ),getDopItem('workLoad')),
+            ),getDopItem('workLoad',0)),
             'visible' => _ch('workLoad', 'main')
         ),
         array(
@@ -470,7 +482,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'visible' => _ch('payment', 'education'),
                     'active'  => $_c=='payment' && $_a=='education',
                 ),
-            ),getDopItem('payment')),
+            ),getDopItem('payment',0)),
             'visible' => _ch('payment', 'main') && $isStd
         ),
         array(
@@ -515,7 +527,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'active'  => $_c=='other' && $_a=='studentInfo',
                     'visible' => _ch('other', 'studentInfo') && ($isTch || $isStd),
                 ),
-            ),getDopItem('other')),
+            ),getDopItem('other',0)),
             'visible' => _ch('other', 'main')
         ),
     ),getDopGroup($_l)),

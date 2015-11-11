@@ -18,7 +18,7 @@ class MenuItemController extends Controller
 	{
 		return array(
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('index','update','create','delete','changeVisible'),
+				'actions'=>array('index','update','create','delete','changeVisible','view'),
 				'expression' => 'Yii::app()->user->isAdmin',
 			),
 			array('deny',  // deny all users
@@ -26,14 +26,21 @@ class MenuItemController extends Controller
 			),
 		);
 	}
-        
-        public function actionChangeVisible($id,$type)
-        {
-            if(!Yii::app()->request->isAjaxRequest) throw new CHttpException('Нет доступа');
-            $model=$this->loadModel($id);
-            $model->pm7=$type;
-            $model->save();
-        }
+
+    public function actionView($id)
+    {
+        $this->render('view',array(
+            'model'=>$this->loadModel($id)
+        ));
+    }
+
+    public function actionChangeVisible($id,$type)
+    {
+        if(!Yii::app()->request->isAjaxRequest) throw new CHttpException('Нет доступа');
+        $model=$this->loadModel($id);
+        $model->pm7=$type;
+        $model->save();
+    }
 	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
@@ -54,20 +61,31 @@ class MenuItemController extends Controller
             {
                 $parent->attributes=$_POST['Pmc'];
             }
-            $model->pm1=new CDbExpression('GEN_ID(GEN_PM, 1)');
-            if($model->pm11!=0)
+            if($model->validate())
             {
-                if($model->validate())
+                $sql = 'select GEN_ID(GEN_PM, 1) FROM RDB$DATABASE';
+                $command = Yii::app()->db->createCommand($sql);
+                $id=$command->queryScalar();
+
+                $model->pm1=$id;
+                if($model->pm11!=0)
+                {
                     if($parent->validate())
+                    {
+                        $parent_ = Pm::model()->findByPk($parent->pmc1);
+                        $model->pm10=$parent_->pm10;
                         if($model->save())
                         {
+                            $parent->pmc0=new CDbExpression('GEN_ID(GEN_PMC,1)');
                             $parent->pmc2=$model->pm1;
                             if($parent->save())
                                 $this->redirect(array('index'));
                         }
-            }else{
-                if($model->save())
-                    $this->redirect(array('index'));
+                    }
+                }else{
+                    if($model->save())
+                        $this->redirect(array('index'));
+                }
             }
 		}
 
@@ -103,12 +121,18 @@ class MenuItemController extends Controller
             {
                 if($model->validate())
                     if($parent->validate())
+                    {
+                        $parent_ = Pm::model()->findByPk($parent->pmc1);
+                        $model->pm10=$parent_->pm10;
                         if($model->save())
                         {
+                            if(empty($parent->pmc0))
+                                $parent->pmc0=new CDbExpression('GEN_ID(GEN_PMC,1)');
                             $parent->pmc2=$model->pm1;
                             if($parent->save())
                                 $this->redirect(array('index'));
                         }
+                    }
             }else{
                 if($model->save())
                     $this->redirect(array('index'));

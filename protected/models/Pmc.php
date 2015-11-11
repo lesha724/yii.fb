@@ -4,11 +4,9 @@
  * This is the model class for table "pmc".
  *
  * The followings are the available columns in table 'pmc':
+ * @property integer $pmc0
  * @property integer $pmc1
  * @property integer $pmc2
- *
- * The followings are the available model relations:
- * @property Pm $pmc20
  */
 class Pmc extends CActiveRecord
 {
@@ -28,10 +26,11 @@ class Pmc extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('pmc1, pmc2', 'required'),
+			//array('pmc0', 'required'),
+			array('pmc1, pmc2', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('pmc1, pmc2', 'safe', 'on'=>'search'),
+			array('pmc0, pmc1, pmc2', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -43,7 +42,6 @@ class Pmc extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'pmc20' => array(self::BELONGS_TO, 'Pm', 'pmc2'),
 		);
 	}
 
@@ -53,7 +51,8 @@ class Pmc extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'pmc1' => 'Pmc1',
+			'pmc0' => 'Pmc0',
+			'pmc1' => tt('Родитель'),
 			'pmc2' => 'Pmc2',
 		);
 	}
@@ -76,6 +75,7 @@ class Pmc extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
+		$criteria->compare('pmc0',$this->pmc0);
 		$criteria->compare('pmc1',$this->pmc1);
 		$criteria->compare('pmc2',$this->pmc2);
 

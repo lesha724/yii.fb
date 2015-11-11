@@ -24,10 +24,10 @@ $this->widget('bootstrap.widgets.TbGridView',array(
 	'columns'=>array(
 		//'pm1',
 		'pm2',
-		'pm3',
+		/*'pm3',
 		'pm4',
 		'pm5',
-		'pm6',
+		'pm6',*/
 		'pm7'=>array(
                     'name'=>'pm7',
                     'type'=>'html',
@@ -36,12 +36,12 @@ $this->widget('bootstrap.widgets.TbGridView',array(
                     },
                     'filter'=>Pm::getPm7Array(),
                 ),
-		'pm8'=>array(
+		/*'pm8'=>array(
                     'name'=>'pm8',
                     'value'=>'$data->getPm8()',
                     'filter'=>Pm::getPm8Array(),
-                ),
-		'pm9',
+                ),*/
+		/*'pm9',*/
         'pm10'=>array(
             'name'=>'pm10',
             'value'=>'$data->getPm10()',
@@ -59,7 +59,7 @@ $this->widget('bootstrap.widgets.TbGridView',array(
         ),
 		array(
                     'class'=>'bootstrap.widgets.TbButtonColumn',
-                    'template'=>'{update} {delete}',
+                    'template'=>'{update} {view} {delete}',
                     'header'=>CHtml::dropDownList(
                         'pageSize',
                         $pageSize,

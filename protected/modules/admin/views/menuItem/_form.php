@@ -7,6 +7,8 @@
 
 	<?php echo $form->errorSummary($model); ?>
 
+    <?php echo $form->errorSummary($parent); ?>
+
 	<?php echo $form->textFieldRow($model,'pm2',array('class'=>'span12','maxlength'=>400)); ?>
 
 	<?php echo $form->textFieldRow($model,'pm3',array('class'=>'span12','maxlength'=>400)); ?>
@@ -26,9 +28,19 @@
 	<?php echo $form->labelEx($model, 'pm9'); ?>
     <?php echo $form->numberField($model,'pm9',array('class'=>'span12')); ?>
     <?php echo $form->error($model, 'pm9'); ?>
-
-	<?php echo $form->dropDownListRow($model,'pm10',Pm::getPm10Array(),array('class'=>'span5','maxlength'=>80)); ?>
-
+    <?php
+        $style="display:none";
+        $style1="";
+        if(!empty($model->pm11))
+            if($model->pm11!=0)
+            {
+                $style='';
+                $style1="display:none";
+            }
+    ?>
+    <div id="item_menu_group" style="<?=$style1?>">
+        <?php echo $form->dropDownListRow($model,'pm10',Pm::getPm10Array(),array('class'=>'span5','maxlength'=>80)); ?>
+    </div>
     <?php
     echo $form->DropDownListRow($model, 'pm11',Pm::getPm11Array(),array('id'=>'type-select'));
 
@@ -37,19 +49,18 @@
             if($(this).val()!=0)
             {
                 $('#item_menu_type').show();
+                $('#item_menu_group').hide();
             }else
             {
                 $('#item_menu_type').hide();
+                $('#item_menu_group').show();
             }
         });",CClientScript::POS_READY);
 
-    $style="display:none";
-    if(!empty($model->pm11))
-        if($model->pm11!=0)
-            $style='';
+
     ?>
     <div id="item_menu_type" style="<?=$style?>">
-        <?php echo $form->dropDownListRow($parent,'pmc2',CHtml::listData($model->getParents(),'pm1','pm2'))?>
+        <?php echo $form->dropDownListRow($parent,'pmc1',CHtml::listData($model->getParents(),'pm1','pm2'))?>
     </div>
 
 	<div class="form-actions">
