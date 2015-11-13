@@ -50,7 +50,7 @@ JS
         if($hours!=$us6)
             $class="red";
     ?>
-    <h4 class="<?=$class?>"><b><i class="icon-info-sign show-info"></i><i class="icon-double-angle-right"></i><?=tt('Часы по рабочему плану - ').$us6?> /</label><?=tt('Часы по тематическому плану - ').$hours?></b></h4>
+    <h4 class="<?=$class?>"><b><i class="icon-info-sign show-info"></i><i class="icon-double-angle-right"></i><?=tt('Часы по рабочему плану - ').' '.$us6?> / </label><?=tt('Часы по тематическому плану - ').' '.$hours?></b></h4>
 <?php $urlInsert   = Yii::app()->controller->createAbsoluteUrl("journal/insertUstemTheme");?>
     <table id="themes" data-us1="<?=$us1?>" data-url="<?=$urlInsert?>" class="table table-striped table-bordered table-hover">
         <thead>
