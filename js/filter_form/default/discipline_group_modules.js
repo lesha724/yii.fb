@@ -2,7 +2,7 @@ $(document).ready(function(){
 
     $spinner1 = $('#spinner1');
 
-    $(document).on('change', '#FilterForm_discipline,#FilterForm_group', function() {
+    /*$(document).on('change', '#FilterForm_discipline,#FilterForm_group', function() {
 
         var $form  = $(this).closest('form');
         var formId = $form.attr('id');
@@ -17,9 +17,9 @@ $(document).ready(function(){
             initChosen();
             $spinner1.hide();
         })
-    });
+    });*/
 
-    $(document).on('change', '#FilterForm_module', function() {
+    $(document).on('change', '#FilterForm_discipline,#FilterForm_group', function() {
         $(this).closest('form').submit();
     });
 

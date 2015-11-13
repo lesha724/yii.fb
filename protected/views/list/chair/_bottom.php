@@ -14,7 +14,7 @@
 	<tr>
 		<th style="width:40px">№</th>
 		<th><?=tt('Ф.И.О.')?></th>
-                <th><?=tt('Должность')?></th>
+                <th><?=tt('Ставка')?></th>
 	</tr>
 </thead>
 <tbody>
@@ -25,7 +25,7 @@
             echo '<tr>';
             echo '<td>'.$i.'</td>';
             echo '<td>'.$teacher['p3'].' '.$teacher['p4'].' '.$teacher['p5'].'</td>';
-            echo '<td>'.$teacher['dol2'].'</td>';
+            echo '<td>'.round($teacher['pd6'],2).'</td>';
             echo '</tr>';
             $i++;
         }

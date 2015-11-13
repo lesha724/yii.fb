@@ -294,7 +294,7 @@ table.small-table-1{
     text-align: center !important;
 }
 
-.journal-bottom td.error, .exam-session-table-2 td.error {
+.journal-bottom td.error,.modules_table_2 td.error, .exam-session-table-2 td.error {
     border:1px solid red;
 }
 
@@ -708,6 +708,50 @@ table.subscription caption {
 .cell-vertical{
 	text-align: center;
 }
+
+/*----------modules-table-------------*/
+.modules_table_1 {
+    width:20%;
+}
+div.modules_div_table2,div.modules_div_table3{
+    /*overflow-x:scroll;*/
+    float:left;
+    /*width:80%;*/
+}
+
+.modules_div_table2 th {
+    min-width: 57px;
+    text-align: center !important;
+    font-size:10px;
+}
+
+.modules_table thead tr {
+    height: 43px;
+}
+
+.modules_table tbody tr {
+    height: 36px!important;
+}
+.modules_table tbody td
+{
+    padding: 0px;
+    white-space: nowrap;
+    line-height: 36px;
+}
+.modules_table tbody td input
+{
+    max-width: 30px;
+}
+
+.modules_div_table3 td,.modules_table_2 td, .modules_table th
+{
+    max-width: 50px;
+}
+
+#modules td{
+    border-top: 0px;
+}
+/*----------modules-table-------------*/
 
 @media print {
  .noprint { display: none; }

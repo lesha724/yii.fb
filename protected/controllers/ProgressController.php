@@ -20,7 +20,6 @@ class ProgressController extends Controller
                     'getGroups',
                     'insertMejModule',
                     'deleteMejModule',
-                    'modules',
                     'module',
                     'updateVvmp',
                     'insertVmpMark',
@@ -29,7 +28,10 @@ class ProgressController extends Controller
                     'renderExtendedModule',
                     'examSession',
                     'insertStus',
-                    'insertVmp',
+                    //'insertVmp',
+
+                    'modules',
+                    'insertJpvd',
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -215,48 +217,7 @@ class ProgressController extends Controller
         Yii::app()->end(CJSON::encode(array('error' => $error, 'errors' => $model->getErrors())));
     }
 	
-	public function actionInsertVmp()
-    {
-        if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
-        $vmp1  = Yii::app()->request->getParam('vmpv1', null);
-        $vmp2  = Yii::app()->request->getParam('st1', null);
-        $value = (int)Yii::app()->request->getParam('value', null);
-		
-		$criteria = new CDbCriteria();
-		$criteria->compare('vmp1', $vmp1);
-		$criteria->compare('vmp2', $vmp2);
-		$sql=<<<SQL
-			select * from vmpp where vmpp1=:vmpv1 and vmpp2=:p1 and vmpp4=1
-SQL;
-        $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':vmpv1', $vmp1);
-		$command->bindValue(':p1', Yii::app()->user->dbModel->p1);
-        
-		$model = Vmp::model()->find($criteria);
-		if (empty($model))
-			$error = true;
-		else
-		{
-			$permition = $command->queryAll();
-			if($permition==null)
-				$error = true;
-			else
-			{
-				if($value>=0&&$value<=5)
-				{
-					$model->vmp4=$value;
-					$error = !$model->save();
-				}else
-				{
-					$error = true;
-				}
-			}
-		}
-		
-        Yii::app()->end(CJSON::encode(array('error' => $error, 'errors' => $model->getErrors())));
-    }
 
     public function actionUpdateStus()
     {
@@ -461,16 +422,54 @@ SQL;
         if (isset($_REQUEST['FilterForm']))
             $model->attributes=$_REQUEST['FilterForm'];
 
-
-        /*$moduleInfo = null;
-        if (! empty($model->group)) {
-            $moduleInfo = $this->fillModulesFor($model);
-        }*/
-
         $this->render('modules', array(
             'model'      => $model,
-            //'moduleInfo' => $moduleInfo,
         ));
+    }
+
+    public function actionInsertJpvd()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $error =false;
+
+        $jpv1  = Yii::app()->request->getParam('jpv1', null);
+        $st1  = Yii::app()->request->getParam('st1', null);
+        $value = Yii::app()->request->getParam('value', null);
+
+        if(empty($jpv1)||empty($st1)||$value<0||$value>200||$value===null)
+            $error=true;
+        else
+        {
+            $jpv = Jpv::model()->findByPk($jpv1);
+            if($jpv==null)
+                $error=true;
+            else{
+                $jpvp = Jpvp::model()->findByAttributes(array('jpvp1'=>$jpv1,'jpvp2'=>Yii::app()->user->dbModel->p1));
+                if($jpvp==null)
+                    $error=true;
+                else
+                {
+                    $jpvd = Jpvd::model()->findByAttributes(array('jpvd1'=>$jpv1,'jpvd2'=>$st1));
+                    if($jpvd==null)
+                    {
+                        $jpvd= new Jpvd();
+                        $jpvd->jpvd0=new CDbExpression('GEN_ID(GEN_JPVD, 1)');
+                        $jpvd->jpvd1=$jpv1;
+                        $jpvd->jpvd2=$st1;
+                    }
+                    $jpvd->jpvd3=$value;
+                    $jpvd->jpvd4=date('Y-m-d H:i:s');
+                    $jpvd->jpvd5=0;
+                    $jpvd->jpvd6=Yii::app()->user->dbModel->p1;
+                    $error=!$jpvd->save();
+                }
+            }
+        }
+
+
+        Yii::app()->end(CJSON::encode(array('error' => $error)));
     }
     /*------------------------------------------------------------------------*/
 }

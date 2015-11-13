@@ -1,4 +1,5 @@
 <?php
+    //не используеться
     $translate = tt('Колонка');
 
     $pattern = <<<HTML

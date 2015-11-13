@@ -6,8 +6,8 @@
         'htmlOptions' => array('class' => 'form-inline row-fluid')
     ));
         $disciplines = CHtml::listData(D::model()->getDisciplinesForModulesPermition(), 'd1', 'd2');
-        $groups = CHtml::listData(Gr::model()->getGroupsForJournalPermition($model->discipline,$model->type_lesson), 'group', 'name');
-        $modules=FilterForm::getTypesForJournal();
+        $groups = CHtml::listData(Gr::model()->getGroupsForModulesPermition($model->discipline), 'group', 'name');
+        //$modules=CHtml::listData(Jpv::model()->getModules($model->group),'jpv1','name');
 
         $options =  array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;');
         echo '<div>'.
@@ -19,10 +19,10 @@
                 $form->label($model, 'group').
                 $form->dropDownList($model, 'group', $groups,$options).
                 '</div>'.
-                '<div class="span3 ace-select">'.
+                /*'<div class="span3 ace-select">'.
                 $form->label($model, 'module').
                 $form->dropDownList($model, 'module', $modules, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;')).
-                '</div>'.
+                '</div>'.*/
             '</div>';
 
     $this->endWidget();
