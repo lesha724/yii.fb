@@ -123,4 +123,9 @@ SQL;
         return $marks;
     }
 
+    public function getList()
+    {
+        
+    }
+
 }

@@ -25,6 +25,19 @@ HTML;
         return sprintf($pattern,$jpv['jpv4'],$jpv['jpv1'],$mark);
     }
 }
+function getBal($bal,$total3)
+{
+    $ects=$bal5="-";
+    foreach($bal as $key)
+    {
+        if(($total3>=$key['CXMB4'])&&($total3<=$key['CXMB5']))
+        {
+            $ects = $key['CXMB3'];
+            $bal5 = $key['CXMB2'];
+        }
+    }
+    return array($ects,$bal5);
+}
 function generate3Th($key)
 {
     $title = $key;
@@ -91,6 +104,7 @@ foreach ($students as $st) {
     $tr .= '<td data-total=2>'.$total_2.'</td>'; // total 2
     $tr .= table3Tr($marks,$jpvExam); // экзамен
     $tr .= '<td data-total=3>'.$total_3.'</td>'; // total 3
+    list($ects,$bal5)= getBal($bal,$total_3);
     $tr .= '<td data-total=4></td>'; // total 4
     $tr .= '<td data-total=5></td>'; // total 5
     $tr .= '</tr>';

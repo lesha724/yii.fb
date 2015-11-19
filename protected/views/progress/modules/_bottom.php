@@ -18,6 +18,14 @@ if (!empty($model->group))
         )
     ));*/
 
+    $bal = Cxmb::model()->findAll();
+
+    /*$js_array = json_encode($bal);
+    Yii::app()->clientScript->registerScript('journal-pbal', <<<JS
+        var bpal  = {$js_array};
+JS
+        , CClientScript::POS_HEAD);*/
+
     $this->renderPartial('/filter_form/default/_refresh_filter_form_button');
 
     list($uo1,$gr1)=explode('/',$model->group);
@@ -46,6 +54,7 @@ if (!empty($model->group))
         'uo1'=>$uo1,
         'gr1'=>$gr1,
         'model' => $model,
+        'bal'=>$bal
     ));
     echo '</div>';
 }
