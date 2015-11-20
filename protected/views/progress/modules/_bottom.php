@@ -32,7 +32,8 @@ JS
     $students=Jpv::model()->getStudents($uo1,$gr1);
 
     $modules = Jpv::model()->getModules($model->group);
-    echo '<div id="modules">';
+    $url = Yii::app()->createUrl('/progress/getCxmb');
+    echo '<div id="modules" data-url-cxmb="'.$url.'">';
     $this->renderPartial('modules/_table_1', array(
         'students' => $students,
         'uo1'=>$uo1,

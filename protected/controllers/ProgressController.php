@@ -32,6 +32,7 @@ class ProgressController extends Controller
 
                     'modules',
                     'insertJpvd',
+                    'getCxmb'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -216,8 +217,6 @@ class ProgressController extends Controller
 
         Yii::app()->end(CJSON::encode(array('error' => $error, 'errors' => $model->getErrors())));
     }
-	
-
 
     public function actionUpdateStus()
     {
@@ -470,6 +469,36 @@ class ProgressController extends Controller
 
 
         Yii::app()->end(CJSON::encode(array('error' => $error)));
+    }
+
+    public function actionGetCxmb()
+    {
+        //if (! Yii::app()->request->isAjaxRequest)
+            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $error =false;
+        $ects = "-";
+        $bal5 = "-";
+
+        $bal  = Yii::app()->request->getParam('bal', null);
+
+        if(!empty($bal))
+        {
+            $sql = <<<SQL
+              SELECT * FROM cxmb WHERE cxmb4<={$bal} AND cxmb5>={$bal}
+SQL;
+            $el = Cxmb::model()->findBySql($sql);
+            if(!empty($el))
+            {
+                $ects =$el->cxmb3;
+                $bal5 =$el->cxmb2;
+            }
+            else
+                $error = true;
+        }else
+            $error = true;
+
+        Yii::app()->end(CJSON::encode(array('error' => $error,'ects'=>$ects,'bal5'=>$bal5)));
     }
     /*------------------------------------------------------------------------*/
 }

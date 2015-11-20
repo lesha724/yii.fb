@@ -382,9 +382,9 @@ $this->widget('zii.widgets.CMenu', array(
                 ),
                 array(
                     'label'   => $_l2.tt('Ведение модулей'),
-                    'url'     => _u('/progress/module'),
+                    'url'     => _u('/progress/modules'),
                     'visible' => _ch('progress', 'modules') && $isTch,
-                    'active'  => $_c=='progress' && $_a=='module'
+                    'active'  => $_c=='progress' && $_a=='modules'
                 ),
                 array(
                     'label'   => $_l2.tt('Экз. сессия'),

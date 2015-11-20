@@ -71,6 +71,8 @@ $(document).ready(function(){
 
 function recalculateBothTotal(st1)
 {
+    var url = $('#modules').data('url-cxmb');
+
     var total_1 = 0;
     var total_2 = 0;
     var total_3 = 0;
@@ -103,6 +105,33 @@ function recalculateBothTotal(st1)
     $(table_3 +' td[data-total=1]').text(total_1);
     $(table_3 +' td[data-total=2]').text(total_2);
     $(table_3 +' td[data-total=3]').text(total_3);
+
+    var params = {
+        bal : total_3
+    }
+
+    $.ajax({
+        url: url,
+        dataType: 'json',
+        data: params,
+        success: function(data){
+            if (!data.error) {
+                $(table_3 +' td[data-total=4]').text(data.ects);
+                $(table_3 +' td[data-total=5]').text(data.bal5);
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            if (jqXHR.status == 500) {
+                addGritter('', 'Internal error: ' + jqXHR.responseText, 'error')
+            } else {
+                if (jqXHR.status == 403) {
+                    addGritter('', 'Access error: ' + jqXHR.responseText, 'error')
+                } else {
+                    addGritter('', 'Unexpected error.', 'error')
+                }
+            }
+        }
+    });
 }
 
 function calculateMarkFor(el)

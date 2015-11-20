@@ -30,10 +30,10 @@ function getBal($bal,$total3)
     $ects=$bal5="-";
     foreach($bal as $key)
     {
-        if(($total3>=$key['CXMB4'])&&($total3<=$key['CXMB5']))
+        if(($total3>=$key['cxmb4'])&&($total3<=$key['cxmb5']))
         {
-            $ects = $key['CXMB3'];
-            $bal5 = $key['CXMB2'];
+            $ects = $key['cxmb3'];
+            $bal5 = $key['cxmb2'];
         }
     }
     return array($ects,$bal5);
@@ -105,8 +105,8 @@ foreach ($students as $st) {
     $tr .= table3Tr($marks,$jpvExam); // экзамен
     $tr .= '<td data-total=3>'.$total_3.'</td>'; // total 3
     list($ects,$bal5)= getBal($bal,$total_3);
-    $tr .= '<td data-total=4></td>'; // total 4
-    $tr .= '<td data-total=5></td>'; // total 5
+    $tr .= '<td data-total=4>'.$ects.'</td>'; // total 4
+    $tr .= '<td data-total=5>'.$bal5.'</td>'; // total 5
     $tr .= '</tr>';
 }
 echo sprintf($table,$th,$tr); // 3 table
