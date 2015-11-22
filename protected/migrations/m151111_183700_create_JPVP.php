@@ -6,7 +6,7 @@ class m151111_183700_create_JPVP extends CDbMigration
 	{
 		$sql = <<<SQL
     CREATE TABLE JPVP (
-      JPVP1 inte,  /* JPV1 */
+      JPVP1 inte  NOT NULL,  /* JPV1 */
       JPVP2 inte); /* код P1 */
 SQL;
 		$this->execute($sql);
