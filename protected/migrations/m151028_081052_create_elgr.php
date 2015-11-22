@@ -6,8 +6,8 @@ class m151028_081052_create_elgr extends CDbMigration
 	{
 		$sql = <<<SQL
     CREATE TABLE elgr (
-      elgr1 inte, /* код gr1 */
-      elgr2 inte,  /* код elgz1 */
+      elgr1 inte NOT NULL, /* код gr1 */
+      elgr2 inte NOT NULL,  /* код elgz1 */
       elgr3 dat,  /* дата окончания коректировки */
       elgr4 var50, /* примечание */
       elgr5 dat DEFAULT 'NOW' NOT NULL, /* дата корректировки */
