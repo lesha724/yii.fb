@@ -29,7 +29,7 @@ SQL;
 SQL;
         $this->execute($sql);
         $sql = <<<SQL
-        INSERT INTO elgz (elgz1) VALUES (0);
+        INSERT INTO elgz (elgz1,elgz2,elgz3) VALUES (0,0,0);
 SQL;
         $this->execute($sql);
         /*$sql = <<<SQL
