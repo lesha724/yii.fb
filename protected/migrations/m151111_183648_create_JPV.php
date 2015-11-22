@@ -7,8 +7,8 @@ class m151111_183648_create_JPV extends CDbMigration
 		$sql = <<<SQL
     /* Ведение промежуточных модулей Модули УП (баллы) */
     CREATE TABLE JPV (JPV1 inte_not_null PRIMARY KEY,
-        JPV2 inte, /* код SEM1 семестр */
-        JPV3 inte, /* UO1*/
+        JPV2 inte NOT NULL, /* код SEM1 семестр */
+        JPV3 inte NOT NULL, /* UO1*/
         JPV4 smal, /* № модуля 1,2...   -1- индив. -2 - экзамен */
         JPV5 inte); /* GR1*/
 SQL;
