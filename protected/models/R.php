@@ -115,7 +115,7 @@ class R extends CActiveRecord
 
     public function getDatesForJournal($uo1, $gr1,$type_lesson)
     {
-        /*$sql = <<<SQL
+        $sql = <<<SQL
         select elgz3,r2,ustem5,elgz4,r1,us4,elgz1,elgz5,elgz6
         from r
            inner join elgz on (r.r8 = elgz.elgz1)
@@ -126,7 +126,8 @@ class R extends CActiveRecord
            inner join ug on (nr.nr1 = ug.ug3)
            inner join us on (nr.nr2 = us.us1)
         where (ug2=:GR1) and (elg2 = :UO1) and (sem3 = :YEAR) and (sem5 = :SEM) and (elg4 = :TYPE_LESSON)
-SQL;*/
+        order by elgz3
+SQL;
         /*$sql = <<<SQL
             select elgz3,r2,ustem5,elgz4,r1,us4,elgz1,elgz5,elgz6
             from r

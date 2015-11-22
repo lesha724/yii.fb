@@ -188,14 +188,16 @@ SQL;
                 FROM kaa
                 INNER JOIN a on (kaa.kaa2 = a.a1)
                 INNER JOIN r on (a.a1 = r.r5)
-                WHERE r2=:DATE and r3>=:LESSON_START and r3<=:LESSON_END and kaa1=:FILIAL
+                INNER JOIN rz on (r.r4 = rz.rz1)
+                WHERE r2=:DATE and rz6>=:LESSON_START and rz6<=:LESSON_END and kaa1=:FILIAL
 SQL;
         else
             $sql=<<<SQL
                 SELECT a1
                 FROM a
                 INNER JOIN r on (a.a1 = r.r5)
-                WHERE r2=:DATE and r3>=:LESSON_START and r3<=:LESSON_END
+                INNER JOIN rz on (r.r4 = rz.rz1)
+                WHERE r2=:DATE and rz6>=:LESSON_START and rz6<=:LESSON_END
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
@@ -223,14 +225,15 @@ SQL;
                 SELECT  a1
                 FROM a
                 INNER JOIN r on (a.a1 = r.r5)
-                WHERE r2=:R2 and  r3=:R3 {$filial}
+                INNER JOIN rz on (r.r4 = rz.rz1)
+                WHERE r2=:R2 and  rz6=:RZ6 {$filial}
                 GROUP BY a1
             )
             ORDER BY A8,A9,A2
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':R2', $r2);
-        $command->bindValue(':R3', $r3);
+        $command->bindValue(':RZ6', $r3);
 
         $classrooms = $command->queryAll();
 
