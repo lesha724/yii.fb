@@ -517,13 +517,20 @@ function send(url,params,title,$td,$that,$spinner1,st1)
                 }
             }
 
-            if($td.find('[data-name="elgzst3"]').is(':checked')||parseFloat($td.find('[data-name="elgzst4"]').val().replace(',','.'))<=min)
-                if(parseFloat($td.find('[data-name="elgzst5"]').val().replace(',','.'))>min)
-                    $td.find('.btn-retake').hide();
+            if(!$td.find('[data-name="elgzst5"]')){
+                if($td.find('[data-name="elgzst3"]').is(':checked')||parseFloat($td.find('[data-name="elgzst4"]').val().replace(',','.'))<=min)
+                    if(parseFloat($td.find('[data-name="elgzst5"]').val().replace(',','.'))>min)
+                        $td.find('.btn-retake').hide();
+                    else
+                        $td.find('.btn-retake').show();
                 else
+                    $td.find('.btn-retake').hide();
+            }else{
+                if($td.find('[data-name="elgzst3"]').is(':checked'))
                     $td.find('.btn-retake').show();
-            else
-                $td.find('.btn-retake').hide();
+                else
+                    $td.find('.btn-retake').hide();
+            }
 
 
         }
