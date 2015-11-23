@@ -133,7 +133,7 @@ class Elgzst extends CActiveRecord
         $criteria->join .= 'LEFT JOIN elgp ON (t.elgzst0=elgp.elgp1) ';
         $criteria->join .= 'JOIN std ON (st.st1=std.std2) ';
         $criteria->join .= 'JOIN '.$table4.' ON (std.std3='.$table4.'.gr1) ';
-        $criteria->join .= 'JOIN '.$table3.' ON (t.elgzst2='.$table3.'.elgz1) ';
+        $criteria->join .= 'JOIN elgz ON (t.elgzst2=elgz.elgz1) ';
         $criteria->join .= 'JOIN elg ON (elgz.elgz2=elg.elg1 and elg.elg2='.$this->uo1.') ';
         $criteria->join .= 'JOIN sem ON (elg.elg3=sem.sem1 AND sem3='.Yii::app()->session['year'].' and sem5='.Yii::app()->session['sem'].') ';
         $criteria->join .= 'JOIN r ON (elgz.elgz1=r.r8) ';
