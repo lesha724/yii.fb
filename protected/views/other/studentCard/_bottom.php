@@ -14,6 +14,10 @@ $studentInfo = $st->getStudentInfoForCard();
 if(empty($studentInfo))
     echo tt('Error');
 else {
+
+echo '<div id="studentCard">';
+    echo '<div class="top-block"></div>';
+
     $infoHtml = <<<HTML
     <div class="student-info">
         <table class="table">
@@ -45,4 +49,20 @@ HTML;
         tt('Курс'), $studentInfo['sem4'],
         tt('Группа'), $studentInfo['gr3']
     );
+
+    echo '</div>';//.top-block
+    echo '<div class="bottom-block">';
+
+     $this->widget('bootstrap.widgets.TbTabs', array(
+        'type'=>'tabs',
+        'placement'=>'top',
+        'tabs'=>array(
+            array('label'=>Yii::t('main', 'Journal'), 'content'=>$this->renderPartial('studentCard/_journal', array(), false, true), 'active'=>true),
+            array('label'=>Yii::t('main', 'Module'), 'content'=>$this->renderPartial('studentCard/_module', array(), false, true)),
+        ),
+    ));
+
+    echo '</div>';//.bottom-block
+echo'</div>';//#studentCard
+
 }
