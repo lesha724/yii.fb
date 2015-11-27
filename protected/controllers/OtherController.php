@@ -34,7 +34,8 @@ class OtherController extends Controller
                     'saveDisciplines',
                     'cancelSubscription',
                     'renderAddSpkr',
-                    'addSpkr'
+                    'addSpkr',
+                    'studentCard'
                 ),
                 'expression' => 'Yii::app()->user->isStd',
             ),
@@ -60,7 +61,16 @@ class OtherController extends Controller
         );
     }
 
+    public function actionStudentCard()
+    {
+        $st1 = Yii::app()->user->dbModel->st1;
+        $st = St::model()->findByPk($st1);
 
+        $this->render('studentCard', array(
+            'st' => $st,
+            'st1'=>$st1
+        ));
+    }
 
     public function actionPhones()
     {

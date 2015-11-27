@@ -19,8 +19,8 @@ JS
                 $form->label($model, 'discipline').
                 $form->dropDownList($model, 'discipline', $disciplines,$options).
                 '</div>'.
-                '<div class="span3 ace-select">'.
-                $form->label($model, 'group').
+                '<div class="span3 ace-select w300">'.
+                CHtml::label(tt('Поток'),'FilterForm_group').
                 $form->dropDownList($model, 'group', $groups,$options).
                 '</div>'.
             '</div>';

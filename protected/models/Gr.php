@@ -322,7 +322,10 @@ SQL;
         if (empty($discipline))
             return array();
         $sql = <<<SQL
-             SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,:D1,3,0,0,1,0) ORDER by us1,us4 ASC;
+              SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,:D1,3,0,0,1,0)
+              /*INNER JOIN us on (EL_GURNAL.us1 = us.us1)
+              INNER JOIN sem on (us3 = sem1)*/
+              ORDER by sem4 ASC,us1,us4 ASC;
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);

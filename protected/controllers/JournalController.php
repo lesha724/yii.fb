@@ -703,16 +703,19 @@ SQL;
                 $type=' '.$type;
                 $title='№'.$date['elgz3'].' '.$date['formatted_date'].' '.SH::convertUS4($date['us4']).$type;
                 $sheet->setCellValueByColumnAndRow($i+2,3,$title);
-                $sheet->setCellValueByColumnAndRow($i+2,4+$count_st_column,$date['ustem5']);
+                $sheet->setCellValueByColumnAndRow($i+2,4+$count_st_column,$date['ustem7']);
+                $sheet->setCellValueByColumnAndRow($i+2,5+$count_st_column,$date['ustem5']);
                 $i++;
             }
             $sheet->mergeCellsByColumnAndRow(2, 2, 1+$i, 2)->setCellValueByColumnAndRow(2, 2,'Дата')->getStyleByColumnAndRow(2, 2)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
             $sheet->getStyleByColumnAndRow(2, 3, 1+$i, 3)->getAlignment()->setWrapText(true)->setTextRotation(90)-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-            $sheet->setCellValueByColumnAndRow(1,4+$count_st_column,'Тема')->getStyleByColumnAndRow(1,4+$count_st_column)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $sheet->setCellValueByColumnAndRow(1,4+$count_st_column,'Кількість годин')->getStyleByColumnAndRow(1,4+$count_st_column)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
             $sheet->getStyleByColumnAndRow(2, 4+$count_st_column, 1+$i, 4+$count_st_column)->getAlignment()->setWrapText(true)->setTextRotation(90)-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-            $sheet->getRowDimension(4+$count_st_column)->setRowHeight(93);
-            $sheet->setCellValueByColumnAndRow(1,5+$count_st_column,'Підпис викладача')->getStyleByColumnAndRow(1,5+$count_st_column)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $sheet->setCellValueByColumnAndRow(1,5+$count_st_column,'Тема')->getStyleByColumnAndRow(1,5+$count_st_column)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $sheet->getStyleByColumnAndRow(2, 5+$count_st_column, 1+$i, 5+$count_st_column)->getAlignment()->setWrapText(true)->setTextRotation(90)-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
             $sheet->getRowDimension(5+$count_st_column)->setRowHeight(93);
+            $sheet->setCellValueByColumnAndRow(1,6+$count_st_column,'Підпис викладача')->getStyleByColumnAndRow(1,6+$count_st_column)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $sheet->getRowDimension(6+$count_st_column)->setRowHeight(93);
             $i=0;
             $k=0;
             foreach($students as $st) {
@@ -734,12 +737,12 @@ SQL;
                     {
                         if($elgzst3!='')
                         {
-                            $sheet->setCellValueByColumnAndRow($k+2,$i*2 + 4,$elgzst3);
-                            $sheet->setCellValueByColumnAndRow($k+2,$i*2 + 5,$elgzst5);
+                            $sheet->setCellValueByColumnAndRow($k+2,$i*2 + 5,$elgzst3);
+                            $sheet->setCellValueByColumnAndRow($k+2,$i*2 + 4,$elgzst5);
                         }else
                         {
-                            $sheet->setCellValueByColumnAndRow($k+2,$i*2 + 4,$elgzst4);
-                            $sheet->setCellValueByColumnAndRow($k+2,$i*2 + 5,$elgzst5);
+                            $sheet->setCellValueByColumnAndRow($k+2,$i*2 + 5,$elgzst4);
+                            $sheet->setCellValueByColumnAndRow($k+2,$i*2 + 4,$elgzst5);
                         }
                     }else
                     {

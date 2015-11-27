@@ -641,6 +641,28 @@ SQL;
         ));
     }
 
+	public function getStudentInfoForCard(){
+		$sql = <<<SQL
+		 select sg1,sg2,gr1,gr3,sp1,sp2,sem4,f2,f3
+		   from sem
+			   inner join sg on (sem.sem2 = sg.sg1)
+			   inner join gr on (sg.sg1 = gr.gr2)
+			   inner join std on (gr.gr1 = std.std3)
+			   inner join st on (std.std2 = st.st1)
+			   inner join sp on (sg.sg2 = sp.sp1)
+			   INNER JOIN f on (sp.sp5 = f.f1)
+		   where st1=:ST1 AND sem3=:YEAR and sem5=:SEM
+SQL;
+
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':ST1', $this->st1);
+		$command->bindValue(':YEAR', Yii::app()->session['year']);
+		$command->bindValue(':SEM', Yii::app()->session['sem']);
+		$info = $command->queryRow();
+
+		return $info;
+	}
+
     public function getStudentsForJournal($gr1, $uo1)
     {
         $sql = <<<SQL

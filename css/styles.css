@@ -1,3 +1,6 @@
+.w300 .chosen-container{
+    width: 350px!important;
+}
 #modalRetake .page-header{
     margin-top: 0px;
 }
