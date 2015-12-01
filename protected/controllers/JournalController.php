@@ -756,6 +756,57 @@ SQL;
             $sheet->getStyleByColumnAndRow(0,1,$k+1,5+$count_st_column)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
             $sheet->setTitle('Jornal '.date('Y-m-d H-i'));
 
+            //----------------------отраотка---------------------------------
+            $objWorkSheet = $objPHPExcel->createSheet(1);
+            $objPHPExcel->setActiveSheetIndex(1);
+            $sheet=$objPHPExcel->getActiveSheet();
+            $sheet->setTitle('Retake '.date('Y-m-d H-i'));
+
+            $sheet->mergeCells('A1:H1');
+            $sheet->setCellValue('A1', tt('Журнал реєстрації результатів відробки пропущених занять та "2" '))
+                ->getStyle('A1')->getAlignment()
+                ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+                ->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $sheet->mergeCells('A2:H2');
+            $sheet->setCellValue('A2', tt('Группа').' '.$group)
+                ->getStyle('A2')->getAlignment()
+                ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+                ->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+            $otr = Elgotr::model()->getElgotrForExcel($model);
+
+            $sheet->setCellValueByColumnAndRow(0,3, '№ п/п');
+            $sheet->setCellValueByColumnAndRow(1,3,tt('ПІП'));
+            $sheet->setCellValueByColumnAndRow(2,3,tt('№ зан.'));
+            $sheet->setCellValueByColumnAndRow(3,3,tt('№ справки'));
+            $sheet->setCellValueByColumnAndRow(4,3,tt('Причина нб("2")'));
+            $sheet->setCellValueByColumnAndRow(5,3,tt('№ квитанции'));
+            $sheet->setCellValueByColumnAndRow(6,3,tt('ФИО преподователя (отработка)'));
+            $sheet->setCellValueByColumnAndRow(7,3,tt('Результат отработки'));
+
+            $i=4;
+            foreach($otr as $val)
+            {
+                $sheet->setCellValueByColumnAndRow(0,$i, $i-3);
+                $sheet->setCellValueByColumnAndRow(1,$i,SH::getShortName($val['st2'],$val['st3'],$val['st4']));
+                $sheet->setCellValueByColumnAndRow(2,$i,$val['elgz3']);
+                $sheet->setCellValueByColumnAndRow(3,$i,$val['elgp3']);
+                switch ($val['elgzst3']){
+                    case 0: $type = tt('Двойка');
+                            break;
+                    case 1: $type = tt('Неув.');
+                        break;
+                    case 2: $type = tt('Уваж.');
+                        break;
+                    default: $type='-';
+                }
+                $sheet->setCellValueByColumnAndRow(4,$i,tt('Причина нб("2")'));
+                $sheet->setCellValueByColumnAndRow(5,$i,$val['elgp4']);
+                $sheet->setCellValueByColumnAndRow(6,$i,SH::getShortName($val['p3'],$val['p4'],$val['p5']));
+                $sheet->setCellValueByColumnAndRow(7,$i,$val['elgotr2']);
+                $i++;
+            }
+
             // Set active sheet index to the first sheet, so Excel opens this as the first sheet
             $objPHPExcel->setActiveSheetIndex(0);
 

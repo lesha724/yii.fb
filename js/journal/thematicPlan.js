@@ -27,67 +27,75 @@ $(document).ready(function(){
 	$('#themes').on('click','.save-new-theme',function(e){
         $(this).attr("disabled", true);
         var elem=$(this).parents('.new-theme');
+        var elem3= elem.find(".ustem3");
+        var elem5= elem.find(".ustem5");
 		var us1	=$(this).parents('[data-us1]').data('us1');
 		var url	=$(this).parents('[data-url]').data('url');
-                var ustem3=elem.find(".ustem3").val();
-                var ustem4=elem.find(".ustem4").val();
-                var ustem5=elem.find(".ustem5").val();
-                var ustem6=elem.find(".ustem6").val();
-                var ustem7=elem.find(".ustem7").val();
-                var ustem7_text=elem.find('.ustem7 option:selected').text();
-                var ustem6_text=elem.find('.ustem6 option:selected').text();
+        var ustem3=elem3.val();
+        var ustem4=elem.find(".ustem4").val();
+        var ustem5=elem5.val();
+        var ustem6=elem.find(".ustem6").val();
+        var ustem7=elem.find(".ustem7").val();
+        var ustem7_text=elem.find('.ustem7 option:selected').text();
+        var ustem6_text=elem.find('.ustem6 option:selected').text();
 
-                var params = {
-                    us1 : us1,
-                    ustem3 : ustem3,
-                    ustem4 : ustem4,
-                    ustem5 : ustem5,
-                    ustem6 : ustem6,
-                    ustem7 : ustem7
-                }
-                
-                if (isNaN(params.ustem6)||/*isNaN(params.ustem3)||*/isNaN(params.ustem4)||params.ustem5=='') {
-                    addGritter('', tt.error, 'error');
-                    elem.addClass('error');
-                    $(this).attr("disabled", false);
-                    return false;
-                }
-                
-                 $spinner1.show()
+        var params = {
+            us1 : us1,
+            ustem3 : ustem3,
+            ustem4 : ustem4,
+            ustem5 : ustem5,
+            ustem6 : ustem6,
+            ustem7 : ustem7
+        }
 
-                $.get(url, params, function(data){
+        if (isNaN(params.ustem6)||params.ustem3==''||isNaN(params.ustem4)||params.ustem5=='') {
+            elem3.removeClass('input-error');
+            elem5.removeClass('input-error');
+            addGritter('', tt.error, 'error');
+            elem.addClass('error');
+            $(this).attr("disabled", false);
+            if(params.ustem3=='')
+                elem3.addClass('input-error');
+            if(params.ustem5=='')
+                elem5.addClass('input-error');
+            return false;
+        }
 
-                    if (data.error) {
-                        var title=tt.error;
-                        if(data.typeError==1)
-                            title=tt.errorUs6;
-                        if(data.typeError==3)
-                            title=tt.errorAccess;
-                        addGritter('', title, 'error');
-                        elem.addClass('error');
-                        $(this).attr("disabled", false);
-                    } else {
-                        addGritter('', tt.success, 'success')
-                        elem.removeClass('error').addClass('success');
-                        setTimeout(function() { elem.removeClass('success') }, 3000);
-                        elem.html('<td class="td-ustem4">'+params.ustem4+'</td>'+
-                            '<td>'+ustem7_text+'</td>'+
-                            '<td>'+params.ustem3+'</td>'+
-                            '<td>'+params.ustem5+'</td>'+
-                            '<td>'+ustem6_text+'</td>'+
-                            '<td>'+
-                                '<a href="'+urlEdit+data.ustem1+'" class="edit-theme btn btn-mini btn-info">'+
-                                    '<i class="icon-edit bigger-120"></i>'+
-                                '</a>'+
-                                '<a href="'+urlDelete+data.ustem1+'" class="delete-theme btn btn-mini btn-danger">'+
-                                    '<i class="icon-trash bigger-120"></i>'+
-                               ' </a>'+
-                            '</td>');
-                        refreshPage = true;
-                    }
+         $spinner1.show()
 
-                    $spinner1.hide();
-                }, 'json');
+        $.get(url, params, function(data){
+
+            if (data.error) {
+                var title=tt.error;
+                if(data.typeError==1)
+                    title=tt.errorUs6;
+                if(data.typeError==3)
+                    title=tt.errorAccess;
+                addGritter('', title, 'error');
+                elem.addClass('error');
+                $(this).attr("disabled", false);
+            } else {
+                addGritter('', tt.success, 'success')
+                elem.removeClass('error').addClass('success');
+                setTimeout(function() { elem.removeClass('success') }, 3000);
+                elem.html('<td class="td-ustem4">'+params.ustem4+'</td>'+
+                    '<td>'+ustem7_text+'</td>'+
+                    '<td>'+params.ustem3+'</td>'+
+                    '<td>'+params.ustem5+'</td>'+
+                    '<td>'+ustem6_text+'</td>'+
+                    '<td>'+
+                        '<a href="'+urlEdit+data.ustem1+'" class="edit-theme btn btn-mini btn-info">'+
+                            '<i class="icon-edit bigger-120"></i>'+
+                        '</a>'+
+                        '<a href="'+urlDelete+data.ustem1+'" class="delete-theme btn btn-mini btn-danger">'+
+                            '<i class="icon-trash bigger-120"></i>'+
+                       ' </a>'+
+                    '</td>');
+                refreshPage = true;
+            }
+
+            $spinner1.hide();
+        }, 'json');
 	});
 	
 	$('[name=delete-thematic-plan]').click(function(e){
