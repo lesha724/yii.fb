@@ -710,7 +710,7 @@ SQL;
             $sheet->mergeCellsByColumnAndRow(2, 2, 1+$i, 2)->setCellValueByColumnAndRow(2, 2,'Дата')->getStyleByColumnAndRow(2, 2)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
             $sheet->getStyleByColumnAndRow(2, 3, 1+$i, 3)->getAlignment()->setWrapText(true)->setTextRotation(90)-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
             $sheet->setCellValueByColumnAndRow(1,4+$count_st_column,'Кількість годин')->getStyleByColumnAndRow(1,4+$count_st_column)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-            $sheet->getStyleByColumnAndRow(2, 4+$count_st_column, 1+$i, 4+$count_st_column)->getAlignment()->setWrapText(true)->setTextRotation(90)-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $sheet->getStyleByColumnAndRow(2, 4+$count_st_column, 1+$i, 4+$count_st_column)->getAlignment()->setWrapText(true)-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
             $sheet->setCellValueByColumnAndRow(1,5+$count_st_column,'Тема')->getStyleByColumnAndRow(1,5+$count_st_column)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
             $sheet->getStyleByColumnAndRow(2, 5+$count_st_column, 1+$i, 5+$count_st_column)->getAlignment()->setWrapText(true)->setTextRotation(90)-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
             $sheet->getRowDimension(5+$count_st_column)->setRowHeight(93);
@@ -753,7 +753,7 @@ SQL;
                 }
                 $i++;
             }
-            $sheet->getStyleByColumnAndRow(0,1,$k+1,5+$count_st_column)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
+            $sheet->getStyleByColumnAndRow(0,1,$k+1,6+$count_st_column)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
             $sheet->setTitle('Jornal '.date('Y-m-d H-i'));
 
             //----------------------отраотка---------------------------------
@@ -783,7 +783,16 @@ SQL;
             $sheet->setCellValueByColumnAndRow(5,3,tt('№ квитанции'));
             $sheet->setCellValueByColumnAndRow(6,3,tt('ФИО преподователя (отработка)'));
             $sheet->setCellValueByColumnAndRow(7,3,tt('Результат отработки'));
-
+            $sheet->getStyleByColumnAndRow(0,3,7,3)->getAlignment()->setWrapText(true)-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $sheet->getRowDimension(3)->setRowHeight(-1);
+            $sheet->getColumnDimensionByColumn(0)->setWidth(4);
+            $sheet->getColumnDimensionByColumn(1)->setWidth(30);
+            $sheet->getColumnDimensionByColumn(2)->setWidth(7);
+            $sheet->getColumnDimensionByColumn(3)->setWidth(20);
+            $sheet->getColumnDimensionByColumn(4)->setWidth(10);
+            $sheet->getColumnDimensionByColumn(5)->setWidth(20);
+            $sheet->getColumnDimensionByColumn(6)->setWidth(30);
+            $sheet->getColumnDimensionByColumn(7)->setWidth(10);
             $i=4;
             foreach($otr as $val)
             {
@@ -800,12 +809,15 @@ SQL;
                         break;
                     default: $type='-';
                 }
-                $sheet->setCellValueByColumnAndRow(4,$i,tt('Причина нб("2")'));
+                $sheet->setCellValueByColumnAndRow(4,$i,$type);
                 $sheet->setCellValueByColumnAndRow(5,$i,$val['elgp4']);
                 $sheet->setCellValueByColumnAndRow(6,$i,SH::getShortName($val['p3'],$val['p4'],$val['p5']));
                 $sheet->setCellValueByColumnAndRow(7,$i,$val['elgotr2']);
+                $sheet->getRowDimension($i)->setRowHeight(-1);
                 $i++;
             }
+
+            $sheet->getStyleByColumnAndRow(0,3,7,$i-1)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
 
             // Set active sheet index to the first sheet, so Excel opens this as the first sheet
             $objPHPExcel->setActiveSheetIndex(0);
