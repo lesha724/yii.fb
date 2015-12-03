@@ -16,7 +16,7 @@ function getSelect($type,$i)
 
 }
 
-$omissions = Elgp::model()->getOmissions($model->student,$model->date1,$model->date2);
+$omissions = Elgp::model()->getOmissions($model->student,$model->date1,$model->date2,$model->group);
 
 if($omissions==null)
     echo '<div><span class="label label-success" style="font-size:16px">'.tt('Зарегистрированных пропусков нет').'</span></div>';
