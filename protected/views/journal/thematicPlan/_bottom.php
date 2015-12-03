@@ -9,6 +9,7 @@ if (!empty($model->group)) {
 
     list($us1,$us6) = explode("/", $model->group);
     Ustem::model()->recalculation($us1);
+    Ustem::model()->addChair($us1);
 
     $hours = Ustem::model()->getHours($us1,0);
     $urlDelete = Yii::app()->controller->createAbsoluteUrl("journal/deleteUstemTheme", array("ustem1" => ''));
@@ -56,6 +57,7 @@ JS
         <thead>
         <tr>
             <th class="wd-20"><?=Ustem::model()->getAttributeLabel('ustem4')?></th>
+            <th><?=Ustem::model()->getAttributeLabel('ustem11')?></th>
             <th class="wd-25"><?=Ustem::model()->getAttributeLabel('ustem7')?></th>
             <th><?=Ustem::model()->getAttributeLabel('ustem3')?></th>
             <th><?=Ustem::model()->getAttributeLabel('ustem5')?></th>
@@ -79,6 +81,7 @@ JS
                     $html .= <<<HTML
                         <tr>
 							<td class="td-ustem4">$theme[ustem4]</td>
+							<td>$theme[k2]</td>
 							<td>$ustem7</td>
 							<td>$theme[ustem3]</td>
                             <td>$theme[ustem5]</td>

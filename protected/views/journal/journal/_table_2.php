@@ -73,7 +73,8 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson)
             $disabled = 'disabled="disabled"';
     }
 
-    if(PortalSettings::model()->findByPk(29)->ps2==1)
+    $ps29 = PortalSettings::model()->findByPk(29)->ps2;
+    if($ps29 == 1)
         $disabled_input_1 = 'disabled="disabled"';
 
     if($elgzst5!='')
@@ -102,7 +103,26 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson)
     }else
     {
         $elgzst4_input='';
-        $elgzst5_input='<label class="label label-warning">'.$elgzst5.'</label>';
+        if(!$read_only) {
+            if($ps29!=1) {
+                if($disabled == 'disabled="disabled"') {
+                    $disabled_input_1 = 'disabled="disabled"';
+                }else
+                    $disabled_input_1 = '';
+                if($disabled_input_1 != 'disabled="disabled"') {
+                    if ($elgzst3 == 'checked')
+                        $disabled_input_1 = '';
+                    else
+                        $disabled_input_1 = 'disabled="disabled"';
+                }
+                $val = $elgzst5;
+                if($elgzst5!='')
+                    $val = 'checked';
+                $elgzst5_input = '<input type="checkbox" '.$val.' data-name="elgzst5" '.$disabled_input_1.'>';
+            }
+        }
+        else
+            $elgzst5_input='<label class="label label-warning">'.$elgzst5.'</label>';
     }
 
     $button=CHtml::htmlButton('<i class="icon-tag"></i>',array('class'=>'btn btn-mini btn-info btn-retake','style'=>'display:none'));

@@ -166,20 +166,21 @@ SQL;
                 }
 
                 //проверка на макимальный и минимальный бал
-                if ($field == 'elgzst4'||$field == 'elgzst5')
-                {
-                    $min=PortalSettings::model()->findByPk(37)->ps2;
-                    $bal=PortalSettings::model()->findByPk(36)->ps2;
-                    if($bal!=0)
+                if($value!=0&&$value!=-1)
+                    if ($field == 'elgzst4'||$field == 'elgzst5')
                     {
-                        if($value>$bal||$value<$min)
-                            if($value!=0)
-                            {
-                                $error=true;
-                                $errorType=4;
-                            }
+                        $min=PortalSettings::model()->findByPk(37)->ps2;
+                        $bal=PortalSettings::model()->findByPk(36)->ps2;
+                        if($bal!=0)
+                        {
+                            if($value>$bal||$value<$min)
+                                if($value!=0)
+                                {
+                                    $error=true;
+                                    $errorType=4;
+                                }
+                        }
                     }
-                }
                 //блокировка пересдач
                 if($field=='elgzst5' && PortalSettings::model()->findByPk(29)->ps2==1)
                 {
@@ -210,6 +211,17 @@ SQL;
                     $elgzst= Elgzst::model()->findByAttributes(array('elgzst1'=>$st1,'elgzst2'=>$elgz1));
                     if(!empty($elgzst))
                     {
+                        if($elgzst->elgzst3>0&&$field=='elgzst5')
+                        {
+                            $elg = Elg::model()->findByPk($elgz->elgz2);
+                            if($elg->elg4==0)
+                                if($value==0)
+                                    $value=-1;
+                                else {
+                                    $value=0;
+                                }
+                        }
+
                         $attr = array_merge(array(
                             $field => $value,
                             'elgzst7' =>  Yii::app()->user->dbModel->p1,

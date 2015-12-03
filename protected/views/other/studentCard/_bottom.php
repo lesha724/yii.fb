@@ -47,7 +47,7 @@ HTML;
         tt('Факультет'), $studentInfo['f3'],
         tt('Специальность'), $studentInfo['sp2'],
         tt('Курс'), $studentInfo['sem4'],
-        tt('Группа'), $studentInfo['gr3']
+        tt('Группа'), Gr::model()->getGroupName($studentInfo['sem4'], $studentInfo)
     );
 
     echo '</div>';//.top-block
@@ -57,8 +57,8 @@ HTML;
         'type'=>'tabs',
         'placement'=>'top',
         'tabs'=>array(
-            array('label'=>Yii::t('main', 'Journal'), 'content'=>$this->renderPartial('studentCard/_journal', array(), false, true), 'active'=>true),
-            array('label'=>Yii::t('main', 'Module'), 'content'=>$this->renderPartial('studentCard/_module', array(), false, true)),
+            array('label'=>Yii::t('main', 'Journal'), 'content'=>$this->renderPartial('studentCard/_journal', array(),true), 'active'=>true),
+            array('label'=>Yii::t('main', 'Module'), 'content'=>$this->renderPartial('studentCard/_module', array('gr1'=>$studentInfo['gr1'],'st'=>$st),true)),
         ),
     ));
 

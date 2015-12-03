@@ -132,11 +132,12 @@ class Elgzst extends CActiveRecord
         $criteria->join = 'JOIN st ON (t.elgzst1=st.st1) ';
         $criteria->join .= 'LEFT JOIN elgp ON (t.elgzst0=elgp.elgp1) ';
         $criteria->join .= 'JOIN std ON (st.st1=std.std2) ';
-        $criteria->join .= 'JOIN '.$table4.' ON (std.std3='.$table4.'.gr1) ';
+        $criteria->join .= 'JOIN gr ON (std.std3=gr.gr1) ';
         $criteria->join .= 'JOIN elgz ON (t.elgzst2=elgz.elgz1) ';
         $criteria->join .= 'JOIN elg ON (elgz.elgz2=elg.elg1 and elg.elg2='.$this->uo1.') ';
         $criteria->join .= 'JOIN sem ON (elg.elg3=sem.sem1 AND sem3='.Yii::app()->session['year'].' and sem5='.Yii::app()->session['sem'].') ';
         $criteria->join .= 'JOIN r ON (elgz.elgz1=r.r8) ';
+        $criteria->join .= 'JOIN ug ON (r.r1=ug.ug3 and ug.ug2 = gr1) ';
         if(empty($this->type_lesson)||$this->type_lesson==1)
             $criteria->compare('elg4',0);
         else

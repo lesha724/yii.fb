@@ -5,8 +5,12 @@ $(document).ready(function(){
     $spinner1 = $('#spinner1');
     
     $('#journal-print').click(function(){
+        /*$("#filter-form").attr("action", $(this).data('url'));
+        $("#filter-form").submit();*/
+        var action=$("#filter-form").attr("action");
         $("#filter-form").attr("action", $(this).data('url'));
         $("#filter-form").submit();
+        $("#filter-form").attr("action", action);
     });
 
     $('tr.min-max input').keyup(function(event ){
@@ -133,6 +137,8 @@ $(document).ready(function(){
 
         var st1  = $that.parents('[data-st1]').data('st1');
 
+        var typeLesson =$that.parents('[data-type-lesson]').data('type-lesson');
+
         var gr1  = $that.parents('[data-gr1]').data('gr1');
 
         var params = {
@@ -159,12 +165,21 @@ $(document).ready(function(){
             $td.addClass('error')
             return false;
         }
-        if (params.field!='elgzst3'&&params.value==0) {
+        if (params.field!='elgzst3'&&params.value==0&&!$that.is(':checkbox')) {
             addGritter(title, tt.error, 'error')
             $td.addClass('error')
             return false;
         }
 
+        if (params.field=='elgzst3'&&params.value==0)
+        {
+            if($td.find('[data-name="elgzst4"]').val()!=''&&typeLesson==1) {
+                addGritter(title, tt.error, 'error')
+                $td.addClass('error')
+                $that.removeAttr('checked');
+                return false;
+            }
+        }
         // min max check
         // ps9 - portal settings
         if (ps9 == '1' && $that.parents('.journal_div_table2').length > 0) {
@@ -482,17 +497,26 @@ function send(url,params,title,$td,$that,$spinner1,st1)
         {
             if ($that.is(':checkbox'))
             {
-                if ($that.is(':checked'))
-                    $td.find('[data-name="elgzst4"]').attr('disabled','disabled');
+                var elem = $td.find('[data-name="elgzst5"]');
+                if ($that.is(':checked')) {
+                    $td.find('[data-name="elgzst4"]').attr('disabled', 'disabled');
+                }
                 else
                 {
                     $td.find('[data-name="elgzst4"]').removeAttr('disabled');
-                    $td.find('[data-name="elgzst5"]').val('');
+                    elem.val('');
                 }
-                if(params.value==1)
-                    $that.attr('data-original-title','Присутсвует');
-                else
-                    $that.attr('data-original-title','Отсутсвует');
+
+                if(params.value==1) {
+                    if(elem.is(':checkbox'))
+                        elem.attr('disabled', 'disabled');
+                    $that.attr('data-original-title', 'Присутсвует');
+                }
+                else {
+                    if(elem.is(':checkbox'))
+                        elem.removeAttr('disabled');
+                    $that.attr('data-original-title', 'Отсутсвует');
+                }
             }
 
             if ($that.is(':text'))

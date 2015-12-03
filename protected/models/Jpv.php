@@ -168,6 +168,54 @@ SQL;
         return $statements;
     }
 
+    public function getModuleFromStudentCard($gr1)
+    {
+        $sql=<<<SQL
+            select jpv1,jpv3,jpv4,d1,d2 from jpv
+              INNER JOIN sem on (jpv2 = sem1)
+              INNER JOIN uo on (jpv.jpv3 = uo.uo1)
+              INNER JOIN d on (uo.uo3 = d.d1)
+            WHERE sem3=:YEAR AND sem5=:SEM AND jpv5=:JPV5 ORDER BY d2 collate UNICODE
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $command->bindValue(':JPV5', $gr1);
+        $res = $command->queryAll();
+        $modules = array();
+        $maxCount=$count=$d1=$exam=$ind=0;
+        foreach ($res as $val)
+        {
+            if($d1!=$val['d1']) {
+                if ($count > $maxCount)
+                    $maxCount = $count;
+                $count = 0;
+                $d1=$val['d1'];
+            }
+            $modules[$val['d1']]['name']=$val['d2'];
+            $modules[$val['d1']]['uo1']=$val['jpv3'];
+            $modules[$val['d1']][$val['jpv4']]=$val['jpv1'];
+            if($val['jpv4']<0)
+            {
+                switch($val['jpv4'])
+                {
+                    case -1:
+                        $ind=1;
+                        break;
+                    case -2:
+                        $exam=1;
+                        break;
+                }
+            }else
+                $count++;
+        }
+
+        if($count>$maxCount)
+            $maxCount=$count;
+
+        return array($modules,array($maxCount,$exam,$ind));
+    }
+
     public function getMarksFromStudent($uo1,$gr1,$st1)
     {
         if (empty($uo1)||empty($gr1)||empty($st1))

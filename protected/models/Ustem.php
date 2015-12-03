@@ -13,6 +13,7 @@
  * @property integer $ustem7
  * @property string $ustem8
  * @property integer $ustem9
+ * @property integer $ustem11
  */
 class Ustem extends CActiveRecord
 {
@@ -35,7 +36,7 @@ class Ustem extends CActiveRecord
 		return array(
 			array('ustem1', 'required'),
             array('ustem7', 'numerical'),
-			array('ustem2, ustem3, ustem4, ustem6', 'numerical', 'integerOnly'=>true),
+			array('ustem2, ustem3, ustem4, ustem6,ustem11', 'numerical', 'integerOnly'=>true),
 			array('ustem5', 'length', 'max'=>1000),
             array('nr18', 'safe'),
             array('ustem4', 'unsafe','on'=>'update'),
@@ -69,6 +70,7 @@ class Ustem extends CActiveRecord
             'ustem5' => tt('Тема'),
             'ustem6' => tt('Тип'),
             'ustem7' => tt('Длительность занятия'),
+            'ustem11' => tt('Кафедра'),
             'groups' => tt('Группы'),
             'nr18'   => tt('Длительность')
 		);
@@ -119,7 +121,9 @@ class Ustem extends CActiveRecord
     public function getTheme($us1)
     {
         $sql=<<<SQL
-            select * from ustem where ustem2=:us1 order by ustem4
+            select ustem.*,k2,k3 from ustem
+            LEFT JOIN k on (ustem11 = k1)
+            where ustem2=:us1 order by ustem4
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':us1', $us1);
@@ -219,7 +223,28 @@ SQL;
             $res=$command->execute();
         }
     }
-    
+
+    public function addChair($us1)
+    {
+        $sql=<<<SQL
+            SELECT uo4 FROM us
+            INNER JOIN uo ON (us.us2 = uo.uo1)
+            WHERE us1=:US1
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':US1', $us1);
+        $uo4=$command->queryScalar();
+
+        Ustem::model()->updateAll(array('ustem11'=>$uo4),'ustem2=:US1 AND ustem11=0',array(':US1'=>$us1));
+        /*$sql=<<<SQL
+                UPDATE ustem SET ustem11=:UO4 WHERE ustem2=:US1;
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':US1', $us1);
+        $command->bindValue(':U04', $uo4);
+        $command->execute();*/
+    }
+
     public function recalculation($us1)
     {
         $themes=Ustem::model()->findAllByAttributes(array('ustem2'=>$us1),array('order'=>'ustem4 ASC,ustem1 ASC'));
@@ -239,6 +264,25 @@ SQL;
             '1'=>tt('Субмодуль'),
             '2'=>tt('ПМК'),
         );
+    }
+
+    public function getUstem11Arr()
+    {
+        $sql = <<<SQL
+             select nr30,k2 from sem
+              inner join us on (sem.sem1 = us.us3)
+              inner join nr on (us.us1 = nr.nr2)
+              inner join ug on (nr.nr1 = ug.ug1)
+              INNER JOIN k on (nr30 = k1)
+            WHERE sem3=:YEAR AND sem5=:SEM AND us1=:US1
+            GROUP BY nr30,k2
+SQL;
+        $command=Yii::app()->db->createCommand($sql);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $command->bindValue(':US1', $this->ustem2);
+        $res = $command->queryAll();
+        return $res;
     }
 
     public function getUstem7Arr()

@@ -89,7 +89,9 @@ function initFilterForm($spinner)
 
 function initDataTable(id)
 {
-    $('#'+id).addClass( 'nowrap' ).dataTable({
+    //$('#'+id).addClass( 'nowrap' ).dataTable({
+    $('#'+id).dataTable(
+    {
         iDisplayLength: 20,
         aaSorting: [],
         bPaginate: true,

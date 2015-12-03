@@ -72,6 +72,9 @@ $options = array(
                 $input = $form->dropDownList($model, 'ustem6', Ustem::model()->getUstem6Arr());
                 $html .= sprintf($pattern, $label, $input);
 
+                $label = $form->label($model, 'ustem11', $options);
+                $input = $form->dropDownList($model, 'ustem11', CHtml::listData($model->getUstem11Arr(),'nr30','k2'));
+                $html .= sprintf($pattern, $label, $input);
 
                 $html .= '</div>';
                 echo $html;
