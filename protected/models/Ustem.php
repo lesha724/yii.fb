@@ -224,7 +224,7 @@ SQL;
         }
     }
 
-    public function addChair($us1)
+    public function getDefaultChair($us1)
     {
         $sql=<<<SQL
             SELECT uo4 FROM us
@@ -234,6 +234,12 @@ SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':US1', $us1);
         $uo4=$command->queryScalar();
+        return $uo4;
+    }
+
+    public function addChair($us1)
+    {
+        $uo4 = self::model()->getDefaultChair($us1);
 
         Ustem::model()->updateAll(array('ustem11'=>$uo4),'ustem2=:US1 AND ustem11=0',array(':US1'=>$us1));
         /*$sql=<<<SQL
@@ -266,7 +272,7 @@ SQL;
         );
     }
 
-    public function getUstem11Arr()
+    public function getUstem11Arr($us1)
     {
         $sql = <<<SQL
              select nr30,k2 from sem
@@ -280,7 +286,7 @@ SQL;
         $command=Yii::app()->db->createCommand($sql);
         $command->bindValue(':YEAR', Yii::app()->session['year']);
         $command->bindValue(':SEM', Yii::app()->session['sem']);
-        $command->bindValue(':US1', $this->ustem2);
+        $command->bindValue(':US1', $us1);
         $res = $command->queryAll();
         return $res;
     }

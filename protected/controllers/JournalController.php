@@ -1513,8 +1513,8 @@ SQL;
 
     public function actionInsertUstemTheme()
     {
-        if (! Yii::app()->request->isAjaxRequest)
-          throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        //if (! Yii::app()->request->isAjaxRequest)
+          //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $ustem2 = Yii::app()->request->getParam('us1', null);
         $ustem3 = Yii::app()->request->getParam('ustem3', null);
@@ -1522,6 +1522,7 @@ SQL;
         $ustem5 = Yii::app()->request->getParam('ustem5', null);
         $ustem6 = Yii::app()->request->getParam('ustem6', null);
         $ustem7 = Yii::app()->request->getParam('ustem7', null);
+        $ustem11 = Yii::app()->request->getParam('ustem11', null);
 
         if (empty($ustem2))
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
@@ -1565,6 +1566,7 @@ SQL;
                 $model->ustem7=$ustem7;
                 $model->ustem9=Yii::app()->user->dbModel->p1;
                 $model->ustem8=date('Y-m-d H:i:s');
+                $model->ustem11=$ustem11;
                 $error=!$model->save();
                 $ustem1=$model->ustem1;
                 if(!$error)

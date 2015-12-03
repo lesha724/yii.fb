@@ -133,8 +133,8 @@ class Elgp extends CActiveRecord
                     INNER JOIN uo on (elg.elg2 = uo.uo1)
                     INNER JOIN d on (d.d1 = uo.uo3)
                     INNER JOIN r on (elgz.elgz1 = r.r8)
-                    INNER JOIN nr on (r.r1 = nr.nr1)
-                    INNER JOIN us on (nr.nr2 = us.us1)
+                    LEFT JOIN ustem ON (ustem.ustem1=elgz.elgz7 AND ustem.ustem4= elgz.elgz3)
+                    left JOIN us on (ustem.ustem2 = us.us1)
                 WHERE elgzst1=:ST1 and r2 >= :DATE1 and r2 <= :DATE2 and elgzst3!=0 and d1 in (select d1 FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,0,0,0,3,0))
 SQL;
 

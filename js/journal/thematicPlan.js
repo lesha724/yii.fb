@@ -36,8 +36,10 @@ $(document).ready(function(){
         var ustem5=elem5.val();
         var ustem6=elem.find(".ustem6").val();
         var ustem7=elem.find(".ustem7").val();
+        var ustem11=elem.find(".ustem11").val();
         var ustem7_text=elem.find('.ustem7 option:selected').text();
         var ustem6_text=elem.find('.ustem6 option:selected').text();
+        var ustem11_text=elem.find('.ustem11 option:selected').text();
 
         var params = {
             us1 : us1,
@@ -45,7 +47,8 @@ $(document).ready(function(){
             ustem4 : ustem4,
             ustem5 : ustem5,
             ustem6 : ustem6,
-            ustem7 : ustem7
+            ustem7 : ustem7,
+            ustem11 : ustem11
         }
 
         if (isNaN(params.ustem6)||params.ustem3==''||isNaN(params.ustem4)||params.ustem5=='') {
@@ -79,6 +82,7 @@ $(document).ready(function(){
                 elem.removeClass('error').addClass('success');
                 setTimeout(function() { elem.removeClass('success') }, 3000);
                 elem.html('<td class="td-ustem4">'+params.ustem4+'</td>'+
+                    '<td>'+ustem11_text+'</td>'+
                     '<td>'+ustem7_text+'</td>'+
                     '<td>'+params.ustem3+'</td>'+
                     '<td>'+params.ustem5+'</td>'+
@@ -178,6 +182,7 @@ $(document).ready(function(){
             return '<tr class="new-theme">'+
                 //'<td><input type="number" class="ustem4" value="'+(number)+'"></td>'+
                 '<td><input type="number" disabled class="ustem4 " value="'+(number)+'"/></td>'+
+                '<td>'+selectUstem11+'</td>'+
                 '<td>'+selectUstem7+'</td>'+
                 '<td><input type="number" class="ustem3"/></td>'+
                 '<td><input type="text" class="ustem5"/></td>'+

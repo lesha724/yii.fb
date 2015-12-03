@@ -11,6 +11,8 @@ if (!empty($model->group)) {
     Ustem::model()->recalculation($us1);
     Ustem::model()->addChair($us1);
 
+    $uo4 = Ustem::model()->getDefaultChair($us1);
+
     $hours = Ustem::model()->getHours($us1,0);
     $urlDelete = Yii::app()->controller->createAbsoluteUrl("journal/deleteUstemTheme", array("ustem1" => ''));
     $urlPaste = Yii::app()->controller->createAbsoluteUrl("journal/pasteUstemTheme",array('us1' => $us1));
@@ -18,11 +20,13 @@ if (!empty($model->group)) {
     $res = CHtml::listData(Ustem::model()->getUstem7Arr(),'rz8','rz8_');
     $selectUstem7= str_replace("\n", ' ', CHtml::dropDownList('',0,$res,array('class'=>'ustem7 select-new-ustem7')));
     $selectUstem6= str_replace("\n", ' ', CHtml::dropDownList('',0,Ustem::model()->getUstem6Arr(),array('class'=>'ustem6')));
+    $selectUstem11= str_replace("\n", ' ', CHtml::dropDownList('',$uo4,CHtml::listData(Ustem::model()->getUstem11Arr($us1),'nr30','k2'),array('class'=>'ustem11')));
     Yii::app()->clientScript->registerScript('url_ustem6', <<<JS
         urlDelete       = "{$urlDelete}";
         urlEdit    = "{$urlEdit}";
         selectUstem7='{$selectUstem7}';
         selectUstem6='{$selectUstem6}';
+        selectUstem11='{$selectUstem11}';
 JS
     , CClientScript::POS_READY);
     
