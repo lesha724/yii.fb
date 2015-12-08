@@ -18,9 +18,16 @@ else {
 echo '<div id="studentCard">';
     echo '<div class="top-block"></div>';
 
+    $id   = $st->st1;
+    $type = Users::FOTO_ST1;
+    $url = $this->createUrl('/site/userPhoto', array('_id' => $id, 'type' => $type));
+
     $infoHtml = <<<HTML
-    <div class="student-info">
-        <table class="table">
+    <div class="student-info row">
+        <div class="student-foto span3">
+             <img alt="photo" src="{$url}" class="nav-user-photo">
+        </div>
+        <table class="table span9">
             <tbody>
                 <tr>
                     <th>%s</th>

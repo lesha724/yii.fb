@@ -119,6 +119,9 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson)
                 if($elgzst5!='')
                     $val = 'checked';
                 $elgzst5_input = '<input type="checkbox" '.$val.' data-name="elgzst5" '.$disabled_input_1.'>';
+            }else
+            {
+                $elgzst5_input='<label class="label label-warning">'.$elgzst5.'</label>';
             }
         }
         else
@@ -135,21 +138,22 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson)
     $show=Yii::app()->user->getState('showRetake',0);
     if($show==0)
         $button='';
-    $pattern= <<<HTML
-        <td colspan="2" data-nom="{$nom}" data-priz="{$type}"  data-elgz1="{$elgz1}" data-type-lesson="{$type_lesson}" data-r1="{$r1}" data-date="{$date_lesson}" data-gr1="{$gr1}">
-            %s %s %s %s
-        </td>
+    $pattern = <<<HTML
+    <td colspan="2" data-nom="{$nom}" data-priz="{$type}"  data-elgz1="{$elgz1}" data-type-lesson="{$type_lesson}" data-r1="{$r1}" data-date="{$date_lesson}" data-gr1="{$gr1}">
+        %s %s %s %s
+    </td>
 HTML;
 
-    return sprintf($pattern, $elgzst3_input,$elgzst4_input,$elgzst5_input,$button);
+    return sprintf($pattern, $elgzst3_input, $elgzst4_input, $elgzst5_input, $button);
 
 }
 
 function generateTh2($ps9,$date,$type_lesson)
 {
-    if ($ps9 == '0')
-        return '<th></th><th></th>';
     if ($type_lesson == '0')
+        return '<th></th><th></th>';
+        //return '<th>'.tt('Посещение').'</th><th>'.tt('Отработка').'</th>';
+    if ($ps9 == '0')
         return '<th></th><th></th>';
     $elgz5='';
     $elgz6='';
