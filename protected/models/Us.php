@@ -412,4 +412,26 @@ SQL;
 
         return $data;
     }
+
+    public function getGroups($us1)
+    {
+        if(empty($us1))
+            return array();
+
+        $sql=<<<SQL
+          SELECT sem4,gr3,gr7,gr1,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28 FROM us
+            inner join sem on (sem1 = us3)
+            inner join nr on (nr2 = us1)
+            inner join ug on (nr1 = ug1)
+            inner join gr on (ug2 = gr1)
+          WHERE us1=:US1
+            GROUP BY sem4,gr3,gr7,gr1,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28
+            ORDER BY gr7
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':US1', $us1);
+        $res = $command->queryAll();
+
+        return $res;
+    }
 }

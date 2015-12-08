@@ -39,6 +39,8 @@ class Controller extends CController
     {
         $this->checkClosePortal($action);
 
+        $this->checkCloseChair($action);
+
         $this->processAccess($action);
 
         $this->processYearAndSem();
@@ -60,6 +62,30 @@ class Controller extends CController
 
         if (! SH::checkServiceFor(MENU_ELEMENT_VISIBLE, Yii::app()->controller->id, 'main', true))
             throw new CHttpException(404, tt('Сервис закрыт!'));
+    }
+
+    private function checkCloseChair($action)
+    {
+        /*$enable_close=false;
+        if(Yii::app()->user->isTch)
+            $enable_close=true;
+        if(Yii::app()->user->isAdmin)
+            $enable_close=false;
+        if(Yii::app()->controller->id=='site'&&$action->id!='index')
+            $enable_close=false;
+
+        $chair=0;
+        $kcp = Kcp::model()->findByAttributes(array('kcp2'=>$chair));
+        $text_close=tt('Система для вашей кафедры закрыта. Обратитесь к администратору системы.');
+        if(!empty($kcp)&&$enable_close)
+        {
+            Yii::app()->setComponents(array(
+                'errorHandler'=>array(
+                    'errorAction'=>'site/close',
+                ),
+            ));
+            throw new CHttpException(403,$text_close);
+        }*/
     }
 
     private function checkClosePortal($action)

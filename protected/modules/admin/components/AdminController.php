@@ -31,7 +31,10 @@ class AdminController extends Controller
                     'employment',
 					'settings',
                     'settingsPortal',
-                    'list'
+                    'list',
+                    'closeChair',
+                    'deleteCloseChair',
+                    'createCloseChair'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin',
             ),

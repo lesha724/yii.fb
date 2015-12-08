@@ -38,6 +38,7 @@ class JournalController extends Controller
                     'copyUstemTheme',
                     'deleteUstemTheme',
                     'copyThemePlanSg',
+                    'thematicExcel',
 
                     'omissions',
                     'updateOmissionsStMark',
@@ -222,28 +223,50 @@ SQL;
                                 }
                         }
 
-                        $attr = array_merge(array(
-                            $field => $value,
-                            'elgzst7' =>  Yii::app()->user->dbModel->p1,
-                            'elgzst6' =>  date('Y-m-d H:i:s'),
-                        ),$arr);
-                        $error =!$elgzst->saveAttributes($attr);
+                        if($field=='elgzst3'&&$value==1&&$elgzst->elgzst4>0)
+                        {
+                            $error=true;
+                        }
+
+                        if($field=='elgzst4'&&$value>0&&$elgzst->elgzst3>0)
+                        {
+                            $error=true;
+                        }
+
+                        if($field=='elgzst5'&&$value>0&&$elgzst->elgzst3==0&&$elgzst->elgzst4==0)
+                        {
+                            $error=true;
+                        }
+
+                        if(!$error) {
+                            $attr = array_merge(array(
+                                $field => $value,
+                                'elgzst7' => Yii::app()->user->dbModel->p1,
+                                'elgzst6' => date('Y-m-d H:i:s'),
+                            ), $arr);
+                            $error = !$elgzst->saveAttributes($attr);
+                        }
                     }else
                     {
-                        $elgzst= new Elgzst();
-                        $elgzst->elgzst0=new CDbExpression('GEN_ID(GEN_ELGZST, 1)');
-                        $elgzst->elgzst1=$st1;
-                        $elgzst->elgzst2=$elgz1;
-                        $elgzst->elgzst7=Yii::app()->user->dbModel->p1;
-                        $elgzst->elgzst6=date('Y-m-d H:i:s');
-                        $elgzst->elgzst3=0;
-                        $elgzst->elgzst4=0;
-                        $elgzst->elgzst5=0;
-                        $elgzst->$field=$value;
+                        if($field=='elgzst5')
+                        {
+                            $error=true;
+                        }else {
+                            $elgzst = new Elgzst();
+                            $elgzst->elgzst0 = new CDbExpression('GEN_ID(GEN_ELGZST, 1)');
+                            $elgzst->elgzst1 = $st1;
+                            $elgzst->elgzst2 = $elgz1;
+                            $elgzst->elgzst7 = Yii::app()->user->dbModel->p1;
+                            $elgzst->elgzst6 = date('Y-m-d H:i:s');
+                            $elgzst->elgzst3 = 0;
+                            $elgzst->elgzst4 = 0;
+                            $elgzst->elgzst5 = 0;
+                            $elgzst->$field = $value;
 
-                        $error =!$elgzst->save();
-                        if(!$error)
-                            $elgzst = Elgzst::model()->findByAttributes(array('elgzst1'=>$st1,'elgzst2'=>$elgz1));
+                            $error = !$elgzst->save();
+                            if (!$error)
+                                $elgzst = Elgzst::model()->findByAttributes(array('elgzst1' => $st1, 'elgzst2' => $elgz1));
+                        }
                     }
 
                     if(!$error)
@@ -1288,6 +1311,122 @@ SQL;
         ));
     }
 
+    public function actionThematicExcel()
+    {
+        $model = new FilterForm();
+        $model->scenario = 'thematicPlan';
+        if (isset($_REQUEST['FilterForm'])) {
+            $model->attributes=$_REQUEST['FilterForm'];
+        }
+
+        if (!empty($model->group)) {
+
+            $disp = D::model()->findByPk($model->discipline);
+
+            list($us1,$us6) = explode("/", $model->group);
+            $groups = Us::model()->getGroups($us1);
+            $hours = Ustem::model()->getHours($us1,0);
+
+            $potok = Gr::model()->getPotokByThematicExcel($model->discipline,$us1);
+
+            $h4=tt('Часы по рабочему плану - ').' '.$us6.' / '.tt('Часы по тематическому плану - ').' '.$hours;
+
+            $groups_name = '';
+            if(!empty($groups)){
+                foreach ($groups as $group)
+                {
+                    if($groups_name!='')
+                        $groups_name.=', ';
+                    $groups_name.=Gr::model()->getGroupName($group['sem4'], $group);
+                }
+                $groups_name=tt('Группы').': '.$groups_name;
+            }
+
+            Yii::import('ext.phpexcel.XPHPExcel');
+            $objPHPExcel= XPHPExcel::createPHPExcel();
+            $objPHPExcel->getProperties()->setCreator("ACY")
+                ->setLastModifiedBy("ACY ".date('Y-m-d H-i'))
+                ->setTitle("ThematicPlan ".date('Y-m-d H-i'))
+                ->setSubject("ThematicPlan ".date('Y-m-d H-i'))
+                ->setDescription("ThematicPlan document, generated using ACY Portal. ".date('Y-m-d H:i:'))
+                ->setKeywords("")
+                ->setCategory("Result file");
+            $objPHPExcel->setActiveSheetIndex(0);
+            $sheet=$objPHPExcel->getActiveSheet();
+
+            $sheet->mergeCells('A1:J1');
+            $sheet->setCellValue('A1', tt('Дисциплина').': '.$disp->d2);
+            $sheet->mergeCells('A2:J2');
+            $sheet->setCellValue('A2', tt('Поток').': '.$potok['name']);
+            $sheet->mergeCells('A3:J3');
+            $sheet->setCellValue('A3', $h4);
+            $sheet->mergeCells('A4:J4');
+            $sheet->setCellValue('A4', $groups_name);
+
+            $sheet->setTitle('ThematicPlan '.date('Y-m-d H-i'));
+
+            $themes = Ustem::model()->getTheme($us1);
+
+            $i=7;
+            $start=6;
+
+            $sheet->setCellValueByColumnAndRow(0,$start, '№ занятия');
+            $sheet->setCellValueByColumnAndRow(1,$start,tt('Кафедра'));
+            $sheet->setCellValueByColumnAndRow(2,$start,tt('Длительность занятия'));
+            $sheet->setCellValueByColumnAndRow(3,$start,tt('№ темы'));
+            $sheet->setCellValueByColumnAndRow(4,$start,tt('Тема'));
+            $sheet->setCellValueByColumnAndRow(5,$start,tt('Тип'));
+            $sheet->getStyleByColumnAndRow(0,$start,5,$start)->getAlignment()->setWrapText(true)-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $sheet->getRowDimension(3)->setRowHeight(-1);
+            $sheet->getColumnDimensionByColumn(0)->setWidth(10);
+            $sheet->getColumnDimensionByColumn(1)->setWidth(20);
+            $sheet->getColumnDimensionByColumn(2)->setWidth(15);
+            $sheet->getColumnDimensionByColumn(3)->setWidth(15);
+            $sheet->getColumnDimensionByColumn(4)->setWidth(30);
+            $sheet->getColumnDimensionByColumn(5)->setWidth(15);
+
+            $start++;
+
+            foreach($themes as $theme)
+            {
+                $tip = Ustem::model()->getUstem6($theme['ustem6']);
+                $ustem7=round($theme['ustem7'],2);
+
+                $sheet->setCellValueByColumnAndRow(0,$i,$theme['ustem4']);
+                $sheet->setCellValueByColumnAndRow(1,$i,$theme['k2']);
+                $sheet->setCellValueByColumnAndRow(2,$i,$ustem7);
+                $sheet->setCellValueByColumnAndRow(3,$i,$theme['ustem3']);
+                $sheet->setCellValueByColumnAndRow(4,$i,$theme['ustem5']);
+                $sheet->setCellValueByColumnAndRow(5,$i,$tip);
+                $sheet->getRowDimension($i)->setRowHeight(-1);
+                $sheet->getStyleByColumnAndRow(0, $i, 5, $i)->getAlignment()->setWrapText(true)-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                $i++;
+            }
+
+            $sheet->getStyleByColumnAndRow(0,$start-1,5,$i-1)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
+
+            $objPHPExcel->setActiveSheetIndex(0);
+
+            // Redirect output to a clientâ€™s web browser (Excel5)
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="ACY_ThematicPlan_'.date('Y-m-d H-i').'.xls"');
+            header('Cache-Control: max-age=0');
+            // If you're serving to IE 9, then the following may be needed
+            header('Cache-Control: max-age=1');
+            // If you're serving to IE over SSL, then the following may be needed
+            header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+            header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+            header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+            header ('Pragma: public'); // HTTP/1.0
+
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            $objWriter->save('php://output');
+
+        }
+
+        Yii::app()->end();
+    }
+
     public function actionRenderUstemTheme()
     {
        if (! Yii::app()->request->isAjaxRequest)
@@ -1513,8 +1652,8 @@ SQL;
 
     public function actionInsertUstemTheme()
     {
-        //if (! Yii::app()->request->isAjaxRequest)
-          //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        if (! Yii::app()->request->isAjaxRequest)
+          throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $ustem2 = Yii::app()->request->getParam('us1', null);
         $ustem3 = Yii::app()->request->getParam('ustem3', null);

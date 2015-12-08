@@ -47,7 +47,6 @@ $options = array(
     $label = $form->label($model, 'stego4', $options);
     $input = $form->dropDownList($model, 'stego4',$teacher);
     $html .= sprintf($pattern, $label, $input);*/
-
     $model->elgotr4=Yii::app()->user->dbModel->p1;
     $html .=  $form->hiddenField($model, 'elgotr4');
     $html .= '</div>';

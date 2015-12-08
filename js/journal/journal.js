@@ -504,7 +504,10 @@ function send(url,params,title,$td,$that,$spinner1,st1)
                 else
                 {
                     $td.find('[data-name="elgzst4"]').removeAttr('disabled');
-                    elem.val('');
+                    if(!elem.is(':checkbox'))
+                        elem.val('');
+                    else
+                        elem.removeAttr('checked');
                 }
 
                 if(params.value==1) {

@@ -51,7 +51,7 @@ if (! empty($model->group)):
     $elg1=Elg::getElg1($uo1,$model->type_lesson);
     $elg = Elg::model()->findByPk($elg1);
     if(empty($elg))
-        throw new CHttpException(404, 'Elg empty.');
+        throw new CHttpException(404, tt('Не задана структура журнала. Обратитесь к Администратору системы').'.');
 
     $ps9  = PortalSettings::model()->findByPk(9)->ps2;
     //$ps20 = PortalSettings::model()->findByPk(20)->ps2;// use sub modules

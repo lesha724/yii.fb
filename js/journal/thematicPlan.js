@@ -6,6 +6,15 @@ $(document).ready(function(){
 
     initFilterForm($spinner1);
 
+    $('#thematic-print').click(function(){
+        /*$("#filter-form").attr("action", $(this).data('url'));
+         $("#filter-form").submit();*/
+        var action=$("#filter-form").attr("action");
+        $("#filter-form").attr("action", $(this).data('url'));
+        $("#filter-form").submit();
+        $("#filter-form").attr("action", action);
+    });
+
    /* function appendSelect()
     {
         var $select = $('#FilterForm_discipline').clone();

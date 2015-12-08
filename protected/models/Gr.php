@@ -343,6 +343,28 @@ SQL;
 
         return $res;
     }
+
+    public function getPotokByThematicExcel($discipline,$us1)
+    {
+        if (empty($discipline))
+            return array();
+        $sql = <<<SQL
+              SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,:D1,3,0,0,1,0)
+              WHERE us1=:US1
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
+        $command->bindValue(':D1', $discipline);
+        $command->bindValue(':US1', $us1);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $res = $command->queryRow();
+        $pattern='(%s) %s %s '.tt('ч.');
+        $res['name'] = sprintf($pattern,SH::convertUS4($res['us4']),$res['spec'],$res['chasi']);
+
+        return $res;
+    }
     
     public function getGroupsFor($discipline, $type = null)
     {

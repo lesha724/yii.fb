@@ -13,6 +13,8 @@ if (!empty($model->group)) {
 
     $uo4 = Ustem::model()->getDefaultChair($us1);
 
+    $groups = Us::model()->getGroups($us1);
+
     $hours = Ustem::model()->getHours($us1,0);
     $urlDelete = Yii::app()->controller->createAbsoluteUrl("journal/deleteUstemTheme", array("ustem1" => ''));
     $urlPaste = Yii::app()->controller->createAbsoluteUrl("journal/pasteUstemTheme",array('us1' => $us1));
@@ -51,12 +53,47 @@ JS
         <?=tt('Копировать тем. план')?>
     </button>
     <?php
+        $this->widget('bootstrap.widgets.TbButton', array(
+            'buttonType'=>'button',
+            'type'=>'primary',
+            'icon'=>'print',
+            'label'=>tt('Печать'),
+            'htmlOptions'=>array(
+                'class'=>'btn-mini',
+                'data-url'=>Yii::app()->createUrl('/journal/thematicExcel'),
+                'id'=>'thematic-print',
+            )
+        ));?>
+    <?php
         $class="green";
         if($hours!=$us6)
             $class="red";
     ?>
     <h4 class="<?=$class?>"><b><i class="icon-info-sign show-info"></i><i class="icon-double-angle-right"></i><?=tt('Часы по рабочему плану - ').' '.$us6?> / </label><?=tt('Часы по тематическому плану - ').' '.$hours?></b></h4>
-<?php $urlInsert   = Yii::app()->controller->createAbsoluteUrl("journal/insertUstemTheme");?>
+    <?php
+        if(!empty($groups)){
+            $groups_name = '';
+            if(count($groups)>=3)
+            {
+                $group = reset($groups);
+                $groups_name.=Gr::model()->getGroupName($group['sem4'], $group);
+                $group = next($groups);
+                $groups_name.=', '.Gr::model()->getGroupName($group['sem4'], $group);
+                $group = end($groups);
+                $groups_name.=', ..., '.Gr::model()->getGroupName($group['sem4'], $group);
+            }else
+            {
+                foreach ($groups as $group)
+                {
+                    if($groups_name!='')
+                        $groups_name.=', ';
+                    $groups_name.=Gr::model()->getGroupName($group['sem4'], $group);
+                }
+            }
+            echo '<h5 class="blue">'.tt('Группы').': '.$groups_name.'</h5>';
+        }
+    ?>
+    <?php $urlInsert   = Yii::app()->controller->createAbsoluteUrl("journal/insertUstemTheme");?>
     <table id="themes" data-us1="<?=$us1?>" data-url="<?=$urlInsert?>" class="table table-striped table-bordered table-hover">
         <thead>
         <tr>
