@@ -7,7 +7,7 @@
  */
 
 
-$this->pageHeader=tt('Карточка студента').' '.SH::getShortName($st->st2,$st->st3,$st->st4);
+$this->pageHeader=tt('Карточка студента');
 $this->breadcrumbs=array(
     tt('Другое'),
 );

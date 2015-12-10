@@ -95,7 +95,7 @@ $config = array(
                 ),
                 'dataTables' => array(
                     'baseUrl' => 'theme/ace/assets/',
-                    'js' => array('js/jquery.dataTables.min2.js', 'js/jquery.dataTables.bootstrap.js'),
+                    'js' => array('js/jquery.dataTables.min1.js', 'js/jquery.dataTables.bootstrap.js'),
                     //'css' => array('css/jquery.dataTables2.css'),
                     'depends' => array('jquery')
                 ),

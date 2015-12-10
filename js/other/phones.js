@@ -9,7 +9,7 @@
             .after($('<input type="image" id="xButton" src="' + opts['img'] + '" />') //после текстового инпута вставляем image-input
                 .css({ 'display': 'none', 'cursor': 'pointer', 'marginLeft': '-15px' })// делаем его стильным
                 .click(function() { //вешаем обработчик на клик
-                    $('#phones_filter input:text').val('').change().focus();
+                    $('.phones-form').submit();
                     $('#xButton').hide();
                 }))
             .keyup(function() { //на кейап мы проверяем, показывать нам крестик или нет

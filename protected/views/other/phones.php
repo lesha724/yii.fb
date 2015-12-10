@@ -14,7 +14,7 @@ $this->breadcrumbs=array(
 
 ?>
 
-<form class="form-inline">
+<form class="form-inline phones-form">
     <?php
         echo CHtml::label(tt('Подразделение'), 'department');
         $departments = CHtml::listData(Tsg::model()->findAll('tsg1 > 0 order by tsg3'), 'tsg1', 'tsg2');

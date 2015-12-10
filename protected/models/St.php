@@ -643,12 +643,13 @@ SQL;
 
 	public function getStudentInfoForCard(){
 		$sql = <<<SQL
-		 select sg1,sg2,gr1,gr3,sp1,sp2,sem4,f2,f3,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28,st7
+		 select sg1,sg2,sg4,gr1,gr3,sp1,sp2,sem4,f2,f3,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28,sgr2
 		   from sem
 			   inner join sg on (sem.sem2 = sg.sg1)
 			   inner join gr on (sg.sg1 = gr.gr2)
 			   inner join std on (gr.gr1 = std.std3)
 			   inner join st on (std.std2 = st.st1)
+			   inner join sgr on (st.st32 = sgr.sgr1)
 			   inner join sp on (sg.sg2 = sp.sp1)
 			   INNER JOIN f on (sp.sp5 = f.f1)
 		   where st1=:ST1 AND sem3=:YEAR and sem5=:SEM
@@ -979,7 +980,7 @@ SQL;
         $command  = Yii::app()->db->createCommand($sql);
         $command->bindValue(':ST1', $this->st1);
         $params = $command->queryRow();
-
+		$params['SEMESTER']=0;
         return $params;
     }
 
