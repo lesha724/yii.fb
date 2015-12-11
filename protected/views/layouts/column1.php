@@ -12,7 +12,10 @@
             </h1>
         </div>
     <?php endif;?>
-
+    <!--<div class="alert alert-error">
+        <h3><i class="icon-exclamation-sign"></i> Warning!</h3>
+        Best check yo self, you're not...
+    </div>-->
     <div class="row-fluid">
         <div class="span12">
             <div id="content">

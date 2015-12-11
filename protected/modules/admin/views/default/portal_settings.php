@@ -40,6 +40,10 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/a
                     <?=CHtml::textField('settings[39]', PortalSettings::model()->findByPk(39)->ps2)?>
                 </div>
 
+                <div class="control-group">
+                    <span class="lbl"> <?=tt('Текст закрытия журнала для кафедр')?>:</span>
+                    <?=CHtml::textField('settings[43]', PortalSettings::model()->findByPk(43)->ps2)?>
+                </div>
 
                 <div class="form-actions">
                     <button type="submit" class="btn btn-info btn-small">

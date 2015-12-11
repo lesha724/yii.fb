@@ -60,8 +60,13 @@ class RegistrationForm extends CFormModel
             //$this->_u6 = $st ? $st[0]->st1 : $p[0]->p1;
             $this->_u5 = $p ? 1 : 0;
             $this->_u6 = $p ? $p[0]->p1 : $st[0]->st1;
-
-            $alreadyRegistered = 1 <= Users::model()->countByAttributes(array('u5'=>$this->_u5,'u6'=>$this->_u6));
+            //$alreadyRegistered = 1 <= Users::model()->count('u5=:U5 AND u6=:U6 AND u2!=""',array(':U5'=>$this->_u5,':U6'=>$this->_u6));
+            $alreadyRegistered = 1 <= Users::model()->countByAttributes(
+                array('u5'=>$this->_u5,'u6'=>$this->_u6),
+                array(
+                    'condition'=>'u2 != :U2',
+                    'params'=>array(':U2'=>"")
+                ));
             if ($alreadyRegistered)
                 $this->addError($attribute, tt('Пользователь с таким идентификационным кодом уже зарегистрирован!'));
         }
@@ -69,8 +74,11 @@ class RegistrationForm extends CFormModel
 
     public function register()
     {
-        $user = new Users;
-        $user->u1 = new CDbExpression('GEN_ID(GEN_USERS, 1)');
+        $user = Users::model()->findByAttributes(array('u5'=>$this->_u5,'u6'=>$this->_u6,'u2'=>""));
+        if(empty($user)) {
+            $user = new Users;
+            $user->u1 = new CDbExpression('GEN_ID(GEN_USERS, 1)');
+        }
         $user->u2 = $this->username;
         $user->u3 = $this->password;
         $user->u4 = $this->email;

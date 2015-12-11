@@ -204,7 +204,9 @@ SQL;
     {
         $d2  = $day['d2'];
         $d2 = str_replace('"', "'", $d2);
-        $tip = $day['tip'];
+        $tip = SH::convertUS4($day['us4']);
+        //$tip = $day['tip'];
+
         $gr3 = '{$gr3}';
         $a2  = $day['a2'];
         $tem_name='';
@@ -251,7 +253,8 @@ TEXT;
         $maxLength = 17;
 
         $d3    = $day['d3'];
-        $tip   = $day['tip'];
+        //$tip   = $day['tip'];
+        $tip = SH::convertUS4($day['us4']);
         $a2    = $day['a2'];
         $r11   = $day['r11'];
         $class = tt('ауд');

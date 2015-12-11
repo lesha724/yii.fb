@@ -212,6 +212,11 @@ $this->widget('zii.widgets.CMenu', array(
                     'active' => $_a=='settingsPortal' && $_m=='admin'
                 ),
                 array(
+                    'label'  => $_l2.tt('Закрытие журнала для кафедр'),
+                    'url'    => _u('/admin/default/closeChair'),
+                    'active' => $_c=='closeChair' && $_m=='admin'
+                ),
+                array(
                     'label'  => $_l2.tt('Группы пунктов меню (доп.)'),
                     'url'    => _u('/admin/menuGroup'),
                     'active' => $_c=='menuGroup' && $_m=='admin'

@@ -66,26 +66,31 @@ class Controller extends CController
 
     private function checkCloseChair($action)
     {
-        /*$enable_close=false;
-        if(Yii::app()->user->isTch)
-            $enable_close=true;
-        if(Yii::app()->user->isAdmin)
-            $enable_close=false;
-        if(Yii::app()->controller->id=='site'&&$action->id!='index')
-            $enable_close=false;
-
-        $chair=0;
-        $kcp = Kcp::model()->findByAttributes(array('kcp2'=>$chair));
-        $text_close=tt('Система для вашей кафедры закрыта. Обратитесь к администратору системы.');
-        if(!empty($kcp)&&$enable_close)
+        if(Yii::app()->user->isTch&&Yii::app()->controller->id=='journal')
         {
-            Yii::app()->setComponents(array(
-                'errorHandler'=>array(
-                    'errorAction'=>'site/close',
-                ),
-            ));
-            throw new CHttpException(403,$text_close);
-        }*/
+            $today = date('d.m.Y 00:00');
+            $sql = <<<SQL
+            SELECT PD4
+            FROM P
+                INNER JOIN PD ON (P1=PD2)
+            WHERE P1 = :P1 and PD28 in (0,2,5,9) and PD3=0 and (PD13 IS NULL or PD13>'{$today}')
+            group by PD4
+SQL;
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
+            $chairs = $command->queryAll();
+            $close = false;
+            $text = PortalSettings::model()->findByPk(43)->ps2;
+            if(empty($text))
+                $text = tt('Сервис закрыт!');
+            foreach($chairs as $chair) {
+                $close = Kcp::model()->findByAttributes(array('kcp2' => $chair['pd4']))!=null;
+                if($close){
+                    throw new CHttpException(403,$text);
+                    break;
+                }
+            }
+        }
     }
 
     private function checkClosePortal($action)
