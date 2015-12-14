@@ -375,6 +375,7 @@ SQL;
             $time='<br>'.$day['rz2'].'-'.$day['rz3'].'<br>';
         if ($type == 1) // teacher
             $pattern = <<<HTML
+{$time}<br>
 {$d2}[{$tip}]<br>
 {$gr3}<br>
 {$class}. {$a2}<br>
