@@ -1012,7 +1012,7 @@ SQL;*/
 			   inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
 			   inner join st on (ucsn.ucsn2 = st.st1)
 			   inner join stus on (st.st1 = stus.stus1)
-			where ucgn2=:GR1 and stus18 = :STUS18 AND stus19 =:STUS19 AND stus20 = :STUS20 AND stus21 = :STUS21 
+			where ucgn2=:GR1 and stus18 = :STUS18 AND stus19 =:STUS19 AND stus20 = :STUS20 /*AND stus21 = :STUS21 */
 			GROUP BY stus.stus0,stus.stus1,stus.stus3,stus.stus6,stus.stus7,stus.stus19,st1,st2,st3,st4 order by st2 collate UNICODE
 SQL;
         $command = Yii::app()->db->createCommand($sql);
@@ -1020,7 +1020,7 @@ SQL;
         $command->bindValue(':STUS18', $stus18);
         $command->bindValue(':STUS19', $stus19);
         $command->bindValue(':STUS20', $stus20);
-        $command->bindValue(':STUS21', $stus21);
+        //$command->bindValue(':STUS21', $stus21);
         $students = $command->queryAll();
 
         return $students;

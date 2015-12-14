@@ -225,11 +225,12 @@ SQL;
         $marks['stus3'] = Yii::app()->db->createCommand()
                             ->select('stus3')
                             ->from('stus')
-                            ->where('stus1=:ST1 and stus18=:D1 and stus19=8 and stus20=:SEM7 and stus21=:K1', array(
+                            //->where('stus1=:ST1 and stus18=:D1 and stus19=8 and stus20=:SEM7 and stus21=:K1', array(
+                            ->where('stus1=:ST1 and stus18=:D1 and stus19=8 and stus20=:SEM7', array(
                                 ':ST1'  => $st1,
                                 ':D1'   => $vvmp->vvmp3,
                                 ':SEM7' => $vvmp->vvmp4,
-                                ':K1'   => $vvmp->vvmp5,
+                                //':K1'   => $vvmp->vvmp5,
                             ))
                             ->queryScalar();
 
