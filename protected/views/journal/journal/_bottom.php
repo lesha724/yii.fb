@@ -92,7 +92,8 @@ if (! empty($model->group)):
             'students' => $students,
             'elgd'=>$elgd,
             'elg'=>$elg,
-            'read_only'=>$read_only
+            'read_only'=>$read_only,
+            'ps44'=>$ps44
         ));
     }
 

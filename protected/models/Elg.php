@@ -148,4 +148,21 @@ SQL;
         else
             return -1;
     }
+
+	public function getDispBySt($st1){
+		$sql=<<<SQL
+              SELECT elg.*,d2,d3 FROM elg
+                INNER JOIN sem on (elg3 = sem1)
+                inner join uo on (elg.elg2 = uo.uo1)
+                inner join d on (uo.uo3 = d.d1)
+                inner join elgz on (elg1 = elgz2)
+                inner join elgzst on (elgz1 = elgzst2)
+              WHERE elgzst1=:ST1 AND sem3=:YEAR AND sem5=:SEM
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':ST1', $st1);
+		$command->bindValue(':YEAR', Yii::app()->session['year']);
+		$command->bindValue(':SEM', Yii::app()->session['sem']);
+		$res = $command->queryAll();
+	}
 }

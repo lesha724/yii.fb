@@ -19,6 +19,7 @@
     $st= tt('Ошибка! Студент заблокирован!');
     $error2= tt('Ошибка! Не найдены входящие данные!');
     $min=Elgzst::model()->getMin();
+    $ps44 = PortalSettings::model()->findByPk(44)->ps2;
 
     Yii::app()->clientScript->registerScript('translations', <<<JS
         min = {$min}
@@ -28,6 +29,7 @@
         tt.access = "{$access}" //errorType=3
         tt.st = "{$st}" //errorType=5
         tt.error2 = "{$error2}" //errorType=2
+        ps44 = {$ps44}
 JS
     , CClientScript::POS_READY);
 
@@ -41,4 +43,4 @@ JS
     ));
     
     
-   $this->renderPartial('journal/_bottom', array('model' => $model,'read_only' => $read_only));
+   $this->renderPartial('journal/_bottom', array('model' => $model,'read_only' => $read_only,'ps44'=>$ps44));

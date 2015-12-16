@@ -6,3 +6,4 @@
  * Time: 8:48
  */
 
+ $disp = Elg::model()->getDispBySt($st->st1);

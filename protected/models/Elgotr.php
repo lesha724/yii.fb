@@ -147,7 +147,7 @@ class Elgotr extends CActiveRecord
 				INNER JOIN elgz on (elgzst.elgzst2 = elgz.elgz1)
 				INNER JOIN elg on (elgz.elgz2 = elg.elg1)
 				INNER JOIN sem on (elg.elg3 = sem.sem1)
-			WHERE sem.sem3=:YEAR AND sem.sem5=:SEM AND elg.elg2=:UO1 AND gr.gr1=:GR1
+			WHERE sem.sem3=:YEAR AND sem.sem5=:SEM AND elg.elg2=:UO1 AND gr.gr1=:GR1 AND elg.elg4=:TYPE
 			GROUP BY elgotr0,elgotr2,elgotr4,st2,st3,st4,p3,p4,p5,elgzst3,elgz3,elgp2,elgp3,elgp4
 			ORDER BY elgotr.elgotr0
 
@@ -155,6 +155,7 @@ SQL;
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':UO1', $uo1);
 		$command->bindValue(':GR1', $gr1);
+		$command->bindValue(':TYPE', $model->type_lesson);
 		$command->bindValue(':YEAR', Yii::app()->session['year']);
 		$command->bindValue(':SEM', Yii::app()->session['sem']);
 		$rows = $command->queryAll();

@@ -311,7 +311,13 @@ SQL;
         $discipline = $command->queryAll();
         return $discipline;
     }
-	
+
+    public function getDisciplineForUo1($uo1)
+    {
+        $discipline = D::model()->findBySql('SELECT d.* FROM uo INNER JOIN d ON (uo3=d1) WHERE uo1=:UO1',array(':UO1'=>$uo1));
+        return $discipline;
+    }
+
 	public function getDisciplinesByStream($sg1,$k1)
 	{
 		if (empty($sg1)||empty($k1))

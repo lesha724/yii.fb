@@ -493,6 +493,22 @@ SQL;
         return $groups;
     }
 
+    public function getStarostaFromGr1($gr1)
+    {
+        $sql = <<<SQL
+            select st1,st2,st3,st4
+            from st
+               inner join sst on (st1 = sst2)
+            where sst3=:GR1
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':GR1', $gr1);
+        $res = $command->queryRow();
+
+        return $res;
+    }
+
     public static function getTimeTable($id, $date1, $date2,$type)
     {
         $max=8;

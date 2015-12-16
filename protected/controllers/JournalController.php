@@ -853,6 +853,63 @@ SQL;
 
             $sheet->getStyleByColumnAndRow(0,3,7,$i-1)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
 
+            //----------------------------------title---------------------------------
+            $objWorkSheet = $objPHPExcel->createSheet(2);
+            $objPHPExcel->setActiveSheetIndex(2);
+            $sheet=$objPHPExcel->getActiveSheet();
+            $sheet->setTitle('Title');
+
+            $ps45 = PortalSettings::model()->findByPk(45)->ps2;//вуз
+            $ps46 = PortalSettings::model()->findByPk(46)->ps2;//министерство
+
+            $sheet->mergeCells('A1:I1');
+            $sheet->setCellValue('A1',$ps46)->getStyle('A1')->getFont()->setSize(14);
+            $sheet->mergeCells('A2:I2');
+            $sheet->setCellValue('A2',$ps45)->getStyle('A2')->getFont()->setSize(12);
+            $sheet->mergeCells('A10:I10');
+            $sheet->setCellValue('A10',tt('Журнал'))->getStyle('A10')->getFont()->setSize(33);
+            $sheet->getRowDimension(10)->setRowHeight(42);
+            $sheet->mergeCells('A11:I11');
+            $sheet->setCellValue('A11',tt('учета посещаемости и успеваемости студентов'))
+                ->getStyle('A11')->getFont()->setSize(21);
+            $sheet->getRowDimension(11)->setRowHeight(24);
+
+            $type=tt('Лекції');
+            if($model->type_lesson==1)
+                $type=tt('Практичні');
+            $sheet->mergeCells('A12:I12');
+            $sheet->setCellValue('A12',$type)->getStyle('A12')->getFont()->setSize(16);
+
+            $sheet->getStyleByColumnAndRow(0,1,1,18)->getAlignment()->setWrapText(true)->
+                setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+            $chair = K::model()->findByPk(K::model()->getChairByUo1($elg->elg2));
+
+            if(!empty($chair))
+            {
+                $sheet->mergeCells('A17:I17');
+                $sheet->setCellValue('A17',tt('Кафедра').' '.$chair->k3)->getStyle('A17')->getFont()->setSize(16);
+            }
+
+            $disp = D::model()->getDisciplineForUo1($elg->elg2);
+            if(!empty($disp))
+            {
+                $sheet->mergeCells('A18:I18');
+                $sheet->setCellValue('A18',tt('Дисциплина').': '.$disp->d2)->getStyle('A18')->getFont()->setSize(16);
+            }
+            $sheet->mergeCells('A22:I22');
+            $sheet->setCellValue('A22',tt('Факультет').': '.$faculty)->getStyle('A22')->getFont()->setSize(16);
+            $sheet->mergeCells('A23:I23');
+            $sheet->setCellValue('A23',tt('Группа, курс').': '.$group.', '.$course)->getStyle('A23')->getFont()->setSize(16);
+            $sheet->mergeCells('A24:I24');
+            $sheet->setCellValue('A24',tt('Преподователь').': ')->getStyle('A24')->getFont()->setSize(16);
+            $res = Gr::model()->getStarostaFromGr1($gr1);
+            $nameStarosta='';
+            if(!empty($res))
+                $nameStarosta=SH::getShortName($res['st2'],$res['st3'],$res['$st4']);
+            $sheet->mergeCells('A25:I25');
+            $sheet->setCellValue('A25',tt('Староста').': '.$res)->getStyle('A25')->getFont()->setSize(16);
+
             // Set active sheet index to the first sheet, so Excel opens this as the first sheet
             $objPHPExcel->setActiveSheetIndex(0);
 

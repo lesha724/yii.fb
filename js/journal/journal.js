@@ -572,13 +572,22 @@ function recalculateBothTotal(st1)
     var table_2 = 'div.journal_div_table2 tr[data-st1='+st1+']';
     var table_3 = 'div.journal_div_table3 tr[data-st1='+st1+']';
 
+    var totalCount = 0;
     $(table_2 +' td').each(function(){
 
         var mark = calculateMarkFor(this);
 
         if (! isNaN(mark))
             total_1 += mark;
+
+
+        totalCount++;
     });
+
+    if(ps44==1)
+    {
+        total_1 = Math.round(total_1/totalCount*12);
+    }
 
     $(table_3 +' td').each(function(){
 

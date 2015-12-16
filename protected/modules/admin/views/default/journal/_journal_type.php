@@ -6,16 +6,17 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'action' => '#'
 ));
 
-    /*$options = array(
-        ' '.tt('Стандартный'),
-        ' '.tt('C модулями'),
+    $options = array(
+        ' '.tt('Стандартный (сума балов)'),
+        ' '.tt('Вариант 1 (ср. бал по занятиям * 12 + доп. балы)'),
     );
+
     $htmlOptions = array(
         'class'=>'ace',
         'labelOptions' => array(
             'class' => 'lbl'
         )
-    );*/
+    );
 
 
     $htmlOptions2 = array(
@@ -25,6 +26,10 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     <?php /*<div class="control-group">
         <?=CHtml::radioButtonList('settings[8]', PortalSettings::model()->findByPk(8)->ps2, $options, $htmlOptions)?>
     </div>*/ ?>
+
+    <div class="control-group">
+        <?=CHtml::radioButtonList('settings[44]', PortalSettings::model()->findByPk(44)->ps2, $options, $htmlOptions)?>
+    </div>
 
     <div class="control-group">
         <?=CHtml::checkBox('', PortalSettings::model()->findByPk(9)->ps2, $htmlOptions2)?>

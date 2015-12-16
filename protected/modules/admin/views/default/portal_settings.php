@@ -30,6 +30,16 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/a
                 ?>
 
                 <div class="control-group">
+                    <span class="lbl"> <?=tt('Название ВУЗа')?>:</span>
+                    <?=CHtml::textField('settings[45]', PortalSettings::model()->findByPk(45)->ps2)?>
+                </div>
+
+                <div class="control-group">
+                    <span class="lbl"> <?=tt('Название министерсва')?>:</span>
+                    <?=CHtml::textField('settings[46]', PortalSettings::model()->findByPk(46)->ps2)?>
+                </div>
+
+                <div class="control-group">
                     <?=CHtml::checkBox('', PortalSettings::model()->findByPk(38)->ps2, $checkboxStyle)?>
                     <span class="lbl"> <?=tt('Закрыть портал на тех.Обслуживание')?></span>
                     <?=CHtml::hiddenField('settings[38]', PortalSettings::model()->findByPk(38)->ps2)?>

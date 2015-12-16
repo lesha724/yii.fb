@@ -1,4 +1,16 @@
 <?php
+function getTotal1($total_1,$count_dates,$ps44){
+    $value = '';
+    switch($ps44){
+        case 0:
+            $value = $total_1;
+            break;
+        case 0:
+            $value = round($total_1/$count_dates * 12);
+            break;
+    }
+}
+
 function table3Tr($column, $marks,$st1,$elg1)
 {
     $tr= <<<HTML
@@ -91,7 +103,7 @@ $th2 .= '<th></th>';
 
 foreach ($students as $st) {
     $st1 = $st['st1'];
-    $val=  $total_1[$st1];
+    $val=  getTotal1($total_1[$st1],$count_dates,$ps44);
     $marks=Elgdst::model()->getMarksForStudent($st1,$elg1);
     $total_2[$st1] = $val+countDopTotal($marks);
     $tr.='<tr data-st1="'.$st1.'">';
