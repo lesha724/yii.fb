@@ -412,6 +412,24 @@ class P extends CActiveRecord
 		return parent::model($className);
 	}
 
+	public function getTeacherByUo($uo1)
+	{
+		$sql = <<<SQL
+        SELECT pd2,p3,p4,p5 FROM sem
+        	INNER JOIN us ON (sem.sem1 = us.us12)
+		    INNER JOIN nr ON (us.us1 = nr.nr2)
+		    INNER JOIN pd ON (nr.nr6 = pd.pd1) /*or (nr.nr7 = pd.pd1) or (nr.nr8 = pd.pd1) or (nr.nr9 = pd.pd1)*/
+            INNER JOIN p on (pd.pd2 = p.p1)
+      	WHERE us2=:UO1 and sem3=:YEAR AND sem5=:SEM
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':UO1', $uo1);
+		$command->bindValue(':YEAR', Yii::app()->session['year']);
+		$command->bindValue(':SEM', Yii::app()->session['sem']);
+		$res = $command->queryRow();
+		return $res;
+	}
+
     public function getZavKavByTeacher($teacher)
     {
         if (empty($teacher))

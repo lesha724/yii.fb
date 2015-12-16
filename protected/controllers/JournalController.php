@@ -797,7 +797,7 @@ SQL;
             $sheet->setTitle('Retake '.date('Y-m-d H-i'));
 
             $sheet->mergeCells('A1:H1');
-            $sheet->setCellValue('A1', tt('Журнал реєстрації результатів відробки пропущених занять та "2" '))
+            $sheet->setCellValue('A1', tt('Журнал регистрации результатов отработки пропущенных занятий и "2" '))
                 ->getStyle('A1')->getAlignment()
                 ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
                 ->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
@@ -810,12 +810,12 @@ SQL;
             $otr = Elgotr::model()->getElgotrForExcel($model);
 
             $sheet->setCellValueByColumnAndRow(0,3, '№ п/п');
-            $sheet->setCellValueByColumnAndRow(1,3,tt('ПІП'));
+            $sheet->setCellValueByColumnAndRow(1,3,tt('ФИО'));
             $sheet->setCellValueByColumnAndRow(2,3,tt('№ зан.'));
             $sheet->setCellValueByColumnAndRow(3,3,tt('№ справки'));
             $sheet->setCellValueByColumnAndRow(4,3,tt('Причина нб("2")'));
             $sheet->setCellValueByColumnAndRow(5,3,tt('№ квитанции'));
-            $sheet->setCellValueByColumnAndRow(6,3,tt('ФИО преподователя (отработка)'));
+            $sheet->setCellValueByColumnAndRow(6,3,tt('ФИО преподавателя (отработка)'));
             $sheet->setCellValueByColumnAndRow(7,3,tt('Результат отработки'));
             $sheet->getStyleByColumnAndRow(0,3,7,3)->getAlignment()->setWrapText(true)-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
             $sheet->getRowDimension(3)->setRowHeight(-1);
@@ -846,7 +846,10 @@ SQL;
                 $sheet->setCellValueByColumnAndRow(4,$i,$type);
                 $sheet->setCellValueByColumnAndRow(5,$i,$val['elgp4']);
                 $sheet->setCellValueByColumnAndRow(6,$i,SH::getShortName($val['p3'],$val['p4'],$val['p5']));
-                $sheet->setCellValueByColumnAndRow(7,$i,$val['elgotr2']);
+                $elgotr2=$val['elgotr2'];
+                if($elgotr2==-1)
+                    $elgotr2 = tt('Отработано');
+                $sheet->setCellValueByColumnAndRow(7,$i,$elgotr2);
                 $sheet->getRowDimension($i)->setRowHeight(-1);
                 $i++;
             }
@@ -874,9 +877,9 @@ SQL;
                 ->getStyle('A11')->getFont()->setSize(21);
             $sheet->getRowDimension(11)->setRowHeight(24);
 
-            $type=tt('Лекції');
+            $type=tt('Лекции');
             if($model->type_lesson==1)
-                $type=tt('Практичні');
+                $type=tt('Практические');
             $sheet->mergeCells('A12:I12');
             $sheet->setCellValue('A12',$type)->getStyle('A12')->getFont()->setSize(16);
 
@@ -902,7 +905,11 @@ SQL;
             $sheet->mergeCells('A23:I23');
             $sheet->setCellValue('A23',tt('Группа, курс').': '.$group.', '.$course)->getStyle('A23')->getFont()->setSize(16);
             $sheet->mergeCells('A24:I24');
-            $sheet->setCellValue('A24',tt('Преподователь').': ')->getStyle('A24')->getFont()->setSize(16);
+            $res = P::model()->getTeacherByUo($elg->elg2);
+            $p='';
+            if(!empty($res))
+                $p = SH::getShortName($res['p3'], $res['p4'], $res['p5']);
+            $sheet->setCellValue('A24',tt('Преподаватель').': '.$p)->getStyle('A24')->getFont()->setSize(16);
             $res = Gr::model()->getStarostaFromGr1($gr1);
             $nameStarosta='';
             if(!empty($res))
