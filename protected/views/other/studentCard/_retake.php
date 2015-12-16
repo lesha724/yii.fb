@@ -6,4 +6,9 @@
  * Time: 8:48
  */
 
- $disp = Elg::model()->getDispBySt($st->st1);
+ $disciplines = Elg::model()->getDispBySt($st->st1);
+
+foreach($disciplines as $discipline)
+{
+
+}

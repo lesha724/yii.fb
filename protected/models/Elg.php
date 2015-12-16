@@ -151,12 +151,13 @@ SQL;
 
 	public function getDispBySt($st1){
 		$sql=<<<SQL
-              SELECT elg.*,d2,d3 FROM elg
+              SELECT elg.*,d2,d3,k2,k3 FROM elg
                 INNER JOIN sem on (elg3 = sem1)
                 inner join uo on (elg.elg2 = uo.uo1)
                 inner join d on (uo.uo3 = d.d1)
                 inner join elgz on (elg1 = elgz2)
                 inner join elgzst on (elgz1 = elgzst2)
+                inner JOIN k on (uo4 = k1)
               WHERE elgzst1=:ST1 AND sem3=:YEAR AND sem5=:SEM
 SQL;
 		$command = Yii::app()->db->createCommand($sql);

@@ -5,10 +5,11 @@ function getTotal1($total_1,$count_dates,$ps44){
         case 0:
             $value = $total_1;
             break;
-        case 0:
+        case 1:
             $value = round($total_1/$count_dates * 12);
             break;
     }
+    return $value;
 }
 
 function table3Tr($column, $marks,$st1,$elg1)
