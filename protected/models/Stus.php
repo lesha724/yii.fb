@@ -181,4 +181,27 @@ SQL;
         return $statistic;
     }
 
+	public function getDispByStudentCard($st1,$gr1,$type)
+	{
+		if($type==0)
+			$where = "WHERE stus19<>8";
+		else
+			$where = "WHERE stus19=8";
+		$sql = <<<SQL
+            SELECT stus18,d2,d27,uo1,uo6,uo12,uo10,uo5,u10,stus19 /*,
+            (SELECT sum(us6) as sm FROM us WHERE us4=0 and us2=uo1) as sum_us6,
+            (SELECT sum(us6) as sm FROM us WHERE us4 in (1,2,3,4,9,10,11,12) and us2=uo1) as sum_us6_aud*/
+            FROM STUS_ST1(:ST1,1,99,:GR1)
+            {$where}
+            GROUP BY stus18,d2,d27,uo1,uo6,uo12,uo10,uo5,u10,stus19
+			order by d2
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':ST1', $st1);
+		$command->bindValue(':GR1', $gr1);
+		$disciplines = $command->queryAll();
+
+		return $disciplines;
+	}
+
 }

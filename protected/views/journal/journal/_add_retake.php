@@ -5,7 +5,8 @@
     $this->renderPartial('/journal/retake/_add_retake', array(
         'model' => $model,
         'elgzst'=>$elgzst,
-        'us4'=>$us4
+        'us4'=>$us4,
+        'r1'=>$r1
     ));
 ?>
 </div>

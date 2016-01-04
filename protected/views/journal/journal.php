@@ -22,7 +22,7 @@
     $ps44 = PortalSettings::model()->findByPk(44)->ps2;
 
     Yii::app()->clientScript->registerScript('translations', <<<JS
-        min = {$min}
+        minBal = {$min}
         tt.error       = "{$error}" //errorType=0
         tt.success     = "{$success}"
         tt.minMaxError = "{$minMaxError}" //errorType=4

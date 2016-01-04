@@ -15,8 +15,8 @@ function getSelect($type,$i)
     return CHtml::dropDownList($name,$type,$data,$options);
 
 }
-
-$omissions = Elgp::model()->getOmissions($model->student,$model->date1,$model->date2,$model->group);
+$sem1 = Sem::model()->getSem1ByGr1($model->group);
+$omissions = Elgp::model()->getOmissions($model->student,$model->date1,$model->date2,$model->group,$sem1);
 
 if($omissions==null)
     echo '<div><span class="label label-success" style="font-size:16px">'.tt('Зарегистрированных пропусков нет').'</span></div>';
@@ -40,6 +40,7 @@ else {
                     <tr>
                         <th>№</th>
                         <th>'.tt('Дата').'</th>
+                        <th>'.tt('№ зан.').'</th>
                         <th>'.tt('Дисциплина').'</th>
                         <th>'.tt('Тип').'</th>
                         <th>'.tt('Уваж./Неув.').'</th>
@@ -61,6 +62,7 @@ else {
         <tr data-type1="{$type1}" data-type2="{$type2}" data-elgp0="%s">
                 <td>%s</td>
                 <td class="date">%s</td>
+                <td class="nom">%s</td>
                 <td class="d-name">%s</td>
                 <td class="type-us">%s</td>
                 <td class="type-omissions">%s</td>
@@ -73,24 +75,26 @@ HTML;
 
     foreach($omissions as $key)
     {
-        $type=$type1;
-        if($key['elgzst3']==2)
-            $type=$type2;
+        $val = Elgp::model()->getDateTypeLesson($key['elg2'],$model->group,$sem1,$key['elg4'],$model->date1,$model->date2,$key['elgz3']);
+        if(!empty($val)) {
+            $type = $type1;
+            if ($key['elgzst3'] == 2)
+                $type = $type2;
 
-        $elgp3='<input data-field="elgp3" class="input-elgp3" type="text" value="'.$key['elgp3'].'"/>';
-        $elgp2=getSelect($key['elgp2'],0);
+            $elgp3 = '<input data-field="elgp3" class="input-elgp3" type="text" value="' . $key['elgp3'] . '"/>';
+            $elgp2 = getSelect($key['elgp2'], 0);
 
-        $elgp4='';
-        $elgp5='';
+            $elgp4 = '';
+            $elgp5 = '';
 
-        if($key['elgp2']==5)
-        {
-            $elgp4 ='<input data-field="elgp4" class="input-elgp4" type="text" value="'.$key['elgp4'].'"/>';
-            $elgp5 ='<input data-field="elgp5" class="input-elgp5 datepicker" type="text" value="'.date('d.m.Y', strtotime($key['elgp5'])).'"/>';
+            if ($key['elgp2'] == 5) {
+                $elgp4 = '<input data-field="elgp4" class="input-elgp4" type="text" value="' . $key['elgp4'] . '"/>';
+                $elgp5 = '<input data-field="elgp5" class="input-elgp5 datepicker" type="text" value="' . date('d.m.Y', strtotime($key['elgp5'])) . '"/>';
+            }
+
+            $tr .= sprintf($pattern, $key['elgp0'], $i, date('d.m.Y', strtotime($val['r2'])),$key['elgz3'], $key['d2'], SH::convertUS4($val['us4']), $type, $elgp3, $elgp2, $elgp4, $elgp5);
+            $i++;
         }
-
-        $tr.=sprintf($pattern,$key['elgp0'],$i,date('d.m.Y', strtotime($key['r2'])),$key['d2'],SH::convertUS4($key['us4']),$type,$elgp3,$elgp2,$elgp4,$elgp5);
-        $i++;
     }
     echo sprintf($table, $tr); // 2 table
 

@@ -434,4 +434,15 @@ SQL;
 
         return $res;
     }
+
+    public function getSummForStudentCard($uo1,$in)
+    {
+        $sql=<<<SQL
+          SELECT sum(us6) as sm FROM us WHERE us4 in ({$in}) and us2=:UO1
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':UO1', $uo1);
+        $sum = $command->queryScalar();
+        return $sum;
+    }
 }

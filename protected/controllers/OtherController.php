@@ -55,6 +55,12 @@ class OtherController extends Controller
                     'searchStudent'
                 ),
             ),
+            array('allow',
+                'actions' => array(
+                    'studentCard'
+                ),
+                'expression' => 'Yii::app()->user->isPrnt',
+            ),
             array('deny',
                 'users' => array('*'),
             ),

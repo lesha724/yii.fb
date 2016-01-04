@@ -179,7 +179,7 @@ function generateColumnName($date,$type_lesson)
     </th>
 HTML;
 
-    switch($date['elgz4'])
+    switch($date['ustem6'])
     {
         case '0':
             $type='';

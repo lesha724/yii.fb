@@ -68,7 +68,7 @@ if (! empty($model->group)):
     $elgd=Elgd::model()->getDop($elg1);
 
     $classTable2='journal_div_table2';
-    if($model->type_lesson==0 || empty($elgd))
+    if($model->type_lesson==0 /*|| empty($elgd)*/)
         $classTable2='journal_div_table2 journal_div_table2_1';
 
     $this->renderPartial('journal/_table_2', array(
@@ -86,7 +86,7 @@ if (! empty($model->group)):
     ));
 
 
-    if($model->type_lesson!=0&&!empty($elgd))
+    if($model->type_lesson!=0/*&&!empty($elgd)*/)
     {
         $this->renderPartial('journal/_table_3', array(
             'students' => $students,

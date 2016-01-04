@@ -172,6 +172,11 @@ $this->widget('zii.widgets.CMenu', array(
                     'active' => $_a=='parents' || $_a=='prntGrants'
                 ),
                 array(
+                    'label'  => $_l2.tt('Карточка студента'),
+                    'url'    => _u('/admin/default/studentCard'),
+                    'active' => $_c=='default' && $_m=='studentCard'
+                ),
+                array(
                     'label'  => $_l2.tt('Эл. журнал'),
                     'url'    => _u('/admin/default/journal'),
                     'active' => $_a=='journal' && $_m=='admin'
@@ -226,6 +231,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'url'    => _u('/admin/menuItem'),
                     'active' => $_c=='menuItem' && $_m=='admin'
                 ),
+
             ),
             'visible' => $isAdmin,
         ),

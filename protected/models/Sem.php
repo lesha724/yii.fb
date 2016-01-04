@@ -425,4 +425,42 @@ SQL;
         return $modules;
 		//return array();
 	}
+
+    public function getSem1ByGr1($gr1){
+        if(empty($gr1))
+            return 0;
+        $sql = <<<SQL
+          select sem1
+            from us
+               inner join sem on (us.us3 = sem.sem1)
+               inner join nr on (us.us1 = nr.nr2)
+               inner join ug on (nr.nr1 = ug.ug1)
+            where ug2=:GR1 and sem3=:YEAR and sem5=:SEM
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':GR1', $gr1);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $sem1 = $command->queryScalar();
+
+        return $sem1;
+    }
+
+    public function getSem1ByUo1($uo1){
+        if(empty($uo1))
+            return 0;
+        $sql = <<<SQL
+          select sem1
+            from us
+               inner join sem on (us.us3 = sem.sem1)
+            where us2=:UO1 and sem3=:YEAR and sem5=:SEM
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':UO1', $uo1);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $sem1 = $command->queryScalar();
+
+        return $sem1;
+    }
 }

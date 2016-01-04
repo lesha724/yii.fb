@@ -119,7 +119,7 @@ class Elgotr extends CActiveRecord
 
     public function getElgotr2ByLk()
     {
-        switch ($this->stego2) {
+        switch ($this->elgotr2) {
             case 0:
                 return tt('Не отработано');
                 break;

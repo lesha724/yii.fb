@@ -967,6 +967,21 @@ SQL;
         return $info;
     }
 
+	public function getGr1BySt1($st1)
+	{
+		$sql=<<<SQL
+            SELECT first 1 gr1
+                FROM gr
+                  INNER JOIN std on (gr.gr1 = std.std3)
+                  INNER JOIN st on (std.std2 = st.st1)
+                WHERE st1=:ST1 and (std7 is null or (std7>current_timestamp) ) and std11 in (0,5,6,8)
+SQL;
+		$command= Yii::app()->db->createCommand($sql);
+		$command->bindValue(':ST1', $st1);
+		$gr1 = $command->queryScalar();
+		return $gr1;
+	}
+
     public function getSubscriptionParams()
     {
         $sql = <<<SQL

@@ -37,18 +37,25 @@ $options = array(
     $label = $form->label($model, 'elgotr3', $options);
     $input = $form->textField($model, 'elgotr3',array('class' => 'datepicker'));
     $html .= sprintf($pattern, $label, $input);
-    
+
+    $nr = Nr::model()->findByPk($r1);
+    $k1=0;
+    if(!empty($nr))
+        $k1 = $nr->nr30;
+
     //$options_select = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;', 'style' => 'width:200px');
-    /*$teacher = CHtml::listData(Stego::model()->getTeacher($stegn), 'p1', 'name');
-    if(Yii::app()->user->isTch&&isset($teacher[Yii::app()->user->dbModel->p1]))
-    {
-        $model->stego4=Yii::app()->user->dbModel->p1;
+    $teachers = CHtml::listData(P::model()->getTeachersForTimeTableChair($k1), 'p1', 'name');
+    if(!empty($teachers)&&$k1!=0&&Yii::app()->user->dbModel->isJournalAdmin($k1,1,2)) {
+        if (Yii::app()->user->isTch && isset($teachers[Yii::app()->user->dbModel->p1])) {
+            $model->elgotr4 = Yii::app()->user->dbModel->p1;
+        }
+        $label = $form->label($model, 'elgotr4', $options);
+        $input = $form->dropDownList($model, 'elgotr4', $teachers);
+        $html .= sprintf($pattern, $label, $input);
+    }else {
+        $model->elgotr4 = Yii::app()->user->dbModel->p1;
+        $html .= $form->hiddenField($model, 'elgotr4');
     }
-    $label = $form->label($model, 'stego4', $options);
-    $input = $form->dropDownList($model, 'stego4',$teacher);
-    $html .= sprintf($pattern, $label, $input);*/
-    $model->elgotr4=Yii::app()->user->dbModel->p1;
-    $html .=  $form->hiddenField($model, 'elgotr4');
     $html .= '</div>';
     echo $html;
 

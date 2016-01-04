@@ -40,6 +40,11 @@ class WebUser extends CWebUser
         return !$this->isGuest && $this->model->isStudent;
     }
 
+    public function getIsPrnt()
+    {
+        return !$this->isGuest && $this->model->isParent;
+    }
+
     public function getDbModel()
     {
         $model = null;
@@ -48,6 +53,8 @@ class WebUser extends CWebUser
             $model = P::model()->findByPk($this->model->u6);
         elseif ($this->isStd)
             $model = St::model()->findByPk($this->model->u6);
+        elseif ($this->isPrnt)
+            $model = St::model()->findByPk($this->model->u6); null;
 
         return $model;
     }

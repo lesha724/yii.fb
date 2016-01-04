@@ -34,7 +34,8 @@ class AdminController extends Controller
                     'list',
                     'closeChair',
                     'deleteCloseChair',
-                    'createCloseChair'
+                    'createCloseChair',
+                    'studentCard'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin',
             ),

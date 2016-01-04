@@ -119,12 +119,23 @@ class Elgp extends CActiveRecord
 	}
 
 
-    public function getOmissions($st1,$date1,$date2,$gr1)
+    public function getOmissions($st1,$date1,$date2,$gr1,$sem1)
     {
-        if (empty($st1) || empty($date1) || empty($date2) || empty($gr1))
+        if (empty($st1) || empty($date1) || empty($date2) || empty($gr1)||empty($sem1))
             return array();
 		/* $sql=<<<SQL
-                SELECT elgp.*,d2,us4,elgzst3,elgzst0,elgz1,
+				 /*SELECT elgp.*,d2,us4,r2,elgzst3,elgzst0
+                FROM elgzst
+                    LEFT JOIN elgp on (elgzst.elgzst0 = elgp.elgp1)
+                    INNER JOIN elgz on (elgzst.elgzst2 = elgz.elgz1)
+                    INNER JOIN elg on (elgz.elgz2 = elg.elg1)
+                    INNER JOIN uo on (elg.elg2 = uo.uo1)
+                    INNER JOIN d on (d.d1 = uo.uo3)
+                    INNER JOIN EL_GURNAL_ZAN(uo.uo1,:GR1,:SEM1, elg.elg4) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
+                    LEFT JOIN ustem ON (ustem.ustem1=elgz.elgz7 AND ustem.ustem4= elgz.elgz3)
+                WHERE elgzst1=:ST1 and r2 >= :DATE1 and r2 <= :DATE2 and  elgzst3!=0 and d1 in (select d1 FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,0,0,0,3,0))*/
+/*
+		SELECT elgp.*,d2,us4,elgzst3,elgzst0,elgz1,
                 (select first 1
 						r2
 					from gr
@@ -146,30 +157,50 @@ class Elgp extends CActiveRecord
                     left JOIN us on (ustem.ustem2 = us.us1)
                 WHERE elgzst1=:ST1_  and elgzst3!=0 and d1 in (select d1 FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,0,0,0,3,0))
 SQL;*/
+
         $sql=<<<SQL
-                SELECT elgp.*,d2,us4,r2,elgzst3,elgzst0
-                FROM elgzst
-                    LEFT JOIN elgp on (elgzst.elgzst0 = elgp.elgp1)
-                    INNER JOIN elgz on (elgzst.elgzst2 = elgz.elgz1)
-                    INNER JOIN elg on (elgz.elgz2 = elg.elg1)
-                    INNER JOIN uo on (elg.elg2 = uo.uo1)
-                    INNER JOIN d on (d.d1 = uo.uo3)
-                    INNER JOIN r on (elgz.elgz1 = r.r8)
-                    JOIN ug ON (r.r1=ug.ug3 and ug.ug2 = :GR1)
-                    LEFT JOIN ustem ON (ustem.ustem1=elgz.elgz7 AND ustem.ustem4= elgz.elgz3)
-                    left JOIN us on (ustem.ustem2 = us.us1)
-                WHERE elgzst1=:ST1 and r2 >= :DATE1 and r2 <= :DATE2 and  elgzst3!=0 and d1 in (select d1 FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,0,0,0,3,0))
+        select elgp.*,d2,elgzst3,elgzst0,elgz3,uo1,elg4,elg2
+			from elgzst
+			   inner join elgz on (elgzst.elgzst2 = elgz.elgz1)
+			   inner join elg on (elgz.elgz2 = elg.elg1)
+			   left join elgp on (elgzst.elgzst0 = elgp.elgp1)
+			   inner join ustem on (elgz.elgz7 = ustem.ustem1)
+			   INNER JOIN uo on (elg.elg2 = uo.uo1)
+			   INNER JOIN d on (d.d1 = uo.uo3)
+			where elgzst1=:ST1 and elg3=:SEM1 and elgzst3>0 and d1 in (select d1 FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,0,0,0,3,0))
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
        	$command->bindValue(':ST1', $st1);
-		$command->bindValue(':GR1', $gr1);
-        $command->bindValue(':DATE1', $date1);
-        $command->bindValue(':DATE2', $date2);
+		//$command->bindValue(':GR1', $gr1);
+        //$command->bindValue(':DATE1', $date1);
+        //$command->bindValue(':DATE2', $date2);
         $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
         $command->bindValue(':YEAR', Yii::app()->session['year']);
         $command->bindValue(':SEM', Yii::app()->session['sem']);
+		$command->bindValue(':SEM1', $sem1);
         $rows = $command->queryAll();
         return $rows;
     }
+
+	public function getDateTypeLesson($uo1,$gr1,$sem1, $elg4,$date1,$date2,$nom)
+	{
+		if (empty($uo1) || empty($elg4) || empty($gr1)||empty($sem1)|| empty($date1) || empty($date2) || empty($nom))
+			return array();
+
+		$sql=<<<SQL
+        select r2,us4 from EL_GURNAL_ZAN(:UO1,:GR1,:SEM1, :ELG4) where EL_GURNAL_ZAN.nom = :NOM and EL_GURNAL_ZAN.r2>=:DATE1 and EL_GURNAL_ZAN.r2<=:DATE2
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':UO1', $uo1);
+		$command->bindValue(':ELG4', $elg4);
+		$command->bindValue(':NOM', $nom);
+		$command->bindValue(':GR1', $gr1);
+		$command->bindValue(':DATE1', $date1);
+		$command->bindValue(':DATE2', $date2);
+		$command->bindValue(':SEM1', $sem1);
+		$row = $command->queryRow();
+
+		return $row;
+	}
 }

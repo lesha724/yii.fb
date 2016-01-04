@@ -144,6 +144,11 @@ class Users extends CActiveRecord
         return $this->u5 === '1';
     }
 
+	public function getIsParent()
+	{
+		return $this->u5 === '2';
+	}
+
     /**
      * Returns true if this user is student.
      * @return boolean

@@ -83,13 +83,16 @@ HTML;
     echo '</div>';//.top-block
     echo '<div class="bottom-block">';
 
+    $ps50 = PortalSettings::model()->findByPk(50)->ps2;
      $this->widget('bootstrap.widgets.TbTabs', array(
         'type'=>'tabs',
         'placement'=>'top',
         'tabs'=>array(
-            array('label'=>tt('Успеваемость'), 'content'=>$this->renderPartial('studentCard/_journal', array(),true), 'active'=>true),
-            array('label'=>Yii::t('main', 'Поточная задолженость'), 'content'=>$this->renderPartial('studentCard/_retake', array('gr1'=>$studentInfo['gr1'],'st'=>$st),true)),
-            array('label'=>Yii::t('main', 'Модульный контроль'), 'content'=>$this->renderPartial('studentCard/_module', array('gr1'=>$studentInfo['gr1'],'st'=>$st),true)),
+            array('label'=>tt('Успеваемость'), 'content'=>$this->renderPartial('studentCard/_journal', array(),true), 'active'=>$ps50==0,'visible'=>PortalSettings::model()->findByPk(47)->ps2==1),
+            array('label'=>Yii::t('main', 'Текущая задолженость'), 'content'=>$this->renderPartial('studentCard/_retake', array('gr1'=>$studentInfo['gr1'],'st'=>$st),true), 'active'=>$ps50==1,'visible'=>PortalSettings::model()->findByPk(48)->ps2==1),
+            array('label'=>Yii::t('main', 'Модульный контроль'), 'content'=>$this->renderPartial('studentCard/_module', array('gr1'=>$studentInfo['gr1'],'st'=>$st),true), 'active'=>$ps50==2,'visible'=>PortalSettings::model()->findByPk(49)->ps2==1),
+            array('label'=>Yii::t('main', 'Екзаменационная сессия'), 'content'=>$this->renderPartial('studentCard/_exam', array('gr1'=>$studentInfo['gr1'],'st'=>$st),true), 'active'=>$ps50==2,'visible'=>PortalSettings::model()->findByPk(51)->ps2==1),
+            array('label'=>Yii::t('main', 'Диплом'), 'content'=>$this->renderPartial('studentCard/_diplom', array('gr1'=>$studentInfo['gr1'],'st'=>$st),true), 'active'=>$ps50==2,'visible'=>PortalSettings::model()->findByPk(52)->ps2==1),
         ),
     ));
 

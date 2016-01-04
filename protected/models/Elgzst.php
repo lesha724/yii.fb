@@ -28,7 +28,7 @@ class Elgzst extends CActiveRecord
 		return 'elgzst';
 	}
 
-    public $st2,$st3,$st4,$us4,$count_elgotr,$tema,$status,$group_st,$uo1,$r2,$nom,$elgp2,$elgp3,$type_lesson;
+    public $r1,$st2,$st3,$st4,$us4,$count_elgotr,$tema,$status,$group_st,$uo1,$r2,$nom,$elgp2,$elgp3,$type_lesson,$elg4,$gr1,$elg3,$elg2;
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -122,30 +122,25 @@ class Elgzst extends CActiveRecord
     {
         // @todo Please modify the following code to remove attributes that should not be searched.
 
+        /*if(empty($this->type_lesson)||$this->type_lesson==1)
+            $type_lesson=0;
+        else
+            $type_lesson=1;
+        $sem1 = Sem::model()->getSem1ByUo1($this->uo1);
+
         $criteria=new CDbCriteria;
-        $table = St::model()->tableName();
-        $table2 = Ustem::model()->tableName();
-        $table3 = Elgz::model()->tableName();
-        $table4 = Gr::model()->tableName();
         //$criteria->select = 't.*,gr.gr3 as group_st,elgp2,elgp3,USTEM5 as tema,r2,'.$table.'.st2,elgz.elgz3 as nom,'.$table.'.st3,'.$table.'.st4,(SELECT COUNT(*) FROM elgotr WHERE elgotr.elgotr1=t.elgzst0) as count_elgotr';
-        $criteria->select = 't.*,gr.gr3 as group_st,elgp2,elgp3,USTEM5 as tema,r2,st2,elgz.elgz3 as nom,st3,st4';
+        $criteria->select = 'elg2,elg4,elg3,elgzst0,elgzst1,elgzst3,elgzst5,gr.gr1,gr.gr3 as group_st,elgp2,elgp3,USTEM5 as tema,st2,elgz.elgz3 as nom,st3,st4';
+        //    (SELECT r2 FROM  EL_GURNAL_ZAN('.$this->uo1.',gr.gr1,'.$sem1.','.$type_lesson.') WHERE (elgz.elgz3 = EL_GURNAL_ZAN.nom) )';
         $criteria->join = 'JOIN st ON (t.elgzst1=st.st1) ';
-        $criteria->join .= 'LEFT JOIN elgp ON (t.elgzst0=elgp.elgp1) ';
         $criteria->join .= 'JOIN std ON (st.st1=std.std2) ';
         $criteria->join .= 'JOIN gr ON (std.std3=gr.gr1) ';
         $criteria->join .= 'JOIN elgz ON (t.elgzst2=elgz.elgz1) ';
-        $criteria->join .= 'JOIN elg ON (elgz.elgz2=elg.elg1 and elg.elg2='.$this->uo1.') ';
-        $criteria->join .= 'JOIN sem ON (elg.elg3=sem.sem1 AND sem3='.Yii::app()->session['year'].' and sem5='.Yii::app()->session['sem'].') ';
-        $criteria->join .= 'JOIN r ON (elgz.elgz1=r.r8) ';
-        $criteria->join .= 'JOIN ug ON (r.r1=ug.ug3 and ug.ug2 = gr1) ';
-        if(empty($this->type_lesson)||$this->type_lesson==1)
-            $criteria->compare('elg4',0);
-        else
-            $criteria->compare('elg4',1);
-        //$criteria->join .= 'JOIN us ON (nr.nr2=us.us1) ';
-        $criteria->join .= 'LEFT JOIN '.$table2.' ON ('.$table2.'.USTEM1=elgz.elgz7 AND '.$table2.'.USTEM4= elgz.elgz3) ';
+        $criteria->join .= 'JOIN elg ON (elgz.elgz2=elg.elg1) ';
+        //$criteria->join .= 'JOIN EL_GURNAL_ZAN('.$this->uo1.',gr.gr1,'.$sem1.','.$type_lesson.') on (elgz.elgz3 = EL_GURNAL_ZAN.nom) ';
+        $criteria->join .= 'LEFT JOIN elgp ON (t.elgzst0=elgp.elgp1) ';
+        $criteria->join .= 'LEFT JOIN ustem ON (ustem.USTEM1=elgz.elgz7 AND ustem.USTEM4= elgz.elgz3) ';
         $criteria->addCondition("std7 is null and std11 in(0,5,6,8)");
-        $criteria->addCondition("st2 CONTAINING '".$this->st2."'");
         $criteria->compare('elgzst1',$this->elgzst1);
         $criteria->compare('elgzst2',$this->elgzst2);
         $criteria->compare('elgzst3',$this->elgzst3);
@@ -153,6 +148,8 @@ class Elgzst extends CActiveRecord
         $criteria->compare('elgzst5',$this->elgzst5);
         $criteria->compare('elgp2',$this->elgp2);
         $criteria->compare('elgp3',$this->elgp3);
+        if(!empty($this->st2))
+            $criteria->addCondition("st2 CONTAINING '".$this->st2."'");
         if(!empty($this->r2))
             $criteria->compare('r.r2',date_format(date_create_from_format("d.m.Y", $this->r2), "Y-m-d"));
         if(!empty($this->tema))
@@ -164,15 +161,15 @@ class Elgzst extends CActiveRecord
                 $criteria->addCondition("elgzst5>'".$this->getMin()."' or elgzst5=-1");
             else
                 $criteria->addCondition("(elgzst5<'".$this->getMin()."' and elgzst5!=-1)");
-        $criteria->addCondition("(elgzst3 > 0) OR (elgzst4<=".Stegn::model()->getMin()." and elgzst4>0)");
-
+        $criteria->addCondition("elg.elg2=".$this->uo1." and elg.elg3=".$sem1." and elg.elg4=".$type_lesson." AND (elgzst3 > 0) OR (elgzst4<=".Stegn::model()->getMin()." and elgzst4>0)");
+        $criteria->group = 'elg2,elg4,elg3,elgzst0,elgzst1,elgzst3,elgzst5,gr.gr1,group_st,elgp2,elgp3,tema,st2,nom,st3,st4';
         $sort = new CSort();
         $sort->sortVar = 'sort';
         $sort->defaultOrder = 'st2 ASC';
         $sort->attributes = array(
             'st2'=>array(
-                'asc'=>$table.'.st2 ASC',
-                'desc'=>$table.'.st2 DESC',
+                'asc'=>'st.st2 ASC',
+                'desc'=>'st.st2 DESC',
                 'default'=>'ASC',
             ),
             'r2'=>array(
@@ -184,13 +181,13 @@ class Elgzst extends CActiveRecord
                 'asc'=>'t.elgzst3 ASC',
                 'desc'=>'t.elgzst3 DESC',
                 'default'=>'ASC',
-            ),
+            ),*/
             /*'count_elgotr'=>array(
                 'asc'=>'count_elgotr asc',
                 'desc'=>'count_elgotr DESC',
                 'default'=>'ASC',
             ),*/
-            'tema'=>array(
+            /*'tema'=>array(
                 'asc'=>'tema asc',
                 'desc'=>'tema DESC',
                 'default'=>'ASC',
@@ -227,7 +224,131 @@ class Elgzst extends CActiveRecord
             'pagination'=>array(
                 'pageSize'=> $pageSize,
             ),
+        ));*/
+
+        if(empty($this->type_lesson)||$this->type_lesson==1)
+            $type_lesson=0;
+        else
+            $type_lesson=1;
+        $sem1 = Sem::model()->getSem1ByUo1($this->uo1);
+
+        $fields = ' EL_GURNAL_OTR.* ';
+
+        $from = '
+            FROM EL_GURNAL_OTR(0,%s,%s,%s)
+            ';
+        $from = sprintf($from,$this->uo1, Yii::app()->session['year'], Yii::app()->session['sem']);
+
+        $where = '
+                WHERE   elg4= :ELG4 AND
+                        ((elgzst3 > 0) OR (elgzst4<=:MIN and elgzst4>0))
+        ';
+        //$where = '';
+        $params = array(
+            ':MIN' => Stegn::model()->getMin(),
+            ':ELG4' => $type_lesson,
+        );
+
+        if(!empty($this->st2))
+            $where .=" AND st2 CONTAINING '".$this->st2."' ";
+        /*if(!empty($this->r2))
+            $where .=" AND r2 ='".date_format(date_create_from_format("d.m.Y", $this->r2), "Y-m-d")."'";*/
+        if(!empty($this->tema))
+            $where .=" AND ustem5 CONTAINING '".$this->tema."' ";
+        if(!empty($this->nom))
+            $where .=" AND nom=".$this->nom;
+        if(!empty($this->elgp3))
+            $where .=" AND elgp3 CONTAINING '".$this->elgp3."' ";
+        if(!empty($this->elgp2))
+            $where .=" AND elgp2=".$this->elgp2;
+        if(!empty($this->elgzst3))
+            $where .=" AND elgzst3=".$this->elgzst3;
+        if(!empty($this->group_st))
+            $where .=" AND gr3 CONTAINING '".$this->group_st."' ";
+        if(!empty($this->status))
+            if($this->status==1)
+                $where .=" AND elgzst5>'".$this->getMin()."' or elgzst5=-1 ";
+            else
+                $where .=" AND elgzst5<'".$this->getMin()."' or elgzst5!=-1 ";
+
+        $countSQL =
+            'SELECT COUNT(*) ' .
+            $from .
+            $where;
+
+        $selectSQL =
+            'SELECT ' .
+            $fields .
+            $from .
+            $where;
+
+        $command=Yii::app()->db->createCommand($countSQL);
+        foreach ($params as $key => $val)
+        {
+            $command->bindParam($key, $val, PDO::PARAM_STR);
+        }
+        $count = $command->queryScalar();
+
+        $sort = new CSort();
+        $sort->sortVar = 'sort';
+        $sort->defaultOrder = 'st2 ASC';
+        $sort->attributes = array(
+            'st2'=>array(
+                'asc'=>'st2 ASC',
+                'desc'=>'st2 DESC',
+                'default'=>'ASC',
+            ),
+            'r2'=>array(
+                'asc'=>'r2 ASC',
+                'desc'=>'r2 DESC',
+                'default'=>'ASC',
+            ),
+            'elgzst3'=>array(
+                'asc'=>'elgzst3 ASC',
+                'desc'=>'elgzst3 DESC',
+                'default'=>'ASC',
+            ),
+            'tema'=>array(
+                'asc'=>'tema asc',
+                'desc'=>'tema DESC',
+                'default'=>'ASC',
+            ),
+            'group_st'=>array(
+                'asc'=>'g3 asc',
+                'desc'=>'gr3 DESC',
+                'default'=>'ASC',
+            ),
+            'nom'=>array(
+                'asc'=>'nom asc',
+                'desc'=>'nom DESC',
+                'default'=>'ASC',
+            ),
+            'elgp2'=>array(
+                'asc'=>'elgp2 asc',
+                'desc'=>'elgp2 DESC',
+                'default'=>'ASC',
+            ),
+            'elgp3'=>array(
+                'asc'=>'elgp3 asc',
+                'desc'=>'elgp3 DESC',
+                'default'=>'ASC',
+            )
+        );
+
+        $pageSize=Yii::app()->user->getState('pageSize',10);
+        if($pageSize==0)
+            $pageSize=10;
+
+        return new CSqlDataProvider($selectSQL, array(
+            'keyField' => 'elgzst0',
+            'totalItemCount'=>$count,
+            'params'=>$params,
+            'sort'=>$sort,
+            'pagination'=>array(
+                'pageSize'=> $pageSize,
+            ),
         ));
+
     }
 
 
@@ -306,9 +427,34 @@ SQL;
                 return '-';
     }
 
+    public static function checkMinRetakeForGridRetake($elgzst5)
+    {
+        return ($elgzst5<=self::model()->getMin()&&$elgzst5!=-1);
+    }
+
+    public static function getTypeRetake($elgzst3,$elgp2)
+    {
+        $arr=self::model()->getTypes();
+        if($elgzst3<1)
+            return '-';
+        else
+            if(isset($arr[$elgp2]))
+                return $arr[$elgp2];
+            else
+                return '-';
+    }
+
     public function getStatusArray()
     {
         return array(1=>tt('Отработано'),2=>tt('Не отработано'));
+    }
+
+    public static function getStatusRetake($elgzst5)
+    {
+        if(!self::checkMinRetakeForGridRetake($elgzst5))
+            return tt('Отработано');
+        else
+            return tt('Не отработано');
     }
 
     public function getStatus()
@@ -347,19 +493,16 @@ SQL;
         return array(0=>tt('Двойка'),1=>tt('Неув'),2=>tt('Уваж'));
     }
 
-    public function getInfoByElgzst0()
+    public function getInfoByElgzst0($uo1,$sem1,$gr1,$elg4)
     {
         $sql=<<<SQL
-             SELECT d2,d3,st2,st3,st4,r2
+             SELECT d2,d3,st2,st3,st4,elgz3
                 FROM elgzst
                     LEFT JOIN elgp on (elgzst.elgzst0 = elgp.elgp1)
                     INNER JOIN elgz on (elgzst.elgzst2 = elgz.elgz1)
                     INNER JOIN elg on (elgz.elgz2 = elg.elg1)
                     INNER JOIN uo on (elg.elg2 = uo.uo1)
                     INNER JOIN d on (d.d1 = uo.uo3)
-                    INNER JOIN r on (elgz.elgz1 = r.r8)
-                    INNER JOIN nr on (r.r1 = nr.nr1)
-                    INNER JOIN us on (nr.nr2 = us.us1)
                     INNER JOIN st on (elgzst.elgzst1 = st.st1)
                 WHERE elgzst0=:ELGZST0 and d1 in (select d1 FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,0,0,0,2,0))
 SQL;
@@ -370,6 +513,21 @@ SQL;
         $command->bindValue(':YEAR', Yii::app()->session['year']);
         $command->bindValue(':SEM', Yii::app()->session['sem']);
         $res = $command->queryRow();
+
+        $sql=<<<SQL
+             SELECT r2 FROM EL_GURNAL_ZAN(:UO1,:GR1,:SEM1, :ELG4) WHERE EL_GURNAL_ZAN.nom=:NOM
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':UO1', $uo1);
+        $command->bindValue(':GR1', $gr1);
+        $command->bindValue(':SEM1', $sem1);
+        $command->bindValue(':ELG4', $elg4);
+        $command->bindValue(':NOM', $res['elgz3']);
+
+        $r2 = $command->queryScalar();
+
+        $res['r2']=$r2;
+
         return $res;
     }
 
@@ -439,5 +597,30 @@ SQL;
         }
 
         return $statistic;
+    }
+    public static function getElgzst3Reatake($elgzst3)
+    {
+        $arr=self::model()->getElgzst3s();
+        return $arr[$elgzst3];
+    }
+
+    public static function getR2Retake($elg2,$elg4,$nom,$gr1,$elg3)
+    {
+        $sql = <<<SQL
+          SELECT r2 FROM EL_GURNAL_ZAN(:UO1,:GR1,:SEM1, :ELG4) where EL_GURNAL_ZAN.nom = :NOM;
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':UO1', $elg2);
+        $command->bindValue(':ELG4', $elg4);
+        $command->bindValue(':NOM', $nom);
+        $command->bindValue(':GR1', $gr1);
+        $command->bindValue(':SEM1', $elg3);
+        $val = $command->queryRow();
+
+        if(!empty($val['r2']))
+            return date_format(date_create_from_format("Y-m-d H:i:s", $val['r2']), "d.m.Y");
+        else
+            return '-';
     }
 }

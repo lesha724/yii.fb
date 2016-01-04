@@ -871,6 +871,23 @@ SQL;
             }
             return $teachers;
         }
+	//$type = 0 -факультет 1 - кафедра
+	public function isJournalAdmin($id,$type,$stegnd9)
+	{
+		$result = false;
+		if($type==1) {
+			$sql = <<<SQL
+			SELECT * FROM stegnd WHERE stegnd1=:P1 AND stegnd2=:K1 AND stegnd9=:STEGND9 AND stegnd6=1
+SQL;
+			$command = Yii::app()->db->createCommand($sql);
+			$command->bindValue(':P1', $this->p1);
+			$command->bindValue(':K1', $id);
+			$command->bindValue(':STEGND9', $stegnd9);
+			$res = $command->queryRow();
+			if(!empty($res))
+				$result = true;
+		}
 
-
+		return $result;
+	}
 }

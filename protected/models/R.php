@@ -115,7 +115,7 @@ class R extends CActiveRecord
 
     public function getDatesForJournal($uo1, $gr1,$type_lesson)
     {
-        $sql = <<<SQL
+        /*$sql = <<<SQL
         select elgz3,r2,ustem5,ustem7,elgz4,r1,us4,elgz1,elgz5,elgz6
         from r
            inner join elgz on (r.r8 = elgz.elgz1)
@@ -127,6 +127,14 @@ class R extends CActiveRecord
            inner join us on (nr.nr2 = us.us1)
         where (ug2=:GR1) and (elg2 = :UO1) and (sem3 = :YEAR) and (sem5 = :SEM) and (elg4 = :TYPE_LESSON)
         order by elgz3
+SQL;*/
+		$sql = <<<SQL
+			select elgz3,r2,r1,ustem5,us4,ustem7,ustem6,elgz4,elgz1,elgz5,elgz6
+			from elgz
+			   inner join elg on (elgz.elgz2 = elg.elg1 and elg2=:UO1 and elg4=:TYPE_LESSON)
+			   inner join ustem on (elgz.elgz7 = ustem.ustem1)
+			   inner join EL_GURNAL_ZAN({$uo1},:GR1,:SEM1, {$type_lesson}) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
+			order by elgz3
 SQL;
         /*$sql = <<<SQL
             select elgz3,r2,ustem5,elgz4,r1,us4,elgz1,elgz5,elgz6
@@ -142,12 +150,16 @@ SQL;
             )
             order by elgz3
 SQL;*/
+
+		$sem1 = Sem::model()->getSem1ByUo1($uo1);
+		if(empty($sem1))
+			return array();
+
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':UO1', $uo1);
         $command->bindValue(':GR1', $gr1);
         $command->bindValue(':TYPE_LESSON', $type_lesson);
-        $command->bindValue(':YEAR', Yii::app()->session['year']);
-        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $command->bindValue(':SEM1', $sem1);
         $dates = $command->queryAll();
 
         foreach($dates as $key => $date) {

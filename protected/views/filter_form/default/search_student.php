@@ -49,7 +49,7 @@ $form1=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 $this->endWidget();
 
 $filial=false;
-$filials = Ks::model()->findAll();
+$filials = Ks::model()->findAllByAttributes(array('ks12'=>null,'ks13'=>0));
 if (count($filials) > 1) {
 	$filial=true;
 }

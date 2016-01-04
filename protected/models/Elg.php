@@ -151,19 +151,137 @@ SQL;
 
 	public function getDispBySt($st1){
 		$sql=<<<SQL
-              SELECT elg.*,d2,d3,k2,k3 FROM elg
+              /*SELECT elg.*,d2,d3,k2,k3 FROM elg
                 INNER JOIN sem on (elg3 = sem1)
                 inner join uo on (elg.elg2 = uo.uo1)
                 inner join d on (uo.uo3 = d.d1)
                 inner join elgz on (elg1 = elgz2)
                 inner join elgzst on (elgz1 = elgzst2)
                 inner JOIN k on (uo4 = k1)
-              WHERE elgzst1=:ST1 AND sem3=:YEAR AND sem5=:SEM
+              WHERE elgzst1=:ST1 AND sem3=:YEAR AND sem5=:SEM*/
+SQL;
+		$sql=<<<SQL
+              SELECT d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1,sem1
+                    from ucxg
+                       inner join ucgn on (ucxg.ucxg2 = ucgn.ucgn1)
+                       inner join ucx on (ucxg.ucxg1 = ucx.ucx1)
+                       inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
+                       inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
+                       inner join uo on (ucx.ucx1 = uo.uo19)
+                       inner join us on (uo.uo1 = us.us2)
+                       inner join u on (uo.uo22 = u.u1)
+                       inner join d on (uo.uo3 = d.d1)
+                       inner join k on (uo.uo4 = k.k1)
+                       inner join sem on (us.us3 = sem.sem1)
+                    WHERE ucxg3=0 and ucsn2=:ST1 and sem3=:YEAR and sem5=:SEM and us6<>0 and us4 in (1,2,3,4)
+                    group by d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1,sem1
+                    ORDER BY d2,us4,uo3
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':ST1', $st1);
 		$command->bindValue(':YEAR', Yii::app()->session['year']);
 		$command->bindValue(':SEM', Yii::app()->session['sem']);
 		$res = $command->queryAll();
+		return $res;
+	}
+
+	public function getRetakeInfo($uo1,$sem1,$elg4,$st1)
+	{
+		$sql = <<<SQL
+			SELECT COUNT(*) FROM elgzst
+				INNER JOIN elgz on (elgzst2 = elgz1)
+				INNER JOIN elg on (elgz2 = elg1)
+			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4 AND elgzst1=:ST1 AND elgzst3=2
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':ST1', $st1);
+		$command->bindValue(':UO1', $uo1);
+		$command->bindValue(':SEM1', $sem1);
+		$command->bindValue(':ELG4', $elg4);
+		$respectful = $command->queryScalar();
+
+		$sql = <<<SQL
+			SELECT COUNT(*) FROM elgzst
+				INNER JOIN elgz on (elgzst2 = elgz1)
+				INNER JOIN elg on (elgz2 = elg1)
+			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4 AND elgzst1=:ST1 AND elgzst3=1
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':ST1', $st1);
+		$command->bindValue(':UO1', $uo1);
+		$command->bindValue(':SEM1', $sem1);
+		$command->bindValue(':ELG4', $elg4);
+		$disrespectful = $command->queryScalar();
+
+		$sql = <<<SQL
+			SELECT COUNT(*) FROM elgzst
+				INNER JOIN elgz on (elgzst2 = elgz1)
+				INNER JOIN elg on (elgz2 = elg1)
+			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4 AND elgzst1=:ST1 AND elgzst4>0 AND elgzst4<=:MIN
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':ST1', $st1);
+		$command->bindValue(':UO1', $uo1);
+		$command->bindValue(':SEM1', $sem1);
+		$command->bindValue(':ELG4', $elg4);
+		$command->bindValue(':MIN', Elgzst::model()->getMin());
+		$f = $command->queryScalar();
+
+		$sql = <<<SQL
+			SELECT COUNT(*) FROM elgzst
+				INNER JOIN elgz on (elgzst2 = elgz1)
+				INNER JOIN elg on (elgz2 = elg1)
+			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4 AND elgzst1=:ST1 AND elgzst3>0 AND elgzst5>=:MIN
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':ST1', $st1);
+		$command->bindValue(':UO1', $uo1);
+		$command->bindValue(':SEM1', $sem1);
+		$command->bindValue(':ELG4', $elg4);
+		$command->bindValue(':MIN', Elgzst::model()->getMin());
+		$nbretake = $command->queryScalar();
+
+		$sql = <<<SQL
+			SELECT COUNT(*) FROM elgzst
+				INNER JOIN elgz on (elgzst2 = elgz1)
+				INNER JOIN elg on (elgz2 = elg1)
+			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4 AND elgzst1=:ST1 AND elgzst4>0 AND elgzst4<=:MIN1 AND elgzst5>=:MIN2
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':ST1', $st1);
+		$command->bindValue(':UO1', $uo1);
+		$command->bindValue(':SEM1', $sem1);
+		$command->bindValue(':ELG4', $elg4);
+		$command->bindValue(':MIN1', Elgzst::model()->getMin());
+		$command->bindValue(':MIN2', Elgzst::model()->getMin());
+		$fretake = $command->queryScalar();
+
+		$sql = <<<SQL
+			SELECT COUNT(*) FROM elgz
+				INNER JOIN elg on (elgz2 = elg1)
+			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':UO1', $uo1);
+		$command->bindValue(':SEM1', $sem1);
+		$command->bindValue(':ELG4', $elg4);
+		$count = $command->queryScalar();
+		
+		return array($respectful,$disrespectful,$f,$nbretake,$fretake,$count);
+	}
+
+	public function getElgByElgzst0($elgzst0)
+	{
+		$sql=<<<SQL
+            SELECT elg.*
+                FROM elgzst
+                  INNER JOIN elgz on (elgzst2 = elgz1)
+                  INNER JOIN elg on (elgz2 = elg1)
+                WHERE elgzst0=:ELGZST0
+SQL;
+		$command= Yii::app()->db->createCommand($sql);
+		$command->bindValue(':ELGZST0', $elgzst0);
+		$elg = $command->queryRow();
+		return $elg;
 	}
 }

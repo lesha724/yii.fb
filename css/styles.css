@@ -372,7 +372,10 @@ tr.min-max th {
 }
 
 .journal_table_1 thead tr {
-    height: 85px!Important;
+    height: 105px !important;
+}
+.journal_div_table2 [data-rel="popover"]{
+    cursor: pointer;
 }
 
 table.modules_table_2 td{

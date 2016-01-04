@@ -429,6 +429,7 @@ SQL;
         $nom = Yii::app()->request->getParam('nom', null);
         $date = Yii::app()->request->getParam('date', null);
         $gr1 = Yii::app()->request->getParam('gr1', null);
+        $sem1 = Sem::model()->getSem1ByGr1($gr1);
 
         if($st1==null || $elgz1==null || $r1==null || $nom==null || $date==null || $gr1==null)
         {
@@ -437,6 +438,7 @@ SQL;
         }else
         {
             $elgzst=Elgzst::model()->findByAttributes(array('elgzst1'=>$st1,'elgzst2'=>$elgz1));
+            $elgz = Elgz::model()->findByPk($elgzst->elgzst2);
             if(empty($elgzst))
             {
                 $error = true;
@@ -447,18 +449,21 @@ SQL;
                 {
                     if($elgzst->checkMinRetakeForGrid())
                     {
+                        $elg = Elg::model()->getElgByElgzst0($elgzst->elgzst0);
+
                         $sql=<<<SQL
-                            SELECT us4 FROM elgz
-                               INNER JOIN r ON (elgz1=r8)
-                               INNER JOIN nr ON (r1=nr1)
-                               INNER JOIN us ON (us1=nr2)
-                            WHERE  elgz1=:ELGZ1
+                select first 1 us4 from EL_GURNAL_ZAN(:UO1,:GR1,:SEM1, :ELG4) where EL_GURNAL_ZAN.nom = :NOM
 SQL;
                         $command=Yii::app()->db->createCommand($sql);
-                        $command->bindValue(':ELGZ1', $elgzst->elgzst2);
+                        $command->bindValue(':NOM', $elgz->elgz3);
+                        $command->bindValue(':GR1', $gr1);
+                        $command->bindValue(':SEM1', $sem1);
+                        $command->bindValue(':UO1', $elg['elg2']);
+                        $command->bindValue(':ELG4', $elg['elg4']);
                         $us4 = $command->queryRow();
+                        //print_r($elgz->elgz3.' /'.$gr1.'/'.$sem1.'/'.$elg['elg2'].'/'.$elg['elg4']);
+                        $info=$elgzst->getInfoByElgzst0($elg['elg2'],$sem1,$gr1,$elg['elg4']);
 
-                        $info=$elgzst->getInfoByElgzst0();
                         if(!empty($info))
                             $title.=' '.SH::getShortName($info['st2'],$info['st3'],$info['st4']).' '.date('d.m.Y', strtotime($info['r2'])).' '.$info['d3'];
 
@@ -467,15 +472,24 @@ SQL;
                             $elgp=Elgp::model()->findByAttributes(array('elgp1'=>$elgzst->elgzst0));
                             if(empty($elgp))
                             {
-                                $error = true;
-                                $errorType=2;
-                            }else
-                            {
-                                $html .= $this->renderPartial('journal/_add_omissions', array(
-                                    'model'=>$elgp,
-                                    'us4'=>$us4['us4']
-                                ), true);
+                                //$error = true;
+                                //$errorType=2;
+                                $elgp = new Elgp();
+                                $elgp->elgp0=new CDbExpression('GEN_ID(GEN_ELGP, 1)');
+                                $elgp->elgp1=$elgzst->elgzst0;
+                                $elgp->elgp3='';
+                                $elgp->elgp4='';
+                                $elgp->elgp5=date('Y-m-d H:i:s');
+                                $elgp->elgp7=Yii::app()->user->dbModel->p1;
+                                $elgp->elgp6=date('Y-m-d H:i:s');
+                                $elgp->save();
                             }
+
+                            $html .= $this->renderPartial('journal/_add_omissions', array(
+                                'model'=>$elgp,
+                                'us4'=>$us4['us4']
+                            ), true);
+
                         }
 
                         if(!empty($elgzst)&&!empty($us4))
@@ -487,7 +501,8 @@ SQL;
                             $html .= $this->renderPartial('journal/_add_retake', array(
                                 'model' => $model,
                                 'elgzst'=>$elgzst,
-                                'us4'=>$us4['us4']
+                                'us4'=>$us4['us4'],
+                                'r1'=>$r1
                             ), true);
                         }else
                             $error=true;
@@ -515,8 +530,8 @@ SQL;
     }
 
     public function actionSaveJournalRetake(){
-        //if (! Yii::app()->request->isAjaxRequest)
-            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $error=false;
         $errorType=0;
@@ -529,6 +544,7 @@ SQL;
         $elgotr1=Yii::app()->request->getParam('elgotr1', null);
         $elgotr2=Yii::app()->request->getParam('elgotr2', null);
         $elgotr3=Yii::app()->request->getParam('elgotr3', null);
+        $elgotr4=Yii::app()->request->getParam('elgotr4', null);
 
         if($elgotr1==null || $elgotr2==null || $elgotr3==null)
         {
@@ -537,6 +553,7 @@ SQL;
         }else
         {
             $elgzst=Elgzst::model()->findByPk($elgotr1);
+            $elgz = Elgz::model()->findByPk($elgzst->elgzst2);
             if(empty($elgzst))
             {
                 $error = true;
@@ -547,15 +564,22 @@ SQL;
                 {
                     if($elgzst->checkMinRetakeForGrid())
                     {
+                        $gr1 = St::model()->getGr1BySt1($elgzst->elgzst1);
+
+                        $elg = Elg::model()->getElgByElgzst0($elgzst->elgzst0);
+
+                        $sem1 = Sem::model()->getSem1ByGr1($gr1);
+
                         $sql=<<<SQL
-                            SELECT us4 FROM elgz
-                               INNER JOIN r ON (elgz1=r8)
-                               INNER JOIN nr ON (r1=nr1)
-                               INNER JOIN us ON (us1=nr2)
-                            WHERE  elgz1=:ELGZ1
+                select first 1 us4 from EL_GURNAL_ZAN(:UO1,:GR1,:SEM1, :ELG4) where EL_GURNAL_ZAN.nom = :NOM
 SQL;
                         $command=Yii::app()->db->createCommand($sql);
-                        $command->bindValue(':ELGZ1', $elgzst->elgzst2);
+                        $command->bindValue(':NOM', $elgz->elgz3);
+                        $command->bindValue(':GR1', $gr1);
+                        $command->bindValue(':SEM1', $sem1);
+                        $command->bindValue(':UO1', $elg['elg2']);
+                        $command->bindValue(':ELG4', $elg['elg4']);
+                        //print_r($elgz->elgz3.' /'.$gr1.'/'.$sem1.'/'.$elg['elg2'].'/'.$elg['elg4']);
                         $us4 = $command->queryRow();
 
 
@@ -573,11 +597,15 @@ SQL;
                                 $elgp->elgp4=$elgp4;
                                 $elgp->elgp5=$elgp5;
                                 $error=!$elgp->save();
-                                if($error)
-                                    $errorType=9;
+                                if($error) {
+                                    $errorType = 9;
+                                   /* print_r($errorType);
+                                    echo '</br>';*/
+                                }
                             }
                         }
-
+                        /*print_r($errorType);
+                        echo '</br>';*/
                         $ps40=PortalSettings::model()->findByPk(40)->ps2;
                         if(! empty($ps40)){
                             /*$date1  = new DateTime(date('Y-m-d H:i:s'));
@@ -587,14 +615,14 @@ SQL;
                                 $error=true;*/
                         }
 
-                        if(!$error&&!empty($elgzst)&&!empty($us4))
+                        if(!$error&&!empty($elgzst))
                         {
                             $model=new Elgotr();
                             $model->elgotr0=new CDbExpression('GEN_ID(GEN_ELGOTR, 1)');
                             $model->elgotr1=$elgzst->elgzst0;
                             $model->elgotr2=$elgotr2;
                             $model->elgotr3=$elgotr3;
-                            $model->elgotr4=Yii::app()->user->dbModel->p1;
+                            $model->elgotr4=$elgotr4;
                             $model->elgotr5=date('Y-m-d H:i:s');
                             $error=!$model->save();
                             if(!$error)
@@ -607,8 +635,11 @@ SQL;
                             }
                         }else
                         {
+                            /*print_r($error);*/
                             $error=true;
                             $errorType=6;
+                            /*print_r($elgzst);
+                            print_r($us4);*/
                         }
                     }else
                     {
@@ -1138,6 +1169,10 @@ SQL;
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $elgzst0 = Yii::app()->request->getParam('elgzst0', null);
+        $sem1 = Yii::app()->request->getParam('sem1', null);
+        $r1 = Yii::app()->request->getParam('r1', null);
+        $gr1 = Yii::app()->request->getParam('gr1', null);
+
 
         $error=false;
         $html='';
@@ -1149,32 +1184,38 @@ SQL;
         if(!$error)
         {
             $elgzst=Elgzst::model()->findByAttributes(array('elgzst0'=>$elgzst0));
-            $info=$elgzst->getInfoByElgzst0();
-            if(!empty($info))
-            {
-                $title.=' '.SH::getShortName($info['st2'],$info['st3'],$info['st4']).' '.date('d.m.Y', strtotime($info['r2'])).' '.$info['d3'];
-            }
-            $sql=<<<SQL
-                SELECT us4 FROM elgz
-                   INNER JOIN r ON (elgz1=r8)
-                   INNER JOIN nr ON (r1=nr1)
-                   INNER JOIN us ON (us1=nr2)
-                WHERE  elgz1=:ELGZ1
+            $elgz = Elgz::model()->findByPk($elgzst->elgzst2);
 
+            //$gr1 = St::model()->getGr1BySt1($elgzst->elgzst1);
+
+            $elg = Elg::model()->getElgByElgzst0($elgzst->elgzst0);
+
+            $sql=<<<SQL
+                select first 1 us4 from EL_GURNAL_ZAN(:UO1,:GR1,:SEM1, :ELG4) where EL_GURNAL_ZAN.nom = :NOM
 SQL;
             $command=Yii::app()->db->createCommand($sql);
-            $command->bindValue(':ELGZ1', $elgzst->elgzst2);
+            $command->bindValue(':NOM', $elgz->elgz3);
+            $command->bindValue(':GR1', $gr1);
+            $command->bindValue(':SEM1', $sem1);
+            $command->bindValue(':UO1', $elg['elg2']);
+            $command->bindValue(':ELG4', $elg['elg4']);
             $us4 = $command->queryRow();
 
             if(!empty($elgzst)&&!empty($us4))
             {
+                $info=$elgzst->getInfoByElgzst0($elg['elg2'],$sem1,$gr1,$elg['elg4']);
+                if(!empty($info))
+                {
+                    $title.=' '.SH::getShortName($info['st2'],$info['st3'],$info['st4']).' '.date('d.m.Y', strtotime($info['r2'])).' '.$info['d3'];
+                }
                 $model=new Elgotr();
                 $model->unsetAttributes();
                 $model->elgotr1=$elgzst0;
                 $html = $this->renderPartial('retake/_add_retake', array(
                     'model' => $model,
                     'elgzst'=>$elgzst,
-                    'us4'=>$us4['us4']
+                    'us4'=>$us4['us4'],
+                    'r1'=>$r1
                 ), true);
             }else
                 $error=true;
@@ -1195,6 +1236,8 @@ SQL;
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $elgzst0 = Yii::app()->request->getParam('elgzst0', null);
+        $sem1 = Yii::app()->request->getParam('sem1', null);
+        $gr1 = Yii::app()->request->getParam('gr1', null);
 
         $error=false;
         $html='';
@@ -1206,22 +1249,28 @@ SQL;
         {
             $models=Elgotr::model()->findAllByAttributes(array('elgotr1'=>$elgzst0));
             $elgzst=Elgzst::model()->findByAttributes(array('elgzst0'=>$elgzst0));
-            $info=$elgzst->getInfoByElgzst0();
+            $elgz = Elgz::model()->findByPk($elgzst->elgzst2);
+
+            $gr1 = St::model()->getGr1BySt1($elgzst->elgzst1);
+
+            $elg = Elg::model()->getElgByElgzst0($elgzst->elgzst0);
+
+            $sql=<<<SQL
+                select first 1 us4 from EL_GURNAL_ZAN(:UO1,:GR1,:SEM1, :ELG4) where EL_GURNAL_ZAN.nom = :NOM
+SQL;
+            $command=Yii::app()->db->createCommand($sql);
+            $command->bindValue(':NOM', $elgz->elgz3);
+            $command->bindValue(':GR1', $gr1);
+            $command->bindValue(':SEM1', $sem1);
+            $command->bindValue(':UO1', $elg['elg2']);
+            $command->bindValue(':ELG4', $elg['elg4']);
+            $us4 = $command->queryRow();
+
+            $info=$elgzst->getInfoByElgzst0($elg['elg2'],$sem1,$gr1,$elg['elg4']);
             if(!empty($info))
             {
                 $title.=' '.SH::getShortName($info['st2'],$info['st3'],$info['st4']).' '.date('d.m.Y', strtotime($info['r2'])).' '.$info['d3'];
             }
-            $sql=<<<SQL
-                SELECT us4 FROM elgz
-                   INNER JOIN r ON (elgz1=r8)
-                   INNER JOIN nr ON (r1=nr1)
-                   INNER JOIN us ON (us1=nr2)
-                WHERE  elgz1=:ELGZ1
-
-SQL;
-            $command=Yii::app()->db->createCommand($sql);
-            $command->bindValue(':ELGZ1', $elgzst->elgzst2);
-            $us4 = $command->queryRow();
 
             $html = $this->renderPartial('retake/_show_retake', array(
                 'models' => $models,
@@ -1251,7 +1300,7 @@ SQL;
 
         $error=false;
 
-        if(empty($elgotr1)||empty($value)||empty($date)||empty($p1))
+        if(empty($elgotr1)||$value===null||empty($date)||empty($p1))
             $error=true;
         if(!$error)
         {

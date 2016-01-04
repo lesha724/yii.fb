@@ -408,6 +408,7 @@ $(document).ready(function(){
         var elgotr1=$('#Elgotr_elgotr1').val();
         var elgotr2=$('#Elgotr_elgotr2').val();
         var elgotr3=$('#Elgotr_elgotr3').val();
+        var elgotr4=$('#Elgotr_elgotr4').val();
 
         var params = {
             elgp2 :elgp2,
@@ -416,7 +417,8 @@ $(document).ready(function(){
             elgp5 :elgp5,
             elgotr1:elgotr1,
             elgotr2:elgotr2,
-            elgotr3:elgotr3
+            elgotr3:elgotr3,
+            elgotr4:elgotr4
         }
 
         title='';
@@ -544,12 +546,13 @@ function send(url,params,title,$td,$that,$spinner1,st1)
                 }
             }
 
-            if(!$td.find('[data-name="elgzst5"]')){
-                if($td.find('[data-name="elgzst3"]').is(':checked')||parseFloat($td.find('[data-name="elgzst4"]').val().replace(',','.'))<=min)
-                    if(parseFloat($td.find('[data-name="elgzst5"]').val().replace(',','.'))>min)
+            if($td.find('[data-name="elgzst5"]')){
+                if($td.find('[data-name="elgzst3"]').is(':checked')||parseFloat($td.find('[data-name="elgzst4"]').val().replace(',','.'))<=minBal) {
+                    if (parseFloat($td.find('[data-name="elgzst5"]').val().replace(',', '.')) > minBal)
                         $td.find('.btn-retake').hide();
                     else
                         $td.find('.btn-retake').show();
+                }
                 else
                     $td.find('.btn-retake').hide();
             }else{
