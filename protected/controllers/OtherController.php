@@ -35,7 +35,9 @@ class OtherController extends Controller
                     'cancelSubscription',
                     'renderAddSpkr',
                     'addSpkr',
-                    'studentCard'
+                    'studentCard',
+                    'studentCardExcel',
+
                 ),
                 'expression' => 'Yii::app()->user->isStd',
             ),
@@ -57,7 +59,8 @@ class OtherController extends Controller
             ),
             array('allow',
                 'actions' => array(
-                    'studentCard'
+                    'studentCard',
+                    'studentCardExcel',
                 ),
                 'expression' => 'Yii::app()->user->isPrnt',
             ),
@@ -76,6 +79,115 @@ class OtherController extends Controller
             'st' => $st,
             'st1'=>$st1
         ));
+    }
+
+    public function actionStudentCardExcel()
+    {
+        $st1 = Yii::app()->user->dbModel->st1;
+        $st = St::model()->findByPk($st1);
+
+        $studentInfo = $st->getStudentInfoForCard();
+
+        if(!empty($studentInfo)) {
+            Yii::import('ext.phpexcel.XPHPExcel');
+            $objPHPExcel = XPHPExcel::createPHPExcel();
+            $objPHPExcel->getProperties()->setCreator("ACY")
+                ->setLastModifiedBy("ACY " . date('Y-m-d H-i'))
+                ->setTitle("StudentCard " . date('Y-m-d H-i'))
+                ->setSubject("StudentCard " . date('Y-m-d H-i'))
+                ->setDescription("StudentCard document, generated using ACY Portal. " . date('Y-m-d H:i:'))
+                ->setKeywords("")
+                ->setCategory("Result file");
+            $objPHPExcel->setActiveSheetIndex(0);
+            $sheet = $objPHPExcel->getActiveSheet();
+
+            $sheet->mergeCells('A1:D8');
+
+            $data = St::model()->getFoto($st->st1);
+            if ($data != null) {
+
+                $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
+                $objDrawing->setName('logo');
+                $objDrawing->setImageResource(imagecreatefromstring($data));
+                $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_DEFAULT);
+                $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
+                $objDrawing->setHeight(100);
+                $objDrawing->setCoordinates('A1');
+                $objDrawing->setOffsetX(10);
+                $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+            }
+
+            $sheet->mergeCells('E1:F1');
+            $sheet->setCellValue('E1', tt('ФИО'));
+            $sheet->mergeCells('G1:J1');
+            $sheet->setCellValue('G1', $st->st2.' '.$st->st3.' '.$st->st4);
+
+            $sheet->mergeCells('E2:F2');
+            $sheet->setCellValue('E2', tt('Гражданство'));
+            $sheet->mergeCells('G2:J2');
+            $sheet->setCellValue('G2', $studentInfo['sgr2']);
+
+            $sheet->mergeCells('E3:F3');
+            $sheet->setCellValue('E3', tt('Дата рождения'));
+            $sheet->mergeCells('G3:J3');
+            $sheet->setCellValue('G3', date("m.d.y",strtotime($st->st7)));
+
+            $sheet->mergeCells('E4:F4');
+            $sheet->setCellValue('E4', tt('Факультет'));
+            $sheet->mergeCells('G4:J4');
+            $sheet->setCellValue('G4', $studentInfo['f3']);
+
+            $sheet->mergeCells('E5:F5');
+            $sheet->setCellValue('E5', tt('Специальность'));
+            $sheet->mergeCells('G5:J5');
+            $sheet->setCellValue('G5', $studentInfo['sp2']);
+
+            $sheet->mergeCells('E6:F6');
+            $sheet->setCellValue('E6', tt('Форма обучения'));
+            $sheet->mergeCells('G6:J6');
+            $sheet->setCellValue('G6',SH::convertEducationType($studentInfo['sg4']));
+
+            $sheet->mergeCells('E7:F7');
+            $sheet->setCellValue('E7', tt('Курс'));
+            $sheet->mergeCells('G7:J7');
+            $sheet->setCellValue('G7', $studentInfo['sem4']);
+
+            $sheet->mergeCells('E8:F8');
+            $sheet->setCellValue('E8', tt('Группа'));
+            $sheet->mergeCells('G8:J8');
+            $sheet->setCellValue('G8',Gr::model()->getGroupName($studentInfo['sem4'], $studentInfo));
+
+            $sheet->setTitle(tt('Карточка ст.') . ' ' . date('Y-m-d H-i'));
+
+            /*---------------------------------------------------*/
+            if(PortalSettings::model()->findByPk(48)->ps2==1) {
+                $objWorkSheet = $objPHPExcel->createSheet(1);
+                $objPHPExcel->setActiveSheetIndex(1);
+                $sheet = $objPHPExcel->getActiveSheet();
+                $sheet->setTitle(tt('Тек. задолженость'));
+
+                $disciplines = Elg::model()->getDispBySt($st->st1);
+            }
+
+
+            $objPHPExcel->setActiveSheetIndex(0);
+
+            // Redirect output to a clientâ€™s web browser (Excel5)
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="ACY_' . date('Y-m-d H-i') . '.xls"');
+            header('Cache-Control: max-age=0');
+            // If you're serving to IE 9, then the following may be needed
+            header('Cache-Control: max-age=1');
+            // If you're serving to IE over SSL, then the following may be needed
+            header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+            header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+            header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+            header('Pragma: public'); // HTTP/1.0
+
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            $objWriter->save('php://output');
+            Yii::app()->end();
+        }
     }
 
     public function actionPhones()

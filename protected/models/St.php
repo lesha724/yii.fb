@@ -461,6 +461,35 @@ SQL;
             return true;
     }
 
+	public function getFoto($st1)
+	{
+		$sql = <<<SQL
+        SELECT foto3 as foto
+        FROM foto
+        WHERE foto1 = {$st1} AND foto2 = 1
+SQL;
+
+		$string = Yii::app()->db->connectionString;
+		$parts  = explode('=', $string);
+
+		$host     = trim($parts[1].'d');
+		$login    = Yii::app()->db->username;
+		$password = Yii::app()->db->password;
+		$dbh      = ibase_connect($host, $login, $password);
+
+		$result = ibase_query($dbh, $sql);
+		$data   = ibase_fetch_object($result);
+		$foto=null;
+		if (!empty($data->FOTO)) {
+			$blob_data = ibase_blob_info($data->FOTO);
+			$blob_hndl = ibase_blob_open($data->FOTO);
+			$foto=ibase_blob_get($blob_hndl, $blob_data[0]);
+		}
+
+		ibase_free_result($result);
+		return $foto;
+	}
+
     public function getShortCodesImage($st1)
     {
         $sql = <<<SQL
@@ -479,10 +508,10 @@ SQL;
 
         $result = ibase_query($dbh, $sql);
         $data   = ibase_fetch_object($result);
-        $blob_data = ibase_blob_info($data->FOTO);
-        $blob_hndl = ibase_blob_open($data->FOTO);
         $foto=null;
         if (!empty($data->FOTO)) {
+			$blob_data = ibase_blob_info($data->FOTO);
+			$blob_hndl = ibase_blob_open($data->FOTO);
             $foto=ibase_blob_get($blob_hndl, $blob_data[0]);
         }
 

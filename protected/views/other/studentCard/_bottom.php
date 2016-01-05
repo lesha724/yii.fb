@@ -81,6 +81,19 @@ HTML;
     );
 
     echo '</div>';//.top-block
+
+    $this->widget('bootstrap.widgets.TbButton', array(
+        'buttonType'=>'link',
+        'type'=>'primary',
+        'icon'=>'print',
+        'url'=>Yii::app()->createUrl('/other/studentCardExcel'),
+        'label'=>tt('Печать'),
+        'htmlOptions'=>array(
+            'class'=>'btn-mini',
+            'id'=>'studentCard-print',
+        )
+    ));
+
     echo '<div class="bottom-block">';
 
     $ps50 = PortalSettings::model()->findByPk(50)->ps2;
