@@ -73,7 +73,10 @@ HTML;
             $tr.='<td>'.$f.'</td>';
             $tr.='<td>'.$nbretake.'</td>';
             $tr.='<td>'.$fretake.'</td>';
-            $proc = round((($respectful+$disrespectful-$nbretake)+($f-$fretake))/$count*100);
+            if($count!=0)
+                $proc = round((($respectful+$disrespectful-$nbretake)+($f-$fretake))/$count*100);
+            else
+                $proc=0;
             $tr.='<td>'.$proc.'</td>';
         $tr.='</tr>';
         $i++;

@@ -310,6 +310,7 @@ $(document).ready(function(){
         $( "#dialog-confirm-copy" ).dialog({
             resizable: false,
             modal: true,
+            width: 500,
             title: "<div class='widget-header'><h4 class='smaller'><i class='icon-question-sign green'></i> Копировать тем. план?</h4></div>",
             title_html: true,
             buttons: [

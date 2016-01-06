@@ -167,6 +167,75 @@ class OtherController extends Controller
                 $sheet->setTitle(tt('Тек. задолженость'));
 
                 $disciplines = Elg::model()->getDispBySt($st->st1);
+
+                $sheet->mergeCells('A1:A2');
+                $sheet->setCellValue('A1', tt('№ пп'));
+
+                $sheet->mergeCells('B1:B2');
+                $sheet->setCellValue('B1', tt('Кафедра'));
+
+                $sheet->mergeCells('C1:C2');
+                $sheet->setCellValue('C1', tt('Дисциплина'));
+
+                $sheet->mergeCells('D1:D2');
+                $sheet->setCellValue('D1', tt('Тип занятий'));
+
+                $sheet->mergeCells('E1:E2');
+                $sheet->setCellValue('E1', tt('Общее к-во занятий'));
+
+                $sheet->mergeCells('F1:G1');
+                $sheet->setCellValue('F1', tt('Количество пропусков'));
+                $sheet->setCellValue('F2', tt('Уваж.'));
+                $sheet->setCellValue('G2', tt('Неув.'));
+
+                $sheet->mergeCells('H1:H2');
+                $sheet->setCellValue('H1', tt('К-во "2"'));
+
+                $sheet->mergeCells('I1:J1');
+                $sheet->setCellValue('I1', tt('К-во отработанных занятий'));
+                $sheet->setCellValue('I2', tt('"нб"'));
+                $sheet->setCellValue('J2', tt('"2"'));
+
+                $sheet->mergeCells('K1:K2');
+                $sheet->setCellValue('K1', tt('% задолжености'));
+
+                $sheet->getColumnDimension('B')->setWidth(20);
+                $sheet->getColumnDimension('C')->setWidth(40);
+                $sheet->getColumnDimension('E')->setWidth(12);
+
+                $i=1;
+                $k=2;
+                foreach($disciplines as $discipline)
+                {
+                    $type=0;
+                    if($discipline['us4']>1)
+                        $type=1;
+                    list($respectful,$disrespectful,$f,$nbretake,$fretake,$count) = Elg::model()->getRetakeInfo($discipline['uo1'],$discipline['sem1'],$type,$st->st1);
+                    $sheet->setCellValueByColumnAndRow(0,$i+$k, $i);
+                    $sheet->setCellValueByColumnAndRow(1,$i+$k, $discipline['k2']);
+                    if(!empty($discipline['d27'])&&Yii::app()->language=="en")
+                        $d2=$discipline['d27'];
+                    else
+                        $d2=$discipline['d2'];
+                    $sheet->setCellValueByColumnAndRow(2,$i+$k, $d2);
+                    $sheet->setCellValueByColumnAndRow(3,$i+$k, SH::convertUS4($discipline['us4']));
+                    $sheet->setCellValueByColumnAndRow(4,$i+$k, $count);
+                    $sheet->setCellValueByColumnAndRow(5,$i+$k, $respectful);
+                    $sheet->setCellValueByColumnAndRow(6,$i+$k, $disrespectful);
+                    $sheet->setCellValueByColumnAndRow(7,$i+$k, $f);
+                    $sheet->setCellValueByColumnAndRow(8,$i+$k, $nbretake);
+                    $sheet->setCellValueByColumnAndRow(9,$i+$k, $fretake);
+                    if($count!=0)
+                        $proc = round((($respectful+$disrespectful-$nbretake)+($f-$fretake))/$count*100);
+                    else
+                        $proc=0;
+                    $sheet->setCellValueByColumnAndRow(10,$i+$k, $proc);
+                    $i++;
+                }
+                $sheet->getStyleByColumnAndRow(0,1,10,$i+$k-1)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
+                $sheet->getStyleByColumnAndRow(0,1,10,2)->getFont()->setSize(12)->setBold(true);
+                $sheet->getStyleByColumnAndRow(0,1,10,2)->getAlignment()->setWrapText(true)->
+                setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
             }
 
 
