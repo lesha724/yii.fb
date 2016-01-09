@@ -339,6 +339,17 @@ SQL;
         foreach($res as $key => $val) {
             $res[$key]['name'] = sprintf($pattern,SH::convertUS4($val['us4']),$val['spec'],$val['chasi']);
             $res[$key]['group'] = $val['us1'].'/'.$val['chasi'];
+            $groups = Us::model()->getGroups($val['us1']);
+            if(!empty($groups))
+            {
+                $res[$key]['name'].=' ( ';
+                $group = reset($groups);
+                $res[$key]['name'].=Gr::model()->getGroupName($group['sem4'], $group);
+                $res[$key]['name'].=', ..., ';
+                $group = end($groups);
+                $res[$key]['name'].=Gr::model()->getGroupName($group['sem4'], $group);
+                $res[$key]['name'].=')';
+            }
         }
 
         return $res;
@@ -616,6 +627,17 @@ SQL;
 
         foreach($groups as $key => $group) {
             $groups[$key]['name'] = SH::convertUS4($group['us4']).' '.$group['sp2'].' '.$group['sg3'];
+            $grs = Us::model()->getGroups($group['us1']);
+            if(!empty($grs))
+            {
+                $groups[$key]['name'].=' ( ';
+                $gr = reset($grs);
+                $groups[$key]['name'].=Gr::model()->getGroupName($gr['sem4'], $gr);
+                $groups[$key]['name'].=', ..., ';
+                $gr = end($grs);
+                $groups[$key]['name'].=Gr::model()->getGroupName($gr['sem4'], $gr);
+                $groups[$key]['name'].=')';
+            }
         }
 
         return $groups;

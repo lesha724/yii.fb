@@ -381,7 +381,7 @@ SQL;
     public function getDisciplinesForJournalPermition()
     {
         $sql = <<<SQL
-            SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,0,0,0,0,0);
+            SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,0,0,0,0,0) ORDER BY d2 COLLATE UNICODE ASC;
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
@@ -397,7 +397,7 @@ SQL;
     public function getDisciplinesForModulesPermition()
     {
         $sql = <<<SQL
-            SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,0,0,0,5,0);
+            SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,0,0,0,5,0) ORDER BY d2 COLLATE UNICODE ASC;
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
@@ -412,7 +412,7 @@ SQL;
     {
 
         $sql = <<<SQL
-            SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,0,0,0,1,0);
+            SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,0,0,0,1,0) ORDER BY d2 COLLATE UNICODE ASC;
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
@@ -429,7 +429,7 @@ SQL;
     {
 
         $sql = <<<SQL
-            SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,0,0,0,2,0);
+            SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,0,0,0,2,0) ORDER BY d2 COLLATE UNICODE ASC;
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':P1', Yii::app()->user->dbModel->p1);

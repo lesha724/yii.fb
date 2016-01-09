@@ -85,7 +85,7 @@ HTML;
 
 $th=$th2=$tr='';
 
-global $total_1;// calculating in journal/table_2
+global $total_1, $total_count_1;// calculating in journal/table_2
 global $count_dates;
 
 $total_2 =array();
@@ -104,7 +104,7 @@ $th2 .= '<th></th>';
 
 foreach ($students as $st) {
     $st1 = $st['st1'];
-    $val=  getTotal1($total_1[$st1],$count_dates,$ps44);
+    $val=  getTotal1($total_1[$st1],$total_count_1[$st1],$ps44);
     $marks=Elgdst::model()->getMarksForStudent($st1,$elg1);
     $total_2[$st1] = $val+countDopTotal($marks);
     $tr.='<tr data-st1="'.$st1.'">';

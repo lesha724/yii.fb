@@ -205,12 +205,16 @@ HTML;
 function countMarkTotal($marks)
 {
     $total = 0;
+    $count = 0;
     foreach ($marks as $mark) {
-        $total += $mark['elgzst5'] != 0
+        $m = $mark['elgzst5'] != 0
             ? $mark['elgzst5']
             : $mark['elgzst4'];
+        $total += $m;
+        if($m>0)
+            $count++;
     }
-    return $total;
+    return array($total,$count);
 }
 
 
@@ -242,7 +246,7 @@ HTML;
     $elgz1_arr=array();
     $th = $th2 = $tr = '';
 
-    global $total_1;
+    global $total_1, $total_count_1;
     global $count_dates;
     $count_dates=0;
     //$column = 1;
@@ -260,7 +264,7 @@ HTML;
         $st1 = $st['st1'];
         $marks = $elg->getMarksForStudent($st1);
         $tr .= '<tr data-st1="'.$st1.'">';
-        $total_1[$st1] = countMarkTotal($marks);
+        list($total_1[$st1], $total_count_1[$st1]) = countMarkTotal($marks);
         foreach($dates as $key => $date) {
             $tr .= table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$model->type_lesson);
         }
