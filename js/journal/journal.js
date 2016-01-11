@@ -580,11 +580,10 @@ function recalculateBothTotal(st1)
 
         var mark = calculateMarkFor(this);
 
-        if (! isNaN(mark))
+        if (! isNaN(mark)) {
             total_1 += mark;
-
-
-        totalCount++;
+            totalCount++;
+        }
     });
 
     if(ps44==1)
