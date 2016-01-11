@@ -595,7 +595,7 @@ SQL;
             inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
             where ucsn2=:ST1 and ucsn4>=:DATA_NACHALA and ucsn5=0
             group by d2
-            order by ucgns5, ucgns6, d2 collate UNICODE
+            order by d2 collate UNICODE
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
