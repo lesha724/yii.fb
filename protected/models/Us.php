@@ -445,4 +445,21 @@ SQL;
         $sum = $command->queryScalar();
         return $sum;
     }
+
+    public function getHoursByUo1Sem1($uo1,$sem1,$type)
+    {
+        if(empty($uo1)||empty($sem1))
+            return '';
+
+        $sql=<<<SQL
+          SELECT us6 FROM us WHERE us3=:SEM1 AND us2=:UO1 AND us4=:TYPE
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':UO1', $uo1);
+        $command->bindValue(':SEM1', $sem1);
+        $command->bindValue(':TYPE', $type);
+        $res = $command->queryScalar();
+
+        return $res;
+    }
 }

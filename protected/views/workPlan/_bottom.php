@@ -74,6 +74,12 @@ HTML;
 
             foreach ($types as $type => $name) {
                 $hours = isset($discipline['hours'][$type]) ? round($discipline['hours'][$type],2) : null;
+                if(is_null($hours)&&$type==0)
+                {
+                    $hours = Us::model()->getHoursByUo1Sem1( $discipline['uo1'],$model->semester,0);
+                    if(!empty($hours))
+                        $hours = round($hours);
+                }
                 if (in_array($type, array(5,6,7,8)) && !is_null($hours))
                     $hours = '<span class="label label-warning">+</span>';
 
