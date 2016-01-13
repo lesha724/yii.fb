@@ -71,7 +71,7 @@
                     else
                             $groups.=','.$event['gr3'];
                     $full_name=$event['d2'];
-                    $full_name=str_replace('"', "'", $full_name);
+                    $full_name=str_replace( "'",'"', $full_name);
                     $text='{';
                     $text.="id:'".$i."',";
                     $color = SH::getLessonColor($event['tip']);
@@ -81,11 +81,13 @@
                     $text.="start:'".date("Y-m-d",strtotime($event['r2']))." ".$event['rz2']."',";
                     $text.="end:'".date("Y-m-d",strtotime($event['r2']))." ".$event['rz3']."',";
                     $text.='},';
-                    $fullText='["'.$tem_name_full.'\u000A'.$full_name.'","'.$event['tip'].'","'.$fio.'","'.$event['a2'].'","'.date("Y-m-d",strtotime($event['r2'])).'","'.$event['rz2'].'","'.$event['rz3'].'","'.$groups.'"]';
+                    $fullText='[\''.$tem_name_full.'\u000A'.$full_name.'\',\''.$event['tip'].'\',\''.$fio.'\',\''.$event['a2'].'\',\''.date("Y-m-d",strtotime($event['r2'])).'\',\''.$event['rz2'].'\',\''.$event['rz3'].'\',\''.$groups.'\']';
             }
         }
 	$events.=$text;
-	$arr.=','.$fullText;
+    if($arr!='[')
+        $arr.= ',';
+	$arr.=$fullText;
 	$arr.=']';
 ?>
 	<button id="print-table" class="btn btn-info btn-small">
