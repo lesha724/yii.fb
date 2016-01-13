@@ -5,6 +5,7 @@
  *
  * The followings are the available columns in table 'elgd':
  * @property integer $elgd1
+ * @property integer $elgd0
  * @property integer $elgd2
  */
 class Elgd extends CActiveRecord
@@ -109,4 +110,28 @@ SQL;
 
         return $rows;
     }
+
+	public static function checkEmptyElgd($elg1)
+	{
+		if(empty($elg1))
+			return;
+		$sql=<<<SQL
+                SELECT elgsd.*
+                FROM elgsd
+                    LEFT JOIN elgd on (elgsd.elgsd1 = elgd.elgd2 AND elgd1 = :ELG1)
+                WHERE elgd0 is NULL AND elgsd3=0
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':ELG1', $elg1);
+		$rows = $command->queryAll();
+		foreach($rows as $row)
+		{
+			$elgd = new Elgd();
+			$elgd->elgd0=new CDbExpression('GEN_ID(GEN_ELGD, 1)');
+			$elgd->elgd1=$elg1;
+			$elgd->elgd2=$row['elgsd1'];
+			$elgd->save();
+		}
+		//return $rows;
+	}
 }

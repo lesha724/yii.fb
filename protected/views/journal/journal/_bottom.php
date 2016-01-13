@@ -65,6 +65,7 @@ if (! empty($model->group)):
         'students' => $students
     ));
     //доп колонки
+    Elgd::checkEmptyElgd($elg1);
     $elgd=Elgd::model()->getDop($elg1);
 
     $classTable2='journal_div_table2';
