@@ -102,6 +102,7 @@ class Elgd extends CActiveRecord
                 FROM elgd
                     INNER JOIN elgsd on (elgd.elgd2 = elgsd.elgsd1)
                 WHERE elgd1=:ELG1
+                ORDER BY elgd0
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
