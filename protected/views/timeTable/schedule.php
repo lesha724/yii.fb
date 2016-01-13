@@ -102,6 +102,12 @@ if('teacherExcel'==$action||'classroomExcel'==$action)
 	<a id="print-table" data-url="<?=Yii::app()->createUrl('/timeTable/'.$action)?>" class="btn btn-info btn-small <?=$class?>">
         <i class="icon-print bigger-110"></i>
     </a>
+    <h3 class="red header lighter tooltip-info noprint">
+        <i class="icon-info-sign show-info" style="cursor:pointer"></i>
+        <small>
+            <i class="icon-double-angle-right"></i> <?= tt('Дисциплины с (!) - Нажмите на дисциплину для вывода времени занятия')?>
+        </small>
+    </h3>
 <?php
 
 echo $html;

@@ -226,6 +226,8 @@ SQL;
             $time=$day['rz2'].'-'.$day['rz3'];
         if ($type == 1) // teacher
             $pattern = <<<TEXT
+{$time}
+{$tem_name}
 {$d2}[{$tip}]
 {$gr3}
 {$class}. {$a2}
