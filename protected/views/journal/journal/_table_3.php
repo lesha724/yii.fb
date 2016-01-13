@@ -6,7 +6,10 @@ function getTotal1($total_1,$count_dates,$ps44){
             $value = $total_1;
             break;
         case 1:
-            $value = round($total_1/$count_dates * 12);
+            if($count_dates!=0)
+                $value = round($total_1/$count_dates * 12);
+            else
+                $value=0;
             break;
     }
     return $value;
