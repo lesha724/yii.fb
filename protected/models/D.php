@@ -1191,7 +1191,7 @@ SQL;
         if (empty($params['sg40']))
             $params['sg40'] = $year;
 
-        if (empty($params['sg41']))
+        if ($params['sg41']==null)
             $params['sg41'] = $sem;
 
         return array($params['sg40'], $params['sg41']);
