@@ -586,9 +586,11 @@ function recalculateBothTotal(st1)
         }
     });
 
+    var bal = 0;
     if(ps44==1)
     {
-        total_1 = Math.round(total_1/totalCount*12);
+        bal = (total_1/totalCount).toFixed(2);
+        total_1 = (total_1/totalCount*12).toFixed(2);
     }
 
     $(table_3 +' td').each(function(){
@@ -599,7 +601,7 @@ function recalculateBothTotal(st1)
             total_2 += mark;
     });
 
-    $(table_3 +' td[data-total=1]').text(total_1);
+    $(table_3 +' td[data-total=1]').text(total_1+'('+bal+')');
     $(table_3 +' td[data-total=2]').text(total_1 + total_2);
 }
 

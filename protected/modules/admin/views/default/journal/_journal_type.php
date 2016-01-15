@@ -39,7 +39,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
     <div class="control-group">
         <?=CHtml::checkBox('', PortalSettings::model()->findByPk(20)->ps2, $htmlOptions2)?>
-        <span class="lbl"> <?=tt('Использовать субмодули')?></span>
+        <span class="lbl"> <?=tt('Использовать субмодули и пмк')?></span>
         <?=CHtml::hiddenField('settings[20]', PortalSettings::model()->findByPk(20)->ps2)?>
     </div>
 

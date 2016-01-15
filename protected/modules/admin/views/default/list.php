@@ -32,3 +32,7 @@ HTML;
     $html  = $this->renderPartial('list/_type', array(), true);
     echo sprintf($widget, $title, $html);
 
+    $title = tt('Список Кафедры');
+    $html  = $this->renderPartial('list/_type_group', array(), true);
+    echo sprintf($widget, $title, $html);
+

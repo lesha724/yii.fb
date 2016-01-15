@@ -4,6 +4,8 @@ $this->breadcrumbs=array(
 tt('Настройки портала'),
 );
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/admin/journal.js');
+Yii::app()->clientScript->registerPackage('datepicker');
+Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/admin/psettings.js');
 ?>
 <div class="span4">
     <div class="widget-box">
@@ -53,6 +55,11 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/a
                 <div class="control-group">
                     <span class="lbl"> <?=tt('Текст закрытия журнала для кафедр')?>:</span>
                     <?=CHtml::textField('settings[43]', PortalSettings::model()->findByPk(43)->ps2)?>
+                </div>
+
+                <div class="control-group">
+                    <span class="lbl"> <?=tt('Начало Весеннего семестра')?>:</span>
+                    <?=CHtml::textField('settings[53]', PortalSettings::model()->findByPk(53)->ps2,array('class' => 'sem-start datepicker'))?>
                 </div>
 
                 <div class="form-actions">

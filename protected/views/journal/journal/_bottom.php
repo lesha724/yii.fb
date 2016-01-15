@@ -54,7 +54,7 @@ if (! empty($model->group)):
         throw new CHttpException(404, tt('Не задана структура журнала. Обратитесь к Администратору системы').'.');
 
     $ps9  = PortalSettings::model()->findByPk(9)->ps2;
-    //$ps20 = PortalSettings::model()->findByPk(20)->ps2;// use sub modules
+    $ps20 = PortalSettings::model()->findByPk(20)->ps2;// use sub modules
     $ps33=PortalSettings::model()->findByPk(33)->ps2;
 
     $students = St::model()->getStudentsForJournal($gr1, $uo1);
@@ -78,7 +78,7 @@ if (! empty($model->group)):
         'elg'=>$elg,
         'uo1'=>$uo1,
         'gr1'=>$gr1,
-        //'ps20'  => $ps20,
+        'ps20'  => $ps20,
         'ps33'  => $ps33,
         'ps9'  => $ps9,
         'read_only'=>$read_only,

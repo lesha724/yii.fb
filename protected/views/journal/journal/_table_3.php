@@ -7,7 +7,7 @@ function getTotal1($total_1,$count_dates,$ps44){
             break;
         case 1:
             if($count_dates!=0)
-                $value = round($total_1/$count_dates * 12);
+                $value = round($total_1/$count_dates * 12,2);
             else
                 $value=0;
             break;
@@ -111,7 +111,14 @@ foreach ($students as $st) {
     $marks=Elgdst::model()->getMarksForStudent($st1,$elg1);
     $total_2[$st1] = $val+countDopTotal($marks);
     $tr.='<tr data-st1="'.$st1.'">';
-    $tr .= '<td data-total=1 colspan="2">'.$val.'</td>'; // total 1
+    $bal='';
+    if($ps44==1){
+        if($total_count_1[$st1]!=0)
+            $bal = round($total_1[$st1]/$total_count_1[$st1],2);
+        else
+            $bal=0;
+    }
+    $tr .= '<td data-total=1 colspan="2">'.$val.'('.$bal.')</td>'; // total 1
         foreach($elgd as $key)
         {
             $tr .= table3Tr($key, $marks, $st1,$elg1);

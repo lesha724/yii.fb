@@ -132,7 +132,7 @@ SQL;
         if ($sem === null)
             $sem = Yii::app()->session['sem'];
         if ($sem === null)
-            $sem = date('n')>=8 ? 0 : 1;
+            $sem = $arr[1];
 
         Yii::app()->session['sem']  = $sem;
     }

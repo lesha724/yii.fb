@@ -1,12 +1,13 @@
 <?php
-function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson)
+function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps20)
 {
     if (stripos($date['r2'], '11.11.1111')!==false )
         return '<td colspan="2"></td>';
 
     if (strtotime($date['r2']) > strtotime('now'))
         return '<td colspan="2"></td>';
-
+    if ($ps20 == 0 && $date['ustem6']>0)
+        return '<td colspan="2"></td>';
     $r1  = $date['r1'];
     $ps2 = PortalSettings::model()->getSettingFor(27);
     $nom=$date['elgz3'];
@@ -251,11 +252,11 @@ HTML;
     $count_dates=0;
     //$column = 1;
     foreach($dates as $date) {
-        $th    .= generateColumnName($date,$model->type_lesson);
-        $th2   .= generateTh2($ps9,$date,$model->type_lesson);
-        array_push($elgz1_arr,$date['elgz1']);
-        //$column++;
-        $count_dates++;
+            $th .= generateColumnName($date, $model->type_lesson);
+            $th2 .= generateTh2($ps9, $date, $model->type_lesson);
+            array_push($elgz1_arr, $date['elgz1']);
+            //$column++;
+            $count_dates++;
     }
 
     $permLesson=Elgr::model()->getList($gr1,$elgz1_arr);
@@ -266,7 +267,7 @@ HTML;
         $tr .= '<tr data-st1="'.$st1.'">';
         list($total_1[$st1], $total_count_1[$st1]) = countMarkTotal($marks);
         foreach($dates as $key => $date) {
-            $tr .= table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$model->type_lesson);
+            $tr .= table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$model->type_lesson,$ps20);
         }
         $tr .= '</tr>';
     }

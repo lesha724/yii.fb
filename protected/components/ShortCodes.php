@@ -206,8 +206,23 @@ class ShortCodes extends CApplicationComponent
             $year = date('Y');
             $sem  = 0;
         } else {
-            $year = date('Y', strtotime('-1 year'));
-            $sem  = 1;
+            $ps53 = PortalSettings::model()->findByPk(53)->ps2;
+            if(!empty($ps53)){
+                if(date('m-d')>=$ps53)
+                {
+                    $sem = 1;
+                }else
+                {
+                    $sem  = 0;
+                    list($month,$day)=explode('-',$ps53);
+                    if((int)$month>8)
+                        $sem=1;
+                }
+                $year = date('Y', strtotime('-1 year'));
+            }else {
+                $year = date('Y', strtotime('-1 year'));
+                $sem = 1;
+            }
         }
 
         return array($year, $sem);
