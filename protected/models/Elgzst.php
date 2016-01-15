@@ -267,9 +267,9 @@ class Elgzst extends CActiveRecord
             $where .=" AND gr3 CONTAINING '".$this->group_st."' ";
         if(!empty($this->status))
             if($this->status==1)
-                $where .=" AND elgzst5>'".$this->getMin()."' or elgzst5=-1 ";
+                $where .=" AND (elgzst5>'".$this->getMin()."' or elgzst5=-1) ";
             else
-                $where .=" AND elgzst5<'".$this->getMin()."' or elgzst5!=-1 ";
+                $where .=" AND (elgzst5<'".$this->getMin()."' and elgzst5>-1) ";
 
         $countSQL =
             'SELECT COUNT(*) ' .

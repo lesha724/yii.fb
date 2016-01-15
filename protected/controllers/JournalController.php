@@ -1142,8 +1142,8 @@ SQL;
 
     public function actionSearchRetake($uo1,$us1)
     {
-        if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        //if (! Yii::app()->request->isAjaxRequest)
+            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
         $model = new Elgzst('search');
         $model->unsetAttributes();
         if (isset($_GET['pageSize'])) {
