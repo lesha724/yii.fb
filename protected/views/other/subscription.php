@@ -30,6 +30,7 @@ JS
 
 $params = $model->subscriptionParams;
 $params['st1'] = $model->st1;
+$params['semester'] =0;
 
 $_SESSION['u1_vib']       = isset($_SESSION['u1_vib']) ? $_SESSION['u1_vib'] : '';
 $_SESSION['u1_vib_disc']  = isset($_SESSION['u1_vib_disc']) ? $_SESSION['u1_vib_disc'] : '';
@@ -48,6 +49,7 @@ if (isset($_SESSION['func'])) {
 
 function PROCEDURA_CIKL_PO_BLOKAM($params)
 {
+    $_SESSION['semester']     = $params['semester'];
     unset($_SESSION['func']);
     extract($params);// $sg1_kod, $gr1_kod, $uch_god, $semestr, $data_nachala
 
@@ -58,9 +60,10 @@ function PROCEDURA_CIKL_PO_BLOKAM($params)
 
     list($min_block, $max_block) = U::model()->getMinMAxBlocks($sg1_kod);
     $min_block = isset($_SESSION['min_block']) ? $_SESSION['min_block'] : (int)$min_block;
-
+    $enable= false;
     for ($block = $min_block; $block <= $max_block; $block ++) {
-
+        /*print_r($block.'///');
+        print_r($semester.'///');*/
         // Определяю является ли родитель блоком по выбору
         $u9_root = U::model()->getU9($sg1_kod, $block);
 
@@ -103,12 +106,10 @@ function PROCEDURA_CIKL_PO_BLOKAM($params)
                 }
 
                 if ($u1_d == 0) {
-
                     $kol = U::model()->getKOL($block, $sg1_kod);
 
                     // если в блоке только 1 строка цикла, в случае просто выбора дисциплин
                     if ($kol == 1){
-
                         $_ul = U::model()->get_U1($block, $sg1_kod);
                         $_SESSION['u1_vib'] .= ','.$_ul;
                         $_SESSION['u1_vib_disc'] = $_ul;
@@ -137,6 +138,13 @@ function PROCEDURA_CIKL_PO_BLOKAM($params)
             } else
                 continue;
         }
+    }
+    if($block>$max_block){
+        //print_r('----------');
+        $params['semester']++;
+        $_SESSION['min_block'] = $min_block;
+        if ($params['semester'] <= 1)
+            PROCEDURA_CIKL_PO_BLOKAM($params);
     }
 }
 

@@ -143,7 +143,7 @@ class U extends CActiveRecord
         $sql = <<<SQL
           SELECT min(u9) as MIN_BLOK, max(u9) as MAX_BLOK
           FROM u
-          WHERE u2=:SG1 and u9>0
+          WHERE u27=0 and u2=:SG1 and u9>0
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
@@ -217,7 +217,7 @@ SQL;
             inner join uo on (u1 = uo.uo22)
             inner join us on (uo.uo1 = us.us2)
             inner join sem on (us.us3 = sem.sem1)
-            where (sem3 = {$uch_god}) and (sem5 = {$semester}) and (
+            where (u38<=current_timestamp and u39>=current_timestamp) and (sem3 = {$uch_god}) and (sem5 = {$semester}) and (
                 (u1 in ({$subSql})) or
                 (u1 in (select u1 from u where u17 in ({$subSql}))) or
                 (u1 in (select u1 from u where u17 in (select u1 from u where u17 in ({$subSql}))))
