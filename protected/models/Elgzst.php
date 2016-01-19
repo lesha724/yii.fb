@@ -262,7 +262,7 @@ class Elgzst extends CActiveRecord
             $where .=" AND elgp3 CONTAINING '".$this->elgp3."' ";
         if(!empty($this->elgp2))
             $where .=" AND elgp2=".$this->elgp2;
-        if(!empty($this->elgzst3))
+        if($this->elgzst3!=null)
             $where .=" AND elgzst3=".$this->elgzst3;
         if(!empty($this->group_st))
             $where .=" AND gr3 CONTAINING '".$this->group_st."' ";
