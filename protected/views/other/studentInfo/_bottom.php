@@ -141,7 +141,6 @@ $form=$this->beginWidget('CActiveForm', array(
         </a>
     </div>
 <?php $this->endWidget(); ?>
-
 <div class="control-group">
         <?= $form->label($stInfoForm, 'internationalPassport', array('class' => 'control-label'))?>
         <div class="controls">
@@ -240,7 +239,7 @@ $this->beginWidget(
                     ?>
 
                     <fieldset>
-                        <?= CHtml::fileField('document', '', array('id' => 'id-input-file-3')) ?>
+                        <?= CHtml::fileField('document', ''/*, array('id' => 'id-input-file-3')*/) ?>
                         <?= CHtml::hiddenField('nkrs1', $nkrs1) ?>
                         <?= CHtml::hiddenField('nkrs6', isset($p1)?$p1:null) ?>
                     </fieldset>
