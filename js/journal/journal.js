@@ -590,7 +590,7 @@ function recalculateBothTotal(st1)
     if(ps44==1)
     {
         bal = (total_1/totalCount).toFixed(2);
-        total_1 = (total_1/totalCount*12).toFixed(2);
+        total_1 = Math.round(total_1/totalCount*12);
     }
 
     $(table_3 +' td').each(function(){

@@ -240,14 +240,15 @@ class Elgzst extends CActiveRecord
         $from = sprintf($from,$this->uo1, Yii::app()->session['year'], Yii::app()->session['sem']);
 
         $where = '
-                WHERE   elg4= :ELG4 AND
-                        ((elgzst3 > 0) OR (elgzst4<=:MIN and elgzst4>0))
+                WHERE   elg4='.$type_lesson.' AND
+                        ((elgzst3 > 0) OR (elgzst4<='.Stegn::model()->getMin().' and elgzst4>0))
         ';
         //$where = '';
-        $params = array(
-            ':MIN' => Stegn::model()->getMin(),
+        /*$params = array(
             ':ELG4' => $type_lesson,
-        );
+            ':MIN' => ,
+        );*/
+
 
         if(!empty($this->st2))
             $where .=" AND st2 CONTAINING '".$this->st2."' ";
@@ -261,7 +262,7 @@ class Elgzst extends CActiveRecord
             $where .=" AND elgp3 CONTAINING '".$this->elgp3."' ";
         if(!empty($this->elgp2))
             $where .=" AND elgp2=".$this->elgp2;
-        if(!empty($this->elgzst3))
+        if($this->elgzst3!=null)
             $where .=" AND elgzst3=".$this->elgzst3;
         if(!empty($this->group_st))
             $where .=" AND gr3 CONTAINING '".$this->group_st."' ";
@@ -283,10 +284,10 @@ class Elgzst extends CActiveRecord
             $where;
 
         $command=Yii::app()->db->createCommand($countSQL);
-        foreach ($params as $key => $val)
+        /*foreach ($params as $key => $val)
         {
             $command->bindParam($key, $val, PDO::PARAM_STR);
-        }
+        }*/
         $count = $command->queryScalar();
 
         $sort = new CSort();
@@ -342,7 +343,7 @@ class Elgzst extends CActiveRecord
         return new CSqlDataProvider($selectSQL, array(
             'keyField' => 'elgzst0',
             'totalItemCount'=>$count,
-            'params'=>$params,
+            //'params'=>$params,
             'sort'=>$sort,
             'pagination'=>array(
                 'pageSize'=> $pageSize,
