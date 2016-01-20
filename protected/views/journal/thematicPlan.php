@@ -22,6 +22,7 @@
     $errorUs6      = tt('Ошибка! Количество часов привышено!');
     $emptyPlan      = tt('Ошибка! Копируемый план пуст!');
 
+    $maxL = Ustem::USTEM5_LENGHT;
     Yii::app()->clientScript->registerScript('themes-messages', <<<JS
         tt.confirmDeleteMsg  = '{$confirmDeleteMsg}';
         tt.error       = "{$error}"
@@ -29,6 +30,8 @@
         tt.errorAccess = "{$access}"
         tt.errorUs6 = "{$errorUs6}"
         tt.emptyPlan = "{$emptyPlan}"
+
+        ustem5Lenght = {$maxL}
 JS
     , CClientScript::POS_READY);
 

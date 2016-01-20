@@ -18,6 +18,7 @@
 class Ustem extends CActiveRecord
 {
     public $nr18;
+    const USTEM5_LENGHT= 250;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -37,7 +38,7 @@ class Ustem extends CActiveRecord
 			array('ustem1', 'required'),
             array('ustem7', 'numerical'),
 			array('ustem2, ustem3, ustem4, ustem6,ustem11', 'numerical', 'integerOnly'=>true),
-			array('ustem5', 'length', 'max'=>1000),
+			array('ustem5', 'length', 'max'=>self::USTEM5_LENGHT),
             array('nr18', 'safe'),
             array('ustem4', 'unsafe','on'=>'update'),
 			// The following rule is used by search().

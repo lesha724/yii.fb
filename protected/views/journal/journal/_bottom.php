@@ -80,6 +80,7 @@ if (! empty($model->group)):
         'gr1'=>$gr1,
         'ps20'  => $ps20,
         'ps33'  => $ps33,
+        'ps55'  => $ps55,
         'ps9'  => $ps9,
         'read_only'=>$read_only,
         'model' => $model,

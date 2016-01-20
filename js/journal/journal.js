@@ -165,7 +165,7 @@ $(document).ready(function(){
             $td.addClass('error')
             return false;
         }
-        if (params.field!='elgzst3'&&params.value==0&&!$that.is(':checkbox')) {
+        if (params.field!='elgzst3'&&params.value==0&&!$that.is(':checkbox')&&ps55==0) {
             addGritter(title, tt.error, 'error')
             $td.addClass('error')
             return false;

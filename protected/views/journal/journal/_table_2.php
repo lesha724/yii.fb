@@ -1,5 +1,5 @@
 <?php
-function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps20)
+function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps20,$ps55)
 {
     if (stripos($date['r2'], '11.11.1111')!==false )
         return '<td colspan="2"></td>';
@@ -23,13 +23,12 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
         else
             $disabled = '';
 
+    $date1  = new DateTime(date('Y-m-d H:i:s'));
+    $date2  = new DateTime($date_lesson);
     if (! empty($ps2)&&!isset($permLesson[$elgz1])) {
-        $date1  = new DateTime(date('Y-m-d H:i:s'));
-        $date2  = new DateTime($date_lesson);
         $diff = $date1->diff($date2)->days;
         if ($diff > $ps2)
         {
-
             $disabled = 'disabled="disabled"';
         }
     }
@@ -94,6 +93,13 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
     if($type_lesson==1)
     {
         if(!$read_only){
+            if($ps55==1&&$elgzst4==''&&$elgzst3=='')
+            {
+                if($date1>=$date2) {
+                    $elgzst4 = 0;
+                    $class_1 = '';
+                }
+            }
             $elgzst4_input='<input value="'.$elgzst4.'" '.$class_1.' maxlength="3" data-name="elgzst4" '.$disabled_input.'>';
             $elgzst5_input='<input value="'.$elgzst5.'" '.$class_2.' maxlength="3" data-name="elgzst5" '.$disabled_input_1.'>';
         }else
@@ -267,7 +273,7 @@ HTML;
         $tr .= '<tr data-st1="'.$st1.'">';
         list($total_1[$st1], $total_count_1[$st1]) = countMarkTotal($marks);
         foreach($dates as $key => $date) {
-            $tr .= table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$model->type_lesson,$ps20);
+            $tr .= table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$model->type_lesson,$ps20,$ps55);
         }
         $tr .= '</tr>';
     }

@@ -65,7 +65,7 @@ $options = array(
                 $html .= sprintf($pattern, $label, $input);
 
                 $label = $form->label($model, 'ustem5', $options);
-                $input = $form->textArea($model, 'ustem5');
+                $input = $form->textArea($model, 'ustem5',array('maxlength'=>Ustem::USTEM5_LENGHT));
                 $html .= sprintf($pattern, $label, $input);
 
                 $label = $form->label($model, 'ustem6', $options);

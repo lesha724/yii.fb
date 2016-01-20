@@ -20,6 +20,7 @@
     $error2= tt('Ошибка! Не найдены входящие данные!');
     $min=Elgzst::model()->getMin();
     $ps44 = PortalSettings::model()->findByPk(44)->ps2;
+    $ps55 = PortalSettings::model()->findByPk(55)->ps2;
 
     Yii::app()->clientScript->registerScript('translations', <<<JS
         minBal = {$min}
@@ -30,6 +31,7 @@
         tt.st = "{$st}" //errorType=5
         tt.error2 = "{$error2}" //errorType=2
         ps44 = {$ps44}
+        ps55 = {$ps55}
 JS
     , CClientScript::POS_READY);
 
@@ -43,4 +45,4 @@ JS
     ));
     
     
-   $this->renderPartial('journal/_bottom', array('model' => $model,'read_only' => $read_only,'ps44'=>$ps44));
+   $this->renderPartial('journal/_bottom', array('model' => $model,'read_only' => $read_only,'ps44'=>$ps44,'ps55'=>$ps55));

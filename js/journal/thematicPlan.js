@@ -190,11 +190,11 @@ $(document).ready(function(){
 	{
             return '<tr class="new-theme">'+
                 //'<td><input type="number" class="ustem4" value="'+(number)+'"></td>'+
-                '<td><input type="number" disabled class="ustem4 " value="'+(number)+'"/></td>'+
+                '<td class="wd-20"><input type="number" disabled class="ustem4 " value="'+(number)+'"/></td>'+
                 '<td>'+selectUstem11+'</td>'+
-                '<td>'+selectUstem7+'</td>'+
+                '<td class="wd-25">'+selectUstem7+'</td>'+
                 '<td><input type="number" class="ustem3"/></td>'+
-                '<td><input type="text" class="ustem5"/></td>'+
+                '<td><input type="text" class="ustem5" maxlength="'+ustem5Lenght+'"/></td>'+
                 '<td>'+selectUstem6+'</td>'+
                 '<td>'+
                     '<a class="save-new-theme btn btn-mini btn-success"><i class="icon-ok bigger-120"></i></a>'+

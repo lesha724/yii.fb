@@ -1541,8 +1541,8 @@ SQL;
 
     public function actionRenderUstemTheme()
     {
-       if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+       //if (! Yii::app()->request->isAjaxRequest)
+            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $ustem1 = Yii::app()->request->getParam('ustem1', null);
         $d1     = Yii::app()->request->getParam('d1', null);
@@ -1569,7 +1569,7 @@ SQL;
             if(empty($res)||$res['dostup']==0)
             {
                 //throw new CHttpException(404, '2Invalid request. Please do not repeat this request again.');
-                //$error=true;
+                $error=true;
                 $typeError=3;
             }
             if(!$error)
@@ -1582,7 +1582,12 @@ SQL;
                 {
                     $model->ustem9=Yii::app()->user->dbModel->p1;
                     $model->ustem8=date('Y-m-d H:i:s');
-                    $error=!$model->save();
+                    try {
+                        $error = !$model->save();
+                    }catch (Exception $e)
+                    {
+                        $error = true;
+                    }
                     if(!$error)
                         Ustem::model()->noAcceptThematicPlan($model->ustem2);
                 }else
