@@ -39,7 +39,7 @@ class ListController extends Controller
         if(!empty($res))
             $ps35 = $res->ps2;
         $dbh=null;
-        if($ps35==1)
+        if($ps35==1&&Yii::app()->user->isAdmin)
         {
             $string = Yii::app()->db->connectionString;
             $parts  = explode('=', $string);

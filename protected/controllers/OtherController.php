@@ -877,8 +877,7 @@ SQL;
             $document = CUploadedFile::getInstanceByName('document');
             $tmpName = tempnam(sys_get_temp_dir(), '_');
             $saved = $document->saveAs($tmpName);
-
-
+            
             if ($saved) {
                 list($id, $url) = $this->sendToAntiPlagiarism($document, $tmpName);
                 if ($nkrs1)
