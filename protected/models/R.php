@@ -115,46 +115,24 @@ class R extends CActiveRecord
 
     public function getDatesForJournal($uo1, $gr1,$type_lesson)
     {
-        /*$sql = <<<SQL
-        select elgz3,r2,ustem5,ustem7,elgz4,r1,us4,elgz1,elgz5,elgz6
-        from r
-           inner join elgz on (r.r8 = elgz.elgz1)
-           inner join ustem on (elgz.elgz7 = ustem.ustem1)
-           inner join elg on (elgz.elgz2 = elg.elg1)
-           inner join sem on (elg.elg3 = sem.sem1)
-           inner join nr on (r.r1 = nr.nr1)
-           inner join ug on (nr.nr1 = ug.ug3)
-           inner join us on (nr.nr2 = us.us1)
-        where (ug2=:GR1) and (elg2 = :UO1) and (sem3 = :YEAR) and (sem5 = :SEM) and (elg4 = :TYPE_LESSON)
-        order by elgz3
-SQL;*/
-		$sql = <<<SQL
-			select elgz3,r2,r1,ustem5,us4,ustem7,ustem6,elgz4,elgz1,elgz5,elgz6
-			from elgz
-			   inner join elg on (elgz.elgz2 = elg.elg1 and elg2=:UO1 and elg4=:TYPE_LESSON)
-			   inner join ustem on (elgz.elgz7 = ustem.ustem1)
-			   inner join EL_GURNAL_ZAN({$uo1},:GR1,:SEM1, {$type_lesson}) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
-			order by elgz3
-SQL;
-        /*$sql = <<<SQL
-            select elgz3,r2,ustem5,elgz4,r1,us4,elgz1,elgz5,elgz6
-            from r
-                inner join elgz on (r8 = elgz1)
-                left join ustem on (elgz7 = ustem1)
-                inner join us on (ustem2 = us1)
-            where elgz2 =
-            (
-                  SELECT elg1 FROM elg
-                    INNER JOIN sem on (elg3 = sem1)
-                  WHERE elg2=:UO1 AND sem3=:YEAR AND sem5=:SEM AND elg4 = :TYPE_LESSON
-            )
-            order by elgz3
-SQL;*/
-
 		$sem1 = Sem::model()->getSem1ByUo1($uo1);
 		if(empty($sem1))
 			return array();
 
+		$sql = <<<SQL
+			select elgz3,r2,r1,ustem5,us4,ustem7,ustem6,elgz4,elgz1,elgz5,elgz6
+			from elgz
+			inner join elg on (elgz.elgz2 = elg.elg1 and elg2=:UO1 and elg4=:TYPE_LESSON and elg3={$sem1})
+			inner join ustem on (elgz.elgz7 = ustem.ustem1)
+			inner join EL_GURNAL_ZAN({$uo1},:GR1,:SEM1, {$type_lesson}) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
+			order by elgz3
+SQL;
+		/*select elgz3,r2,r1,ustem5,us4,ustem7,ustem6,elgz4,elgz1,elgz5,elgz6
+from elgz
+   inner join elg on (elgz.elgz2 = elg.elg1 and elg2=:UO1 and elg4=:TYPE_LESSON)
+   inner join ustem on (elgz.elgz7 = ustem.ustem1)
+   inner join EL_GURNAL_ZAN({$uo1},:GR1,:SEM1, {$type_lesson}) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
+order by elgz3*/
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':UO1', $uo1);
         $command->bindValue(':GR1', $gr1);
