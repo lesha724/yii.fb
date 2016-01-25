@@ -1070,4 +1070,28 @@ SQL;
         return $students;
     }
 
+	public function getDisciplineExam($st1,$gr1)
+	{
+		$sql = <<<SQL
+		select d2,stus19,stus20,stus8,stus6,stus7,STUS11,STUS3 from d
+			inner join stus on (d.d1 = stus.stus18)
+			inner join st on (stus.stus1 = st.st1)
+			inner join std on (st.st1 = std.std2)
+			inner join gr on (std.std3 = gr.gr1)
+			inner join sg on (gr.gr2 = sg.sg1)
+			inner join sem on (sg.sg1 = sem.sem2)
+			INNER JOIN stusa ON (stus18=stusa18 AND stus19=stusa19 AND stus20=stusa20)
+		WHERE st1=:ST1 and std11 in (0,5,8) and std7 is null and sem3=:YEAR and sem5=:SEM  and sem7=stus20
+		group by d2,stus19,stus20,stus8,stus6,stus7,STUS11,STUS3 order by d2 COLLATE UNICODE
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':GR1', $gr1);
+		$command->bindValue(':ST1', $st1);
+		$command->bindValue(':YEAR', Yii::app()->session['year']);
+		$command->bindValue(':SEM', Yii::app()->session['sem']);
+		$disciplines = $command->queryAll();
+
+		return $disciplines;
+	}
+
 }
