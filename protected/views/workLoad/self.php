@@ -23,7 +23,7 @@ if(count($teachers)>1)
 
         $html  = '<div>';
             $html .= '<fieldset>';
-            $html .= '<div class="span3 ace-select">';
+            $html .= '<div class="span2 ace-select">';
             $html .= $form->label($model, 'teacher');
             $html .= $form->dropDownList($model, 'teacher',  CHtml::listData($teachers,'pd1','title'), $options);
             $html .= '</fieldset>';

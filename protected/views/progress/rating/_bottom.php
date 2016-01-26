@@ -8,11 +8,11 @@ $inost=array(
 $data = CHtml::listData(Sem::model()->getSemestersForRating($model->group, $type), 'sem7', 'sem7', 'name');
 
 $html  = '<div class="row-fluid" style="margin-bottom:2%">';
-$html .= '<div class="span3 ace-select">';
+$html .= '<div class="span2 ace-select">';
 $html .= CHtml::label(tt('Семестр'), 'FilterForm_semester');
 $html .= CHtml::dropDownList('FilterForm[semester]', $model->semester,array('-1'=>tt('За весь период'))+$data, $options);
 $html .= '</div>';
-$html .= '<div class="span3 ace-select">';
+$html .= '<div class="span2 ace-select">';
 $html .= CHtml::label(tt('Студенты'), 'FilterForm_st_rating');
 $html .= CHtml::dropDownList('FilterForm[st_rating]', $model->st_rating,$inost,array('class'=>'chosen-select', 'autocomplete' => 'off', 'style' => 'width:200px'));
 $html .= '</div>';

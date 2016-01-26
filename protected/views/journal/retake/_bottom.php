@@ -13,12 +13,12 @@ $form=$this->beginWidget('CActiveForm', array(
 
 $html  ='<div class="row-fluid">';
 $disciplines = CHtml::listData(D::model()->getDisciplinesForRetakePermition(), 'd1', 'd2');
-$html .= '<div class="span3 ace-select">';
+$html .= '<div class="span2 ace-select">';
 $html .= $form->label($model, 'discipline');
 $html .= $form->dropDownList($model, 'discipline', $disciplines, $options);
 $html .= '</div>';
 $groups = CHtml::listData(D::model()->getUоFromDiscipline($model->discipline), 'key', 'name');
-$html .= '<div class="span3 ace-select">';
+$html .= '<div class="span2 ace-select">';
 $html .= $form->label($model, 'group');
 $html .= $form->dropDownList($model, 'group', $groups, $options);
 $html .= '</div>';

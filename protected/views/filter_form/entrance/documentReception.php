@@ -16,7 +16,7 @@ $form=$this->beginWidget('CActiveForm', array(
 
     $filials = CHtml::listData(Ks::model()->findAllByAttributes(array('ks12'=>null,'ks13'=>0)), 'ks1', 'ks2');
     if (count($filials) > 1) {
-        $html .= '<div class="span3 ace-select">';
+        $html .= '<div class="span2 ace-select">';
         $html .= $form->label($model, 'filial');
         $html .= $form->dropDownList($model, 'filial', $filials, $options);
         $html .= '</div>';
@@ -28,7 +28,7 @@ $form=$this->beginWidget('CActiveForm', array(
         2 => tt('Специалист'),
         3 => tt('Магистр'),
     );
-    $html .= '<div class="span3 ace-select">';
+    $html .= '<div class="span2 ace-select">';
     $html .= $form->label($model, 'sel_1');
     $html .= $form->dropDownList($model, 'sel_1', $sel_1, $options);
     $html .= '</div>';
@@ -42,13 +42,13 @@ $form=$this->beginWidget('CActiveForm', array(
         $sel_2 += array(2 => tt('Вечерняя'));
     $sel_2 += array(3 => tt('Экстернат'));
 
-    $html .= '<div class="span3 ace-select">';
+    $html .= '<div class="span2 ace-select">';
     $html .= $form->label($model, 'sel_2');
     $html .= $form->dropDownList($model, 'sel_2', $sel_2, $options);
     $html .= '</div>';
 
 
-    $html .= '<div class="span3 ace-select">';
+    $html .= '<div class="span2 ace-select">';
     $html .= $form->label($model, 'extendedForm');
     $html .= '<br/><label>';
     $html .= CHtml::checkBox('FilterForm[extendedForm]', $model->extendedForm, array('class' => 'ace ace-switch ace-switch-6')); 
@@ -60,14 +60,14 @@ $form=$this->beginWidget('CActiveForm', array(
         $html .= $form->hiddenField($model, 'course', array('value' => 1));
     } else {
         $courses = CHtml::listData(Spab::model()->getCoursesForEntrance($model), 'spab6', 'spab6');
-        $html .= '<div class="span3 ace-select">';
+        $html .= '<div class="span2 ace-select">';
         $html .= $form->label($model, 'course');
         $html .= $form->dropDownList($model, 'course', $courses, $options);
         $html .= '</div>';
     }
 
     $button =  <<<HTML
-    <div class="span3 ace-select" style="padding:23px 0 0 0">
+    <div class="span2 ace-select" style="padding:23px 0 0 0">
         <button class="btn btn-info btn-small">
             <i class="icon-key bigger-110"></i>
             %s

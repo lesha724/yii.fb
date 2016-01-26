@@ -32,7 +32,7 @@ $html  = '<div>';
 
     $filials = CHtml::listData(Ks::model()->findAllByAttributes(array('ks12'=>null,'ks13'=>0)), 'ks1', 'ks2');
     if (count($filials) > 1) {
-        $html .= '<div class="span3 ace-select">';
+        $html .= '<div class="span2 ace-select">';
         $html .= $form->label($model, 'filial');
         $html .= $form->dropDownList($model, 'filial', $filials, $options);
         $html .= '</div>';
@@ -40,7 +40,7 @@ $html  = '<div>';
 
     $housings = CHtml::listData(Ka::model()->getHousingFor($model->filial), 'ka1', 'ka2');
     if (count($housings) > 1) {
-        $html .= '<div class="span3 ace-select">';
+        $html .= '<div class="span2 ace-select">';
         $html .= $form->label($model, 'housing');
         $html .= $form->dropDownList($model, 'housing', $housings, $options);
         $html .= '</div>';
@@ -48,12 +48,12 @@ $html  = '<div>';
 
     $lessons = CHtml::listData(Rz::model()->getRzForDropdown(), 'rz1', 'name');
 
-    $html .= '<div class="span3 ace-select">';
+    $html .= '<div class="span2 ace-select">';
     $html .= $form->label($model, 'lessonStart');
     $html .= $form->dropDownList($model, 'lessonStart', $lessons, $options);
     $html .= '</div>';
 
-    $html .= '<div class="span3 ace-select">';
+    $html .= '<div class="span2 ace-select">';
     $html .= $form->label($model, 'lessonEnd');
     $html .= $form->dropDownList($model, 'lessonEnd', $lessons, $options);
     $html .= '</div>';

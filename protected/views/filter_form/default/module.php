@@ -20,27 +20,27 @@ JS
 		$groups = CHtml::listData(Gr::model()->getGroupsByModule($model->discipline,$model->module), 'gr1', 'name');
 		$statements=CHtml::listData(Gr::model()->getStatements($model->group,$model->module), 'vmpv1', 'vmpv3');
         echo '<div>'.
-				'<div class="span3 ace-select">'.
+				'<div class="span2 ace-select">'.
 				$form->label($model, 'chair').
                 $form->dropDownList($model, 'chair', $chairs, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;')).
                 '</div>'.
-				'<div class="span3 ace-select">'.
+				'<div class="span2 ace-select">'.
 				$form->label($model, 'stream').
                 $form->dropDownList($model, 'stream', $streams, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;')).
 				'</div>'.
-				'<div class="span3 ace-select">'.
+				'<div class="span2 ace-select">'.
 				$form->label($model, 'discipline').
                 $form->dropDownList($model, 'discipline', $disciplines, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;')).
                 '</div>'.
-				'<div class="span3 ace-select">'.
+				'<div class="span2 ace-select">'.
 				$form->label($model, 'module').
                 $form->dropDownList($model, 'module', $modules, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;')).
 				'</div>'.
-				'<div class="span3 ace-select">'.
+				'<div class="span2 ace-select">'.
 				$form->label($model, 'group').
                 $form->dropDownList($model, 'group', $groups, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;')).
                 '</div>'.
-				'<div class="span3 ace-select">'.
+				'<div class="span2 ace-select">'.
 				$form->label($model, 'statement').
                 $form->dropDownList($model, 'statement', $statements, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;')).
 				'</div>'.

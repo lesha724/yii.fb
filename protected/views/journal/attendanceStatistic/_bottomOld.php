@@ -14,14 +14,14 @@ $options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '
 $data = CHtml::listData(Sem::model()->getSemestersForAttendanceStatistic($model->group), 'us3', 'sem7', 'name');
 
 $html  = '<div class="row-fluid" style="margin-bottom:2%">';
-$html .= '<div class="span3 ace-select">';
+$html .= '<div class="span2 ace-select">';
 $html .= CHtml::label(tt('Семестр'), 'FilterForm_semester');
 $html .= CHtml::dropDownList('FilterForm[semester]', $model->semester, $data, $options);
 $html .= '</div>';
 
 if ($model->semester) {
     $data = CHtml::listData(Sem::model()->getMonthsNamesForAttendanceStatistic($model->semester), 'firstDay', 'name');
-    $html .= '<div class="span3 ace-select">';
+    $html .= '<div class="span2 ace-select">';
     $html .= CHtml::label(tt('Месяц'), 'FilterForm_month');
     $html .= CHtml::dropDownList('FilterForm[month]', $model->month, $data, $options);
     $html .= '</div>';

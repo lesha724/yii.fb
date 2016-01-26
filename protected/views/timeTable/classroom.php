@@ -23,7 +23,7 @@ $form=$this->beginWidget('CActiveForm', array(
     $html .= '<fieldset>';
     $filials = CHtml::listData(Ks::model()->findAllByAttributes(array('ks12'=>null,'ks13'=>0)), 'ks1', 'ks2');
     if (count($filials) > 1) {
-        $html .= '<div class="span3 ace-select">';
+        $html .= '<div class="span2 ace-select">';
         $html .= $form->label($model, 'filial');
         $html .= $form->dropDownList($model, 'filial', $filials, $options);
         $html .= '</div>';
@@ -31,7 +31,7 @@ $form=$this->beginWidget('CActiveForm', array(
 
     $housings = CHtml::listData(Ka::model()->getHousingFor($model->filial), 'ka1', 'ka2');
     if (count($housings) > 1) {
-        $html .= '<div class="span3 ace-select">';
+        $html .= '<div class="span2 ace-select">';
         $html .= $form->label($model, 'housing');
         $html .= $form->dropDownList($model, 'housing', $housings, $options);
         $html .= '</div>';
@@ -39,7 +39,7 @@ $form=$this->beginWidget('CActiveForm', array(
 
 
     $classrooms = CHtml::listData(A::model()->getClassRooms($model->filial, $model->housing), 'a1', 'a2');
-    $html .= '<div class="span3 ace-select">';
+    $html .= '<div class="span2 ace-select">';
     $html .= $form->label($model, 'classroom');
     $html .= $form->dropDownList($model, 'classroom', $classrooms, $options);
     $html .= '</div>';

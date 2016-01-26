@@ -11,15 +11,15 @@
 
         $options =  array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;');
         echo '<div>'.
-                '<div class="span3 ace-select">'.
+                '<div class="span2 ace-select">'.
                 $form->label($model, 'discipline').
                 $form->dropDownList($model, 'discipline', $disciplines,$options).
                 '</div>'.
-                '<div class="span3 ace-select">'.
+                '<div class="span2 ace-select">'.
                 $form->label($model, 'group').
                 $form->dropDownList($model, 'group', $groups,$options).
                 '</div>'.
-                /*'<div class="span3 ace-select">'.
+                /*'<div class="span2 ace-select">'.
                 $form->label($model, 'module').
                 $form->dropDownList($model, 'module', $modules, array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;')).
                 '</div>'.*/
