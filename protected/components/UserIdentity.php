@@ -19,21 +19,24 @@ class UserIdentity extends CUserIdentity
 	public function authenticate()
 	{
         $params = array(
-            ':USERNAME' => mb_strtolower($this->username),
+            //':USERNAME' => mb_strtolower($this->username),
+            ':USERNAME' => $this->username,
             ':EMAIL'    => mb_strtolower($this->username),
             #':PASSWORD' => $this->password,
         );
 
         $criteria = new CDbCriteria;
-        $criteria->addCondition('LOWER(U2)=:USERNAME OR LOWER(U4)=:EMAIL');
+        //$criteria->addCondition('LOWER(U2)=:USERNAME OR LOWER(U4)=:EMAIL');
+        $criteria->addCondition('u2=:USERNAME OR LOWER(U4)=:EMAIL');
         $criteria->params = $params;
 
         $user = Users::model()->find($criteria);
 
         if (empty($user))
             $this->errorCode=self::ERROR_USERNAME_INVALID;
-        elseif ($user->u3 !== $this->password)
-            $this->errorCode=self::ERROR_PASSWORD_INVALID;
+        elseif ($user->u3 !== $this->password) {
+            $this->errorCode = self::ERROR_PASSWORD_INVALID;
+        }
         else {
             $this->errorCode=self::ERROR_NONE;
             $this->_id = $user->u1;
