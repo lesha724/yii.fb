@@ -30,6 +30,8 @@ class Controller extends CController
 
     public function init()
     {
+        $ps58 = PortalSettings::model()->findByPk(58)->ps2;
+        Yii::app()->params['defaultLanguage'] = $ps58;
         ELangPick::setLanguage();
         parent::init();
     }
