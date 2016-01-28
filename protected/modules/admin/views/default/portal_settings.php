@@ -6,6 +6,16 @@ tt('Настройки портала'),
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/admin/journal.js');
 Yii::app()->clientScript->registerPackage('datepicker');
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/admin/psettings.js');
+
+$htmlOptions2 = array(
+    'class'=>'ace',
+);
+
+$options = array(
+    'uk'=>tt('Ua'),
+    'ru'=>tt('Ru'),
+    'en'=>tt('en'),
+);
 ?>
 <div class="span4">
     <div class="widget-box">
@@ -30,6 +40,11 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/a
                     'class'=>'ace',
                 );
                 ?>
+
+                <div class="control-group">
+                    <span class="lbl"> <?=tt('Язык по умолчанию')?>:</span>
+                    <?=CHtml::dropDownList('settings[58]', PortalSettings::model()->findByPk(58)->ps2, $options, $htmlOptions2)?>
+                </div>
 
                 <div class="control-group">
                     <span class="lbl"> <?=tt('Название ВУЗа')?>:</span>

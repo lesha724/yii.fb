@@ -223,4 +223,23 @@ SQL;
         return $res;
     }
 
+	public function getModule($uo1,$nom,$gr1)
+	{
+		$sql = <<<SQL
+			SELECT vvmp1,vmpv1,vmpv4,vmpv3,vmpv5 from vvmp
+			INNER JOIN vmpv on (vvmp1=vmpv2)
+			INNER JOIN sem on (vvmp4 = sem7 and sem3=:YEAR and sem5=:SEM)
+			WHERE vvmp2=:UO1 and vmpv7=:GR1 and vvmp2=:NOM
+			/*GROUP BY vvmp1,vmpv1,vmpv4,vmpv3,vmpv5*/
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':GR1', $gr1);
+		$command->bindValue(':UO1', $uo1);
+		$command->bindValue(':NOM', $nom);
+		$command->bindValue(':YEAR', Yii::app()->session['year']);
+		$command->bindValue(':SEM', Yii::app()->session['sem']);
+		$res = $command->queryRow();
+		return $res;
+	}
+
 }

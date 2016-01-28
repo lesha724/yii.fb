@@ -1,12 +1,12 @@
 <?php
-function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps20,$ps55)
+function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps20,$ps55,$ps56)
 {
     if (stripos($date['r2'], '11.11.1111')!==false )
         return '<td colspan="2"></td>';
 
     if (strtotime($date['r2']) > strtotime('now'))
         return '<td colspan="2"></td>';
-    if ($ps20 == 0 && $date['ustem6']>0)
+    if ($ps56 == 1 && $date['ustem6']>0)
         return '<td colspan="2"></td>';
     $r1  = $date['r1'];
     $ps2 = PortalSettings::model()->getSettingFor(27);
@@ -155,8 +155,35 @@ HTML;
 
 }
 
-function generateTh2($ps9,$date,$type_lesson)
+function table2TrModule($date,$gr1,$st,$read_only,$type_lesson,$ps20,$ps55,$ps56,$nom,$uo1)
 {
+    if (stripos($date['r2'], '11.11.1111')!==false )
+        return '<td colspan="4"></td>';
+
+    /*if (strtotime($date['r2']) > strtotime('now'))
+        return '<td colspan="4"></td>';*/
+
+    if ($ps56 == 1 && $date['ustem6']>0)
+        return '<td colspan="4"></td>';
+
+    switch($date['ustem6']){
+        case 2:
+            $module = Vvmp::model()->getModule($uo1,$nom,$gr1);
+            if(empty($module))
+                return '<td colspan="4">'.tt('Модуль не найден!').'</td>';
+            else{
+
+            }
+            break;
+    }
+    return '<td colspan="4"></td>';
+}
+
+function generateTh2($ps9,$date,$type_lesson,$ps57)
+{
+    if($date['ustem6']>1&&$ps57==1) {
+        return '<th></th><th></th><th></th><th></th>';
+    }
     if ($type_lesson == '0')
         return '<th></th><th></th>';
         //return '<th>'.tt('Посещение').'</th><th>'.tt('Отработка').'</th>';
@@ -177,14 +204,23 @@ HTML;
     return sprintf($pattern);
 }
 
-function generateColumnName($date,$type_lesson)
+function generateColumnName($date,$type_lesson,$ps57)
 {
-    $pattern = <<<HTML
+    if($date['ustem6']>1&&$ps57==1) {
+        $pattern = <<<HTML
+	<th colspan="4">
+	    <i class="icon-hand-right icon-animated-hand-pointer blue"></i>
+        <span data-rel="popover" data-placement="top" data-content="%s" class="green">%s</span>
+    </th>
+HTML;
+    }else {
+        $pattern = <<<HTML
 	<th colspan="2">
 	    <i class="icon-hand-right icon-animated-hand-pointer blue"></i>
         <span data-rel="popover" data-placement="top" data-content="%s" class="green">%s</span>
     </th>
 HTML;
+    }
 
     switch($date['ustem6'])
     {
@@ -258,22 +294,27 @@ HTML;
     $count_dates=0;
     //$column = 1;
     foreach($dates as $date) {
-            $th .= generateColumnName($date, $model->type_lesson);
-            $th2 .= generateTh2($ps9, $date, $model->type_lesson);
+            $th .= generateColumnName($date, $model->type_lesson,$ps57);
+            $th2 .= generateTh2($ps9, $date, $model->type_lesson,$ps57);
             array_push($elgz1_arr, $date['elgz1']);
             //$column++;
             $count_dates++;
     }
 
     $permLesson=Elgr::model()->getList($gr1,$elgz1_arr);
-
+    $moduleNom=1;
     foreach($students as $st) {
         $st1 = $st['st1'];
         $marks = $elg->getMarksForStudent($st1);
         $tr .= '<tr data-st1="'.$st1.'">';
         list($total_1[$st1], $total_count_1[$st1]) = countMarkTotal($marks);
         foreach($dates as $key => $date) {
-            $tr .= table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$model->type_lesson,$ps20,$ps55);
+            if($date['ustem6']>1&&$ps57==1)
+            {
+                $tr .= table2TrModule($date,$gr1,$st,$permLesson,$read_only,$ps20,$ps55,$ps56,$moduleNom,$uo1);
+                $moduleNom++;
+            }else
+             $tr .= table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$model->type_lesson,$ps20,$ps55,$ps56);
         }
         $tr .= '</tr>';
     }

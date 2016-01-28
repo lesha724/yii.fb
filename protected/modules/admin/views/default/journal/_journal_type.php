@@ -39,8 +39,20 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
     <div class="control-group">
         <?=CHtml::checkBox('', PortalSettings::model()->findByPk(20)->ps2, $htmlOptions2)?>
-        <span class="lbl"> <?=tt('Использовать субмодули и пмк')?></span>
+        <span class="lbl"> <?=tt('Использовать субмодули')?></span>
         <?=CHtml::hiddenField('settings[20]', PortalSettings::model()->findByPk(20)->ps2)?>
+    </div>
+
+    <div class="control-group">
+        <?=CHtml::checkBox('', PortalSettings::model()->findByPk(56)->ps2, $htmlOptions2)?>
+        <span class="lbl"> <?=tt('Ввод оценок только типа "занятие"')?></span>
+        <?=CHtml::hiddenField('settings[56]', PortalSettings::model()->findByPk(56)->ps2)?>
+    </div>
+
+    <div class="control-group">
+        <?=CHtml::checkBox('', PortalSettings::model()->findByPk(57)->ps2, $htmlOptions2)?>
+        <span class="lbl"> <?=tt('Обьединение с модулями')?></span>
+        <?=CHtml::hiddenField('settings[57]', PortalSettings::model()->findByPk(57)->ps2)?>
     </div>
 
     <div class="control-group">

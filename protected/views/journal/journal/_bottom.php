@@ -55,6 +55,8 @@ if (! empty($model->group)):
 
     $ps9  = PortalSettings::model()->findByPk(9)->ps2;
     $ps20 = PortalSettings::model()->findByPk(20)->ps2;// use sub modules
+    $ps56 = PortalSettings::model()->findByPk(56)->ps2;//
+    $ps57 = PortalSettings::model()->findByPk(57)->ps2;//
     $ps33=PortalSettings::model()->findByPk(33)->ps2;
 
     $students = St::model()->getStudentsForJournal($gr1, $uo1);
@@ -81,6 +83,8 @@ if (! empty($model->group)):
         'ps20'  => $ps20,
         'ps33'  => $ps33,
         'ps55'  => $ps55,
+        'ps56'  => $ps56,
+        'ps57'  => $ps57,
         'ps9'  => $ps9,
         'read_only'=>$read_only,
         'model' => $model,
