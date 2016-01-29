@@ -273,4 +273,20 @@ SQL;
 
         return (bool)$isExtended;
     }
+
+    public function getMarks($vmpv1,$st1)
+    {
+        if(empty($vmpv1)||empty($st1))
+            return array();
+
+        $sql = <<<SQL
+          SELECT * FROM vmp WHERE vmp2=:ST1 AND vmp1=:VMPV1
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':VMPV1', $vmpv1);
+        $command->bindValue(':ST1', $st1);
+        $res = $command->queryRow();
+
+        return $res;
+    }
 }

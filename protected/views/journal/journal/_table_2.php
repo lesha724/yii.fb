@@ -1,4 +1,13 @@
 <?php
+function getMarsForElgz3($nom,$marks){
+    if(isset($marks[$nom])) {
+        $m = $marks[$nom]['elgzst5'] != 0
+            ? $marks[$nom]['elgzst5']
+            : $marks[$nom]['elgzst4'];
+        return  $m;
+    }
+    return 0;
+}
 function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps20,$ps55,$ps56)
 {
     if (stripos($date['r2'], '11.11.1111')!==false )
@@ -6,7 +15,7 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
 
     if (strtotime($date['r2']) > strtotime('now'))
         return '<td colspan="2"></td>';
-    if ($ps56 == 1 && $date['ustem6']>0)
+    if ($ps56 == 1 && $date['elgz4']>0)
         return '<td colspan="2"></td>';
     $r1  = $date['r1'];
     $ps2 = PortalSettings::model()->getSettingFor(27);
@@ -155,7 +164,7 @@ HTML;
 
 }
 
-function table2TrModule($date,$gr1,$st,$read_only,$type_lesson,$ps20,$ps55,$ps56,$nom,$uo1)
+function table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$nom,$uo1,$modules,$potoch)
 {
     if (stripos($date['r2'], '11.11.1111')!==false )
         return '<td colspan="4"></td>';
@@ -163,16 +172,20 @@ function table2TrModule($date,$gr1,$st,$read_only,$type_lesson,$ps20,$ps55,$ps56
     /*if (strtotime($date['r2']) > strtotime('now'))
         return '<td colspan="4"></td>';*/
 
-    if ($ps56 == 1 && $date['ustem6']>0)
+    if ($ps56 == 1 && $date['elgz4']>0)
         return '<td colspan="4"></td>';
 
-    switch($date['ustem6']){
+    switch($date['elgz4']){
         case 2:
-            $module = Vvmp::model()->getModule($uo1,$nom,$gr1);
-            if(empty($module))
+
+            if(!isset($modules[$nom]))
                 return '<td colspan="4">'.tt('Модуль не найден!').'</td>';
             else{
-
+                $mark = Vmp::model()->getMarks($modules[$nom]['vmpv1'],$st['st1']);
+                $ind = !empty($mark)?$mark['vmp6']:'';
+                $itog = !empty($mark)?$mark['vmp4']:'';
+                $pmk = !empty($mark)?$mark['vmp7']:'';
+                return sprintf('<td>%s</td><td>%s</td><td>%s</td><td>%s</td>',$potoch,$ind,$pmk,$itog);
             }
             break;
     }
@@ -181,8 +194,8 @@ function table2TrModule($date,$gr1,$st,$read_only,$type_lesson,$ps20,$ps55,$ps56
 
 function generateTh2($ps9,$date,$type_lesson,$ps57)
 {
-    if($date['ustem6']>1&&$ps57==1) {
-        return '<th></th><th></th><th></th><th></th>';
+    if($date['elgz4']>1&&$ps57==1) {
+        return sprintf('<th>%s</th><th>%s</th><th>%s</th><th>%s</th>',tt('Тек.'),tt('Инд.р.'),tt('ПМК'),tt('Итог.'));
     }
     if ($type_lesson == '0')
         return '<th></th><th></th>';
@@ -206,7 +219,7 @@ HTML;
 
 function generateColumnName($date,$type_lesson,$ps57)
 {
-    if($date['ustem6']>1&&$ps57==1) {
+    if($date['elgz4']>1&&$ps57==1) {
         $pattern = <<<HTML
 	<th colspan="4">
 	    <i class="icon-hand-right icon-animated-hand-pointer blue"></i>
@@ -222,7 +235,7 @@ HTML;
 HTML;
     }
 
-    switch($date['ustem6'])
+    switch($date['elgz4'])
     {
         case '0':
             $type='';
@@ -302,19 +315,24 @@ HTML;
     }
 
     $permLesson=Elgr::model()->getList($gr1,$elgz1_arr);
-    $moduleNom=1;
+
     foreach($students as $st) {
+        $potoch = 0;
+        $moduleNom=1;
         $st1 = $st['st1'];
         $marks = $elg->getMarksForStudent($st1);
         $tr .= '<tr data-st1="'.$st1.'">';
         list($total_1[$st1], $total_count_1[$st1]) = countMarkTotal($marks);
         foreach($dates as $key => $date) {
-            if($date['ustem6']>1&&$ps57==1)
+            if($date['elgz4']>1&&$ps57==1)
             {
-                $tr .= table2TrModule($date,$gr1,$st,$permLesson,$read_only,$ps20,$ps55,$ps56,$moduleNom,$uo1);
+                $tr .= table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$moduleNom,$uo1,$modules,$potoch);
+                $potoch = 0;
                 $moduleNom++;
-            }else
-             $tr .= table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$model->type_lesson,$ps20,$ps55,$ps56);
+            }else {
+                $tr .= table2Tr($date, $gr1, $st, $marks, $permLesson, $read_only, $model->type_lesson, $ps20, $ps55, $ps56);
+                $potoch+=getMarsForElgz3($date['elgz3'],$marks);
+            }
         }
         $tr .= '</tr>';
     }

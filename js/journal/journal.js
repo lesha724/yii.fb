@@ -587,6 +587,7 @@ function recalculateBothTotal(st1)
     });
 
     var bal = 0;
+    var sr ='';
     if(ps44==1)
     {
         bal = (total_1/totalCount).toFixed(2);
@@ -600,8 +601,10 @@ function recalculateBothTotal(st1)
         if (! isNaN(mark))
             total_2 += mark;
     });
-
-    $(table_3 +' td[data-total=1]').text(total_1+'('+bal+')');
+    if(ps44==1) {
+        sr = '(' + bal + ')'
+    }
+    $(table_3 +' td[data-total=1]').text(total_1+sr);
     $(table_3 +' td[data-total=2]').text(total_1 + total_2);
 }
 

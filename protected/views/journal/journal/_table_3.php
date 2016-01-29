@@ -118,7 +118,8 @@ foreach ($students as $st) {
         else
             $bal=0;
     }
-    $tr .= '<td data-total=1 colspan="2">'.$val.'('.$bal.')</td>'; // total 1
+    $sr = ($bal!='')?'('.$bal.')':'';
+    $tr .= '<td data-total=1 colspan="2">'.$val.$sr.'</td>'; // total 1
         foreach($elgd as $key)
         {
             $tr .= table3Tr($key, $marks, $st1,$elg1);

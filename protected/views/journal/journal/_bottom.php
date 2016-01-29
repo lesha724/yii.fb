@@ -70,6 +70,9 @@ if (! empty($model->group)):
     Elgd::checkEmptyElgd($elg1);
     $elgd=Elgd::model()->getDop($elg1);
 
+    $modules = null;
+    if($ps57==1)
+        $modules = Vvmp::model()->getModule($uo1,$gr1);
     $classTable2='journal_div_table2';
     if($model->type_lesson==0 /*|| empty($elgd)*/)
         $classTable2='journal_div_table2 journal_div_table2_1';
@@ -86,6 +89,7 @@ if (! empty($model->group)):
         'ps56'  => $ps56,
         'ps57'  => $ps57,
         'ps9'  => $ps9,
+        'modules'=>$modules,
         'read_only'=>$read_only,
         'model' => $model,
         'classTable2'=>$classTable2
