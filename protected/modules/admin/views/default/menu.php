@@ -66,6 +66,13 @@
                     ),
                 ),
                 array(
+                    'name'       => 'Эл. журнал',
+                    'controller' => 'mobile',
+                    'items' => array(
+                        'journal' => 'Эл. журнал (моб.)',
+                    ),
+                ),
+                array(
                     'name'       => 'Успеваемость',
                     'controller' => 'progress',
                     'items' => array(

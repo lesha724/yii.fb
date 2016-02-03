@@ -353,6 +353,12 @@ $this->widget('zii.widgets.CMenu', array(
                     'active'  => $_c=='journal' && $_a=='journal'
                 ),
                 array(
+                    'label'   => $_l2.tt('Эл. журнал (моб.)'),
+                    'url'     => _u('/mobile/journal'),
+                    'visible' => _ch('mobile', 'journal') && $isTch,
+                    'active'  => $_c=='mobile' && $_a=='journal'
+                ),
+                array(
                     'label'   => $_l2.tt('Отработка'),
                     'url'     => _u('/journal/retake'),
                     'visible' => _ch('journal', 'retake')&& $isTch,
