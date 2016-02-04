@@ -19,7 +19,7 @@ $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 	'action'=> array('timeTable/searchStudent'),
 ));
 ?>
-	<?php echo $form->textField($student,'st2',array('size'=>60,'maxlength'=>255)); ?>
+	<?php echo $form->textField($student,'st2',array('size'=>60,'maxlength'=>255,'class'=>'search-by-name')); ?>
 	
 	<?php $this->widget('bootstrap.widgets.TbButton', array(
 		'buttonType'=>'submit',

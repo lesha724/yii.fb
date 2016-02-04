@@ -18,7 +18,7 @@ $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 	'action'=> array('journal/searchStudent'),
 ));
 ?>
-	<?php echo $form->textField($model,'st2',array('size'=>60,'maxlength'=>255)); ?>
+	<?php echo $form->textField($model,'st2',array('size'=>60,'maxlength'=>255,'class'=>'search-by-name')); ?>
 	
 	<?php $this->widget('bootstrap.widgets.TbButton', array(
 		'buttonType'=>'submit',
