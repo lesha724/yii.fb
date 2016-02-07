@@ -97,7 +97,9 @@
 
         </div><!-- /.main-content -->
     </div>
-
+    <footer>
+        ©2015 ООО НПП "МКР", <a target="_ablank" title="www.mkr.org.ua" href="http://mkr.org.ua/">www.mkr.org.ua</a>
+    </footer>
     <!-- basic scripts -->
 
     <!--[if !IE]> -->
