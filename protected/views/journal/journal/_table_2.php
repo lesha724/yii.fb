@@ -104,8 +104,8 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
         if(!$read_only){
             if($ps55==1&&$elgzst4==''&&$elgzst3=='')
             {
-                if($date1>=$date2) {
-                    $elgzst4 = 0;
+                if($date1>=$date2&&isset($marks[$key]['elgzst4'])) {
+                    $elgzst4 = round($marks[$key]['elgzst4']);
                     $class_1 = '';
                 }
             }
