@@ -426,7 +426,7 @@ SQL;
             inner join gr on (ug2 = gr1)
           WHERE us1=:US1
             GROUP BY sem4,gr3,gr7,gr1,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28
-            ORDER BY gr7
+            ORDER BY gr7,gr3 collate UNICODE
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':US1', $us1);
