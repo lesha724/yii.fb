@@ -18,7 +18,7 @@
 class Ustem extends CActiveRecord
 {
     public $nr18;
-    const USTEM5_LENGHT= 250;
+    const USTEM5_LENGHT= 700;
 	/**
 	 * @return string the associated database table name
 	 */
