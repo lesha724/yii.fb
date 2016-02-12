@@ -48,6 +48,9 @@ if (! empty($model->group)):
             $model->type_lesson
     );
 
+    if(count($dates)==0)
+        throw new CHttpException(404, tt('Не еайдены занятия').'.');
+
     $elg1=Elg::getElg1($uo1,$model->type_lesson);
     $elg = Elg::model()->findByPk($elg1);
     if(empty($elg))
