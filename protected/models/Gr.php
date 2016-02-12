@@ -875,4 +875,23 @@ SQL;
 
         return $data;
     }
+
+    public function getSem7ByGr1($gr1)
+    {
+        $sql = <<<SQL
+            SELECT first 1 sem7
+            from sem
+               inner join sg on (sem.sem2 = sg.sg1)
+               inner join gr on (sg.sg1 = gr.gr2)
+            WHERE gr1=:GR1 and sem3=:YEAR and sem5=:SEM
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':GR1', $gr1);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $course = $command->queryScalar();
+
+        return $course;
+    }
 }

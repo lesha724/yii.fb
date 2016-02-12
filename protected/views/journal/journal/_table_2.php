@@ -8,8 +8,11 @@ function getMarsForElgz3($nom,$marks){
     }
     return 0;
 }
-function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps20,$ps55,$ps56)
+function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps20,$ps55,$ps56,$sem7)
 {
+    if ($st['st71']!=$sem7 )
+        return '<td colspan="2"></td>';
+
     if (stripos($date['r2'], '11.11.1111')!==false )
         return '<td colspan="2"></td>';
 
@@ -164,8 +167,11 @@ HTML;
 
 }
 
-function table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$nom,$uo1,$modules,$potoch)
+function table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$nom,$uo1,$modules,$potoch,$sem7)
 {
+    if ($st['st71']!=$sem7 )
+        return '<td colspan="4"></td>';
+
     if (stripos($date['r2'], '11.11.1111')!==false )
         return '<td colspan="4"></td>';
 
@@ -217,7 +223,7 @@ HTML;
     return sprintf($pattern);
 }
 
-function generateColumnName($date,$type_lesson,$ps57)
+function generateColumnName($date,$type_lesson,$ps57,$ps59)
 {
     if($date['elgz4']>1&&$ps57==1) {
         $pattern = <<<HTML
@@ -254,6 +260,8 @@ HTML;
     if($type_lesson!=0)
     $us4=SH::convertUS4($date['us4']);
     $name = '№'.$date['elgz3'].' '.$date['formatted_date'].' '.$us4.$type;
+    if($ps59==1)
+        $name.= ' '.$date['k2'];
 
     return sprintf($pattern,$date['ustem5'], $name);
 }
@@ -297,7 +305,8 @@ function countMarkTotal($marks)
 </div>
 HTML;
 
-
+    $sem7 = Gr::model()->getSem7ByGr1($gr1);
+    $ps59 = PortalSettings::model()->findByPk(59)->ps2;
 
     $elgz1_arr=array();
     $th = $th2 = $tr = '';
@@ -307,7 +316,7 @@ HTML;
     $count_dates=0;
     //$column = 1;
     foreach($dates as $date) {
-            $th .= generateColumnName($date, $model->type_lesson,$ps57);
+            $th .= generateColumnName($date, $model->type_lesson,$ps57,$ps59);
             $th2 .= generateTh2($ps9, $date, $model->type_lesson,$ps57);
             array_push($elgz1_arr, $date['elgz1']);
             //$column++;
@@ -326,11 +335,11 @@ HTML;
         foreach($dates as $key => $date) {
             if($date['elgz4']>1&&$ps57==1)
             {
-                $tr .= table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$moduleNom,$uo1,$modules,$potoch);
+                $tr .= table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$moduleNom,$uo1,$modules,$potoch,$sem7);
                 $potoch = 0;
                 $moduleNom++;
             }else {
-                $tr .= table2Tr($date, $gr1, $st, $marks, $permLesson, $read_only, $model->type_lesson, $ps20, $ps55, $ps56);
+                $tr .= table2Tr($date, $gr1, $st, $marks, $permLesson, $read_only, $model->type_lesson, $ps20, $ps55, $ps56,$sem7);
                 $potoch+=getMarsForElgz3($date['elgz3'],$marks);
             }
         }

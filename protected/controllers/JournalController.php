@@ -194,6 +194,12 @@ SQL;
                     $error=true;
                     $errorType=5;
                 }
+                $sem7 = Gr::model()->getSem7ByGr1($gr1);
+                if($st->st71!=$sem7)
+                {
+                    $error=true;
+                    $errorType=5;
+                }
 
                 if(!$error)
                 {
@@ -1742,7 +1748,7 @@ SQL;
                         $model->ustem7=$val->ustem7;
                         $model->ustem9=Yii::app()->user->dbModel->p1;
                         $model->ustem8=date('Y-m-d H:i:s');
-                        $model->save();
+                        //$model->save();
                         $k++;
                     }
                     Ustem::model()->noAcceptThematicPlan($us1);
