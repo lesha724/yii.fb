@@ -195,7 +195,8 @@ SQL;
                     $errorType=5;
                 }
                 $sem7 = Gr::model()->getSem7ByGr1($gr1);
-                if($st->st71!=$sem7)
+                $ps60 = PortalSettings::model()->findByPk(60)->ps2;
+                if($st->st71!=$sem7&&$ps60==1)
                 {
                     $error=true;
                     $errorType=5;
