@@ -15,11 +15,11 @@ JS
         $disciplines = CHtml::listData(D::model()->getDisciplinesForTPlanPermition(), 'd1', 'd2');
         $groups = CHtml::listData(Gr::model()->getGroupsForTPlanPermition($model->discipline), 'group', 'name');
         echo '<div>'.
-                '<div class="span2 ace-select">'.
+                '<div class="span6 ace-select w400">'.
                 $form->label($model, 'discipline').
                 $form->dropDownList($model, 'discipline', $disciplines,$options).
                 '</div>'.
-                '<div class="span3 ace-select w400">'.
+                '<div class="span6 ace-select w400">'.
                 CHtml::label(tt('Поток'),'FilterForm_group').
                 $form->dropDownList($model, 'group', $groups,$options).
                 '</div>'.
