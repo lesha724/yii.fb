@@ -212,10 +212,8 @@ class DefaultController extends AdminController
         $settings = Yii::app()->request->getParam('settings', array());
 
         foreach ($settings as $key => $value) {
-
             /*if ($key == 38)
                 $value = intval($value);*/
-
             PortalSettings::model()
                 ->findByPk($key)
                 ->saveAttributes(array(
@@ -223,9 +221,7 @@ class DefaultController extends AdminController
                 ));
         }
 
-
-        $this->render('portal_settings', array(
-        ));
+        $this->render('portal_settings', array());
     }
 	
     public function actionSettings()

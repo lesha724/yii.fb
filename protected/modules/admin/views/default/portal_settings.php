@@ -17,7 +17,7 @@ $options = array(
     'en'=>tt('en'),
 );
 ?>
-<div class="span4">
+<div class="span12">
     <div class="widget-box">
         <div class="widget-header">
             <h4><?=tt('Настройки закрытия портала')?></h4>
@@ -75,6 +75,63 @@ $options = array(
                 <div class="control-group">
                     <span class="lbl"> <?=tt('Начало Весеннего семестра')?>:</span>
                     <?=CHtml::textField('settings[53]', PortalSettings::model()->findByPk(53)->ps2,array('class' => 'sem-start datepicker'))?>
+                </div>
+
+                <div class="control-group">
+                    <span class="lbl"> <?=tt('Текст на главной(Ua)')?>:</span>
+                    <?php $this->widget('application.extensions.elFinderTinyMce.TinyMce',
+                        array(
+                            'name'=>'settings[61]',
+                            'value'=>PortalSettings::model()->findByPk(61)->ps2,
+                            'htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'tinymce'),
+                            'fileManager' => array(
+                                'class' => 'ext.elFinder.TinyMceElFinder',
+                                'connectorRoute'=>'/site/connector',
+                            ),
+                            /*'settings'=>array(
+                                'theme' => "advanced",
+                                'skin' => 'default',
+                                'language' => Yii::app()->language,
+                            ),*/
+                        )); ?>
+                </div>
+
+                <div class="control-group">
+                    <span class="lbl"> <?=tt('Текст на главной(Ru)')?>:</span>
+                    <?php $this->widget('application.extensions.elFinderTinyMce.TinyMce',
+                        array(
+                            'name'=>'settings[62]',
+                            'value'=>PortalSettings::model()->findByPk(62)->ps2,
+                            'htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'tinymce'),
+                            'fileManager' => array(
+                                'class' => 'ext.elFinder.TinyMceElFinder',
+                                'connectorRoute'=>'/site/connector',
+                            ),
+                            /*'settings'=>array(
+                                'theme' => "advanced",
+                                'skin' => 'default',
+                                'language' => Yii::app()->language,
+                            ),*/
+                        )); ?>
+                </div>
+
+                <div class="control-group">
+                    <span class="lbl"> <?=tt('Текст на главной(En)')?>:</span>
+                    <?php $this->widget('application.extensions.elFinderTinyMce.TinyMce',
+                        array(
+                            'name'=>'settings[63]',
+                            'value'=>PortalSettings::model()->findByPk(63)->ps2,
+                            'htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'tinymce'),
+                            'fileManager' => array(
+                                'class' => 'ext.elFinder.TinyMceElFinder',
+                                'connectorRoute'=>'/site/connector',
+                            ),
+                            /*'settings'=>array(
+                                'theme' => "advanced",
+                                'skin' => 'default',
+                                'language' => Yii::app()->language,
+                            ),*/
+                        )); ?>
                 </div>
 
                 <div class="form-actions">
