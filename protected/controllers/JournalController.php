@@ -1749,7 +1749,7 @@ SQL;
                         $model->ustem7=$val->ustem7;
                         $model->ustem9=Yii::app()->user->dbModel->p1;
                         $model->ustem8=date('Y-m-d H:i:s');
-                        //$model->save();
+                        $model->save();
                         $k++;
                     }
                     Ustem::model()->noAcceptThematicPlan($us1);
