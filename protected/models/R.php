@@ -142,12 +142,16 @@ order by elgz3*/
         $command->bindValue(':SEM1', $sem1);
         $dates = $command->queryAll();
 
+		$ps59 = PortalSettings::model()->findByPk(59)->ps2;
+
         foreach($dates as $key => $date) {
             $dates[$key]['formatted_date'] = ShortCodes::formatDate('Y-m-d H:i:s', 'd.m.Y', $date['r2']);
 			$us4=SH::convertUS4(1);
 			if($type_lesson!=0)
 				$us4=SH::convertUS4($dates[$key]['us4']);
 			$dates[$key]['text'] = '№'.$dates[$key]['elgz3'].' '.$dates[$key]['formatted_date'].' '.$us4;
+			if($ps59==1)
+				$dates[$key]['text'].= ' '.$dates[$key]['k2'];
         }
 
         return $dates;

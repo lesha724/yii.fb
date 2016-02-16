@@ -4,6 +4,9 @@
  * @var TimeTableForm || FilterForm $model
  * @var CActiveForm $form
  */
+
+?>
+<?php
 $options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;');
 $form=$this->beginWidget('CActiveForm', array(
     'id'=>'filter-form',

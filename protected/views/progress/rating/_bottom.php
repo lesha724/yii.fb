@@ -1,5 +1,5 @@
 <?php
-$options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;', 'style' => 'width:200px');
+$options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;');
 $inost=array(
 	0=>tt('Все'),
 	1=>tt('Не иностранцы'),
@@ -8,13 +8,13 @@ $inost=array(
 $data = CHtml::listData(Sem::model()->getSemestersForRating($model->group, $type), 'sem7', 'sem7', 'name');
 
 $html  = '<div class="row-fluid" style="margin-bottom:2%">';
-$html .= '<div class="span2 ace-select">';
+$html .= '<div class="span3 ace-select">';
 $html .= CHtml::label(tt('Семестр'), 'FilterForm_semester');
 $html .= CHtml::dropDownList('FilterForm[semester]', $model->semester,array('-1'=>tt('За весь период'))+$data, $options);
 $html .= '</div>';
-$html .= '<div class="span2 ace-select">';
+$html .= '<div class="span3 ace-select">';
 $html .= CHtml::label(tt('Студенты'), 'FilterForm_st_rating');
-$html .= CHtml::dropDownList('FilterForm[st_rating]', $model->st_rating,$inost,array('class'=>'chosen-select', 'autocomplete' => 'off', 'style' => 'width:200px'));
+$html .= CHtml::dropDownList('FilterForm[st_rating]', $model->st_rating,$inost,array('class'=>'chosen-select', 'autocomplete' => 'off'));
 $html .= '</div>';
 $html .= '<div class="span3">';
 $html .=CHtml::activeCheckBox($model, 'type_rating',array('style'=>'float:left')).CHtml::label($model->getAttributeLabel('type_rating'),'FilterForm_type_rating',array('style'=>'float:left'));
