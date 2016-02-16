@@ -9,12 +9,17 @@
 /**
  * @var FilterForm $model
  */
-
+    $previousYear3 = date('Y', strtotime('-4 year'));
+    $previousYear2 = date('Y', strtotime('-3 year'));
+    $previousYear1 = date('Y', strtotime('-2 year'));
     $previousYear = date('Y', strtotime('-1 year'));
     $currentYear  = date('Y');
     $nextYear     = date('Y', strtotime('+1 year'));
 
     $data = array(
+        $previousYear3 => $previousYear3.'/'.$previousYear2,
+        $previousYear2 => $previousYear2.'/'.$previousYear1,
+        $previousYear1 => $previousYear1.'/'.$previousYear,
         $previousYear => $previousYear.'/'.$currentYear,
         $currentYear  => $currentYear.'/'.$nextYear,
     );
@@ -134,9 +139,10 @@
                     $td3 = SH::convertUS4($discipline['us4']);
                     $td4 = array_sum($discipline['hours']);
                     $td5 = implode(', ', $discipline['groups']);
-					$nr1=$discipline['nr1'];
 
-                    if (! empty($td5)) {
+
+                    if (! empty($td5)&&isset($discipline['nr1'])) {
+                        $nr1=$discipline['nr1'];
                         $tip  = tt('Нажмите для просмотра списка студентов');
                         $tip2  = tt('Распечатать в Excel');
                         $ids  = serialize($discipline['ids']);

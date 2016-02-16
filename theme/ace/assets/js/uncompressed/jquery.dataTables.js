@@ -2768,6 +2768,7 @@
 				nLength.id = oSettings.sTableId+'_length';
 			}
 			nLength.className = oSettings.oClasses.sLength;
+			alert
 			nLength.innerHTML = '<label>'+oSettings.oLanguage.sLengthMenu.replace( '_MENU_', sStdMenu )+'</label>';
 			
 			/*
@@ -2813,7 +2814,7 @@
 		
 		
 			$('select', nLength).attr('aria-controls', oSettings.sTableId);
-			
+
 			return nLength;
 		}
 		
