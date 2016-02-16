@@ -122,6 +122,13 @@ function initDataTable(id)
     });
 }
 
+function initDataTableOprions(id, arr)
+{
+    //$('#'+id).addClass( 'nowrap' ).dataTable({
+    $('#'+id).dataTable(arr);
+}
+
+
 function initAutoSize()
 {
     $('textarea[class*=autosize]').autosize({append: "\n"});

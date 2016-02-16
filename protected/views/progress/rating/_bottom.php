@@ -46,11 +46,11 @@ if (!empty($model->semester))
 	$rating = Gr::model()->getRating($sg1, $group,$sem,$model->st_rating);
 	if(!empty($rating))
 	{
-		Yii::app()->clientScript->registerScript('list-group', "
+		/*Yii::app()->clientScript->registerScript('list-group', "
 			initDataTable('rating');
-		");
+		");*/
 		?>
-	<table id="rating" class="table table-striped table-hover">
+	<table id="rating" class="table table-striped table-hover table-condensed">
 	<thead>
 		<tr>
 			<th style="width:40px">№</th>
