@@ -728,7 +728,7 @@ table.subscription caption {
     font-size: 16px;
 }
 
-#filter-form .ace-select,#timeTable-form .ace-select{
+#filter-form .ace-select,#timeTable-form .ace-select,.row-fluid .ace-select{
 	min-width:220px;
 	margin-left:0px;
 }

@@ -8,7 +8,7 @@ function getMarsForElgz3($nom,$marks){
     }
     return 0;
 }
-function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps20,$ps55,$ps56,$sem7,$ps60)
+function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps20,$ps55,$ps56,$sem7,$ps60,$min)
 {
     if ($st['st71']!=$sem7 &&$ps60==1)
         return '<td colspan="2"></td>';
@@ -77,7 +77,7 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
     {
         $tooltip=tt('Отсутсвует');
         $disabled_input = 'disabled="disabled"';
-        $disabled_input_1 = 'disabled="disabled"';
+        //$disabled_input_1 = 'disabled="disabled"';
     }else
     {
         $tooltip=tt('Присутсвует');
@@ -111,6 +111,13 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
                     $elgzst4 = round($marks[$key]['elgzst4']);
                     $class_1 = '';
                 }
+            }
+            if($disabled_input_1 != 'disabled="disabled"') {
+                if (($elgzst3 == 'checked')||($elgzst4>0&&$elgzst4<=$min)) {
+                    $disabled_input_1 = '';
+                }
+                else
+                    $disabled_input_1 = 'disabled="disabled"';
             }
             $elgzst4_input='<input value="'.$elgzst4.'" '.$class_1.' maxlength="3" data-name="elgzst4" '.$disabled_input.'>';
             $elgzst5_input='<input value="'.$elgzst5.'" '.$class_2.' maxlength="3" data-name="elgzst5" '.$disabled_input_1.'>';
@@ -308,7 +315,7 @@ HTML;
     $sem7 = Gr::model()->getSem7ByGr1($gr1);
     $ps59 = PortalSettings::model()->findByPk(59)->ps2;
     $ps60 = PortalSettings::model()->findByPk(60)->ps2;
-
+    $min = Elgzst::model()->getMin();
     $elgz1_arr=array();
     $th = $th2 = $tr = '';
 
@@ -340,7 +347,7 @@ HTML;
                 $potoch = 0;
                 $moduleNom++;
             }else {
-                $tr .= table2Tr($date, $gr1, $st, $marks, $permLesson, $read_only, $model->type_lesson, $ps20, $ps55, $ps56,$sem7,$ps60);
+                $tr .= table2Tr($date, $gr1, $st, $marks, $permLesson, $read_only, $model->type_lesson, $ps20, $ps55, $ps56,$sem7,$ps60,$min);
                 $potoch+=getMarsForElgz3($date['elgz3'],$marks);
             }
         }

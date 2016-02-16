@@ -49,7 +49,7 @@ if (! empty($model->group)):
     );
 
     if(count($dates)==0)
-        throw new CHttpException(404, tt('Не еайдены занятия').'.');
+        throw new CHttpException(404, tt('Не найдены занятия.'));
 
     $elg1=Elg::getElg1($uo1,$model->type_lesson);
     $elg = Elg::model()->findByPk($elg1);

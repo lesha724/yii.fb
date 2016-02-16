@@ -502,10 +502,12 @@ function send(url,params,title,$td,$that,$spinner1,st1)
                 var elem = $td.find('[data-name="elgzst5"]');
                 if ($that.is(':checked')) {
                     $td.find('[data-name="elgzst4"]').attr('disabled', 'disabled');
+                    //elem.removeAttr('disabled');
                 }
                 else
                 {
                     $td.find('[data-name="elgzst4"]').removeAttr('disabled');
+                    //elem.attr('disabled', 'disabled');
                     if(!elem.is(':checkbox'))
                         elem.val('');
                     else
@@ -546,20 +548,31 @@ function send(url,params,title,$td,$that,$spinner1,st1)
                 }
             }
 
-            if($td.find('[data-name="elgzst5"]')){
+            var elem = $td.find('[data-name="elgzst5"]');
+            if(elem){
                 if($td.find('[data-name="elgzst3"]').is(':checked')||parseFloat($td.find('[data-name="elgzst4"]').val().replace(',','.'))<=minBal) {
-                    if (parseFloat($td.find('[data-name="elgzst5"]').val().replace(',', '.')) > minBal)
+                    if (parseFloat(elem.val().replace(',', '.')) > minBal) {
                         $td.find('.btn-retake').hide();
-                    else
+                        elem.attr('disabled', 'disabled');
+                    }
+                    else {
                         $td.find('.btn-retake').show();
+                        elem.removeAttr('disabled');
+                    }
                 }
-                else
+                else {
                     $td.find('.btn-retake').hide();
+                    elem.attr('disabled', 'disabled');
+                }
             }else{
-                if($td.find('[data-name="elgzst3"]').is(':checked'))
+                if($td.find('[data-name="elgzst3"]').is(':checked')) {
                     $td.find('.btn-retake').show();
-                else
+                    elem.removeAttr('disabled');
+                }
+                else {
                     $td.find('.btn-retake').hide();
+                    elem.attr('disabled', 'disabled');
+                }
             }
 
 
