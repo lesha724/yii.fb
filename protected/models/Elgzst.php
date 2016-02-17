@@ -405,8 +405,12 @@ SQL;
         $bal = PortalSettings::model()->findByPk(37)->ps2;
         if($bal>0)
             return $bal;
-        else
-            return 2;
+        else {
+            if(PortalSettings::model()->findByPk(55)->ps2==1&&$bal==0){
+                return 0;
+            }else
+                return 2;
+        }
     }
 
     public function checkMinRetakeForGrid()

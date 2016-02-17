@@ -528,13 +528,13 @@ function send(url,params,title,$td,$that,$spinner1,st1)
 
             if ($that.is(':text'))
             {
-                if(parseFloat( $that.val().replace(',','.') )>0)
+                if($that.val()!=""&&parseFloat( $that.val().replace(',','.') )>=0)
                     $that.removeClass('not-value');
                 else
                     $that.addClass('not-value');
 
                 if($that.data('name')=='elgzst4')
-                    if(parseFloat( $that.val().replace(',','.') )>0)
+                    if($that.val()!=""&&parseFloat( $that.val().replace(',','.') )>=0)
                         $td.find(':checkbox').attr('disabled','disabled');
                     else
                         $td.find(':checkbox').removeAttr('disabled');
