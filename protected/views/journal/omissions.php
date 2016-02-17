@@ -22,7 +22,9 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/j
         tt.success     = "{$success}"
 JS
     , CClientScript::POS_READY);
-        
+
+$this->renderPartial('/filter_form/default/year_sem');
+
 $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id'=>'search-form',
     'htmlOptions' => array('class' => 'form-inline noprint'),
