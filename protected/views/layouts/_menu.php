@@ -177,6 +177,11 @@ $this->widget('zii.widgets.CMenu', array(
                     'active' => $_c=='default' && $_m=='studentCard'
                 ),
                 array(
+                    'label'  => $_l2.tt('Расписание'),
+                    'url'    => _u('/admin/default/timeTable'),
+                    'active' => $_a=='timeTable' && $_m=='admin'
+                ),
+                array(
                     'label'  => $_l2.tt('Эл. журнал'),
                     'url'    => _u('/admin/default/journal'),
                     'active' => $_a=='journal' && $_m=='admin'
