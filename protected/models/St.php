@@ -1094,5 +1094,20 @@ SQL;
 
 		return $disciplines;
 	}
+	public function enableSubcription($st1){
+		$sql = <<<SQL
+		select count(sg1)
+			from gr
+			   inner join std on (gr.gr1 = std.std3)
+			   inner join st on (std.std2 = st.st1)
+			   inner join sg on (gr2 = sg1)
+			where st1=:ST1 and std7 is null and std11 in (0,5,6,8) and sg38<=current_timestamp and sg39>=current_timestamp
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':ST1', $st1);
+		$count = $command->queryScalar();
+
+		return $count>0;
+	}
 
 }

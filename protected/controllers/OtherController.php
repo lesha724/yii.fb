@@ -555,8 +555,10 @@ SQL;
 
     public function actionCancelSubscription()
     {
-        U::model()->cancelSubscription();
-        unset($_SESSION['u1_vib'], $_SESSION['u1_vib_disc'], $_SESSION['func'], $_SESSION['min_block']);
+        if(St::model()->enableSubcription(Yii::app()->user->dbModel->st1)) {
+            U::model()->cancelSubscription();
+            unset($_SESSION['u1_vib'], $_SESSION['u1_vib_disc'], $_SESSION['func'], $_SESSION['min_block']);
+        }
 
         Yii::app()->end(CJSON::encode(array('res' => true)));
     }

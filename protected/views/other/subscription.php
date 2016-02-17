@@ -255,7 +255,9 @@ HTML;
 
 echo $html;
 
-echo CHtml::button(tt('Отмена'), array('id' => 'cancelSubscription', 'class' => 'btn btn-small btn-danger'));
+
+if(St::model()->enableSubcription($model->st1))
+    echo CHtml::button(tt('Отмена'), array('id' => 'cancelSubscription', 'class' => 'btn btn-small btn-danger'));
 
 $disciplines = U::model()->getSubscribedDisciplines();
 if (! empty($disciplines)) : ?>
