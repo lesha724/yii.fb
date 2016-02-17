@@ -624,4 +624,19 @@ SQL;
         else
             return '-';
     }
+
+    public function nbSt45($st,$elgz1){
+        if($st['st45']==1){
+            $elgzst = new Elgzst();
+            $elgzst->elgzst0 = new CDbExpression('GEN_ID(GEN_ELGZST, 1)');
+            $elgzst->elgzst1 = $st['st1'];
+            $elgzst->elgzst2 = $elgz1;
+            $elgzst->elgzst7 = Yii::app()->user->dbModel->p1;
+            $elgzst->elgzst6 = date('Y-m-d H:i:s');
+            $elgzst->elgzst3 = 1;
+            $elgzst->elgzst4 = 0;
+            $elgzst->elgzst5 = 0;
+            $elgzst->save();
+        }
+    }
 }

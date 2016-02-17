@@ -68,18 +68,18 @@ class JournalController extends Controller
             $model->attributes=$_REQUEST['FilterForm'];
 
         $read_only=false;
-        if(!empty($model->group))
+        /*if(!empty($model->group))
         {
             list($uo1,$gr1) = explode("/", $model->group);
 
-            /*$sql = <<<SQL
+            $sql = <<<SQL
                      SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,2,:US1,0,0,:TYPE_LESSON);
 SQL;
             $command = Yii::app()->db->createCommand($sql);
 
             $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
             $command->bindValue(':UO1', $uo1);
-            $command->bindValue(':US1', $us1);
+            $command->bindValue(':US1', 0);
             $command->bindValue(':GR1', $gr1);
             $command->bindValue(':TYPE_LESSON', $model->type_lesson);
             $command->bindValue(':YEAR', Yii::app()->session['year']);
@@ -88,8 +88,8 @@ SQL;
             if(empty($res)||$res['dostup']==0)
             {
                 $read_only=true;
-            }*/
-        }
+            }
+        }*/
 
         $this->render('journal', array(
             'model' => $model,
@@ -128,8 +128,8 @@ SQL;
             $res = $command->queryRow();
             if(count($res)==0 || empty($res)||$res['dostup']==0)
             {
-                //$error=true;
-                //$errorType=3;
+                $error=true;
+                $errorType=3;
             }
 
             $whiteList = array(

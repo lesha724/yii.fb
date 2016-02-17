@@ -8,7 +8,7 @@ function getMarsForElgz3($nom,$marks){
     }
     return 0;
 }
-function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps20,$ps55,$ps56,$sem7,$ps60,$min)
+function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps20,$ps55,$ps56,$sem7,$ps60,$min,$ps65)
 {
     if ($st['st71']!=$sem7 &&$ps60==1)
         return '<td colspan="2"></td>';
@@ -20,6 +20,8 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
         return '<td colspan="2"></td>';
     if ($ps56 == 1 && $date['elgz4']>0)
         return '<td colspan="2"></td>';
+
+
     $r1  = $date['r1'];
     $ps2 = PortalSettings::model()->getSettingFor(27);
     $nom=$date['elgz3'];
@@ -45,8 +47,11 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
         }
     }
 
-    if($st['st45']==1)
+    if($st['st45']==1) {
         $disabled = 'disabled="disabled"';
+        if($ps65==1&&$date2<=$date1&&!isset($marks[$nom]))
+            Elgzst::model()->nbSt45($st,$elgz1);
+    }
 
     $key = $nom; // 0 - r3
 
@@ -315,6 +320,8 @@ HTML;
     $sem7 = Gr::model()->getSem7ByGr1($gr1);
     $ps59 = PortalSettings::model()->findByPk(59)->ps2;
     $ps60 = PortalSettings::model()->findByPk(60)->ps2;
+    $ps65 = PortalSettings::model()->findByPk(65)->ps2;
+
     $min = Elgzst::model()->getMin();
     $elgz1_arr=array();
     $th = $th2 = $tr = '';
@@ -347,7 +354,7 @@ HTML;
                 $potoch = 0;
                 $moduleNom++;
             }else {
-                $tr .= table2Tr($date, $gr1, $st, $marks, $permLesson, $read_only, $model->type_lesson, $ps20, $ps55, $ps56,$sem7,$ps60,$min);
+                $tr .= table2Tr($date, $gr1, $st, $marks, $permLesson, $read_only, $model->type_lesson, $ps20, $ps55, $ps56,$sem7,$ps60,$min,$ps65);
                 $potoch+=getMarsForElgz3($date['elgz3'],$marks);
             }
         }
