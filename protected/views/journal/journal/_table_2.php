@@ -322,7 +322,7 @@ function countMarkTotal($marks)
 </div>
 HTML;
 
-    $sem7 = Gr::model()->getSem7ByGr1($gr1);
+    $sem7 = Gr::model()->getSem7ByGr1ByDate($gr1,date('d.m.Y'));
     $ps59 = PortalSettings::model()->findByPk(59)->ps2;
     $ps60 = PortalSettings::model()->findByPk(60)->ps2;
     $ps65 = PortalSettings::model()->findByPk(65)->ps2;
