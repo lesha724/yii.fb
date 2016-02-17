@@ -23,6 +23,7 @@ class AdminController extends Controller
                     'parents',
                     'stGrants',
                     'pGrants',
+                    'timeTable',
                     'prntGrants',
                     'journal',
                     'modules',

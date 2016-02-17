@@ -48,26 +48,31 @@ $form=$this->beginWidget('CActiveForm', array(
     'htmlOptions' => array('class' => 'form-inline noprint')
 ));
 
+$ps64 = PortalSettings::model()->findByPk(64)->ps2;
+
 $html = '<div>';
     $html .= '<fieldset>';
     $filials = CHtml::listData(Ks::model()->findAllByAttributes(array('ks12'=>null,'ks13'=>0)), 'ks1', 'ks2');
     if (count($filials) > 1) {
         $html .= '<div class="span2 ace-select">';
-        $html .= $form->label($model, 'filial');
-        $html .= $form->dropDownList($model, 'filial', $filials, $attr);
+		if($ps64!=1)
+        	$html .= $form->label($model, 'filial');
+        $html .= ($ps64==1)?$form->hiddenField($model,'filial'):$form->dropDownList($model, 'filial', $filials, $attr);
         $html .= '</div>';
     }
 
     $chairs = CHtml::listData(K::model()->getOnlyChairsFor($model->filial), 'k1', 'k3');
     $html .= '<div class="span2 ace-select">';
-    $html .= $form->label($model, 'chair');
-    $html .= $form->dropDownList($model, 'chair', $chairs, $attr);
+	if($ps64!=1)
+		$html .= $form->label($model, 'chair');
+    $html .= ($ps64==1)?$form->hiddenField($model,'chair'):$form->dropDownList($model, 'chair', $chairs, $attr);
     $html .= '</div>';
 
     $teachers = P::model()->getTeachersForTimeTable($model->chair);
     $html .= '<div class="span2 ace-select">';
-    $html .= $form->label($model, 'teacher');
-    $html .= $form->dropDownList($model, 'teacher', $teachers, $attr);
+	if($ps64!=1)
+    	$html .= $form->label($model, 'teacher');
+    $html .= ($ps64==1)?$form->hiddenField($model,'teacher'):$form->dropDownList($model, 'teacher', $teachers, $attr);
     $html .= '</div>';
 
     $html .= $form->hiddenField($model, 'date1');

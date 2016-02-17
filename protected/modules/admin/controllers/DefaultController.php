@@ -379,6 +379,24 @@ class DefaultController extends AdminController
         ));
     }
 
+    public function actionTimeTable()
+    {
+        $settings = Yii::app()->request->getParam('settings', array());
+
+        foreach ($settings as $key => $value) {
+
+            PortalSettings::model()
+                ->findByPk($key)
+                ->saveAttributes(array(
+                    'ps2' => $value
+                ));
+        }
+
+
+        $this->render('timeTable', array(
+        ));
+    }
+
     public function actionList()
     {
         $settings = Yii::app()->request->getParam('settings', array());
