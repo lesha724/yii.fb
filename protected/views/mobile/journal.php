@@ -8,6 +8,7 @@ $this->breadcrumbs=array(
     tt('Журнал'),
 );
     Yii::app()->clientScript->registerPackage('gritter');
+    Yii::app()->clientScript->registerPackage('jquery.ui');
 
     Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/mobile/script/journal/journal.js', CClientScript::POS_HEAD);
 
@@ -42,3 +43,16 @@ $this->renderPartial('/filter_form/default/mobile/_accordion_select', array(
 ));
 
 $this->renderPartial('journal/_bottom', array('model' => $model,'read_only' => $read_only,'ps44'=>$ps44,'ps55'=>$ps55));
+?>
+<div id="dialog-confirm" class="hide" title="Empty the recycle bin?">
+    <div class="alert alert-info bigger-110">
+        <?=tt('По данному пропуску есть отработки. Все отработки будут удалены!')?>
+</div>
+
+<div class="space-6"></div>
+
+<p class="bigger-110 bolder center grey">
+    <i class="icon-hand-right blue bigger-120"></i>
+    <?=tt('Вы уверены?')?>
+</p>
+</div><!-- #dialog-confirm -->

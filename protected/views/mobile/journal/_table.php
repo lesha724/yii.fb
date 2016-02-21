@@ -13,8 +13,11 @@ function getCellStName($st)
 HTML;
     return sprintf($cell,$st['st2'].' '.$st['st3'].' '.$st['st4'],ShortCodes::getShortName($st['st2'], $st['st3'], $st['st4']));
 }
-function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps20,$ps55,$ps56)
+function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps20,$ps55,$ps56,$sem7,$ps60,$min,$ps65,$show)
 {
+    if ($st['st71']!=$sem7 &&$ps60==1)
+        return '<td colspan="4"></td>';
+
     if (stripos($date['r2'], '11.11.1111')!==false )
         return '<td colspan="4"></td>';
 
@@ -49,10 +52,12 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
         }
     }
 
-    if($st['st45']==1)
+    if($st['st45']==1) {
         $disabled = 'disabled="disabled"';
-    if($read_only)
-        $disabled = 'disabled="disabled"';
+        if($ps65==1&&$date2<=$date1&&!isset($marks[$nom]))
+            Elgzst::model()->nbSt45($st,$elgz1);
+    }
+
     $key = $nom; // 0 - r3
 
     $elgzst3 = isset($marks[$key]) && $marks[$key]['elgzst3'] != 0
@@ -69,15 +74,21 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
 
     $disabled_input=$disabled;
     $disabled_input_1=$disabled;
-
     if($elgzst3=='checked')
     {
         $disabled_input = 'disabled="disabled"';
-        $disabled_input_1 = 'disabled="disabled"';
     }else
     {
         if(!empty($elgzst4)&&$elgzst4!=''&&$elgzst4!=0)
             $disabled = 'disabled="disabled"';
+
+        if($ps55==1&&$elgzst4==''&&$elgzst3==''&&$type_lesson==1)
+        {
+            if($date1>=$date2&&isset($marks[$key]['elgzst4'])) {
+                $elgzst4 = round($marks[$key]['elgzst4']);
+                $disabled = 'disabled="disabled"';
+            }
+        }
     }
 
     $ps29 = PortalSettings::model()->findByPk(29)->ps2;
@@ -87,15 +98,17 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
     if($elgzst5!='')
         $disabled_input = 'disabled="disabled"';
 
-    $elgzst3_input='<input type="checkbox" id="checkbox-'.$elgz1.'-'.$st['st1'].'-0" class="checkbox-custom" name="elgzst3" '.$elgzst3.' '.$disabled.'>
+    $elgzst3_input='<input type="checkbox" id="checkbox-'.$elgz1.'-'.$st['st1'].'-0" class="checkbox-custom" data-name="elgzst3" '.$elgzst3.' '.$disabled.'>
                     <label for="checkbox-'.$elgz1.'-'.$st['st1'].'-0" class="checkbox-custom-label"> </label>';
     $class_td_elgzst5 ='input-td';
     if($type_lesson==1)
     {
-            if($ps55==1&&$elgzst4==''&&$elgzst3=='')
-            {
-                if($date1>=$date2&&isset($marks[$key]['elgzst4']))
-                    $elgzst4 = round($marks[$key]['elgzst4']);
+            if($disabled_input_1 != 'disabled="disabled"') {
+                if (($elgzst3 == 'checked')||($elgzst4>0&&$elgzst4<=$min)) {
+                    $disabled_input_1 = '';
+                }
+                else
+                    $disabled_input_1 = 'disabled="disabled"';
             }
             $elgzst4_input='<input value="'.$elgzst4.'" maxlength="3" type="number" data-name="elgzst4" '.$disabled_input.'>';
             $elgzst5_input='<input value="'.$elgzst5.'" maxlength="3" type="number" data-name="elgzst5" '.$disabled_input_1.'>';
@@ -124,19 +137,20 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
                 $elgzst5_input='<label class="label label-warning">'.$elgzst5.'</label>';
             }
     }
-
-    /*$button=CHtml::htmlButton('<i class="icon-tag"></i>',array('class'=>'btn btn-mini btn-info btn-retake','style'=>'display:none'));
-    $min =Elgzst::model()->getMin();
-    if(!$read_only&&($elgzst3=='checked'||$elgzst4<=$min&&$elgzst4!=0))
-    {
-        if($elgzst5<=$min&&$elgzst5!=-1)
-            $button=CHtml::htmlButton('<i class="icon-tag"></i>',array('class'=>'btn btn-mini btn-info btn-retake','style'=>'display:inline'));
-    }
-    $show=Yii::app()->user->getState('showRetake',0);
-    if($show==0)*/
+    if($show==0)
         $button='';
+    else {
+        $button = CHtml::htmlButton('<i class="glyphicon glyphicon-tag"></i>', array('class' => 'btn btn-mini btn-info btn-retake', 'style' => 'display:none'));
+        $min = Elgzst::model()->getMin();
+        if (!$read_only && ($elgzst3 == 'checked' || $elgzst4 <= $min && $elgzst4 != 0)) {
+            if ($elgzst5 <= $min && $elgzst5 != -1)
+                $button = CHtml::htmlButton('<i class="glyphicon glyphicon-tag"></i>', array('class' => 'btn btn-mini btn-info btn-retake', 'style' => 'display:inline'));
+        }
+    }
+    //show=Yii::app()->user->getState('showRetake',0);
+
     $cell = <<<HTML
-    <td class="%s" data-number="{$nom}" data-priz="{$type}"  data-elgz1="{$elgz1}" data-type-lesson="{$type_lesson}" data-r1="{$r1}" data-date="{$date_lesson}" data-gr1="{$gr1}">
+    <td class="%s" data-number="{$nom}" data-priz="{$type}"  data-elgz1="{$elgz1}" data-type-lesson="{$type_lesson}" data-r1="{$r1}" data-date="{$date_lesson}">
         %s
     </td>
 HTML;
@@ -254,9 +268,13 @@ $table = <<<HTML
     </table>
 HTML;
 
+$sem7 = Gr::model()->getSem7ByGr1ByDate($gr1,date('d.m.Y'));
 $ps59 = PortalSettings::model()->findByPk(59)->ps2;
 $ps60 = PortalSettings::model()->findByPk(60)->ps2;
+$ps65 = PortalSettings::model()->findByPk(65)->ps2;
+$ps66 = PortalSettings::model()->findByPk(66)->ps2;
 
+$min = Elgzst::model()->getMin();
 $elgz1_arr=array();
 $th = $th2 = $tr = '';
 $th = '<th></th>';
@@ -275,7 +293,7 @@ foreach($students as $st) {
     $moduleNom=1;
     $st1 = $st['st1'];
     $marks = $elg->getMarksForStudent($st1);
-    $tr .= '<tr data-st1="'.$st1.'">';
+    $tr .= '<tr data-st1="'.$st1.'" data-gr1="'.$gr1.'">';
     $tr .= getCellStName($st);
     foreach($dates as $key => $date) {
         if($date['elgz4']>1&&$ps57==1)
@@ -284,7 +302,7 @@ foreach($students as $st) {
             $potoch = 0;
             $moduleNom++;*/
         }else {
-            $tr .= table2Tr($date, $gr1, $st, $marks, $permLesson, $read_only, $model->type_lesson, $ps20, $ps55, $ps56);
+            $tr .= table2Tr($date, $gr1, $st, $marks, $permLesson, $read_only, $model->type_lesson, $ps20, $ps55, $ps56,$sem7,$ps60,$min,$ps65,$ps66);
             $potoch+=getMarsForElgz3($date['elgz3'],$marks);
         }
     }

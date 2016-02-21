@@ -20,7 +20,8 @@ if (! empty($model->group)):
 		)
 	));
 
-    $this->renderPartial('/filter_form/default/_refresh_filter_form_button');?>
+    $this->renderPartial('/filter_form/default/_refresh_filter_form_button');
+    /*?>
 
     <div class="control-group inline pull-right">
     <?=CHtml::label(tt('Показывать кнопку отработки'), 'showRetake', array('class' => 'control-label'))?>
@@ -38,7 +39,7 @@ if (! empty($model->group)):
             </label>
         </div>
     </div>
-<?php
+<?php*/
 
 
     list($uo1,$gr1) = explode("/", $model->group);

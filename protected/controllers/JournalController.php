@@ -60,10 +60,10 @@ class JournalController extends Controller
     {
         $model = new FilterForm;
         $model->scenario = 'journal';
-        if (isset($_REQUEST['showRetake'])) {
+        /*if (isset($_REQUEST['showRetake'])) {
             Yii::app()->user->setState('showRetake',(int)$_REQUEST['showRetake']);
             unset($_REQUEST['showRetake']);
-        }
+        }*/
         if (isset($_REQUEST['FilterForm']))
             $model->attributes=$_REQUEST['FilterForm'];
 
@@ -113,7 +113,7 @@ SQL;
         $gr1 = Yii::app()->request->getParam('gr1', null);
         $value = Yii::app()->request->getParam('value', null);
 
-        if($st1==null || $elgz1==null || $r1==null || $field==null || $value==null|| $nom==null || $date==null || $gr1==null)
+        if($st1==null || $elgz1==null || $r1==null || $field==null || $value===null|| $nom==null || $date==null || $gr1==null)
         {
             $error = true;
             $errorType=2;

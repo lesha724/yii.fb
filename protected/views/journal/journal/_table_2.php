@@ -8,7 +8,7 @@ function getMarsForElgz3($nom,$marks){
     }
     return 0;
 }
-function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps20,$ps55,$ps56,$sem7,$ps60,$min,$ps65)
+function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps20,$ps55,$ps56,$sem7,$ps60,$min,$ps65,$show)
 {
     if ($st['st71']!=$sem7 &&$ps60==1)
         return '<td colspan="2"></td>';
@@ -163,17 +163,19 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
         else
             $elgzst5_input='<label class="label label-warning">'.$elgzst5.'</label>';
     }
-
-    $button=CHtml::htmlButton('<i class="icon-tag"></i>',array('class'=>'btn btn-mini btn-info btn-retake','style'=>'display:none'));
-    $min =Elgzst::model()->getMin();
-    if(!$read_only&&($elgzst3=='checked'||($elgzst4<=$min&&($elgzst4!=0||($ps55==1&&$elgzst4==0&&isset($marks[$key]['elgzst4']))))))
-    {
-        if($elgzst5<=$min&&$elgzst5!=-1)
-            $button=CHtml::htmlButton('<i class="icon-tag"></i>',array('class'=>'btn btn-mini btn-info btn-retake','style'=>'display:inline'));
-    }
-    $show=Yii::app()->user->getState('showRetake',0);
     if($show==0)
         $button='';
+    else {
+        $button = CHtml::htmlButton('<i class="icon-tag"></i>', array('class' => 'btn btn-mini btn-info btn-retake', 'style' => 'display:none'));
+        $min = Elgzst::model()->getMin();
+        if (!$read_only && ($elgzst3 == 'checked' || ($elgzst4 <= $min && ($elgzst4 != 0 || ($ps55 == 1 && $elgzst4 == 0 && isset($marks[$key]['elgzst4'])))))) {
+            if ($elgzst5 <= $min && $elgzst5 != -1)
+                $button = CHtml::htmlButton('<i class="icon-tag"></i>', array('class' => 'btn btn-mini btn-info btn-retake', 'style' => 'display:inline'));
+        }
+    }
+    //$show=Yii::app()->user->getState('showRetake',0);
+    //if($show==0)
+        //$button='';
     $pattern = <<<HTML
     <td colspan="2" data-nom="{$nom}" data-priz="{$type}"  data-elgz1="{$elgz1}" data-type-lesson="{$type_lesson}" data-r1="{$r1}" data-date="{$date_lesson}" data-gr1="{$gr1}">
         %s %s %s %s
@@ -326,6 +328,7 @@ HTML;
     $ps59 = PortalSettings::model()->findByPk(59)->ps2;
     $ps60 = PortalSettings::model()->findByPk(60)->ps2;
     $ps65 = PortalSettings::model()->findByPk(65)->ps2;
+    $ps66 = PortalSettings::model()->findByPk(66)->ps2;
 
     $min = Elgzst::model()->getMin();
     $elgz1_arr=array();
@@ -359,7 +362,7 @@ HTML;
                 $potoch = 0;
                 $moduleNom++;
             }else {
-                $tr .= table2Tr($date, $gr1, $st, $marks, $permLesson, $read_only, $model->type_lesson, $ps20, $ps55, $ps56,$sem7,$ps60,$min,$ps65);
+                $tr .= table2Tr($date, $gr1, $st, $marks, $permLesson, $read_only, $model->type_lesson, $ps20, $ps55, $ps56,$sem7,$ps60,$min,$ps65,$ps66);
                 $potoch+=getMarsForElgz3($date['elgz3'],$marks);
             }
         }

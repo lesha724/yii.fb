@@ -574,8 +574,6 @@ function send(url,params,title,$td,$that,$spinner1,st1)
                     elem.attr('disabled', 'disabled');
                 }
             }
-
-
         }
     }, 'json');
 }

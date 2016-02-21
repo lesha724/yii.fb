@@ -4,6 +4,8 @@
 $(document).ready(function() {
     initSelect('');
 
+    initDialogSettings();
+
     $(window).on('load', function () {
         var $preloader = $('#page-preloader'),
             $spinner   = $preloader.find('.spinner-preloader');
@@ -11,6 +13,28 @@ $(document).ready(function() {
         $preloader.delay(500).fadeOut('slow');
     });
 });
+
+function addGritter(title, text, className)
+{
+    obj = {
+        title: title,
+        text: text,
+        class_name: 'gritter-'+className
+    }
+    $.gritter.add(obj)
+}
+function initDialogSettings()
+{
+    if ($.ui != undefined)
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function(title) {
+                var $title = this.options.title || '&nbsp;'
+                if( ("title_html" in this.options) && this.options.title_html == true )
+                    title.html($title);
+                else title.text($title);
+            }
+        }));
+}
 
 function initSelect(id)
 {
