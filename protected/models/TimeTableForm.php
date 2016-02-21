@@ -18,6 +18,7 @@ class TimeTableForm extends CFormModel
 
     public $date1;
     public $date2;
+    public $dateLesson;
     public $r11 = 5;
 
     const r11Color = '#EFBCEF';
@@ -34,9 +35,9 @@ class TimeTableForm extends CFormModel
             array('chair', 'numerical', 'allowEmpty' => false, 'on' => 'chair'),
             array('chair, teacher', 'required', 'on' => 'teacher'),
             array('chair', 'required', 'on' => 'chair'),        
-            array('faculty, course, group', 'numerical', 'allowEmpty' => false, 'on' => 'group, student,omissions'),
-            array('faculty, course, group', 'required', 'on' => 'group, student,omissions'),
-
+            array('faculty, course, group', 'numerical', 'allowEmpty' => false, 'on' => 'group, student,omissions,mobile-group'),
+            array('faculty, course, group', 'required', 'on' => 'group, student,omissions,mobile-group'),
+            array('dateLesson', 'required','on' => 'mobile-group'),
             array('student', 'required', 'on' => 'student,omissions'),
 
             array('housing, classroom', 'required', 'on' => 'classroom'),
