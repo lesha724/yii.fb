@@ -7,12 +7,23 @@
  */
 
 if(!empty($model->group)):
+
 list($uo1,$gr1) = explode("/", $model->group);
 $dates = R::model()->getDatesForJournal(
     $uo1,
     $gr1,
     $model->type_lesson
 );
+
+    $sem1 = Sem::model()->getSem1ByUo1($uo1);
+    $sem = Sem::model()->findByPk($sem1);
+
+    $gr = Gr::model()->findByPk($gr1);
+    $grName = Gr::model()->getGroupName($sem->sem4,$gr);
+    $this->pageHeader=tt($grName);
+    $this->breadcrumbs=array(
+        tt($grName),
+    );
 
     $ps9  = PortalSettings::model()->findByPk(9)->ps2;
     $ps20 = PortalSettings::model()->findByPk(20)->ps2;// use sub modules
@@ -34,11 +45,11 @@ if($ps57==1)
 ?>
 <div class="panel-actions row">
     <div class="form-actions col-xs-12">
-        <button id="lesson-left" class="btn col-xs-2" type="button"><i class="arrow glyphicon arrow-left"></i></button>
+        <button id="lesson-left" class="btn col-xs-2" type="button"><i class="arrow glyphicon glyphicon-triangle-left"></i></button>
         <div class="form-group col-xs-8">
             <?= CHtml::dropDownList('lesson-list',1, CHtml::listData($dates,'elgz3','text'), array('class'=>'form-control','data-count'=>count($dates)));?>
         </div>
-        <button id="lesson-right" class="btn col-xs-2 disabled" type="button" disabled="disabled"><i class="arrow glyphicon arrow-right"></i></button>
+        <button id="lesson-right" class="btn col-xs-2 disabled" type="button" disabled="disabled"><i class="arrow glyphicon glyphicon-triangle-right"></i></button>
     </div>
 </div>
 <div class="col-xs-12 table-journal">

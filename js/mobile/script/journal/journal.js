@@ -17,8 +17,10 @@ $(document).ready(function(){
 
     var val_=$(this).val();
     var count_=$( "#lesson-list").data('count');
-    showColumn($('#lesson-list').val());
-    checkDisabledButton(val_,count_);
+    if($('#lesson-list').length > 0) {
+        showColumn($('#lesson-list').val());
+        checkDisabledButton(val_, count_);
+    }
 
     $( "#lesson-list" ).change(function() {
         var val=$(this).val();

@@ -25,9 +25,12 @@ body{
   background-color: @color1;
   padding: 5px;
   margin-top: 0px;
-  margin-bottom: 10px;
+  //margin-bottom: 10px;
   margin-left: 0px;
   margin-right: 0px;
+}
+.header h1{
+  margin-top: 10px;
 }
 .container{
   padding-left: 5px;
@@ -47,6 +50,9 @@ body{
   z-index: 1000!important;
 }
   /*---------------#accordion-select--------------------*/
+#accordion-select {
+  margin-bottom: 0px;
+}
 #accordion-select .panel-heading {
   color: #333;
   background-color: @colorComponent;
@@ -139,21 +145,15 @@ body{
 /*--------------------select-group---------------*/
 /*-----------------arrow--------------*/
 .arrow{
-  left: 0px;
   color: @selectColor1;
-  font-size: 3.0em;
-  line-height: 9px;
-  speak: none;
-  /*-webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;*/
-  width: 100%;
+  font-size: 20px;
 }
-.arrow-left:before{
+/*.arrow-left:before{
   content: '\25C2';
 }
 .arrow-right:before{
   content: '\25B8';
-}
+}*/
 #lesson-left,#lesson-right{
   height: 34px;
 }
@@ -253,7 +253,11 @@ body{
   padding-left: 10px;
 }
 .journal-bottom .table th{
-  /*display: none!important;*/
+  display: none!important;
+}
+
+#lesson-list{
+  font-weight: 900;
 }
 /*---------------------------------------------*/
 
