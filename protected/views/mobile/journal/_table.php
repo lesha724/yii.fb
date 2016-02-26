@@ -168,13 +168,13 @@ HTML;
 function table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$nom,$uo1,$modules,$potoch,$sem7,$ps60)
 {
     if ($st['st71']!=$sem7 && $ps60 ==1)
-        return '<td colspan="4"></td>';
+        return '<td data-number="'.$nom.'" colspan="4"></td>';
 
     if (stripos($date['r2'], '11.11.1111')!==false )
-        return '<td colspan="4"></td>';
+        return '<td data-number="'.$nom.'" colspan="4"></td>';
 
     if ($ps56 == 1 && $date['elgz4']>0)
-        return '<td colspan="4"></td>';
+        return '<td data-number="'.$nom.'" colspan="4"></td>';
 
     switch($date['elgz4']){
         case 2:
@@ -186,11 +186,11 @@ function table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$nom,$uo1,$modules,$pot
                 $ind = !empty($mark)?$mark['vmp6']:'';
                 $itog = !empty($mark)?$mark['vmp4']:'';
                 $pmk = !empty($mark)?$mark['vmp7']:'';
-                return sprintf('<td>%s</td><td>%s</td><td>%s</td><td>%s</td>',$potoch,$ind,$pmk,$itog);
+                return sprintf('<td  data-number="{$nom}">%s</td><td  data-number="{$nom}">%s</td><td  data-number="{$nom}">%s</td><td  data-number="{$nom}">%s</td>',$potoch,$ind,$pmk,$itog);
             }
             break;
     }
-    return '<td colspan="4"></td>';
+    return '<td data-number="'.$nom.'" colspan="4"></td>';
 }
 
 function getMarsForElgz3($nom,$marks){
@@ -298,9 +298,9 @@ foreach($students as $st) {
     foreach($dates as $key => $date) {
         if($date['elgz4']>1&&$ps57==1)
         {
-            /*$tr .= table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$moduleNom,$uo1,$modules,$potoch);
+            $tr .= table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$moduleNom,$uo1,$modules,$potoch);
             $potoch = 0;
-            $moduleNom++;*/
+            $moduleNom++;
         }else {
             $tr .= table2Tr($date, $gr1, $st, $marks, $permLesson, $read_only, $model->type_lesson, $ps20, $ps55, $ps56,$sem7,$ps60,$min,$ps65,$ps66);
             $potoch+=getMarsForElgz3($date['elgz3'],$marks);
