@@ -58,7 +58,7 @@ class MobileController extends Controller
 
         $model->scenario = 'mobile-group';
 
-        $model->dateLesson = date('d.m.Y');
+        $model->dateLesson = Yii::app()->session['dateLesson'];
 
         if (isset($_REQUEST['timeTable'])) {
             Yii::app()->user->setState('timeTable',(int)$_REQUEST['timeTable']);
@@ -72,7 +72,7 @@ class MobileController extends Controller
         $timeTable = array();
         if (! empty($model->group))
         {
-            $timeTable=Gr::getTimeTable($model->group, $model->date1, $model->date2, 0);
+            $timeTable=Gr::getTimeTable($model->group, $model->dateLesson, $model->dateLesson, 0);
         }
 
         $this->render('timeTable/group', array(

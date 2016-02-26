@@ -49,6 +49,8 @@ class Controller extends CController
 
         $this->processDate1AndDate2();
 
+        $this->processDateLesson();
+
         return parent::beforeAction($action);
     }
 
@@ -137,6 +139,17 @@ SQL;
             $sem = $arr[1];
 
         Yii::app()->session['sem']  = $sem;
+    }
+
+    private function processDateLesson()
+    {
+        $date1 = isset($_REQUEST['TimeTableForm']['dateLesson']) ? $_REQUEST['TimeTableForm']['dateLesson'] : null;
+        if ($date1 === null)
+            $date1 = Yii::app()->session['dateLesson'];
+        if ($date1 === null)
+            $date1 = date('d.m.Y');
+
+        Yii::app()->session['dateLesson'] = $date1;
     }
 
     private function processDate1AndDate2()

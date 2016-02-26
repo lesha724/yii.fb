@@ -5,6 +5,12 @@ $(document).ready(function(){
 
     $('[data-toggle="popover"]').popover();
 
+
+    $('#btn-refresh').click(function( event ){
+        event.preventDefault();
+        $("#filter-form").submit();
+    });
+
     $spinner1 = $('#spinner1');
 
     initFilterForm($spinner1);

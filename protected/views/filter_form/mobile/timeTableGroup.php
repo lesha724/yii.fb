@@ -44,5 +44,6 @@ $html .= $form->dropDownList($model, 'group', $groups, $options);
 $html .= '</div>';
 
 $html .= '</fieldset>';
+$html .= '</div>';
 echo $html;
 $this->endWidget();

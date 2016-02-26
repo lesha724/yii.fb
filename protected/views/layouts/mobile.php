@@ -94,15 +94,15 @@
         <script src="/js/mobile/less.min.js" type="text/javascript"></script>
         <link rel="stylesheet" type="text/css" href="<?=Yii::app()->baseUrl?>/css/mobile/select/cs-select.css" />
         <link rel="stylesheet" type="text/css" href="<?=Yii::app()->baseUrl?>/css/mobile/select/cs-skin-elastic.css" />
-        <link rel="stylesheet" type="text/css" href="<?=Yii::app()->baseUrl?>/css/mobile/datepicker/bootstrap-datepicker3.min.css">
+        <?php /*<link rel="stylesheet" type="text/css" href="<?=Yii::app()->baseUrl?>/css/mobile/datepicker/bootstrap-datepicker3.min.css">
         <link rel="stylesheet" type="text/css" href="<?=Yii::app()->baseUrl?>/css/mobile/datepicker/bootstrap-datepicker3.standalone.min.css">
-        <!--<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">-->
+        <!--<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">--> */?>
 
         <script type="text/javascript" src="<?=Yii::app()->baseUrl?>/js/mobile/bootstrap.min.js"></script>
         <script src="<?=Yii::app()->baseUrl?>/js/mobile/main.js"></script>
         <script type="text/javascript" src="<?=Yii::app()->baseUrl?>/js/mobile/select/classie.js"></script>
         <script type="text/javascript" src="<?=Yii::app()->baseUrl?>/js/mobile/select/selectFx.js"></script>
-        <script type="text/javascript" src="<?=Yii::app()->baseUrl?>/js/mobile/datepicker/js/bootstrap-datepicker.min.js"></script>
-        <script type="text/javascript" src="<?=Yii::app()->baseUrl?>/js/mobile/datepicker/locales/bootstrap-datepicker.uk.min.js"></script>
+<?php /*<script type="text/javascript" src="<?=Yii::app()->baseUrl?>/js/mobile/datepicker/js/bootstrap-datepicker.min.js"></script>
+        <script type="text/javascript" src="<?=Yii::app()->baseUrl?>/js/mobile/datepicker/locales/bootstrap-datepicker.uk.min.js"></script>*/?>
     </body>
 </html>

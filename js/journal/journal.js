@@ -3,7 +3,7 @@ $(document).ready(function(){
     initPopovers();
 
     $spinner1 = $('#spinner1');
-    
+
     $('#journal-print').click(function(){
         /*$("#filter-form").attr("action", $(this).data('url'));
         $("#filter-form").submit();*/

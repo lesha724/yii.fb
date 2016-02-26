@@ -111,6 +111,12 @@ $config = array(
                     'js' => array('js/date-time/bootstrap-datepicker.min.js', 'js/date-time/locales/bootstrap-datepicker.ru.js'),
                     'depends' => array('jquery')
                 ),
+				'datepicker-mobile' => array(
+						'baseUrl' => '/',
+						'css' => array('css/mobile/datepicker/bootstrap-datepicker3.min.css','css/mobile/datepicker/bootstrap-datepicker3.standalone.min.css'),
+						'js' => array('js/mobile/datepicker/js/bootstrap-datepicker.min.js'),
+						//'depends' => array('jquery')
+				),
                 'autosize' => array(
                     'baseUrl' => 'theme/ace/assets/',
                     'js' => array('js/jquery.autosize-min.js'),
