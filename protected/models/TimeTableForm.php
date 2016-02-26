@@ -204,7 +204,7 @@ SQL;
     private function cellPrintTextFor($day, $type)
     {
         $d2  = $day['d2'];
-        $d2 = str_replace('"', "'", $d2);
+        $d2 = str_replace('"','&quot;', $d2);
         $tip = SH::convertUS4($day['us4']);
         //$tip = $day['tip'];
 
@@ -214,8 +214,10 @@ SQL;
         if(isset($day['r1_']))
         {
             $tem = $this->getTem($day['r1_'],$day['r2']);
-            if(!empty($tem))
-                $tem_name=$tem['name_temi'];
+            if(!empty($tem)) {
+                $tem_name = $tem['name_temi'];
+                $tem_name = str_replace('"','&quot;', $tem_name);
+            }
         }
         $class = tt('ауд');
         if (isset($day['fio']))
@@ -353,7 +355,7 @@ SQL;
     private function cellFullTextFor($day, $type)
     {
         $d2  = $day['d2'];
-        $d2 = str_replace('"', "'", $d2);
+        $d2 = str_replace('"', '&quot;', $d2);
         $tip = $day['tip'];
         //$gr3 = $day['gr3'];
         $gr3 = '{$gr3}';
@@ -362,8 +364,10 @@ SQL;
         if(isset($day['r1_']))
         {
             $tem = $this->getTem($day['r1_'],$day['r2']);
-            if(!empty($tem))
-                $tem_name=$tem['name_temi'];
+            if(!empty($tem)) {
+                $tem_name = $tem['name_temi'];
+                $tem_name = str_replace('"','&quot;', $tem_name);
+            }
         }
         $class = tt('ауд');
         $text  = tt('Добавлено');

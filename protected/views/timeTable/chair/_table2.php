@@ -87,7 +87,7 @@ HTML;
             {
                 $name=$cur['d2'];
 
-                $name = str_replace('"','\'',$name);
+                $name = str_replace('"','&quot;',$name);
                 $group=$cur['gr3'];
                 $a2=$cur['a2'];
                 $added = date('d.m.Y H:i', strtotime($cur['r11']));
