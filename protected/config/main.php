@@ -71,11 +71,11 @@ $config = array(
 					'js' => array(YII_DEBUG ? 'jquery-1.11.0.js' : 'jquery-1.11.0.min.js'),
 				),
                 'chosen' => array(
-                    'baseUrl' => 'theme/ace/assets/chosen',
-                    //'css' => array('css/chosen.css'),
-                    //'js' => array('js/uncompressed/chosen.jquery.js'),
-					'css' => array('chosen.min.css'),
-					'js' => array('chosen.jquery.min.js'),
+                    'baseUrl' => 'theme/ace/assets/',
+                    'css' => array('css/chosen.css'),
+                    'js' => array('js/uncompressed/chosen.jquery.js'),
+					//'css' => array('chosen.min.css'),
+					//'js' => array('chosen.jquery.min.js'),
                     'depends' => array('jquery')
                 ),
                 'gritter' => array(
