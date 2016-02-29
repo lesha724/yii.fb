@@ -244,13 +244,14 @@ SQL;
 		$command->bindValue(':SEM', Yii::app()->session['sem']);
 		$res = $command->queryAll();
 
-		$modules = array();
+		return $res;
+		/*$modules = array();
 		foreach ($res as $row)
 		{
 			$modules[$row['vvmp6']]=$row;
 		}
 
-		return $modules;
+		return $modules;*/
 	}
 
 }

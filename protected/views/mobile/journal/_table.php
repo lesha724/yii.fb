@@ -15,6 +15,7 @@ HTML;
 }
 function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps20,$ps55,$ps56,$sem7,$ps60,$min,$ps65,$show)
 {
+    $nom=$date['elgz3'];
     if ($st['st71']!=$sem7 &&$ps60==1)
         return '<td colspan="4"></td>';
 
@@ -165,8 +166,9 @@ HTML;
 
 }
 
-function table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$nom,$uo1,$modules,$potoch,$sem7,$ps60)
+function table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$moduleNom,$uo1,$modules,$potoch,$sem7,$ps60)
 {
+    $nom=$date['elgz3'];
     if ($st['st71']!=$sem7 && $ps60 ==1)
         return '<td data-number="'.$nom.'" colspan="4"></td>';
 
@@ -179,14 +181,14 @@ function table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$nom,$uo1,$modules,$pot
     switch($date['elgz4']){
         case 2:
 
-            if(!isset($modules[$nom]))
+            if(!isset($modules[(int)$moduleNom-1]))
                 return '<td colspan="4">'.tt('Модуль не найден!').'</td>';
             else{
-                $mark = Vmp::model()->getMarks($modules[$nom]['vmpv1'],$st['st1']);
+                $mark = Vmp::model()->getMarks($modules[(int)$moduleNom-1]['vmpv1'],$st['st1']);
                 $ind = !empty($mark)?$mark['vmp6']:'';
                 $itog = !empty($mark)?$mark['vmp4']:'';
                 $pmk = !empty($mark)?$mark['vmp7']:'';
-                return sprintf('<td  data-number="{$nom}">%s</td><td  data-number="{$nom}">%s</td><td  data-number="{$nom}">%s</td><td  data-number="{$nom}">%s</td>',$potoch,$ind,$pmk,$itog);
+                return sprintf('<td  data-number="'.$nom.'">%s</td><td  data-number="'.$nom.'">%s</td><td  data-number="'.$nom.'">%s</td><td  data-number="'.$nom.'">%s</td>',$potoch,$ind,$pmk,$itog);
             }
             break;
     }
@@ -298,7 +300,7 @@ foreach($students as $st) {
     foreach($dates as $key => $date) {
         if($date['elgz4']>1&&$ps57==1)
         {
-            $tr .= table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$moduleNom,$uo1,$modules,$potoch);
+            $tr .= table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$moduleNom,$uo1,$modules,$potoch,$sem7,$ps60);
             $potoch = 0;
             $moduleNom++;
         }else {
