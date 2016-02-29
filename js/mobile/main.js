@@ -12,6 +12,10 @@ $(document).ready(function() {
         $spinner.delay(1000).fadeOut('slow');
         $preloader.delay(500).fadeOut('slow');
     });
+
+    $('.cs-options li').click(function () {
+        $("html, body").animate({ scrollTop: 0 }, "slow");
+    });
 });
 
 function addGritter(title, text, className)
