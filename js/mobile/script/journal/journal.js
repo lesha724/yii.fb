@@ -15,9 +15,10 @@ $(document).ready(function(){
 
     initFilterForm($spinner1);
 
-    var val_=$(this).val();
-    var count_=$( "#lesson-list").data('count');
+
     if($('#lesson-list').length > 0) {
+        var val_=$(this).val();
+        var count_=$( "#lesson-list").data('count');
         showColumn($('#lesson-list').val());
         checkDisabledButton(val_, count_);
     }
@@ -120,16 +121,16 @@ $(document).ready(function(){
             return false;
         }
 
-        if (params.field=='elgzst3'&&params.value==0)
+        /*if (params.field=='elgzst3'&&params.value==0)
         {
-            var val=$trElem.find('td [data-name="elgzst4"]').val();
+            var val=$trElem.find('td[data-name="elgzst4"][data-number="'+params.nom+'"] input').val();
             if(val!=''&&typeLesson==1) {
                 addGritter(title, _error, 'error');
                 $td.addClass('error');
                 $that.removeAttr('checked');
                 return false;
             }
-        }
+        }*/
         // min max check
         var url = $that.parents('[data-url]').data('url');
         var url_check = $that.parents('[data-url-check]').data('url-check');
