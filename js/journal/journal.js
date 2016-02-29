@@ -5,8 +5,6 @@ $(document).ready(function(){
     $spinner1 = $('#spinner1');
 
     $('#journal-print').click(function(){
-        /*$("#filter-form").attr("action", $(this).data('url'));
-        $("#filter-form").submit();*/
         var action=$("#filter-form").attr("action");
         $("#filter-form").attr("action", $(this).data('url'));
         $("#filter-form").submit();
