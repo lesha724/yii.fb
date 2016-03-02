@@ -199,6 +199,7 @@ $(document).ready(function(){
 
 
 function showColumn(date){
+    $('[data-toggle="popover"]').popover('hide');
     $('.journal-bottom th:not(:first-child),.journal-bottom td:not(:first-child)').hide();
     var lessons = $('.journal-bottom [data-number="'+date+'"]');
     if(lessons.length>0)
