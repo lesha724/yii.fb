@@ -185,7 +185,7 @@ SQL;
 
 	public function getDateTypeLesson($uo1,$gr1,$sem1, $elg4,$date1,$date2,$nom)
 	{
-		if (empty($uo1) || empty($elg4) || empty($gr1)||empty($sem1)|| empty($date1) || empty($date2) || empty($nom))
+		if (empty($uo1) || $elg4==null || empty($gr1)||empty($sem1)|| empty($date1) || empty($date2) || empty($nom))
 			return array();
 
 		$sql=<<<SQL
