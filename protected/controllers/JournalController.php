@@ -452,7 +452,9 @@ SQL;
                 $errorType=2;
             }else
             {
-                if(($elgzst->elgzst3!=0||($elgzst->elgzst4<=$elgzst->getMin()&&$elgzst->elgzst4!=0)))
+                //if(($elgzst->elgzst3!=0||($elgzst->elgzst4<=$elgzst->getMin()&&$elgzst->elgzst4!=0)))
+                $ps55 = PortalSettings::model()->findByPk(55)->ps2;
+                if($elgzst->elgzst3!=0||($elgzst->elgzst4<=$elgzst->getMin()&&($elgzst->elgzst4 != 0 || ($ps55 == 1 && $elgzst->elgzst4 == 0))))
                 {
                     if($elgzst->checkMinRetakeForGrid())
                     {
@@ -567,7 +569,8 @@ SQL;
                 $errorType=2;
             }else
             {
-                if(($elgzst->elgzst3!=0||($elgzst->elgzst4<=$elgzst->getMin()&&$elgzst->elgzst4!=0)))
+                $ps55 = PortalSettings::model()->findByPk(55)->ps2;
+                if($elgzst->elgzst3!=0||($elgzst->elgzst4<=$elgzst->getMin()&&($elgzst->elgzst4 != 0 || ($ps55 == 1 && $elgzst->elgzst4 == 0))))
                 {
                     if($elgzst->checkMinRetakeForGrid())
                     {
