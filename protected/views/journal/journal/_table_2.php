@@ -123,7 +123,7 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
         if(!$read_only){
 
             if($disabled_input_1 != 'disabled="disabled"') {
-                if (($elgzst3 == 'checked')||($elgzst4>0&&$elgzst4<=$min)) {
+                if (($elgzst3 == 'checked')||($elgzst4 <= $min && ($elgzst4 != 0 || ($ps55 == 1 && $elgzst4 == 0 && isset($marks[$key]['elgzst4']))))) {
                     $disabled_input_1 = '';
                 }
                 else
