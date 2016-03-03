@@ -168,8 +168,8 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
     else {
         $button = CHtml::htmlButton('<i class="icon-tag"></i>', array('class' => 'btn btn-mini btn-info btn-retake', 'style' => 'display:none'));
         $min = Elgzst::model()->getMin();
-        if (!$read_only && ($elgzst3 == 'checked' || ($elgzst4 <= $min && ($elgzst4 != 0 || ($ps55 == 1 && $elgzst4 == 0 && isset($marks[$key]['elgzst4'])))))) {
-            if ($elgzst5 <= $min && $elgzst5 != -1)
+        if (!$read_only && ($elgzst3 == 'checked' || ($elgzst4 <= $min && ($elgzst4 != 0|| ($ps55 == 1 && ($elgzst4 == 0 && isset($marks[$key]['elgzst4'])&& $type_lesson!=0)))))) {
+            if (($elgzst5 <= $min&& $type_lesson==1) || ($marks[$key]['elgzst5'] != -1 && $type_lesson==0))
                 $button = CHtml::htmlButton('<i class="icon-tag"></i>', array('class' => 'btn btn-mini btn-info btn-retake', 'style' => 'display:inline'));
         }
     }

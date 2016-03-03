@@ -547,8 +547,8 @@ function send(url,params,title,$td,$that,$spinner1,st1)
             }
 
             var elem = $td.find('[data-name="elgzst5"]');
-            if(elem){
-                if($td.find('[data-name="elgzst3"]').is(':checked')||parseFloat($td.find('[data-name="elgzst4"]').val().replace(',','.'))<=minBal) {
+            if(elem.length>0){
+                if($td.find('[data-name="elgzst3"]').is(':checked')||(parseFloat($td.find('[data-name="elgzst4"]').val().replace(',','.'))<=minBal&&$td.data('type-lesson')==1)) {
                     if (parseFloat(elem.val().replace(',', '.')) > minBal) {
                         $td.find('.btn-retake').hide();
                         elem.attr('disabled', 'disabled');
