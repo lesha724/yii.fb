@@ -5,7 +5,6 @@ $(document).ready(function(){
 
     $('[data-toggle="popover"]').popover();
 
-
     $('#btn-refresh').click(function( event ){
         event.preventDefault();
         $("#filter-form").submit();

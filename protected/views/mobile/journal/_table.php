@@ -9,7 +9,7 @@
 function getCellStName($st)
 {
     $cell = <<<HTML
-        <td  data-container="body" data-toggle="popover" data-placement="right" data-content="%s">%s</td>
+        <td  data-container="body" data-toggle="popover" data-placement="top" data-content="%s">%s</td>
 HTML;
     return sprintf($cell,$st['st2'].' '.$st['st3'].' '.$st['st4'],ShortCodes::getShortName($st['st2'], $st['st3'], $st['st4']));
 }

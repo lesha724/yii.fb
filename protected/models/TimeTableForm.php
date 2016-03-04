@@ -258,8 +258,8 @@ TEXT;
         $maxLength = 17;
 
         $d3    = $day['d3'];
-        //$tip   = $day['tip'];
-        $tip = SH::convertUS4($day['us4']);
+        $tip   = $day['tip'];
+        //$tip = SH::convertUS4TimeTable($day['us4'],$day['nr17']);
         $a2    = $day['a2'];
         $r11   = $day['r11'];
         $class = tt('ауд');
