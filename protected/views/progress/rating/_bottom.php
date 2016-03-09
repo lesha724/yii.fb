@@ -70,10 +70,10 @@ if (!empty($model->semester))
 		foreach($rating as $key)
 		{
 			//if($key['credniy_bal_5']!=$val5 || $key['credniy_bal_100']!=$val100)
-			$bal_ = round($key['credniy_bal_5'],1);
-			if($bal_!=$val5)
+			$_bal = round($key['credniy_bal_5'], 1);
+			if($_bal!=$val5)
 			{
-				$bal_=$key['credniy_bal_5'];
+				$val5=$_bal;
 				$val100=$key['credniy_bal_100'];
 				$i++;
 			}
@@ -82,7 +82,7 @@ if (!empty($model->semester))
 					'<td>'.ShortCodes::getShortName($key['fio'], $key['name'], $key['otch']).'</td>'.
 					'<td>'.$key['group_name'].'</td>'.
 					'<td>'.$key['kyrs'].'</td>'.
-					'<td>'.$bal_.'</td>'.
+					'<td>'.$_bal.'</td>'.
 					//'<td>'.round($key['credniy_bal_100'], 1).'</td>'.
 					'<td>'.$key['ne_sdano'].'</td>'.
 				'</tr>';
