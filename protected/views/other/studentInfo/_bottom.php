@@ -67,6 +67,20 @@ $form=$this->beginWidget('CActiveForm', array(
     <?php $url1 = $this->createUrl('/other/autocompleteTeachers') ?>
     <?php $url2 = $this->createUrl('/other/updateNkrs') ?>
 
+    <?php
+    $cod = SH::getUniversityCod();
+    if($cod==7):
+        ?>
+        <div class="alert alert-warning">
+            <strong>Внимание!</strong></br>
+            При занесении темы курсовой/дипломной работы придерживайтесь следующих правил:</br>
+            1. Тема должна состоять из одного предложения (использование точек не допускается). Точка в конце предложения НЕ ставится;</br>
+            2. Избегайте кавычек и лишних пробелов;</br>
+            3. Использование аббревиатур не допускается;</br>
+            4. При возникновении проблем с оформлением заявления пишите на почту edu@law.msu.ru c пометкой Выпуск-[год].</br>
+        </div>
+    <?php endif;?>
+
     <div class="control-group" data-autocompleteUrl="<?= $url1?>" data-updateNkrs="<?= $url2?>">
         <?= CHtml::label(tt('Тема курсовой'), '', array('class' => 'control-label')) ?>
         <div class="controls">

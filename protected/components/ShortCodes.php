@@ -17,6 +17,15 @@ class ShortCodes extends CApplicationComponent
         return $res;
     }
 
+    public static function getUniversityCod(){
+        $sql=<<<SQL
+			select b15 from b where b1=0
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $id=$command->queryRow();
+
+        return $id['b15'];
+    }
     public static function truncateText($text)
     {
         if (empty($text))
