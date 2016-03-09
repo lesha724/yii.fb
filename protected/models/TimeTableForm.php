@@ -205,8 +205,8 @@ SQL;
     {
         $d2  = $day['d2'];
         $d2 = str_replace('"','&quot;', $d2);
-        $tip = SH::convertUS4($day['us4']);
-        //$tip = $day['tip'];
+        //$tip = SH::convertUS4($day['us4']);
+        $tip = $day['tip'];
 
         $gr3 = '{$gr3}';
         $a2  = $day['a2'];
