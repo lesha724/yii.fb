@@ -4,7 +4,7 @@
  */
 
 
-if (! empty($model->group)):
+if (!empty($model->group) && !(empty($model->sem1))):
 
     echo '<div class="container">';
     $this->widget('bootstrap.widgets.TbButton', array(
@@ -46,7 +46,8 @@ if (! empty($model->group)):
     $dates = R::model()->getDatesForJournal(
             $uo1,
             $gr1,
-            $model->type_lesson
+            $model->type_lesson,
+            $model->sem1
     );
 
     if(count($dates)==0)

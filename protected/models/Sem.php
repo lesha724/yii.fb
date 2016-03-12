@@ -463,4 +463,31 @@ SQL;
 
         return $sem1;
     }
+
+    public function getSem1List($uo1gr1){
+        if(empty($uo1gr1))
+            return array();
+
+        list($uo1,$gr1) = explode("/", $uo1gr1);
+
+        $sql = <<<SQL
+          select sem1
+            from us
+               inner join sem on (us.us3 = sem.sem1)
+            where us2=:UO1 and sem3=:YEAR and sem5=:SEM
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':UO1', $uo1);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $sem1 = $command->queryAll();
+
+        $res = array();
+
+        foreach($sem1 as $key => $val){
+            $res[$key]['name']= $key++;
+            $res[$key]['sem1']= $val['sem1'];
+        }
+        return $res;
+    }
 }

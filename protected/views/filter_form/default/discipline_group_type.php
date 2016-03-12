@@ -14,7 +14,7 @@ JS
         $disciplines = CHtml::listData(D::model()->getDisciplinesForJournalPermition(), 'd1', 'd2');
         $type_lesson=FilterForm::getTypesForJournal();
         $groups = CHtml::listData(Gr::model()->getGroupsForJournalPermition($model->discipline,$model->type_lesson), 'group', 'name');
-
+        $sem1List =  CHtml::listData(Sem::model()->getSem1List($model->group), 'sem1', 'name');
         $options =  array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;');
         echo '<div>'.
                 '<div class="span2 ace-select">'.
@@ -28,6 +28,10 @@ JS
                 '<div class="span2 ace-select">'.
                 $form->label($model, 'group').
                 $form->dropDownList($model, 'group', $groups,$options).
+                '</div>'.
+                '<div class="span2 ace-select">'.
+                $form->label($model, 'sem1').
+                $form->dropDownList($model, 'sem1', $sem1List,$options).
                 '</div>'.
             '</div>';
 

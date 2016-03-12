@@ -113,11 +113,11 @@ class R extends CActiveRecord
 		return parent::model($className);
 	}
 
-    public function getDatesForJournal($uo1, $gr1,$type_lesson)
+    public function getDatesForJournal($uo1, $gr1,$type_lesson, $sem1)
     {
-		$sem1 = Sem::model()->getSem1ByUo1($uo1);
+		/*$sem1 = Sem::model()->getSem1ByUo1($uo1);
 		if(empty($sem1))
-			return array();
+			return array();*/
 
 		$sql = <<<SQL
 			select elgz3,r2,r1,ustem5,us4,ustem7,ustem6,elgz4,elgz1,elgz5,elgz6,nr30,k2,k3
