@@ -464,17 +464,16 @@ SQL;
         return $sem1;
     }
 
-    public function getSem1List($uo1gr1){
-        if(empty($uo1gr1))
+    public function getSem1List($uo1){
+        if(empty($uo1))
             return array();
-
-        list($uo1,$gr1) = explode("/", $uo1gr1);
 
         $sql = <<<SQL
           select sem1
             from us
                inner join sem on (us.us3 = sem.sem1)
             where us2=:UO1 and sem3=:YEAR and sem5=:SEM
+          GROUP BY sem1
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':UO1', $uo1);

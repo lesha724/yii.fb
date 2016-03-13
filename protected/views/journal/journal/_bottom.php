@@ -2,47 +2,29 @@
 /* @var $this ProgressController
  * @var $model FilterForm
  */
+if(!empty($model->group)):
+list($uo1,$gr1) = explode("/", $model->group);
+
+$sem1List =  Sem::model()->getSem1List($uo1);
+if(count($sem1List)!=1) {
+    $options =  array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;');
+
+    $html  = '<div class="span2 ace-select" style="width:100%;margin-left: 0px;margin-bottom: 5px;">';
+    $html .= CHtml::label($model->getAttributeLabel('sem1'), 'FilterForm_sem1');
+    $html .= CHtml::dropDownList('FilterForm[sem1]', $model->sem1, CHtml::listData($sem1List, 'sem1', 'name'), $options);
+    $html .= '</div>';
+
+    echo $html;
+}else
+{
+    $elem =  current($sem1List);
+    $model->sem1 = $elem['sem1'];
+}
+
+if (!empty($model->sem1)):
 
 
-if (!empty($model->group) && !(empty($model->sem1))):
 
-    echo '<div class="container">';
-    $this->widget('bootstrap.widgets.TbButton', array(
-		'buttonType'=>'button',
-		'type'=>'primary',
-                
-		'icon'=>'print',
-		'label'=>tt('Печать'),
-		'htmlOptions'=>array(
-            'class'=>'btn-small',
-            'data-url'=>Yii::app()->createUrl('/journal/journalExcel'),
-            'id'=>'journal-print',
-		)
-	));
-
-    $this->renderPartial('/filter_form/default/_refresh_filter_form_button');
-    /*?>
-
-    <div class="control-group inline pull-right">
-    <?=CHtml::label(tt('Показывать кнопку отработки'), 'showRetake', array('class' => 'control-label'))?>
-        <div class="controls">
-            <label>
-                <?php
-                echo CHtml::checkBox('showRetake', Yii::app()->user->getState('showRetake',0),
-                    array(
-                        'class' => 'ace ace-switch',
-                        'uncheckValue' => '0'
-                    )
-                );
-                ?>
-                <span class="lbl"></span>
-            </label>
-        </div>
-    </div>
-<?php*/
-
-
-    list($uo1,$gr1) = explode("/", $model->group);
     $dates = R::model()->getDatesForJournal(
             $uo1,
             $gr1,
@@ -52,6 +34,22 @@ if (!empty($model->group) && !(empty($model->sem1))):
 
     if(count($dates)==0)
         throw new CHttpException(404, tt('Не найдены занятия.'));
+
+    echo '<div class="container">';
+    $this->widget('bootstrap.widgets.TbButton', array(
+        'buttonType'=>'button',
+        'type'=>'primary',
+
+        'icon'=>'print',
+        'label'=>tt('Печать'),
+        'htmlOptions'=>array(
+            'class'=>'btn-small',
+            'data-url'=>Yii::app()->createUrl('/journal/journalExcel'),
+            'id'=>'journal-print',
+        )
+    ));
+
+    $this->renderPartial('/filter_form/default/_refresh_filter_form_button');
 
     $elg1=Elg::getElg1($uo1,$model->type_lesson);
     $elg = Elg::model()->findByPk($elg1);
@@ -120,6 +118,7 @@ JS
         , CClientScript::POS_HEAD);
 
     endif;
+ endif;
 ?>
 
 <div id="dialog-confirm" class="hide" title="Empty the recycle bin?">

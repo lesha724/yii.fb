@@ -2,7 +2,7 @@ $(document).ready(function(){
 
     $spinner1 = $('#spinner1');
 
-    $(document).on('change', '#FilterForm_discipline,#FilterForm_type_lesson,#FilterForm_group', function() {
+    $(document).on('change', '#FilterForm_discipline,#FilterForm_type_lesson', function() {
 
         var $form  = $(this).closest('form');
         var formId = $form.attr('id');
@@ -20,7 +20,24 @@ $(document).ready(function(){
         })
     });
 
-    $(document).on('change', ' #FilterForm_sem1', function() {
+    $('#FilterForm_sem1').change(function(){
+
+        var $that   = $(this);
+        var $select = $that.clone();
+        var $form   = $('#filter-form');
+        var value   = $that.val();
+
+        if (value.length == 0)
+            return;
+
+        $select.find('option[value='+$that.val()+']').attr('selected', 'selected');
+
+        $form.append($select);
+
+        $form.submit();
+    });
+
+    $(document).on('change', '#FilterForm_group', function() {
         $(this).closest('form').submit();
     });
 
