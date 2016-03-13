@@ -62,12 +62,25 @@ $modules = null;
 $ps57 = PortalSettings::model()->findByPk(57)->ps2;
 if($ps57==1)
     $modules = Vvmp::model()->getModule($uo1,$gr1);
+
+$elgz3Nom = 1;
+$dateDiff = -1;
+$date1 = new DateTime(date('Y-m-d H:i:s'));
+foreach($dates as $date){
+    $date2  = new DateTime($date['r2']);
+    $diff = $date1->diff($date2)->days;
+    if ($diff <= $dateDiff || $dateDiff==-1)
+    {
+        $dateDiff = $diff;
+        $elgz3Nom = $date['elgz3'];
+    }
+}
 ?>
 <div class="panel-actions row">
     <div class="form-actions col-xs-12">
         <button id="lesson-left" class="btn col-xs-2" type="button"><i class="arrow glyphicon glyphicon-triangle-left"></i></button>
         <div class="form-group col-xs-8">
-            <?= CHtml::dropDownList('lesson-list',1, CHtml::listData($dates,'elgz3','text'), array('class'=>'form-control','data-count'=>count($dates)));?>
+            <?= CHtml::dropDownList('lesson-list',$elgz3Nom, CHtml::listData($dates,'elgz3','text'), array('class'=>'form-control','data-count'=>count($dates)));?>
         </div>
         <button id="lesson-right" class="btn col-xs-2 disabled" type="button" disabled="disabled"><i class="arrow glyphicon glyphicon-triangle-right"></i></button>
     </div>
