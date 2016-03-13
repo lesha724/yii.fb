@@ -50,6 +50,7 @@ if (! empty($model->semester)) :
             <th rowspan="2"><?=tt('КП')?></th>
             <th rowspan="2"><?=tt('Кр')?></th>
             <th rowspan="2"><?=tt('Кафедра')?></th>
+            <th rowspan="2"></th>
         </tr>
         <tr>
             <th><?=tt('Всего')?></th>
@@ -85,9 +86,20 @@ HTML;
 
                 $html .= '<td>'.$hours.'</td>';
             }
-
+            $tip2  = tt('Распечатать в Excel');
+            $url = Yii::app()->createUrl('workPlan/printGroups',array('type'=> $discipline['uo1'],'sem'=>$model->semester));
+            $btnPrint  = <<<HTML
+                        <a class="btn btn-minier btn-info tooltip-info btn-print"
+                                href="{$url}"
+                                data-rel="tooltip"
+                                data-placement="bottom"
+                                data-original-title="{$tip2}">
+                            <i class="icon-print"></i>
+                        </a>
+HTML;
             $html .= <<<HTML
                     <td>{$discipline['k2']}</td>
+                    <td>{$btnPrint}</td>
                 </tr>
 HTML;
 

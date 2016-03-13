@@ -818,7 +818,37 @@ SQL;
 
         return $students;
     }
-	
+
+	public function getStudentsOfUo($uo1,$year,$sem)
+	{
+		if (empty($uo1))
+			return array();
+
+		$sql=<<<SQL
+            select
+                gr1,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,st2||' '||st3||' '||st4||' ' as stud,st56,gr7
+            from gr
+               inner join ug on (gr.gr1 = ug.ug2)
+               inner join ucgn on (ug.ug4 = ucgn.ucgn1)
+               inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
+               inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
+               inner join st on (ucsn.ucsn2 = st.st1)
+               inner join nr on (ug.ug3 = nr.nr1)
+               inner join us on (nr.nr2 = us.us1)
+            where us2=:uo1 and ucgns5=:sem3 and ucgns6=:sem5
+            GROUP BY gr1,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,st2,st3,st4,st56,gr7
+            ORDER BY gr7,gr3,st2 collate UNICODE
+SQL;
+
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':uo1', $uo1);
+		$command->bindValue(':sem3', $year);
+		$command->bindValue(':sem5', $sem);
+		$students = $command->queryAll();
+
+		return $students;
+	}
+
 	public function getStudentsOfNr($nr1,$year,$sem)
     {
         if (empty($nr1))
