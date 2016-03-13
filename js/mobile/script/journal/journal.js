@@ -14,6 +14,22 @@ $(document).ready(function(){
 
     initFilterForm($spinner1);
 
+    $('#FilterForm_sem1').change(function(){
+
+        var $that   = $(this);
+        var $select = $that.clone();
+        var $form   = $('#filter-form');
+        var value   = $that.val();
+
+        if (value.length == 0)
+            return;
+
+        $select.find('option[value='+$that.val()+']').attr('selected', 'selected');
+
+        $form.append($select);
+
+        $form.submit();
+    });
 
     if($('#lesson-list').length > 0) {
         var val_=$(this).val();

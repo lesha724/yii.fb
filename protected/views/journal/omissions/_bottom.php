@@ -11,7 +11,7 @@ function getSelect($type,$i)
         $name ='select-type';
     }
     $options=$options+array('empty' => tt('--Виберіть тип--'));
-    $data = CHtml::listData(Stegn::model()->getTypesByGroup(),'id','text','group');
+    $data = CHtml::listData(Elgzst::model()->getTypesByGroup(),'id','text','group');
     return CHtml::dropDownList($name,$type,$data,$options);
 
 }

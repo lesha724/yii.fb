@@ -8,12 +8,32 @@
 
 if(!empty($model->group)):
 
-list($uo1,$gr1) = explode("/", $model->group);
-$dates = R::model()->getDatesForJournal(
-    $uo1,
-    $gr1,
-    $model->type_lesson
-);
+    list($uo1,$gr1) = explode("/", $model->group);
+
+    $sem1List =  Sem::model()->getSem1List($uo1);
+    if(count($sem1List)!=1) {
+        $options =  array('class'=>'cs-select cs-skin-elastic', 'autocomplete' => 'off', 'empty' => '&nbsp;');
+
+        $html  = '<div class="select-group col-xs-12" style="width:100%;margin-left: 0px;margin-bottom: 5px;">';
+        $html .= CHtml::label($model->getAttributeLabel('sem1'), 'FilterForm_sem1');
+        $html .= CHtml::dropDownList('FilterForm[sem1]', $model->sem1, CHtml::listData($sem1List, 'sem1', 'name'), $options);
+        $html .= '</div>';
+
+        echo $html;
+    }else
+    {
+        $elem =  current($sem1List);
+        $model->sem1 = $elem['sem1'];
+    }
+
+    if (!empty($model->sem1)):
+
+    $dates = R::model()->getDatesForJournal(
+        $uo1,
+        $gr1,
+        $model->type_lesson,
+        $model->sem1
+    );
 
     $sem1 = Sem::model()->getSem1ByUo1($uo1);
     $sem = Sem::model()->findByPk($sem1);
@@ -75,5 +95,6 @@ if($ps57==1)
     </div>
 </div>
 <?php
+endif;
 endif;
 

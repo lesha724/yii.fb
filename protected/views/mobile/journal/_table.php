@@ -55,7 +55,8 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
 
     if($st['st45']==1) {
         $disabled = 'disabled="disabled"';
-        if($ps65==1&&$date2<=$date1&&!isset($marks[$nom]))
+        $dateClose = new DateTime($st['st163']);
+        if($dateClose<=$date2&&$ps65==1&&$date2<=$date1&&!isset($marks[$nom]))
             Elgzst::model()->nbSt45($st,$elgz1);
     }
 

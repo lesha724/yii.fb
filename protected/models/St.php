@@ -696,7 +696,7 @@ SQL;
     public function getStudentsForJournal($gr1, $uo1)
     {
         $sql = <<<SQL
-       select st1,st2,st3,st4,st45,st71
+       select st1,st2,st3,st4,st45,st71,st163
         from st
            inner join ucsn on (st.st1 = ucsn.ucsn2)
            inner join ucgns on (ucsn.ucsn1 = ucgns.ucgns1)
@@ -706,7 +706,7 @@ SQL;
            inner join us on (nr.nr2 = us.us1)
            inner join std on (st1 = std2 and std3 = {$gr1})
         where UCGNS5=:YEAR and UCGNS6=:SEM and us2=:UO1 and ug2=:GR1 and std11 in (0,6,8) and (std7 is null)
-        group by st1,st2,st3,st4,st45,st71
+        group by st1,st2,st3,st4,st45,st71,st163
         order by st2 collate UNICODE
 SQL;
 

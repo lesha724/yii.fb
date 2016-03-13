@@ -476,7 +476,9 @@ SQL;
                         if(!empty($info))
                             $title.=' '.SH::getShortName($info['st2'],$info['st3'],$info['st4']).' '.date('d.m.Y', strtotime($info['r2'])).' '.$info['d3'];
 
-                        if($elgzst->elgzst3>0)
+                        $ps67 = PortalSettings::model()->findByPk(67)->ps2;
+
+                        if($elgzst->elgzst3>0 && $ps67==1)
                         {
                             $elgp=Elgp::model()->findByAttributes(array('elgp1'=>$elgzst->elgzst0));
                             if(empty($elgp))
@@ -592,8 +594,9 @@ SQL;
                         //print_r($elgz->elgz3.' /'.$gr1.'/'.$sem1.'/'.$elg['elg2'].'/'.$elg['elg4']);
                         $us4 = $command->queryRow();
 
+                        $ps67 = PortalSettings::model()->findByPk(67)->ps2;
 
-                        if($elgzst->elgzst3>0)
+                        if($elgzst->elgzst3>0&&$ps67==1)
                         {
                             $elgp=Elgp::model()->findByAttributes(array('elgp1'=>$elgzst->elgzst0));
                             if(empty($elgp))

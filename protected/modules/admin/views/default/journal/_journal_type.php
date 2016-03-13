@@ -80,6 +80,12 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     </div>
 
     <div class="control-group">
+        <?=CHtml::checkBox('', PortalSettings::model()->findByPk(67)->ps2, $htmlOptions2)?>
+        <span class="lbl"> <?=tt('Регистрация пропусков из журнала')?></span>
+        <?=CHtml::hiddenField('settings[67]', PortalSettings::model()->findByPk(67)->ps2)?>
+    </div>
+
+    <div class="control-group">
         <?=CHtml::checkBox('', PortalSettings::model()->findByPk(29)->ps2, $htmlOptions2)?>
         <span class="lbl"> <?=tt('Блокировать поле пересдач')?></span>
         <?=CHtml::hiddenField('settings[29]', PortalSettings::model()->findByPk(29)->ps2)?>
