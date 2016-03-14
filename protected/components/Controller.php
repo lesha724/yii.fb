@@ -36,6 +36,13 @@ class Controller extends CController
         parent::init();
     }
 
+    public function mobileCheck(){
+        $detect = Yii::app()->mobileDetect;
+
+        $detect->isMobile();
+        $detect->isTablet();
+        $detect->isIphone();
+    }
 
     public function beforeAction($action)
     {
@@ -50,6 +57,8 @@ class Controller extends CController
         $this->processDate1AndDate2();
 
         $this->processDateLesson();
+
+        $this->mobileCheck();
 
         return parent::beforeAction($action);
     }

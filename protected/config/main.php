@@ -84,6 +84,12 @@ $config = array(
                     'js' => array('js/jquery.gritter.min.js'),
                     'depends' => array('jquery')
                 ),
+				'noty' => array(
+						'baseUrl' => '',
+						'css' => array('css/mobile/animate.css','css/mobile/buttons.css'),
+						'js' => array('js/mobile/noty/packaged/jquery.noty.packaged.min.js','js/mobile/notification_html.js'),
+						'depends' => array('jquery')
+				),
                 'spin' => array(
                     'baseUrl' => 'theme/ace/assets/',
                     'js' => array('js/spin.min.js'),
@@ -195,6 +201,9 @@ $config = array(
 					//'ipFilters'=>array('93.78.170.140'),
 				),*/
 			),
+		),
+		'mobileDetect' => array(
+			'class' => 'ext.MobileDetect.MobileDetect'
 		),
         'bootstrap' => array(
             'class' => 'ext.bootstrap.components.Bootstrap',

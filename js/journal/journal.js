@@ -312,12 +312,12 @@ $(document).ready(function(){
 
     });
 
-    $(document).on('change', '#showRetake', function(){
+    /*$(document).on('change', '#showRetake', function(){
         var $elem = $('[name="showRetake"]').clone();
         var $form   = $('#filter-form');
         $form.append($elem);
         $form.submit();
-    });
+    });*/
 
     $(document).on('click', '.btn-retake', function(){
 

@@ -7,7 +7,7 @@ $this->pageHeader=tt('Журнал');
 $this->breadcrumbs=array(
     tt('Журнал'),
 );
-    Yii::app()->clientScript->registerPackage('gritter');
+    Yii::app()->clientScript->registerPackage('noty');
     Yii::app()->clientScript->registerPackage('jquery.ui');
 
     Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/mobile/script/journal/journal.js', CClientScript::POS_HEAD);

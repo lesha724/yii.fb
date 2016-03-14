@@ -18,7 +18,7 @@ $(document).ready(function() {
     });
 });
 
-function addGritter(title, text, className)
+/*function addGritter(title, text, className)
 {
     obj = {
         title: title,
@@ -26,7 +26,29 @@ function addGritter(title, text, className)
         class_name: 'gritter-'+className
     }
     $.gritter.add(obj)
+}*/
+
+function addNoty(title, text, className){
+    var n = noty({
+        text        : text +'</br>'+title,
+        type        : className,
+        dismissQueue: true,
+        modal       : false,
+        layout      : 'topRight',
+        closeWith   : ['click'],
+        theme       : 'relax',
+        maxVisible  : 4,
+        timeout     : 2000,
+        animation   : {
+            open  : 'animated bounceInRight',
+            close : 'animated bounceOutRight',
+            easing: 'swing',
+            speed : 500
+        }
+    });
+    console.log('html: ' + n.options.id);
 }
+
 function initDialogSettings()
 {
     if ($.ui != undefined)

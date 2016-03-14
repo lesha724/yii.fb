@@ -86,7 +86,7 @@ $(document).ready(function(){
             var url = $that.parents('[data-url]').data('url');
 
             $spinner1.show();
-            send(url,params,title,$trElem,$td,$that,$spinner1,st1);
+            send(url,params,title,$trElem,$td,$that,$spinner1,st1,index);
             $that.val('');
             $that.addClass('not-value');
             $trElem.find(':checkbox').attr('disabled','disabled');
@@ -125,13 +125,13 @@ $(document).ready(function(){
 
 
         if (params.field!='elgzst3'&&params.value==0&&!$that.is(':checkbox')&&ps55==0) {
-            addGritter(title, _error, 'error')
+            addNoty(title, _error, 'error')
             $td.addClass('error')
             return false;
         }
 
         if (isNaN(params.value)||(params.value<0)) {
-            addGritter(title, _error, 'error')
+            addNoty(title, _error, 'error')
             $td.addClass('error')
             return false;
         }
@@ -140,7 +140,7 @@ $(document).ready(function(){
         {
             var val=$trElem.find('td[data-name="elgzst4"][data-number="'+params.nom+'"] input').val();
             if(val!=''&&typeLesson==1) {
-                addGritter(title, _error, 'error');
+                addNoty(title, _error, 'error');
                 $td.addClass('error');
                 $that.removeAttr('checked');
                 return false;
@@ -159,7 +159,7 @@ $(document).ready(function(){
                 data:params,
                 success: function( data ) {
                     if (data.error) {
-                        addGritter(title, _error, 'error')
+                        addNoty(title, _error, 'error')
                         $td.addClass('error');
                         $enable=false;
                     } else {
@@ -176,7 +176,7 @@ $(document).ready(function(){
                                         "class" : "btn btn-danger btn-mini",
                                         click: function() {
                                             $( this ).dialog( "close" );
-                                            send(url,params,title,$trElem,$td,$that,$spinner1,st1);
+                                            send(url,params,title,$trElem,$td,$that,$spinner1,st1,index);
                                         }
                                     }
                                     ,
@@ -193,20 +193,20 @@ $(document).ready(function(){
                             });
                         }else
                         {
-                            send(url,params,title,$trElem,$td,$that,$spinner1,st1);
+                            send(url,params,title,$trElem,$td,$that,$spinner1,st1,index);
                         }
 
                     }
                 },
                 error: function( data ) {
-                    addGritter(title, _error, 'error');
+                    addNoty(title, _error, 'error');
                     $trElem.addClass('error');
                 }
             });
         }
         else
         {
-            send(url,params,title,$trElem,$td,$that,$spinner1,st1);
+            send(url,params,title,$trElem,$td,$that,$spinner1,st1,index);
         }
 
     });
@@ -280,7 +280,7 @@ function getError(data)
     }
 }
 
-function send(url,params,title,$trElem,$td,$that,$spinner1,st1)
+function send(url,params,title,$trElem,$td,$that,$spinner1,st1,index)
 {
     $.ajax({
         url: url,
@@ -289,86 +289,89 @@ function send(url,params,title,$trElem,$td,$that,$spinner1,st1)
         success: function(data){
             $spinner1.hide();
             if (data.error) {
-                addGritter(title, getError(data), 'error')
+                addNoty(title, getError(data), 'error')
                 $td.addClass('error');
             } else {
-                addGritter(title, _success, 'success')
+                addNoty(title, _success, 'success');
+
+                var $number = $td.data('number');
+                var elem5 = $trElem.find('td[data-number="'+$number+'"] input[data-name="elgzst5"]');
+                var elem3 = $trElem.find('td[data-number="'+$number+'"] input[data-name="elgzst3"]');
+                var elem4 = $trElem.find('td[data-number="'+$number+'"] input[data-name="elgzst4"]');
+                var buttonRetake = $trElem.find('td[data-number="'+$number+'"] .btn-retake');
+
                 $td.removeClass('error').addClass('success');
                 setTimeout(function() { $trElem.removeClass('success') }, 1000);
                 if ($that.is(':checkbox'))
                 {
-                    var elem = $trElem.find('td [data-name="elgzst5"]');
                     if ($that.prop('checked')) {
-                        $trElem.find('td  [data-name="elgzst4"]').attr('disabled', 'disabled');
-                        //elem.removeAttr('disabled');
+                        elem4.attr('disabled', 'disabled');
                     }
                     else
                     {
-                        $trElem.find('td  [data-name="elgzst4"]').removeAttr('disabled');
-                        //elem.attr('disabled', 'disabled');
-                        if(!elem.is(':checkbox'))
-                            elem.val('');
+                        elem4.removeAttr('disabled');
+                        if(!elem5.is(':checkbox'))
+                            elem5.val('');
                         else
-                            elem.removeAttr('checked');
+                            elem5.removeAttr('checked');
                     }
 
                     if(params.value==1) {
-                        if(elem.is(':checkbox'))
-                            elem.attr('disabled', 'disabled');
+                        if(elem5.is(':checkbox'))
+                            elem5.attr('disabled', 'disabled');
                     }
                     else {
-                        if(elem.is(':checkbox'))
-                            elem.removeAttr('disabled');
+                        if(elem5.is(':checkbox'))
+                            elem5.removeAttr('disabled');
                     }
                 }
 
-                if ($that.is(':text'))
+                if ($that.data('name')=='elgzst4'||$that.data('name')=='elgzst5')
                 {
                     if($that.val()!=""&&parseFloat( $that.val() )>=0)
                         $that.removeClass('not-value');
                     else
                         $that.addClass('not-value');
 
-                    if($that.data('name')=='elgzst4')
-                        if($that.val()!=""&&parseFloat( $that.val() )>=0)
-                            $trElem.find(':checkbox').attr('disabled','disabled');
+                    if($that.data('name')=='elgzst4') {
+                        if ($that.val() != "" && parseFloat($that.val()) >= 0)
+                            elem3.attr('disabled', 'disabled');
                         else
-                            $trElem.find(':checkbox').removeAttr('disabled');
+                            elem3.removeAttr('disabled');
+                    }
 
                     if($that.data('name')=='elgzst5')
                     {
                         if(parseFloat( $that.val() )>0)
-                            $trElem.find('td [data-name="elgzst4"]').attr('disabled','disabled');
+                            elem4.attr('disabled','disabled');
                         else
-                            $trElem.find('td [data-name="elgzst4"]').removeAttr('disabled');
+                            elem4.removeAttr('disabled');
                     }
                 }
 
-                var elem5 = $trElem.find('td [data-name="elgzst5"]');
-                var elem3 = $trElem.find('td [data-name="elgzst3"]');
-                var elem4 = $trElem.find('td [data-name="elgzst4"]');
+
                 if(elem5){
                     if(elem3.prop('checked')||parseFloat(elem4.val())<=minBal) {
                         if (parseFloat(elem5.val()) > minBal) {
-                            $trElem.find('td .btn-retake').hide();
+                            buttonRetake.hide();
                             elem5.attr('disabled', 'disabled');
                         }
                         else {
-                            $trElem.find('td .btn-retake').show();
+                            buttonRetake.show();
                             elem5.removeAttr('disabled');
                         }
                     }
                     else {
-                        $trElem.find('td .btn-retake').hide();
+                        buttonRetake.hide();
                         elem5.attr('disabled', 'disabled');
                     }
                 }else{
                     if(elem3.prop('checked')) {
-                        $trElem.find('td .btn-retake').show();
+                        buttonRetake.show();
                         elem5.removeAttr('disabled');
                     }
                     else {
-                        $trElem.find('td .btn-retake').hide();
+                        buttonRetake.hide();
                         elem5.attr('disabled', 'disabled');
                     }
                 }
@@ -376,12 +379,12 @@ function send(url,params,title,$trElem,$td,$that,$spinner1,st1)
         },
         error: function(jqXHR, textStatus, errorThrown){
             if (jqXHR.status == 500) {
-                addGritter('', 'Internal error: ' + jqXHR.responseText, 'error')
+                addNoty('', 'Internal error: ' + jqXHR.responseText, 'error')
             } else {
                 if (jqXHR.status == 403) {
-                    addGritter('', 'Access error: ' + jqXHR.responseText, 'error')
+                    addNoty('', 'Access error: ' + jqXHR.responseText, 'error')
                 } else {
-                    addGritter('', 'Unexpected error.', 'error')
+                    addNoty('', 'Unexpected error.', 'error')
                 }
             }
             $td.addClass('error');
