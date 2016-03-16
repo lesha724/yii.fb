@@ -599,6 +599,12 @@ function recalculateBothTotal(st1)
         total_1 = Math.round(total_1/totalCount*12);
     }
 
+    if(ps44==2)
+    {
+        bal = (total_1/totalCount).toFixed(2);
+        total_1 = Math.round(total_1/totalCount);
+    }
+
     $(table_3 +' td').each(function(){
 
         var mark = calculateMarkFor(this);
@@ -607,6 +613,9 @@ function recalculateBothTotal(st1)
             total_2 += mark;
     });
     if(ps44==1) {
+        sr = '(' + bal + ')'
+    }
+    if(ps44==2) {
         sr = '(' + bal + ')'
     }
     $(table_3 +' td[data-total=1]').text(total_1+sr);

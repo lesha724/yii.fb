@@ -134,6 +134,7 @@ $_l2 = '<i class="icon-double-angle-right"></i>';
 $isStd   = Yii::app()->user->isStd;
 $isTch   = Yii::app()->user->isTch;
 $isAdmin = Yii::app()->user->isAdmin;
+$isPrnt = Yii::app()->user->isPrnt;
 
 $this->widget('zii.widgets.CMenu', array(
     'encodeLabel' => false,
@@ -554,6 +555,12 @@ $this->widget('zii.widgets.CMenu', array(
                     'url'     => _u('/other/studentInfo'),
                     'active'  => $_c=='other' && $_a=='studentInfo',
                     'visible' => _ch('other', 'studentInfo') && ($isTch || $isStd),
+                ),
+                array(
+                    'label'   => $_l2.tt('Каточка студента'),
+                    'url'     => _u('/other/studentCard'),
+                    'active'  => $_c=='other' && $_a=='studentCard',
+                    'visible' => _ch('other', 'studentCard') && ($isPrnt || $isStd),
                 ),
             ),getDopItem('other',0)),
             'visible' => _ch('other', 'main')
