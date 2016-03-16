@@ -1,15 +1,15 @@
 <?php
 $pattern = <<<HTML
-<div class="control-group">
+<div class="control-group form-group">
     %s
-    <div class="controls">
+    <div class="controls col-sm-10">
         %s
     </div>
 </div>
 HTML;
 
 $options = array(
-    'class' => 'control-label'
+    'class' => 'control-label col-sm-2'
 );
 
    
@@ -25,17 +25,17 @@ $options = array(
     if($us4!=1)
     {
         $label = $form->label($model, 'elgotr2', $options);
-        $input = $form->textField($model, 'elgotr2');
+        $input = $form->textField($model, 'elgotr2',array('class'=>"form-control"));
         $html .= sprintf($pattern, $label, $input);
     }else
     {
         $label = $form->label($model, 'elgotr2', $options);
-        $input = $form->dropDownList($model, 'elgotr2',Elgotr::model()->getElgotr2ArrByLk());
+        $input = $form->dropDownList($model, 'elgotr2',Elgotr::model()->getElgotr2ArrByLk(),array('class'=>"form-control"));
         $html .= sprintf($pattern, $label, $input);
     }
 
     $label = $form->label($model, 'elgotr3', $options);
-    $input = $form->textField($model, 'elgotr3',array('class' => 'datepicker'));
+    $input = $form->textField($model, 'elgotr3',array('class' => 'datepicker form-control'));
     $html .= sprintf($pattern, $label, $input);
 
     $nr = Nr::model()->findByPk($r1);

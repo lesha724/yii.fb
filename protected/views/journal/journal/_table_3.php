@@ -11,6 +11,12 @@ function getTotal1($total_1,$count_dates,$ps44){
             else
                 $value=0;
             break;
+        case 2:
+            if($count_dates!=0)
+                $value = round($total_1/$count_dates);
+            else
+                $value=0;
+            break;
     }
     return $value;
 }
@@ -113,6 +119,12 @@ foreach ($students as $st) {
     $tr.='<tr data-st1="'.$st1.'">';
     $bal='';
     if($ps44==1){
+        if($total_count_1[$st1]!=0)
+            $bal = round($total_1[$st1]/$total_count_1[$st1],2);
+        else
+            $bal=0;
+    }
+    if($ps44==2){
         if($total_count_1[$st1]!=0)
             $bal = round($total_1[$st1]/$total_count_1[$st1],2);
         else

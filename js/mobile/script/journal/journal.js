@@ -210,6 +210,133 @@ $(document).ready(function(){
         }
 
     });
+
+    $(document).on('click', '.btn-retake', function(){
+
+        var $that = $(this);
+
+        var url = $that.parents('[data-url-retake]').data('url-retake');
+
+        var st1  = $that.parents('[data-st1]').data('st1');
+
+        var gr1  = $that.parents('[data-gr1]').data('gr1');
+
+        var params = {
+            nom  : $that.parent().data('number'),
+            elgz1   : $that.parent().data('elgz1'),
+            type_lesson   : $that.parent().data('type_lesson'),
+            r1   : $that.parent().data('r1'),
+            st1   : st1,
+            gr1   : gr1,
+            date:$that.parent().data('date'),
+            value : '0'
+        }
+
+
+        $spinner1.show();
+
+        $.ajax({
+            url: url,
+            data:params,
+            dataType: 'json',
+            success: function( data ) {
+                if (!data.error) {
+                    $('#modalRetake .modal-header h4').html(data.title);
+                    $('#modalRetake #modal-content').html(data.html);
+                    $('#modalRetake .datepicker').datepicker({
+                        todayBtn: "linked",
+                        format: "dd.mm.yy",
+                        language: 'ru',
+                        daysOfWeekHighlighted: "0,6",
+                        calendarWeeks: true,
+                        autoclose: true,
+                        todayHighlight: true,
+                        toggleActive: true
+                    });
+                    if(data.show){
+                        $('#save-retake').show();
+                    }
+                    $('#modalRetake').modal('show');
+                } else {
+                    addNoty(data.html, _error, 'error');
+                }
+                $spinner1.hide();
+            },
+            error: function( data ) {
+                addNoty('', _error, 'error');
+                $spinner1.hide();
+            }
+        });
+    });
+
+    $(document).on('change','#Elgp_elgp2',function(){
+        var val = $(this).val();
+        if(val!=5)
+            $('#elgp').hide();
+        else
+            $('#elgp').show();
+    });
+
+    $(document).on('click','#save-retake-journal',function(){
+
+        var $that =$(this);
+
+        var url = $that.parents('[data-url]').data('url');
+
+        var st1  = $that.parents('[data-st1]').data('st1');
+
+        var $td    = $that.parent();
+
+        var elgp2,elgp3,elgp4,elgp5='';
+        if($('form').is('#omissions-form'))
+        {
+            elgp2=$('#Elgp_elgp2').val();
+            elgp3=$('#Elgp_elgp3').val();
+            elgp4=$('#Elgp_elgp4').val();
+            elgp5=$('#Elgp_elgp5').val();
+        }
+
+        var elgotr1=$('#Elgotr_elgotr1').val();
+        var elgotr2=$('#Elgotr_elgotr2').val();
+        var elgotr3=$('#Elgotr_elgotr3').val();
+        var elgotr4=$('#Elgotr_elgotr4').val();
+
+        var params = {
+            elgp2 :elgp2,
+            elgp3 :elgp3,
+            elgp4 :elgp4,
+            elgp5 :elgp5,
+            elgotr1:elgotr1,
+            elgotr2:elgotr2,
+            elgotr3:elgotr3,
+            elgotr4:elgotr4
+        }
+
+        title='';
+
+        $.ajax({
+            url: url,
+            data:params,
+            dataType: 'json',
+            success: function( data ) {
+                if (!data.error) {
+                    addNoty(title, _success, 'success');
+                    //$td.find('[data-name="elgzst5"]').val(elgotr2);
+                    //recalculateBothTotal(st1);
+                    $('#filter-form').submit();
+                } else {
+                    addNoty(title, _error, 'error');
+                }
+                $spinner1.hide();
+                $('#modalRetake').modal('hide');
+            },
+            error: function( data ) {
+                addNoty(title, _error, 'error');
+                $spinner1.hide();
+                $('#modalRetake').modal('hide');
+            }
+        });
+    });
 });
 
 

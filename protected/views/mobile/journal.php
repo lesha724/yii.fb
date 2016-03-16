@@ -9,6 +9,7 @@ $this->breadcrumbs=array(
 );
     Yii::app()->clientScript->registerPackage('noty');
     Yii::app()->clientScript->registerPackage('jquery.ui');
+    Yii::app()->clientScript->registerPackage('datepicker-mobile');
 
     Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/mobile/script/journal/journal.js', CClientScript::POS_HEAD);
 
@@ -56,3 +57,41 @@ $this->renderPartial('journal/_bottom', array('model' => $model,'read_only' => $
     <?=tt('Вы уверены?')?>
 </p>
 </div><!-- #dialog-confirm -->
+
+<div id="modalRetake" data-url="<?=Yii::app()->createUrl('/journal/saveJournalRetake')?>" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal">&times;</a>
+                <h4></h4>
+            </div>
+
+            <div class="modal-body">
+                <div id="modal-content">
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <?php $this->widget(
+                    'bootstrap.widgets.TbButton',
+                    array(
+                        'label' => tt('Сохранить'),
+                        'type'=>'info',
+                        'url' => '#',
+                        'htmlOptions' => array('id' => 'save-retake-journal'),
+                    )
+                ); ?>
+                <?php $this->widget(
+                    'bootstrap.widgets.TbButton',
+                    array(
+                        'label' => tt('Отмена'),
+                        'url' => '#',
+                        'htmlOptions' => array('data-dismiss' => 'modal'),
+                    )
+                ); ?>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

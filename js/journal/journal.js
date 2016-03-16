@@ -359,10 +359,6 @@ $(document).ready(function(){
                     if(data.show){
                         $('#save-retake').show();
                     }
-                    $('.datepicker').datepicker({
-                        format: 'dd.mm.yy',
-                        language:'ru'
-                    });
                     $('#modalRetake').modal('show');
                 } else {
                     addGritter(data.html, tt.error, 'error');

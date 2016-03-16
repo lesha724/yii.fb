@@ -9,6 +9,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     $options = array(
         ' '.tt('Стандартный (сума балов)'),
         ' '.tt('Вариант 1 (ср. бал по занятиям * 12 + доп. балы)'),
+        ' '.tt('\'Вариант 1 (ср. бал по занятиям + доп. балы)'),
     );
 
     $htmlOptions = array(
