@@ -100,7 +100,7 @@ SQL;
     public function actionInsertStMark()
     {
         if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
         $error=false;
         $errorType=0;
 
@@ -676,11 +676,12 @@ SQL;
 
     public function actionJournalExcel()
     {
+        $sem1=Yii::app()->request->getParam('sem1', null);
         $model = new FilterForm;
         $model->scenario = 'journal';
         if (isset($_REQUEST['FilterForm']))
             $model->attributes=$_REQUEST['FilterForm'];
-        if(!empty($model->group))
+        if(!empty($model->group)&&!(empty($sem1)))
         {
             list($uo1,$gr1) = explode("/", $model->group);
             $sql = <<<SQL
@@ -712,7 +713,8 @@ SQL;
             $dates = R::model()->getDatesForJournal(
                 $uo1,
                 $gr1,
-                $model->type_lesson
+                $model->type_lesson,
+                $sem1
             );
 
             $elg1=Elg::getElg1($uo1,$model->type_lesson);
@@ -957,9 +959,9 @@ SQL;
             $res = Gr::model()->getStarostaFromGr1($gr1);
             $nameStarosta='';
             if(!empty($res))
-                $nameStarosta=SH::getShortName($res['st2'],$res['st3'],$res['$st4']);
+                $nameStarosta=SH::getShortName($res['st2'],$res['st3'],$res['st4']);
             $sheet->mergeCells('A25:I25');
-            $sheet->setCellValue('A25',tt('Староста').': '.$res)->getStyle('A25')->getFont()->setSize(16);
+            $sheet->setCellValue('A25',tt('Староста').': '.$nameStarosta)->getStyle('A25')->getFont()->setSize(16);
 
             // Set active sheet index to the first sheet, so Excel opens this as the first sheet
             $objPHPExcel->setActiveSheetIndex(0);

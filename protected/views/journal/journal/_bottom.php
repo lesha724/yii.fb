@@ -44,7 +44,7 @@ if (!empty($model->sem1)):
         'label'=>tt('Печать'),
         'htmlOptions'=>array(
             'class'=>'btn-small',
-            'data-url'=>Yii::app()->createUrl('/journal/journalExcel'),
+            'data-url'=>Yii::app()->createUrl('/journal/journalExcel',array('sem1'=>$model->sem1)),
             'id'=>'journal-print',
         )
     ));
