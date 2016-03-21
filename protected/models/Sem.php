@@ -469,11 +469,11 @@ SQL;
             return array();
 
         $sql = <<<SQL
-          select sem1
+          select sem1,sem7
             from us
                inner join sem on (us.us3 = sem.sem1)
             where us2=:UO1 and sem3=:YEAR and sem5=:SEM
-          GROUP BY sem1
+          GROUP BY sem1,sem7
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':UO1', $uo1);
@@ -484,7 +484,7 @@ SQL;
         $res = array();
 
         foreach($sem1 as $key => $val){
-            $res[$key]['name']= $key++;
+            $res[$key]['name']= $val['sem7'];
             $res[$key]['sem1']= $val['sem1'];
         }
         return $res;
