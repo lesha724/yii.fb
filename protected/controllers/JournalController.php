@@ -100,7 +100,7 @@ SQL;
     public function actionInsertStMark()
     {
         if (! Yii::app()->request->isAjaxRequest)
-            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
         $error=false;
         $errorType=0;
 
