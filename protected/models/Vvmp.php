@@ -225,16 +225,22 @@ SQL;
 
 	public function getModule($uo1,$gr1)
 	{
+
 		$sql = <<<SQL
 			SELECT vvmp1,vmpv1,vvmp2,vmpv4,vmpv3,vmpv5,vvmp6 from vvmp
 			INNER JOIN vmpv on (vvmp1=vmpv2)
-			WHERE vvmp2=:UO1 and vmpv7=:GR1 and vvmp4 = (
+			WHERE vvmp3=(
+			SELECT  uo3 from uo where uo1=:UO1
+			)
+			and vmpv7=:GR1 and vvmp4 = (
 			select
 			   first 1 sem7
 				from sem
 				   inner join sg on (sem.sem2 = sg.sg1)
 				   inner join gr on (sg.sg1 = gr.gr2)
 				WHERE gr1={$gr1} and sem3=:YEAR and sem5=:SEM
+			) and vvmp25=(
+			SELECT  gr2 from gr where gr1={$gr1}
 			)
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
