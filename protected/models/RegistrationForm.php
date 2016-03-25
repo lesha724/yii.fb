@@ -19,13 +19,14 @@ class RegistrationForm extends CFormModel
             array('email', 'email'),
             array('email', 'unique', 'className'=>'Users', 'attributeName'=>'u4'),
             array('username', 'unique', 'className'=>'Users', 'attributeName'=>'u2'),
+            array('password', 'compare', 'compareAttribute'=>'password2'),
             //array('username', 'match', 'pattern'=>'/^[A-z][\w]+$/','message'=>tt('В Логине могут быть только латинские символы')),
-            array('username', 'match', 'pattern'=>'/^[a-zA-Z0-9_-]{8,30}$/','message'=>tt('В Логине могут быть только латинские символы и цифры, длиной от 8 до 30 символов')),
-            array('password', 'match', 'pattern'=>'/^[a-zA-Z0-9_-]{8,30}$/','message'=>tt('В password могут быть только латинские символы и цифры,  длиной от 8 до 30 символов')),
+            array('username', 'match', 'pattern'=>'/^[a-zA-Z][a-zA-Z0-9-_\.]{8,30}$/','message'=>tt('В Логине могут быть только латинские символы и цифры, длиной от 8 до 30 символов. Первый символ обязательно буква')),
+            array('password', 'match', 'pattern'=>'/(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/','message'=>tt('В password могут быть только строчные и прописные латинские буквы, цифры, спецсимволы. Минимум 8 символов')),
             //array('password', 'match', 'pattern'=>'/^[A-z][\w]+$/','message'=>tt('В password могут быть только латинские символы')),
             //array('username, password', 'length', 'min' => 6,'max'=>50),
             array('email', 'length', 'max'=>100),
-            array('password', 'compare', 'compareAttribute'=>'password2'),
+
 		);
 	}
 
