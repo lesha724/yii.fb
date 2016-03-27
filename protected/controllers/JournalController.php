@@ -1005,7 +1005,7 @@ SQL;
 
     public function actionUpdateOmissionsStMark()
     {
-        if (! Yii::app()->request->isAjaxRequest)
+        //if (! Yii::app()->request->isAjaxRequest)
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $st1 = Yii::app()->request->getParam('st1', null);

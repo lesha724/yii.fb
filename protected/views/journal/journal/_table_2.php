@@ -130,8 +130,8 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
                 else
                     $disabled_input_1 = 'disabled="disabled"';
             }
-            $elgzst4_input='<input value="'.$elgzst4.'" '.$class_1.' maxlength="3" data-name="elgzst4" '.$disabled_input.'>';
-            $elgzst5_input='<input value="'.$elgzst5.'" '.$class_2.' maxlength="3" data-name="elgzst5" '.$disabled_input_1.'>';
+            $elgzst4_input='<input value="'.$elgzst4.'" '.$class_1.' maxlength="5" data-name="elgzst4" '.$disabled_input.'>';
+            $elgzst5_input='<input value="'.$elgzst5.'" '.$class_2.' maxlength="5" data-name="elgzst5" '.$disabled_input_1.'>';
         }else
         {
             $elgzst4_input='<label class="label label-success">'.$elgzst4.'</label>';
