@@ -40,7 +40,7 @@ class Users extends CActiveRecord
 			array('u1', 'required'),
 			array('u1, u5, u6, u7', 'numerical', 'integerOnly'=>true),
 			//array('u2, u3','length',  'min' => 8,'max'=>30),
-			array('u3', 'match', 'pattern'=>'/^[a-zA-Z][a-zA-Z0-9-_\.,]{7,}$','message'=>tt('В password могут быть только латинские символы и цифры, длиной от 8 до 30 символов')),
+			array('u3', 'match', 'pattern'=>'/^[a-zA-Z][a-zA-Z0-9-_\.,]{7,}$/','message'=>tt('В password могут быть только строчные и прописные латинские буквы, цифры, спецсимволы. Минимум 8 символов')),
 			array('u4', 'length', 'max'=>400),
             array('u2, u4', 'checkIfUnique'),
             //array('u2', 'length', 'min'=>5, 'max'=>30),
