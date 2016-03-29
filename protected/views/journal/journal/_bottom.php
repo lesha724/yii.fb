@@ -51,7 +51,7 @@ if (!empty($model->sem1)):
 
     $this->renderPartial('/filter_form/default/_refresh_filter_form_button');
 
-    $elg1=Elg::getElg1($uo1,$model->type_lesson);
+    $elg1=Elg::getElg1($uo1,$model->type_lesson,$model->sem1);
     $elg = Elg::model()->findByPk($elg1);
     if(empty($elg))
         throw new CHttpException(404, tt('Не задана структура журнала. Обратитесь к Администратору системы').'.');

@@ -129,18 +129,19 @@ SQL;
         return $res;
     }
 
-    public static function getElg1($uo1,$type_lesson)
+    public static function getElg1($uo1,$type_lesson,$sem1)
     {
         $sql=<<<SQL
                 SELECT elg1 FROM elg
                 INNER JOIN sem on (elg3 = sem1)
-              WHERE elg2=:UO1 AND sem3=:YEAR AND sem5=:SEM AND elg4 = :TYPE_LESSON
+              WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4 = :TYPE_LESSON
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':UO1', $uo1);
         $command->bindValue(':TYPE_LESSON', $type_lesson);
-        $command->bindValue(':YEAR', Yii::app()->session['year']);
-        $command->bindValue(':SEM', Yii::app()->session['sem']);
+		$command->bindValue(':SEM1', $sem1);
+        //$command->bindValue(':YEAR', Yii::app()->session['year']);
+        //$command->bindValue(':SEM', Yii::app()->session['sem']);
         $res = $command->queryRow();
 
         if(!empty($res))
