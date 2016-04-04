@@ -717,7 +717,7 @@ SQL;
                 $sem1
             );
 
-            $elg1=Elg::getElg1($uo1,$model->type_lesson);
+            $elg1=Elg::getElg1($uo1,$model->type_lesson,$sem1);
             $elg = Elg::model()->findByPk($elg1);
             if(empty($elg))
                 throw new CHttpException(404, 'Elg empty.');
