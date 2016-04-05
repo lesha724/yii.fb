@@ -1110,7 +1110,7 @@ SQL;
         $id = $uploadResult->UploadDocumentResult->Uploaded[0]->Id;
 
         // Иницировать проверку с использованием собственного модуля поиска и модуля поиска "wikipedia"
-        $client->CheckDocument(array("docId" => $id, "checkServicesList" => array($COMPANY_NAME, "internet", "disser.rsl", "lexpro")));
+        $client->CheckDocument(array("docId" => $id));
 
         // Получить текущий статус последней проверки
         $status = $client->GetCheckStatus(array("docId" => $id));
