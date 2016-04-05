@@ -19,7 +19,7 @@ $html .= $form->dropDownList($model, 'discipline', $disciplines, $options);
 $html .= '</div>';
 $groups = CHtml::listData(D::model()->getUоFromDiscipline($model->discipline), 'key', 'name');
 $html .= '<div class="span2 ace-select">';
-$html .= $form->label($model, 'group');
+$html .= $form->label($model, 'group',array('label' => tt( 'Специальность' )));
 $html .= $form->dropDownList($model, 'group', $groups, $options);
 $html .= '</div>';
 echo $html;
