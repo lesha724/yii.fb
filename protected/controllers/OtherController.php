@@ -1060,15 +1060,41 @@ SQL;
 
     public function sendToAntiPlagiarism($document, $tmpName)
     {
-        $ANTIPLAGIAT_URI = Yii::app()->params['antiPlagiarism']['antiplagiat_uri'];
+        //$ANTIPLAGIAT_URI = Yii::app()->params['antiPlagiarism']['antiplagiat_uri'];
 
         // Создать клиента сервиса(http, unsecured)
-        $COMPANY_NAME = Yii::app()->params['antiPlagiarism']['company_name'];
-        $APICORP_ADDRESS = Yii::app()->params['antiPlagiarism']['apicorp_address'];
-        $client = new SoapClient("http://$APICORP_ADDRESS/apiCorp/$COMPANY_NAME?singleWsdl",
+        //$COMPANY_NAME = Yii::app()->params['antiPlagiarism']['company_name'];
+        //$APICORP_ADDRESS = Yii::app()->params['antiPlagiarism']['apicorp_address'];
+        /*$client = new SoapClient("http://$APICORP_ADDRESS/apiCorp/$COMPANY_NAME?singleWsdl",
             array("trace"=>1,
                 "soap_version" => SOAP_1_1,
-                "features" => SOAP_SINGLE_ELEMENT_ARRAYS));
+                "features" => SOAP_SINGLE_ELEMENT_ARRAYS));*/
+
+        $LOGIN = "testapi";////начало
+        $PASSWORD = "testapi";
+        $COMPANY_NAME = 'testapi';
+        $APICORP_ADDRESS = 'api.antiplagiat.ru:5433';
+        $client = new SoapClient("https://$APICORP_ADDRESS/apiCorp/$COMPANY_NAME?singleWsdl",
+            array("trace"=>1,
+                "login"=>$LOGIN,
+                "password"=>$PASSWORD,
+                "soap_version" => SOAP_1_1,
+                "features" => SOAP_SINGLE_ELEMENT_ARRAYS,
+                "timeout" => 300,
+                # PHP 5.6
+                "stream_context"=>stream_context_create(
+                    array(
+                        "ssl"=>array(
+                            "verify_peer"=>false
+                        ,"allow_self_signed"=>true
+                        ,"verify_peer_name"=>false
+                        )
+                    )
+                )));
+
+
+// Используется для получения ссылок на отчеты
+        $ANTIPLAGIAT_URI = "http://$COMPANY_NAME.antiplagiat.ru";///конец
 
         // Описание загружаемого файла
         $data = array(
