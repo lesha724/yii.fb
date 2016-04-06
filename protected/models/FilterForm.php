@@ -43,7 +43,7 @@ class FilterForm extends CFormModel
 	public $type_rating = 0;
 	public $st_rating = 0;
 	
-	public $type_lesson = 0;
+	public $type_lesson = 1;
 
 	public $sem1 = 0;
 	/**
