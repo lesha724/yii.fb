@@ -1070,10 +1070,16 @@ SQL;
                 "soap_version" => SOAP_1_1,
                 "features" => SOAP_SINGLE_ELEMENT_ARRAYS));*/
 
-        $LOGIN = "testapi";////начало
-        $PASSWORD = "testapi";
-        $COMPANY_NAME = 'testapi';
-        $APICORP_ADDRESS = 'api.antiplagiat.ru:5433';
+        //$LOGIN = "testapi";////начало
+        //$PASSWORD = "testapi";
+        //$COMPANY_NAME = 'testapi';
+        //$APICORP_ADDRESS = 'api.antiplagiat.ru:5433';
+
+        $LOGIN = PortalSettings::model()->findByPk(68)->ps2;
+        $PASSWORD = PortalSettings::model()->findByPk(69)->ps2;
+        $COMPANY_NAME = PortalSettings::model()->findByPk(70)->ps2;
+        $APICORP_ADDRESS = PortalSettings::model()->findByPk(71)->ps2;
+
         $client = new SoapClient("https://$APICORP_ADDRESS/apiCorp/$COMPANY_NAME?singleWsdl",
             array("trace"=>1,
                 "login"=>$LOGIN,

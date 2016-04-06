@@ -17,7 +17,7 @@ $options = array(
     'en'=>tt('en'),
 );
 ?>
-<div class="span12">
+<div class="span6">
     <div class="widget-box">
         <div class="widget-header">
             <h4><?=tt('Настройки закрытия портала')?></h4>
@@ -132,6 +132,59 @@ $options = array(
                                 'language' => Yii::app()->language,
                             ),*/
                         )); ?>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-info btn-small">
+                        <i class="icon-ok bigger-110"></i>
+                        <?=tt('Сохранить')?>
+                    </button>
+                </div>
+
+                <?php $this->endWidget();?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="span6">
+    <div class="widget-box">
+        <div class="widget-header">
+            <h4><?=tt('Антиплагиат')?></h4>
+            <span class="widget-toolbar">
+                <a data-action="collapse" href="#">
+                    <i class="icon-chevron-up"></i>
+                </a>
+            </span>
+        </div>
+        <div class="widget-body">
+            <div class="widget-main">
+                <?php
+                $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+                    'id'=>'ps-antiplagiat',
+                    'htmlOptions' => array('class' => 'form-horizontal'),
+                    'action' => '#'
+                ));
+                ?>
+
+                <div class="control-group">
+                    <span class="lbl"> <?=tt('LOGIN')?>:</span>
+                    <?=CHtml::textField('settings[68]', PortalSettings::model()->findByPk(68)->ps2)?>
+                </div>
+
+                <div class="control-group">
+                    <span class="lbl"> <?=tt('PASSWORD')?>:</span>
+                    <?=CHtml::textField('settings[69]', PortalSettings::model()->findByPk(69)->ps2)?>
+                </div>
+
+                <div class="control-group">
+                    <span class="lbl"> <?=tt('COMPANY_NAME')?>:</span>
+                    <?=CHtml::textField('settings[70]', PortalSettings::model()->findByPk(70)->ps2)?>
+                </div>
+
+                <div class="control-group">
+                    <span class="lbl"> <?=tt('APICORP_ADDRESS')?>:</span>
+                    <?=CHtml::textField('settings[71]', PortalSettings::model()->findByPk(71)->ps2)?>
                 </div>
 
                 <div class="form-actions">
