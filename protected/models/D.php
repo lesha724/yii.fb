@@ -1188,11 +1188,14 @@ SQL;
 
         list($year, $sem) = ShortCodes::getCurrentYearAndSem();
 
-        if (empty($params['sg40']))
-            $params['sg40'] = $year;
+        if(!empty($params)) {
+            if (empty($params['sg40']))
+                $params['sg40'] = $year;
 
-        if ($params['sg41']==null)
-            $params['sg41'] = $sem;
+            if ($params['sg41'] == null)
+                $params['sg41'] = $sem;
+        }else
+            return array($year, $sem);
 
         return array($params['sg40'], $params['sg41']);
     }

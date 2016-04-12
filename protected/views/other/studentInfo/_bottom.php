@@ -148,13 +148,16 @@ $form=$this->beginWidget('CActiveForm', array(
 
         <?php
             endif;
+            if(PortalSettings::model()->findByPk(72)->ps2!=1):
         ?>
         <a type="submit" class="btn btn-warning btn-add-spkr" data-url="<?=$this->createUrl('/other/renderAddSpkr')?>">
             <i class="icon-plus bigger-110"></i>
             <?=tt('Добавить в справочник тему курсовой')?>
         </a>
     </div>
-<?php $this->endWidget(); ?>
+<?php
+            endif;
+$this->endWidget(); ?>
 <div class="control-group">
         <?= $form->label($stInfoForm, 'internationalPassport', array('class' => 'control-label'))?>
         <div class="controls">

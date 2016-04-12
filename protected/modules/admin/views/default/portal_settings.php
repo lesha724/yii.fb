@@ -199,3 +199,42 @@ $options = array(
         </div>
     </div>
 </div>
+
+<div class="span6">
+    <div class="widget-box">
+        <div class="widget-header">
+            <h4><?=tt('Данные студентов')?></h4>
+            <span class="widget-toolbar">
+                <a data-action="collapse" href="#">
+                    <i class="icon-chevron-up"></i>
+                </a>
+            </span>
+        </div>
+        <div class="widget-body">
+            <div class="widget-main">
+                <?php
+                $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+                    'id'=>'ps-student-info',
+                    'htmlOptions' => array('class' => 'form-horizontal'),
+                    'action' => '#'
+                ));
+                ?>
+
+                <div class="control-group">
+                    <?=CHtml::checkBox('', PortalSettings::model()->findByPk(72)->ps2, $checkboxStyle)?>
+                    <span class="lbl"> <?=tt('Блокировка изменения темы курсовой')?></span>
+                    <?=CHtml::hiddenField('settings[72]', PortalSettings::model()->findByPk(72)->ps2)?>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-info btn-small">
+                        <i class="icon-ok bigger-110"></i>
+                        <?=tt('Сохранить')?>
+                    </button>
+                </div>
+
+                <?php $this->endWidget();?>
+            </div>
+        </div>
+    </div>
+</div>

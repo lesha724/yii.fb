@@ -683,6 +683,8 @@ SQL;
         if (! Yii::app()->request->isAjaxRequest)
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
+        if(PortalSettings::model()->findByPk(72)->ps2==1)
+            throw new CHttpException(403, 'Редактирование тем закрыто.');
         $error=false;
         $html='';
 
@@ -703,6 +705,9 @@ SQL;
     {
         if (! Yii::app()->request->isAjaxRequest)
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        if(PortalSettings::model()->findByPk(72)->ps2==1)
+            throw new CHttpException(403, 'Редактирование тем закрыто.');
 
         $error=false;
         $html='';
@@ -1176,6 +1181,9 @@ SQL;
     {
         if (! Yii::app()->request->isAjaxRequest)
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        if(PortalSettings::model()->findByPk(72)->ps2==1)
+            throw new CHttpException(403, 'Редактирование тем закрыто.');
 
         $field = Yii::app()->request->getParam('field', null);
         $value = Yii::app()->request->getParam('value', null);
