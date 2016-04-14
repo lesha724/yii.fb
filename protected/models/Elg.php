@@ -150,6 +150,61 @@ SQL;
             return -1;
     }
 
+	public function getRetakeAndOmissions($st1,$uo1,$sem1,$type,$gr1){
+		$min = Elgzst::model()->getMin();
+		$sql=<<<SQL
+              SELECT ustem5, elgzst3,elgzst4,elgzst5, elgp.* from elgzst
+              	inner join elgz on (elgzst.elgzst2 = elgz.elgz1)
+              	inner join elgp on (elgzst.elgzst0 = elgp.elgp1)
+              	inner join elg on (elgz.elgz2 = elg.elg1 and elg2=:UO1 and elg4=:TYPE_LESSON and elg3={$sem1})
+				inner join ustem on (elgz.elgz7 = ustem.ustem1)
+				inner join EL_GURNAL_ZAN({$uo1},:GR1,:SEM1, {$type}) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
+			  WHERE elgzst1=:ST1 AND ((elgzst3 > 0) OR (elgzst4<='{$min}' and elgzst4>0))
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':UO1', $uo1);
+		$command->bindValue(':ST1', $st1);
+		$command->bindValue(':SEM1', $sem1);
+		$command->bindValue(':GR1', $gr1);
+		$command->bindValue(':TYPE_LESSON', $type);
+		$res = $command->queryAll();
+		return $res;
+	}
+
+	public function getDispByStSemUoType($st1,$uo1,$sem1,$type){
+
+		$type="";
+		if($type==0)
+			$type=" and us4=1";
+		if($type==1)
+			$type=" and us4 in (2,3,4)";
+		//(1,2,3,4)
+
+		$sql=<<<SQL
+              SELECT d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1,sem1
+                    from ucxg
+                       inner join ucgn on (ucxg.ucxg2 = ucgn.ucgn1)
+                       inner join ucx on (ucxg.ucxg1 = ucx.ucx1)
+                       inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
+                       inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
+                       inner join uo on (ucx.ucx1 = uo.uo19)
+                       inner join us on (uo.uo1 = us.us2)
+                       inner join u on (uo.uo22 = u.u1)
+                       inner join d on (uo.uo3 = d.d1)
+                       inner join k on (uo.uo4 = k.k1)
+                       inner join sem on (us.us3 = sem.sem1)
+                    WHERE ucxg3=0 and ucsn2=:ST1 and sem1=:SEM1 and uo1=:UO1 and us6<>0 {$type}
+                    group by d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1,sem1
+                    ORDER BY d2,us4,uo3
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':ST1', $st1);
+		$command->bindValue(':UO1',	$uo1);
+		$command->bindValue(':SEM1', $sem1);
+		$res = $command->queryRow();
+		return $res;
+	}
+
 	public function getDispBySt($st1){
 		$sql=<<<SQL
               /*SELECT elg.*,d2,d3,k2,k3 FROM elg

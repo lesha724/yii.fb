@@ -34,10 +34,7 @@ class OtherController extends Controller
                     'saveDisciplines',
                     'cancelSubscription',
                     'renderAddSpkr',
-                    'addSpkr',
-                    'studentCard',
-                    'studentCardExcel',
-
+                    'addSpkr'
                 ),
                 'expression' => 'Yii::app()->user->isStd',
             ),
@@ -54,7 +51,10 @@ class OtherController extends Controller
                     'changePassport',
                     'autocompleteTeachers',
                     'updateNkrs',
-                    'searchStudent'
+                    'searchStudent',
+                    'studentCard',
+                    'studentCardExcel',
+                    'showRetake'
                 ),
             ),
             array('allow',
@@ -70,14 +70,80 @@ class OtherController extends Controller
         );
     }
 
+    public function actionShowRetake()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $uo1 = Yii::app()->request->getParam('uo1', null);
+        $sem1 = Yii::app()->request->getParam('sem1', null);
+        $type = Yii::app()->request->getParam('sem1', null);
+        $st1 = Yii::app()->request->getParam('st1', null);
+        $gr1 = Yii::app()->request->getParam('gr1', null);
+
+        if (empty($uo1) || empty($sem1) || empty($st1) || $type === null || empty($gr1))
+            throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
+
+        if (Yii::app()->user->isAdmin) {
+
+
+        } elseif (Yii::app()->user->isStd) {
+            if($st1!=Yii::app()->user->dbModel->st1)
+                throw new CHttpException(403, 'Invalid request. Please do not repeat this request again.');
+        } else
+            throw new CHttpException(403, 'You don\'t have an access to this service');
+
+
+        $info = Elg::model()->getDispByStSemUoType($st1,$sem1,$uo1,$type);
+        $error = false;
+
+        $title = "";
+        if(!empty($info)) {
+            if(!empty($discipline['d27'])&&Yii::app()->language=="en")
+                $d2=$discipline['d27'];
+            else
+                $d2=$discipline['d2'];
+            $title = sprintf("%s | %s (%s)",$d2,$discipline['k2'],SH::convertUS4($discipline['us4']));
+        }
+
+        $html = $this->renderPartial('studentCard/_show_retake', array(
+            'uo1'=>$uo1,
+            'sem1'=>$sem1,
+            'type'=>$type,
+            'st1'=>$st1,
+            'gr1'=>$gr1
+        ), true);
+
+        $res = array(
+            'title'=>$title,
+            'html'=>$html,
+            'error' => $error,
+        );
+
+        Yii::app()->end(CJSON::encode($res));
+    }
+
     public function actionStudentCard()
     {
-        $st1 = Yii::app()->user->dbModel->st1;
-        $st = St::model()->findByPk($st1);
+        $model = new TimeTableForm;
+        $model->scenario = 'student';
+        if (isset($_REQUEST['TimeTableForm']))
+            $model->attributes=$_REQUEST['TimeTableForm'];
+
+        $student = new St;
+        $student->unsetAttributes();
+        if (Yii::app()->user->isAdmin) {
+
+
+        } elseif (Yii::app()->user->isStd) {
+
+            $model->student = Yii::app()->user->dbModel->st1;
+        } else
+            throw new CHttpException(404, 'You don\'t have an access to this service');
 
         $this->render('studentCard', array(
-            'st' => $st,
-            'st1'=>$st1
+            'student'=>$student,
+            'model'=>$model
         ));
     }
 

@@ -18,9 +18,9 @@ echo "<style>
         }
 </style>";
  $disciplines = Elg::model()->getDispBySt($st->st1);
-
+ $urlShow = Yii::app()->createUrl('/other/showRetake');
  $table = <<<HTML
-    <table id="studentCardRetake" class="table table-bordered table-hover table-condensed">
+    <table id="studentCardRetake" data-url-retake="{$urlShow}" class="table table-bordered table-hover table-condensed">
         <thead>
                 %s
         </thead>
@@ -42,6 +42,7 @@ HTML;
         $th.='<th rowspan="2">'.tt('К-во "2"').'</th>';
         $th.='<th colspan="2">'.tt('К-во отработанных занятий').'</th>';
         $th.='<th rowspan="2">'.tt('% задолжености').'</th>';
+        $th.='<th rowspan="2">'.tt('').'</th>';
     $th.='</tr>';
     $th.='<tr>';
         $th.='<th>'.tt('Уваж.').'</th>';
@@ -78,6 +79,19 @@ HTML;
             else
                 $proc=0;
             $tr.='<td>'.$proc.'</td>';
+            $tr.='<td>'.
+                sprintf(
+                '<a class="btn btn-minier btn-info tooltip-info btn-retake"
+                        data-rel="tooltip"
+                        data-placement="bottom"
+                        data-original-title="Просмотр"
+                        data-uo1="%s"
+                        data-sem1="%s"
+                        data-type="%s"
+                        data-st1="%s"
+                        data-gr1="%s">
+                    <i class="icon-eye-open"></i>
+                </a>',$discipline['uo1'],$discipline['sem1'],$type,$st->st1,$gr1).'</td>';
         $tr.='</tr>';
         $i++;
     }

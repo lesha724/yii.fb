@@ -241,7 +241,7 @@ class Elgzst extends CActiveRecord
 
         $where = '
                 WHERE   elg4='.$type_lesson.' AND
-                        ((elgzst3 > 0) OR (elgzst4<='.Stegn::model()->getMin().' and elgzst4>0))
+                        ((elgzst3 > 0) OR (elgzst4<='.Elgzst::model()->getMin().' and elgzst4>0))
         ';
         //$where = '';
         /*$params = array(
