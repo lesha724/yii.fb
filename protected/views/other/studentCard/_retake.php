@@ -17,7 +17,7 @@ echo "<style>
             text-align: left;
         }
 </style>";
- $disciplines = Elg::model()->getDispBySt($st->st1);
+
  $urlShow = Yii::app()->createUrl('/other/showRetake');
  $table = <<<HTML
     <table id="studentCardRetake" data-url-retake="{$urlShow}" class="table table-bordered table-hover table-condensed">
@@ -65,7 +65,8 @@ HTML;
                 $d2=$discipline['d27'];
             else
                 $d2=$discipline['d2'];
-            $tr.='<td class="text-left">'.$d2.'</td>';
+
+            $tr.='<td class="text-left">'.$d2.' | '.tt("Семестр").' №'.$discipline['sem7'].'</td>';
             $tr.='<td>'.SH::convertUS4($discipline['us4']).'</td>';
             //$tr.='<td>'.round($discipline['us6'],2).'</td>';
             $tr.='<td>'.$count.'</td>';

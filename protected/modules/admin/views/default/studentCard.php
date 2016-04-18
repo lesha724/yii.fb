@@ -6,7 +6,7 @@
  * Time: 10:06
  */
 
-$this->pageHeader=tt('Настройки сервиса Эл. журнал');
+$this->pageHeader=tt('Настройки сервиса Карточка студента');
 $this->breadcrumbs=array(
     tt('Админ. панель'),
 );
@@ -31,6 +31,10 @@ $widget = <<<HTML
     </div>
 HTML;
 
-$title = tt('Карточка студента');
+$title = tt('Отображение');
 $html  = $this->renderPartial('studentCard/settings', array(), true);
+echo sprintf($widget, $title, $html);
+
+$title = tt('Доступ');
+$html  = $this->renderPartial('studentCard/settings-access', array(), true);
 echo sprintf($widget, $title, $html);

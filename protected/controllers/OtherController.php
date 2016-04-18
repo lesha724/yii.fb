@@ -77,7 +77,7 @@ class OtherController extends Controller
 
         $uo1 = Yii::app()->request->getParam('uo1', null);
         $sem1 = Yii::app()->request->getParam('sem1', null);
-        $type = Yii::app()->request->getParam('sem1', null);
+        $type = Yii::app()->request->getParam('type', null);
         $st1 = Yii::app()->request->getParam('st1', null);
         $gr1 = Yii::app()->request->getParam('gr1', null);
 
@@ -94,16 +94,16 @@ class OtherController extends Controller
             throw new CHttpException(403, 'You don\'t have an access to this service');
 
 
-        $info = Elg::model()->getDispByStSemUoType($st1,$sem1,$uo1,$type);
+        $info = Elg::model()->getDispByStSemUoType($st1,$uo1,$sem1,$type);
         $error = false;
 
         $title = "";
         if(!empty($info)) {
-            if(!empty($discipline['d27'])&&Yii::app()->language=="en")
-                $d2=$discipline['d27'];
+            if(!empty($info['d27'])&&Yii::app()->language=="en")
+                $d2=$info['d27'];
             else
-                $d2=$discipline['d2'];
-            $title = sprintf("%s | %s (%s)",$d2,$discipline['k2'],SH::convertUS4($discipline['us4']));
+                $d2=$info['d2'];
+            $title = sprintf("%s | %s (%s)",$d2,$info['k2'],SH::convertUS4($info['us4']));
         }
 
         $html = $this->renderPartial('studentCard/_show_retake', array(

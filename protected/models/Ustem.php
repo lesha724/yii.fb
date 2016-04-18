@@ -276,6 +276,34 @@ SQL;
         );
     }
 
+    public function getUstem6Value($key)
+    {
+        switch($key)
+        {
+            case '0':
+                $type='';
+                break;
+            case '1':
+                $type=tt('Субмодуль');
+                break;
+            case '2':
+                $type=tt('ПМК');
+                break;
+            case '3':
+                $type=tt('Диф. Зачет');
+                break;
+            case '4':
+                $type=tt('Зачет');
+                break;
+            case '5':
+                $type=tt('Экзамен');
+                break;
+            default:
+                $type='';
+        }
+        return $type;
+    }
+
     public function getUstem11Arr($us1)
     {
         $sql = <<<SQL

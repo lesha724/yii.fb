@@ -560,7 +560,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'label'   => $_l2.tt('Каточка студента'),
                     'url'     => _u('/other/studentCard'),
                     'active'  => $_c=='other' && $_a=='studentCard',
-                    'visible' => _ch('other', 'studentCard') && ($isPrnt || $isStd),
+                    'visible' => _ch('other', 'studentCard') && ($isPrnt || $isStd|| $isAdmin),
                 ),
             ),getDopItem('other',0)),
             'visible' => _ch('other', 'main')

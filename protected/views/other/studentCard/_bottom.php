@@ -9,6 +9,20 @@
 /* @var $st St */
 
 
+if(Yii::app()->user->isStd)
+{
+    $ps73 = PortalSettings::model()->findByPk(73)->ps2;
+    if($ps73==0)
+        throw new CHttpException(403, tt('Доступ закрыт для студентов.'));
+}
+
+if(Yii::app()->user->isPrnt)
+{
+    $ps74 = PortalSettings::model()->findByPk(74)->ps2;
+    if($ps74==0)
+        throw new CHttpException(403, tt('Доступ закрыт для родителей.'));
+}
+
 $studentInfo = $st->getStudentInfoForCard();
 
 if(empty($studentInfo))
@@ -95,13 +109,16 @@ HTML;
     ));
 
     echo '<div class="bottom-block">';
+
+    $disciplines = Elg::model()->getDispBySt($st->st1);
+
     $params = array('gr1'=>$studentInfo['gr1'],'st'=>$st);
     $ps50 = PortalSettings::model()->findByPk(50)->ps2;
     $tabs = array();
     if(PortalSettings::model()->findByPk(47)->ps2==1)
-        array_push($tabs,array('label'=>tt('Успеваемость'), 'content'=>$this->renderPartial('studentCard/_journal', $params,true), 'active'=>$ps50==0));
+        array_push($tabs,array('label'=>tt('Успеваемость'), 'content'=>$this->renderPartial('studentCard/_journal', $params+array('disciplines'=>$disciplines),true), 'active'=>$ps50==0));
     if(PortalSettings::model()->findByPk(48)->ps2==1)
-        array_push($tabs,array('label'=>tt('Текущая задолженость'), 'content'=>$this->renderPartial('studentCard/_retake', $params,true), 'active'=>$ps50==1));
+        array_push($tabs,array('label'=>tt('Текущая задолженость'), 'content'=>$this->renderPartial('studentCard/_retake', $params+array('disciplines'=>$disciplines),true), 'active'=>$ps50==1));
     if(PortalSettings::model()->findByPk(49)->ps2==1)
         array_push($tabs,array('label'=>tt('Модульный контроль'), 'content'=>$this->renderPartial('studentCard/_module', $params,true), 'active'=>$ps50==2));
     if(PortalSettings::model()->findByPk(51)->ps2==1)
@@ -130,6 +147,9 @@ $this->beginWidget(
     'bootstrap.widgets.TbModal',
     array(
         'id' => 'modalBlock',
+        'htmlOptions'=>array(
+            'class'=>'full-modal'
+        )
     )
 ); ?>
 
@@ -142,6 +162,16 @@ $this->beginWidget(
         <div id="modal-content">
 
         </div>
+    </div>
+    <div class="modal-footer">
+        <?php $this->widget(
+            'bootstrap.widgets.TbButton',
+            array(
+                'label' => tt('Закрыть'),
+                'url' => '#',
+                'htmlOptions' => array('data-dismiss' => 'modal'),
+            )
+        ); ?>
     </div>
 
 <?php $this->endWidget();

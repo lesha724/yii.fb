@@ -681,7 +681,7 @@ SQL;
 			   inner join sgr on (st.st32 = sgr.sgr1)
 			   inner join sp on (sg.sg2 = sp.sp1)
 			   INNER JOIN f on (sp.sp5 = f.f1)
-		   where st1=:ST1 AND sem3=:YEAR and sem5=:SEM
+		   where st1=:ST1 AND sem3=:YEAR and sem5=:SEM and std11 in (0,5,6,8) and std7 is null
 SQL;
 
 		$command = Yii::app()->db->createCommand($sql);

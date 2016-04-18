@@ -12,7 +12,7 @@ $htmlOptions2 = array(
 
 $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id'=>'ps-appearance',
-    'htmlOptions' => array('class' => 'form-horizontal'),
+    'htmlOptions' => array('class' => 'form-horizontal form-settings'),
     'action' => '#'
 ));
 

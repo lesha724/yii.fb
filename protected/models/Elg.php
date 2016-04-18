@@ -150,7 +150,7 @@ SQL;
             return -1;
     }
 
-	public function getRetakeAndOmissions($st1,$uo1,$sem1,$type,$gr1){
+	/*public function getRetakeAndOmissions($st1,$uo1,$sem1,$type,$gr1){
 		$min = Elgzst::model()->getMin();
 		$sql=<<<SQL
               SELECT ustem5, elgzst3,elgzst4,elgzst5, elgp.* from elgzst
@@ -169,15 +169,15 @@ SQL;
 		$command->bindValue(':TYPE_LESSON', $type);
 		$res = $command->queryAll();
 		return $res;
-	}
+	}*/
 
 	public function getDispByStSemUoType($st1,$uo1,$sem1,$type){
 
-		$type="";
+		$type_str="";
 		if($type==0)
-			$type=" and us4=1";
+			$type_str=" and us4=1";
 		if($type==1)
-			$type=" and us4 in (2,3,4)";
+			$type_str=" and us4 in (2,3,4)";
 		//(1,2,3,4)
 
 		$sql=<<<SQL
@@ -193,7 +193,7 @@ SQL;
                        inner join d on (uo.uo3 = d.d1)
                        inner join k on (uo.uo4 = k.k1)
                        inner join sem on (us.us3 = sem.sem1)
-                    WHERE ucxg3=0 and ucsn2=:ST1 and sem1=:SEM1 and uo1=:UO1 and us6<>0 {$type}
+                    WHERE ucxg3=0 and ucsn2=:ST1 and sem1=:SEM1 and uo1=:UO1 and us6<>0 {$type_str}
                     group by d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1,sem1
                     ORDER BY d2,us4,uo3
 SQL;
@@ -217,7 +217,7 @@ SQL;
               WHERE elgzst1=:ST1 AND sem3=:YEAR AND sem5=:SEM*/
 SQL;
 		$sql=<<<SQL
-              SELECT d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1,sem1
+              SELECT d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1,sem1, sem7
                     from ucxg
                        inner join ucgn on (ucxg.ucxg2 = ucgn.ucgn1)
                        inner join ucx on (ucxg.ucxg1 = ucx.ucx1)
@@ -230,7 +230,7 @@ SQL;
                        inner join k on (uo.uo4 = k.k1)
                        inner join sem on (us.us3 = sem.sem1)
                     WHERE ucxg3=0 and ucsn2=:ST1 and sem3=:YEAR and sem5=:SEM and us6<>0 and us4 in (1,2,3,4)
-                    group by d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1,sem1
+                    group by d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1,sem1, sem7
                     ORDER BY d2,us4,uo3
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
@@ -241,8 +241,61 @@ SQL;
 		return $res;
 	}
 
+	public function getOmissions($st1,$uo1,$sem1,$type,$gr1){
+		$sql=<<<SQL
+              SELECT r2,us4,elgz3,ustem5, elgzst3,elgzst4,elgzst5, elgp.* from elgzst
+              	inner join elgz on (elgzst.elgzst2 = elgz.elgz1)
+              	left join elgp on (elgzst.elgzst0 = elgp.elgp1)
+              	inner join elg on (elgz.elgz2 = elg.elg1 and elg2=:UO1 and elg4=:TYPE_LESSON and elg3={$sem1})
+				inner join ustem on (elgz.elgz7 = ustem.ustem1)
+				inner join EL_GURNAL_ZAN({$uo1},:GR1,:SEM1, {$type}) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
+			  WHERE elgzst1=:ST1 AND elgzst3 > 0
+SQL;
+
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':UO1', $uo1);
+		$command->bindValue(':ST1', $st1);
+		$command->bindValue(':SEM1', $sem1);
+		$command->bindValue(':GR1', $gr1);
+		$command->bindValue(':TYPE_LESSON', $type);
+		$res = $command->queryAll();
+		return $res;
+	}
+
+	public function getF($st1,$uo1,$sem1,$type,$gr1){
+
+		$elgzst4_str = " elgzst4>0 ";
+		if(PortalSettings::model()->findByPk(55)->ps2==1){
+			$elgzst4_str = " elgzst4>=0 ";
+		}
+		$min = Elgzst::model()->getMin();
+
+		$sql=<<<SQL
+              SELECT r2,us4,elgz3,ustem5, elgzst3,elgzst4,elgzst5 from elgzst
+              	inner join elgz on (elgzst.elgzst2 = elgz.elgz1)
+              	inner join elg on (elgz.elgz2 = elg.elg1 and elg2={$uo1} and elg4=:TYPE_LESSON and elg3={$sem1})
+				inner join ustem on (elgz.elgz7 = ustem.ustem1)
+				inner join EL_GURNAL_ZAN({$uo1},:GR1,:SEM1, {$type}) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
+			  WHERE elgzst1=:ST1 AND elgzst3=0 AND {$elgzst4_str} AND elgzst4<=:MIN
+
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':UO1', $uo1);
+		$command->bindValue(':ST1', $st1);
+		$command->bindValue(':SEM1', $sem1);
+		$command->bindValue(':GR1', $gr1);
+		$command->bindValue(':TYPE_LESSON', $type);
+		$command->bindValue(':MIN', $min);
+		$res = $command->queryAll();
+		return $res;
+	}
+
 	public function getRetakeInfo($uo1,$sem1,$elg4,$st1)
 	{
+		$elgzst4_str = " elgzst4>0 ";
+		if(PortalSettings::model()->findByPk(55)->ps2==1){
+			$elgzst4_str = " elgzst4>=0 ";
+		}
 		$sql = <<<SQL
 			SELECT COUNT(*) FROM elgzst
 				INNER JOIN elgz on (elgzst2 = elgz1)
@@ -273,7 +326,7 @@ SQL;
 			SELECT COUNT(*) FROM elgzst
 				INNER JOIN elgz on (elgzst2 = elgz1)
 				INNER JOIN elg on (elgz2 = elg1)
-			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4 AND elgzst1=:ST1 AND elgzst4>0 AND elgzst4<=:MIN
+			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4 AND elgzst1=:ST1 AND elgzst3=0 AND {$elgzst4_str} AND elgzst4<=:MIN
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':ST1', $st1);
@@ -287,7 +340,7 @@ SQL;
 			SELECT COUNT(*) FROM elgzst
 				INNER JOIN elgz on (elgzst2 = elgz1)
 				INNER JOIN elg on (elgz2 = elg1)
-			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4 AND elgzst1=:ST1 AND elgzst3>0 AND (elgzst5>=:MIN OR elgzst5=-1)
+			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4 AND elgzst1=:ST1 AND elgzst3>0 AND (elgzst5>:MIN OR elgzst5=-1)
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':ST1', $st1);
@@ -301,7 +354,7 @@ SQL;
 			SELECT COUNT(*) FROM elgzst
 				INNER JOIN elgz on (elgzst2 = elgz1)
 				INNER JOIN elg on (elgz2 = elg1)
-			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4 AND elgzst1=:ST1 AND elgzst4>0 AND elgzst4<=:MIN1 AND (elgzst5>=:MIN2  OR elgzst5=-1)
+			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4 AND elgzst1=:ST1 AND elgzst3=0 AND {$elgzst4_str} AND elgzst4<=:MIN1 AND (elgzst5>:MIN2  OR elgzst5=-1)
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':ST1', $st1);
