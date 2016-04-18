@@ -25,7 +25,7 @@ HTML;
         $html .= $input;
 
         if(empty($model->elgp2))
-            $model->elgp2=1;
+            $model->elgp2=5;
 
         $label = $form->label($model, 'elgp2', $options);
         $input = $form->dropDownList($model, 'elgp2',CHtml::listData(Elgzst::model()->getTypesByGroup(),'id','text','group'),array('class'=>"form-control"));

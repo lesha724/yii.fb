@@ -596,6 +596,10 @@ SQL;
 
                         $ps67 = PortalSettings::model()->findByPk(67)->ps2;
 
+                        $check=1;
+                        if($elgp2<4)
+                            $check=2;
+
                         if($elgzst->elgzst3>0&&$ps67==1)
                         {
                             $elgp=Elgp::model()->findByAttributes(array('elgp1'=>$elgzst->elgzst0));
@@ -614,6 +618,9 @@ SQL;
                                     $errorType = 9;
                                    /* print_r($errorType);
                                     echo '</br>';*/
+                                }else{
+                                    $elgzst->elgzst3=$check;
+                                    $elgzst->save();
                                 }
                             }
                         }
@@ -1021,7 +1028,7 @@ SQL;
         else {
             $check=1;
 
-            if($type<=4)
+            if($type<4)
                 $check=2;
 
             $attr = array(
