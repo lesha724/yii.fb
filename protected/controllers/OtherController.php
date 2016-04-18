@@ -87,6 +87,9 @@ class OtherController extends Controller
         if (Yii::app()->user->isAdmin) {
 
 
+        } elseif (Yii::app()->user->isPrnt) {
+            if($st1!=Yii::app()->user->dbModel->st1)
+                throw new CHttpException(403, 'Invalid request. Please do not repeat this request again.');
         } elseif (Yii::app()->user->isStd) {
             if($st1!=Yii::app()->user->dbModel->st1)
                 throw new CHttpException(403, 'Invalid request. Please do not repeat this request again.');
