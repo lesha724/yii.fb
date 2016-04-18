@@ -16,12 +16,13 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/o
 
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/timetable/timetable.js', CClientScript::POS_HEAD);
 
-$this->renderPartial('/filter_form/timeTable/student', array(
-    'model' => $model,
-    'showDateRangePicker' => false,
-    'showCheckBoxCalendar'=>false
-));
-
+if(Yii::app()->user->isAdmin) {
+    $this->renderPartial('/filter_form/timeTable/student', array(
+        'model' => $model,
+        'showDateRangePicker' => false,
+        'showCheckBoxCalendar' => false
+    ));
+}
 if ($model->student) :
     $this->renderPartial('/filter_form/default/year_sem');
 

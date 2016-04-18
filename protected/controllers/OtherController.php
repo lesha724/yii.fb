@@ -57,13 +57,13 @@ class OtherController extends Controller
                     'showRetake'
                 ),
             ),
-            array('allow',
+            /*array('allow',
                 'actions' => array(
                     'studentCard',
                     'studentCardExcel',
                 ),
                 'expression' => 'Yii::app()->user->isPrnt',
-            ),
+            ),*/
             array('deny',
                 'users' => array('*'),
             ),
@@ -135,6 +135,9 @@ class OtherController extends Controller
         if (Yii::app()->user->isAdmin) {
 
 
+        }
+        elseif (Yii::app()->user->isPrnt) {
+            $model->student = Yii::app()->user->dbModel->st1;
         } elseif (Yii::app()->user->isStd) {
 
             $model->student = Yii::app()->user->dbModel->st1;
