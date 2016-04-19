@@ -5,8 +5,9 @@
  * Date: 13.04.2016
  * Time: 13:44
  */
+    $ps55=PortalSettings::model()->findByPk(55)->ps2;
     $nb = Elg::model()->getOmissions($st1,$uo1,$sem1,$type,$gr1);
-    $f = Elg::model()->getF($st1,$uo1,$sem1,$type,$gr1);
+    $f = Elg::model()->getF($st1,$uo1,$sem1,$type,$gr1,$ps55);
 
     if(!empty($nb)):
         ?>

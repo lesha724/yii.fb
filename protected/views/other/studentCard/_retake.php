@@ -52,12 +52,14 @@ HTML;
     $th.='</tr>';
 
     $i=1;
+
+    $ps55=PortalSettings::model()->findByPk(55)->ps2;
     foreach($disciplines as $discipline)
     {
         $type=0;
         if($discipline['us4']>1)
             $type=1;
-        list($respectful,$disrespectful,$f,$nbretake,$fretake,$count) = Elg::model()->getRetakeInfo($discipline['uo1'],$discipline['sem1'],$type,$st->st1);
+        list($respectful,$disrespectful,$f,$nbretake,$fretake,$count) = Elg::model()->getRetakeInfo($discipline['uo1'],$discipline['sem1'],$type,$st->st1,$ps55);
         $tr.='<tr>';
             $tr.='<td>'.$i.'</td>';
             $tr.='<td class="text-left">'.$discipline['k2'].'</td>';

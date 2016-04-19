@@ -262,10 +262,10 @@ SQL;
 		return $res;
 	}
 
-	public function getF($st1,$uo1,$sem1,$type,$gr1){
+	public function getF($st1,$uo1,$sem1,$type,$gr1,$ps55){
 
 		$elgzst4_str = " elgzst4>0 ";
-		if(PortalSettings::model()->findByPk(55)->ps2==1){
+		if($ps55==1){
 			$elgzst4_str = " elgzst4>=0 ";
 		}
 		$min = Elgzst::model()->getMin();
@@ -276,7 +276,7 @@ SQL;
               	inner join elg on (elgz.elgz2 = elg.elg1 and elg2={$uo1} and elg4=:TYPE_LESSON and elg3={$sem1})
 				inner join ustem on (elgz.elgz7 = ustem.ustem1)
 				inner join EL_GURNAL_ZAN({$uo1},:GR1,:SEM1, {$type}) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
-			  WHERE elgzst1=:ST1 AND elgzst3=0 AND {$elgzst4_str} AND elgzst4<=:MIN
+			  WHERE elgzst1=:ST1 AND elg4!=0 AND elgzst3=0 AND {$elgzst4_str} AND elgzst4<=:MIN
 
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
@@ -290,10 +290,10 @@ SQL;
 		return $res;
 	}
 
-	public function getRetakeInfo($uo1,$sem1,$elg4,$st1)
+	public function getRetakeInfo($uo1,$sem1,$elg4,$st1,$ps55)
 	{
 		$elgzst4_str = " elgzst4>0 ";
-		if(PortalSettings::model()->findByPk(55)->ps2==1){
+		if($ps55==1){
 			$elgzst4_str = " elgzst4>=0 ";
 		}
 		$sql = <<<SQL
@@ -326,7 +326,7 @@ SQL;
 			SELECT COUNT(*) FROM elgzst
 				INNER JOIN elgz on (elgzst2 = elgz1)
 				INNER JOIN elg on (elgz2 = elg1)
-			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4 AND elgzst1=:ST1 AND elgzst3=0 AND {$elgzst4_str} AND elgzst4<=:MIN
+			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4 AND elg4!=0 AND elgzst1=:ST1 AND elgzst3=0 AND {$elgzst4_str} AND elgzst4<=:MIN
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':ST1', $st1);
@@ -354,7 +354,7 @@ SQL;
 			SELECT COUNT(*) FROM elgzst
 				INNER JOIN elgz on (elgzst2 = elgz1)
 				INNER JOIN elg on (elgz2 = elg1)
-			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4 AND elgzst1=:ST1 AND elgzst3=0 AND {$elgzst4_str} AND elgzst4<=:MIN1 AND (elgzst5>:MIN2  OR elgzst5=-1)
+			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4 AND elg4!=0 AND elgzst1=:ST1 AND elgzst3=0 AND {$elgzst4_str} AND elgzst4<=:MIN1 AND (elgzst5>:MIN2  OR elgzst5=-1)
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':ST1', $st1);
