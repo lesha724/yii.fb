@@ -242,6 +242,59 @@ $this->widget('zii.widgets.CMenu', array(
             'visible' => $isAdmin,
         ),
         array(
+            'label' => _l('Личное', 'user'),
+            'url' => '#',
+            'linkOptions'=> $_l,
+            'itemOptions'=>array('class'=> ( $_c=='timeTable' && $_a=='self')||($_c=='workLoad' && $_a=='self')
+                ||($_c=='other' && $_a=='subscription')||($_c=='other' && $_a=='studentInfo')
+                ||($_c=='other' && $_a=='gostem') ||($_c=='other' && $_a=='orderLesson')||($_c=='other' && $_a=='studentCard') ? 'active open' : ''),
+            'items' =>array(
+                array(
+                    'label'   => $_l2.tt('Личное расписание'),
+                    'url'     => _u('/timeTable/self'),
+                    'active'  => $_c=='timeTable' && $_a=='self',
+                    'visible' => _ch('timeTable', 'self')&& ($isStd||$isTch)
+                ),
+                array(
+                    'label'   => $_l2.tt('Личная нагрузка'),
+                    'url'     => _u('/workLoad/self'),
+                    'visible' => _ch('workLoad', 'self') && $isTch,
+                    'active'  => $_c=='workLoad' && $_a=='self'
+                ),
+                array(
+                    'label'   => $_l2.tt('Запись на дисциплины'),
+                    'url'     => _u('/other/subscription'),
+                    'active'  => $_c=='other' && $_a=='subscription',
+                    'visible' => _ch('other', 'subscription') && $isStd,
+                ),
+                array(
+                    'label'   => $_l2.tt('Данные студенты'),
+                    'url'     => _u('/other/studentInfo'),
+                    'active'  => $_c=='other' && $_a=='studentInfo',
+                    'visible' => _ch('other', 'studentInfo') && ($isTch || $isStd),
+                ),
+                array(
+                    'label'   => $_l2.tt('Запись на гос. экзамены'),
+                    'url'     => _u('/other/gostem'),
+                    'active'  => $_c=='other' && $_a=='gostem',
+                    'visible' => _ch('other', 'gostem') && $isStd,
+                ),
+                array(
+                    'label'   => $_l2.tt('Заказ переноса занятий'),
+                    'url'     => _u('/other/orderLesson'),
+                    'active'  => $_c=='other' && $_a=='orderLesson',
+                    'visible' => _ch('other', 'orderLesson') && $isTch,
+                ),
+                array(
+                    'label'   => $_l2.tt('Карточка студента'),
+                    'url'     => _u('/other/studentCard'),
+                    'active'  => $_c=='other' && $_a=='studentCard',
+                    'visible' => _ch('other', 'studentCard') && ($isPrnt || $isStd|| $isAdmin),
+                ),
+            ),
+            'visible' => ($isStd||$isTch||$isAdmin||$isPrnt)
+        ),
+        array(
             'label' => _l('Расписание', 'calendar'),
             'url' => '#',
             'linkOptions'=> $_l,
@@ -557,7 +610,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'visible' => _ch('other', 'studentInfo') && ($isTch || $isStd),
                 ),
                 array(
-                    'label'   => $_l2.tt('Каточка студента'),
+                    'label'   => $_l2.tt('Карточка студента'),
                     'url'     => _u('/other/studentCard'),
                     'active'  => $_c=='other' && $_a=='studentCard',
                     'visible' => _ch('other', 'studentCard') && ($isPrnt || $isStd|| $isAdmin),
