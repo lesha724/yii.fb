@@ -54,8 +54,9 @@ $ps64 = PortalSettings::model()->findByPk(64)->ps2;
 
 $html = '<div>';
     $html .= '<fieldset>';
-    $filials = CHtml::listData(Ks::model()->findAllByAttributes(array('ks12'=>null,'ks13'=>0)), 'ks1', 'ks2');
-    if (count($filials) > 1) {
+
+	$filials = Ks::getListDataForKsFilter();
+	if (count($filials) > 1) {
         $html .= '<div class="span2 ace-select">';
 		if($ps64!=1)
         	$html .= $form->label($model, 'filial');

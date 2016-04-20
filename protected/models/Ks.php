@@ -112,4 +112,33 @@ class Ks extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	public static function getFieldByLanguage($short){
+		switch(Yii::app()->language){
+			case 'uk':
+				if(!$short)
+					return 'ks2';
+				else
+					return 'ks3';
+				break;
+			case 'ru':
+				if(!$short)
+					return 'ks2';
+				else
+					return 'ks3';
+				break;
+			case 'en': if(!$short)
+					return 'ks10';
+				else
+					return 'ks11';
+				break;
+		}
+
+		return 'ks2';
+	}
+
+	public static function getListDataForKsFilter(){
+		//$filials = CHtml::listData(Ks::model()->findAllByAttributes(array('ks12'=>null,'ks13'=>0)), 'ks1', 'ks2');
+		return CHtml::listData(Ks::model()->findAllByAttributes(array('ks12'=>null,'ks13'=>0)), 'ks1', Ks::getFieldByLanguage(false));
+	}
 }

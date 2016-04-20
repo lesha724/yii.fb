@@ -30,7 +30,7 @@ $html  = '<div>';
     $html .= '</div>';
     $html .= '</div>';
 
-    $filials = CHtml::listData(Ks::model()->findAllByAttributes(array('ks12'=>null,'ks13'=>0)), 'ks1', 'ks2');
+    $filials = Ks::getListDataForKsFilter();
     if (count($filials) > 1) {
         $html .= '<div class="span2 ace-select">';
         $html .= $form->label($model, 'filial');
