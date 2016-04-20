@@ -23,6 +23,12 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         <?=CHtml::hiddenField('settings[64]', PortalSettings::model()->findByPk(64)->ps2)?>
     </div>
 
+    <div class="control-group">
+        <?=CHtml::checkBox('', PortalSettings::model()->findByPk(75)->ps2, $htmlOptions2)?>
+        <span class="lbl"> <?=tt('Скрывать поиск для неавторизированных пользователей')?></span>
+        <?=CHtml::hiddenField('settings[75]', PortalSettings::model()->findByPk(75)->ps2)?>
+    </div>
+
     <div class="form-actions">
         <button type="submit" class="btn btn-info btn-small">
             <i class="icon-ok bigger-110"></i>

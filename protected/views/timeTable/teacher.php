@@ -21,27 +21,29 @@ JS
     , CClientScript::POS_READY);
 	
 $attr = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;');
+if(!(PortalSettings::model()->findByPk(75)->ps2&&Yii::app()->user->isGuest)) {
+	$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+			'id' => 'search-form',
+			'htmlOptions' => array('class' => 'form-inline noprint'),
+			'method' => 'post',
+			'action' => array('timeTable/searchTeacher'),
+	));
 
-$form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-    'id'=>'search-form',
-    'htmlOptions' => array('class' => 'form-inline noprint'),
-	'method'=>'post',
-	'action'=> array('timeTable/searchTeacher'),
-));
-?>
-	<?php echo $form->textField($teacher,'p3',array('size'=>60,'maxlength'=>255)); ?>
-	
+	?>
+	<?php echo $form->textField($teacher, 'p3', array('size' => 60, 'maxlength' => 255)); ?>
+
 	<?php $this->widget('bootstrap.widgets.TbButton', array(
-		'buttonType'=>'submit',
-		'type'=>'primary',
-		'icon'=>'search',
-		'label'=>tt('Поиск'),
-		'htmlOptions'=>array(
-			'class'=>'btn-small'
-		)
+			'buttonType' => 'submit',
+			'type' => 'primary',
+			'icon' => 'search',
+			'label' => tt('Поиск'),
+			'htmlOptions' => array(
+					'class' => 'btn-small'
+			)
 	)); ?>
 	<?php
-$this->endWidget();
+	$this->endWidget();
+}
 
 $form=$this->beginWidget('CActiveForm', array(
     'id'=>'timeTable-form',
