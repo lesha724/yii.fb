@@ -112,7 +112,9 @@ HTML;
                 $elgzst5=tt('Отработано');
             }
             $tr .= sprintf($pattern, $i,(float)$key['elgzst4'],$elgzst5, date('d.m.Y', strtotime($key['r2'])),$key['elgz3'], $key['ustem5'], SH::convertUS4($key['us4']));
+            $i++;
         }
+
         echo sprintf($table,$tr);
     endif;
 ?>
