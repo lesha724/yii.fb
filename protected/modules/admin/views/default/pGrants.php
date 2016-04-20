@@ -64,6 +64,7 @@ $this->breadcrumbs=array(
         </div>
     </div>
 
+    <?php /*
     <div class="control-group">
         <?=$form->label($model, 'grants3', array('class' => 'control-label'))?>
         <div class="controls">
@@ -78,7 +79,7 @@ $this->breadcrumbs=array(
                 )
             ?>
         </div>
-    </div>
+    </div> */?>
 
     <div class="control-group">
         <?=$form->label($model, 'grants5', array('class' => 'control-label'))?>
