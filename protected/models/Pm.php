@@ -70,7 +70,7 @@ class Pm extends CActiveRecord
 			'pm5' => tt('Заголовок др.'),
 			'pm6' => 'url',
 			'pm7' => tt('Видимость'),
-			'pm8' => tt('Открывать в новой вкладке'),
+			'pm8' => tt('Открывать'),
             'pm9' => tt('Приоритет'),
             'pm10' => tt('Группа'),
             'pm11' => tt('Тип'),
@@ -157,6 +157,7 @@ class Pm extends CActiveRecord
            return array(
                0=>tt('Открывать в текущей вкладке'),
                1=>tt('Открывать в новой вкладке'),
+               2=>tt('Открывать в iframe'),
            );
         }
 
@@ -168,6 +169,9 @@ class Pm extends CActiveRecord
                     break;
                 case 1:
                     return tt('Открывать в новой вкладке');
+                    break;
+                case 2:
+                    return tt('Открывать в iframe');
                     break;
                 default:
                     return '-';

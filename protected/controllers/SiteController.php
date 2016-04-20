@@ -190,4 +190,16 @@ class SiteController extends Controller
 
         Users::model()->renderPhoto($id, $type);
     }
+
+	public function actionIFrame($id)
+	{
+		$model = Pm::model()->findByPk($id);
+		if ($model==null)
+			throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+		if($model->pm8!=2||$model->pm7!=1)
+			throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+		$this->render('iframe',array('model'=>$model));
+	}
 }

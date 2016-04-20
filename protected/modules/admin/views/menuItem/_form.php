@@ -23,9 +23,12 @@
         
     <?php echo $form->checkBoxRow($model,'pm7'); ?>
 
-    <?php echo $form->checkBoxRow($model,'pm8'); ?>
+    <?php echo $form->labelEx($model, 'pm8'); ?>
+    <?php echo $form->dropDownListRow($model,'pm8',Pm::getPm8Array())?>
+    <?php echo $form->error($model, 'pm8'); ?>
 
-	<?php echo $form->labelEx($model, 'pm9'); ?>
+
+    <?php echo $form->labelEx($model, 'pm9'); ?>
     <?php echo $form->numberField($model,'pm9',array('class'=>'span12')); ?>
     <?php echo $form->error($model, 'pm9'); ?>
     <?php
@@ -42,7 +45,7 @@
         <?php echo $form->dropDownListRow($model,'pm10',Pm::getPm10Array(),array('class'=>'span5','maxlength'=>80)); ?>
     </div>
     <?php
-    echo $form->DropDownListRow($model, 'pm11',Pm::getPm11Array(),array('id'=>'type-select'));
+    echo $form->dropDownListRow($model, 'pm11',Pm::getPm11Array(),array('id'=>'type-select'));
 
     Yii::app()->clientScript->registerScript('create-item-menu',"
 	$(document).on('change','#type-select', function() {
