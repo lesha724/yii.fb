@@ -3,6 +3,11 @@
         $model Pm
  */
 
+Yii::app()->clientScript->registerScript('iframe-main', <<<JS
+        top.document.getElementById('iframe-main').height = document.body.scrollHeight;
+JS
+    , CClientScript::POS_END);
+
 $label='';
 switch (Yii::app()->language) {
         case 'uk':
@@ -23,7 +28,7 @@ $this->pageTitle=$label." | iframe:".$model->pm6;
 $this->pageHeader=$this->pageTitle;
 ?>
 
-<iframe src="<?=$model->pm6?>" width="100%" height="400px" align="left">
+<iframe id="iframe-main" src="<?=$model->pm6?>" width="100%" height="400px" align="left">
     Ваш браузер не поддерживает плавающие фреймы!
 </iframe>
 
