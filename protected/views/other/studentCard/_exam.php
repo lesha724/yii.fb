@@ -6,6 +6,19 @@
  * Time: 10:04
  */
 
+$sql=<<<SQL
+			select b15 from b where b1=0
+SQL;
+$command = Yii::app()->db->createCommand($sql);
+$id=$command->queryScalar();
+
+$types = array(
+    '5'=>($id==32||$id==38)?tt('ПМК'):SH::convertUS4(5),
+    '6'=>SH::convertUS4(6),
+    '7'=>tt('ДифЗач'),
+    '8'=>SH::convertUS4(7),
+);
+
 $disciplines  = St::model()->getDisciplineExam($st->st1,$gr1);
 
 if(empty($disciplines))
@@ -42,9 +55,12 @@ HTML;
         $tr2.='<td>'.$i.'</td>';
         $tr2.='<td>'.$discipline['d2'].'</td>';
         $type=$discipline['stus19'];
-        $tr2.='<td>'.SH::convertUS4($type).'</td>';
+        //$tr2.='<td>'.SH::convertUS4ByUS6($type).'</td>';
+        $type = (isset($types[$type]))?$types[$type]:"";
+        $tr2.='<td>'.$type.'</td>';
         $tr2.='<td>'.$discipline['stus7'].'</td>';
-        $tr2.='<td>'.date('Y-m-d',strtotime($discipline['stus6'])).'</td>';
+        $date=!empty($discipline['stus6'])?date('Y-m-d',strtotime($discipline['stus6'])):"";
+        $tr2.='<td>'.$date.'</td>';
         if($type!=6)
             $tr2.='<td>'.$discipline['stus8'].'</td>';
         else
