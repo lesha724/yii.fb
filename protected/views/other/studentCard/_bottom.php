@@ -120,7 +120,7 @@ HTML;
     if(PortalSettings::model()->findByPk(48)->ps2==1)
         array_push($tabs,array('label'=>tt('Текущая задолженость'), 'content'=>$this->renderPartial('studentCard/_retake', $params+array('disciplines'=>$disciplines),true), 'active'=>$ps50==1));
     if(PortalSettings::model()->findByPk(49)->ps2==1)
-        array_push($tabs,array('label'=>tt('Модульный контроль'), 'content'=>$this->renderPartial('studentCard/_module', $params,true), 'active'=>$ps50==2));
+        array_push($tabs,array('label'=>tt('Модульный контроль'), 'content'=>$this->renderPartial((PortalSettings::model()->findByPk(76)->ps2==1)?'studentCard/_module':'studentCard/_module_pmk', $params,true), 'active'=>$ps50==2));
     if(PortalSettings::model()->findByPk(51)->ps2==1)
         array_push($tabs,array('label'=>tt('Екзаменационная сессия'), 'content'=>$this->renderPartial('studentCard/_exam', $params,true), 'active'=>$ps50==3));
     if(PortalSettings::model()->findByPk(52)->ps2==1)

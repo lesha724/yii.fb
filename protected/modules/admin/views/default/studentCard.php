@@ -38,3 +38,7 @@ echo sprintf($widget, $title, $html);
 $title = tt('Доступ');
 $html  = $this->renderPartial('studentCard/settings-access', array(), true);
 echo sprintf($widget, $title, $html);
+
+$title = tt('Модульный контроль');
+$html  = $this->renderPartial('studentCard/module', array(), true);
+echo sprintf($widget, $title, $html);
