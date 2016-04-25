@@ -168,6 +168,7 @@ SQL;*/
 			   INNER JOIN uo on (elg.elg2 = uo.uo1)
 			   INNER JOIN d on (d.d1 = uo.uo3)
 			where elgzst1=:ST1 and elg3=:SEM1 and elgzst3>0 and d1 in (select d1 FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,0,0,0,3,0))
+			ORDER BY elgz3
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
