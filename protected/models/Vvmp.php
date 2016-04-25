@@ -223,6 +223,47 @@ SQL;
         return $res;
     }
 
+	public function getModuleBySt($st1)
+	{
+		$sql = <<<SQL
+			select d1,d2,d3,vvmp6,vvmp4,vvmp8,k3,k2,vmpv3,vmpv4,vmpv5,vmpv6
+			from sg
+			   inner join sem on (sg.sg1 = sem.sem2)
+			   inner join vvmp on (sg.sg1 = vvmp.vvmp25)
+			   inner join k on (vvmp.vvmp5 = k.k1)
+			   inner join vmpv on (vvmp.vvmp1 = vmpv.vmpv2)
+			   /*inner join st on (vmp.vmp2 = st.st1)*/
+			   inner join d on (vvmp.vvmp3 = d.d1)  where sem3=:YEAR AND sem5=:SEM AND vvmp4 = sem7
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':ST1', $st1);
+		$command->bindValue(':YEAR', Yii::app()->session['year']);
+		$command->bindValue(':SEM', Yii::app()->session['sem']);
+		$res = $command->queryAll();
+
+		$modules = array();
+		$maxCount=$count=$d1=0;
+		foreach ($res as $val)
+		{
+			if($d1!=$val['d1']) {
+				if ($count > $maxCount)
+					$maxCount = $count;
+				$count = 0;
+				$d1=$val['d1'];
+			}
+			$modules[$val['d1']]['discipline']=$val['d2'];
+			$modules[$val['d1']]['chair']=$val['k2'];
+			$modules[$val['d1']][$val['vvmp6']]=$val;
+
+			$count++;
+		}
+
+		if($count>$maxCount)
+			$maxCount=$count;
+
+		return array($modules,$maxCount);
+	}
+
 	public function getModule($uo1,$gr1)
 	{
 
