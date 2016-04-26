@@ -22,16 +22,21 @@
     $ps44 = PortalSettings::model()->findByPk(44)->ps2;
     $ps55 = PortalSettings::model()->findByPk(55)->ps2;
 
+//errorType=0 error
+//errorType=4 minMaxError
+//errorType=3 access
+//errorType=5 st
+//errorType=2 error2
     Yii::app()->clientScript->registerScript('translations', <<<JS
         minBal = {$min}
-        tt.error       = "{$error}" //errorType=0
-        tt.success     = "{$success}"
-        tt.minMaxError = "{$minMaxError}" //errorType=4
-        tt.access = "{$access}" //errorType=3
-        tt.st = "{$st}" //errorType=5
-        tt.error2 = "{$error2}" //errorType=2
-        ps44 = {$ps44}
-        ps55 = {$ps55}
+        tt.error       = "{$error}";
+        tt.success     = "{$success}";
+        tt.minMaxError = "{$minMaxError}";
+        tt.access = "{$access}";
+        tt.st = "{$st}";
+        tt.error2 = "{$error2}";
+        ps44 = {$ps44};
+        ps55 = {$ps55};
 JS
     , CClientScript::POS_READY);
 
