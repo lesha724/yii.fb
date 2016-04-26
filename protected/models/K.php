@@ -144,6 +144,30 @@ class K extends CActiveRecord
 		return parent::model($className);
 	}
 
+	public static function getFieldByLanguage($short){
+		switch(Yii::app()->language){
+			case 'uk':
+				if(!$short)
+					return 'k3';
+				else
+					return 'k2';
+				break;
+			case 'ru':
+				if(!$short)
+					return 'k18';
+				else
+					return 'k2';
+				break;
+			case 'en': if(!$short)
+				return 'k15';
+			else
+				return 'k2';
+				break;
+		}
+
+		return 'k3';
+	}
+
     public function getAllChairs()
     {
         $today = date('Y-m-d');
@@ -174,7 +198,15 @@ SQL;
         $command->bindValue(':FILIAL', $filial);
         $chairs = $command->queryAll();
 
-        return $chairs;
+		$res = array();
+		foreach($chairs as $key => $chair){
+			$name =  $chair[K::getFieldByLanguage(false)];
+			$res[$key] = $chair;
+			$res[$key]['name'] = (isset($name)&&!empty($name)&&$name!="")?$name:$chair['k3'];
+		}
+		return CHtml::listData($res, 'k1', 'name');
+
+        //return $chairs;
     }
 
     public function getChairByUo1($uo1)

@@ -64,7 +64,8 @@ $html = '<div>';
         $html .= '</div>';
     }
 
-    $chairs = CHtml::listData(K::model()->getOnlyChairsFor($model->filial), 'k1', 'k3');
+    //$chairs = CHtml::listData(K::model()->getOnlyChairsFor($model->filial), 'k1', 'k3');
+	$chairs = K::model()->getOnlyChairsFor($model->filial);
     $html .= '<div class="span2 ace-select">';
 	if($ps64!=1)
 		$html .= $form->label($model, 'chair');
