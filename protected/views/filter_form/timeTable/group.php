@@ -16,7 +16,8 @@ $form=$this->beginWidget('CActiveForm', array(
     $html = '<div>';
     $html .= '<fieldset>';
     //$filials = CHtml::listData(Ks::model()->findAllByAttributes(array('ks12'=>null,'ks13'=>0)), 'ks1', 'ks2');
-    $filials = CHtml::listData(Ks::model()->findAllByAttributes(array('ks12'=>null,'ks13'=>0)), 'ks1', Ks::getFieldByLanguage(false));
+    //$filials = CHtml::listData(Ks::model()->findAllByAttributes(array('ks12'=>null,'ks13'=>0)), 'ks1', Ks::getFieldByLanguage(false));
+    $filials = Ks::getListDataForKsFilter();
     if (count($filials) > 1) {
         $html .= '<div class="span2 ace-select">';
         $html .= $form->label($model, 'filial');

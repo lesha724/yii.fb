@@ -139,6 +139,14 @@ class Ks extends CActiveRecord
 
 	public static function getListDataForKsFilter(){
 		//$filials = CHtml::listData(Ks::model()->findAllByAttributes(array('ks12'=>null,'ks13'=>0)), 'ks1', 'ks2');
-		return CHtml::listData(Ks::model()->findAllByAttributes(array('ks12'=>null,'ks13'=>0)), 'ks1', Ks::getFieldByLanguage(false));
+		$filials = Ks::model()->findAllByAttributes(array('ks12'=>null,'ks13'=>0));
+		$res = array();
+		foreach($filials as $key => $filial){
+			$name =  $filial[Ks::getFieldByLanguage(false)];
+			//$filials[$key]['name'] =
+			$res[$key]['name'] = (isset($name)&&!empty($name)&&$name!="")?$name:$filial['ks2'];
+			$res[$key]['ks1'] = $filial->ks1;
+		}
+		return CHtml::listData($res, 'ks1', 'name');
 	}
 }
