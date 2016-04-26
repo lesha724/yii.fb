@@ -189,6 +189,30 @@ class F extends CActiveRecord
 		return parent::model($className);
 	}
 
+	public static function getFieldByLanguage($short){
+		switch(Yii::app()->language){
+			case 'uk':
+				if(!$short)
+					return 'f3';
+				else
+					return 'f2';
+				break;
+			case 'ru':
+				if(!$short)
+					return 'f30';
+				else
+					return 'f2';
+				break;
+			case 'en': if(!$short)
+				return 'f26';
+			else
+				return 'f2';
+				break;
+		}
+
+		return 'f3';
+	}
+
     public function getFacultiesFor($filial)
     {
         $sql=<<<SQL
@@ -202,6 +226,13 @@ SQL;
         $command->bindValue(':FILIAL', $filial);
         $faculties = $command->queryAll();
 
-        return $faculties;
+		$res = array();
+		foreach($faculties as $key => $faculty){
+			$name =  $faculty[F::getFieldByLanguage(false)];
+			$res[$key] = $faculty;
+			$res[$key]['name'] = (isset($name)&&!empty($name)&&$name!="")?$name:$faculty['f3'];
+		}
+		return CHtml::listData($res, 'f1', 'name');
+        //return $faculties;
     }
 }

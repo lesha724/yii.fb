@@ -23,7 +23,8 @@ if (count($filials) > 1) {
     $html .= '</div>';
 }
 
-$faculties = CHtml::listData(F::model()->getFacultiesFor($model->filial), 'f1', 'f3');
+//$faculties = CHtml::listData(F::model()->getFacultiesFor($model->filial), 'f1', 'f3');
+$faculties = F::model()->getFacultiesFor($model->filial);
 $html .= '<div class="select-group col-xs-12">';
 $html .= $form->label($model, 'faculty');
 $html .= $form->dropDownList($model, 'faculty', $faculties, $options);

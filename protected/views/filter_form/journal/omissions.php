@@ -21,7 +21,8 @@ $form=$this->beginWidget('CActiveForm', array(
         $html .= '</div>';
     }
 
-    $faculties = CHtml::listData(F::model()->getFacultiesFor($model->filial), 'f1', 'f3');
+    //$faculties = CHtml::listData(F::model()->getFacultiesFor($model->filial), 'f1', 'f3');
+    $faculties = F::model()->getFacultiesFor($model->filial);
     $html .= '<div class="span2 ace-select">';
     $html .= $form->label($model, 'faculty');
     $html .= $form->dropDownList($model, 'faculty', $faculties, $options);
