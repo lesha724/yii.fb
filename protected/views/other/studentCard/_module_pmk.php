@@ -6,7 +6,7 @@
  * Time: 11:23
  */
 
-list($modules,$maxCount) = VVMP::model()->getModuleBySt($st->st1);
+list($modules,$maxCount) = Vvmp::model()->getModuleBySt($st->st1);
 
 $table =<<<HTML
     <table class="table">
