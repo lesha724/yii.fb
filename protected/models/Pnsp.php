@@ -147,6 +147,22 @@ class Pnsp extends CActiveRecord
 		return parent::model($className);
 	}
 
+	public static function getFieldByLanguage(){
+		switch(Yii::app()->language){
+			case 'uk':
+				return 'pnsp2';
+				break;
+			case 'ru':
+				return 'pnsp20';
+				break;
+			case 'en':
+				return 'pnsp17';
+				break;
+		}
+
+		return 'f3';
+	}
+
     public function getSpecialitiesFor($faculty)
     {
         if (empty($faculty))
@@ -171,10 +187,10 @@ SQL;
         $specialities = $command->queryAll();
 
         foreach ($specialities as $key => $speciality) {
-            $specialities[$key]['name'] = $speciality['pnsp2'];
-        }
-
-
+			$name =  $speciality[self::getFieldByLanguage()];
+            $specialities[$key]['name'] = (isset($name)&&!empty($name)&&$name!="")?$name:$speciality['pnsp2'];
+		}
+		//return CHtml::listData($specialities, 'pnsp1', 'name');
         return $specialities;
     }
 
