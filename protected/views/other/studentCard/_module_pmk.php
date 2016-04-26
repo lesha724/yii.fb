@@ -30,7 +30,7 @@ for ($i=1; $i<=$maxCount;$i++)
 
 foreach ($modules as $module)
 {
-    //$marks = Jpv::model()->getMarksFromStudent($module['uo1'],$gr1,$st->st1);
+    //$marks = Vmp::model()->getMarksFromStudent($module['uo1'],$gr1,$st->st1);
     $tr.='<tr>';
     $tr.='<td>'.$module['discipline'].'</td>';
     $summ=0;
@@ -39,12 +39,13 @@ foreach ($modules as $module)
         if(!isset($module[$i]))
             $tr.='<td class="not-module">-</td>';
         else {
-            /*$mark = isset($marks[$i]) && $marks[$i]['jpvd3'] != 0
-                ? round($marks[$i]['jpvd3'], 1)
-                : '';
-            if($mark!='')
-                $summ+=$mark;
-            $tr .= '<td>'.$mark.'</td>';*/
+            if(isset($module['discipline'][$i])&&!empty($module['discipline'][$i]['vmpv1'])){
+                $tr .= '<td>+</td>';
+            }else{
+                $tr .= '<td>+-</td>';
+            }
+
+
         }
     }
 
