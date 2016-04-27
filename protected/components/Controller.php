@@ -188,4 +188,17 @@ SQL;
 
         Yii::app()->session['date2'] = $date2;
     }
+
+    public function mailsend($to,$from,$subject,$message){
+        $mail=Yii::app()->Smtpmail;
+        $mail->SetFrom($from, 'From NAme');
+        $mail->Subject    = $subject;
+        $mail->MsgHTML($message);
+        $mail->AddAddress($to, "");
+        if(!$mail->Send()) {
+            return array(false, "Mailer Error: " . $mail->ErrorInfo);
+        }else {
+            return array(true,  "Message sent!");
+        }
+    }
 }

@@ -223,6 +223,11 @@ $this->widget('zii.widgets.CMenu', array(
                     'active' => $_a=='settingsPortal' && $_m=='admin'
                 ),
                 array(
+                    'label'  => $_l2.tt('Настройки почты'),
+                    'url'    => _u('/admin/default/mail'),
+                    'active' => $_a=='mail' && $_m=='admin'
+                ),
+                array(
                     'label'  => $_l2.tt('Закрытие журнала для кафедр'),
                     'url'    => _u('/admin/default/closeChair'),
                     'active' => $_c=='closeChair' && $_m=='admin'

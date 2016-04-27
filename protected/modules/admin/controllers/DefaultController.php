@@ -16,7 +16,41 @@ class DefaultController extends AdminController
 
         $this->render('studentCard');
     }
+	
+	public function actionMail()
+    {
+        $file = YiiBase::getPathOfAlias('application.config').'/mail.inc';
+        $content = file_get_contents($file);
+        $arr = unserialize(base64_decode($content));
+        $model = new ConfigMailForm();
+        $model->setAttributes($arr);
 
+        if (isset($_POST['ConfigMailForm']))
+        {
+            $config = array(
+                //'Class'=>'application.extensions.smtpmail.PHPMailer',
+                'Host'=>$_POST['ConfigMailForm']['Host'],
+                'Username'=>$_POST['ConfigMailForm']['Username'],
+                'Password'=>$_POST['ConfigMailForm']['Password'],
+                'Mailer'=>$_POST['ConfigMailForm']['Mailer'],
+                'Port'=>$_POST['ConfigMailForm']['Port'],
+                //'SMTPAuth'=>true,
+            );
+            $model->setAttributes($config);
+            if($model->validate())
+            {
+                $str = base64_encode(serialize($config));
+                if(file_put_contents($file, $str))
+                    Yii::app()->user->setFlash('config',tt("Настройки почты сохранены!"));
+                else
+                    Yii::app()->user->setFlash('config_error',tt("Ошибка! Настройки почты не сохранены!"));
+
+            }
+        }
+
+        $this->render('mail',array('model'=>$model));
+    }
+	
     public function actionCloseChair()
     {
         $model = new Kcp();
