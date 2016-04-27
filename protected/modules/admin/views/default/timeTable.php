@@ -32,4 +32,8 @@ HTML;
     $html  = $this->renderPartial('timeTable/_teacher', array(), true);
     echo sprintf($widget, $title, $html);
 
+    $title = tt('Расписание студента');
+    $html  = $this->renderPartial('timeTable/_student', array(), true);
+    echo sprintf($widget, $title, $html);
+
 
