@@ -82,6 +82,10 @@
                             </li>
                         <?php else: ?>
                             <li>
+                                <a href="<?=Yii::app()->createUrl('site/changePassword')?>" id="change-password">
+                                    <i class="icon-user"></i>
+                                    <?=tt('Смена пароля')?>
+                                </a>
                                 <a href="<?=Yii::app()->createUrl('/site/logout')?>">
                                     <i class="icon-off"></i>
                                     <?=tt('Выйти')?>

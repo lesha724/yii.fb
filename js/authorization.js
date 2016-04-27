@@ -3,7 +3,7 @@ $(document).ready(function(){
     var option = {
         'headerClass' : 'authorization-header'
     }
-    $("#sign-in, #registration, #forgot-password").on('click', function() {
+    $("#sign-in,#change-password, #registration, #forgot-password").on('click', function() {
 
         var $that = $(this);
         var header = $that.text();
@@ -17,7 +17,7 @@ $(document).ready(function(){
         return false;
     });
 
-    $(document).on('submit', '#login-form, #registration-form, #forgot-password-form', function(){
+    $(document).on('submit', '#login-form,#changePassword-form, #registration-form, #forgot-password-form', function(){
 
         var data  = $(this).serialize();
         var url   = $(this).attr('action');

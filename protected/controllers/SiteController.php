@@ -118,6 +118,49 @@ class SiteController extends Controller
 		$this->render('login',array('model'=>$model));
 	}
 
+	public function actionChangePassword()
+	{
+		//if (! Yii::app()->request->isAjaxRequest)
+			//$this->redirect('index');
+
+		if (Yii::app()->user->isGuest)
+			$this->redirect('index');
+
+		$model=Users::model()->findByPk(Yii::app()->user->id);
+
+
+		if($model==null){
+			throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+		}
+
+
+		$model->password = $model->u3;
+
+		$model->scenario = "change-password";
+		// if it is ajax validation request
+		if(isset($_POST['ajax']) && $_POST['ajax']==='changePassword-form')
+		{
+			echo CActiveForm::validate($model);
+			Yii::app()->end();
+		}
+
+		// collect user input data
+		if(isset($_POST['Users']))
+		{
+			$model->u3=$_POST['Users']['u3'];
+			$model->password=$_POST['Users']['password'];
+			$model->u2=$_POST['Users']['u2'];
+			$model->u4=$_POST['Users']['u4'];
+			// validate user input and redirect to the previous page if valid
+			if($model->save())
+				Yii::app()->end('ok');
+			//print_r($model->getErrors());
+			//$this->redirect(Yii::app()->user->returnUrl);
+		}
+		// display the login form
+		$this->render('changePassword',array('model'=>$model));
+	}
+
 	/**
 	 * Logs out the current user and redirect to homepage.
 	 */

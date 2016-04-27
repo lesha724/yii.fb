@@ -29,6 +29,7 @@ class Users extends CActiveRecord
 		return 'users';
 	}
 
+	public $password;
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -40,7 +41,7 @@ class Users extends CActiveRecord
 			array('u1', 'required'),
 			array('u1, u5, u6, u7', 'numerical', 'integerOnly'=>true),
 			//array('u2, u3','length',  'min' => 8,'max'=>30),
-			array('u3', 'match', 'pattern'=>'/^[a-zA-Z][a-zA-Z0-9-_\.,]{7,}$/','message'=>tt('В password могут быть только строчные и прописные латинские буквы, цифры, спецсимволы. Минимум 8 символов')),
+			array('u3', 'match', 'pattern'=>'/^[a-zA-Z0-9-_\.,]{7,}$/','message'=>tt('В password могут быть только строчные и прописные латинские буквы, цифры, спецсимволы. Минимум 8 символов')),
 			array('u4', 'length', 'max'=>400),
             array('u2, u4', 'checkIfUnique'),
             //array('u2', 'length', 'min'=>5, 'max'=>30),
@@ -48,7 +49,9 @@ class Users extends CActiveRecord
             array('u2', 'match', 'pattern'=>'/^[a-zA-Z][a-zA-Z0-9]{7,30}$/','message'=>tt('В login могут быть только латинские символы и цифры,  длиной от 8 до 30 символов')),
             array('u4', 'email'),
             array('u2, u3, u4', 'required', 'on'=>'admin-create,admin-update'),
-
+			array('u2,u4 ,u3, password', 'safe', 'on'=>'change-password'),
+			array('u2,u4 ,u3, password', 'required', 'on'=>'change-password'),
+			array('u3', 'compare', 'compareAttribute'=>'password', 'on'=>'change-password'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('u1, u2, u3, u4, u5, u6, u7', 'safe', 'on'=>'search'),
@@ -74,7 +77,8 @@ class Users extends CActiveRecord
 		return array(
 			'u1' => 'U1',
 			'u2' => 'Login',
-			'u3' => 'Password',
+			'u3' => tt('Пароль'),
+			'password' => tt('Повторите пароль'),
 			'u4' => 'Email',
 			'u5' => 'U5',
 			'u6' => 'U6',
