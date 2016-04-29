@@ -10,7 +10,7 @@ function getSelect($type,$i)
         $options=array('id'=>"select-type");
         $name ='select-type';
     }
-    $options=$options+array('empty' => tt('--Виберіть тип--'));
+    $options=$options+array('empty' => tt('--Выберите тип--'));
     $data = CHtml::listData(Elgzst::model()->getTypesByGroup(),'id','text','group');
     return CHtml::dropDownList($name,$type,$data,$options);
 
