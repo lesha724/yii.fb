@@ -1104,16 +1104,22 @@ SQL;
 	public function getDisciplineExam($st1,$gr1)
 	{
 		$sql = <<<SQL
-		select d2,stus19,stus20,stus8,stus6,stus7,STUS11,STUS3 from d
-			inner join stus on (d.d1 = stus.stus18)
-			inner join st on (stus.stus1 = st.st1)
-			inner join std on (st.st1 = std.std2)
-			inner join gr on (std.std3 = gr.gr1)
-			inner join sg on (gr.gr2 = sg.sg1)
-			inner join sem on (sg.sg1 = sem.sem2)
-			INNER JOIN stusa ON (stus18=stusa18 AND stus19=stusa19 AND stus20=stusa20)
-		WHERE st1=:ST1 and std11 in (0,5,8) and std7 is null and sem3=:YEAR and sem5=:SEM  and sem7=stus20
-		group by d2,stus19,stus20,stus8,stus6,stus7,STUS11,STUS3 order by d2 COLLATE UNICODE
+		select d2,stus19,stus20,stus8,stus6,stus7,STUS11,STUS3
+			from st
+			   inner join stus on (st.st1 = stus.stus1)
+			   inner join d on (stus.stus18 = d.d1)
+			   inner join stusa on (stus.stus18 = stusa.stusa18) and (stus.stus19 = stusa.stusa19) and (stus.stus20 = stusa.stusa20)
+			where st1=:ST1 and stus20 in
+					 (select sem7
+					 from gr
+						inner join std on (gr.gr1 = std.std3)
+						inner join st on (std.std2 = st.st1)
+						inner join sg on (gr.gr2 = sg.sg1)
+						inner join sem on (sg.sg1 = sem.sem2)
+					 where st1={$st1} and std11<>1 and std7 is null and sem3=:YEAR and sem5=:SEM
+					 group by sem7)
+			group by d2,stus19,stus20,stus8,stus6,stus7,STUS11,STUS3
+			order by d2 COLLATE UNICODE
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':GR1', $gr1);
