@@ -226,18 +226,15 @@ SQL;
 	public function getModuleBySt($st1)
 	{
 		$sql = <<<SQL
-			select d1,d2,d3,vvmp6,vvmp4,vvmp8,k3,k2,vmpv1
-			from sg
-			   inner join sem on (sg.sg1 = sem.sem2)
-			   JOIN us ON (sem1=us3)
-			   inner join gr on (sg.sg1 = gr.gr2)
-			   inner join std on (gr.gr1 = std.std3 and std.std2 = :ST1)
-			   inner join vvmp on (sg.sg1 = vvmp.vvmp25)
+			select d1,d2,vvmp6,vvmp4,sem1,k2,vmp4,vmp5,vmp6,vmp7,vmp1
+			from (select vmp1,vmp4,vmp5,vmp6,vmp7 from vmp where vmp2 = :ST1)
+			   inner join vmpv on (vmp1 = vmpv.vmpv1)
+			   inner join vvmp on (vmpv.vmpv2 = vvmp.vvmp1)
+			   inner join d on (vvmp.vvmp3 = d.d1)
 			   inner join k on (vvmp.vvmp5 = k.k1)
-			   left join vmpv on (vvmp.vvmp1 = vmpv.vmpv2 and vmpv7 = gr1)
-			   inner join d on (vvmp.vvmp3 = d.d1)  where sem3=:YEAR AND sem5=:SEM AND vvmp4 = sem7 AND us4 in (5,6) AND std7 is null and std11 in (0, 5, 6, 8)
-			GROUP BY d1,d2,d3,vvmp6,vvmp4,vvmp8,k3,k2,vmpv1
-			ORDER BY  d2,d1,d3,vvmp6,vvmp4,vvmp8,k3,k2,vmpv1
+			   inner join sem on (vvmp.vvmp4 = sem.sem7) and (vvmp.vvmp25 = sem.sem2)
+			where sem3=:YEAR AND sem5=:SEM
+			GROUP BY d2,vvmp6,vvmp4,d1,sem1,k2,vmp4,vmp5,vmp6,vmp7,vmp1
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':ST1', $st1);
@@ -246,26 +243,24 @@ SQL;
 		$res = $command->queryAll();
 
 		$modules = array();
-		$maxCount=$count=$d1=0;
+		$max=$min=$d1=0;
 		foreach ($res as $val)
 		{
 			if($d1!=$val['d1']) {
-				if ($count > $maxCount)
-					$maxCount = $count;
-				$count = 0;
 				$d1=$val['d1'];
 			}
+
+			if ($val['vvmp6']<$min || $min==0)
+				$min = $val['vvmp6'];
+			if ($val['vvmp6']>$max || $max==0)
+				$max = $val['vvmp6'];
+
 			$modules[$val['d1']]['discipline']=$val['d2'];
 			$modules[$val['d1']]['chair']=$val['k2'];
 			$modules[$val['d1']][$val['vvmp6']]=$val;
-
-			$count++;
 		}
 
-		if($count>$maxCount)
-			$maxCount=$count;
-
-		return array($modules,$maxCount);
+		return array($modules,$min,$max);
 	}
 
 	public function getModule($uo1,$gr1)
