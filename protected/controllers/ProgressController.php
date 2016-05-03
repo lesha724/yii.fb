@@ -43,7 +43,7 @@ class ProgressController extends Controller
                 'expression' => 'Yii::app()->user->isStd',
             ),
             array('allow',
-                'actions' => array('attendanceStatistic','rating')
+                'actions' => array('attendanceStatistic','rating','ratingExcel')
             ),
             array('deny',
                 'users' => array('*'),
@@ -70,6 +70,127 @@ class ProgressController extends Controller
         $this->render('rating', array(
             'model' => $model,
         ));
+    }
+
+    public function actionRatingExcel(){
+
+        $group = Yii::app()->request->getParam('group', null);
+        $sel_1 = Yii::app()->request->getParam('sem1', null);
+        $sel_2 = Yii::app()->request->getParam('sem2', null);
+        $type_rating = Yii::app()->request->getParam('type_rating', null);
+        $st_rating = Yii::app()->request->getParam('st_rating', null);
+
+        if (empty($sel_1)||empty($sel_2)||empty($group))
+            throw new CHttpException(400, 'Invalid params. Please do not repeat this request again.');
+
+        $sg1=0;
+        if($type_rating==1){
+
+            $criteria = new CDbCriteria;
+            $criteria->select = 'gr2';
+            $criteria->condition = 'gr1 = '.$group;
+            $data = Gr::model()->find($criteria);
+            if(!empty($data))
+            {
+                $group=0;
+                $sg1=$data->gr2;
+            }
+        }
+        $rating = Gr::model()->getRating($sg1, $group,$sel_1,$sel_2,$st_rating);
+
+        if(empty($rating))
+            throw new CHttpException(400, tt('Нет данных.'));
+
+        Yii::import('ext.phpexcel.XPHPExcel');
+        $objPHPExcel= XPHPExcel::createPHPExcel();
+        $objPHPExcel->getProperties()->setCreator("ACY")
+            ->setLastModifiedBy("ACY ".date('Y-m-d H-i'))
+            ->setTitle("Jornal ".date('Y-m-d H-i'))
+            ->setSubject("Jornal ".date('Y-m-d H-i'))
+            ->setDescription("Jornal document, generated using ACY Portal. ".date('Y-m-d H:i:'))
+            ->setKeywords("")
+            ->setCategory("Result file");
+        $objPHPExcel->setActiveSheetIndex(0);
+        $sheet=$objPHPExcel->getActiveSheet();
+
+        $sheet->getColumnDimension('A')->setWidth(10);
+        $sheet->getColumnDimension('B')->setWidth(40);
+        $sheet->getColumnDimension('C')->setWidth(30);
+        $sheet->getColumnDimension('D')->setWidth(20);
+        $sheet->getColumnDimension('E')->setWidth(20);
+        $sheet->getColumnDimension('F')->setWidth(20);
+
+        $sheet->setCellValue('A3', '№')->getStyle('A3')->getAlignment()->setHorizontal(
+            PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $sheet->setCellValue('B3', tt('Студент'))->getStyle('B3')->getAlignment()->setHorizontal(
+            PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $sheet->setCellValue('C3', tt('Группа'))->getStyle('C3')->getAlignment()->setHorizontal(
+            PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $sheet->setCellValue('D3', tt('Курс'))->getStyle('D3')->getAlignment()->setHorizontal(
+            PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $sheet->setCellValue('E3', tt('5'))->getStyle('E3')->getAlignment()->setHorizontal(
+            PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $sheet->setCellValue('F3', tt('Не сдано'))->getStyle('F3')->getAlignment()->setHorizontal(
+            PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+        $sheet->getStyle('A3')->getFont()->setName('Arial')->setSize(15)->getColor()->applyFromArray(array('rgb' => '000000'));
+        $sheet->getStyle('B3')->getFont()->setName('Arial')->setSize(15)->getColor()->applyFromArray(array('rgb' => '000000'));
+        $sheet->getStyle('C3')->getFont()->setName('Arial')->setSize(15)->getColor()->applyFromArray(array('rgb' => '000000'));
+        $sheet->getStyle('D3')->getFont()->setName('Arial')->setSize(15)->getColor()->applyFromArray(array('rgb' => '000000'));
+        $sheet->getStyle('E3')->getFont()->setName('Arial')->setSize(15)->getColor()->applyFromArray(array('rgb' => '000000'));
+        $sheet->getStyle('F3')->getFont()->setName('Arial')->setSize(15)->getColor()->applyFromArray(array('rgb' => '000000'));
+
+        $i=0;
+        $k=0;
+        $val5='0';
+        $val100='0';
+
+        foreach($rating as $key)
+        {
+            $_bal = round($key['credniy_bal_5'], 1);
+            if($_bal!=$val5)
+            {
+                $val5=$_bal;
+                $val100=$key['credniy_bal_100'];
+                $i++;
+            }
+            $sheet->setCellValueByColumnAndRow(0,$k+4,$i);
+            $sheet->setCellValueByColumnAndRow(1,$k+4,ShortCodes::getShortName($key['fio'], $key['name'], $key['otch']));
+            $sheet->setCellValueByColumnAndRow(2,$k+4,$key['group_name']);
+            $sheet->setCellValueByColumnAndRow(3,$k+4,$key['kyrs']);
+            $sheet->setCellValueByColumnAndRow(4,$k+4,$_bal);
+            $sheet->setCellValueByColumnAndRow(5,$k+4,$key['ne_sdano']);
+            $k++;
+        }
+
+        $sheet->getStyleByColumnAndRow(0,3,5,$k+3)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
+
+        $sheet->getProtection()->setSheet(true);
+        $sheet->getProtection()->setSort(true);
+        $sheet->getProtection()->setInsertRows(true);
+        $sheet->getProtection()->setFormatCells(true);
+
+        $sheet->getProtection()->setPassword('TNDF12451ghtreds54213');
+
+        $sheet->setTitle('Рейтинг '.date('Y-m-d H-i'));
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        // Redirect output to a clientâ€™s web browser (Excel5)
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="ACY_'.date('Y-m-d H-i').'.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+        Yii::app()->end();
     }
     
     public function actionGetGroups()

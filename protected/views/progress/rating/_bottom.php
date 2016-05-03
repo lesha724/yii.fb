@@ -37,6 +37,27 @@ echo $html;
 
 if (!empty($model->sel_1)&&!empty($model->sel_2))
 {
+
+	$this->widget('bootstrap.widgets.TbButton', array(
+			'buttonType'=>'link',
+			'type'=>'primary',
+			'icon'=>'print',
+			'url'=>Yii::app()->createUrl('/progress/ratingExcel',
+					array(
+							'group'=>$model->group,
+							'sem1'=>$model->sel_1,
+							'sem2'=>$model->sel_2,
+							'st_rating'=>$model->st_rating,
+							'type_rating'=>$model->type_rating
+					)
+			),
+			'label'=>tt('Печать'),
+			'htmlOptions'=>array(
+					'class'=>'btn-mini',
+					'id'=>'rating-print',
+			)
+	));
+
 	/*$sem = $model->semester;
 	if($sem==-1)
 		$sem=0;*/

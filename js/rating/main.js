@@ -1,5 +1,15 @@
 $(document).ready(function(){
 
+    /*$(document).on('click','#rating-print',
+        function(){
+            var action=$("#timeTable-form").attr("action");
+            $("#timeTable-form").attr("action", $(this).data('url'));
+            $("#timeTable-form").submit();
+            $("#timeTable-form").attr("action", action);
+
+        }
+    );*/
+
     $spinner1 = $('#spinner1');
 
     initFilterForm($spinner1);
