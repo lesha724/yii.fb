@@ -1,16 +1,27 @@
 <?php
+
+
+/*if(!empty($model->sel_1)&&empty($model->sel_2)){
+	$model->sel_2 = $model->sel_1;
+}*/
+
 $options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;');
 $inost=array(
 	0=>tt('Все'),
 	1=>tt('Не иностранцы'),
 	2=>tt('Иностранцы'),
 );
+//$data = CHtml::listData(Sem::model()->getSemestersForRating($model->group, $type), 'sem7', 'name');
 $data = CHtml::listData(Sem::model()->getSemestersForRating($model->group, $type), 'sem7', 'sem7', 'name');
 
 $html  = '<div class="row-fluid" style="margin-bottom:2%">';
 $html .= '<div class="span3 ace-select">';
-$html .= CHtml::label(tt('Семестр'), 'FilterForm_semester');
-$html .= CHtml::dropDownList('FilterForm[semester]', $model->semester,array('-1'=>tt('За весь период'))+$data, $options);
+$html .= CHtml::label(tt('Семестр "с"'), 'FilterForm_sel_1');
+$html .= CHtml::dropDownList('FilterForm[sel_1]', $model->sel_1,$data,$options);
+$html .= '</div>';
+$html .= '<div class="span3 ace-select">';
+$html .= CHtml::label(tt('Семестр "по"'), 'FilterForm_sel_2');
+$html .= CHtml::dropDownList('FilterForm[sel_2]', $model->sel_2,$data,$options);
 $html .= '</div>';
 $html .= '<div class="span3 ace-select">';
 $html .= CHtml::label(tt('Студенты'), 'FilterForm_st_rating');
@@ -24,11 +35,11 @@ $html .= '</div>';
 
 echo $html;
 
-if (!empty($model->semester))
+if (!empty($model->sel_1)&&!empty($model->sel_2))
 {
-	$sem = $model->semester;
+	/*$sem = $model->semester;
 	if($sem==-1)
-		$sem=0;
+		$sem=0;*/
 	$group=$model->group;
 	$sg1=0;
 	if($model->type_rating==1){
@@ -43,7 +54,7 @@ if (!empty($model->semester))
 			$sg1=$data->gr2;
 		}
 	}
-	$rating = Gr::model()->getRating($sg1, $group,$sem,$model->st_rating);
+	$rating = Gr::model()->getRating($sg1, $group,$model->sel_1,$model->sel_2,$model->st_rating);
 	if(!empty($rating))
 	{
 		/*Yii::app()->clientScript->registerScript('list-group', "
@@ -95,7 +106,7 @@ if (!empty($model->semester))
 	{
 		?>
 			<div class="alert alert-danger" role="alert">
-				<?='Empty array'?>
+				<?=tt('Нет данных')?>
 			</div>
 		<?php
 	}

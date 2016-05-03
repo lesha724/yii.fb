@@ -562,13 +562,14 @@ SQL;
         return $timeTable;
     }
 	
-	public static function getRating($sg1,$gr1, $sem, $inost)
+	public static function getRating($sg1,$gr1, $sem1, $sem2, $inost)
     {
-		$sql ='SELECT fio,kyrs,gr.gr1,credniy_bal_5,credniy_bal_100,ne_sdano,name,otch,gr19,gr20,gr21,gr22,gr23,gr24,gr28 FROM STUD_REYTING(:SG1, :GR1, :SEM, :INOST) JOIN gr On gr.gr1=STUD_REYTING.gr1 ORDER BY CREDNIY_BAL_5 DESC';
+		$sql ='SELECT fio,kyrs,gr.gr1,credniy_bal_5,credniy_bal_100,ne_sdano,name,otch,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28 FROM STUD_REYTING(:SG1, :GR1, :SEM1,:SEM2, :INOST) JOIN gr On gr.gr1=STUD_REYTING.gr1 ORDER BY CREDNIY_BAL_5 DESC';
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':SG1', $sg1);
         $command->bindValue(':GR1', $gr1);
-        $command->bindValue(':SEM', $sem);
+        $command->bindValue(':SEM1', $sem1);
+        $command->bindValue(':SEM2', $sem2);
 		$command->bindValue(':INOST', $inost);
         $rating = $command->queryAll();
         if (empty($rating))

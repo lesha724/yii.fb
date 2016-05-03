@@ -4,23 +4,32 @@ $(document).ready(function(){
 
     initFilterForm($spinner1);
 
-    $('#FilterForm_semester,#FilterForm_type_rating,#FilterForm_st_rating').change(function(){
+    $('#FilterForm_sel_1,#FilterForm_sel_2 ,#FilterForm_type_rating,#FilterForm_st_rating').change(function(){
 
-        var $that   = $('#FilterForm_semester');
+        var $that   = $('#FilterForm_sel_1');
         var $select = $that.clone();
-		var $checkbox=$('#FilterForm_type_rating').clone();
-		$checkbox.hide();
-		var $select2 = $('#FilterForm_st_rating').clone();
-        var $form   = $('#filter-form');
         var value   = $that.val();
 
-        if (value.length == 0)
-            return;
+        var $that1   = $('#FilterForm_sel_2');
+        var $select1 = $that1.clone();
+        var value1   = $that1.val();
+
+		var $checkbox=$('#FilterForm_type_rating').clone();
+		$checkbox.hide();
+
+		var $select2 = $('#FilterForm_st_rating').clone();
+        var $form   = $('#filter-form');
+
+        if (value.length != 0 && $(this).attr('id')=="FilterForm_sel_1")
+            value1 = value;
 
         $select.find('option[value='+$that.val()+']').attr('selected', 'selected');
+        $select1.find('option[value='+value1+']').attr('selected', 'selected');
+
 		$select2.find('option[value='+$('#FilterForm_st_rating').val()+']').attr('selected', 'selected');
 
         $form.append($select);
+        $form.append($select1);
 		$form.append($select2);
 		$form.append($checkbox);
         $form.submit();

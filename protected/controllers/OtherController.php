@@ -1106,6 +1106,13 @@ SQL;
                         $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
                     }
 
+                    $sheet->getProtection()->setSheet(true);
+                    $sheet->getProtection()->setSort(true);
+                    $sheet->getProtection()->setInsertRows(true);
+                    $sheet->getProtection()->setFormatCells(true);
+
+                    $sheet->getProtection()->setPassword('TNDF12451ghtreds54213');
+
                     $sheet->setTitle('Заявление '.date('Y-m-d H-i'));
                     // Set active sheet index to the first sheet, so Excel opens this as the first sheet
                     $objPHPExcel->setActiveSheetIndex(0);

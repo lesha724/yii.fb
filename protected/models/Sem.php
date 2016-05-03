@@ -309,6 +309,7 @@ SQL;
         $semesters = $command->queryAll();
 
         foreach ($semesters as $key => $sem) {
+            //$semesters[$key]['name'] = tt('Семестр').' №'.$sem['sem7'].' ('.$sem['sem3'].' '.$sem['sem4'].' '.tt('курс').')';
             $semesters[$key]['name'] = $sem['sem3'].' ('.$sem['sem4'].' '.tt('курс').')';
         }
 
