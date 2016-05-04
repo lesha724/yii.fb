@@ -37,12 +37,32 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
         else
             $disabled = '';
 
-    $date1  = new DateTime(date('Y-m-d H:i:s'));
-    $date2  = new DateTime($date_lesson);
-    if (! empty($ps2)&&!isset($permLesson[$elgz1])) {
-        $diff = $date1->diff($date2)->days;
-        if ($diff > $ps2)
-        {
+    $ps78 = PortalSettings::model()->findByPk(78)->ps2;
+    if($ps78==0) {
+        $date1 = new DateTime(date('Y-m-d H:i:s'));
+        $date2 = new DateTime($date_lesson);
+        if (!empty($ps2) && !isset($permLesson[$elgz1])) {
+            $diff = $date1->diff($date2)->days;
+            if ($diff > $ps2) {
+                $disabled = 'disabled="disabled"';
+            }
+        }
+    }else{
+
+        $ps79 = PortalSettings::model()->findByPk(79)->ps2;
+        $date2 = new DateTime($date_lesson/*.' '.$rz->rz9.':'.$rz->rz10*/);
+        $date2->modify('+'.$date['rz9'].' hours');
+        $date2->modify('+'.$date['rz10'].' minutes');
+
+        $date2->modify('-10 minutes');
+
+        $date3 = new DateTime($date_lesson);
+        $date3->modify('+'.$date['rz9'].' hours');
+        $date3->modify('+'.$date['rz10'].' minutes');
+        $date3->modify('+' . $ps79 . ' minutes');
+
+        $date1 = new DateTime(date('Y-m-d H:i:s'));
+        if ($date1 < $date2 || $date1 > $date3) {
             $disabled = 'disabled="disabled"';
         }
     }

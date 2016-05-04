@@ -99,8 +99,9 @@ SQL;
 
     public function actionInsertStMark()
     {
-        if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        //if (! Yii::app()->request->isAjaxRequest)
+            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
         $error=false;
         $errorType=0;
 
@@ -157,12 +158,42 @@ SQL;
                         $perm_enable=true;
                 }
                 //проверка на количество дней после занятия, если прошло больше денй чем указано в настрйоках запрещаем вносить
-                if(! empty($ps2) &&!$perm_enable){
-                    $date1  = new DateTime(date('Y-m-d H:i:s'));
-                    $date2  = new DateTime($date);
-                    $diff = $date1->diff($date2)->days;
-                    if ($diff > $ps2)
+                $ps78 = PortalSettings::model()->findByPk(78)->ps2;
+                if($ps78==0) {
+                    if (!empty($ps2) && !$perm_enable) {
+                        $date1 = new DateTime(date('Y-m-d H:i:s'));
+                        $date2 = new DateTime($date);
+                        $diff = $date1->diff($date2)->days;
+                        if ($diff > $ps2)
+                            $error = true;
+                    }
+                }else{
+                    //Костыль клименка, если два занятия в один день будет ошибка. будет выгребать только первую запись
+                    $lesson = R::model()->findByAttributes(array('r1'=>$r1,'r2'=>$date));
+                    if($lesson==null)
                         $error = true;
+                    else {
+                        $rz = Rz::model()->findByPk($lesson->r4);
+
+                        $ps79 = PortalSettings::model()->findByPk(79)->ps2;
+                        $date2 = new DateTime($date/*.' '.$rz->rz9.':'.$rz->rz10*/);
+                        $date2->modify('+'.$rz->rz9.' hours');
+                        $date2->modify('+'.$rz->rz10.' minutes');
+
+                        $date2->modify('-10 minutes');
+
+                        $date3 = new DateTime($date);
+                        $date3->modify('+'.$rz->rz9.' hours');
+                        $date3->modify('+'.$rz->rz10.' minutes');
+                        //$date3 = new DateTime($date.' '.$rz->rz9.':'.$rz->rz10);
+                        $date3->modify('+' . $ps79 . ' minutes');
+
+                        $date1 = new DateTime(date('Y-m-d H:i:s'));
+                        if ($date1 < $date2 || $date1 > $date3) {
+                            $error = true;
+                            $errorType = 6;
+                        }
+                    }
                 }
 
                 //проверка на макимальный и минимальный бал

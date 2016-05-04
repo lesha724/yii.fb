@@ -21,17 +21,20 @@
     $min=Elgzst::model()->getMin();
     $ps44 = PortalSettings::model()->findByPk(44)->ps2;
     $ps55 = PortalSettings::model()->findByPk(55)->ps2;
+    $timeAccess = tt('Ошибка! Доступ на редактирование закрыт!');
 
 //errorType=0 error
 //errorType=4 minMaxError
 //errorType=3 access
 //errorType=5 st
 //errorType=2 error2
+//errorType=6 timeAccess
     Yii::app()->clientScript->registerScript('translations', <<<JS
         minBal = {$min}
         tt.error       = "{$error}";
         tt.success     = "{$success}";
         tt.minMaxError = "{$minMaxError}";
+        tt.timeAccess = "{$timeAccess}";
         tt.access = "{$access}";
         tt.st = "{$st}";
         tt.error2 = "{$error2}";

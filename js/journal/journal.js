@@ -464,6 +464,9 @@ function getError(data)
             case 5:
                 error = tt.st;
                 break
+            case 6:
+                error = tt.timeAccess;
+                break
             default:
                 error = tt.error;
         }
