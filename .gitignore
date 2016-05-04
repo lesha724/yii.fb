@@ -36,3 +36,4 @@ Thumbs.db
 /kiosk
 /protected/config/params.inc
 protected/config/mail.inc
+css/user.css

@@ -1,18 +1,12 @@
 <?php /* @var $this Controller */ 
 	function getStyleName($name)
 	{
-		if(!file_exists(Yii::getPathOfAlias('webroot').'/css/user/'.$name))
-			return 'css/'.$name;
-		else
-			return 'css/user/'.$name;
+		return 'css/'.$name;
 	}
 	
 	function getAceStyleName($name)
 	{
-		if(!file_exists(Yii::getPathOfAlias('webroot').'/css/user/ace/'.$name))
-			return 'theme/ace/assets/css/'.$name;
-		else
-			return 'css/user/ace/'.$name;
+		return 'theme/ace/assets/css/'.$name;
 	}
 ?>
 <!DOCTYPE html>
@@ -29,7 +23,13 @@
     <title><?php echo CHtml::encode($this->pageTitle); ?></title>
 
     <?php Yii::app()->bootstrap->register(); ?>
-
+    <?php
+        if(file_exists(Yii::getPathOfAlias('webroot').'/css/user.css')):
+        ?>
+            <link rel="stylesheet" href="<?=Yii::app()->baseUrl?>/<?=getStyleName('user.css')?>" />
+        <?php
+        endif;
+    ?>
     <link rel="stylesheet" href="<?=Yii::app()->baseUrl?>/<?=getAceStyleName('font-awesome.min.css')?>" />
     <!--[if IE 7]>
     <link rel="stylesheet" href="<?=Yii::app()->baseUrl?>/theme/ace/assets/css/font-awesome-ie7.min.css"/>
