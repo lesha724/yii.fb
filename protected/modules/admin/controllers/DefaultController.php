@@ -149,7 +149,7 @@ class DefaultController extends AdminController
             $model->u1=0;
             //$model->u1=new CDbExpression('GEN_ID(GEN_USERS, 1)');
             $model->u7=1;
-            $model->u6=0;
+            //$model->u6=0;
             $model->u5=1;
             if($model->validate())
             {
@@ -174,7 +174,7 @@ class DefaultController extends AdminController
         {
             $model->attributes=$_POST['Users'];
             $model->u7=1;
-            $model->u6=0;
+            //$model->u6=0;
             $model->u5=1;
             if($model->save())
                 $this->redirect(array('admin'));
