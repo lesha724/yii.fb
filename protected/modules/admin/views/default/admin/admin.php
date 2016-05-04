@@ -34,6 +34,11 @@ if(!empty($this->menu))
             'u2',
             'u4',
             array(
+                'name'=>'u8',
+                'value'=>'$data->getU8Type()',
+                'filter'=>false
+            ),
+            array(
                 'class'=>'bootstrap.widgets.TbButtonColumn',
                 'template'=>'{update} {delete}',
                 'buttons'=>array(

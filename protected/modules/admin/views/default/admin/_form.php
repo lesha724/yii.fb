@@ -14,6 +14,8 @@
 
 <?php echo $form->emailFieldRow($model,'u4',array('class'=>'span5','maxlength'=>255)); ?>
 
+<?php echo $form->checkBoxRow($model,'u8'); ?>
+
 <div class="form-actions">
     <?php $this->widget('bootstrap.widgets.TbButton', array(
         'buttonType'=>'submit',

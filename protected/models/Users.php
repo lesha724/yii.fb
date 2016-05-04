@@ -39,7 +39,7 @@ class Users extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('u1', 'required'),
-			array('u1, u5, u6, u7', 'numerical', 'integerOnly'=>true),
+			array('u1, u5, u6, u7,u8', 'numerical', 'integerOnly'=>true),
 			//array('u2, u3','length',  'min' => 8,'max'=>30),
 			array('u3', 'match', 'pattern'=>'/^[a-zA-Z0-9-_\.,]{7,}$/','message'=>tt('В password могут быть только строчные и прописные латинские буквы, цифры, спецсимволы. Минимум 8 символов')),
 			array('u4', 'length', 'max'=>400),
@@ -54,7 +54,7 @@ class Users extends CActiveRecord
 			array('u3', 'compare', 'compareAttribute'=>'password', 'on'=>'change-password'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('u1, u2, u3, u4, u5, u6, u7', 'safe', 'on'=>'search'),
+			array('u1, u2, u3, u4, u5, u6, u7,u8', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -83,6 +83,7 @@ class Users extends CActiveRecord
 			'u5' => 'U5',
 			'u6' => 'U6',
 			'u7' => 'U7',
+			'u8' => tt('Заблокирован'),
 		);
 	}
 
@@ -111,6 +112,7 @@ class Users extends CActiveRecord
 		$criteria->compare('u5',$this->u5);
 		$criteria->compare('u6',$this->u6);
 		$criteria->compare('u7',$this->u7);
+		$criteria->compare('u8',$this->u8);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -139,6 +141,11 @@ class Users extends CActiveRecord
     {
         return $this->u7 === '1';
     }
+
+	public function getIsBlock()
+	{
+		return $this->u8 === '1';
+	}
 
     /**
      * Returns true if this user is teacher.
@@ -228,4 +235,11 @@ SQL;
 
         ibase_free_result($result);
     }
+
+	public function getU8Type(){
+		if($this->getIsBlock()){
+			return tt('Заблокирован');
+		}else
+			return '';
+	}
 }

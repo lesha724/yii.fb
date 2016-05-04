@@ -46,6 +46,8 @@ class Controller extends CController
 
     public function beforeAction($action)
     {
+        $this->checkBlockUser($action);
+
         $this->checkClosePortal($action);
 
         $this->checkCloseChair($action);
@@ -61,6 +63,17 @@ class Controller extends CController
         $this->mobileCheck();
 
         return parent::beforeAction($action);
+    }
+
+    private function checkBlockUser($action){
+
+        $enable_close=true;
+
+        if(Yii::app()->controller->id=='site'&&($action->id=='index'||$action->id=='logout'||$action->id=='error'))
+            $enable_close=false;
+
+        if(Yii::app()->user->isBlock&&$enable_close)
+            throw new CHttpException(403, tt('Доступ закрыт! Учеьная запись заблокирована!'));
     }
 
     private function processAccess($action)

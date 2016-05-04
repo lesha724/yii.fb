@@ -19,6 +19,11 @@ class WebUser extends CWebUser
         return !$this->isGuest && $this->model->isAdmin;
     }
 
+    public function getIsBlock()
+    {
+        return !$this->isGuest && $this->model->isBlock;
+    }
+
     public function getName()
     {
         if (! $this->isGuest)

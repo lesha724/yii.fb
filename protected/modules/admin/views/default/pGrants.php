@@ -64,6 +64,23 @@ $this->breadcrumbs=array(
         </div>
     </div>
 
+    <div class="control-group">
+        <label for="Users_u8" class="control-label"><?=tt('Заблокирован')?></label>
+        <div class="controls">
+            <label>
+                <?php
+                echo CHtml::checkBox('Users[u8]', $user->u8,
+                    array(
+                        'class' => 'ace ace-switch',
+                        'uncheckValue' => '0'
+                    )
+                )
+                ?>
+                <span class="lbl"></span>
+            </label>
+        </div>
+    </div>
+
     <?php /*
     <div class="control-group">
         <?=$form->label($model, 'grants3', array('class' => 'control-label'))?>
