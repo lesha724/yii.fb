@@ -15,6 +15,10 @@
  * @property integer $pm9
  * @property string $pm10
  * @property integer $pm11
+ * @property integer $pm12
+ * @property integer $pm13
+ * @property integer $pm14
+ * @property integer $pm15
  */
 class Pm extends CActiveRecord
 {
@@ -35,14 +39,14 @@ class Pm extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('pm2, pm3, pm4, pm5, pm6, pm7, pm8, pm9,pm10,pm11', 'required'),
-			array('pm7, pm8, pm9,pm11', 'numerical', 'integerOnly'=>true),
+			array('pm7, pm8, pm9,pm11,pm12,pm13,pm14,pm15', 'numerical', 'integerOnly'=>true),
 			array('pm2, pm3, pm4, pm5', 'length', 'max'=>400),
 			array('pm6', 'length', 'max'=>1020),
             array('pm6', 'url'),
 			array('pm10,pm1', 'length', 'max'=>80),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('pm1,pm2, pm3, pm4, pm5, pm6, pm7, pm8, pm9,pm10,pm11', 'safe', 'on'=>'search'),
+			array('pm1,pm2, pm3, pm4, pm5, pm6, pm7, pm8, pm9,pm10,pm11,pm12,pm13,pm14,pm15', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -74,6 +78,10 @@ class Pm extends CActiveRecord
             'pm9' => tt('Приоритет'),
             'pm10' => tt('Группа'),
             'pm11' => tt('Тип'),
+            'pm12' => tt('Только для авторизированных пользователей'),
+            'pm13' => tt('Запретить показывать студентам'),
+            'pm14' => tt('Запретить показывать преподователям'),
+            'pm15' => tt('Запретить показывать родителям'),
 		);
 	}
 
@@ -106,6 +114,10 @@ class Pm extends CActiveRecord
 		$criteria->compare('pm9',$this->pm9);
 		$criteria->compare('pm10',$this->pm10,true);
         $criteria->compare('pm11',$this->pm11);
+        $criteria->compare('pm12',$this->pm12);
+        $criteria->compare('pm13',$this->pm13);
+        $criteria->compare('pm14',$this->pm14);
+        $criteria->compare('pm15',$this->pm15);
 
 		return new CActiveDataProvider($this, array(
                     'criteria'=>$criteria,

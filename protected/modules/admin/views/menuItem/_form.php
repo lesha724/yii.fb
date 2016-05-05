@@ -66,6 +66,14 @@
         <?php echo $form->dropDownListRow($parent,'pmc1',CHtml::listData($model->getParents(),'pm1','pm2'))?>
     </div>
 
+    <?php echo $form->checkBoxRow($model,'pm12',array('class'=>'')); ?>
+
+    <?php echo $form->checkBoxRow($model,'pm13',array('class'=>'')); ?>
+
+    <?php echo $form->checkBoxRow($model,'pm14',array('class'=>'')); ?>
+
+    <?php echo $form->checkBoxRow($model,'pm15',array('class'=>'')); ?>
+
 	<div class="form-actions">
 		<?php $this->widget('bootstrap.widgets.TbButton', array(
 			'buttonType'=>'submit',

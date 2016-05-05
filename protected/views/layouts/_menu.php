@@ -85,11 +85,29 @@ function getDopItem($controller,$level)
        //'linkOptions' => array('target'=>'_blank')
        foreach ($items as $item) {
            $items=getDopItem($item->pm1,$level+1);
+
+            $visible = true;
+           if($item->pm12 == 1)
+           {
+               if(Yii::app()->user->isGuest)
+                   $visible=false;
+           }
+
+           if($item->pm13==1&&Yii::app()->user->isStd)
+               $visible=false;
+
+           if($item->pm14==1&&Yii::app()->user->isTch)
+               $visible=false;
+
+           if($item->pm15==1&&Yii::app()->user->isPrnt)
+               $visible=false;
+
            if(empty($items))
             array_push($array,array(
               'label'  => getLabelItem($item),
               'url'    => ($item->pm8!=2)?$item->pm6:Yii::app()->createUrl('site/iframe',array('id'=>$item->pm1)),
               'linkOptions' => array('target'=>($item->pm8==1)?'_blank':'_self'),
+              'visible'=>$visible
           ));
            else
                array_push($array,array(
@@ -97,6 +115,7 @@ function getDopItem($controller,$level)
                    'url' => '#',
                    'linkOptions'=> array('class' => 'dropdown-toggle'),
                    'items' =>$items,
+                   'visible'=>$visible
                ));
 
        }
