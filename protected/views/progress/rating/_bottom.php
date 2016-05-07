@@ -75,7 +75,11 @@ if (!empty($model->sel_1)&&!empty($model->sel_2))
 			$sg1=$data->gr2;
 		}
 	}
-	$rating = Gr::model()->getRating($sg1, $group,$model->sel_1,$model->sel_2,$model->st_rating);
+
+	$ps81 = PortalSettings::model()->findByPk(81)->ps2;
+	$tmp = ($ps81==0)?'credniy_bal_5':'credniy_bal_100';
+
+	$rating = Gr::model()->getRating($sg1, $group,$model->sel_1,$model->sel_2,$model->st_rating,$tmp);
 	if(!empty($rating))
 	{
 		/*Yii::app()->clientScript->registerScript('list-group', "
@@ -89,7 +93,7 @@ if (!empty($model->sel_1)&&!empty($model->sel_2))
 			<th><?=tt('Ф.И.О.')?></th>
 			<th><?=$model->getAttributeLabel('group')?></th>
 			<th><?=$model->getAttributeLabel('course')?></th>
-			<th><?=tt('5')?></th>
+			<th><?=($ps81==0)?tt('5'):tt('Многобальная')?></th>
 			<?php /*<th><?=tt('100')?></th>*/ ?>
 			<th><?=tt('Не сдано')?></th>
 		</tr>
@@ -97,18 +101,21 @@ if (!empty($model->sel_1)&&!empty($model->sel_2))
 	<tbody>
 	<?php
 		$i=0;
-		$val5='0';
+		$val='0';
 		$val100='0';
+
 		foreach($rating as $key)
 		{
 			//if($key['credniy_bal_5']!=$val5 || $key['credniy_bal_100']!=$val100)
-			$_bal = round($key['credniy_bal_5'], 1);
-			if($_bal!=$val5)
+			$_bal = round($key[$tmp], 2);
+			if($_bal!=$val)
 			{
-				$val5=$_bal;
-				$val100=$key['credniy_bal_100'];
+				$val=$_bal;
+				//$val100=$key['credniy_bal_100'];
 				$i++;
 			}
+
+			//$tmp = ($ps81==0)?$_bal:$val100;
 			echo '<tr>'.
 					'<td>'.$i.'</td>'.
 					'<td>'.ShortCodes::getShortName($key['fio'], $key['name'], $key['otch']).'</td>'.

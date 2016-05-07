@@ -96,7 +96,11 @@ class ProgressController extends Controller
                 $sg1=$data->gr2;
             }
         }
-        $rating = Gr::model()->getRating($sg1, $group,$sel_1,$sel_2,$st_rating);
+
+        $ps81 = PortalSettings::model()->findByPk(81)->ps2;
+        $tmp = ($ps81==0)?'credniy_bal_5':'credniy_bal_100';
+
+        $rating = Gr::model()->getRating($sg1, $group,$sel_1,$sel_2,$st_rating,$tmp);
 
         if(empty($rating))
             throw new CHttpException(400, tt('Нет данных.'));
@@ -142,18 +146,18 @@ class ProgressController extends Controller
 
         $i=0;
         $k=0;
-        $val5='0';
-        $val100='0';
+        $val='0';
+        //$val100='0';
 
         foreach($rating as $key)
         {
-            $_bal = round($key['credniy_bal_5'], 1);
-            if($_bal!=$val5)
+            $_bal = round($key[$tmp], 2);
+            if($_bal!=$val)
             {
-                $val5=$_bal;
-                $val100=$key['credniy_bal_100'];
+                $val=$_bal;
                 $i++;
             }
+
             $sheet->setCellValueByColumnAndRow(0,$k+4,$i);
             $sheet->setCellValueByColumnAndRow(1,$k+4,ShortCodes::getShortName($key['fio'], $key['name'], $key['otch']));
             $sheet->setCellValueByColumnAndRow(2,$k+4,$key['group_name']);

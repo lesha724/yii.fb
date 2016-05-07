@@ -212,6 +212,11 @@ $this->widget('zii.widgets.CMenu', array(
                     'active' => $_a=='list' && $_m=='admin'
                 ),
                 array(
+                    'label'  => $_l2.tt('Рейтинг'),
+                    'url'    => _u('/admin/default/rating'),
+                    'active' => $_a=='rating' && $_m=='admin'
+                ),
+                array(
                     'label'  => $_l2.tt('Ведение модулей'),
                     'url'    => _u('/admin/default/modules'),
                     'active' => $_a=='modules' && $_m=='admin'

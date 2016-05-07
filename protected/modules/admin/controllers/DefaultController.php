@@ -16,6 +16,21 @@ class DefaultController extends AdminController
 
         $this->render('studentCard');
     }
+
+    public function actionRating()
+    {
+        $settings = Yii::app()->request->getParam('settings', array());
+
+        foreach ($settings as $key => $value) {
+            PortalSettings::model()
+                ->findByPk($key)
+                ->saveAttributes(array(
+                    'ps2' => $value
+                ));
+        }
+
+        $this->render('rating');
+    }
 	
 	public function actionMail()
     {
