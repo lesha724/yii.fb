@@ -42,6 +42,12 @@ $options = array(
                 ?>
 
                 <div class="control-group">
+                    <?=CHtml::checkBox('', PortalSettings::model()->findByPk(80)->ps2, $checkboxStyle)?>
+                    <span class="lbl"> <?=tt('Скрывать баннер "Плаймаркет"')?></span>
+                    <?=CHtml::hiddenField('settings[80]', PortalSettings::model()->findByPk(80)->ps2)?>
+                </div>
+
+                <div class="control-group">
                     <span class="lbl"> <?=tt('Язык по умолчанию')?>:</span>
                     <?=CHtml::dropDownList('settings[58]', PortalSettings::model()->findByPk(58)->ps2, $options, $htmlOptions2)?>
                 </div>
