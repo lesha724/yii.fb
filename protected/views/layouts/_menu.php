@@ -106,7 +106,7 @@ function getDopItem($controller,$level)
             array_push($array,array(
               'label'  => getLabelItem($item),
               'url'    => ($item->pm8!=2)?$item->pm6:Yii::app()->createUrl('site/iframe',array('id'=>$item->pm1)),
-              'linkOptions' => array('target'=>($item->pm8==1)?'_blank':'_self'),
+              'linkOptions' => array('target'=>($item->pm8==1)?'_blank':'_self','rel'=>'nofollow noopener'),
               'visible'=>$visible
           ));
            else
