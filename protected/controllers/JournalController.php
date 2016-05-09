@@ -22,6 +22,7 @@ class JournalController extends Controller
                     'journalRetake',
                     'saveJournalRetake',
                     'journalExcel',
+                    'updateVmp',
 
                     'retake',
                     'searchRetake',
@@ -97,10 +98,110 @@ SQL;
         ));
     }
 
+
+    public function actionUpdateVmp()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $ps57 = PortalSettings::model()->findByPk(57)->ps2;
+        if($ps57!=1)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        $error=false;
+        $errorType=0;
+
+        $st1 = Yii::app()->request->getParam('st1', null);
+        $r1 = Yii::app()->request->getParam('r1', null);
+        $elgz1 = Yii::app()->request->getParam('elgz1', null);
+        $nom = Yii::app()->request->getParam('nom', null);
+        $date = Yii::app()->request->getParam('date', null);
+        $nomModule = Yii::app()->request->getParam('nomModule', null);
+        $gr1 = Yii::app()->request->getParam('gr1', null);
+        $value = Yii::app()->request->getParam('value', null);
+        $vmpv1 = Yii::app()->request->getParam('vmpv1', null);
+
+        if($vmpv1==null ||$st1==null || $elgz1==null || $r1==null || $nomModule==null || $value===null|| $nom==null || $date==null || $gr1==null)
+        {
+            $error = true;
+            $errorType=2;
+        }
+        else
+        {
+            $sql = <<<SQL
+            SELECT * FROM  EL_GURNAL(:P1,0,0,0,2,0,:R1,0,0);
+SQL;
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
+            $command->bindValue(':R1', $r1);
+            $res = $command->queryRow();
+            if(count($res)==0 || empty($res)||$res['dostup']==0)
+            {
+                $error=true;
+                $errorType=3;
+            }
+
+            if($value<0){
+                $error=true;
+                $errorType=2;
+            }
+
+            $elgz = Elgz::model()->findByPk($elgz1);
+            if(!$error) {
+                if (empty($elgz)) {
+                    $error = true;
+                    $errorType = 23;
+                } else {
+                    if ($elgz->elgz4 != 2) {
+                        $error = true;
+                        $errorType = 22;
+                    } else {
+                        $elg = Elg::model()->findByPk($elgz->elgz2);
+                        $module = Vvmp::model()->getModul($elg->elg2, $gr1);
+                        //print_r($module['vmpv1']);
+                        if ($module['vmpv1'] != $vmpv1) {
+                            $error = true;
+                            $errorType = 21;
+                        } else {
+                            $sql = <<<SQL
+                              SELECT * FROM vmp WHERE vmp2=:ST1 AND vmp1=:VMPV1
+SQL;
+                            $command = Yii::app()->db->createCommand($sql);
+                            $command->bindValue(':ST1', $st1);
+                            $command->bindValue(':VMPV1', $vmpv1);
+                            $vmp = $command->queryRow();
+
+                            if(empty($vmp)){
+                                $error = true;
+                                $errorType = 24;
+                            }
+                            else {
+                                $itog = $vmp['vmp5']+$value+$vmp['vmp7'];
+
+                                $sql = <<<SQL
+                              UPDATE vmp set vmp4=:VMP4, vmp6=:VMP6, vmp10=:VMP10, vmp12=:VMP12 WHERE vmp2=:ST1 AND vmp1=:VMPV1
+SQL;
+                                $command = Yii::app()->db->createCommand($sql);
+                                $command->bindValue(':VMP6', $value);
+                                $command->bindValue(':VMP4', $itog);
+                                $command->bindValue(':ST1', $st1);
+                                $command->bindValue(':VMPV1', $vmpv1);
+                                $command->bindValue(':VMP12', Yii::app()->user->dbModel->p1);
+                                $command->bindValue(':VMP10', date('Y-m-d H:i:s'));
+                                $command->execute();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Yii::app()->end(CJSON::encode(array('error' => $error, 'errorType' => $errorType)));
+    }
+
     public function actionInsertStMark()
     {
-        //if (! Yii::app()->request->isAjaxRequest)
-            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $error=false;
         $errorType=0;
@@ -131,6 +232,30 @@ SQL;
             {
                 $error=true;
                 $errorType=3;
+            }
+
+            try {
+                $sql = <<<SQL
+                    select elgz3,r2,r1,elgz1
+                    from elgz
+                    inner join elg on (elgz.elgz2 = elg.elg1)
+                    inner join EL_GURNAL_ZAN(elg.elg2,:GR1,elg.elg3, elg.elg4) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
+                    WHERE r1=:R1 and elgz.elgz1=:ELGZ1 and elgz.elgz3=:NOM
+                    order by elgz3
+SQL;
+                $command = Yii::app()->db->createCommand($sql);
+                $command->bindValue(':GR1', $gr1);
+                $command->bindValue(':R1', $r1);
+                $command->bindValue(':ELGZ1', $elgz1);
+                $command->bindValue(':NOM', $nom);
+                $res = $command->queryRow();
+            }
+            catch (Exception $e) {
+                $res = null;
+            }
+
+            if(empty($res)){
+                throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
             }
 
             $whiteList = array(
@@ -299,15 +424,18 @@ SQL;
                             $elgzst->elgzst4 = 0;
                             $elgzst->elgzst5 = 0;
                             $elgzst->$field = $value;
-
                             $error = !$elgzst->save();
-                            if (!$error)
+
+                            if (!$error) {
                                 $elgzst = Elgzst::model()->findByAttributes(array('elgzst1' => $st1, 'elgzst2' => $elgz1));
+                            }
                         }
                     }
 
                     if(!$error)
                     {
+                        Vmp::model()->recalculate($st1,$elgz,$gr1);
+
                         if($field == 'elgzst3'&&$value==0)
                         {
                             //если убираем пропуск удалем все записи с регитрацией пропусвов и отработок по этому занятию

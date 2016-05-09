@@ -289,4 +289,96 @@ SQL;
 
         return $res;
     }
+
+    public function recalculate($st1,$elgz,$gr1){
+        $ps57 = PortalSettings::model()->findByPk(57)->ps2;
+        if($ps57!=1)
+            return;
+
+        $elg = Elg::model()->findByPk($elgz->elgz2);
+        $module = Vvmp::model()->getModul($elg->elg2, $gr1);
+
+        $sql=<<<SQL
+            SELECT elgz3 FROM elgz WHERE elgz2=:ELGZ2 AND elgz4=2 AND elgz3>:ELGZ3 ORDER by elgz3 asc
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ELGZ2', $elgz->elgz2);
+        $command->bindValue(':ELGZ3', $elgz->elgz3);
+        $pmkLessonNom = $command->queryScalar();
+
+        if(empty($pmkLessonNom))
+            return;
+        else
+        {
+            $sql=<<<SQL
+            SELECT elgz3 FROM elgz WHERE elgz2=:ELGZ2 AND elgz4=2 AND elgz3<:ELGZ3 ORDER by elgz3 asc
+SQL;
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':ELGZ2', $elgz->elgz2);
+            $command->bindValue(':ELGZ3', $elgz->elgz3);
+            $pmkPrevLessonNom = $command->queryScalar();
+
+            if(empty($pmkPrevLessonNom))
+                $pmkPrevLessonNom = 0;
+
+            $sql=<<<SQL
+              SELECT elgzst5,elgzst4,elgzst3 FROM elgzst
+              INNER JOIN elgz on (elgzst.elgzst2 = elgz.elgz1 AND elgz.elgz2=:ELGZ2 and elgz.elgz3>:MIN AND elgz.elgz3<:MAX)
+              WHERE elgzst1=:ST1 ORDER by elgz3 asc
+SQL;
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':ELGZ2', $elgz->elgz2);
+            $command->bindValue(':ST1', $st1);
+            $command->bindValue(':MIN', $pmkPrevLessonNom);
+            $command->bindValue(':MAX', $pmkLessonNom);
+            $marks= $command->queryAll();
+
+            if(!empty($marks)){
+                $tek =0;
+
+                foreach($marks as $mark){
+                    $bal=0;
+                    if($mark['elgzst3']>0){
+                        $bal=$mark['elgzst5'];
+                    }else
+                    {
+                        $bal=($mark['elgzst5']>0)?$mark['elgzst5']:$mark['elgzst4'];
+                    }
+                    $tek+=$bal;
+                }
+
+                $ps82 = PortalSettings::model()->findByPk(82)->ps2;
+                if($ps82!=0){
+                    $val = $tek/count($marks);
+                    //print_r($val);
+                    $tek = round($val,2);
+                    //print_r($tek);
+                }
+
+                $sql = <<<SQL
+                              SELECT * FROM vmp WHERE vmp2=:ST1 AND vmp1=:VMPV1
+SQL;
+                $command = Yii::app()->db->createCommand($sql);
+                $command->bindValue(':ST1', $st1);
+                $command->bindValue(':VMPV1', $module['vmpv1']);
+                $vmp = $command->queryRow();
+
+                if(!empty($vmp)){
+                    $itog = $tek + $vmp['vmp6'] + $vmp['vmp7'];
+
+                    $sql = <<<SQL
+                              UPDATE vmp set vmp4=:VMP4, vmp5=:VMP5, vmp10=:VMP10, vmp12=:VMP12 WHERE vmp2=:ST1 AND vmp1=:VMPV1
+SQL;
+                    $command = Yii::app()->db->createCommand($sql);
+                    $command->bindValue(':VMP5', $tek);
+                    $command->bindValue(':VMP4', $itog);
+                    $command->bindValue(':ST1', $st1);
+                    $command->bindValue(':VMPV1', $module['vmpv1']);
+                    $command->bindValue(':VMP12', Yii::app()->user->dbModel->p1);
+                    $command->bindValue(':VMP10', date('Y-m-d H:i:s'));
+                    $command->execute();
+                }
+            }
+        }
+    }
 }

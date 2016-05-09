@@ -51,6 +51,10 @@ if (!empty($model->sem1)):
 
     $this->renderPartial('/filter_form/default/_refresh_filter_form_button');
 
+    ?>
+        <span><label class="label label-warning">&nbsp;&nbsp;</label> - <?=tt('Информация требует обновления страницы')?></span>
+    <?php
+
     $elg1=Elg::getElg1($uo1,$model->type_lesson,$model->sem1);
     $elg = Elg::model()->findByPk($elg1);
     if(empty($elg))

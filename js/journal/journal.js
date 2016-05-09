@@ -92,7 +92,69 @@ $(document).ready(function(){
         }, 'json')
     });
 
-    $('div .journal_div_table2 tr:not(.min-max) input').keyup(function(event ){
+    $('div .journal_div_table2 .module-ind').change(function(event ){
+
+        var $that = $(this);
+        var st1  = $that.parents('[data-st1]').data('st1');
+        var gr1  = $that.parents('[data-gr1]').data('gr1');
+        var vmpv1 = $that.data('vmpv1');
+
+        var params = {
+            nom  : $that.parent().data('nom'),
+            nomModule  : $that.parent().data('nom-module'),
+            elgz1   : $that.parent().data('elgz1'),
+            r1   : $that.parent().data('r1'),
+            st1   : st1,
+            gr1   : gr1,
+            date:$that.parent().data('date'),
+            value : parseFloat( $that.val().replace(',','.') ),
+            vmpv1:vmpv1
+        }
+
+        var stName = $('table.journal_table_1 tr[data-st1='+st1+'] td:eq(1)').text();
+        var index  = $that.parent().index();
+        var nom   = $that.parents('table').find('th:eq('+index+')').html();
+        var title  = stName+'<br>'+nom+'<br>';
+        var $td    = $that.parent();
+
+        if (isNaN(params.value)||(params.value<0)) {
+            addGritter(title, tt.error, 'error')
+            $td.addClass('error')
+            return false;
+        }
+
+        var url = $that.parents('[data-url-module]').data('url-module');
+
+        $spinner1.show();
+
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            data:params,
+            success: function( data ) {
+                if (data.error) {
+                    addGritter(title, tt.error, 'error')
+                    $td.addClass('error');
+                } else {
+                    addGritter(title, tt.success, 'success')
+                    $td.removeClass('error').addClass('success');
+                    setTimeout(function() { $td.removeClass('success') }, 1000);
+
+
+                    $('.module'+vmpv1+st1).addClass('updated');
+                }
+                $spinner1.hide();
+            },
+            error: function( data ) {
+                addGritter(title, tt.error, 'error');
+                $td.addClass('error');
+                $spinner1.hide();
+            }
+        });
+
+    });
+
+    $('div .journal_div_table2 tr:not(.min-max) input:not(.module-ind)').keyup(function(event ){
         if(event.keyCode == 46)
         {
             var $that = $(this);
@@ -130,7 +192,7 @@ $(document).ready(function(){
 
     })
 
-    $('div .journal_div_table2 tr:not(.min-max) input').change(function(event){
+    $('div .journal_div_table2 tr:not(.min-max) input:not(.module-ind)').change(function(event){
         var $that = $(this);
 
         var st1  = $that.parents('[data-st1]').data('st1');
@@ -488,6 +550,8 @@ function send(url,params,title,$td,$that,$spinner1,st1)
             $td.removeClass('error').addClass('success');
             setTimeout(function() { $td.removeClass('success') }, 1000);
             recalculateBothTotal(st1);
+
+            $that.parents('tr').find('.module-tr ').addClass('updated');
         }
 
         $spinner1.hide();
@@ -630,10 +694,10 @@ function calculateMarkFor(el)
     var $that = $(el);
 
     var mark;
-    if ($that.children('input:text').length > 1) {
+    if ($that.children('input:text:not(.module-ind)').length > 1) {
 
-        var $input_1 = $that.children('input:text:first');
-        var $input_2 = $that.children('input:text:last');
+        var $input_1 = $that.children('input:text:not(.module-ind):first');
+        var $input_2 = $that.children('input:text:not(.module-ind):last');
 
         if ( parseFloat($input_2.val()) > 0 )
             mark = $input_2.val();
@@ -641,7 +705,7 @@ function calculateMarkFor(el)
             mark = $input_1.val();
 
     } else
-        mark = $that.children('input:text').val();
+        mark = $that.children('input:text:not(.module-ind)').val();
 
     return parseFloat(mark);
 }

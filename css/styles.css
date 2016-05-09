@@ -1,3 +1,9 @@
+.journal_div_table2 .module-tr.updated{
+    background-color: #ffb752;
+}
+.journal_div_table2 .module-tr .module-ind{
+    width: 50%;
+}
 #iframe-main {
     border:none;
 }

@@ -8,7 +8,7 @@
 
 $this->widget('bootstrap.widgets.TbButton', array(
     'buttonType'=>'button',
-    'type'=>'success',
+    'type'=>'warning',
     'icon'=>'refresh',
     'label'=>tt('Обновить'),
     'htmlOptions'=>array(

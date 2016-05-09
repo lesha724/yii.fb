@@ -9,12 +9,18 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     $options = array(
         ' '.tt('Стандартный (сума балов)'),
         ' '.tt('Вариант 1 (ср. бал по занятиям * 12 + доп. балы)'),
-        ' '.tt('\'Вариант 1 (ср. бал по занятиям + доп. балы)'),
+        ' '.tt('Вариант 2 (ср. бал по занятиям + доп. балы)'),
     );
 
     $options2 = array(
         ' '.tt('Количество дней на введение оценок'). ' '.tt('(Тип 1)'),
         ' '.tt('10 минут до занятия и определенное кол-во минут после занятия').' '.tt('(Тип 2)'),
+    );
+
+    $options3 = array(
+        ' '.tt('Сумма балов по занятиям'),
+        ' '.tt('Среднее по занятиям'),
+        ' '.tt('Перевод среднего в 200-бальную систему'),
     );
 
     $htmlOptions = array(
@@ -131,6 +137,10 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     <div class="control-group">
         <span class="lbl"> <?=tt('Количество минут на редактирование оценок после начала занятия (Тип 2)')?>:</span>
         <?=CHtml::textField('settings[79]', PortalSettings::model()->findByPk(79)->ps2)?>
+    </div>
+
+    <div class="control-group">
+        <?=CHtml::radioButtonList('settings[82]', PortalSettings::model()->findByPk(82)->ps2, $options3, $htmlOptions)?>
     </div>
 
     <div class="form-actions">

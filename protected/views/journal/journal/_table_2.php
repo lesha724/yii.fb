@@ -228,10 +228,28 @@ function table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$nom,$uo1,$modules,$pot
                 return '<td colspan="4">'.tt('Модуль не найден!').'</td>';
             else{
                 $mark = Vmp::model()->getMarks($modules[(int)$nom-1]['vmpv1'],$st['st1']);
-                $ind = !empty($mark)?$mark['vmp6']:'';
-                $itog = !empty($mark)?$mark['vmp4']:'';
-                $pmk = !empty($mark)?$mark['vmp7']:'';
-                return sprintf('<td>%s</td><td>%s</td><td>%s</td><td>%s</td>',$potoch,$ind,$pmk,$itog);
+                $ind = !empty($mark)?round($mark['vmp6'],2):'';
+                $pot = !empty($mark)?round($mark['vmp5'],2):'';
+                $itog = !empty($mark)?round($mark['vmp4'],2):'';
+                $pmk = !empty($mark)?round($mark['vmp7'],2):'';
+                $vmpv1 = $modules[(int)$nom-1]['vmpv1'];
+
+                $nom_=$date['elgz3'];
+                $elgz1=$date['elgz1'];
+                $date_lesson=$date['r2'];
+                $r1=$date['r1'];
+                $vmpv6 = $modules[(int)$nom-1]['vmpv6'];
+                $disabled = '';
+                if(!empty($vmpv6))
+                    $disabled = 'disabled="disabled"';
+                $st1 = $st['st1'];
+                return sprintf(<<<HTML
+                    <td class="module-tr module{$vmpv1}{$st1}">%s</td>
+                    <td class="module-tr module{$vmpv1}{$st1}" data-nom-module="{$nom}" data-nom="{$nom_}" {$disabled} data-elgz1="{$elgz1}" data-r1="{$r1}" data-date="{$date_lesson}" data-gr1="{$gr1}"><input value="%s" class="module-ind"  maxlength="5" data-vmpv1="{$vmpv1}"/></td>
+                    <td class="module-tr module{$vmpv1}{$st1}">%s</td>
+                    <td class="module-tr module{$vmpv1}{$st1}">%s</td>
+HTML
+                ,$pot,$ind,$pmk,$itog);
             }
             break;
     }
@@ -326,9 +344,10 @@ function countMarkTotal($marks)
     $url_check = Yii::app()->createUrl('/journal/checkCountRetake');
     $minMaxUrl = Yii::app()->createUrl('/journal/insertMinMaxMark');
     $urlRetake = Yii::app()->createUrl('/journal/journalRetake');
+    $urlModule= Yii::app()->createUrl('/journal/updateVmp');
 
     $table = <<<HTML
-<div class="{$classTable2}" data-ps33="{$ps33}" data-gr1="{$gr1}" data-url="{$url}" data-url-retake="{$urlRetake}" data-url-check="{$url_check}">
+<div class="{$classTable2}" data-ps33="{$ps33}" data-gr1="{$gr1}" data-url-module="{$urlModule}" data-url="{$url}" data-url-retake="{$urlRetake}" data-url-check="{$url_check}">
     <table class="table table-striped table-bordered table-hover journal_table">
         <thead>
             <tr>
