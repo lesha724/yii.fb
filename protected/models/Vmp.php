@@ -352,6 +352,24 @@ SQL;
                     $val = $tek/count($marks);
                     //print_r($val);
                     $tek = round($val,2);
+                   //print_r($tek);
+                    if($ps82==2){
+                        //print_r('----');
+                        $sql = <<<SQL
+                              SELECT max(markb3) FROM markb WHERE markb2<=:BAL
+SQL;
+                        $command = Yii::app()->db->createCommand($sql);
+                        $command->bindValue(':BAL', $tek);
+                        $mark = $command->queryScalar();
+                        print_r($mark);
+                        if(!empty($mark)){
+                            $tek = $mark;
+                        }else {
+                            $tek = 0;
+                            //print_r($tek);
+                        }
+                    }
+
                     //print_r($tek);
                 }
 
