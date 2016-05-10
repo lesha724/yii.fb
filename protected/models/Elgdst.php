@@ -111,7 +111,7 @@ class Elgdst extends CActiveRecord
             return array();
 
         $sql=<<<SQL
-                SELECT elgdst3,elgd2
+                SELECT elgdst3,elgd2,elgd0
                 FROM elgdst
                     INNER JOIN elgd on (elgdst.elgdst2 = elgd.elgd0)
                 WHERE elgd1=:ELG1 AND elgdst1=:ST1
@@ -126,7 +126,7 @@ SQL;
 
         foreach($rows as $row)
         {
-            $res[$row['elgd2']]=$row['elgdst3'];
+            $res[$row['elgd0']]=$row['elgdst3'];
         }
 
         return $res;

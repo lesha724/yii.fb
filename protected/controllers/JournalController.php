@@ -484,7 +484,7 @@ SQL;
             $errorType=2;
         }
         else {
-            $elgd=Elgd::model()->findByAttributes(array('elgd1'=>$elg1,'elgd2'=>$field));
+            $elgd=Elgd::model()->findByAttributes(array('elgd1'=>$elg1,'elgd0'=>$field));
             if(empty($elgd))
             {
                 $error = true;

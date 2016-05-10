@@ -28,7 +28,7 @@ function table3Tr($column, $marks,$st1,$elg1)
 HTML;
 
     //list($field, $name) = $column;
-    $key=$column['elgsd1'];
+    $key=$column['elgd0'];
 
     $mark = isset($marks[$key]) && $marks[$key] != 0
         ? round($marks[$key], 1)
