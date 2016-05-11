@@ -37,3 +37,4 @@ Thumbs.db
 /protected/config/params.inc
 protected/config/mail.inc
 css/user.css
+html/*
