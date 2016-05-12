@@ -287,14 +287,14 @@ function generateColumnName($date,$type_lesson,$ps57,$ps59)
         $pattern = <<<HTML
 	<th colspan="4">
 	    <i class="icon-hand-right icon-animated-hand-pointer blue"></i>
-        <span data-rel="popover" data-placement="top" data-content="%s" class="green">%s</span>
+        <span data-rel="popover" class="nom%s" data-placement="top" data-content="%s" class="green">%s</span>
     </th>
 HTML;
     }else {
         $pattern = <<<HTML
 	<th colspan="2">
 	    <i class="icon-hand-right icon-animated-hand-pointer blue"></i>
-        <span data-rel="popover" data-placement="top" data-content="%s" class="green">%s</span>
+        <span data-rel="popover" class="nom%s" data-placement="top" data-content="%s" class="green">%s</span>
     </th>
 HTML;
     }
@@ -321,7 +321,7 @@ HTML;
     if($ps59==1)
         $name.= ' '.$date['k2'];
 
-    return sprintf($pattern,$date['ustem5'], $name);
+    return sprintf($pattern,$date['elgz3'],$date['ustem5'], $name);
 }
 
 function countMarkTotal($marks)
@@ -378,11 +378,23 @@ HTML;
     global $count_dates;
     $count_dates=0;
     //$column = 1;
+    $elgz3Nom = 1;
+    $dateDiff = -1;
+    $date1 = new DateTime(date('Y-m-d H:i:s'));
+
     foreach($dates as $date) {
             $th .= generateColumnName($date, $model->type_lesson,$ps57,$ps59);
             $th2 .= generateTh2($ps9, $date, $model->type_lesson,$ps57);
             array_push($elgz1_arr, $date['elgz1']);
             //$column++;
+
+            $date2  = new DateTime($date['r2']);
+            $diff = $date1->diff($date2)->days;
+            if ($diff <= $dateDiff || $dateDiff==-1)
+            {
+                $dateDiff = $diff;
+                $elgz3Nom = $date['elgz3'];
+            }
             $count_dates++;
     }
 
@@ -410,5 +422,13 @@ HTML;
     }
 
     echo sprintf($table, $th, $th2, $tr); // 2 table
+    if($elgz3Nom>1)
+    Yii::app()->clientScript->registerScript('journal-scroll', <<<JS
+        $(".journal_div_table2 ").animate({
+            scrollLeft:$('.journal_div_table2 .nom{$elgz3Nom}').position().left
+        }, 750);
+
+JS
+    , CClientScript::POS_END);
 
 
