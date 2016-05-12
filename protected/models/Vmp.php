@@ -306,7 +306,7 @@ SQL;
         $command->bindValue(':ELGZ3', $elgz->elgz3);
         $pmkLessonNom = $command->queryScalar();
 
-        if(empty($pmkLessonNom))
+        if(empty($pmkLessonNom)||empty($module))
             return;
         else
         {
