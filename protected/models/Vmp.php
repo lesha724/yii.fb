@@ -361,7 +361,7 @@ SQL;
                         $command = Yii::app()->db->createCommand($sql);
                         $command->bindValue(':BAL', $tek);
                         $mark = $command->queryScalar();
-                        print_r($mark);
+                        //print_r($mark);
                         if(!empty($mark)){
                             $tek = $mark;
                         }else {
