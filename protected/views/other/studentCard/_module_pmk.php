@@ -40,7 +40,7 @@ foreach ($modules as $module)
             $tr.='<td class="not-module"></td>';
         else {
             if(isset($module[$i])&&!empty($module[$i]['vmp1'])){
-                $tr .= '<td>'.$module[$i]['vmp4'].'</td>';
+                $tr .= '<td>'.round($module[$i]['vmp4'],2).'</td>';
             }else{
                 $tr .= '<td>-</td>';
             }
