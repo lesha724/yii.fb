@@ -10,11 +10,11 @@ SQL;*/
         $sql = <<<SQL
         alter table r add R8 inte;
 SQL;
-		$this->execute($sql);
+		//$this->execute($sql);
         $sql = <<<SQL
         ALTER TABLE r ADD constraint FK_r8_elgz1 FOREIGN KEY (r8) REFERENCES elgz (elgz1) ON DELETE SET DEFAULT ON UPDATE CASCADE;
 SQL;
-        $this->execute($sql);
+        //$this->execute($sql);
 	}
 
 	public function safeDown()
