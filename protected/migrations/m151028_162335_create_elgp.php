@@ -4,7 +4,13 @@ class m151028_162335_create_elgp extends CDbMigration
 {
 	public function safeUp()
 	{
-		$sql = <<<SQL
+		$b15 = $this->getDBConnection()->createCommand(<<<SQL
+			select b15 from b where b1=0
+SQL
+		)->queryScalar();
+
+		if($b15!=6) {
+			$sql = <<<SQL
 CREATE TABLE elgp(
   elgp0  inte_not_null PRIMARY KEY, /*'первичный ключ*/
   elgp1 inte, /* код elgzst0 */
@@ -15,19 +21,20 @@ CREATE TABLE elgp(
   elgp6 dat DEFAULT 'NOW' NOT NULL, /* дата корректировки */
   elgp7 inte); /* кто корректировал p1 */
 SQL;
-		$this->execute($sql);
-        $sql = <<<SQL
+			$this->execute($sql);
+			$sql = <<<SQL
 ALTER TABLE elgp ADD constraint FK_elgp1_elgzst0 FOREIGN KEY (elgp1) REFERENCES elgzst (elgzst0) ON DELETE CASCADE ON UPDATE CASCADE;
 SQL;
-        $this->execute($sql);
-        $sql = <<<SQL
+			$this->execute($sql);
+			$sql = <<<SQL
 ALTER TABLE elgp ADD constraint FK_elgp7_p1 FOREIGN KEY (elgp7) REFERENCES p (p1) ON DELETE SET DEFAULT ON UPDATE CASCADE;
 SQL;
-        $this->execute($sql);
-        $sql = <<<SQL
+			$this->execute($sql);
+			$sql = <<<SQL
 CREATE SEQUENCE GEN_elgp;
 SQL;
-        $this->execute($sql);
+			$this->execute($sql);
+		}
 	}
 
 	public function safeDown()

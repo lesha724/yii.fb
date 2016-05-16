@@ -4,14 +4,21 @@ class m151102_130955_alter_elgdst4_5 extends CDbMigration
 {
 	public function safeUp()
 	{
-		$sql = <<<SQL
+		$b15 = $this->getDBConnection()->createCommand(<<<SQL
+			select b15 from b where b1=0
+SQL
+		)->queryScalar();
+
+		if($b15!=6) {
+			$sql = <<<SQL
     alter table elgdst add elgdst4 dat DEFAULT 'NOW' NOT NULL, add elgdst5 inte;
 SQL;
-		$this->execute($sql);
-        $sql = <<<SQL
+			$this->execute($sql);
+			$sql = <<<SQL
     ALTER TABLE elgdst ADD constraint FK_elgdst5_p1 FOREIGN KEY (elgdst5) REFERENCES p (p1) ON DELETE SET DEFAULT ON UPDATE CASCADE;
 SQL;
-        $this->execute($sql);
+			$this->execute($sql);
+		}
 	}
 
 	public function safeDown()
