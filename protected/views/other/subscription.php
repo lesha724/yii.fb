@@ -30,26 +30,35 @@ JS
 
 $params = $model->subscriptionParams;
 $params['st1'] = $model->st1;
-$params['semester'] =0;
+//$params['semester'] =0;
 
 $_SESSION['u1_vib']       = isset($_SESSION['u1_vib']) ? $_SESSION['u1_vib'] : '';
 $_SESSION['u1_vib_disc']  = isset($_SESSION['u1_vib_disc']) ? $_SESSION['u1_vib_disc'] : '';
 $_SESSION['uch_god']      = $params['uch_god'];
-$_SESSION['semester']     = $params['semester'];
+$_SESSION['semester']     = isset($_SESSION['semester']) ? $_SESSION['semester'] :$params['semester'];
+//print_r($_SESSION['semester'].'-------------------');
 $_SESSION['st1']          = $params['st1'];
 $_SESSION['gr1_kod']      = $params['gr1_kod'];
 $_SESSION['data_nachala'] = $params['data_nachala'];
 
 if (isset($_SESSION['func'])) {
+    //print_r('2---------------------');
     $_SESSION['func']($params);
 } else {
+    //$params['semester'] =0;
+    //$_SESSION['semester']     = $params['semester'];
     PROCEDURA_CIKL_PO_BLOKAM($params);
 }
 
 
 function PROCEDURA_CIKL_PO_BLOKAM($params)
 {
-    $_SESSION['semester']     = $params['semester'];
+    //print_r('Начало:<br>');
+    //$params['semester'] =0;
+    $_SESSION['semester'] = $params['semester'];
+
+    //print_r('Тек семест:'. $params['semester'].'<br>');
+
     unset($_SESSION['func']);
     extract($params);// $sg1_kod, $gr1_kod, $uch_god, $semestr, $data_nachala
 
@@ -59,11 +68,14 @@ function PROCEDURA_CIKL_PO_BLOKAM($params)
     }
 
     list($min_block, $max_block) = U::model()->getMinMAxBlocks($sg1_kod);
+    //print_r('Тек min_block 1:'. $min_block.'<br>');
     $min_block = isset($_SESSION['min_block']) ? $_SESSION['min_block'] : (int)$min_block;
+    //print_r('Тек min_block 2:'. $min_block.'<br>');
     $enable= false;
-    for ($block = $min_block; $block <= $max_block; $block ++) {
-        /*print_r($block.'///');
-        print_r($semester.'///');*/
+    for ($block = $min_block; $block <= $max_block+1; $block ++) {
+
+        //print_r($block.'///---<br>');
+        //print_r($semester.'///<br>');
         // Определяю является ли родитель блоком по выбору
         $u9_root = U::model()->getU9($sg1_kod, $block);
 
@@ -75,30 +87,33 @@ function PROCEDURA_CIKL_PO_BLOKAM($params)
             if (empty($_SESSION['u1_vib']))
                 $_SESSION['u1_vib'] = $u1_root;
             else
-                $_SESSION['u1_vib'] .= ','.$u1_root;
+                if(!empty($u1_root))
+                    $_SESSION['u1_vib'] .= ','.$u1_root;
         }
 
         // Проверяю анализировать ли блок
         // (нужно, когда повторно буду заходить внутрь и там нет дисциплин, то понять,
         // нужно ли в него дальше в глубь идти т.е. выбрал студент его или нет ранее)
         $u1 = U::model()->getU1($sg1_kod, $block, $_SESSION['u1_vib']);
-
+        //print_r('Тек u1:'. $u1.'<br>');
         if ($u1 > 0) {
 
             // Проверяю попадает ли блок в анализируемый учебный год и семестр
             // (анализирую максимум 2 вложения циклов, если больше будет, то нужно дописать условие по аналогии с ниже на u17)
             $analyze = U::model()->getAnalyze($uch_god, $semester, $block, $sg1_kod);
-
+            //print_r('Тек analyze:'. $analyze.'<br>');
             if ($analyze > 0) {
 
                 // Проверяю, выбрал ли цикл в этом блоке студент
                 $u1_d = 0;
                 $u1_kods = U::model()->getU1_KOD($block, $sg1_kod);
-
+                //print_r('Тек u1_kods:<br>');
+                //print_r($u1_kods);
+                //print_r('<br>');
                 foreach ($u1_kods as $u1_kod) {
 
                     $u1_vibral = U::model()->getU1_VIBRAL($st1, $u1_kod, $block, $sg1_kod);
-
+                    //print_r('Тек '.$u1_kod.' - $u1_vibral:'.$u1_vibral.'<br>');
                     if ($u1_vibral) {
                         $u1_d = $u1_kod;
                         break;
@@ -140,9 +155,11 @@ function PROCEDURA_CIKL_PO_BLOKAM($params)
         }
     }
     if($block>$max_block){
-        //print_r('----------');
+        //print_r('Переход:<br>');
         $params['semester']++;
+        //print_r('Тек семест:'. $params['semester'].'<br>');
         $_SESSION['min_block'] = $min_block;
+        //print_r('Тек min_block:'. $min_block.'<br>');
         if ($params['semester'] <= 1)
             PROCEDURA_CIKL_PO_BLOKAM($params);
     }
@@ -200,7 +217,15 @@ HTML;
     unset($_SESSION['func']);
     extract($params);// $sg1_kod, $gr1_kod, $uch_god, $semestr, $data_nachala
     // Проверяю, если ли дисциплины в выбранном цикле для выбора
+
+    //print_r('u1_vib_disc: '.$_SESSION['u1_vib_disc'].'<br>');
+    //print_r('$uch_god: '.$uch_god.'<br>');
+    //print_r('$semester: '.$semester.'<br>');
+    $semester=isset($_SESSION['semester']) ? $_SESSION['semester']:$semester;
+    //print_r('$semester: '.$semester.'<br>');
     $nado_vibrat = U::model()->getNADO_VIBRAT($_SESSION['u1_vib_disc'], $uch_god, $semester);
+
+    //print_r('nado-vibrat:'.$nado_vibrat.'<br>');
 
     if ($nado_vibrat > 0) {
 

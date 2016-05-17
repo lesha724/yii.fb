@@ -1055,7 +1055,7 @@ SQL;
         $command  = Yii::app()->db->createCommand($sql);
         $command->bindValue(':ST1', $this->st1);
         $params = $command->queryRow();
-		$params['SEMESTER']=0;
+		//$params['SEMESTER']=0;
         return $params;
     }
 

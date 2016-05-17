@@ -331,6 +331,7 @@ SQL;
 
     public function getNADO_VIBRAT($u1_vib_disc, $uch_god, $semester)
     {
+
         $sql = <<<SQL
             select first 1 u8 as NADO_VIBRAT
             from uo

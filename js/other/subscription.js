@@ -10,6 +10,7 @@ $(document).ready(function(){
         }
 
         $.getJSON(url1, {'u1_cikl' : value}, function(data){
+            //alert(1);
             if (! data.res)
                 alert(msg1)
             else
