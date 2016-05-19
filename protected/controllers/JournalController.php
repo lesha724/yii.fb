@@ -23,6 +23,7 @@ class JournalController extends Controller
                     'saveJournalRetake',
                     'journalExcel',
                     'updateVmp',
+                    'journalExcelItog',
 
                     'retake',
                     'searchRetake',
@@ -468,8 +469,8 @@ SQL;
 
     public function actionInsertDopMark()
     {
-        //if (! Yii::app()->request->isAjaxRequest)
-            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
         $error=false;
         $errorType=0;
 
@@ -1131,6 +1132,167 @@ SQL;
             $sheet->setCellValue('A25',tt('Староста').': '.$nameStarosta)->getStyle('A25')->getFont()->setSize(16);
 
             // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+            $objPHPExcel->setActiveSheetIndex(0);
+
+            // Redirect output to a clientâ€™s web browser (Excel5)
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="ACY_JORNAL_'.date('Y-m-d H-i').'.xls"');
+            header('Cache-Control: max-age=0');
+            // If you're serving to IE 9, then the following may be needed
+            header('Cache-Control: max-age=1');
+            // If you're serving to IE over SSL, then the following may be needed
+            header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+            header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+            header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+            header ('Pragma: public'); // HTTP/1.0
+
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+            $objWriter->save('php://output');
+        }
+        Yii::app()->end();
+    }
+
+    public function actionJournalExcelItog()
+    {
+        $sem1=Yii::app()->request->getParam('sem1', null);
+        $model = new FilterForm;
+        $model->scenario = 'journal';
+        if (isset($_REQUEST['FilterForm']))
+            $model->attributes=$_REQUEST['FilterForm'];
+        if(!empty($model->group)&&!(empty($sem1)))
+        {
+            list($uo1,$gr1) = explode("/", $model->group);
+            $sql = <<<SQL
+
+                select sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28,gr3,f3,f2,sp2
+                from sem
+                  inner join sg on (sem2 = sg1)
+                  inner join gr on (sg1 = gr2)
+                  inner join sp on (sg2 = sp1)
+                  inner join f on (sp5 = f1)
+                where gr1=:gr1 and sem3=:YEAR and sem5=:SEM
+SQL;
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':gr1', $gr1);
+            $command->bindValue(':YEAR', Yii::app()->session['year']);
+            $command->bindValue(':SEM', Yii::app()->session['sem']);
+            $res = $command->queryRow();
+            $course='-';
+            $group='-';
+            $faculty='-';
+            $speciality = '-';
+            if($res!=null)
+            {
+                $course=$res['sem4'];
+                $group=Gr::model()->getGroupName($res['sem4'], $res);
+                $faculty=$res['f3'];
+                $speciality=$res['sp2'];
+            }
+
+            $students = St::model()->getStudentsForJournal($gr1, $uo1);
+            $dates = R::model()->getDatesForJournal(
+                $uo1,
+                $gr1,
+                $model->type_lesson,
+                $sem1
+            );
+
+            $elg1=Elg::getElg1($uo1,$model->type_lesson,$sem1);
+            $elg = Elg::model()->findByPk($elg1);
+            if(empty($elg))
+                throw new CHttpException(404, 'Elg empty.');
+
+            $ps45 = PortalSettings::model()->findByPk(45)->ps2;//вуз
+            $ps46 = PortalSettings::model()->findByPk(46)->ps2;//министерство
+
+            $year=(int)Yii::app()->session['year'];
+            $first_title='%s семестр %s - %s навчальний рік %s курс';
+            $second_title='%s факультет %s група';
+
+            Yii::import('ext.phpexcel.XPHPExcel');
+            $objPHPExcel= XPHPExcel::createPHPExcel();
+            $objPHPExcel->getProperties()->setCreator("ACY")
+                ->setLastModifiedBy("ACY ".date('Y-m-d H-i'))
+                ->setTitle("Jornal ".date('Y-m-d H-i'))
+                ->setSubject("Jornal ".date('Y-m-d H-i'))
+                ->setDescription("Jornal document, generated using ACY Portal. ".date('Y-m-d H:i:'))
+                ->setKeywords("")
+                ->setCategory("Result file");
+            $objPHPExcel->setActiveSheetIndex(0);
+            $sheet=$objPHPExcel->getActiveSheet();
+            $sheet->mergeCells('A2:J2');
+            $sheet->setCellValue('A2', $ps45)->getStyle('A2')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $sheet->mergeCells('B4:D4');
+            $sheet->setCellValue('B4', tt("Факультет"));
+            $sheet->mergeCells('E4:I4');
+            $sheet->setCellValue('E4', $faculty);
+            $sheet->mergeCells('B5:D5');
+            $sheet->setCellValue('B5', tt("Специальность (специализация)"));
+            $sheet->mergeCells('E5:I5');
+            $sheet->setCellValue('E5', $speciality);
+            $sheet->setCellValue('E7', tt("Курс"));
+            $sheet->setCellValue('F7', $course);
+            $sheet->setCellValue('G7', tt("Группа"));
+            $sheet->mergeCells('H7:I7');
+            $sheet->setCellValue('H7', $group);
+            $sheet->mergeCells('B9:C9');
+            $sheet->setCellValue('B9', sprintf('%s - %s н. рік',$year,$year+1));
+            $sheet->mergeCells('A11:J13');
+            $sheet->setCellValue('A11', tt("ВЕДОМОСТЬ \r\n учета поточной успеваимости"))->getStyle('A11')->getAlignment()->setWrapText(true)-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $sheet->mergeCells('A14:J14');
+            $disp = D::model()->getDisciplineForUo1($elg->elg2);
+            if(!empty($disp))
+            {
+                $sheet->setCellValue('A14','з '.$disp->d2)->getStyle('A14')->getAlignment()->setWrapText(true)-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            }
+            $sheet->mergeCells('A15:J15');
+            $sheet->setCellValue('A15', tt('За {sem} учебный семестр', array('{sem}'=>SH::convertSem5(Yii::app()->session['sem']))))
+                ->getStyle('A15')->getAlignment()->setWrapText(true)-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+            $elgd=Elgd::model()->getDop($elg1);
+
+            //колонка с фио студентов
+            $i=0;
+            $ps44=PortalSettings::model()->findByPk(44)->ps2;
+            foreach($students as $st) {
+                $st1 = $st['st1'];
+                $marks = $elg->getMarksForStudent($st1);
+                $total = 0;
+                $countTotal = 0;
+                foreach ($marks as $mark) {
+                    $m = $mark['elgzst5'] != 0
+                        ? $mark['elgzst5']
+                        : $mark['elgzst4'];
+                    $total += $m;
+                    if($m>0)
+                        $countTotal++;
+                }
+
+                $value = '';
+                $count_dates = count($dates);
+                switch($ps44){
+                    case 0:
+                        $value = $total;
+                        break;
+                    case 1:
+                        if($count_dates!=0)
+                            $value = round($total/$count_dates * 12);
+                        else
+                            $value=0;
+                        break;
+                    case 2:
+                        if($count_dates!=0)
+                            $value = round($total/$count_dates);
+                        else
+                            $value=0;
+                        break;
+                }
+
+                $marksDop=Elgdst::model()->getMarksForStudent($st1,$elg1);
+            }
+
+            //$sheet->getStyleByColumnAndRow(0,1,$k+1,6+$count_st_column)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
+
             $objPHPExcel->setActiveSheetIndex(0);
 
             // Redirect output to a clientâ€™s web browser (Excel5)

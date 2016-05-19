@@ -4,7 +4,7 @@ $(document).ready(function(){
 
     $spinner1 = $('#spinner1');
 
-    $('#journal-print').click(function(){
+    $('#journal-print,#journal-print-itog').click(function(){
         var action=$("#filter-form").attr("action");
         $("#filter-form").attr("action", $(this).data('url'));
         $("#filter-form").submit();
