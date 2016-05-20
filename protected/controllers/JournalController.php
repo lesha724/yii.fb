@@ -1251,10 +1251,20 @@ SQL;
 
             $elgd=Elgd::model()->getDop($elg1);
 
+            $sheet->setCellValue('A16',tt("ФИО"));
+            $sheet->setCellValue('В16',tt("Итог"));
+            $countDop =0;
+            foreach($elgd as $elgdItem){
+                $sheet->setCellValueByColumnAndRow($countDop+2,17,$elgdItem['elgsd2']);
+                $countDop++;
+            }
+            $sheet->setCellValueByColumnAndRow($countDop+2,17,tt("Всего"));
+            $rowStart = 17;
             //колонка с фио студентов
             $i=0;
             $ps44=PortalSettings::model()->findByPk(44)->ps2;
             foreach($students as $st) {
+
                 $st1 = $st['st1'];
                 $marks = $elg->getMarksForStudent($st1);
                 $total = 0;
@@ -1288,7 +1298,18 @@ SQL;
                         break;
                 }
 
+                $value2 = $value;
+
                 $marksDop=Elgdst::model()->getMarksForStudent($st1,$elg1);
+                foreach($elgd as $elddItem){
+                    $key=$elddItem['elgd0'];
+
+                    $mark = isset($marks[$key]) && $marks[$key] != 0
+                        ? round($marks[$key], 1)
+                        : 0;
+                    $value2+=$mark;
+                }
+
             }
 
             //$sheet->getStyleByColumnAndRow(0,1,$k+1,6+$count_st_column)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
