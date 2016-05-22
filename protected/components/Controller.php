@@ -39,9 +39,9 @@ class Controller extends CController
     public function mobileCheck(){
         $detect = Yii::app()->mobileDetect;
 
-        $detect->isMobile();
-        $detect->isTablet();
-        $detect->isIphone();
+        //$detect->isMobile();
+        //$detect->isTablet();
+        //$detect->isIphone();
     }
 
     public function beforeAction($action)

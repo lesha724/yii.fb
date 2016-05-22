@@ -242,4 +242,31 @@ SQL;
 		}else
 			return '';
 	}
+
+	public function getTypes()
+	{
+		return array(0=>tt('Студент'),1=>tt('Преподователь'),2=>tt('Родитель'));
+	}
+
+	public function getType()
+	{
+		$arr=self::model()->getTypes();
+		if(isset( $arr[$this->u5]))
+			return $arr[$this->u5];
+		else
+			return '-';
+	}
+	public function getAdminTypes()
+	{
+		return array(0=>tt('не имеет'),1=>tt('имеет'));
+	}
+
+	public function getAdminType()
+	{
+		$arr=self::model()->getTypes();
+		if(isset( $arr[$this->u5]))
+			return $arr[$this->u5];
+		else
+			return '-';
+	}
 }

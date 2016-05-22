@@ -82,6 +82,38 @@ class DefaultController extends AdminController
         ));
     }
 
+    public function actionUserHistory()
+    {
+        $model = new UsersHistory();
+        $model->unsetAttributes();
+        if (isset($_GET['pageSize'])) {
+            Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
+            unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
+        }
+        if (isset($_REQUEST['UsersHistory']))
+            $model->attributes = $_REQUEST['UsersHistory'];
+
+        $this->render('userHistory', array(
+            'model' => $model,
+        ));
+    }
+
+    public function actionDeleteUserHistory($id)
+    {
+        if(Yii::app()->request->isPostRequest)
+        {
+            // we only allow deletion via POST request
+            $model = UsersHistory::model()->findByPk($id);
+            $model->delete();
+
+            // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+            if(!isset($_GET['ajax']))
+                $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('userHistory'));
+        }
+        else
+            throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
+    }
+
     public function actionCreateCloseChair()
     {
         $model=new Kcp();
