@@ -171,6 +171,7 @@ $this->widget('zii.widgets.CMenu', array(
             'linkOptions'=>$_l,
             'itemOptions'=>array('class'=> $_m=='admin' ? 'active open' : ''),
             'items' => array(
+
                 array(
                     'label'  => $_l2.tt('Администраторы'),
                     'url'    => _u('/admin/default/admin'),
@@ -265,6 +266,11 @@ $this->widget('zii.widgets.CMenu', array(
                     'label'  => $_l2.tt('Пункты меню (доп.)'),
                     'url'    => _u('/admin/menuItem'),
                     'active' => $_c=='menuItem' && $_m=='admin'
+                ),
+                array(
+                    'label'  => $_l2.tt('История авторизаций'),
+                    'url'    => _u('/admin/default/userHistory'),
+                    'active' => $_a=='admin'
                 ),
 
             ),

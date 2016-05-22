@@ -18,6 +18,7 @@ $this->widget('bootstrap.widgets.TbGridView',array(
     'id'=>'user-history-grid',
     'dataProvider'=>$model->search(),
     'filter'=>$model,
+    //'enableHistory'=>true,
     'type'=>'striped hover bordered',
     'columns'=>array(
         array(
