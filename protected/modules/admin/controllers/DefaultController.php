@@ -82,6 +82,72 @@ class DefaultController extends AdminController
         ));
     }
 
+    public function actionUserHistory()
+    {
+        /*if (!isset($_SERVER['HTTP_REFERER'])or(!strpos($_SERVER['HTTP_REFERER'], 'userHistory'))) //change _ControllerName_ to your controller page
+        {
+            Yii::app()->user->setState('SearchParamsUH', null);
+            Yii::app()->user->setState('CurrentPageUH', null);
+        }*/
+        $model = new UsersHistory();
+        $model->unsetAttributes();
+        if (isset($_GET['pageSize'])) {
+            Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
+            unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
+        }
+
+        if (isset($_REQUEST['UsersHistory']))
+        {
+            $model->attributes = $_REQUEST['UsersHistory'];
+            Yii::app()->user->setState('SearchParamsUH', $_REQUEST['UsersHistory']);
+            Yii::app()->user->setState('CurrentPageUH', null);
+        }
+        else
+        {
+            $searchParams = Yii::app()->user->getState('SearchParamsUH');
+            if ( isset($searchParams) )
+            {
+                $model->attributes = $searchParams;
+            }
+        }
+
+        /*if (isset($_GET['UsersHistory_page']))
+        {
+            Yii::app()->user->setState('CurrentPageUH', $_GET['UsersHistory_page']);
+        }
+        else
+        {
+            $page = Yii::app()->user->getState('CurrentPageUH');
+            if ( isset($page) )
+            {
+                $_GET['UsersHistory_page'] = $page;
+            }
+        }*/
+
+        /*if (isset($_REQUEST['UsersHistory']))
+            $model->attributes = $_REQUEST['UsersHistory'];*/
+
+        $this->render('userHistory', array(
+            'model' => $model,
+        ));
+    }
+
+    public function actionDeleteUserHistory($id)
+    {
+        if(Yii::app()->request->isPostRequest)
+        {
+            // we only allow deletion via POST request
+            $model = UsersHistory::model()->findByPk($id);
+            $model->delete();
+
+            // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+            //if(!isset($_GET['ajax']))
+                $this->redirect(array('userHistory'));
+        }
+        else
+            throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
+    }
+
     public function actionCreateCloseChair()
     {
         $model=new Kcp();
@@ -118,7 +184,13 @@ class DefaultController extends AdminController
 
 	public function actionTeachers()
 	{
-        $chairId = Yii::app()->request->getParam('chairId', null);
+       $chairId = Yii::app()->request->getParam('chairId', null);
+
+        /*if (!isset($_SERVER['HTTP_REFERER'])or(!strpos($_SERVER['HTTP_REFERER'], 'teachers'))) //change _ControllerName_ to your controller page
+        {
+            Yii::app()->user->setState('SearchParamsP', null);
+            Yii::app()->user->setState('CurrentPageP', null);
+        }*/
 
         $model = new P;
         $model->unsetAttributes();
@@ -126,12 +198,44 @@ class DefaultController extends AdminController
             Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
             unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
         }
+        /*if (isset($_REQUEST['P']))
+            $model->attributes = $_REQUEST['P'];*/
+
         if (isset($_REQUEST['P']))
+        {
             $model->attributes = $_REQUEST['P'];
+            Yii::app()->user->setState('SearchParamsP', $_REQUEST['P']);
+            Yii::app()->user->setState('CurrentPageP', null);
+        }
+        else
+        {
+            $searchParams = Yii::app()->user->getState('SearchParamsP');
+            //print_r($searchParams);
+            if ( isset($searchParams) )
+            {
+                $model->attributes = $searchParams;
+            }
+        }
+        /*$page = null;
+        if (isset($_REQUEST['P_page']))
+        {
+            Yii::app()->user->setState('CurrentPageP', $_REQUEST['P_page']);
+            $page = $_REQUEST['P_page'];
+        }
+        else
+        {
+            $page = Yii::app()->user->getState('CurrentPageP');
+            print_r($page);
+            if ( isset($page) )
+            {
+                $_REQUEST['P_page'] = $page;
+            }
+        }*/
 
         $this->render('teachers', array(
             'model' => $model,
-            'chairId' => $chairId
+            'chairId' => $chairId,
+            //'page'=>$page
         ));
 	}
 
@@ -339,7 +443,8 @@ class DefaultController extends AdminController
 
         if (isset($_REQUEST['Users'])) {
             $user->attributes = $_REQUEST['Users'];
-            $user->save();
+            if($user->save())
+                $this->redirect(array('teachers'));
         }
 
         $this->render('pGrants', array(

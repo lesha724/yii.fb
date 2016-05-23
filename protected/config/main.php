@@ -38,6 +38,9 @@ $config = array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
 		),
+		'session'=>array(
+			'timeout' => 1440,
+		),
 		'urlManager'=>array(
 			'showScriptName' => false,
 			'urlFormat' => 'path',

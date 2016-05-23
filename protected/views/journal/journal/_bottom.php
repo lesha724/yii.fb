@@ -49,7 +49,7 @@ if (!empty($model->sem1)):
         )
     ));
 
-    /*$this->widget('bootstrap.widgets.TbButton', array(
+    $this->widget('bootstrap.widgets.TbButton', array(
         'buttonType'=>'button',
         'type'=>'success',
 
@@ -60,7 +60,7 @@ if (!empty($model->sem1)):
             'data-url'=>Yii::app()->createUrl('/journal/journalExcelItog',array('sem1'=>$model->sem1)),
             'id'=>'journal-print-itog',
         )
-    ));*/
+    ));
 
     $this->renderPartial('/filter_form/default/_refresh_filter_form_button');
 

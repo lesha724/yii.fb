@@ -1249,12 +1249,32 @@ SQL;
             $sheet->setCellValue('A15', tt('За {sem} учебный семестр', array('{sem}'=>SH::convertSem5(Yii::app()->session['sem']))))
                 ->getStyle('A15')->getAlignment()->setWrapText(true)-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
-            $elgd=Elgd::model()->getDop($elg1);
+            //таблица
+            $rowStart=17;
 
-            //колонка с фио студентов
+            $sheet->setCellValue('A'.$rowStart,"№");
+            $sheet->setCellValue('B'.$rowStart, tt('ФИО'));
+            $sheet->mergeCells('B'.$rowStart.':D'.$rowStart);
+            $sheet->setCellValue('E'.$rowStart, tt('Итог'));
+            $elgdCount = 0;
+            $elgd=Elgd::model()->getDop($elg1);
+            foreach($elgd as $elgdItem){
+                $sheet->setCellValueByColumnAndRow($elgdCount+5,$rowStart,$elgdItem['elgsd2']);
+                $elgdCount++;
+            }
+            $sheet->setCellValueByColumnAndRow($elgdCount+5,$rowStart,tt("Всего"));
+            $rowStart++;
+
             $i=0;
             $ps44=PortalSettings::model()->findByPk(44)->ps2;
             foreach($students as $st) {
+
+                $sheet->mergeCellsByColumnAndRow(1, $i+ $rowStart, 3, $i+ $rowStart);
+                $name = $st['st2'].' '.$st['st3'].' '.$st['st4'];
+
+                $sheet->setCellValueByColumnAndRow(0,$i+ $rowStart,$i+1);
+                $sheet->setCellValueByColumnAndRow(1,$i+ $rowStart,$name);
+
                 $st1 = $st['st1'];
                 $marks = $elg->getMarksForStudent($st1);
                 $total = 0;
@@ -1288,10 +1308,30 @@ SQL;
                         break;
                 }
 
+                $sheet->setCellValueByColumnAndRow(4,$i+ $rowStart,$value);
+
+                $elgdCount1=0;
                 $marksDop=Elgdst::model()->getMarksForStudent($st1,$elg1);
+
+                foreach($elgd as $elgdItem){
+
+                    $key=$elgdItem['elgd0'];
+
+                    $mark = isset($marksDop[$key]) && $marksDop[$key] != 0
+                        ? round($marksDop[$key], 1)
+                        : '';
+
+                    $sheet->setCellValueByColumnAndRow($elgdCount1+5,$i+ $rowStart,$mark);
+                    if($mark!='')
+                        $value+=$mark;
+                    $elgdCount1++;
+                }
+
+                $sheet->setCellValueByColumnAndRow($elgdCount1+5,$i+ $rowStart,$value);
+                $i++;
             }
 
-            //$sheet->getStyleByColumnAndRow(0,1,$k+1,6+$count_st_column)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
+            $sheet->getStyleByColumnAndRow(0,$rowStart-1,$elgdCount+5,$rowStart+$i-1)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
 
             $objPHPExcel->setActiveSheetIndex(0);
 
