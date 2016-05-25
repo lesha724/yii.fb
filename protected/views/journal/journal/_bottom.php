@@ -23,8 +23,6 @@ if(count($sem1List)!=1) {
 
 if (!empty($model->sem1)):
 
-
-
     $dates = R::model()->getDatesForJournal(
             $uo1,
             $gr1,
@@ -93,6 +91,11 @@ if (!empty($model->sem1)):
     $modules = null;
     if($ps57==1)
         $modules = Vvmp::model()->getModule($uo1,$gr1);
+
+    $exam = null;
+    /*if($ps57==1)
+        $xam = Stus::model()->getExam($uo1,$gr1,$model->sem1,$model->discipline);*/
+
     $classTable2='journal_div_table2';
     if($model->type_lesson==0 /*|| empty($elgd)*/)
         $classTable2='journal_div_table2 journal_div_table2_1';

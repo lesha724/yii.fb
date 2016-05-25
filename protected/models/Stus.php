@@ -203,5 +203,9 @@ SQL;
 
 		return $disciplines;
 	}
+	//функция получания экзаменов в электроном журнале
+	/*public function getExam($uo1,$gr1,$sem1,$d1){
+
+	}*/
 
 }
