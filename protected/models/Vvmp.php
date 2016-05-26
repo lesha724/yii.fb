@@ -267,7 +267,7 @@ SQL;
 	{
 
 		$sql = <<<SQL
-			SELECT vvmp1,vmpv1,vmpv4,vmpv3,vmpv5,vvmp6,vmpv6 from vvmp
+			SELECT vvmp1,vvmp6,vvmp4 from vvmp
 			INNER JOIN vmpv on (vvmp1=vmpv2)
 			WHERE vvmp3=(
 			SELECT  uo3 from uo where uo1=:UO1
@@ -282,6 +282,7 @@ SQL;
 			) and vvmp25=(
 			SELECT  gr2 from gr where gr1={$gr1}
 			)
+			GROUP BY vvmp1,vvmp6,vvmp4
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':GR1', $gr1);

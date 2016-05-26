@@ -274,13 +274,23 @@ SQL;
         return (bool)$isExtended;
     }
 
-    public function getMarks($vmpv1,$st1)
+    public function getMarks($vvmp1,$st1,$gr1)
     {
-        if(empty($vmpv1)||empty($st1))
+        if(empty($vvmp1)||empty($st1))
             return array();
 
         $sql = <<<SQL
-          SELECT * FROM vmp WHERE vmp2=:ST1 AND vmp1=:VMPV1
+          SELECT vmpv1 from vvmp
+			INNER JOIN vmpv on (vvmp1=vmpv2)
+          WHERE vmpv7=:GR1 AND vvmp1=:VVMP1 ORDER BY vmpv4 DESC
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':VVMP1', $vvmp1);
+        $command->bindValue(':GR1', $gr1);
+        $vmpv1 = $command->queryScalar();
+
+        $sql = <<<SQL
+          SELECT vmp.*,vmpv.* FROM vmp INNER JOIN vmpv on (vmp1=vmpv1) WHERE vmp2=:ST1 AND vmp1=:VMPV1
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':VMPV1', $vmpv1);

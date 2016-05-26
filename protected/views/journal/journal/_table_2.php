@@ -227,18 +227,20 @@ function table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$nom,$uo1,$modules,$pot
             if(!isset($modules[(int)$nom-1]))
                 return '<td colspan="4">'.tt('Модуль не найден!').'</td>';
             else{
-                $mark = Vmp::model()->getMarks($modules[(int)$nom-1]['vmpv1'],$st['st1']);
-                $ind = !empty($mark)?round($mark['vmp6'],2):'';
-                $pot = !empty($mark)?round($mark['vmp5'],2):'';
-                $itog = !empty($mark)?round($mark['vmp4'],2):'';
-                $pmk = !empty($mark)?round($mark['vmp7'],2):'';
-                $vmpv1 = $modules[(int)$nom-1]['vmpv1'];
+                $mark = Vmp::model()->getMarks($modules[(int)$nom-1]['vvmp1'],$st['st1'],$gr1);
+                if(empty($mark))
+                    return '<td colspan="4">'.tt('Модуль не найден!').'</td>';
+                $ind = round($mark['vmp6'],2);
+                $pot = round($mark['vmp5'],2);
+                $itog = round($mark['vmp4'],2);
+                $pmk = round($mark['vmp7'],2);
+                $vmpv1 = $mark['vmpv1'];
 
                 $nom_=$date['elgz3'];
                 $elgz1=$date['elgz1'];
                 $date_lesson=$date['r2'];
                 $r1=$date['r1'];
-                $vmpv6 = $modules[(int)$nom-1]['vmpv6'];
+                $vmpv6 = $mark['vmpv6'];
                 $disabled = '';
                 if(!empty($vmpv6))
                     $disabled = 'disabled="disabled"';
