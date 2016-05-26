@@ -282,11 +282,13 @@ SQL;
         $sql = <<<SQL
           SELECT vmpv1 from vvmp
 			INNER JOIN vmpv on (vvmp1=vmpv2)
-          WHERE vmpv7=:GR1 AND vvmp1=:VVMP1 ORDER BY vmpv4 DESC
+			INNER JOIN vmp on (vmp1=vmpv1)
+          WHERE vmp2=:ST1 AND vmpv7=:GR1 AND vvmp1=:VVMP1 ORDER BY vmpv8 DESC,vmpv4 DESC,vmpv1 DESC
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':VVMP1', $vvmp1);
         $command->bindValue(':GR1', $gr1);
+        $command->bindValue(':ST1', $st1);
         $vmpv1 = $command->queryScalar();
 
         $sql = <<<SQL
