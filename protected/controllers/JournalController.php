@@ -323,7 +323,7 @@ SQL;
                 }
 
                 //проверка на макимальный и минимальный бал
-                if($value!=0&&$value!=-1)
+                if($value!=0&&$value!=-1&&$value!=-2)
                     if ($field == 'elgzst4'||$field == 'elgzst5')
                     {
                         $min=PortalSettings::model()->findByPk(37)->ps2;
@@ -386,29 +386,34 @@ SQL;
                                 }
                         }
 
-                        if($field=='elgzst3'&&$value==1&&$elgzst->elgzst4>0)
+                        if($value==-2&&$field == 'elgzst4')
                         {
-                            $error=true;
+                            $elgzst->delete();
+                        }
+                        else{
+                            if ($field == 'elgzst3' && $value == 1 && $elgzst->elgzst4 > 0) {
+                                $error = true;
+                            }
+
+                            if ($field == 'elgzst4' && $value > 0 && $elgzst->elgzst3 > 0) {
+                                $error = true;
+                            }
+
+                            if ($field == 'elgzst5' && $value > 0 && $elgzst->elgzst3 == 0 && $elgzst->elgzst4 == 0) {
+                                $error = true;
+                            }
+
+
+                            if (!$error) {
+                                $attr = array_merge(array(
+                                    $field => $value,
+                                    'elgzst7' => Yii::app()->user->dbModel->p1,
+                                    'elgzst6' => date('Y-m-d H:i:s'),
+                                ), $arr);
+                                $error = !$elgzst->saveAttributes($attr);
+                            }
                         }
 
-                        if($field=='elgzst4'&&$value>0&&$elgzst->elgzst3>0)
-                        {
-                            $error=true;
-                        }
-
-                        if($field=='elgzst5'&&$value>0&&$elgzst->elgzst3==0&&$elgzst->elgzst4==0)
-                        {
-                            $error=true;
-                        }
-
-                        if(!$error) {
-                            $attr = array_merge(array(
-                                $field => $value,
-                                'elgzst7' => Yii::app()->user->dbModel->p1,
-                                'elgzst6' => date('Y-m-d H:i:s'),
-                            ), $arr);
-                            $error = !$elgzst->saveAttributes($attr);
-                        }
                     }else
                     {
                         if($field=='elgzst5')
