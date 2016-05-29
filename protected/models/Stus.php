@@ -208,4 +208,44 @@ SQL;
 
 	}*/
 
+	public function getMarkForDisp($st1, $d1, $sem7)
+	{
+		$sql = <<<SQL
+            SELECT stus3,stus11, stus19, stus0 from stus
+            WHERE stus1=:ST1 AND stus18=:D1 AND stus20=:SEM7
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':ST1', $st1);
+		$command->bindValue(':D1', $d1);
+		$command->bindValue(':SEM7', $sem7);
+		$mark = $command->queryRow();
+
+		return $mark;
+	}
+
+	public function recalculateStusMark($st1,$gr1,$sem7,$elg){
+		$sql = <<<SQL
+            SELECT uo3 from elg
+            	INNER JOIN uo on (elg2=uo1)
+            WHERE elg1=:ELG1
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':ELG1', $elg->elg1);
+		$d1 = $command->queryScalar();
+
+		if(!empty($d1)){
+			$stus = Stus::model()->findByAttributes(array('stus1'=>$st1,'stus18'=>$d1,'stus20'=>$sem7));
+			if($stus!=null){
+				$sql=<<<SQL
+				  SELECT elgzst5,elgzst4,elgzst3 FROM elgzst
+				  INNER JOIN elgz on (elgzst.elgzst2 = elgz.elgz1 AND elgz.elgz2=:ELGZ2)
+				  WHERE elgzst1=:ST1 ORDER by elgz3 asc
+SQL;
+					$command = Yii::app()->db->createCommand($sql);
+					$command->bindValue(':ELGZ2', $elg->elg1);
+					$command->bindValue(':ST1', $st1);
+					$marks= $command->queryAll();
+			}
+		}
+	}
 }

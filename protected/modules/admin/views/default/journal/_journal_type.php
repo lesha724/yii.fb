@@ -40,6 +40,19 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     </div>*/ ?>
 
     <div class="control-group">
+        <?=CHtml::checkBox('', PortalSettings::model()->findByPk(60)->ps2, $htmlOptions2)?>
+        <span class="lbl"> <?=tt('Блокировать непереведенных студентов')?></span>
+        <?=CHtml::hiddenField('settings[60]', PortalSettings::model()->findByPk(60)->ps2)?>
+    </div>
+
+    <div class="control-group">
+        <?=CHtml::checkBox('', PortalSettings::model()->findByPk(65)->ps2, $htmlOptions2)?>
+        <span class="lbl"> <?=tt('Автопроставлени пропусков заблокированым студентам')?></span>
+        <?=CHtml::hiddenField('settings[65]', PortalSettings::model()->findByPk(65)->ps2)?>
+    </div>
+
+
+    <div class="control-group">
         <?=CHtml::radioButtonList('settings[44]', PortalSettings::model()->findByPk(44)->ps2, $options, $htmlOptions)?>
     </div>
 
@@ -68,21 +81,27 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     </div>
 
     <div class="control-group">
+        <?=CHtml::checkBox('', PortalSettings::model()->findByPk(83)->ps2, $htmlOptions2)?>
+        <span class="lbl"> <?=tt('Скрывать столбец "Итог"')?></span>
+        <?=CHtml::hiddenField('settings[83]', PortalSettings::model()->findByPk(83)->ps2)?>
+    </div>
+
+    <div class="control-group">
+        <?=CHtml::checkBox('', PortalSettings::model()->findByPk(85)->ps2, $htmlOptions2)?>
+        <span class="lbl"> <?=tt('Скрывать столбец "Всего"')?></span>
+        <?=CHtml::hiddenField('settings[85]', PortalSettings::model()->findByPk(85)->ps2)?>
+    </div>
+
+    <div class="control-group">
+        <?=CHtml::checkBox('', PortalSettings::model()->findByPk(84)->ps2, $htmlOptions2)?>
+        <span class="lbl"> <?=tt('Запись Итоговой оценки')?></span>
+        <?=CHtml::hiddenField('settings[84]', PortalSettings::model()->findByPk(84)->ps2)?>
+    </div>
+
+    <div class="control-group">
         <?=CHtml::checkBox('', PortalSettings::model()->findByPk(59)->ps2, $htmlOptions2)?>
         <span class="lbl"> <?=tt('Показывать кафедру')?></span>
         <?=CHtml::hiddenField('settings[59]', PortalSettings::model()->findByPk(59)->ps2)?>
-    </div>
-
-    <div class="control-group">
-        <?=CHtml::checkBox('', PortalSettings::model()->findByPk(60)->ps2, $htmlOptions2)?>
-        <span class="lbl"> <?=tt('Блокировать непереведенных студентов')?></span>
-        <?=CHtml::hiddenField('settings[60]', PortalSettings::model()->findByPk(60)->ps2)?>
-    </div>
-
-    <div class="control-group">
-        <?=CHtml::checkBox('', PortalSettings::model()->findByPk(65)->ps2, $htmlOptions2)?>
-        <span class="lbl"> <?=tt('Автопроставлени пропусков заблокированым студентам')?></span>
-        <?=CHtml::hiddenField('settings[65]', PortalSettings::model()->findByPk(65)->ps2)?>
     </div>
 
     <div class="control-group">

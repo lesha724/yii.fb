@@ -442,6 +442,11 @@ SQL;
                     {
                         Vmp::model()->recalculate($st1,$elgz,$gr1);
 
+                        $ps84 = PortalSettings::model()->findByPk(84)->ps2;
+                        if ($ps84==1){
+                            Stus::model()->recalculateStusMark($st1,$gr1,$sem7,$elg);
+                        }
+
                         if($field == 'elgzst3'&&$value==0)
                         {
                             //если убираем пропуск удалем все записи с регитрацией пропусвов и отработок по этому занятию

@@ -368,7 +368,7 @@ SQL;
                     if($ps82==2){
                         //print_r('----');
                         $sql = <<<SQL
-                              SELECT max(markb3) FROM markb WHERE markb2<=:BAL
+                              SELECT max(markb3) FROM markb WHERE markb2<=:BAL AND markb4=0
 SQL;
                         $command = Yii::app()->db->createCommand($sql);
                         $command->bindValue(':BAL', $tek);

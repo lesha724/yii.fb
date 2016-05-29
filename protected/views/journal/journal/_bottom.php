@@ -30,6 +30,8 @@ if (!empty($model->sem1)):
             $model->sem1
     );
 
+    $us = Us::model()->findByAttributes(array('us2'=>$uo1,'us3'=>$model->sem1));
+
     if(count($dates)==0)
         throw new CHttpException(404, tt('Не найдены занятия.'));
 
@@ -126,7 +128,9 @@ if (!empty($model->sem1)):
             'elgd'=>$elgd,
             'elg'=>$elg,
             'read_only'=>$read_only,
-            'ps44'=>$ps44
+            'ps44'=>$ps44,
+            'us'=>$us,
+            'model'=>$model
         ));
     }
 

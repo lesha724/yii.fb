@@ -99,17 +99,25 @@ global $count_dates;
 
 $total_2 =array();
 
-$th  .= generateTotal1Header();
-$th2.='<th colspan="2"></th>';
+$ps83 = PortalSettings::model()->findByPk(83)->ps2;
+$ps85 = PortalSettings::model()->findByPk(85)->ps2;
+if($ps83==0) {
+    $th  .= generateTotal1Header();
+    $th2.='<th colspan="2"></th>';
+}
 
 foreach($elgd as $key)
 {
     $th.=generate3Th($key);
     $th2.='<th></th>';
 }
+if($ps85==0) {
+    $th .= '<th>' . tt('Всего') . '</th>';
+    $th2 .= '<th></th>';
+}
 
-$th  .= '<th>'.tt('Всего').'</th>';
-$th2 .= '<th></th>';
+$ps84 = PortalSettings::model()->findByPk(84)->ps2;
+$sem = Sem::model()->findByPk($model->sem1);
 
 foreach ($students as $st) {
     $st1 = $st['st1'];
@@ -131,12 +139,27 @@ foreach ($students as $st) {
             $bal=0;
     }
     $sr = ($bal!='')?'('.$bal.')':'';
-    $tr .= '<td data-total=1 colspan="2">'.$val.$sr.'</td>'; // total 1
-        foreach($elgd as $key)
-        {
-            $tr .= table3Tr($key, $marks, $st1,$elg1);
+    if($ps83==0) {
+        $tr .= '<td data-total=1 colspan="2">' . $val . $sr . '</td>'; // total 1
+    }
+    foreach($elgd as $key)
+    {
+        $tr .= table3Tr($key, $marks, $st1,$elg1);
+    }
+    if($ps85==0) {
+        if ($ps84 == 0)
+            $tr .= '<td data-total=2>' . $total_2[$st1] . '</td>'; // total 2
+        else {
+            $mark = Stus::model()->getMarkForDisp($st1, $model->discipline, $sem->sem7);
+            if (!empty($mark)) {
+                $bal = '';
+                $bal = $mark['stus3'];
+                $tr .= '<td data-stus="' . $mark['stus0'] . '" data-total=2>' . $bal . '</td>';
+            } else {
+                $tr .= '<td data-total=2></td>'; // total 2
+            }
         }
-    $tr .= '<td data-total=2>'.$total_2[$st1].'</td>'; // total 2
+    }
     $tr .= '</tr>';
 }
 echo sprintf($table,$th,$th2,$tr); // 3 table
