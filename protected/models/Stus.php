@@ -224,7 +224,10 @@ SQL;
 	}
 
 	private function recalculateXarcovMed($st1,$gr1,$sem7,$elg,$idUniversity,$stus,$marks){
-
+		/*switch($stus->stus19){
+			case 5:
+				break;
+		}*/
 	}
 
 	public function recalculateStusMark($st1,$gr1,$sem7,$elg){
