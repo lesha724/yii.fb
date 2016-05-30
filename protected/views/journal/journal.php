@@ -21,6 +21,7 @@
     $min=Elgzst::model()->getMin();
     $ps44 = PortalSettings::model()->findByPk(44)->ps2;
     $ps55 = PortalSettings::model()->findByPk(55)->ps2;
+    $ps84 = PortalSettings::model()->findByPk(84)->ps2;
     $timeAccess = tt('Ошибка! Доступ на редактирование закрыт!');
 
 //errorType=0 error
@@ -40,6 +41,7 @@
         tt.error2 = "{$error2}";
         ps44 = {$ps44};
         ps55 = {$ps55};
+        ps84 = {$ps84};
 JS
     , CClientScript::POS_READY);
 

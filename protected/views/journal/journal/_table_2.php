@@ -426,8 +426,10 @@ HTML;
     echo sprintf($table, $th, $th2, $tr); // 2 table
     if($elgz3Nom>1)
     Yii::app()->clientScript->registerScript('journal-scroll', <<<JS
+        /*alert($('.journal_div_table2 .nom{$elgz3Nom}').position().left);
+        alert($('.journal_div_table2').position().left);*/
         $(".journal_div_table2 ").animate({
-            scrollLeft:$('.journal_div_table2 .nom{$elgz3Nom}').position().left
+            scrollLeft:$('.journal_div_table2 .nom{$elgz3Nom}').position().left - $('.journal_div_table2').position().left
         }, 750);
 
 JS

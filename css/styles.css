@@ -1,4 +1,4 @@
-.journal_div_table2 .module-tr.updated{
+.journal_div_table2 .module-tr.updated, .journal-bottom .journal_div_table3 .journal_table td.updated{
     background-color: #ffb752;
 }
 .journal_div_table2 .module-tr .module-ind{
@@ -308,7 +308,7 @@ div.journal_div_table2 {
 }
 
 div.journal_div_table2_1{
-    width:80%!important;
+    width:77%!important;
 }
 .test-bottom .mark-td{
     background-color: yellowgreen;

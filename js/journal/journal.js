@@ -184,7 +184,7 @@ $(document).ready(function(){
             var url = $that.parents('[data-url]').data('url');
 
             $spinner1.show();
-            send(url,params,title,$td,$that,$spinner1,st1);
+            send(url,params,title,$td,$that,$spinner1,st1,ps84);
             $that.val('');
             $that.addClass('not-value');
             $td.find(':checkbox').attr('disabled','disabled');
@@ -288,7 +288,7 @@ $(document).ready(function(){
                                         "class" : "btn btn-danger btn-mini",
                                         click: function() {
                                             $( this ).dialog( "close" );
-                                            send(url,params,title,$td,$that,$spinner1,st1);
+                                            send(url,params,title,$td,$that,$spinner1,st1,ps84);
 
                                         }
                                     }
@@ -306,7 +306,7 @@ $(document).ready(function(){
                             });
                         }else
                         {
-                            send(url,params,title,$td,$that,$spinner1,st1);
+                            send(url,params,title,$td,$that,$spinner1,st1,ps84);
                         }
 
                     }
@@ -319,7 +319,7 @@ $(document).ready(function(){
         }
         else
         {
-            send(url,params,title,$td,$that,$spinner1,st1);
+            send(url,params,title,$td,$that,$spinner1,st1,ps84);
         }
 
     });
@@ -333,6 +333,7 @@ $(document).ready(function(){
         var params = {
             elg1 : elg1,
             field : $that.data('name'),
+            gr1 : $that.data('gr1'),
             st1   : st1,
             value : parseFloat( $that.val().replace(',','.') )
         }
@@ -360,7 +361,7 @@ $(document).ready(function(){
             success: function( data ) {
                 if (!data.error) {
                     addGritter(title, tt.success, 'success');
-                    recalculateBothTotal(st1);
+                    recalculateBothTotal(st1,ps84);
                 } else {
                     addGritter(title, tt.error, 'error');
                 }
@@ -487,7 +488,7 @@ $(document).ready(function(){
                 if (!data.error) {
                     addGritter(title, tt.success, 'success');
                     //$td.find('[data-name="elgzst5"]').val(elgotr2);
-                    //recalculateBothTotal(st1);
+                    //recalculateBothTotal(st1,ps84);
                     $('#filter-form').submit();
                 } else {
                     addGritter(title, tt.error, 'error');
@@ -538,7 +539,7 @@ function getError(data)
     }
 }
 
-function send(url,params,title,$td,$that,$spinner1,st1)
+function send(url,params,title,$td,$that,$spinner1,st1,ps84)
 {
     $.get(url, params, function(data){
 
@@ -549,7 +550,7 @@ function send(url,params,title,$td,$that,$spinner1,st1)
             addGritter(title, tt.success, 'success')
             $td.removeClass('error').addClass('success');
             setTimeout(function() { $td.removeClass('success') }, 1000);
-            recalculateBothTotal(st1);
+            recalculateBothTotal(st1,ps84);
 
             $that.parents('tr').find('.module-tr ').addClass('updated');
         }
@@ -639,54 +640,58 @@ function send(url,params,title,$td,$that,$spinner1,st1)
     }, 'json');
 }
 
-function recalculateBothTotal(st1)
+function recalculateBothTotal(st1,ps84)
 {
-    var total_1 = 0;
-    var total_2 = 0;
+    if(ps84!=1) {
+        var total_1 = 0;
+        var total_2 = 0;
 
-    var table_2 = 'div.journal_div_table2 tr[data-st1='+st1+']';
-    var table_3 = 'div.journal_div_table3 tr[data-st1='+st1+']';
+        var table_2 = 'div.journal_div_table2 tr[data-st1=' + st1 + ']';
+        var table_3 = 'div.journal_div_table3 tr[data-st1=' + st1 + ']';
 
-    var totalCount = 0;
-    $(table_2 +' td').each(function(){
+        var totalCount = 0;
+        $(table_2 + ' td').each(function () {
 
-        var mark = calculateMarkFor(this);
+            var mark = calculateMarkFor(this);
 
-        if (! isNaN(mark)) {
-            total_1 += mark;
-            totalCount++;
+            if (!isNaN(mark)) {
+                total_1 += mark;
+                totalCount++;
+            }
+        });
+
+        var bal = 0;
+        var sr = '';
+        if (ps44 == 1) {
+            bal = (total_1 / totalCount).toFixed(2);
+            total_1 = Math.round(total_1 / totalCount * 12);
         }
-    });
 
-    var bal = 0;
-    var sr ='';
-    if(ps44==1)
+        if (ps44 == 2) {
+            bal = (total_1 / totalCount).toFixed(2);
+            total_1 = Math.round(total_1 / totalCount);
+        }
+
+        $(table_3 + ' td').each(function () {
+
+            var mark = calculateMarkFor(this);
+
+            if (!isNaN(mark))
+                total_2 += mark;
+        });
+        if (ps44 == 1) {
+            sr = '(' + bal + ')'
+        }
+        if (ps44 == 2) {
+            sr = '(' + bal + ')'
+        }
+        $(table_3 + ' td[data-total=1]').text(total_1 + sr);
+        $(table_3 + ' td[data-total=2]').text(total_1 + total_2);
+    }else
     {
-        bal = (total_1/totalCount).toFixed(2);
-        total_1 = Math.round(total_1/totalCount*12);
+        var stName = $('.journal_div_table3 tr[data-st1='+st1+'] td').addClass('updated');
     }
 
-    if(ps44==2)
-    {
-        bal = (total_1/totalCount).toFixed(2);
-        total_1 = Math.round(total_1/totalCount);
-    }
-
-    $(table_3 +' td').each(function(){
-
-        var mark = calculateMarkFor(this);
-
-        if (! isNaN(mark))
-            total_2 += mark;
-    });
-    if(ps44==1) {
-        sr = '(' + bal + ')'
-    }
-    if(ps44==2) {
-        sr = '(' + bal + ')'
-    }
-    $(table_3 +' td[data-total=1]').text(total_1+sr);
-    $(table_3 +' td[data-total=2]').text(total_1 + total_2);
 }
 
 function calculateMarkFor(el)

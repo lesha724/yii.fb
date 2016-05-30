@@ -130,6 +130,7 @@ if (!empty($model->sem1)):
             'read_only'=>$read_only,
             'ps44'=>$ps44,
             'us'=>$us,
+            'gr1'=>$gr1,
             'model'=>$model
         ));
     }

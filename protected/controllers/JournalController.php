@@ -440,10 +440,14 @@ SQL;
 
                     if(!$error)
                     {
-                        Vmp::model()->recalculate($st1,$elgz,$gr1);
+                        $ps57 = PortalSettings::model()->findByPk(57)->ps2;
+                        if ($ps57==1) {
+                            Vmp::model()->recalculate($st1, $elgz, $gr1);
+                        }
 
                         $ps84 = PortalSettings::model()->findByPk(84)->ps2;
                         if ($ps84==1){
+                            $elg = Elg::model()->findByPk($elgz->elgz2);
                             Stus::model()->recalculateStusMark($st1,$gr1,$sem7,$elg);
                         }
 
@@ -488,8 +492,9 @@ SQL;
         $elg1 = Yii::app()->request->getParam('elg1', null);
         $value = Yii::app()->request->getParam('value', null);
         $field = Yii::app()->request->getParam('field', null);
+        $gr1 = Yii::app()->request->getParam('gr1', null);
 
-        if($st1==null || $elg1==null || $value==null || $field==null)
+        if($st1==null || $elg1==null || $value==null || $gr1==null|| $field==null)
         {
             $error = true;
             $errorType=2;
@@ -518,6 +523,17 @@ SQL;
                     $elgdst->elgdst5 = Yii::app()->user->dbModel->p1;
                     $elgdst->elgdst4 = date('Y-m-d H:i:s');
                     $error = !$elgdst->save();
+
+                    if(!$error)
+                    {
+                        $ps84 = PortalSettings::model()->findByPk(84)->ps2;
+                        if ($ps84==1){
+                            $elg = Elg::model()->findByPk($elg1);
+                            $sem7 = Gr::model()->getSem7ByGr1ByDate($gr1,date('d.m.Y'));
+                            Stus::model()->recalculateStusMark($st1,$gr1,$sem7,$elg);
+                        }
+                    }
+
                 }
             }
         }

@@ -21,10 +21,10 @@ function getTotal1($total_1,$count_dates,$ps44){
     return $value;
 }
 
-function table3Tr($column, $marks,$st1,$elg1)
+function table3Tr($column, $marks,$st1,$elg1,$gr1)
 {
     $tr= <<<HTML
-<td><input class="elgdst-input" value="%s" data-name="%s" maxlength="3"></td>
+<td><input class="elgdst-input" value="%s" data-name="%s" data-gr1="%s" maxlength="3"></td>
 HTML;
 
     //list($field, $name) = $column;
@@ -34,7 +34,7 @@ HTML;
         ? round($marks[$key], 1)
         : '';
 
-    return sprintf($tr, $mark, $key);
+    return sprintf($tr, $mark, $key,$gr1);
 }
 function generate3Th($key)
 {
@@ -144,7 +144,7 @@ foreach ($students as $st) {
     }
     foreach($elgd as $key)
     {
-        $tr .= table3Tr($key, $marks, $st1,$elg1);
+        $tr .= table3Tr($key, $marks, $st1,$elg1,$gr1);
     }
     if($ps85==0) {
         if ($ps84 == 0)
