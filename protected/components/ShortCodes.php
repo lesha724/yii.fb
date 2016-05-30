@@ -22,9 +22,11 @@ class ShortCodes extends CApplicationComponent
 			select b15 from b where b1=0
 SQL;
         $command = Yii::app()->db->createCommand($sql);
-        $id=$command->queryRow();
-
-        return $id['b15'];
+        $id=$command->queryScalar();
+        if(!empty($id))
+            return $id;
+        else
+            return 0;
     }
     public static function truncateText($text)
     {

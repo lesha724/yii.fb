@@ -223,7 +223,16 @@ SQL;
 		return $mark;
 	}
 
+	private function recalculateXarcovMed($st1,$gr1,$sem7,$elg,$idUniversity,$stus,$marks){
+
+	}
+
 	public function recalculateStusMark($st1,$gr1,$sem7,$elg){
+		$idUniversity = SH::getUniversityCod();
+
+		if($idUniversity==0)
+			return;
+
 		$sql = <<<SQL
             SELECT uo3 from elg
             	INNER JOIN uo on (elg2=uo1)
@@ -232,6 +241,7 @@ SQL;
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':ELG1', $elg->elg1);
 		$d1 = $command->queryScalar();
+
 
 		if(!empty($d1)){
 			$stus = Stus::model()->findByAttributes(array('stus1'=>$st1,'stus18'=>$d1,'stus20'=>$sem7));
@@ -245,6 +255,12 @@ SQL;
 					$command->bindValue(':ELGZ2', $elg->elg1);
 					$command->bindValue(':ST1', $st1);
 					$marks= $command->queryAll();
+
+					switch($idUniversity){
+						case 40:
+							$this->recalculateXarcovMed($st1,$gr1,$sem7,$elg,$idUniversity,$stus,$marks);
+							break;
+					}
 			}
 		}
 	}

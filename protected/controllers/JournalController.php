@@ -496,26 +496,29 @@ SQL;
         }
         else {
             $elgd=Elgd::model()->findByAttributes(array('elgd1'=>$elg1,'elgd0'=>$field));
-            if(empty($elgd))
-            {
+            $elgsd = Elgsd::model()->findByPk($elgd->elgd2);
+            if(empty($elgsd)||($value>$elgsd->elgsd5&&$elgsd->elgsd5!=0)){
                 $error = true;
-                $errorType=2;
-            }else
-            {
-                $elgdst=Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgd->elgd0));
-                //print_r($elgdst->elgdst0);
-                if(empty($elgdst))
-                {
-                    $elgdst=new Elgdst();
-                    $elgdst->elgdst0=new CDbExpression('GEN_ID(GEN_elgdst, 1)');
-                    $elgdst->elgdst1=$st1;
-                    $elgdst->elgdst2=$elgd->elgd0;
-                }
+                $errorType = 2;
+            }else {
+                if (empty($elgd)) {
+                    $error = true;
+                    $errorType = 2;
+                } else {
+                    $elgdst = Elgdst::model()->findByAttributes(array('elgdst1' => $st1, 'elgdst2' => $elgd->elgd0));
+                    //print_r($elgdst->elgdst0);
+                    if (empty($elgdst)) {
+                        $elgdst = new Elgdst();
+                        $elgdst->elgdst0 = new CDbExpression('GEN_ID(GEN_elgdst, 1)');
+                        $elgdst->elgdst1 = $st1;
+                        $elgdst->elgdst2 = $elgd->elgd0;
+                    }
 
-                $elgdst->elgdst3=$value;
-                $elgdst->elgdst5=Yii::app()->user->dbModel->p1;
-                $elgdst->elgdst4=date('Y-m-d H:i:s');
-                $error=!$elgdst->save();
+                    $elgdst->elgdst3 = $value;
+                    $elgdst->elgdst5 = Yii::app()->user->dbModel->p1;
+                    $elgdst->elgdst4 = date('Y-m-d H:i:s');
+                    $error = !$elgdst->save();
+                }
             }
         }
 
