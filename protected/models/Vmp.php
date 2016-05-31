@@ -376,10 +376,10 @@ SQL;
                         //print_r($mark);
                         if(!empty($mark)){
                             $tek = $mark;
-                        }else {
+                        }/*else {
                             $tek = 0;
                             //print_r($tek);
-                        }
+                        }*/
                     }
 
                     //print_r($tek);
