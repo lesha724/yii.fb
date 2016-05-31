@@ -15,6 +15,8 @@
  */
 class Elgsd extends CActiveRecord
 {
+	const EXAM_TYPE=2;
+	const IND_TYPE=1;
 	/**
 	 * @return string the associated database table name
 	 */

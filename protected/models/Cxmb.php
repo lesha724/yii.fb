@@ -128,4 +128,22 @@ SQL;
         
     }
 
+	public function getMark($mark)
+	{
+		if ((int)$mark < 0)
+			return array('cxmb3' => '', 'cxmb2' => 0);
+
+		$sql = <<<SQL
+            select cxmb2,cxmb3
+            from cxmb
+            where cxmb4<=:MARK1 and cxmb5>=:MARK2
+SQL;
+
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':MARK1', $mark);
+		$command->bindValue(':MARK2', $mark);
+		$marks = $command->queryRow();
+		return $marks;
+	}
+
 }

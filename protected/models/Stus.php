@@ -223,11 +223,80 @@ SQL;
 		return $mark;
 	}
 
+	private function getBalMarkb($bal,$type){
+		$sql = <<<SQL
+                              SELECT max(markb3) FROM markb WHERE markb2<=:BAL AND markb4=:TYPE
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':BAL', $bal);
+		$command->bindValue(':TYPE', $type);
+		$mark = $command->queryScalar();
+		//print_r($mark);
+		if(!empty($mark)){
+			$bal_per = $mark;
+		}else {
+			$bal_per = 0;
+		}
+
+		return $bal_per;
+	}
+
 	private function recalculateXarcovMed($st1,$gr1,$sem7,$elg,$idUniversity,$stus,$marks){
-		/*switch($stus->stus19){
+		switch($stus->stus19){
 			case 5:
+				if(!empty($marks)) {
+					$sym = 0;
+					$count=0;
+					foreach ($marks as $mark) {
+						$bal = 0;
+						if ($mark['elgzst3'] > 0) {
+							$bal = $mark['elgzst5'];
+						} else {
+							$bal = ($mark['elgzst5'] > 0) ? $mark['elgzst5'] : $mark['elgzst4'];
+						}
+						$sym += $bal;
+						$count++;
+					}
+
+					$elgsdInd = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::IND_TYPE));
+					$elgsdExam = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::EXAM_TYPE));
+
+					$elgdInd = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdInd->elgsd1));
+					$elgdExam = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdExam->elgsd1));
+
+					if($elgsdInd==null||$elgsdExam==null)
+						return;
+
+					$balInd = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdInd->elgd0));
+					$balExam = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdExam->elgd0));
+
+					if($balInd==null||$balExam==null)
+						return;
+
+					//print_r($sym.'<br>');
+					if($sym+$balInd->elgdst3>120){
+						$sym-=$sym+$balInd-120;
+					}
+
+					//print_r($sym.'<br>');
+
+					$sr_bal = $sym/$count;
+
+					$bal_per1 = $this->getBalMarkb($sr_bal,1);
+
+					$bal_itog = 0;
+					if($bal_per1+$balInd->elgdst3>=70&&$bal_per1+$balInd->elgdst3<=120){
+						$bal_itog=$bal_per1+$balInd->elgdst3+$balExam->elgdst3;
+
+						$bal_itog = $this->getBalMarkb($bal_itog,2);
+						$stus->stus3 = $bal_itog;
+						$cxmb= Cxmb::model()->getMark($bal_itog);
+						$stus->stus11 = $cxmb['cxmb3'];
+						$stus->save();
+					}
+				}
 				break;
-		}*/
+		}
 	}
 
 	public function recalculateStusMark($st1,$gr1,$sem7,$elg){
@@ -236,6 +305,7 @@ SQL;
 		if($idUniversity==0)
 			return;
 
+		//print_r($idUniversity.'<br>');
 		$sql = <<<SQL
             SELECT uo3 from elg
             	INNER JOIN uo on (elg2=uo1)
@@ -245,7 +315,7 @@ SQL;
 		$command->bindValue(':ELG1', $elg->elg1);
 		$d1 = $command->queryScalar();
 
-
+		//print_r($d1.'<br>');
 		if(!empty($d1)){
 			$stus = Stus::model()->findByAttributes(array('stus1'=>$st1,'stus18'=>$d1,'stus20'=>$sem7));
 			if($stus!=null){
@@ -260,7 +330,7 @@ SQL;
 					$marks= $command->queryAll();
 
 					switch($idUniversity){
-						case 40:
+						case 38:
 							$this->recalculateXarcovMed($st1,$gr1,$sem7,$elg,$idUniversity,$stus,$marks);
 							break;
 					}
