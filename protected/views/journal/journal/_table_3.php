@@ -27,14 +27,30 @@ function table3Tr($column, $marks,$st1,$elg1,$gr1)
 <td><input class="elgdst-input" value="%s" data-name="%s" data-gr1="%s" maxlength="3"></td>
 HTML;
 
+    $tr1 = <<<HTML
+        <td>%s</td>
+HTML;
     //list($field, $name) = $column;
     $key=$column['elgd0'];
 
     $mark = isset($marks[$key]) && $marks[$key] != 0
         ? round($marks[$key], 1)
         : '';
+    $edit = true;
 
-    return sprintf($tr, $mark, $key,$gr1);
+    switch($column['elgsd4']){
+        case 3:case 4:case 5:
+            $edit = false;
+            break;
+        default:
+            $edit = true;
+            break;
+    }
+
+    if($edit)
+        return sprintf($tr, $mark, $key,$gr1);
+    else
+        return sprintf($tr1, $mark);
 }
 function generate3Th($key)
 {

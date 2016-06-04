@@ -223,6 +223,7 @@ SQL;
 		return $mark;
 	}
 
+	/*функция для переводов балов */
 	private function getBalMarkb($bal,$type){
 		$sql = <<<SQL
                               SELECT max(markb3) FROM markb WHERE markb2<=:BAL AND markb4=:TYPE
@@ -242,6 +243,7 @@ SQL;
 	}
 
 	private function recalculateXarcovMed($st1,$gr1,$sem7,$elg,$idUniversity,$stus,$marks){
+		//print_r($stus->stus19);
 		switch($stus->stus19){
 			case 5:
 				if(!empty($marks)) {
@@ -261,8 +263,16 @@ SQL;
 					$elgsdInd = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::IND_TYPE));
 					$elgsdExam = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::EXAM_TYPE));
 
+					$elgsdSumm = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::SUM_TYPE));
+					$elgsdSred = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::SRED_TYPE));
+					$elgsdPerevod1 = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::PEREVOD_1_TYPE));
+
 					$elgdInd = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdInd->elgsd1));
 					$elgdExam = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdExam->elgsd1));
+
+					$elgdSumm= Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdSumm->elgsd1));
+					$elgdSred = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdSred->elgsd1));
+					$elgdPerevod1 = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdPerevod1->elgsd1));
 
 					if($elgsdInd==null||$elgsdExam==null)
 						return;
@@ -270,19 +280,81 @@ SQL;
 					$balInd = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdInd->elgd0));
 					$balExam = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdExam->elgd0));
 
-					if($balInd==null||$balExam==null)
-						return;
+					if($balInd==null)
+					{
+						$balInd = new Elgdst();
+						$balInd->elgdst3 = 0;
+					}
+
+					if($balExam==null)
+					{
+						$balExam = new Elgdst();
+						$balExam->elgdst3 = 0;
+					}
 
 					//print_r($sym.'<br>');
+					/*если сумма балов +инд работа >120 то отнимаем разницу от суммы балов*/
 					if($sym+$balInd->elgdst3>120){
 						$sym-=$sym+$balInd-120;
 					}
 
-					//print_r($sym.'<br>');
+					/*запись суммы*/
+					if($elgsdSumm!=null) {
+						if ($elgdSumm != null) {
+							$balSumm = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdSumm->elgd0));
+							if (empty($balSumm)) {
+								$balSumm = new Elgdst();
+								$balSumm->elgdst0 = new CDbExpression('GEN_ID(GEN_elgdst, 1)');
+								$balSumm->elgdst1 = $st1;
+								$balSumm->elgdst2 = $elgdSumm->elgd0;
+							}
 
+							$balSumm->elgdst3 = $sym;
+							$balSumm->elgdst5 = Yii::app()->user->dbModel->p1;
+							$balSumm->elgdst4 = date('Y-m-d H:i:s');
+							$balSumm->save();
+						}
+					}
+					//print_r($sym.'<br>');
+					/*запись среднее*/
 					$sr_bal = $sym/$count;
+					/*запись среднего*/
+					if($elgdSred!=null) {
+						if ($elgdSred != null) {
+							$balSred = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdSred->elgd0));
+							if (empty($balSred)) {
+								$balSred = new Elgdst();
+								$balSred->elgdst0 = new CDbExpression('GEN_ID(GEN_elgdst, 1)');
+								$balSred->elgdst1 = $st1;
+								$balSred->elgdst2 = $elgdSred->elgd0;
+							}
+
+							$balSred->elgdst3 = $sr_bal;
+							$balSred->elgdst5 = Yii::app()->user->dbModel->p1;
+							$balSred->elgdst4 = date('Y-m-d H:i:s');
+							$balSred->save();
+						}
+					}
 
 					$bal_per1 = $this->getBalMarkb($sr_bal,1);
+
+					/*запись перевода*/
+					if($elgdPerevod1!=null) {
+						if ($elgdPerevod1 != null) {
+							$balPerevod1 = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdPerevod1->elgd0));
+							if (empty($balPerevod1)) {
+								$balPerevod1 = new Elgdst();
+								$balPerevod1->elgdst0 = new CDbExpression('GEN_ID(GEN_elgdst, 1)');
+								$balPerevod1->elgdst1 = $st1;
+								$balPerevod1->elgdst2 = $elgdPerevod1->elgd0;
+							}
+
+							$balPerevod1->elgdst3 = $bal_per1;
+							$balPerevod1->elgdst5 = Yii::app()->user->dbModel->p1;
+							$balPerevod1->elgdst4 = date('Y-m-d H:i:s');
+							$balPerevod1->save();
+						}
+					}
 
 					$bal_itog = 0;
 					if($bal_per1+$balInd->elgdst3>=70&&$bal_per1+$balInd->elgdst3<=120){

@@ -483,8 +483,8 @@ SQL;
 
     public function actionInsertDopMark()
     {
-        //if (! Yii::app()->request->isAjaxRequest)
-            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
         $error=false;
         $errorType=0;
 
@@ -510,6 +510,8 @@ SQL;
                     $error = true;
                     $errorType = 2;
                 } else {
+                    if($elgsd->elgsd4>=3&&$elgsd->elgsd4<=5)
+                        throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
                     $elgdst = Elgdst::model()->findByAttributes(array('elgdst1' => $st1, 'elgdst2' => $elgd->elgd0));
                     //print_r($elgdst->elgdst0);
                     if (empty($elgdst)) {
