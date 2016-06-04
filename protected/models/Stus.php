@@ -248,6 +248,7 @@ SQL;
 			case 5:
 				if(!empty($marks)) {
 					$sym = 0;
+
 					$count=0;
 					foreach ($marks as $mark) {
 						$bal = 0;
@@ -257,8 +258,17 @@ SQL;
 							$bal = ($mark['elgzst5'] > 0) ? $mark['elgzst5'] : $mark['elgzst4'];
 						}
 						$sym += $bal;
-						$count++;
+						//$count++;
 					}
+
+					$sql=<<<SQL
+				  SELECT COUNT(*) FROM  elgz WHERE  elgz.elgz2=:ELGZ2 AND elgz.elgz4=0
+SQL;
+					$command = Yii::app()->db->createCommand($sql);
+					$command->bindValue(':ELGZ2', $elg->elg1);
+					$command->bindValue(':ST1', $st1);
+
+					$count = $command->queryScalar();
 
 					$elgsdInd = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::IND_TYPE));
 					$elgsdExam = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::EXAM_TYPE));
@@ -393,7 +403,7 @@ SQL;
 			if($stus!=null){
 				$sql=<<<SQL
 				  SELECT elgzst5,elgzst4,elgzst3 FROM elgzst
-				  INNER JOIN elgz on (elgzst.elgzst2 = elgz.elgz1 AND elgz.elgz2=:ELGZ2)
+				  INNER JOIN elgz on (elgzst.elgzst2 = elgz.elgz1 AND elgz.elgz2=:ELGZ2 AND elgz.elgz4=0)
 				  WHERE elgzst1=:ST1 ORDER by elgz3 asc
 SQL;
 					$command = Yii::app()->db->createCommand($sql);
