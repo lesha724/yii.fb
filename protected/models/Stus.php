@@ -369,11 +369,27 @@ SQL;
 					$bal_itog = 0;
 					if($bal_per1+$balInd->elgdst3>=70&&$bal_per1+$balInd->elgdst3<=120){
 						$bal_itog=$bal_per1+$balInd->elgdst3+$balExam->elgdst3;
+						if($bal_itog>200)
+							$bal_itog=200;
 
-						$bal_itog = $this->getBalMarkb($bal_itog,2);
+						$bal_itog_1='FX';
+
+						if($bal_itog>=180&&$bal_itog<=200){
+							$bal_itog_1='A';
+						}elseif($bal_itog>=160&&$bal_itog<=179){
+							$bal_itog_1='B';
+						}elseif($bal_itog>=150&&$bal_itog<=159){
+							$bal_itog_1='B';
+						}elseif($bal_itog>=130&&$bal_itog<=149){
+							$bal_itog_1='B';
+						}elseif($bal_itog>=120&&$bal_itog<=129){
+							$bal_itog_1='B';
+						}
+						//$bal_itog_1 = $this->getBalMarkb($bal_itog,2);
 						$stus->stus3 = $bal_itog;
-						$cxmb= Cxmb::model()->getMark($bal_itog);
-						$stus->stus11 = $cxmb['cxmb3'];
+						$stus->stus11 =$bal_itog_1;
+						$cxmb= Cxmb::model()->getMarkByECTS($bal_itog_1);
+						$stus->stus8 = $cxmb['cxmb2'];
 						$stus->save();
 					}
 				}
