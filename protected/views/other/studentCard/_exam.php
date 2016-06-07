@@ -61,8 +61,13 @@ HTML;
         $tr2.='<td>'.$discipline['stus7'].'</td>';
         $date=!empty($discipline['stus6'])?date('Y-m-d',strtotime($discipline['stus6'])):"";
         $tr2.='<td>'.$date.'</td>';
-        if($type!=6)
-            $tr2.='<td>'.$discipline['stus8'].'</td>';
+        if($type!=6) {
+            if ($discipline['stus8'] == -1)
+                $val = tt('Зачтено');
+            else
+                $val = $discipline['stus8'];
+            $tr2 .= '<td>' . $val . '</td>';
+        }
         else
         {
             if($discipline['stus8']==-1)
