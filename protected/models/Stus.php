@@ -379,11 +379,11 @@ SQL;
 						}elseif($bal_itog>=160&&$bal_itog<=179){
 							$bal_itog_1='B';
 						}elseif($bal_itog>=150&&$bal_itog<=159){
-							$bal_itog_1='B';
+							$bal_itog_1='C';
 						}elseif($bal_itog>=130&&$bal_itog<=149){
-							$bal_itog_1='B';
+							$bal_itog_1='D';
 						}elseif($bal_itog>=120&&$bal_itog<=129){
-							$bal_itog_1='B';
+							$bal_itog_1='E';
 						}
 						//$bal_itog_1 = $this->getBalMarkb($bal_itog,2);
 						$stus->stus3 = $bal_itog;
