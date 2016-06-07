@@ -152,11 +152,11 @@ SQL;
 		$sql = <<<SQL
             select cxmb2,cxmb3
             from cxmb
-            where CXMB3=":MARK"
+            where CXMB3='{$mark}'
 SQL;
 
 		$command = Yii::app()->db->createCommand($sql);
-		$command->bindValue(':MARK', $mark);
+		//$command->bindValue(':MARK', $mark);
 		//$command->bindValue(':MARK2', $mark);
 		$marks = $command->queryRow();
 		return $marks;

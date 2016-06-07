@@ -44,12 +44,11 @@ class Stus extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('stus0, stus1, stus3, stus4, stus5, stus8, stus10, stus16, stus17, stus18, stus19, stus20, stus21', 'numerical', 'integerOnly'=>true),
-			array('stus6, stus9, stus11', 'length', 'max'=>8),
+			array('stus6, stus9, stus11', 'length', 'max'=>20),
 			array('stus7', 'length', 'max'=>60),
-			array('stus12, stus13, stus14', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('stus0, stus1, stus3, stus4, stus5, stus6, stus7, stus8, stus9, stus10, stus11, stus12, stus13, stus14, stus16, stus17, stus18, stus19, stus20, stus21', 'safe', 'on'=>'search'),
+			array('stus0, stus1, stus3, stus4, stus5, stus6, stus7, stus8, stus9, stus10, stus11, stus16, stus17, stus18, stus19, stus20, stus21', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -211,7 +210,7 @@ SQL;
 	public function getMarkForDisp($st1, $d1, $sem7)
 	{
 		$sql = <<<SQL
-            SELECT stus3,stus11, stus19, stus0 from stus
+            SELECT stus3,stus11, stus8,stus19, stus0 from stus
             WHERE stus1=:ST1 AND stus18=:D1 AND stus20=:SEM7
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
@@ -243,7 +242,7 @@ SQL;
 	}
 
 	private function recalculateXarcovMed($st1,$gr1,$sem7,$elg,$idUniversity,$stus,$marks){
-		//print_r($stus->stus19);
+		//print_r($stus->stus19.'<br>');
 		switch($stus->stus19){
 			case 5:
 				if(!empty($marks)) {
@@ -270,6 +269,8 @@ SQL;
 
 					$count = $command->queryScalar();
 
+					//print_r($count.' count <br>');
+
 					$elgsdInd = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::IND_TYPE));
 					$elgsdExam = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::EXAM_TYPE));
 
@@ -280,11 +281,19 @@ SQL;
 					$elgdInd = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdInd->elgsd1));
 					$elgdExam = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdExam->elgsd1));
 
-					$elgdSumm= Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdSumm->elgsd1));
-					$elgdSred = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdSred->elgsd1));
-					$elgdPerevod1 = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdPerevod1->elgsd1));
+					$elgdSumm=null;
+					if($elgsdSumm!=null)
+						$elgdSumm= Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdSumm->elgsd1));
 
-					if($elgsdInd==null||$elgsdExam==null)
+					$elgdSred=null;
+					if($elgsdSred!=null)
+						$elgdSred = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdSred->elgsd1));
+
+					$elgdPerevod1=null;
+					if($elgsdPerevod1!=null)
+						$elgdPerevod1 = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdPerevod1->elgsd1));
+
+					if($elgdInd==null||$elgdExam==null)
 						return;
 
 					$balInd = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdInd->elgd0));
@@ -328,6 +337,7 @@ SQL;
 					//print_r($sym.'<br>');
 					/*запись среднее*/
 					$sr_bal = $sym/$count;
+					//print_r($sr_bal.'<br>');
 					/*запись среднего*/
 					if($elgdSred!=null) {
 						if ($elgdSred != null) {
@@ -347,7 +357,7 @@ SQL;
 					}
 
 					$bal_per1 = $this->getBalMarkb($sr_bal,1);
-
+					//print_r($bal_per1.'<br>');
 					/*запись перевода*/
 					if($elgdPerevod1!=null) {
 						if ($elgdPerevod1 != null) {
@@ -389,8 +399,10 @@ SQL;
 						$stus->stus3 = $bal_itog;
 						$stus->stus11 =$bal_itog_1;
 						$cxmb= Cxmb::model()->getMarkByECTS($bal_itog_1);
+						//print_r($cxmb);
 						$stus->stus8 = $cxmb['cxmb2'];
-						$stus->save();
+						if(!$stus->save())
+							print_r($stus->getErrors());
 					}
 				}
 				break;

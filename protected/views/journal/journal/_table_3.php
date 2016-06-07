@@ -34,7 +34,7 @@ HTML;
     $key=$column['elgd0'];
 
     $mark = isset($marks[$key]) && $marks[$key] != 0
-        ? round($marks[$key], 1)
+        ? round($marks[$key], 2)
         : '';
     $edit = true;
 
@@ -169,7 +169,7 @@ foreach ($students as $st) {
             $mark = Stus::model()->getMarkForDisp($st1, $model->discipline, $sem->sem7);
             if (!empty($mark)) {
                 $bal = '';
-                $bal = $mark['stus3'];
+                $bal = $mark['stus3'].' /'.$mark['stus11'].' /'.$mark['stus8'];
                 $tr .= '<td data-stus="' . $mark['stus0'] . '" data-total=2>' . $bal . '</td>';
             } else {
                 $tr .= '<td data-total=2></td>'; // total 2
