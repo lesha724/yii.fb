@@ -428,7 +428,7 @@ SQL;
 					$marks= $command->queryAll();
 
 					switch($idUniversity){
-						case 38:
+						case 40:
 							$this->recalculateXarcovMed($st1,$gr1,$sem7,$elg,$idUniversity,$stus,$marks);
 							break;
 					}
