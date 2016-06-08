@@ -245,6 +245,7 @@ SQL;
 		//print_r($stus->stus19.'<br>');
 		switch($stus->stus19){
 			case 5:
+			case 7:
 				if(!empty($marks)) {
 					$sym = 0;
 
