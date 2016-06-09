@@ -11,6 +11,8 @@
     $visible_passport=false;
     if($ps35==1&&Yii::app()->user->isAdmin&&$dbh!=null)
         $visible_passport=true;
+
+    $modelStForm = new StInfoForm();
 ?>
 <table id="list-group" class="table table-striped table-hover">
 <thead>
@@ -22,8 +24,10 @@
         <?php endif;?>
 		<th><?=tt('Ф.И.О.')?></th>
         <?php if($visible_passport):?>
-            <th><?=tt('Паспорт.')?></th>
-            <th><?=tt('Загран паспорт.')?></th>
+            <th><?=$modelStForm->getAttributeLabel('passport')?></th>
+            <th><?=$modelStForm->getAttributeLabel('internationalPassport')?></th>
+            <th><?=$modelStForm->getAttributeLabel('inn')?></th>
+            <th><?=$modelStForm->getAttributeLabel('snils')?></th>
         <?php endif;?>
 	</tr>
 </thead>
@@ -60,6 +64,20 @@
             }
 
             if(St::model()->checkPassport($dbh,$student['st1'],2)){
+                echo sprintf($pattern,'success','+');
+            }else
+            {
+                echo sprintf($pattern,'important','-');
+            }
+
+            if(St::model()->checkPassport($dbh,$student['st1'],3)){
+                echo sprintf($pattern,'success','+');
+            }else
+            {
+                echo sprintf($pattern,'important','-');
+            }
+
+            if(St::model()->checkPassport($dbh,$student['st1'],4)){
                 echo sprintf($pattern,'success','+');
             }else
             {

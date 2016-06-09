@@ -10,8 +10,11 @@ class StInfoForm extends CFormModel
 
 	public $speciality;
         
-        public $passport;
-        public $internationalPassport;
+    public $passport;
+    public $internationalPassport;
+
+    public $inn;
+    public $snils;
 
 
 	public function rules()
@@ -32,7 +35,9 @@ class StInfoForm extends CFormModel
 			'st75'=> tt('Имя (англ.)'),
 			'st76'=> tt('Отчество (англ.)'),
 			'st107'=> 'Email',
-                        'passport'=> tt('Паспорт'),
+            'passport'=> tt('Паспорт'),
+            'inn'=> tt('ИНН'),
+            'snils'=> tt('СНИЛС'),
 			'internationalPassport'=> tt('Загран. паспорт'),
 		);
 	}
@@ -132,11 +137,11 @@ SQL;
             
             if (empty($data))
                     $query = "insert into PASSPORT(PASSPORT1,PASSPORT2,PASSPORT3,PASSPORT4)
-                            VALUES (1,".$id.",$type,?)";
+                            VALUES (1,".$id.",".$type.",?)";
             else
                     $query = "update PASSPORT set PASSPORT4 = ? 
                                     where PASSPORT1 = 1 and PASSPORT2 = ".$id."
-                                    and PASSPORT3 = $type";
+                                    and PASSPORT3 =".$type;
 
             $prepared = ibase_prepare($query);
             $res=-1;

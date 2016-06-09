@@ -203,6 +203,52 @@ $this->endWidget(); ?>
             </div>
         </div>
     </div>
+
+    <div class="control-group">
+        <?= $form->label($stInfoForm, 'inn', array('class' => 'control-label'))?>
+        <div class="controls">
+            <?php
+            echo CHtml::image(Yii::app()->createUrl('/other/studentPassport',array('psp1'=>$model->student,'type'=>3)),'',array("width"=>"200px"));
+            ?>
+            <div>
+                <button data-url="<?=$this->createUrl('/other/changePassport')?>" type="button" class="change-passport btn btn-success btn-mini" data-psp1="<?=$model->student?>" data-type="3">
+                    <i class="icon-arrow-up bigger-110"></i>
+                    <?=tt('Загрузить')?>
+                </button>
+                <button data-url="<?=$this->createUrl('/other/showPassport')?>" type="button" class="show-passport btn btn-warning btn-mini" data-psp1="<?=$model->student?>" data-type="3">
+                    <i class="icon-fullscreen bigger-110"></i>
+                    <?=tt('Открыть в полном размере')?>
+                </button>
+                <button data-url="<?=$this->createUrl('/other/deletePassport')?>" type="button" class="delete-passport btn btn-danger btn-mini" data-psp1="<?=$model->student?>" data-type="3">
+                    <i class="icon-trash bigger-110"></i>
+                    <?=tt('Удалить')?>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <?= $form->label($stInfoForm, 'snils', array('class' => 'control-label'))?>
+        <div class="controls">
+            <?php
+            echo CHtml::image(Yii::app()->createUrl('/other/studentPassport',array('psp1'=>$model->student,'type'=>4)),'',array("width"=>"200px"));
+            ?>
+            <div>
+                <button data-url="<?=$this->createUrl('/other/changePassport')?>" type="button" class="change-passport btn btn-success btn-mini" data-psp1="<?=$model->student?>" data-type="4">
+                    <i class="icon-arrow-up bigger-110"></i>
+                    <?=tt('Загрузить')?>
+                </button>
+                <button data-url="<?=$this->createUrl('/other/showPassport')?>" type="button" class="show-passport btn btn-warning btn-mini" data-psp1="<?=$model->student?>" data-type="4">
+                    <i class="icon-fullscreen bigger-110"></i>
+                    <?=tt('Открыть в полном размере')?>
+                </button>
+                <button data-url="<?=$this->createUrl('/other/deletePassport')?>" type="button" class="delete-passport btn btn-danger btn-mini" data-psp1="<?=$model->student?>" data-type="4">
+                    <i class="icon-trash bigger-110"></i>
+                    <?=tt('Удалить')?>
+                </button>
+            </div>
+        </div>
+    </div>
 <?php
 $this->beginWidget(
     'bootstrap.widgets.TbModal',
