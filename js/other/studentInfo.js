@@ -217,7 +217,8 @@ $(document).ready(function(){
             data: data,
             success: function(html){
                 if (!html.error) {
-                    $('#myModal #modal-content').html(html.html);
+                    //alert(html.html);
+                    $('#myModal #modal-content .block').append(html.html);
                     $('#myModal .modal-header h4').html(html.title);
                     $('#myModal').modal('show');
                 }else

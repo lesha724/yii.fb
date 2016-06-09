@@ -69,7 +69,7 @@ $form=$this->beginWidget('CActiveForm', array(
 
     <?php
     $cod = SH::getUniversityCod();
-    if($cod==7):
+    if($cod==7){
         ?>
         <div class="alert alert-warning">
             <strong>Внимание!</strong></br>
@@ -79,7 +79,7 @@ $form=$this->beginWidget('CActiveForm', array(
             3. Использование аббревиатур не допускается;</br>
             4. При возникновении проблем с оформлением заявления пишите на почту edu@law.msu.ru c пометкой Выпуск-[год].</br>
         </div>
-    <?php endif;?>
+    <?php } ?>
 
     <div class="control-group" data-autocompleteUrl="<?= $url1?>" data-updateNkrs="<?= $url2?>">
         <?= CHtml::label(tt('Тема курсовой'), '', array('class' => 'control-label')) ?>
@@ -156,9 +156,8 @@ $form=$this->beginWidget('CActiveForm', array(
         </a>
     </div>
 <?php
-            endif;
-$this->endWidget(); ?>
-<div class="control-group">
+            endif;?>
+    <div class="control-group">
         <?= $form->label($stInfoForm, 'internationalPassport', array('class' => 'control-label'))?>
         <div class="controls">
             <?php //$form->textField($stInfoForm, 'internationalPassport', array('autocomplete'=>'off'))
@@ -249,6 +248,8 @@ $this->endWidget(); ?>
             </div>
         </div>
     </div>
+<?php $this->endWidget(); ?>
+
 <?php
 $this->beginWidget(
     'bootstrap.widgets.TbModal',
@@ -264,7 +265,7 @@ $this->beginWidget(
  
     <div class="modal-body">
         <div id="modal-content">
-            
+            <div class="block"></div>
         </div>
     </div>
  

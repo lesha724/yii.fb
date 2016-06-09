@@ -841,7 +841,7 @@ SQL;
 		$_FILES[$fileElementName]['name'][$i] = str_replace(" ","_",$_FILES[$fileElementName]['name'][$i]);		
 			
 			$res=1;
-                        if(!empty($_FILES[$fileElementName]['error'][$i]))
+       if(!empty($_FILES[$fileElementName]['error'][$i]))
 			{
 				switch($_FILES[$fileElementName]['error'][$i])
 				{
@@ -895,7 +895,6 @@ SQL;
 			unset($error);
 		}
 		echo $result;
-            
             $this->redirect(array('/other/studentinfo'));
             
         }else
