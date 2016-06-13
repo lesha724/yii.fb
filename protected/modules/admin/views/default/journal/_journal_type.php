@@ -17,6 +17,12 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         ' '.tt('10 минут до занятия и определенное кол-во минут после занятия').' '.tt('(Тип 2)'),
     );
 
+    $options4 = array(
+        ' -',
+        ' '.tt('Запись и чтение итоговой оценки'),
+        ' '.tt('Чтение итоговой оценки'),
+    );
+
     $options3 = array(
         ' '.tt('Сумма балов по занятиям'),
         ' '.tt('Среднее по занятиям'),
@@ -92,10 +98,14 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         <?=CHtml::hiddenField('settings[85]', PortalSettings::model()->findByPk(85)->ps2)?>
     </div>
 
-    <div class="control-group">
+    <?php /*<div class="control-group">
         <?=CHtml::checkBox('', PortalSettings::model()->findByPk(84)->ps2, $htmlOptions2)?>
         <span class="lbl"> <?=tt('Запись Итоговой оценки')?></span>
         <?=CHtml::hiddenField('settings[84]', PortalSettings::model()->findByPk(84)->ps2)?>
+    </div>*/?>
+
+    <div class="control-group">
+        <?=CHtml::radioButtonList('settings[84]', PortalSettings::model()->findByPk(84)->ps2, $options4, $htmlOptions)?>
     </div>
 
     <div class="control-group">
