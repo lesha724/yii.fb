@@ -168,8 +168,18 @@ foreach ($students as $st) {
         else {
             $mark = Stus::model()->getMarkForDisp($st1, $model->discipline, $sem->sem7);
             if (!empty($mark)) {
+                if($mark['stus19']!=6)
+                    $stus8 = $mark['stus8'];
+                else
+                {
+                    if($mark['stus8']!=-1){
+                        $stus8 = tt('не зарах.');
+                    }else{
+                        $stus8 = tt('зарах.');
+                    }
+                }
                 $bal = '';
-                $bal = $mark['stus3'].' /'.$mark['stus11'].' /'.$mark['stus8'];
+                $bal = $mark['stus3'].' /'.$mark['stus11'].' /'.$stus8;
                 $tr .= '<td data-stus="' . $mark['stus0'] . '" data-total=2>' . $bal . '</td>';
             } else {
                 $tr .= '<td data-total=2></td>'; // total 2

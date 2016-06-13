@@ -269,14 +269,14 @@ SQL;
 		//print_r($count.' count <br>');
 
 		$elgsdInd = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::IND_TYPE));
-		$elgsdExam = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::EXAM_TYPE));
+		//$elgsdExam = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::EXAM_TYPE));
 
 		$elgsdSumm = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::SUM_TYPE));
 		$elgsdSred = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::SRED_TYPE));
 		$elgsdPerevod1 = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::PEREVOD_1_TYPE));
 
 		$elgdInd = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdInd->elgsd1));
-		$elgdExam = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdExam->elgsd1));
+		//$elgdExam = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdExam->elgsd1));
 
 		$elgdSumm=null;
 		if($elgsdSumm!=null)
@@ -290,11 +290,11 @@ SQL;
 		if($elgsdPerevod1!=null)
 			$elgdPerevod1 = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdPerevod1->elgsd1));
 
-		if($elgdInd==null||$elgdExam==null)
+		if($elgdInd==null/*||$elgdExam==null*/)
 			return;
 
 		$balInd = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdInd->elgd0));
-		$balExam = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdExam->elgd0));
+		//$balExam = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdExam->elgd0));
 
 		if($balInd==null)
 		{
@@ -302,11 +302,11 @@ SQL;
 			$balInd->elgdst3 = 0;
 		}
 
-		if($balExam==null)
+		/*if($balExam==null)
 		{
 			$balExam = new Elgdst();
 			$balExam->elgdst3 = 0;
-		}
+		}*/
 
 		if($elgsdSumm!=null) {
 			if ($elgdSumm != null) {
@@ -387,6 +387,7 @@ SQL;
 
 		}else{
 			$mark_itog = 0;
+			$bal_itog_2='FX';
 		}
 
 		$stus->stus3 = $bal_itog;
@@ -564,7 +565,7 @@ SQL;
 				}
 				break;
 			case 6:
-					calculateZachXarkovMed($st1,$gr1,$sem7,$elg,$idUniversity,$stus,$marks);
+					$this->calculateZachXarkovMed($st1,$gr1,$sem7,$elg,$idUniversity,$stus,$marks);
 				break;
 		}
 	}
