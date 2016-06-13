@@ -241,6 +241,162 @@ SQL;
 		return $bal_per;
 	}
 
+	private function calculateZachXarkovMed($st1,$gr1,$sem7,$elg,$idUniversity,$stus,$marks)
+	{
+		$sym = 0;
+
+		$count=0;
+		foreach ($marks as $mark) {
+			$bal = 0;
+			if ($mark['elgzst3'] > 0) {
+				$bal = $mark['elgzst5'];
+			} else {
+				$bal = ($mark['elgzst5'] > 0) ? $mark['elgzst5'] : $mark['elgzst4'];
+			}
+			$sym += $bal;
+			//$count++;
+		}
+
+		$sql=<<<SQL
+				  SELECT COUNT(*) FROM  elgz WHERE  elgz.elgz2=:ELGZ2 AND elgz.elgz4=0
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':ELGZ2', $elg->elg1);
+		$command->bindValue(':ST1', $st1);
+
+		$count = $command->queryScalar();
+
+		//print_r($count.' count <br>');
+
+		$elgsdInd = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::IND_TYPE));
+		$elgsdExam = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::EXAM_TYPE));
+
+		$elgsdSumm = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::SUM_TYPE));
+		$elgsdSred = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::SRED_TYPE));
+		$elgsdPerevod1 = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::PEREVOD_1_TYPE));
+
+		$elgdInd = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdInd->elgsd1));
+		$elgdExam = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdExam->elgsd1));
+
+		$elgdSumm=null;
+		if($elgsdSumm!=null)
+			$elgdSumm= Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdSumm->elgsd1));
+
+		$elgdSred=null;
+		if($elgsdSred!=null)
+			$elgdSred = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdSred->elgsd1));
+
+		$elgdPerevod1=null;
+		if($elgsdPerevod1!=null)
+			$elgdPerevod1 = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdPerevod1->elgsd1));
+
+		if($elgdInd==null||$elgdExam==null)
+			return;
+
+		$balInd = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdInd->elgd0));
+		$balExam = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdExam->elgd0));
+
+		if($balInd==null)
+		{
+			$balInd = new Elgdst();
+			$balInd->elgdst3 = 0;
+		}
+
+		if($balExam==null)
+		{
+			$balExam = new Elgdst();
+			$balExam->elgdst3 = 0;
+		}
+
+		if($elgsdSumm!=null) {
+			if ($elgdSumm != null) {
+				$balSumm = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdSumm->elgd0));
+				if (empty($balSumm)) {
+					$balSumm = new Elgdst();
+					$balSumm->elgdst0 = new CDbExpression('GEN_ID(GEN_elgdst, 1)');
+					$balSumm->elgdst1 = $st1;
+					$balSumm->elgdst2 = $elgdSumm->elgd0;
+				}
+
+				$balSumm->elgdst3 = $sym;
+				$balSumm->elgdst5 = Yii::app()->user->dbModel->p1;
+				$balSumm->elgdst4 = date('Y-m-d H:i:s');
+				$balSumm->save();
+			}
+		}
+		//print_r($sym.'<br>');
+		/*запись среднее*/
+		$sr_bal = $sym/$count;
+		//print_r($sr_bal.'<br>');
+		/*запись среднего*/
+		if($elgdSred!=null) {
+			if ($elgdSred != null) {
+				$balSred = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdSred->elgd0));
+				if (empty($balSred)) {
+					$balSred = new Elgdst();
+					$balSred->elgdst0 = new CDbExpression('GEN_ID(GEN_elgdst, 1)');
+					$balSred->elgdst1 = $st1;
+					$balSred->elgdst2 = $elgdSred->elgd0;
+				}
+
+				$balSred->elgdst3 = $sr_bal;
+				$balSred->elgdst5 = Yii::app()->user->dbModel->p1;
+				$balSred->elgdst4 = date('Y-m-d H:i:s');
+				$balSred->save();
+			}
+		}
+
+		$bal_per2 = $this->getBalMarkb($sr_bal,2);
+		//print_r($bal_per1.'<br>');
+		/*запись перевода*/
+		if($elgdPerevod1!=null) {
+			if ($elgdPerevod1 != null) {
+				$balPerevod1 = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdPerevod1->elgd0));
+				if (empty($balPerevod1)) {
+					$balPerevod1 = new Elgdst();
+					$balPerevod1->elgdst0 = new CDbExpression('GEN_ID(GEN_elgdst, 1)');
+					$balPerevod1->elgdst1 = $st1;
+					$balPerevod1->elgdst2 = $elgdPerevod1->elgd0;
+				}
+
+				$balPerevod1->elgdst3 = $bal_per2;
+				$balPerevod1->elgdst5 = Yii::app()->user->dbModel->p1;
+				$balPerevod1->elgdst4 = date('Y-m-d H:i:s');
+				$balPerevod1->save();
+			}
+		}
+
+		$bal_itog = $bal_per2+$balInd->elgdst3;
+		if($bal_itog>=120){
+			$mark_itog = -1;
+			$bal_itog_2='FX';
+
+			if($bal_itog>=180&&$bal_itog<=200){
+				$bal_itog_2='A';
+			}elseif($bal_itog>=160&&$bal_itog<=179){
+				$bal_itog_2='B';
+			}elseif($bal_itog>=150&&$bal_itog<=159){
+				$bal_itog_2='C';
+			}elseif($bal_itog>=130&&$bal_itog<=149){
+				$bal_itog_2='D';
+			}elseif($bal_itog>=120&&$bal_itog<=129){
+				$bal_itog_2='E';
+			}
+			//$bal_itog_1 = $this->getBalMarkb($bal_itog,2);
+
+
+		}else{
+			$mark_itog = 0;
+		}
+
+		$stus->stus3 = $bal_itog;
+		$stus->stus11 =$bal_itog_2;
+		$stus->stus8 = $mark_itog;
+
+		if(!$stus->save())
+			print_r($stus->getErrors());
+	}
+
 	private function recalculateXarcovMed($st1,$gr1,$sem7,$elg,$idUniversity,$stus,$marks){
 		//print_r($stus->stus19.'<br>');
 		switch($stus->stus19){
@@ -406,6 +562,9 @@ SQL;
 							print_r($stus->getErrors());
 					}
 				}
+				break;
+			case 6:
+					calculateZachXarkovMed($st1,$gr1,$sem7,$elg,$idUniversity,$stus,$marks);
 				break;
 		}
 	}
