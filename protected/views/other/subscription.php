@@ -30,7 +30,7 @@ JS
 
 $params = $model->subscriptionParams;
 $params['st1'] = $model->st1;
-//$params['semester'] =0;
+$params['semester'] =0;
 
 $_SESSION['u1_vib']       = isset($_SESSION['u1_vib']) ? $_SESSION['u1_vib'] : '';
 $_SESSION['u1_vib_disc']  = isset($_SESSION['u1_vib_disc']) ? $_SESSION['u1_vib_disc'] : '';
@@ -40,6 +40,8 @@ $_SESSION['semester']     = isset($_SESSION['semester']) ? $_SESSION['semester']
 $_SESSION['st1']          = $params['st1'];
 $_SESSION['gr1_kod']      = $params['gr1_kod'];
 $_SESSION['data_nachala'] = $params['data_nachala'];
+
+//print_r($_SESSION['semester']);
 
 if (isset($_SESSION['func'])) {
     //print_r('2---------------------');
