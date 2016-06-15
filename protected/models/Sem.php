@@ -145,7 +145,7 @@ class Sem extends CActiveRecord
 	}
 	
 	public function getSemestrForGroup($gr1)
-{
+    {
 		 if (empty($gr1))
             return array();
 		$sql='select sem10,sem11 from sg
@@ -166,6 +166,22 @@ class Sem extends CActiveRecord
 
         return array($date1, $date2);
 	}
+
+    public function getSemestrForGroupByYearAndSem($gr1,$year,$sem)
+    {
+        if (empty($gr1))
+            return 0;
+
+        $sql='select sem1 from sg
+			   inner join sem on (sg.sg1 = sem.sem2)
+			   inner join gr on (sg.sg1 = gr.gr2)
+			where gr.gr1='.$gr1.' and sem.sem3='.$year.' and sem.sem5>='.$sem;
+        $command = Yii::app()->db->createCommand($sql);
+
+        $sem1 = $command->queryScalar();
+
+        return !empty($sem1)?$sem1:0;
+    }
 	
     public function getYearsForThematicPlan($speciality)
     {

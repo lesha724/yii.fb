@@ -117,4 +117,40 @@ class Elgz extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	public function getSemYearAndSem($elgz1){
+		$sql=<<<SQL
+		 SELECT sem3,sem5 FROM elgz
+		 	INNER JOIN elg on (elgz2 = elg1)
+		 	INNER JOIN sem on (elg3 = sem1)
+		 WHERE elgz1=:ELGZ1
+SQL;
+
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':ELGZ1', $elgz1);
+		$row = $command->queryRow();
+
+		if(!empty($row))
+			return $row;
+		else
+			return array(0,0);
+	}
+
+	public function getUo1($elgz1){
+		$sql=<<<SQL
+		 SELECT elg2 FROM elgz
+		 	INNER JOIN elg on (elgz2 = elg1)
+		 WHERE elgz1=:ELGZ1
+SQL;
+
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':ELGZ1', $elgz1);
+		$row = $command->queryScalar();
+
+		if(!empty($row))
+			return $row;
+		else
+			return 0;
+	}
+
 }

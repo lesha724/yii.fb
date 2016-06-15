@@ -318,6 +318,7 @@ SQL;
         $command->bindValue(':ELGZ3', $elgz->elgz3);
         $pmkLessonNom = $command->queryScalar();
 
+        //$marks = array();
         if(empty($pmkLessonNom)||empty($module))
             return;
         else
@@ -330,13 +331,44 @@ SQL;
             $command->bindValue(':ELGZ3', $elgz->elgz3);
             $pmkPrevLessonNom = $command->queryScalar();
 
-            if(empty($pmkPrevLessonNom))
+            $dopMarks = array();
+            $prevSem = 0;
+            if(empty($pmkPrevLessonNom)) {
                 $pmkPrevLessonNom = 0;
+
+                /*list($year,$sem) = Elgz::model()->getSemYearAndSem($elgz->elgz1);
+                if($sem==1){
+                    $sem=0;
+                }else{
+                    $year--;
+                }
+
+                $sem1 = Sem::model()->getSemestrForGroupByYearAndSem($gr1,$year,$sem);
+                $prevSem = $sem1;
+                $uo1 = Elgz::model()->getUo1($elgz->elgz1);
+
+                if($sem1!=0){
+
+                    $sql=<<<SQL
+                      SELECT MAX(elgz3) FROM elgz
+                       INNER JOIN elg on (elgz2 = elg1)
+                      WHERE elg3=:SEM1 AND elgz4=2 AND elg2=:UO1 ORDER by elgz3 asc
+SQL;
+                    $command = Yii::app()->db->createCommand($sql);
+                    $command->bindValue(':SEM1', $sem1);
+                    $command->bindValue(':UO1', $uo1);
+                    $pmkLessonNomPrevSem = $command->queryScalar();
+
+                    if(!empty($pmkLessonNomPrevSem)){
+
+                    }
+                }*/
+            }
 
             $sql=<<<SQL
               SELECT elgzst5,elgzst4,elgzst3 FROM elgzst
               INNER JOIN elgz on (elgzst.elgzst2 = elgz.elgz1 AND elgz.elgz2=:ELGZ2 and elgz.elgz3>:MIN AND elgz.elgz3<:MAX)
-              WHERE elgzst1=:ST1 ORDER by elgz3 asc
+              WHERE elgzst1=:ST1 AND elgz4=0 ORDER by elgz3 asc
 SQL;
             $command = Yii::app()->db->createCommand($sql);
             $command->bindValue(':ELGZ2', $elgz->elgz2);
