@@ -336,7 +336,7 @@ SQL;
             if(empty($pmkPrevLessonNom)) {
                 $pmkPrevLessonNom = 0;
 
-                /*list($year,$sem) = Elgz::model()->getSemYearAndSem($elgz->elgz1);
+                list($year,$sem) = Elgz::model()->getSemYearAndSem($elgz->elgz1);
                 if($sem==1){
                     $sem=0;
                 }else{
@@ -344,25 +344,40 @@ SQL;
                 }
 
                 $sem1 = Sem::model()->getSemestrForGroupByYearAndSem($gr1,$year,$sem);
-                $prevSem = $sem1;
+                //$prevSem = $sem1;
                 $uo1 = Elgz::model()->getUo1($elgz->elgz1);
+
+                //print_r($sem1.'<br>');
+                //print_r($uo1.'<br>');
 
                 if($sem1!=0){
 
                     $sql=<<<SQL
-                      SELECT MAX(elgz3) FROM elgz
-                       INNER JOIN elg on (elgz2 = elg1)
-                      WHERE elg3=:SEM1 AND elgz4=2 AND elg2=:UO1 ORDER by elgz3 asc
+                      SELECT MAX(elgz3) as nom FROM elgz
+                        INNER JOIN elg on (elgz2 = elg1)
+                     WHERE elg3=:SEM1 AND elgz4=2 AND elg2=:UO1 ORDER by nom asc
 SQL;
                     $command = Yii::app()->db->createCommand($sql);
                     $command->bindValue(':SEM1', $sem1);
                     $command->bindValue(':UO1', $uo1);
                     $pmkLessonNomPrevSem = $command->queryScalar();
 
+                    //print_r($pmkLessonNomPrevSem.'<br>');
                     if(!empty($pmkLessonNomPrevSem)){
-
+                        $sql=<<<SQL
+                          SELECT elgzst5,elgzst4,elgzst3 FROM elg
+                              INNER JOIN elgz on (elg.elg1 = elgz.elgz2 AND  elgz4=0  AND elgz.elgz3>:NOM)
+                              INNER JOIN elgzst on (elgzst.elgzst2 = elgz.elgz1  AND elgzst1=:ST1 )
+                          WHERE  elg3=:SEM1 AND elg2=:UO1 ORDER by elgz3 asc
+SQL;
+                        $command = Yii::app()->db->createCommand($sql);
+                        $command->bindValue(':ST1', $st1);
+                        $command->bindValue(':NOM', $pmkLessonNomPrevSem);
+                        $command->bindValue(':SEM1', $sem1);
+                        $command->bindValue(':UO1', $uo1);
+                        $dopMarks = $command->queryAll();
                     }
-                }*/
+                }
             }
 
             $sql=<<<SQL
@@ -391,9 +406,26 @@ SQL;
                     $tek+=$bal;
                 }
 
+                $count = count($marks);
+
+                if(!empty($dopMarks)){
+
+                    foreach($dopMarks as $mark){
+                        $bal=0;
+                        if($mark['elgzst3']>0){
+                            $bal=$mark['elgzst5'];
+                        }else
+                        {
+                            $bal=($mark['elgzst5']>0)?$mark['elgzst5']:$mark['elgzst4'];
+                        }
+                        $tek+=$bal;
+                    }
+                    $count+=count($dopMarks);
+                }
+
                 $ps82 = PortalSettings::model()->findByPk(82)->ps2;
                 if($ps82!=0){
-                    $val = $tek/count($marks);
+                    $val = $tek/$count;
                     //print_r($val);
                     $tek = round($val,2);
                    //print_r($tek);

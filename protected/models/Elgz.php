@@ -131,7 +131,7 @@ SQL;
 		$row = $command->queryRow();
 
 		if(!empty($row))
-			return $row;
+			return array($row['sem3'],$row['sem5']);
 		else
 			return array(0,0);
 	}
