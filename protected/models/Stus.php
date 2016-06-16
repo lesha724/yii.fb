@@ -224,6 +224,7 @@ SQL;
 
 	/*функция для переводов балов */
 	private function getBalMarkb($bal,$type){
+		//print_r(' SELECT max(markb3) FROM markb WHERE markb2<='.$bal.' AND markb4='.$type);
 		$sql = <<<SQL
                               SELECT max(markb3) FROM markb WHERE markb2<=:BAL AND markb4=:TYPE
 SQL;
@@ -265,6 +266,8 @@ SQL;
 		$command->bindValue(':ST1', $st1);
 
 		$count = $command->queryScalar();
+
+
 
 		//print_r($count.' count <br>');
 
@@ -326,7 +329,7 @@ SQL;
 		}
 		//print_r($sym.'<br>');
 		/*запись среднее*/
-		$sr_bal = $sym/$count;
+		$sr_bal = round($sym/$count,2);
 		//print_r($sr_bal.'<br>');
 		/*запись среднего*/
 		if($elgdSred!=null) {
@@ -494,7 +497,8 @@ SQL;
 					}
 					//print_r($sym.'<br>');
 					/*запись среднее*/
-					$sr_bal = $sym/$count;
+					$sr_bal = round($sym/$count,2);
+					//print_r($count.'<br>');
 					//print_r($sr_bal.'<br>');
 					/*запись среднего*/
 					if($elgdSred!=null) {
@@ -589,6 +593,8 @@ SQL;
 		//print_r($d1.'<br>');
 		if(!empty($d1)){
 			$stus = Stus::model()->findByAttributes(array('stus1'=>$st1,'stus18'=>$d1,'stus20'=>$sem7));
+			//print_r($stus);
+
 			if($stus!=null){
 				$sql=<<<SQL
 				  SELECT elgzst5,elgzst4,elgzst3 FROM elgzst
