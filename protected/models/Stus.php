@@ -474,9 +474,9 @@ SQL;
 
 					//print_r($sym.'<br>');
 					/*если сумма балов +инд работа >120 то отнимаем разницу от суммы балов*/
-					if($sym+$balInd->elgdst3>120){
+					/*if($sym+$balInd->elgdst3>120){
 						$sym-=$sym+$balInd->elgdst3-120;
-					}
+					}*/
 
 					/*запись суммы*/
 					if($elgsdSumm!=null) {
@@ -519,6 +519,7 @@ SQL;
 					}
 
 					$bal_per1 = $this->getBalMarkb($sr_bal,1);
+
 					//print_r($bal_per1.'<br>');
 					/*запись перевода*/
 					if($elgdPerevod1!=null) {
@@ -539,6 +540,12 @@ SQL;
 					}
 
 					$bal_itog = 0;
+
+
+					if($bal_per1+$balInd->elgdst3>120){
+						$bal_per1-=$bal_per1+$balInd->elgdst3-120;
+					}
+
 					if($bal_per1+$balInd->elgdst3>=70&&$bal_per1+$balInd->elgdst3<=120){
 						$bal_itog=$bal_per1+$balInd->elgdst3+$balExam->elgdst3;
 						if($bal_itog>200)
