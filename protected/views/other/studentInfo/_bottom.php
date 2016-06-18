@@ -54,6 +54,20 @@ $form=$this->beginWidget('CActiveForm', array(
     </div>
 
     <div class="control-group">
+        <?= $form->label($stInfoForm, 'st131', array('class' => 'control-label'))?>
+        <div class="controls">
+            <?= $form->textField($stInfoForm, 'st131', array('autocomplete'=>'off'))?>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <?= $form->label($stInfoForm, 'st132', array('class' => 'control-label'))?>
+        <div class="controls">
+            <?= $form->textField($stInfoForm, 'st132', array('autocomplete'=>'off'))?>
+        </div>
+    </div>
+
+    <div class="control-group">
         <?= $form->label($stInfoForm, 'st34', array('class' => 'control-label'))?>
         <div class="controls">
             <?php
