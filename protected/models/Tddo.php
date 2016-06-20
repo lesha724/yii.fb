@@ -22,7 +22,7 @@
  */
 class Tddo extends CActiveRecord
 {
-    public $executor;
+    /*public $executor;*/
 
     //public $executorType = 0;
     public $executionDates;
@@ -216,6 +216,54 @@ class Tddo extends CActiveRecord
 
         return $provider;
     }
+
+    /*public function getDocsFor($docType)
+    {
+        $criteria=new CDbCriteria;
+
+        $criteria->compare('tddo2', $docType);
+
+        $criteria->compare('tddo3', $this->tddo3);
+        $criteria->compare('tddo7', $this->tddo7);
+        $criteria->compare('tddo4', $this->tddo4);
+        $criteria->addSearchCondition('tddo8', $this->tddo8);
+        $criteria->addCondition(' TDDO1>0 AND TDDO3!=-2 AND EXTRACT(YEAR FROM tddo13) ='.date('Y'));
+        $criteria->compare('tddo9', $this->tddo9);
+        $criteria->addSearchCondition('tddo5', $this->tddo5);
+        $criteria->addSearchCondition('tddo6', $this->tddo6);
+
+        $pageSize=Yii::app()->user->getState('pageSize',10);
+        if($pageSize==0)
+            $pageSize=10;
+
+        $sort = new CSort();
+        $sort->sortVar = 'sort';
+        $sort->defaultOrder = 'EXTRACT (year FROM tddo4) DESC, tddo3 DESC';
+        $sort->attributes = array(
+            'tddo3'=>array(
+                'asc'=>'tddo3 ASC',
+                'desc'=>'tddo3 DESC',
+                'default'=>'DESC',
+            ),
+        );
+
+
+        $provider = new CActiveDataProvider($this, array(
+            'criteria'=>$criteria,
+            'pagination' => array(
+                'pageSize' =>$pageSize
+            ),
+            'sort' => $sort,
+        ));
+
+        /*$items = $provider->getData();
+        foreach ($items as $key => $item) {
+            $items[$key]->executor = $item->executorNames;
+        }
+        $provider->setData($items);*/
+
+        /*return $provider;
+    }*/
 
     public static function getTddo5Header($docType)
     {

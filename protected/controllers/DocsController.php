@@ -16,6 +16,7 @@ class DocsController extends Controller
             array('allow',
                 'actions' => array(
                     'tddo',
+                    //'index',
                     'tddoCreate',
                     'findExecutor',
                     'getTddoNextNumber',
@@ -34,12 +35,15 @@ class DocsController extends Controller
 
     public function filterCheckPermission($filterChain)
     {
-        $grants = Yii::app()->user->dbModel->grants;
-        if (empty($grants))
-            throw new CHttpException(404, 'Invalid request. You don\'t have access to the service.');
+        if(!Yii::app()->user->isAdmin) {
+            $grants = Yii::app()->user->dbModel->grants;
 
-        if ($grants->grants5 != 1)
-            throw new CHttpException(404, 'Invalid request. You don\'t have access to the service.');
+            if (empty($grants))
+                throw new CHttpException(404, 'Invalid request. You don\'t have access to the service.');
+
+            if ($grants->grants5 != 1)
+                throw new CHttpException(404, 'Invalid request. You don\'t have access to the service.');
+        }
 
         $filterChain->run();
     }
@@ -60,6 +64,31 @@ class DocsController extends Controller
         }
 
         $this->render('tddo/list', array(
+            'docType' => $docType,
+            'model'   => $model
+        ));
+    }
+
+    public function actionIndex()
+    {
+        $docType = Yii::app()->request->getParam('docType', null);
+
+        $model = new Tddo();
+        $model->unsetAttributes();
+
+        $model->tddo2 = $docType;
+
+        if (isset($_GET['pageSize'])) {
+            Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
+            unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
+        }
+
+        if (isset($_REQUEST['Tddo'])) {
+            $model->scenario = 'filter';
+            $model->attributes = $_REQUEST['Tddo'];
+        }
+
+        $this->render('index', array(
             'docType' => $docType,
             'model'   => $model
         ));

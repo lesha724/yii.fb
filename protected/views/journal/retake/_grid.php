@@ -101,7 +101,7 @@
             ),
     ),
 ));
-print_r($model->st2);
+//print_r($model->st2);
     Yii::app()->clientScript->registerScript('initPageSize',"
 	    $.fn.yiiGridView.update('retake',{ data:{ pageSize: $(this).val() }})
             
