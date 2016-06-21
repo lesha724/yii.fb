@@ -259,16 +259,24 @@ SQL;
 		}
 
 		$sql=<<<SQL
-				  SELECT COUNT(*) FROM  elgz WHERE  elgz.elgz2=:ELGZ2 AND elgz.elgz4=0
+				  SELECT COUNT(*) FROM  elgz
+						inner join elg on (elgz.elgz2 = elg.elg1)
+						inner join ustem on (elgz.elgz7 = ustem.ustem1)
+						inner join EL_GURNAL_ZAN(:UO1,:GR1,:SEM1, :TYPE_LESSON) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
+					WHERE elgz.elgz2=:ELGZ2 AND elgz.elgz4=0
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':ELGZ2', $elg->elg1);
+		$command->bindValue(':UO1', $elg->elg2);
+		$command->bindValue(':SEM1', $elg->elg3);
+		$command->bindValue(':TYPE_LESSON', $elg->elg4);
+		$command->bindValue(':GR1', $gr1);
 		$command->bindValue(':ST1', $st1);
 
 		$count = $command->queryScalar();
 
 
-
+		//print_r($elg->elg1.'<br>');
 		//print_r($count.' count <br>');
 
 		$elgsdInd = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::IND_TYPE));
@@ -402,7 +410,6 @@ SQL;
 	}
 
 	private function recalculateXarcovMed($st1,$gr1,$sem7,$elg,$idUniversity,$stus,$marks){
-		//print_r($stus->stus19.'<br>');
 		switch($stus->stus19){
 			case 5:
 			case 7:
@@ -422,10 +429,18 @@ SQL;
 					}
 
 					$sql=<<<SQL
-				  SELECT COUNT(*) FROM  elgz WHERE  elgz.elgz2=:ELGZ2 AND elgz.elgz4=0
+				  	SELECT COUNT(*) FROM  elgz
+						inner join elg on (elgz.elgz2 = elg.elg1)
+						inner join ustem on (elgz.elgz7 = ustem.ustem1)
+						inner join EL_GURNAL_ZAN(:UO1,:GR1,:SEM1, :TYPE_LESSON) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
+					WHERE elgz.elgz2=:ELGZ2 AND elgz.elgz4=0
 SQL;
 					$command = Yii::app()->db->createCommand($sql);
 					$command->bindValue(':ELGZ2', $elg->elg1);
+					$command->bindValue(':UO1', $elg->elg2);
+					$command->bindValue(':SEM1', $elg->elg3);
+					$command->bindValue(':TYPE_LESSON', $elg->elg4);
+					$command->bindValue(':GR1', $gr1);
 					$command->bindValue(':ST1', $st1);
 
 					$count = $command->queryScalar();
@@ -605,11 +620,18 @@ SQL;
 			if($stus!=null){
 				$sql=<<<SQL
 				  SELECT elgzst5,elgzst4,elgzst3 FROM elgzst
-				  INNER JOIN elgz on (elgzst.elgzst2 = elgz.elgz1 AND elgz.elgz2=:ELGZ2 AND elgz.elgz4=0)
+					  INNER JOIN elgz on (elgzst.elgzst2 = elgz.elgz1 AND elgz.elgz2=:ELGZ2 AND elgz.elgz4=0)
+					  inner join elg on (elgz.elgz2 = elg.elg1)
+						inner join ustem on (elgz.elgz7 = ustem.ustem1)
+						inner join EL_GURNAL_ZAN(:UO1,:GR1,:SEM1, :TYPE_LESSON) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
 				  WHERE elgzst1=:ST1 ORDER by elgz3 asc
 SQL;
 					$command = Yii::app()->db->createCommand($sql);
 					$command->bindValue(':ELGZ2', $elg->elg1);
+					$command->bindValue(':UO1', $elg->elg2);
+					$command->bindValue(':SEM1', $elg->elg3);
+					$command->bindValue(':TYPE_LESSON', $elg->elg4);
+					$command->bindValue(':GR1', $gr1);
 					$command->bindValue(':ST1', $st1);
 					$marks= $command->queryAll();
 
