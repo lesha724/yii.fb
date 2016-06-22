@@ -36,6 +36,34 @@ SQL;
         return ' '.mb_substr($text, 0,1).'.';
     }
 
+    public static  function convertStus19($stus19){
+        if($stus19!==null)
+            switch($stus19){
+                case 5:	$type = tt('Экз.'); break;
+                case 6:	$type = tt('Зач.'); break;
+                case 7:	$type = tt('Диф.зач.'); break;
+                case 8:	$type = tt('Курсов.'); break;
+                default: $type='';
+            }
+        else
+            $type = '-';
+        return $type;
+    }
+
+    public static  function getColorByStus19($stus19){
+        if($stus19!==null)
+            switch($stus19){
+                case 5:	$color = '#ffe1e1'; break;
+                case 6:	$color = '#ddffdd'; break;
+                case 7:	$color = '#d6d6bd'; break;
+                case 8:	$color = '#d3ffff'; break;
+                default: $color='';
+            }
+        else
+            $color = '-';
+        return $color;
+    }
+
     public static function formatDate($patternFrom, $patternTo, $value)
     {
         if (empty($value))

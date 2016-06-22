@@ -164,6 +164,29 @@ SQL;
         return $marks;
     }
 
+	public function getMarksForStudent($st1)
+	{
+		if (empty($st1))
+			return array();
+
+		$sql = <<<SQL
+          	select
+    			d2,d27,stus0, stus3, stus11,stus8,stus20,stus19,stus6,stus7
+			from d
+			   inner join stus on (d.d1 = stus.stus18)
+			   inner join stusa on (stus.stus18 = stusa.stusa18) and (stus.stus19 = stusa.stusa19) and (stus.stus20 = stusa.stusa20)
+			where STUS1=:ST1
+			group by d2,d27,stus0, stus3, stus11,stus8,stus20,stus19,stus6,stus7
+			ORDER by stus20 ASC, d2 collate UNICODE
+SQL;
+
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':ST1', $st1);
+		$marks = $command->queryAll();
+
+		return $marks;
+	}
+
     public function getStatisticForDisciplines($st1, $start=0, $end=99)
     {
         if (empty($st1))
