@@ -53,14 +53,25 @@ $(document).ready(function(){
         if($(this).hasClass('filter-sem')){
             value = $(this).data('sem');
             filter = 'sem';
+            $('#studentCardProgressSred .mark5').html($(this).data('mark5'));
+            $('#studentCardProgressSred .mark4').html($(this).data('mark4'));
+            $('#studentCardProgressSred .mark3').html($(this).data('mark3'));
+            $('#studentCardProgressSred .mark2').html($(this).data('mark2'));
+            $('#studentCardProgressSred .mark0').html($(this).data('mark0'));
+            $('#studentCardProgressSred .count').html($(this).data('count'));
         }else{
             value = $(this).data('mark');
             filter = 'mark';
+            $('#studentCardProgressSred tbody td').html(0);
         }
         $('#studentCardProgressFilter tr a').removeClass('badge badge-success');
         $('#studentCardProgress tr:not(.head-row)').hide();
         //alert('#studentCardProgress [data-'+filter+'="'+value+'"]');
-        $('#studentCardProgress [data-'+filter+'="'+value+'"]').show();
+        var elems = $('#studentCardProgress [data-'+filter+'="'+value+'"]');
+        elems.show();
+        elems.each(function(i) {
+            $(this).find('td:first-child').html(i+1);
+        });
         $(this).find('a').addClass('badge badge-success');
     });
 
@@ -68,5 +79,6 @@ $(document).ready(function(){
         $('#studentCardProgressFilter tr a').removeClass('badge badge-success');
         $('#studentCardProgress tr').show();
         $(this).find('a').addClass('badge badge-success');
+        $('#studentCardProgressSred tbody td').html(0);
     });
 });

@@ -9,14 +9,16 @@
 $marks = Stus::model()->getMarksForStudent($st->st1);
 
 $table = <<<HTML
-    <table id="studentCardProgress" class="table table-bordered table-striped table-hover table-condensed">
-        <thead>
+    <div class="table-responsive">
+        <table id="studentCardProgress" class="table table-bordered table-striped table-hover table-condensed">
+            <thead>
+                    %s
+            </thead>
+            <tbody>
                 %s
-        </thead>
-        <tbody>
-            %s
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 HTML;
 
 $tableFilter = <<<HTML
@@ -73,14 +75,10 @@ $tableMark[0]=0;
 $tableMark[tt('зарах.')]=0;
 $tableMark[tt('не зарах.')]=0;
 
+$sem = 0;
+
 foreach ($marks as $mark) {
     /*фильтры*/
-    $sem = (int)$mark['stus20'];
-    if(isset($tableSem[$sem]))
-        $tableSem[$sem]++;
-    else
-        $tableSem[$sem]=1;
-
 
     if($mark['stus19']!=6)
         $stus8 = $mark['stus8'];
@@ -91,6 +89,24 @@ foreach ($marks as $mark) {
         }else{
             $stus8 = tt('зарах.');
         }
+    }
+
+    $sem = (int)$mark['stus20'];
+
+    if($mark['stus19']!=6) {
+        if (!isset($tableSem[$sem])) {
+            $tableSem[$sem]['count'] = 0;
+            $tableSem[$sem]['value'] = 0;
+            $tableSem[$sem]['5']=0;
+            $tableSem[$sem]['4']=0;
+            $tableSem[$sem]['3']=0;
+            $tableSem[$sem]['2']=0;
+            $tableSem[$sem]['0']=0;
+        }
+
+        $tableSem[$sem]['count']++;
+        $tableSem[$sem]['value'] += $stus8;
+        $tableSem[$sem][$stus8]++;
     }
 
     if(isset($tableMark[$stus8]))
@@ -140,10 +156,17 @@ $thFilter = $trFilter = $thSred = $trSred = '';
     $trFilter='<td class="show-all"><a class="badge badge-success">'.$all.'</a></td>'.$trFilter;
 
     $thFilter.='<th>'.tt('Семестр').'</th>';
-    $trFilter.='<th>'.tt('Количетсво').'</th>';
+    $trFilter.='<th>'.tt('Ср.бал').'</th>';
+    $pattern =<<<HTML
+        <td class="filter filter-sem" data-sem="%s" data-count="%s" data-mark5="%s" data-mark4="%s" data-mark3="%s" data-mark2="%s" data-mark0="%s">
+            <a>%s</a>
+        </td>
+HTML;
+
     foreach($tableSem as $key=>$sem){
         $thFilter.='<td>'.$key.'</td>';
-        $trFilter.='<td class="filter filter-sem" data-sem="'.$key.'"><a>'.$sem.'</a></td>';
+        $trFilter.=sprintf($pattern,$key,$sem['count'],$sem['5'],$sem['4'],$sem['3'],$sem['2'],$sem['0'],round($sem['value']/$sem['count'],2));
+        //$trFilter.='<td class="filter filter-sem" data-sem="'.$key.'"><a>'.round($sem['value']/$sem['count'],2).'</a></td>';
     }
 
 $thFilter='<tr>'.$thFilter;
@@ -156,21 +179,23 @@ $thSred.='<tr>';
 $trSred.='<tr>';
 
 $thSred.='<td>5</td>';
-$trSred.='<td></td>';
+$trSred.='<td class="mark5">0</td>';
 $thSred.='<td>4</td>';
-$trSred.='<td></td>';
+$trSred.='<td class="mark4">0</td>';
 $thSred.='<td>3</td>';
-$trSred.='<td></td>';
+$trSred.='<td class="mark3">0</td>';
 $thSred.='<td>2</td>';
-$trSred.='<td></td>';
+$trSred.='<td class="mark2">0</td>';
 $thSred.='<td>0</td>';
-$trSred.='<td></td>';
-$thSred.='<td>'.tt('Среднее').'</td>';
-$trSred.='<td></td>';
+$trSred.='<td class="mark0">0</td>';
+$thSred.='<td>'.tt('Всего').'</td>';
+$trSred.='<td class="count">0</td>';
 
 $thSred.='</tr>';
 $trSred.='</tr>';
 
 echo sprintf($tableFilter,$thFilter,$trFilter,$thSred,$trSred);
+
+//echo sprintf($tableFilter,$thFilter,$trFilter);
 
 echo sprintf($table,$th,$tr);
