@@ -20,14 +20,28 @@ $table = <<<HTML
 HTML;
 
 $tableFilter = <<<HTML
-    <table id="studentCardProgressFilter" class="table table-bordered table-striped table-condensed">
-        <thead>
-                %s
-        </thead>
-        <tbody>
-            %s
-        </tbody>
-    </table>
+    <div class="row-fluid">
+        <div class="span9">
+            <table id="studentCardProgressFilter" class="table table-bordered table-striped table-condensed">
+                <thead>
+                        %s
+                </thead>
+                <tbody>
+                    %s
+                </tbody>
+            </table>
+        </div>
+        <div class="span3">
+            <table id="studentCardProgressSred" class="table table-bordered table-striped table-condensed">
+                <thead>
+                    %s
+                </thead>
+                <tbody>
+                    %s
+                </tbody>
+            </table>
+        </div>
+    </div>
 HTML;
 
 $th = $tr = '';
@@ -111,9 +125,7 @@ foreach ($marks as $mark) {
     $i++;
 }
 
-$thFilter = $trFilter = '';
-
-
+$thFilter = $trFilter = $thSred = $trSred = '';
     $all=0;
 
     $thFilter.='<th>'.tt('Оценка').'</th>';
@@ -140,6 +152,25 @@ $trFilter='<tr>'.$trFilter;
 $thFilter.='</tr>';
 $trFilter.='</tr>';
 
-echo sprintf($tableFilter,$thFilter,$trFilter);
+$thSred.='<tr>';
+$trSred.='<tr>';
+
+$thSred.='<td>5</td>';
+$trSred.='<td></td>';
+$thSred.='<td>4</td>';
+$trSred.='<td></td>';
+$thSred.='<td>3</td>';
+$trSred.='<td></td>';
+$thSred.='<td>2</td>';
+$trSred.='<td></td>';
+$thSred.='<td>0</td>';
+$trSred.='<td></td>';
+$thSred.='<td>'.tt('Среднее').'</td>';
+$trSred.='<td></td>';
+
+$thSred.='</tr>';
+$trSred.='</tr>';
+
+echo sprintf($tableFilter,$thFilter,$trFilter,$thSred,$trSred);
 
 echo sprintf($table,$th,$tr);
