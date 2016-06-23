@@ -46,4 +46,27 @@ $(document).ready(function(){
             }
         });
     });
+
+    $(document).on('click', '#studentCardProgressFilter .filter', function() {
+        var value = '';
+        var filter = '';
+        if($(this).hasClass('filter-sem')){
+            value = $(this).data('sem');
+            filter = 'sem';
+        }else{
+            value = $(this).data('mark');
+            filter = 'mark';
+        }
+        $('#studentCardProgressFilter tr a').removeClass('badge badge-success');
+        $('#studentCardProgress tr:not(.head-row)').hide();
+        //alert('#studentCardProgress [data-'+filter+'="'+value+'"]');
+        $('#studentCardProgress [data-'+filter+'="'+value+'"]').show();
+        $(this).find('a').addClass('badge badge-success');
+    });
+
+    $(document).on('click', '#studentCardProgressFilter .show-all', function() {
+        $('#studentCardProgressFilter tr a').removeClass('badge badge-success');
+        $('#studentCardProgress tr').show();
+        $(this).find('a').addClass('badge badge-success');
+    });
 });

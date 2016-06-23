@@ -1,3 +1,6 @@
+#studentCardProgressFilter a{
+    cursor: pointer;
+}
 .journal_div_table2 .module-tr.updated, .journal-bottom .journal_div_table3 .journal_table td.updated{
     background-color: #ffb752;
 }
