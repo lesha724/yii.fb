@@ -1,3 +1,6 @@
+#studentCardProgress td {
+    padding: 0px;
+}
 #studentCardProgressFilter a{
     cursor: pointer;
 }
