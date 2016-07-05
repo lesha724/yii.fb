@@ -22,7 +22,7 @@ class RegistrationForm extends CFormModel
             array('password', 'compare', 'compareAttribute'=>'password2'),
             //array('username', 'match', 'pattern'=>'/^[A-z][\w]+$/','message'=>tt('В Логине могут быть только латинские символы')),
             array('username', 'match', 'pattern'=>'/^[a-zA-Z][a-zA-Z0-9]{7,30}$/','message'=>tt('В Логине могут быть только латинские символы и цифры, длиной от 8 до 30 символов. Первый символ обязательно буква')),
-            array('password', 'match', 'pattern'=>'/^[a-zA-Z0-9-_\.,]{7,}$/','message'=>tt('В password могут быть только строчные и прописные латинские буквы, цифры, спецсимволы. Минимум 8 символов')),
+            array('password', 'match', 'pattern'=>'/^[a-zA-Z0-9-_\.,$|]{7,}$/','message'=>tt('В password могут быть только строчные и прописные латинские буквы, цифры, спецсимволы. Минимум 8 символов')),
             //array('password', 'match', 'pattern'=>'/^[A-z][\w]+$/','message'=>tt('В password могут быть только латинские символы')),
             //array('username, password', 'length', 'min' => 6,'max'=>50),
             array('email', 'length', 'max'=>100),

@@ -31,17 +31,17 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                                 ? $data->parentsAccount->u2
                                 : ""',
         ),
-        array(
+        /*array(
             'header' => 'Password',
             'filter' => CHtml::textField('password', Yii::app()->request->getParam('password')),
             'name'   => 'parentsAccount.u3',
             'value'  => '! empty($data->parentsAccount)
                                 ? $data->parentsAccount->u3
                                 : ""',
-        ),
+        ),*/
         array(
             'class'=>'CButtonColumn',
-            'template'=>'{grants}',
+            'template'=>'{grants} {enter}',
             'header' => tt('Настройки'),
             'buttons'=>array
             (
@@ -50,6 +50,13 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                     'imageUrl'=>false,
                     'url'=>'Yii::app()->createAbsoluteUrl("/admin/default/prntGrants", array("id" => $data->st1))',
                     'options' => array('class' => 'btn btn-mini btn-success'),
+                ),
+                'enter' => array(
+                    'label'=>'<i class="icon-share bigger-120"></i>',
+                    'imageUrl'=>false,
+                    'url'=>'Yii::app()->createAbsoluteUrl("/admin/default/enter", array("id" => !empty($data->account)? $data->account->u1: "-1"))',
+                    'options' => array('class' => 'btn btn-mini btn-primary'),
+                    'visible'=>'!empty($data->account)'
                 ),
             ),
         ),

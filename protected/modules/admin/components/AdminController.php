@@ -40,7 +40,8 @@ class AdminController extends Controller
                     'mail',
                     'rating',
                     'userHistory',
-                    'deleteUserHistory'
+                    'deleteUserHistory',
+                    'enter'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin',
             ),

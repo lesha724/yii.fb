@@ -202,9 +202,9 @@ SQL;
         Yii::app()->session['date2'] = $date2;
     }
 
-    public function mailsend($to,$from,$subject,$message){
+    /*public function mailsend($to,$from,$subject,$message){
         $mail=Yii::app()->Smtpmail;
-        $mail->SetFrom($from, 'From NAme');
+        $mail->SetFrom($from, 'From Name');
         $mail->Subject    = $subject;
         $mail->MsgHTML($message);
         $mail->AddAddress($to, "");
@@ -213,5 +213,27 @@ SQL;
         }else {
             return array(true,  "Message sent!");
         }
+    }*/
+
+    public function mailsend($to,$subject,$message,$file = null){
+        $mail=Yii::app()->Smtpmail;
+        $mail->SetFrom($mail->Username, "EiR");
+        $mail->Subject = $subject;
+        $mail->MsgHTML($message);
+        $mail->AddAddress($to, "");
+        $mail->CharSet = "UTF-8";
+        if($file !== null){
+            $path= $file->tempName;
+            $name=$file->name;
+            $mail->AddAttachment($path,$name);
+        }
+
+        if(!$mail->Send()) {
+            $result = array(false, "Mailer Error: " . $mail->ErrorInfo);
+        }else {
+            $result = array(true,  "Message sent!");
+        }
+        $mail->ClearAddresses();
+        return $result;
     }
 }

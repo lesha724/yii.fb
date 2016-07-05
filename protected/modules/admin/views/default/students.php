@@ -33,14 +33,14 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                                 ? $data->account->u2
                                 : ""',
         ),
-        array(
+        /*array(
             'header' => 'Password',
             'filter' => CHtml::textField('password', Yii::app()->request->getParam('password')),
             'name'   => 'account.u3',
             'value'  => '! empty($data->account)
                                 ? $data->account->u3
                                 : ""',
-        ),
+        ),*/
         array(
             'header' => 'Email',
             'filter' => CHtml::textField('email', Yii::app()->request->getParam('email')),
@@ -51,7 +51,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         ),
         array(
             'class'=>'CButtonColumn',
-            'template'=>'{grants}',
+            'template'=>'{grants} {enter}',
             //'header' => tt('Настройки'),
             'header'=>CHtml::dropDownList(
                     'pageSize',
@@ -66,6 +66,13 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                     'imageUrl'=>false,
                     'url'=>'Yii::app()->createAbsoluteUrl("/admin/default/StGrants", array("id" => $data->st1))',
                     'options' => array('class' => 'btn btn-mini btn-success'),
+                ),
+                'enter' => array(
+                    'label'=>'<i class="icon-share bigger-120"></i>',
+                    'imageUrl'=>false,
+                    'url'=>'Yii::app()->createAbsoluteUrl("/admin/default/enter", array("id" => !empty($data->account)? $data->account->u1: "-1"))',
+                    'options' => array('class' => 'btn btn-mini btn-primary'),
+                    'visible'=>'!empty($data->account)'
                 ),
             ),
         ),

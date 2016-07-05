@@ -2,6 +2,23 @@
 
 class DefaultController extends AdminController
 {
+    public function actionEnter($id){
+        $user = Users::model()->findByPk($id);
+        if($user === null){
+            throw new CHttpException(404,'The requested page does not exist.');
+        }
+
+        //Yii::app()->user->logout();
+
+        $identity = new CUserIdentity($user->u2, 'passwords are broken');
+        Yii::app()->user->login($identity);
+        Yii::app()->user->id = $user->u1;
+
+        UsersHistory::getNewLogin();
+
+        $this->redirect('/site/index');
+    }
+
     public function actionStudentCard()
     {
         $settings = Yii::app()->request->getParam('settings', array());
@@ -288,6 +305,7 @@ class DefaultController extends AdminController
     {
         $model=$this->loadAdminModel($id);
         $model->scenario='admin-update';
+        $model->password=$model->u3;
 
         if(isset($_POST['Users']))
         {
@@ -416,6 +434,9 @@ class DefaultController extends AdminController
         $type = 0; // student
         $user = $this->loadUsersModel($type, $id);
 
+        $user->scenario='admin-update';
+        $user->password=$user->u3;
+
         if (isset($_REQUEST['Users'])) {
             $user->attributes = $_REQUEST['Users'];
             $user->save();
@@ -441,6 +462,9 @@ class DefaultController extends AdminController
         $type = 1; // teacher
         $user = $this->loadUsersModel($type, $model->grants2);
 
+        $user->scenario='admin-update';
+        $user->password=$user->u3;
+
         if (isset($_REQUEST['Users'])) {
             $user->attributes = $_REQUEST['Users'];
             if($user->save())
@@ -460,6 +484,9 @@ class DefaultController extends AdminController
 
         $type = 2; // parent
         $user = $this->loadUsersModel($type, $id);
+
+        $user->scenario='admin-update';
+        $user->password=$user->u3;
 
         if (isset($_REQUEST['Users'])) {
             $user->attributes = $_REQUEST['Users'];

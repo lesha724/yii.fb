@@ -56,14 +56,14 @@
                                 ? $data->account->u2
                                 : ""',
             ),
-            array(
+            /*array(
                 'header' => 'Password',
                 'filter' => CHtml::textField('password', Yii::app()->request->getParam('password')),
                 'name'   => 'account.u3',
                 'value'  => '! empty($data->account)
                                 ? $data->account->u3
                                 : ""',
-            ),
+            ),*/
             array(
                 'header' => 'Email',
                 'filter' => CHtml::textField('email', Yii::app()->request->getParam('email')),
@@ -83,7 +83,7 @@
             ),
             array(
                 'class'=>'CButtonColumn',
-                'template'=>'{grants}',
+                'template'=>'{grants} {enter}',
                 //'header' => tt('Права доступа'),
                 'header'=>CHtml::dropDownList(
                         'pageSize',
@@ -98,6 +98,13 @@
                         'imageUrl'=>false,
                         'url'=>'Yii::app()->createAbsoluteUrl("/admin/default/PGrants", array("id" => $data->p1))',
                         'options' => array('class' => 'btn btn-mini btn-success'),
+                    ),
+                    'enter' => array(
+                        'label'=>'<i class="icon-share bigger-120"></i>',
+                        'imageUrl'=>false,
+                        'url'=>'Yii::app()->createAbsoluteUrl("/admin/default/enter", array("id" => !empty($data->account)? $data->account->u1: "-1"))',
+                        'options' => array('class' => 'btn btn-mini btn-primary'),
+                        'visible'=>'!empty($data->account)'
                     ),
                 ),
             ),

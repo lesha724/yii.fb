@@ -11,6 +11,8 @@
  * @property integer $u5
  * @property integer $u6
  * @property integer $u7
+ * @property integer $u8
+ * @property string $u9
  */
 class Users extends CActiveRecord
 {
@@ -40,18 +42,20 @@ class Users extends CActiveRecord
 		return array(
 			array('u1', 'required'),
 			array('u1, u5, u6, u7,u8', 'numerical', 'integerOnly'=>true),
+			array('u6', 'default', 'value'=>0, 'setOnEmpty'=>TRUE),
 			//array('u2, u3','length',  'min' => 8,'max'=>30),
-			array('u3', 'match', 'pattern'=>'/^[a-zA-Z0-9-_\.,]{7,}$/','message'=>tt('В password могут быть только строчные и прописные латинские буквы, цифры, спецсимволы. Минимум 8 символов')),
+			array('u3', 'match', 'pattern'=>'/^[a-zA-Z0-9-_\.,\/$|]{7,}$/','message'=>tt('В password могут быть только строчные и прописные латинские буквы, цифры, спецсимволы. Минимум 8 символов')),
 			array('u4', 'length', 'max'=>400),
+			array('u9', 'length', 'max'=>45),
             array('u2, u4', 'checkIfUnique'),
             //array('u2', 'length', 'min'=>5, 'max'=>30),
             // Логин должен соответствовать шаблону
             array('u2', 'match', 'pattern'=>'/^[a-zA-Z][a-zA-Z0-9]{7,30}$/','message'=>tt('В login могут быть только латинские символы и цифры,  длиной от 8 до 30 символов')),
             array('u4', 'email'),
-            array('u2, u3, u4', 'required', 'on'=>'admin-create,admin-update'),
+            array('u2, u3, u4, password', 'required', 'on'=>'admin-create,admin-update'),
 			array('u2,u4 ,u3, password', 'safe', 'on'=>'change-password'),
 			array('u2,u4 ,u3, password', 'required', 'on'=>'change-password'),
-			array('u3', 'compare', 'compareAttribute'=>'password', 'on'=>'change-password'),
+			array('u3', 'compare', 'compareAttribute'=>'password', 'on'=>'change-password,admin-create,admin-update'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('u1, u2, u3, u4, u5, u6, u7,u8', 'safe', 'on'=>'search'),
@@ -84,6 +88,7 @@ class Users extends CActiveRecord
 			'u6' => 'U6',
 			'u7' => 'U7',
 			'u8' => tt('Заблокирован'),
+			'u9' => 'U9',
 		);
 	}
 
@@ -268,5 +273,35 @@ SQL;
 			return $arr[$this->u5];
 		else
 			return '-';
+	}
+
+	private function generateSalt(){
+		$salt = openssl_random_pseudo_bytes(12);
+		$hex   = bin2hex($salt);
+		$salt = '$1$' .$hex /*strtr($salt, array('_' => '.', '~' => '/'))*/;
+
+		$this->u9 = $salt;
+	}
+
+	private function setPassword(){
+		$this->generateSalt();
+		$this->u3 = crypt($this->u3,$this->u9);
+
+	}
+
+	public function beforeSave(){
+		if($this->isNewRecord){
+			$this->setPassword();
+		}
+		else{
+			$model=self::model()->findByPk($this->u1);
+			if($this->u3!=$model['u3'])
+				$this->setPassword();
+		}
+		return parent::beforeSave();
+	}
+
+	public function validatePassword($password){
+		return $this->u3 == crypt($password,$this->u9);
 	}
 }

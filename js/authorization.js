@@ -42,7 +42,16 @@ $(document).ready(function(){
                 } else
                     $($that).replaceWith( $('#replace-there', data).html() )
             },
-            error: function(data) { // if error occured
+            error:function(jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status == 500) {
+                    alert( 'Internal error: ' + jqXHR.responseText)
+                } else {
+                    if (jqXHR.status == 403) {
+                        alert('Access error: ' + jqXHR.responseText)
+                    } else {
+                        alert('Unexpected error.')
+                    }
+                }
                 $that.find('button').button('reset')
                 alert("Error occurred. Please try again");
             },

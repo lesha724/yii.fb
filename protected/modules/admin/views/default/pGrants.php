@@ -48,7 +48,17 @@ $this->breadcrumbs=array(
         <label for="Users_u3" class="control-label"><?=tt('Пароль')?></label>
         <div class="controls">
             <label>
-                <?=CHtml::textField('Users[u3]', $user->u3)?>
+                <?=CHtml::passwordField('Users[u3]', $user->u3)?>
+                <span class="lbl"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label for="Users_u3" class="control-label"><?=tt('Повторите пароль')?></label>
+        <div class="controls">
+            <label>
+                <?=CHtml::passwordField('Users[password]', $user->password)?>
                 <span class="lbl"></span>
             </label>
         </div>

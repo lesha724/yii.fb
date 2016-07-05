@@ -120,8 +120,8 @@ class SiteController extends Controller
 
 	public function actionChangePassword()
 	{
-		//if (! Yii::app()->request->isAjaxRequest)
-			//$this->redirect('index');
+		if (! Yii::app()->request->isAjaxRequest)
+			$this->redirect('index');
 
 		if (Yii::app()->user->isGuest)
 			$this->redirect('index');
@@ -154,7 +154,8 @@ class SiteController extends Controller
 			// validate user input and redirect to the previous page if valid
 			if($model->save())
 				Yii::app()->end('ok');
-			//print_r($model->getErrors());
+			/*else
+				print_r($model->getErrors());*/
 			//$this->redirect(Yii::app()->user->returnUrl);
 		}
 		// display the login form
@@ -206,14 +207,31 @@ class SiteController extends Controller
             if ($model->validate()) {
 
                 $user = Users::model()->findByAttributes(array('u4'=>$model->email));
+				if($user===null)
+					throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
-                Apostle::setup("a596c9f9cb4066dd716911ef92be9bd040b0664d");
+                /*Apostle::setup("a596c9f9cb4066dd716911ef92be9bd040b0664d");
                 $mail = new Mail( "forgot-password", array( "email" => $user->u4 ) );
                 $mail->name = $user->name;
                 $mail->url  = Yii::app()->createAbsoluteUrl('site/index');
                 $mail->login    = $user->u2;
                 $mail->password = $user->u3;
-                $t = $mail->deliver();
+                $t = $mail->deliver();*/
+
+				$url =  Yii::app()->createAbsoluteUrl('site/resetPassword',array('user'=>$user->u2,''));
+				$link = tt('Востановить пароль');
+				$text = tt('Для востановления пароля перейдите по сслыке:');
+				$message = <<<HTML
+					{$text} <a href="{$url}">{$link}</a>
+HTML;
+				list($status,$message) = $this->mailsend($model->email,tt('Забыл пароль'),$message);
+
+				if($status)
+				{
+					Yii::app()->user->setFlash('user_error',$message);
+				}else {
+					Yii::app()->user->setFlash('user',$message);
+				}
 
                 Yii::app()->end('send');
             }

@@ -12,6 +12,8 @@
 
 <?php echo $form->passwordFieldRow($model,'u3',array('class'=>'span5','maxlength'=>255)); ?>
 
+<?php echo $form->passwordFieldRow($model,'password',array('class'=>'span5','maxlength'=>255)); ?>
+
 <?php echo $form->emailFieldRow($model,'u4',array('class'=>'span5','maxlength'=>255)); ?>
 
 <?php echo $form->checkBoxRow($model,'u8'); ?>
