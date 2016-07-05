@@ -9,7 +9,6 @@ class SiteController extends Controller
 	 * This is the default 'index' action that is invoked
 	 * when an action is not explicitly requested by users.
 	 */
-	 
 	public function actions()
     {
         return array(
@@ -23,6 +22,10 @@ class SiteController extends Controller
                     'mimeDetect' => 'none',
                 )
             ),
+			'captcha'=>array(
+					'class'=>'CCaptchaAction',
+					'backColor'=>0xFFFFFF,
+			),
         );
     }
 	
@@ -206,7 +209,7 @@ class SiteController extends Controller
 
             if ($model->validate()) {
 
-                $user = Users::model()->findByAttributes(array('u4'=>$model->email));
+				$user = Users::model()->findByAttributes(array('u4'=>$model->email));
 				if($user===null)
 					throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
@@ -218,28 +221,56 @@ class SiteController extends Controller
                 $mail->password = $user->u3;
                 $t = $mail->deliver();*/
 
-				$url =  Yii::app()->createAbsoluteUrl('site/resetPassword',array('user'=>$user->u2,''));
-				$link = tt('Востановить пароль');
-				$text = tt('Для востановления пароля перейдите по сслыке:');
-				$message = <<<HTML
+				$user->generatePasswordResetToken();
+				if($user->saveAttributes(array('u10'=>$user->u10))) {
+
+					$url = Yii::app()->createAbsoluteUrl('site/resetPassword', array('token' => $user->u10));
+					$link = tt('Востановить пароль');
+					$text = tt('Для востановления пароля перейдите по сслыке:');
+					$message = <<<HTML
 					{$text} <a href="{$url}">{$link}</a>
 HTML;
-				list($status,$message) = $this->mailsend($model->email,tt('Забыл пароль'),$message);
+					list($status, $message) = $this->mailsend($model->email, tt('Забыл пароль'), $message);
 
-				if($status)
+					if ($status) {
+						Yii::app()->user->setFlash('user', $message);
+						Yii::app()->end('send');
+					} else {
+						Yii::app()->user->setFlash('user_error', $message);
+						throw new CHttpException(500, $message);
+					}
+				}else
 				{
-					Yii::app()->user->setFlash('user_error',$message);
-				}else {
-					Yii::app()->user->setFlash('user',$message);
+					print_r($user->getErrors());
 				}
-
-                Yii::app()->end('send');
             }
-
         }
 
         $this->render('forgotPassword',array('model'=>$model));
     }
+
+	public function actionResetPassword($token){
+		try {
+			$model = new ResetPasswordForm($token,'reset-password');
+		} catch (Exception $e) {
+			throw new CHttpException(404, '1Invalid request. Please do not repeat this request again.');
+		}
+
+		if(!$model->isValid($token))
+			throw new CHttpException(404, '2Invalid request. Please do not repeat this request again.');
+
+		if(isset($_POST['ResetPasswordForm'])) {
+			$model->attributes = $_POST['ResetPasswordForm'];
+
+			if ($model->validate() && $model->resetPassword()) {
+				Yii::app()->user->setFlash('user', tt('Новый пароль сохранен!'));
+
+				return $this->redirect('index');
+			}
+		}
+
+		$this->render('resetPassword',array('model'=>$model));
+	}
 
     public function actionUserPhoto()
     {

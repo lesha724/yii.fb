@@ -13,6 +13,7 @@
  * @property integer $u7
  * @property integer $u8
  * @property string $u9
+ * @property string $u10
  */
 class Users extends CActiveRecord
 {
@@ -46,7 +47,7 @@ class Users extends CActiveRecord
 			//array('u2, u3','length',  'min' => 8,'max'=>30),
 			array('u3', 'match', 'pattern'=>'/^[a-zA-Z0-9-_\.,\/$|]{7,}$/','message'=>tt('В password могут быть только строчные и прописные латинские буквы, цифры, спецсимволы. Минимум 8 символов')),
 			array('u4', 'length', 'max'=>400),
-			array('u9', 'length', 'max'=>45),
+			array('u9, u10', 'length', 'max'=>45),
             array('u2, u4', 'checkIfUnique'),
             //array('u2', 'length', 'min'=>5, 'max'=>30),
             // Логин должен соответствовать шаблону
@@ -302,6 +303,33 @@ SQL;
 	}
 
 	public function validatePassword($password){
-		return $this->u3 == crypt($password,$this->u9);
+		return $this->u3 === crypt($password,$this->u9);
 	}
+
+	public function generatePasswordResetToken()
+	{
+		$token = openssl_random_pseudo_bytes(12);
+		$hex   = bin2hex($token);
+		$this->u10 = $hex. '_' . time();
+	}
+
+	/**
+	 * Removes password reset token
+	 */
+	public function removePasswordResetToken()
+	{
+		$this->u10 = '';
+	}
+
+	public static function isPasswordResetTokenValid($token)
+	{
+		if (empty($token)) {
+			return false;
+		}
+
+		$timestamp = (int) substr($token, strrpos($token, '_') + 1);
+		$expire = 3600;
+		return $timestamp + $expire >= time();
+	}
+
 }
