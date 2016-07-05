@@ -217,7 +217,7 @@ SQL;
 
     public function mailsend($to,$subject,$message,$file = null){
         $mail=Yii::app()->Smtpmail;
-        $mail->SetFrom($mail->Username, "EiR");
+        $mail->SetFrom($mail->Username, "ASU");
         $mail->Subject = $subject;
         $mail->MsgHTML($message);
         $mail->AddAddress($to, "");
