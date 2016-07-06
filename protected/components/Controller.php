@@ -216,6 +216,10 @@ SQL;
     }*/
 
     public function mailsend($to,$subject,$message,$file = null){
+        return self::mail($to,$subject,$message,$file);
+    }
+
+    public static function mail($to,$subject,$message,$file = null){
         $mail=Yii::app()->Smtpmail;
         $mail->SetFrom($mail->Username, "ASU");
         $mail->Subject = $subject;

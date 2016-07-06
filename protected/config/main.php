@@ -34,6 +34,9 @@ $config = array(
 
 	// application components
 	'components'=>array(
+		'request'=>array(
+				'enableCookieValidation'=>true,
+		),
 		'user'=>array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,

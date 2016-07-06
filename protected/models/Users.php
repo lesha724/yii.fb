@@ -286,8 +286,21 @@ SQL;
 
 	private function setPassword(){
 		$this->generateSalt();
+		$password = $this->u3;
 		$this->u3 = crypt($this->u3,$this->u9);
 
+		$this->sendChangePasswordMail($password);
+	}
+
+	private function sendChangePasswordMail($password){
+		if(empty($this->u4))
+			return;
+
+		$text = tt('Пароль изменен, текущий пароль');
+		$message = <<<HTML
+					{$text}: {$password}
+HTML;
+		Controller::mail($this->u4, tt('Пароль изменен'), $message);
 	}
 
 	public function beforeSave(){

@@ -131,5 +131,30 @@
 		  $('[data-toggle="popover"]').popover()
 		});
 	</script>
+
+    <?php
+    $message = $class = '';
+    if(Yii::app()->user->hasFlash('user')):?>
+            <?php
+                $message = Yii::app()->user->getFlash('user');
+                $class = 'success';
+            ?>
+    <?php endif; ?>
+
+    <?php if(Yii::app()->user->hasFlash('user_error')):?>
+            <?php
+                $message = Yii::app()->user->getFlash('user_error');
+                $class = 'error';
+            ?>
+    <?php endif; ?>
+    <?php
+        if(!empty($message)&&!empty($class)){
+            Yii::app()->clientScript->registerPackage('gritter');
+            $js = <<<JS
+                addGritter('','{$message}','{$class}')
+JS;
+            Yii::app()->clientScript->registerScript('flash',$js,CClientScript::POS_END);
+        }
+    ?>
 </body>
 </html>
