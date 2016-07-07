@@ -21,8 +21,11 @@ $this->renderPartial('/filter_form/default/mobile/_accordion_select', array(
 ));?>
 
 <?php
-$this->renderPartial('timeTable/schedule', array(
-    'model'      => $model,
-    'timeTable'  => $timeTable,
-    'rz'         => $rz,
-));
+
+if (! empty($model->group)) {
+    $this->renderPartial('timeTable/schedule', array(
+        'model' => $model,
+        'timeTable' => $timeTable,
+        'rz' => $rz,
+    ));
+}

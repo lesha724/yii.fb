@@ -6,8 +6,7 @@
  * Time: 11:13
  */
 
-if (! empty($model->group))
-{
+
     ?>
     <div class="panel-actions row">
         <div class="form-actions col-xs-12">
@@ -97,4 +96,3 @@ HTML;
     }
 
     echo sprintf($table,$th,$tr);
-}
