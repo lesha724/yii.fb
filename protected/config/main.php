@@ -193,8 +193,11 @@ $config = array(
 			// use 'site/error' action to display errors
 			'errorAction'=>'site/error',
 		),
-		'Smtpmail'=>array('class'=>'application.extensions.smtpmail.PHPMailer','SMTPAuth'=>true)+require(dirname(__FILE__).'/mail.php'),
-			'log'=>array(
+		'Smtpmail'=>array(
+				'class'=>'application.extensions.smtpmail.PHPMailer',
+				'SMTPAuth'=>true,
+		)+require(dirname(__FILE__).'/mail.php'),
+		'log'=>array(
 			'class'=>'CLogRouter',
 			'routes'=>array(
 				array(

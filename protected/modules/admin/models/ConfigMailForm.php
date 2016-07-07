@@ -13,12 +13,14 @@ class ConfigMailForm extends CFormModel
     public $Password;
 	public $Mailer;
 	public $Port;
+    public $SMTPSecure;
 	//public $SMTPAuth;
 
     public function rules()
     {
         return array(
             array('Host, Username, Password, Mailer, Port','required'),
+            array('SMTPSecure', 'length', 'max'=>10),
             array('Port', 'numerical', 'integerOnly'=>true),
         );
     }
@@ -32,7 +34,7 @@ class ConfigMailForm extends CFormModel
             'Password' => tt('Пароль'),
             'Mailer' => tt('Тип подключения'),
             'Port' => tt('Порт'),
-            //'SMTPAuth'=>'SMTPAuth',
+            'SMTPSecure'=>'SMTPSecure',
         );
     }
 }

@@ -66,6 +66,7 @@ class DefaultController extends AdminController
                 'Password'=>$_POST['ConfigMailForm']['Password'],
                 'Mailer'=>$_POST['ConfigMailForm']['Mailer'],
                 'Port'=>$_POST['ConfigMailForm']['Port'],
+                'SMTPSecure'=>$_POST['ConfigMailForm']['SMTPSecure'],
                 //'SMTPAuth'=>true,
             );
             $model->setAttributes($config);

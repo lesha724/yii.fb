@@ -39,7 +39,9 @@
 			<?php echo $form->labelEx($model,'Port'); ?>
 			<?php echo $form->numberField($model, 'Port',array('min'=>'1','max'=>'65535')); ?>
 			<?php //echo $form->textFieldRow($model, 'Port',array('type'=>'number')); ?>
-                        
+
+			<?php echo $form->dropDownListRow($model, 'SMTPSecure',array(''=>'none','tls'=>'tls','ssl'=>'ssl')); ?>
+
 			<div class="form-actions">
 				<?php $this->widget('bootstrap.widgets.TbButton', array(
 					'buttonType'=>'submit',
