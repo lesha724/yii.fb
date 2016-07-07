@@ -221,7 +221,7 @@ SQL;
 
     public static function mail($to,$subject,$message,$file = null){
         $mail=Yii::app()->Smtpmail;
-        $mail->SetFrom($mail->Username, "ASU");
+        $mail->SetFrom($mail->Username,$_SERVER['HTTP_HOST']);
         $mail->Subject = $subject;
         $mail->MsgHTML($message);
         $mail->AddAddress($to, "");
