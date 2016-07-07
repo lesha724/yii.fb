@@ -201,8 +201,8 @@ SQL;
 
     public function actionInsertStMark()
     {
-        //if (! Yii::app()->request->isAjaxRequest)
-            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $error=false;
         $errorType=0;
@@ -353,7 +353,7 @@ SQL;
                 }
                 $sem7 = Gr::model()->getSem7ByGr1ByDate($gr1,date('d.m.Y'));
                 $ps60 = PortalSettings::model()->findByPk(60)->ps2;
-                if($st->st71!=$sem7&&$ps60==1)
+                if(($st['st71']!=$sem7&&$st['st71']!=$sem7+1)&&$ps60==1)
                 {
                     $error=true;
                     $errorType=5;
