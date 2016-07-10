@@ -20,4 +20,15 @@ $(document).ready(function(){
 
         $form.submit();
     });
+
+    $('#lesson-left').click(function(){
+        var toDatepicker = $('#TimeTableForm_dateLesson');
+        toDatepicker.datepicker('update', moment($('#TimeTableForm_dateLesson').datepicker('getDate')).subtract(1, 'days').toDate());
+    });
+
+    $('#lesson-right').click(function(){
+        var toDatepicker = $('#TimeTableForm_dateLesson');
+        toDatepicker.datepicker('update', moment($('#TimeTableForm_dateLesson').datepicker('getDate')).add(1, 'days').toDate());
+
+    })
 });

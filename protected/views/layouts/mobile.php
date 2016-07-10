@@ -99,6 +99,7 @@
         <!--<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">--> */?>
 
         <script type="text/javascript" src="<?=Yii::app()->baseUrl?>/js/mobile/bootstrap.min.js"></script>
+        <script type="text/javascript" src="<?=Yii::app()->baseUrl?>/js/mobile/moment.min.js"></script>
         <script src="<?=Yii::app()->baseUrl?>/js/mobile/main.js"></script>
         <script type="text/javascript" src="<?=Yii::app()->baseUrl?>/js/mobile/select/classie.js"></script>
         <script type="text/javascript" src="<?=Yii::app()->baseUrl?>/js/mobile/select/selectFx.js"></script>

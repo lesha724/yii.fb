@@ -419,6 +419,7 @@ SQL;
             case 4:	 $name=tt('Чт'); break;
             case 5:	 $name=tt('Пт'); break;
             case 6:	 $name=tt('Сб'); break;
+            case 7:	 $name=tt('Вс'); break;
             default: $name='';
         }
         return $name;
