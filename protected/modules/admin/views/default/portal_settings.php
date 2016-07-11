@@ -140,6 +140,46 @@ $options = array(
                         )); ?>
                 </div>
 
+                <div class="control-group">
+                    <span class="lbl"> <?=tt('Письмо для смены пароля')?>:</span><br>
+                    <span class="blue">{username}-логин, {link}-ссылка для смены пароля</span>
+                    <?php $this->widget('application.extensions.elFinderTinyMce.TinyMce',
+                        array(
+                            'name'=>'settings[86]',
+                            'value'=>PortalSettings::model()->findByPk(86)->ps2,
+                            'htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'tinymce'),
+                            'fileManager' => array(
+                                'class' => 'ext.elFinder.TinyMceElFinder',
+                                'connectorRoute'=>'/site/connector',
+                            ),
+                            /*'settings'=>array(
+                                'theme' => "advanced",
+                                'skin' => 'default',
+                                'language' => Yii::app()->language,
+                            ),*/
+                        )); ?>
+                </div>
+
+                <div class="control-group">
+                    <span class="lbl"> <?=tt('Письмо о смене пароля')?>:</span><br>
+                    <span class="blue">{username}-логин, {password}-пароль</span>
+                    <?php $this->widget('application.extensions.elFinderTinyMce.TinyMce',
+                        array(
+                            'name'=>'settings[87]',
+                            'value'=>PortalSettings::model()->findByPk(87)->ps2,
+                            'htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'tinymce'),
+                            'fileManager' => array(
+                                'class' => 'ext.elFinder.TinyMceElFinder',
+                                'connectorRoute'=>'/site/connector',
+                            ),
+                            /*'settings'=>array(
+                                'theme' => "advanced",
+                                'skin' => 'default',
+                                'language' => Yii::app()->language,
+                            ),*/
+                        )); ?>
+                </div>
+
                 <div class="form-actions">
                     <button type="submit" class="btn btn-info btn-small">
                         <i class="icon-ok bigger-110"></i>

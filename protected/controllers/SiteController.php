@@ -226,10 +226,17 @@ class SiteController extends Controller
 
 					$url = Yii::app()->createAbsoluteUrl('site/resetPassword', array('token' => $user->u10));
 					$link = tt('Востановить пароль');
-					$text = tt('Для востановления пароля перейдите по сслыке:');
-					$message = <<<HTML
-					{$text} <a href="{$url}">{$link}</a>
+
+					$ps86 = PortalSettings::model()->findByPk(86)->ps2;
+					if(empty($ps86)) {
+						$text = tt('Для востановления пароля перейдите по сслыке:');
+						$message = <<<HTML
+							{$text} <a href="{$url}">{$link}</a>
 HTML;
+					}else{
+						$message = str_replace('{username}',$user->u2,$ps86);
+						$message = str_replace('{link}','<a href="'.$url.'">'.$link.'</a>',$message);
+					}
 					list($status, $message) = $this->mailsend($model->email, tt('Забыл пароль'), $message);
 
 					if ($status) {

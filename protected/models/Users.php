@@ -297,7 +297,13 @@ SQL;
 			return;
 
 		$text = tt('Пароль изменен, текущий пароль');
-		$message = <<<HTML
+
+		$ps87=PortalSettings::model()->findByPk(87)->ps2;
+		if(!empty($ps87)){
+			$message = str_replace('{username}',$this->u2,$ps87);
+			$message = str_replace('{password}',$password,$message);
+		}else
+			$message = <<<HTML
 					{$text}: {$password}
 HTML;
 		Controller::mail($this->u4, tt('Пароль изменен'), $message);
