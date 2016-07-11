@@ -353,12 +353,13 @@ SQL;
                 if($sem1!=0){
 
                     $sql=<<<SQL
-                      SELECT MAX(elgz3) as nom FROM elgz
+                      SELECT MIN(elgz3) as nom FROM elgz
                         INNER JOIN elg on (elgz2 = elg1)
-                     WHERE elg3=:SEM1 AND elgz4=2 AND elg2=:UO1 ORDER by nom asc
+                     WHERE elg3=:SEM1 AND elgz4=2 AND elg2=:UO1 AND elgz3>:NOM ORDER by nom asc
 SQL;
                     $command = Yii::app()->db->createCommand($sql);
                     $command->bindValue(':SEM1', $sem1);
+                    $command->bindValue(':NOM', $elgz->elgz3);
                     $command->bindValue(':UO1', $uo1);
                     $pmkLessonNomPrevSem = $command->queryScalar();
 

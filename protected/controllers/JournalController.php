@@ -273,6 +273,8 @@ SQL;
                 $errorType=2;
             }else
             {
+                $elg = Elg::model()->findByPk($elgz->elgz2);
+
                 $ps2 = PortalSettings::model()->getSettingFor(27);
                 $perm_enable=false;
                 $elgr = Elgr::model()->findByAttributes(array('elgr1'=>$gr1,'elgr2'=>$elgz1));
@@ -322,6 +324,28 @@ SQL;
                     }
                 }
 
+                $ps57 = PortalSettings::model()->findByPk(57)->ps2;
+                if($ps57==1){
+                    $sql=<<<SQL
+                      SELECT MIN(elgz3) as nom FROM elgz
+                        INNER JOIN elg on (elgz2 = elg1)
+                     WHERE elg3=:SEM1 AND elgz4=2 AND elg2=:UO1 AND elgz3>:NOM ORDER by nom asc
+SQL;
+                    $command = Yii::app()->db->createCommand($sql);
+                    $command->bindValue(':SEM1', $elg->elg3);
+                    $command->bindValue(':NOM', $elgz->elgz3);
+                    $command->bindValue(':UO1', $elg->elg2);
+                    $nom = $command->queryScalar();
+
+                    if(!empty($nom)) {
+
+                        $module = Vvmp::model()->checkModul($elg->elg2, $gr1,$nom);
+                        if (empty($module) || !empty($module['vmpv6'])) {
+                            $error = true;
+                            $errorType = 6;
+                        }
+                    }
+                }
                 //проверка на макимальный и минимальный бал
                 if($value!=0&&$value!=-1&&$value!=-2)
                     if ($field == 'elgzst4'||$field == 'elgzst5')
@@ -440,14 +464,13 @@ SQL;
 
                     if(!$error)
                     {
-                        $ps57 = PortalSettings::model()->findByPk(57)->ps2;
+
                         if ($ps57==1) {
                             Vmp::model()->recalculate($st1, $elgz, $gr1);
                         }
 
                         $ps84 = PortalSettings::model()->findByPk(84)->ps2;
                         if ($ps84==1){
-                            $elg = Elg::model()->findByPk($elgz->elgz2);
                             Stus::model()->recalculateStusMark($st1,$gr1,$sem7,$elg);
                         }
 
