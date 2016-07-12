@@ -786,6 +786,7 @@ SQL;
                 $errorType=2;
             }else
             {
+
                 $ps55 = PortalSettings::model()->findByPk(55)->ps2;
                 if($elgzst->elgzst3!=0||($elgzst->elgzst4<=$elgzst->getMin()&&($elgzst->elgzst4 != 0 || ($ps55 == 1 && $elgzst->elgzst4 == 0))))
                 {
@@ -848,6 +849,29 @@ SQL;
                             $diff = $date1->diff($date2)->days;
                             if ($diff > $ps40)
                                 $error=true;*/
+                        }
+
+                        $ps57 = PortalSettings::model()->findByPk(57)->ps2;
+                        if($ps57==1){
+                            $sql=<<<SQL
+                              SELECT MIN(elgz3) as nom FROM elgz
+                                INNER JOIN elg on (elgz2 = elg1)
+                             WHERE elg3=:SEM1 AND elgz4=2 AND elg2=:UO1 AND elgz3>:NOM ORDER by nom asc
+SQL;
+                            $command = Yii::app()->db->createCommand($sql);
+                            $command->bindValue(':SEM1', $elg['elg3']);
+                            $command->bindValue(':NOM', $elgz->elgz3);
+                            $command->bindValue(':UO1', $elg['elg2']);
+                            $nom = $command->queryScalar();
+
+                            if(!empty($nom)) {
+
+                                $module = Vvmp::model()->checkModul($elg['elg2'], $gr1,$nom);
+                                if (empty($module) || !empty($module['vmpv6'])) {
+                                    $error = true;
+                                    $errorType = 6;
+                                }
+                            }
                         }
 
                         if(!$error&&!empty($elgzst))

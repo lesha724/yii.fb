@@ -8,7 +8,7 @@ function getMarsForElgz3($nom,$marks){
     }
     return 0;
 }
-function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps20,$ps55,$ps56,$sem7,$ps60,$min,$ps65,$show)
+function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps20,$ps55,$ps56,$sem7,$ps60,$min,$ps65,$show,$moduleNom)
 {
     if (($st['st71']!=$sem7&&$st['st71']!=$sem7+1) &&$ps60==1)
         return '<td colspan="2"></td>';
@@ -130,7 +130,7 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
 
 
     if(!$read_only)
-        $elgzst3_input='<input type="checkbox" data-toggle="tooltip" data-placement="right" data-original-title="'.$tooltip.'" '.$elgzst3.' data-name="elgzst3" '.$disabled.'>';
+        $elgzst3_input='<input type="checkbox" data-toggle="tooltip" data-module-nom="'.$moduleNom.'-'.$st['st1'].'" data-placement="right" data-original-title="'.$tooltip.'" '.$elgzst3.' data-name="elgzst3" '.$disabled.'>';
     else
     {
         if($elgzst3=='checked')
@@ -150,8 +150,8 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
                 else
                     $disabled_input_1 = 'disabled="disabled"';
             }
-            $elgzst4_input='<input value="'.$elgzst4.'" '.$class_1.' maxlength="5" data-name="elgzst4" '.$disabled_input.'>';
-            $elgzst5_input='<input value="'.$elgzst5.'" '.$class_2.' maxlength="5" data-name="elgzst5" '.$disabled_input_1.'>';
+            $elgzst4_input='<input value="'.$elgzst4.'" '.$class_1.' maxlength="5" data-module-nom="'.$moduleNom.'-'.$st['st1'].'" data-name="elgzst4" '.$disabled_input.'>';
+            $elgzst5_input='<input value="'.$elgzst5.'" '.$class_2.' maxlength="5" data-module-nom="'.$moduleNom.'-'.$st['st1'].'" data-name="elgzst5" '.$disabled_input_1.'>';
         }else
         {
             $elgzst4_input='<label class="label label-success">'.$elgzst4.'</label>';
@@ -175,7 +175,7 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
                 $val = $elgzst5;
                 if($elgzst5!='')
                     $val = 'checked';
-                $elgzst5_input = '<input type="checkbox" '.$val.' data-name="elgzst5" '.$disabled_input_1.'>';
+                $elgzst5_input = '<input type="checkbox" '.$val.' data-module-nom="'.$moduleNom.'-'.$st['st1'].'" data-name="elgzst5" '.$disabled_input_1.'>';
             }else
             {
                 $elgzst5_input='<label class="label label-warning">'.$elgzst5.'</label>';
@@ -187,11 +187,11 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
     if($show==0)
         $button='';
     else {
-        $button = CHtml::htmlButton('<i class="icon-tag"></i>', array('class' => 'btn btn-mini btn-info btn-retake', 'style' => 'display:none'));
+        $button = CHtml::htmlButton('<i class="icon-tag"></i>', array('class' => 'btn btn-mini btn-info btn-retake', 'data-module-nom'=>$moduleNom.'-'.$st['st1'], 'style' => 'display:none'));
         $min = Elgzst::model()->getMin();
         if (!$read_only && ($elgzst3 == 'checked' || ($elgzst4 <= $min && ($elgzst4 != 0|| ($ps55 == 1 && ($elgzst4 == 0 && isset($marks[$key]['elgzst4'])&& $type_lesson!=0)))))) {
             if (($elgzst5 <= $min&& $type_lesson==1) || ($marks[$key]['elgzst5'] != -1 && $type_lesson==0))
-                $button = CHtml::htmlButton('<i class="icon-tag"></i>', array('class' => 'btn btn-mini btn-info btn-retake', 'style' => 'display:inline'));
+                $button = CHtml::htmlButton('<i class="icon-tag"></i>', array('class' => 'btn btn-mini btn-info btn-retake', 'data-module-nom'=>$moduleNom.'-'.$st['st1'],'style' => 'display:inline'));
         }
     }
     //$show=Yii::app()->user->getState('showRetake',0);
@@ -242,8 +242,14 @@ function table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$nom,$uo1,$modules,$pot
                 $r1=$date['r1'];
                 $vmpv6 = $mark['vmpv6'];
                 $disabled = '';
-                if(!empty($vmpv6))
+                if(!empty($vmpv6)) {
                     $disabled = 'disabled="disabled"';
+                    $js=<<<JS
+                        $('*[data-module-nom="{$nom}-{$st['st1']}"]').prop('disabled',true);
+JS;
+                    Yii::app()->clientScript->registerScript('module-nom'.$nom.'-'.$st['st1'], $js, CClientScript::POS_END);
+
+                }
                 $st1 = $st['st1'];
                 return sprintf(<<<HTML
                     <td class="module-tr module{$vmpv1}{$st1}">%s</td>
@@ -416,7 +422,7 @@ HTML;
                 $potoch = 0;
                 $moduleNom++;
             }else {
-                $tr .= table2Tr($date, $gr1, $st, $marks, $permLesson, $read_only, $model->type_lesson, $ps20, $ps55, $ps56,$sem7,$ps60,$min,$ps65,$ps66);
+                $tr .= table2Tr($date, $gr1, $st, $marks, $permLesson, $read_only, $model->type_lesson, $ps20, $ps55, $ps56,$sem7,$ps60,$min,$ps65,$ps66,$moduleNom);
                 $potoch+=getMarsForElgz3($date['elgz3'],$marks);
             }
         }
