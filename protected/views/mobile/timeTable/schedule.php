@@ -62,12 +62,6 @@ JS;
 HTML;
     /*формирование таблицы*/
     $tr = $th = '';
-    $nom =date('N',strtotime($model->dateLesson));
-    $th.='<tr><th colspan="2" class="text-center">'.SH::russianDayName($nom).', '.$model->dateLesson.'</th></tr>';
-    /*$tr.='<tr>';
-    $tr.='<th>№ '.tt('пары').'</th>';
-    $tr.='<th>№ '.tt('пары').'</th>';
-    $tr.='</tr>';*/
     $nomZan = 0;
     foreach($timeTable as $event){
 
@@ -102,7 +96,7 @@ HTML;
         }
 
         $r2=$event['r2'];
-        $full_name=str_replace( "'",'"', $event['d2']);
+        $full_name=str_replace('"',"'", $event['d2']);
         $short_name = $event['d3'];
 
         if(isset($event['fio']))
@@ -117,10 +111,14 @@ HTML;
         $rz3 = $event['rz3'];
         $rz2 = $event['rz2'];
         $a2  = $event['a2'];
-        $time="";
+        $time=$timeFull='';
         $pos=stripos($event['d3'],"(!)");
-        if($pos!==false)
-            $time='<label class="label label-warning">'.$event['rz2'].'-'.$event['rz3'].'</label></br>';
+        if($pos!==false) {
+            $time = '<label class="label label-warning">' . $event['rz2'] . '-' . $event['rz3'] . '</label></br>';
+            $timeFull="<label class='label label-warning'>{$event['rz2']}-{$event['rz3'] }</label></br>";
+            $short_name = str_replace('(!)','<span class="glyphicon glyphicon-exclamation-sign danger-font" aria-hidden="true"></span>',$short_name);
+        }
+
 
         $tem_name_full='';
         $tem_name='';
@@ -143,14 +141,20 @@ HTML;
         $text  = tt('Добавлено');
         $added = date('d.m.Y H:i', strtotime($event['r11']));
 
-        $lessonHtml = '<div style="background-color:'.$color.';" class="events event'.$classElem.'">';
-        $lessonHtml .= <<<HTML
+        $fullLessonHtml=<<<HTML
             {$full_name} [{$event['tip']}] </br>
-            {$time}
+            {$timeFull}
             {$tem_name}
             {$class}. {$a2}</br>
-            {$fio}{$groups}
             {$text}: {$added}
+            {$fio}{$groups}
+HTML;
+
+        $lessonHtml = sprintf('<div style="background-color:%s;" class="events event%s" data-content="%s">',$color,$classElem,$fullLessonHtml);
+        $lessonHtml .= <<<HTML
+            {$short_name} [{$event['tip']}] </br>
+            {$time}
+            {$class}. {$a2}</br>
 HTML;
         $lessonHtml .= '</div>';
 
@@ -163,3 +167,20 @@ HTML;
     $tr.='</tr>';
 
     echo sprintf($table,$th,$tr);
+?>
+    <!-- Modal -->
+    <div class="modal fade" id="modal-timeTable" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><?=tt('Закрыть')?></button>
+                </div>
+            </div>
+        </div>
+    </div>

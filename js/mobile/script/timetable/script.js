@@ -30,5 +30,12 @@ $(document).ready(function(){
         var toDatepicker = $('#TimeTableForm_dateLesson');
         toDatepicker.datepicker('update', moment($('#TimeTableForm_dateLesson').datepicker('getDate')).add(1, 'days').toDate());
 
-    })
+    });
+
+    $('.timeTable-table .events').click(function(){
+        var content = $(this).data('content');
+        var modal = $('#modal-timeTable');
+        $('#modal-timeTable .modal-body').html(content);
+        modal.modal('show');
+    });
 });

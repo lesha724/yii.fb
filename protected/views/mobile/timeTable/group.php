@@ -5,11 +5,6 @@
  * Date: 09.02.2016
  * Time: 11:00
  */
-
-$this->pageHeader=tt('Расписание академ. группы');
-$this->breadcrumbs=array(
-    tt('Расписание'),
-);
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/mobile/script/timeTable/script.js', CClientScript::POS_HEAD);
 Yii::app()->clientScript->registerPackage('datepicker-mobile');
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/mobile/datepicker/locales/bootstrap-datepicker.'.Yii::app()->language.'.min.js', CClientScript::POS_END);
@@ -28,4 +23,9 @@ if (! empty($model->group)) {
         'timeTable' => $timeTable,
         'rz' => $rz,
     ));
+}else{
+    $this->pageHeader=tt('Расписание академ. группы');
+    $this->breadcrumbs=array(
+        tt('Расписание'),
+    );
 }
