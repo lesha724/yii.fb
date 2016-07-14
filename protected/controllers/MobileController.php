@@ -24,6 +24,7 @@ class MobileController extends Controller
                 'allow',
                 'actions' => array(
                     'timeTableGroup',
+                    'timeTableStudent',
                 ),
                 'users' => array('*'),
             ),
@@ -76,6 +77,36 @@ class MobileController extends Controller
         }
 
         $this->render('timeTable/group', array(
+            'model'      => $model,
+            'timeTable'  => $timeTable,
+            'rz'         => Rz::model()->getRzArray($model->filial),
+        ));
+    }
+
+    public function actionTimeTableStudent()
+    {
+        $model = new TimeTableForm;
+
+        $model->scenario = 'mobile-student';
+
+        $model->dateLesson = Yii::app()->session['dateLesson'];
+
+        if (isset($_REQUEST['timeTable'])) {
+            Yii::app()->user->setState('timeTable',(int)$_REQUEST['timeTable']);
+            unset($_REQUEST['timeTable']);
+        }
+        if (isset($_REQUEST['TimeTableForm']))
+            $model->attributes=$_REQUEST['TimeTableForm'];
+
+
+
+        $timeTable = array();
+        if (! empty($model->student))
+        {
+            $timeTable=Gr::getTimeTable($model->student, $model->dateLesson, $model->dateLesson, 1);
+        }
+
+        $this->render('timeTable/student', array(
             'model'      => $model,
             'timeTable'  => $timeTable,
             'rz'         => Rz::model()->getRzArray($model->filial),
