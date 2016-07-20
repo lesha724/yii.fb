@@ -12,6 +12,11 @@
         return $tmp;
     }
 
+    function getLessonNumberColumnByTime($nomZan,$rz2,$rz3){
+        $tmp='<span class="lesson label label-primary">'.$nomZan.' '.tt('пара').'</span><span class="start label label-info">'.$rz2.'</span><span class="finish label label-info">'.$rz3.'</span>';
+        return $tmp;
+    }
+
     ?>
     <div class="panel-actions row">
         <div class="form-actions col-xs-12">
@@ -46,9 +51,9 @@
 JS;
     Yii::app()->clientScript->registerScript('lesson-datepicker',$js,CClientScript::POS_END);
 
-    if(empty($timeTable)){
+    if(empty($timeTable)):
         echo '<div class="alert alert-danger" role="alert"><h3>'.Yii::t('main','Занятия не найдены!').'</h3></div>';
-    }
+    else:
 
     $table = <<<HTML
         <table class="table table-bordered table-condensed timeTable-table">
@@ -63,9 +68,24 @@ HTML;
     /*формирование таблицы*/
     $tr = $th = '';
     $nomZan = 0;
+    $groups='';
+    $r2=$timeTable[0]['r2'];
+    $r3=$timeTable[0]['r3'];
+    $lessonHtml = '';
+
     foreach($timeTable as $event){
 
-        $r3=$event['r3'];
+        $rz3 = $event['rz3'];
+        $rz2 = $event['rz2'];
+
+        if(($r2!=$event['r2'])||($r3!=$event['r3']))
+        {
+            $tr.=$lessonHtml;
+            $groups='';
+            //$r1=$event['r1'];
+            $r2=$event['r2'];
+            $r3=$event['r3'];
+        }
 
         if($r3!=$nomZan){
             if($nomZan != 0) {
@@ -89,13 +109,12 @@ HTML;
 
             $tr .= '<th class="text-center lesson-number">';
             //$tr .= '<div class="cell cell-vertical">'.$tmp.'</div>';
-            $tr .= getLessonNumberColumn($nomZan,$rz);
+            $tr .= getLessonNumberColumnByTime($nomZan,$rz2,$rz3);
             $tr .= '</th>';
 
             $tr .= '<td>';
         }
 
-        $r2=$event['r2'];
         $full_name=str_replace('"',"'", $event['d2']);
         $short_name = $event['d3'];
 
@@ -104,21 +123,20 @@ HTML;
         else
             $fio='';
 
-        $groups=$event['gr3'];
-        if($groups!='')
-            $groups.='</br>';
+        if($groups=='')
+            $groups=$event['gr3'];
+        else
+            $groups.=','.$event['gr3'];
 
-        $rz3 = $event['rz3'];
-        $rz2 = $event['rz2'];
         $a2  = $event['a2'];
         $time=$timeFull='';
+
         $pos=stripos($event['d3'],"(!)");
         if($pos!==false) {
-            $time = '<label class="label label-warning">' . $event['rz2'] . '-' . $event['rz3'] . '</label></br>';
-            $timeFull="<label class='label label-warning'>{$event['rz2']}-{$event['rz3'] }</label></br>";
+            //$time = '<label class="label label-warning">' . $event['rz2'] . '-' . $event['rz3'] . '</label></br>';
+            //$timeFull="<label class='label label-warning'>{$event['rz2']}-{$event['rz3'] }</label></br>";
             $short_name = str_replace('(!)','<span class="glyphicon glyphicon-exclamation-sign danger-font" aria-hidden="true"></span>',$short_name);
         }
-
 
         $tem_name_full='';
         $tem_name='';
@@ -135,6 +153,7 @@ HTML;
                 $tem_name.='</br>';
             }
         }
+
         $color = SH::getLessonColor($event['tip']);
         $classElem = SH::getClassColor($event['tip']);
         $class = tt('ауд');
@@ -146,8 +165,9 @@ HTML;
             {$timeFull}
             {$tem_name}
             {$class}. {$a2}</br>
+            {$fio}{$groups}</br>
             {$text}: {$added}
-            {$fio}{$groups}
+
 HTML;
 
         $lessonHtml = sprintf('<div style="background-color:%s;" class="events event%s" data-content="%s">',$color,$classElem,$fullLessonHtml);
@@ -158,12 +178,10 @@ HTML;
 HTML;
         $lessonHtml .= '</div>';
 
-        $tr.=$lessonHtml;
-
-        //$tr.=;
     }
 
-
+    $tr.=$lessonHtml;
+    $tr .= '</td>';
     $tr.='</tr>';
 
     echo sprintf($table,$th,$tr);
@@ -184,3 +202,5 @@ HTML;
             </div>
         </div>
     </div>
+<?php
+    endif;

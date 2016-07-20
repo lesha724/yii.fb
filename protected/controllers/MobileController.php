@@ -116,7 +116,7 @@ class MobileController extends Controller
 
     public function actionTimeTableTeacher()
     {
-        /*$model = new TimeTableForm;
+        $model = new TimeTableForm;
 
         $model->scenario = 'mobile-teacher';
 
@@ -132,15 +132,15 @@ class MobileController extends Controller
 
 
         $timeTable = array();
-        if (! empty($model->student))
+        if (! empty($model->teacher))
         {
-            $timeTable=Gr::getTimeTable($model->student, $model->dateLesson, $model->dateLesson, 1);
+            $timeTable=Gr::getTimeTable($model->teacher, $model->dateLesson, $model->dateLesson, 2);
         }
 
-        $this->render('timeTable/student', array(
+        $this->render('timeTable/teacher', array(
             'model'      => $model,
             'timeTable'  => $timeTable,
             'rz'         => Rz::model()->getRzArray($model->filial),
-        ));*/
+        ));
     }
 }
