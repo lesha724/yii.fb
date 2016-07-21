@@ -42,6 +42,8 @@ class Controller extends CController
         //$detect->isMobile();
         //$detect->isTablet();
         //$detect->isIphone();
+
+        return $detect->isMobile()||$detect->isTablet();
     }
 
     public function beforeAction($action)
