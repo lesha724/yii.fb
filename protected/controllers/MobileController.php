@@ -26,6 +26,7 @@ class MobileController extends Controller
                     'timeTableGroup',
                     'timeTableStudent',
                     'timeTableTeacher',
+                    'timeTableSelf'
                 ),
                 'users' => array('*'),
             ),
@@ -138,6 +139,34 @@ class MobileController extends Controller
         }
 
         $this->render('timeTable/teacher', array(
+            'model'      => $model,
+            'timeTable'  => $timeTable,
+            'rz'         => Rz::model()->getRzArray($model->filial),
+        ));
+    }
+
+    public  function actionTimeTableSelf()
+    {
+        $model = new TimeTableForm;
+        $model->scenario = 'mobile-self';
+        if (isset($_REQUEST['TimeTableForm']))
+            $model->attributes=$_REQUEST['TimeTableForm'];
+
+        $model->dateLesson = Yii::app()->session['dateLesson'];
+        if(Yii::app()->user->isStd)
+        {
+            $model->student=Yii::app()->user->dbModel->st1;
+            $timeTable=Gr::getTimeTable($model->student, $model->dateLesson, $model->dateLesson, 1);
+        }
+        elseif(Yii::app()->user->isTch)
+        {
+            $model->teacher=Yii::app()->user->dbModel->p1;
+            $timeTable=Gr::getTimeTable($model->teacher, $model->dateLesson, $model->dateLesson, 2);
+
+        }else
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $this->render('timeTable/self', array(
             'model'      => $model,
             'timeTable'  => $timeTable,
             'rz'         => Rz::model()->getRzArray($model->filial),
