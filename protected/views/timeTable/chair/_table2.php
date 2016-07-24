@@ -117,7 +117,7 @@ HTML;
                     {$text}: {$added}
 HTML;
                 $fullText=trim($pattern);
-                $tr .='<td class="'.$class_day.' '.$class_interval.'" style="background-color:'.SH::getLessonColor($cur['tip']).'!important"><div data-rel="popover" data-placement="right" data-content="'.$fullText.'">X</label></td>';
+                $tr .='<td class="'.$class_day.' '.$class_interval.'" style="background-color:'.SH::getLessonColor($cur['tip']).'!important"><div data-rel="popover" data-placement="right" data-content="'.$fullText.'">X</div></td>';
             }  else {
                 $tr .='<td class="empty-day '.$class_day.'">&nbsp;</td>';
             }

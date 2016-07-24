@@ -26,7 +26,8 @@ class MobileController extends Controller
                     'timeTableGroup',
                     'timeTableStudent',
                     'timeTableTeacher',
-                    'timeTableSelf'
+                    'timeTableSelf',
+                    'timeTableChair'
                 ),
                 'users' => array('*'),
             ),
@@ -170,6 +171,20 @@ class MobileController extends Controller
             'model'      => $model,
             'timeTable'  => $timeTable,
             'rz'         => Rz::model()->getRzArray($model->filial),
+        ));
+    }
+
+    public function actionTimeTableChair()
+    {
+        $model = new TimeTableForm;
+        $model->scenario = 'mobile-chair';
+        if (isset($_REQUEST['TimeTableForm']))
+            $model->attributes=$_REQUEST['TimeTableForm'];
+
+        $model->dateLesson = Yii::app()->session['dateLesson'];
+
+        $this->render('timeTable/chair', array(
+            'model'      => $model,
         ));
     }
 }

@@ -426,3 +426,43 @@ body{
 .danger-font{
   color:@danger-font;
 }
+/*fixed column table*/
+/*.table-responsive>.fixed-column {
+  position: fixed;
+  display: inline-block;
+  width: auto;
+  border-right: 1px solid #ddd;
+}*/
+/*@media(min-width:768px) {
+  .table-responsive>.fixed-column {
+    display: none;
+  }
+}*/
+
+.fixed-column-table .table.fixedCol {
+  width: auto;
+  position: absolute;
+  /* below styles are specific for borderd Bootstrap tables
+     to remove rounded corners on cloned table */
+  -webkit-border-top-right-radius: 0px;
+  -webkit-border-bottom-right-radius: 0px;
+  -moz-border-radius-topright: 0px;
+  -moz-border-radius-bottomright: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+/*.table.fixedCol th,*/
+.table.fixedCol tr {
+  /* background is set to white to hide underlaying column
+     of original table */
+  background: white;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd){
+  background-color: #f9f9f9;
+}
+
+.table-striped>tbody>tr:nth-of-type(even){
+  background-color: white;
+}
