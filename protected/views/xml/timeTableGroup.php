@@ -6,8 +6,8 @@
  * Time: 22:09
  */
 ?>
-<TimetableForStudent>
+<TimetableForGroup>
     <?=$this->renderPartial('_timeTable',array(
-        'timeTable'=>$timeTable
-    ))?>
-</TimetableForStudent>
+    'timeTable'=>$timeTable
+))?>
+</TimetableForGroup>
