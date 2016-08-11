@@ -27,7 +27,8 @@ class XmlController extends Controller
             array('allow',
                 'actions' => array(
                     'GetTimetableForStudent',
-                    'GetTimetableForGroup'
+                    'GetTimetableForGroup',
+                    'GetTimetableForTeacher'
                 ),
             ),
             array('deny',
@@ -130,12 +131,63 @@ class XmlController extends Controller
                         $this->errorXml(self::ERROR_PARAM, 'Group '.$Group.' не являеться валидным');
 
 
-                    $timeTable=Gr::getTimeTable($group->gr1, $dateStart->format(self::FORMAT_DATE), $dateFinish->format(self::FORMAT_DATE), 0);
+                    $timeTable=$this->getTimeTable($group->gr1, $dateStart->format(self::FORMAT_DATE), $dateFinish->format(self::FORMAT_DATE), 0);
 
                     if(empty($timeTable))
                         $this->errorXml(self::ERROR_EMPTY_TIMETABLE, 'Расписание не найдено');
 
                     $this->render('timeTableGroup',array(
+                        'timeTable'=>$timeTable
+                    ));
+                }
+            }
+        }
+    }
+
+    public function actionGetTimetableForTeacher(){
+        $xml = $this->getXmlFromPost();
+        if(empty($xml))
+            Yii::app()->end;
+        else{
+            /*Проверка есть ли тег TimetableForTeacher*/
+            if($xml->getName()!='Request'||!isset($xml->TimetableForTeacher))
+                $this->errorXml(self::ERROR_XML_STRUCTURE,'Ошибка струтуры xml');
+            else {
+                $xmlAction = $xml->TimetableForTeacher;
+                /*Проверка есть ли теги нужные параметры*/
+                if (
+                    !isset($xmlAction->TeacherID) ||
+                    !isset($xmlAction->PeriodStart) ||
+                    !isset($xmlAction->PeriodFinish)
+                )
+                    $this->errorXml(self::ERROR_XML_STRUCTURE, 'Ошибка струтуры(параметры) xml');
+                else {
+                    /*загрузка параментров*/
+
+                    $TeacherID = $xmlAction->TeacherID->__ToString();
+                    //print_r($StudentID);
+                    $PeriodStart = $xmlAction->PeriodStart->__ToString();
+                    $PeriodFinish = $xmlAction->PeriodFinish->__ToString();
+
+                    $dateStart = date_create($PeriodStart);
+                    if($dateStart===false)
+                        $this->errorXml(self::ERROR_PARAM, 'PeriodStart не являеться датой');
+
+                    $dateFinish = date_create($PeriodFinish);
+                    if($dateFinish===false)
+                        $this->errorXml(self::ERROR_PARAM, 'PeriodFinish не являеться датой');
+
+                    $teacher = P::model()->findByAttributes(array('p1'=>$TeacherID));
+                    if($teacher==null)
+                        $this->errorXml(self::ERROR_PARAM, 'TeacherID '.$TeacherID.' не являеться валидным');
+
+
+                    $timeTable=$this->getTimeTable($teacher->p1, $dateStart->format(self::FORMAT_DATE), $dateFinish->format(self::FORMAT_DATE), 2);
+
+                    if(empty($timeTable))
+                        $this->errorXml(self::ERROR_EMPTY_TIMETABLE, 'Расписание не найдено');
+
+                    $this->render('timeTableTeacher',array(
                         'timeTable'=>$timeTable
                     ));
                 }
@@ -181,13 +233,14 @@ class XmlController extends Controller
                         $this->errorXml(self::ERROR_PARAM, 'StudentID '.$StudentID.' не являеться валидным');
 
 
-                    $timeTable=Gr::getTimeTable($student->st1, $dateStart->format(self::FORMAT_DATE), $dateFinish->format(self::FORMAT_DATE), 1);
+                    $timeTable=$this->getTimeTable($student->st1, $dateStart->format(self::FORMAT_DATE), $dateFinish->format(self::FORMAT_DATE), 1);
 
                     if(empty($timeTable))
                         $this->errorXml(self::ERROR_EMPTY_TIMETABLE, 'Расписание не найдено');
 
                     $this->render('timeTableStudent',array(
-                        'timeTable'=>$timeTable
+                        'timeTable'=>$timeTable,
+                        'type'=>1,//student
                     ));
                 }
             }

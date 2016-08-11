@@ -462,8 +462,8 @@ class TimeTableController extends Controller
 
     public function actionGroup()
     {
-        if($this->mobileCheck())
-            $this->redirect('/mobile/timeTableGroup');
+        //if($this->mobileCheck())
+            //$this->redirect('/mobile/timeTableGroup');
 
         $model = new TimeTableForm;
         $model->scenario = 'group';
