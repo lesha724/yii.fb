@@ -45,13 +45,20 @@ foreach($timeTable as $lesson){
         /*Время окончаня*/
         echo '<TimeFinish>', $lesson['rz3'], '</TimeFinish>';
         /*Аудитория номер ( или нужен айди)*/
-        echo '<Audience>', $lesson['a2'], '</Audience>';
+        echo '<Audience name="'.$lesson['a2'].'">', $lesson['a1'], '</Audience>';
         /*преподователи*/
+        $teachers = explode(',', $lesson['p1_list']);
         echo '<Teachers>';
-            echo '<Teacher>Test</Teacher>';
+        foreach($teachers as $teacher) {
+            if(!empty($teacher)) {
+                echo '<Teacher>', $teacher, '</Teacher>';
+            }
+        }
         echo '</Teachers>';
         /*Тип занятия*/
         echo '<Type>', $lesson['us4'], '</Type>';
+        /*Группа*/
+        echo '<Group type="'.$lesson['gr13'].'">', $lesson['gr1'], '</Group>';
         /*Стандарное время или нет*/
         $pos=stripos($lesson['d3'],"(!)");
         echo '<StandartTime>', ($pos!==false)?1:0 ,'</StandartTime>';

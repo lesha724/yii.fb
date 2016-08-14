@@ -260,7 +260,7 @@ class XmlController extends Controller
                 $sql ='SELECT * FROM RAGR(:LANG, :ID, :DATE_1, :DATE_2) ORDER BY ned, r2, r3';
                 break;
             case 1:
-                $sql ='SELECT * FROM RAST(:LANG, :ID, :DATE_1, :DATE_2) ORDER BY ned, r2, r3';
+                $sql ='SELECT * FROM TTST(:ID, :DATE_1, :DATE_2) ORDER BY ned, r2, r3';
                 break;
             case 2:
                 $sql ='SELECT * FROM RAPR(:ID, :DATE_1, :DATE_2) ORDER BY ned, r2, r3';
