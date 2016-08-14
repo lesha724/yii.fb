@@ -13,6 +13,11 @@ class XmlController extends Controller
 
     public $layout = '/xml/layout';
 
+
+    const VIEW_STUDENT = 1;
+    const VIEW_TEACHER = 2;
+    const VIEW_GROUP = 3;
+
     public function filters() {
 
         return array(
@@ -28,7 +33,8 @@ class XmlController extends Controller
                 'actions' => array(
                     'GetTimetableForStudent',
                     'GetTimetableForGroup',
-                    'GetTimetableForTeacher'
+                    'GetTimetableForTeacher',
+                    'UploadStudentsId'
                 ),
             ),
             array('deny',
@@ -137,7 +143,8 @@ class XmlController extends Controller
                         $this->errorXml(self::ERROR_EMPTY_TIMETABLE, 'Расписание не найдено');
 
                     $this->render('timeTableGroup',array(
-                        'timeTable'=>$timeTable
+                        'timeTable'=>$timeTable,
+                        'type' => self::VIEW_GROUP
                     ));
                 }
             }
@@ -188,7 +195,8 @@ class XmlController extends Controller
                         $this->errorXml(self::ERROR_EMPTY_TIMETABLE, 'Расписание не найдено');
 
                     $this->render('timeTableTeacher',array(
-                        'timeTable'=>$timeTable
+                        'timeTable'=>$timeTable,
+                        'type' => self::VIEW_TEACHER
                     ));
                 }
             }
@@ -240,9 +248,70 @@ class XmlController extends Controller
 
                     $this->render('timeTableStudent',array(
                         'timeTable'=>$timeTable,
-                        'type'=>1,//student
+                        'type' => self::VIEW_STUDENT
                     ));
                 }
+            }
+        }
+    }
+
+    /**
+     * Загрузка внешних id для студентов
+     */
+    public function actionUploadStudentsId(){
+        $xml = $this->getXmlFromPost();
+        if(empty($xml))
+            Yii::app()->end;
+        else{
+            /*Проверка есть ли тег TimetableForStudent*/
+            if($xml->getName()!='Request'||!isset($xml->UploadStudentsID))
+                $this->errorXml(self::ERROR_XML_STRUCTURE,'Ошибка струтуры xml');
+            else {
+                $uploads = $xml->UploadStudentsID;
+                if(!isset($uploads->Students))
+                    $this->errorXml(self::ERROR_XML_STRUCTURE,'Ошибка струтуры xml');
+                else{
+                    $errors = array();
+                    $students = $uploads->Students;
+
+                    foreach($students->children() as $student){
+
+                        /* @var $student SimpleXMLElement */
+
+                        /*проверяем являеться ли дочерний тег тегом Students*/
+                        if($student->getName()=='Students'){
+                            /*берем айди из контента тега*/
+                            $id = $student->__ToString();
+                            /*если пустой айди добавляем ошибку*/
+                            if(empty($id)){
+                                array_push($errors,
+                                    array(
+                                        'id'=>$id,
+                                        'message'=>'Пустой id'
+                                    )
+                                );
+                            }else{
+                                /*название атрибута фамилия*/
+                                $attrLName = 'LastName';
+                                /*название атрибута имя*/
+                                $attrFName = 'FirstName';
+                                /*название атрибута отчество*/
+                                $attrSName = 'SecondName';
+                                /*название атрибута дата рождения*/
+                                $attrBDay = 'BirthDay';
+
+                                $lName = (string)$student->attributes()->$attrLName;
+                                $fName = (string)$student->attributes()->$attrFName;
+                                $sName = (string)$student->attributes()->$attrSName;
+                                $bDay = (string)$student->attributes()->$attrBDay;
+                            }
+                        }
+                    }
+                }
+                /*$this->render('timeTableStudent',array(
+                    'timeTable'=>$timeTable,
+                    'type' => self::VIEW_STUDENT
+                ));*/
             }
         }
     }

@@ -8,6 +8,7 @@
 ?>
 <TimetableForStudent>
     <?=$this->renderPartial('_timeTable',array(
-        'timeTable'=>$timeTable
+        'timeTable'=>$timeTable,
+        'type'=> $type
     ))?>
 </TimetableForStudent>
