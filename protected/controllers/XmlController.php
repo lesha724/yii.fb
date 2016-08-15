@@ -303,7 +303,35 @@ class XmlController extends Controller
                                 $lName = (string)$student->attributes()->$attrLName;
                                 $fName = (string)$student->attributes()->$attrFName;
                                 $sName = (string)$student->attributes()->$attrSName;
-                                $bDay = (string)$student->attributes()->$attrBDay;
+                                $bDay = date_create((string)$student->attributes()->$attrBDay);
+                                if($bDay===false)
+                                    $this->errorXml(self::ERROR_PARAM, 'BirthDay не являеться датой');
+
+                                $arr = St::model()->findAllByAttributes(array(
+                                    'st2'=>$lName,
+                                    'st3'=>$fName,
+                                    'st4'=>$sName,
+                                    'st7'=>$bDay->format(self::FORMAT_DATE),
+                                ));
+
+                                //проверяем есть по нашему запросы студенты
+                                if(empty($arr))
+                                    array_push($errors,
+                                        array(
+                                            'id'=>$id,
+                                            'message' => sprintf(
+                                                'Не найден студент для id=%s с параментрами %s=%s, %s=%s, %s=%s, %s=%s',
+                                                $id,
+                                                $attrLName,$lName,
+                                                $attrFName,$fName,
+                                                $attrSName,$sName,
+                                                $attrBDay,$bDay->format(self::FORMAT_DATE)
+                                            )
+                                        )
+                                    );
+                                else{
+
+                                }
                             }
                         }
                     }
