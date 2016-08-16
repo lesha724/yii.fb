@@ -279,7 +279,7 @@ class XmlController extends Controller
                         /* @var $student SimpleXMLElement */
 
                         /*проверяем являеться ли дочерний тег тегом Students*/
-                        if($student->getName()=='Students'){
+                        if($student->getName()=='Student'){
                             /*берем айди из контента тега*/
                             $id = $student->__ToString();
                             /*если пустой айди добавляем ошибку*/
@@ -330,16 +330,49 @@ class XmlController extends Controller
                                         )
                                     );
                                 else{
-
+                                    /*если мы нашли больше одного стеднта*/
+                                    if(count($arr)>1){
+                                        array_push($errors,
+                                            array(
+                                                'id'=>$id,
+                                                'message' => sprintf(
+                                                    'Найдено несколько студентов для id=%s с параментрами %s=%s, %s=%s, %s=%s, %s=%s',
+                                                    $id,
+                                                    $attrLName,$lName,
+                                                    $attrFName,$fName,
+                                                    $attrSName,$sName,
+                                                    $attrBDay,$bDay->format(self::FORMAT_DATE)
+                                                )
+                                            )
+                                        );
+                                    }else{
+                                        $save = $arr[0]->saveAttributes(array('st108'=>$id));
+                                        if(!$save){
+                                            array_push($errors,
+                                                array(
+                                                    'id'=>$id,
+                                                    'message' => sprintf(
+                                                        'Не сохранен id=%s для студента с параментрами %s=%s, %s=%s, %s=%s, %s=%s',
+                                                        $id,
+                                                        $attrLName,$lName,
+                                                        $attrFName,$fName,
+                                                        $attrSName,$sName,
+                                                        $attrBDay,$bDay->format(self::FORMAT_DATE)
+                                                    )
+                                                )
+                                            );
+                                            //print_r( $arr[0]->getErrors());
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
                 }
-                /*$this->render('timeTableStudent',array(
-                    'timeTable'=>$timeTable,
-                    'type' => self::VIEW_STUDENT
-                ));*/
+
+                $this->render('uploadStudents',array(
+                    'errors'=>$errors
+                ));
             }
         }
     }
