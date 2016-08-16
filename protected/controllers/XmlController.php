@@ -236,7 +236,8 @@ class XmlController extends Controller
                     if($dateFinish===false)
                         $this->errorXml(self::ERROR_PARAM, 'PeriodFinish не являеться датой');
 
-                    $student = St::model()->findByAttributes(array('st1'=>$StudentID));
+                    //$student = St::model()->findByAttributes(array('st1'=>$StudentID));
+                    $student = St::model()->findByAttributes(array('st108'=>$StudentID));
                     if($student==null)
                         $this->errorXml(self::ERROR_PARAM, 'StudentID '.$StudentID.' не являеться валидным');
 
@@ -290,78 +291,92 @@ class XmlController extends Controller
                                         'message'=>'Пустой id'
                                     )
                                 );
-                            }else{
-                                /*название атрибута фамилия*/
-                                $attrLName = 'LastName';
-                                /*название атрибута имя*/
-                                $attrFName = 'FirstName';
-                                /*название атрибута отчество*/
-                                $attrSName = 'SecondName';
-                                /*название атрибута дата рождения*/
-                                $attrBDay = 'BirthDay';
-
-                                $lName = (string)$student->attributes()->$attrLName;
-                                $fName = (string)$student->attributes()->$attrFName;
-                                $sName = (string)$student->attributes()->$attrSName;
-                                $bDay = date_create((string)$student->attributes()->$attrBDay);
-                                if($bDay===false)
-                                    $this->errorXml(self::ERROR_PARAM, 'BirthDay не являеться датой');
-
-                                $arr = St::model()->findAllByAttributes(array(
-                                    'st2'=>$lName,
-                                    'st3'=>$fName,
-                                    'st4'=>$sName,
-                                    'st7'=>$bDay->format(self::FORMAT_DATE),
-                                ));
-
-                                //проверяем есть по нашему запросы студенты
-                                if(empty($arr))
+                            }else {
+                                $arr = St::model()->findAllByAttributes(array('st108' => $id));
+                                if (!empty($arr)) {
                                     array_push($errors,
                                         array(
-                                            'id'=>$id,
+                                            'id' => $id,
                                             'message' => sprintf(
-                                                'Не найден студент для id=%s с параментрами %s=%s, %s=%s, %s=%s, %s=%s',
-                                                $id,
-                                                $attrLName,$lName,
-                                                $attrFName,$fName,
-                                                $attrSName,$sName,
-                                                $attrBDay,$bDay->format(self::FORMAT_DATE)
+                                                'Студент с таким id=%s уже существует',
+                                                $id
                                             )
                                         )
                                     );
-                                else{
-                                    /*если мы нашли больше одного стеднта*/
-                                    if(count($arr)>1){
+                                } else
+                                {
+                                    /*название атрибута фамилия*/
+                                    $attrLName = 'LastName';
+                                    /*название атрибута имя*/
+                                    $attrFName = 'FirstName';
+                                    /*название атрибута отчество*/
+                                    $attrSName = 'SecondName';
+                                    /*название атрибута дата рождения*/
+                                    $attrBDay = 'BirthDay';
+
+                                    $lName = (string)$student->attributes()->$attrLName;
+                                    $fName = (string)$student->attributes()->$attrFName;
+                                    $sName = (string)$student->attributes()->$attrSName;
+                                    $bDay = date_create((string)$student->attributes()->$attrBDay);
+                                    if ($bDay === false)
+                                        $this->errorXml(self::ERROR_PARAM, 'BirthDay не являеться датой');
+
+                                    $arr = St::model()->findAllByAttributes(array(
+                                        'st2' => $lName,
+                                        'st3' => $fName,
+                                        'st4' => $sName,
+                                        'st7' => $bDay->format(self::FORMAT_DATE),
+                                    ));
+
+                                    //проверяем есть по нашему запросы студенты
+                                    if (empty($arr))
                                         array_push($errors,
                                             array(
-                                                'id'=>$id,
+                                                'id' => $id,
                                                 'message' => sprintf(
-                                                    'Найдено несколько студентов для id=%s с параментрами %s=%s, %s=%s, %s=%s, %s=%s',
+                                                    'Не найден студент для id=%s с параментрами %s=%s, %s=%s, %s=%s, %s=%s',
                                                     $id,
-                                                    $attrLName,$lName,
-                                                    $attrFName,$fName,
-                                                    $attrSName,$sName,
-                                                    $attrBDay,$bDay->format(self::FORMAT_DATE)
+                                                    $attrLName, $lName,
+                                                    $attrFName, $fName,
+                                                    $attrSName, $sName,
+                                                    $attrBDay, $bDay->format(self::FORMAT_DATE)
                                                 )
                                             )
                                         );
-                                    }else{
-                                        $save = $arr[0]->saveAttributes(array('st108'=>$id));
-                                        if(!$save){
+                                    else {
+                                        /*если мы нашли больше одного стеднта*/
+                                        if (count($arr) > 1) {
                                             array_push($errors,
                                                 array(
-                                                    'id'=>$id,
+                                                    'id' => $id,
                                                     'message' => sprintf(
-                                                        'Не сохранен id=%s для студента с параментрами %s=%s, %s=%s, %s=%s, %s=%s',
+                                                        'Найдено несколько студентов для id=%s с параментрами %s=%s, %s=%s, %s=%s, %s=%s',
                                                         $id,
-                                                        $attrLName,$lName,
-                                                        $attrFName,$fName,
-                                                        $attrSName,$sName,
-                                                        $attrBDay,$bDay->format(self::FORMAT_DATE)
+                                                        $attrLName, $lName,
+                                                        $attrFName, $fName,
+                                                        $attrSName, $sName,
+                                                        $attrBDay, $bDay->format(self::FORMAT_DATE)
                                                     )
                                                 )
                                             );
-                                            //print_r( $arr[0]->getErrors());
+                                        } else {
+                                            $save = $arr[0]->saveAttributes(array('st108' => $id));
+                                            if (!$save) {
+                                                array_push($errors,
+                                                    array(
+                                                        'id' => $id,
+                                                        'message' => sprintf(
+                                                            'Не сохранен id=%s для студента с параментрами %s=%s, %s=%s, %s=%s, %s=%s',
+                                                            $id,
+                                                            $attrLName, $lName,
+                                                            $attrFName, $fName,
+                                                            $attrSName, $sName,
+                                                            $attrBDay, $bDay->format(self::FORMAT_DATE)
+                                                        )
+                                                    )
+                                                );
+                                                //print_r( $arr[0]->getErrors());
+                                            }
                                         }
                                     }
                                 }
