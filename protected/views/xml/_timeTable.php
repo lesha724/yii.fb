@@ -53,7 +53,8 @@ foreach($timeTable as $lesson){
             echo '<Teachers>';
             foreach ($teachers as $teacher) {
                 if (!empty($teacher)) {
-                    echo '<Teacher>', $teacher, '</Teacher>';
+                    $teacherParam = explode('-', $teacher);
+                    echo '<Teacher id="'.$teacherParam[0].'">', $teacherParam[1], '</Teacher>';
                 }
             }
             echo '</Teachers>';

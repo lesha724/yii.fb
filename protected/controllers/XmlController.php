@@ -34,7 +34,8 @@ class XmlController extends Controller
                     'GetTimetableForStudent',
                     'GetTimetableForGroup',
                     'GetTimetableForTeacher',
-                    'UploadStudentsId'
+                    'UploadStudentsId',
+                    'UploadTeachersId'
                 ),
             ),
             array('deny',
@@ -150,7 +151,9 @@ class XmlController extends Controller
             }
         }
     }
-
+    /**
+     * расписание преодователя
+     */
     public function actionGetTimetableForTeacher(){
         $xml = $this->getXmlFromPost();
         if(empty($xml))
@@ -184,7 +187,7 @@ class XmlController extends Controller
                     if($dateFinish===false)
                         $this->errorXml(self::ERROR_PARAM, 'PeriodFinish не являеться датой');
 
-                    $teacher = P::model()->findByAttributes(array('p1'=>$TeacherID));
+                    $teacher = P::model()->findByAttributes(array('p132'=>$TeacherID));
                     if($teacher==null)
                         $this->errorXml(self::ERROR_PARAM, 'TeacherID '.$TeacherID.' не являеться валидным');
 
@@ -203,6 +206,9 @@ class XmlController extends Controller
         }
     }
 
+    /**
+     * Расписание студента
+     */
     public function actionGetTimetableForStudent(){
         $xml = $this->getXmlFromPost();
         if(empty($xml))
@@ -264,7 +270,7 @@ class XmlController extends Controller
         if(empty($xml))
             Yii::app()->end;
         else{
-            /*Проверка есть ли тег TimetableForStudent*/
+            /*Проверка есть ли тег UploadStudentsID*/
             if($xml->getName()!='Request'||!isset($xml->UploadStudentsID))
                 $this->errorXml(self::ERROR_XML_STRUCTURE,'Ошибка струтуры xml');
             else {
@@ -279,7 +285,7 @@ class XmlController extends Controller
 
                         /* @var $student SimpleXMLElement */
 
-                        /*проверяем являеться ли дочерний тег тегом Students*/
+                        /*проверяем являеться ли дочерний тег тегом Student*/
                         if($student->getName()=='Student'){
                             /*берем айди из контента тега*/
                             $id = $student->__ToString();
@@ -318,8 +324,15 @@ class XmlController extends Controller
                                     $fName = (string)$student->attributes()->$attrFName;
                                     $sName = (string)$student->attributes()->$attrSName;
                                     $bDay = date_create((string)$student->attributes()->$attrBDay);
-                                    if ($bDay === false)
-                                        $this->errorXml(self::ERROR_PARAM, 'BirthDay не являеться датой');
+                                    if ($bDay === false) {
+                                        //$this->errorXml(self::ERROR_PARAM, 'BirthDay не являеться датой');
+                                        array_push($errors,
+                                            array(
+                                                'id' => $id,
+                                                'message' => 'BirthDay не являеться датой'
+                                            )
+                                        );
+                                    }
 
                                     $arr = St::model()->findAllByAttributes(array(
                                         'st2' => $lName,
@@ -391,6 +404,151 @@ class XmlController extends Controller
             }
         }
     }
+
+    /**
+     * Загрузка внешних id для преподователей
+     */
+    public function actionUploadTeachersId(){
+        $xml = $this->getXmlFromPost();
+        if(empty($xml))
+            Yii::app()->end;
+        else{
+            /*Проверка есть ли тег UploadTeachersID*/
+            if($xml->getName()!='Request'||!isset($xml->UploadTeachersID))
+                $this->errorXml(self::ERROR_XML_STRUCTURE,'Ошибка струтуры xml');
+            else {
+                $uploads = $xml->UploadTeachersID;
+                if(!isset($uploads->Teachers))
+                    $this->errorXml(self::ERROR_XML_STRUCTURE,'Ошибка струтуры xml');
+                else{
+                    $errors = array();
+                    $teachers = $uploads->Teachers;
+
+                    foreach($teachers->children() as $teacher){
+
+                        /* @var $teacher SimpleXMLElement */
+
+                        /*проверяем являеться ли дочерний тег тегом Teacher*/
+                        if($teacher->getName()=='Teacher'){
+                            /*берем айди из контента тега*/
+                            $id = $teacher->__ToString();
+                            /*если пустой айди добавляем ошибку*/
+                            if(empty($id)){
+                                array_push($errors,
+                                    array(
+                                        'id'=>$id,
+                                        'message'=>'Пустой id'
+                                    )
+                                );
+                            }else {
+                                $arr = P::model()->findAllByAttributes(array('p132' => $id));
+                                if (!empty($arr)) {
+                                    array_push($errors,
+                                        array(
+                                            'id' => $id,
+                                            'message' => sprintf(
+                                                'Преподователь с таким id=%s уже существует',
+                                                $id
+                                            )
+                                        )
+                                    );
+                                } else
+                                {
+                                    /*название атрибута фамилия*/
+                                    $attrLName = 'LastName';
+                                    /*название атрибута имя*/
+                                    $attrFName = 'FirstName';
+                                    /*название атрибута отчество*/
+                                    $attrSName = 'SecondName';
+                                    /*название атрибута дата рождения*/
+                                    $attrBDay = 'BirthDay';
+
+                                    $lName = (string)$teacher->attributes()->$attrLName;
+                                    $fName = (string)$teacher->attributes()->$attrFName;
+                                    $sName = (string)$teacher->attributes()->$attrSName;
+                                    $bDay = date_create((string)$teacher->attributes()->$attrBDay);
+                                    if ($bDay === false) {
+                                        //$this->errorXml(self::ERROR_PARAM, 'BirthDay не являеться датой');
+                                        array_push($errors,
+                                            array(
+                                                'id' => $id,
+                                                'message' => 'BirthDay не являеться датой'
+                                            )
+                                        );
+                                    }else {
+
+                                        $arr = P::model()->findAllByAttributes(array(
+                                            'p3' => $lName,
+                                            'p4' => $fName,
+                                            'p5' => $sName,
+                                            'p9' => $bDay->format(self::FORMAT_DATE),
+                                        ));
+
+                                        //проверяем есть по нашему запросы преподы
+                                        if (empty($arr))
+                                            array_push($errors,
+                                                array(
+                                                    'id' => $id,
+                                                    'message' => sprintf(
+                                                        'Не найден преподователь для id=%s с параментрами %s=%s, %s=%s, %s=%s, %s=%s',
+                                                        $id,
+                                                        $attrLName, $lName,
+                                                        $attrFName, $fName,
+                                                        $attrSName, $sName,
+                                                        $attrBDay, $bDay->format(self::FORMAT_DATE)
+                                                    )
+                                                )
+                                            );
+                                        else {
+                                            /*если мы нашли больше одного препода*/
+                                            if (count($arr) > 1) {
+                                                array_push($errors,
+                                                    array(
+                                                        'id' => $id,
+                                                        'message' => sprintf(
+                                                            'Найдено несколько преподователей для id=%s с параментрами %s=%s, %s=%s, %s=%s, %s=%s',
+                                                            $id,
+                                                            $attrLName, $lName,
+                                                            $attrFName, $fName,
+                                                            $attrSName, $sName,
+                                                            $attrBDay, $bDay->format(self::FORMAT_DATE)
+                                                        )
+                                                    )
+                                                );
+                                            } else {
+                                                $save = $arr[0]->saveAttributes(array('p132' => $id));
+                                                if (!$save) {
+                                                    array_push($errors,
+                                                        array(
+                                                            'id' => $id,
+                                                            'message' => sprintf(
+                                                                'Не сохранен id=%s для преподователя с параментрами %s=%s, %s=%s, %s=%s, %s=%s',
+                                                                $id,
+                                                                $attrLName, $lName,
+                                                                $attrFName, $fName,
+                                                                $attrSName, $sName,
+                                                                $attrBDay, $bDay->format(self::FORMAT_DATE)
+                                                            )
+                                                        )
+                                                    );
+                                                    //print_r( $arr[0]->getErrors());
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                $this->render('uploadTeachers',array(
+                    'errors'=>$errors
+                ));
+            }
+        }
+    }
+
     /*Получить расписание*/
     /*
      * $id -> индефикатор st1, gr1, p1
