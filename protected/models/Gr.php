@@ -538,6 +538,9 @@ SQL;
                         //$sql ="SELECT *,(DATEDIFF(DAY,r2, :DATE_1)*{$max}+r3) as colonka  FROM RAPR(:ID, :DATE_1, :DATE_2) ORDER BY colonka";
                         $sql ='SELECT * FROM RAPR(:ID, :DATE_1, :DATE_2) ORDER BY r2,r3';
                         break;
+                case 4: /*расписание кафедры по группам*/
+                        $sql ='SELECT * FROM RAGR(:LANG, :ID, :DATE_1, :DATE_2) ORDER BY r2,r3';
+                        break;
         }
         $command = Yii::app()->db->createCommand($sql);
 		if($type!=2)
@@ -549,7 +552,7 @@ SQL;
 
         if (empty($timeTable))
             return array();
-        if($type==3)
+        if($type==3||$type==4)
         {
             $datetime1 = new DateTime($date1);
             foreach($timeTable as $key => $val) {
@@ -914,5 +917,44 @@ SQL;
         $course = $command->queryScalar();
 
         return $course;
+    }
+
+    public function getGroupsByChair($chair, $date1, $date2){
+        $sql = <<<SQL
+          SELECT gr13,gr3,gr1,gr19,gr20,gr21,gr22,gr23,gr24,gr28,sg1
+            FROM UO
+              INNER JOIN US ON (UO.UO1 = US.US2)
+              INNER JOIN NR ON (US.US1 = NR.NR2)
+              INNER JOIN UG ON (NR.NR1 = UG.UG3)
+              INNER JOIN GR ON (UG.UG2 = GR.GR1)
+              INNER JOIN R ON (UG.UG3 = R.R1)
+              INNER JOIN D ON (UO.UO3 = D.D1)
+              inner join U on (UO.UO22 = U.U1)
+              inner join sg on (U.U2 = sg.sg1)
+            WHERE us4>=0 and(R.R2>=:DATE1)and(R.R2<=:DATE2)   and (SG7 IS NULL OR R2 < SG7) and UO4=:K1
+            GROUP BY gr13, gr3, gr1,gr19,gr20,gr21,gr22,gr23,gr24,gr28,sg1
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':K1', $chair);
+        $command->bindValue(':DATE1', $date1);
+        $command->bindValue(':DATE2', $date2);
+        $groups = $command->queryAll();
+
+        foreach ($groups as $key => $group) {
+            $sql = <<<SQL
+            SELECT FIRST 1 sem4
+            FROM sem
+            WHERE sem2=:SG1
+            ORDER BY sem7 DESC
+SQL;
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':SG1', $group['sg1']);
+            $course = $command->queryScalar();
+
+            $groups[$key]['name'] = Gr::model()->getGroupName($course, $group);
+        }
+
+        return $groups;
     }
 }
