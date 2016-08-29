@@ -632,7 +632,7 @@ SQL;
     {
         $criteria=new CDbCriteria;
 
-        $criteria->select = 'st2, st3, st4';
+        $criteria->select = 't.st1, t.st2, t.st3, t.st4';
 
         $with = array(
             'parentsAccount' => array(
