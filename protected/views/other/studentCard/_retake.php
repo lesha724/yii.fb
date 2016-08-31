@@ -62,7 +62,12 @@ HTML;
         list($respectful,$disrespectful,$f,$nbretake,$fretake,$count) = Elg::model()->getRetakeInfo($discipline['uo1'],$discipline['sem1'],$type,$st->st1,$ps55);
         $tr.='<tr>';
             $tr.='<td>'.$i.'</td>';
-            $tr.='<td class="text-left">'.$discipline['k2'].'</td>';
+            if(!empty($discipline['k15'])&&Yii::app()->language=="en")
+                $k2=$discipline['k15'];
+            else
+                $k2=$discipline['k2'];
+            $tr.='<td class="text-left">'.$k2.'</td>';
+        
             if(!empty($discipline['d27'])&&Yii::app()->language=="en")
                 $d2=$discipline['d27'];
             else
