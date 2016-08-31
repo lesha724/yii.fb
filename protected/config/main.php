@@ -129,7 +129,7 @@ $config = array(
 						'baseUrl' => '/',
 						'css' => array('css/mobile/datepicker/bootstrap-datepicker3.min.css','css/mobile/datepicker/bootstrap-datepicker3.standalone.min.css'),
 						'js' => array('js/mobile/datepicker/js/bootstrap-datepicker.min.js'),
-						//'depends' => array('jquery')
+						'depends' => array('jquery')
 				),
                 'autosize' => array(
                     'baseUrl' => 'theme/ace/assets/',
