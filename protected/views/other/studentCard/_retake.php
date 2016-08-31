@@ -67,7 +67,7 @@ HTML;
             else
                 $k2=$discipline['k2'];
             $tr.='<td class="text-left">'.$k2.'</td>';
-        
+
             if(!empty($discipline['d27'])&&Yii::app()->language=="en")
                 $d2=$discipline['d27'];
             else
