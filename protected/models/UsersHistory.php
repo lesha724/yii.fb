@@ -224,7 +224,7 @@ class UsersHistory extends CActiveRecord
 		}
 		return $ip;
 	}
-	
+
 	public function getDevicesTypes()
 	{
 		return array(0=>tt('Desktop'),1=>tt('Tablet'),2=>tt('Mobile'));

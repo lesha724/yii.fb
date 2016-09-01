@@ -24,6 +24,16 @@ $this->breadcrumbs=array(
     echo $form->errorSummary($user);
 ?>
     <div class="control-group">
+        <label for="Users_u4" class="control-label"><?=tt('Email')?></label>
+        <div class="controls">
+            <label>
+                <?=CHtml::emailField('Users[u4]', $user->u4)?>
+                <span class="lbl"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="control-group">
         <label for="Users_u2" class="control-label"><?=tt('Логин')?></label>
         <div class="controls">
             <label>
