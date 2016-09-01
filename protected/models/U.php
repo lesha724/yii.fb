@@ -381,12 +381,12 @@ SQL;
     public function getDisciplines($u1_vib_disc, $uch_god, $semester, $gr1_kod)
     {
         $sql = <<<SQL
-            select d1,d2,ucgn1 as UCGN1_KOD
+            select d1,d2,ucgn1 as UCGN1_KOD, ucx6
             from d
             inner join uo on (d.d1 = uo.uo3)
             inner join us on (uo.uo1 = us.us2)
             inner join sem on (us.us3 = sem.sem1)
-            inner join (select ucx1 from ucx where ucx5>1) on (uo.uo19 = ucx1)
+            inner join (select ucx1, ucx6 from ucx where ucx5>1) on (uo.uo19 = ucx1)
             inner join ucxg on (ucx1 = ucxg1)
             inner join ucgn on (ucxg2 = ucgn1)
             inner join ucgns on (ucgn1 = ucgns2)

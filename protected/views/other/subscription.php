@@ -246,9 +246,23 @@ HTML;
             foreach ($disciplines as $discipline) {
                 $isChecked = in_array($discipline['d1'], $alreadyCheckedDisc);
                 $value     = $discipline['ucgn1_kod'];
-                $tooltip='<a href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="'.tt('Количество студентов записавшихся на дисциплину').'">'.$discipline['count_st'].'</a>';
+
+                $maxCount = $discipline['ucx6'];
+                $maxCountStr = '';
+                $maxCountStr2 = '';
+                $disabled = array();
+
+                if($maxCount>0) {
+                    $maxCountStr = '/' . tt('Максимальное количество');
+                    $maxCountStr2 = '/' . $maxCount;
+                    if($maxCount<=$discipline['count_st']){
+                        $disabled = array('disabled'=>'disbaled');
+                    }
+                }
+
+                $tooltip='<a href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="'.tt('Количество студентов записавшихся на дисциплину').$maxCountStr.'">'.$discipline['count_st'].$maxCountStr2.'</a>';
                 $controls .= '<div class="subscription-disc">'.
-                                CHtml::checkBox('disciplines[]', $isChecked, array('value' => $value)).
+                                CHtml::checkBox('disciplines[]', $isChecked, array('value' => $value)+$disabled).
                                 '<span>'.$discipline['d2'].' '.D::model()->getAd($discipline['d1']).' ('.$tooltip.')</span>'.
                              '</div>';
             }
