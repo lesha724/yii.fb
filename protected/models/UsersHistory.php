@@ -201,13 +201,30 @@ class UsersHistory extends CActiveRecord
 			$isMob = 1;
 		}
 		$model->uh3 = $isMob;
-		$model->uh4 = Yii::app()->request->getUserHostAddress();
+		$model->uh4 = self::getRealIp();
 		$model->uh5 = date('Y-m-d H:i:s');
 		$model->uh6 = SH::user_browser(Yii::app()->request->getUserAgent());
 		if(!$model->save())
 			print_r($model->getErrors());
 	}
 
+	private static function getRealIp()
+	{
+		if (!empty($_SERVER['HTTP_CLIENT_IP']))   //check ip from share internet
+		{
+			$ip=$_SERVER['HTTP_CLIENT_IP'];
+		}
+		elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))   //to check ip is pass from proxy
+		{
+			$ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+		}
+		else
+		{
+			$ip=$_SERVER['REMOTE_ADDR'];
+		}
+		return $ip;
+	}
+	
 	public function getDevicesTypes()
 	{
 		return array(0=>tt('Desktop'),1=>tt('Tablet'),2=>tt('Mobile'));
