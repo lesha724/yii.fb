@@ -22,6 +22,7 @@
     $ps44 = PortalSettings::model()->findByPk(44)->ps2;
     $ps55 = PortalSettings::model()->findByPk(55)->ps2;
     $ps84 = PortalSettings::model()->findByPk(84)->ps2;
+    $ps88 = PortalSettings::model()->findByPk(88)->ps2;
     $timeAccess = tt('Ошибка! Доступ на редактирование закрыт!');
 
 //errorType=0 error
@@ -42,6 +43,7 @@
         ps44 = {$ps44};
         ps55 = {$ps55};
         ps84 = {$ps84};
+        ps88 = {$ps88};
 JS
     , CClientScript::POS_READY);
 
@@ -55,4 +57,4 @@ JS
     ));
     
     
-   $this->renderPartial('journal/_bottom', array('model' => $model,'read_only' => $read_only,'ps44'=>$ps44,'ps55'=>$ps55));
+   $this->renderPartial('journal/_bottom', array('model' => $model,'read_only' => $read_only,'ps44'=>$ps44,'ps55'=>$ps55,'ps88'=>$ps88));

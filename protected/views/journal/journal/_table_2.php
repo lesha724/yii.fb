@@ -8,7 +8,7 @@ function getMarsForElgz3($nom,$marks){
     }
     return 0;
 }
-function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps20,$ps55,$ps56,$sem7,$ps60,$min,$ps65,$show,$moduleNom)
+function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps20,$ps55,$ps56,$sem7,$ps60,$min,$ps65,$show,$moduleNom,$ps88)
 {
     if (($st['st71']!=$sem7&&$st['st71']!=$sem7+1) &&$ps60==1)
         return '<td colspan="2"></td>';
@@ -76,9 +76,29 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
 
     $key = $nom; // 0 - r3
 
-    $elgzst3 = isset($marks[$key]) && $marks[$key]['elgzst3'] != 0
-        ? 'checked'
-        : '';
+
+
+    if($ps88==0){
+        $elgzst3 = isset($marks[$key]) && $marks[$key]['elgzst3'] != 0
+            ? 'checked'
+            : '';
+
+        if($elgzst3=='checked')
+            $typeCheck = 0;//небыл
+        else
+            $typeCheck = 1;//был
+    }else{
+        $elgzst3 = isset($marks[$key]) && $marks[$key]['elgzst3'] != 0
+            ? ''
+            : 'checked';
+        if($elgzst3!='checked') {
+            $typeCheck = 0;//небыл
+        }
+        else {
+            $typeCheck = 1;//был
+        }
+    }
+
 
     $elgzst4 = isset($marks[$key]) && $marks[$key]['elgzst4'] != 0
         ? round($marks[$key]['elgzst4'], 1)
@@ -88,18 +108,7 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
         ? round($marks[$key]['elgzst5'], 1)
         :( isset($marks[$key]) && $marks[$key]['elgzst5']==-1?tt('Отработано'):'');
 
-    $class_1='';
-    $class_2='';
-    $disabled_input=$disabled;
-    $disabled_input_1=$disabled;
-    if($disabled != 'disabled="disabled"')
-    {
-        if($elgzst4=='')
-            $class_1 = 'class="not-value"';
-        if($elgzst5=='')
-            $class_2 = 'class="not-value"';
-    }
-    if($elgzst3=='checked')
+    if($typeCheck == 0)
     {
         $tooltip=tt('Отсутсвует');
         $disabled_input = 'disabled="disabled"';
@@ -120,6 +129,20 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
         }
     }
 
+
+    $class_1='';
+    $class_2='';
+    $disabled_input=$disabled;
+    $disabled_input_1=$disabled;
+    if($disabled != 'disabled="disabled"')
+    {
+        if($elgzst4=='')
+            $class_1 = 'class="not-value"';
+        if($elgzst5=='')
+            $class_2 = 'class="not-value"';
+    }
+
+
     $ps29 = PortalSettings::model()->findByPk(29)->ps2;
     if($ps29 == 1)
         $disabled_input_1 = 'disabled="disabled"';
@@ -133,7 +156,7 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
         $elgzst3_input='<input type="checkbox" data-toggle="tooltip" data-module-nom="'.$moduleNom.'-'.$st['st1'].'" data-placement="right" data-original-title="'.$tooltip.'" '.$elgzst3.' data-name="elgzst3" '.$disabled.'>';
     else
     {
-        if($elgzst3=='checked')
+        if($typeCheck == 0)
             $elgzst3='-';
         else
             $elgzst3='+';
@@ -144,7 +167,7 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
         if(!$read_only){
 
             if($disabled_input_1 != 'disabled="disabled"') {
-                if (($elgzst3 == 'checked')||($elgzst4 <= $min && ($elgzst4 != 0 || ($ps55 == 1 && $elgzst4 == 0 && isset($marks[$key]['elgzst4']))))) {
+                if (($typeCheck == 0)||($elgzst4 <= $min && ($elgzst4 != 0 || ($ps55 == 1 && $elgzst4 == 0 && isset($marks[$key]['elgzst4']))))) {
                     $disabled_input_1 = '';
                 }
                 else
@@ -167,7 +190,7 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
                 }else
                     $disabled_input_1 = '';
                 if($disabled_input_1 != 'disabled="disabled"') {
-                    if ($elgzst3 == 'checked')
+                    if ($typeCheck == 0)
                         $disabled_input_1 = '';
                     else
                         $disabled_input_1 = 'disabled="disabled"';
@@ -189,7 +212,7 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
     else {
         $button = CHtml::htmlButton('<i class="icon-tag"></i>', array('class' => 'btn btn-mini btn-info btn-retake', 'data-module-nom'=>$moduleNom.'-'.$st['st1'], 'style' => 'display:none'));
         $min = Elgzst::model()->getMin();
-        if (!$read_only && ($elgzst3 == 'checked' || ($elgzst4 <= $min && ($elgzst4 != 0|| ($ps55 == 1 && ($elgzst4 == 0 && isset($marks[$key]['elgzst4'])&& $type_lesson!=0)))))) {
+        if (!$read_only && ($typeCheck == 0 || ($elgzst4 <= $min && ($elgzst4 != 0|| ($ps55 == 1 && ($elgzst4 == 0 && isset($marks[$key]['elgzst4'])&& $type_lesson!=0)))))) {
             if (($elgzst5 <= $min&& $type_lesson==1) || ($marks[$key]['elgzst5'] != -1 && $type_lesson==0))
                 $button = CHtml::htmlButton('<i class="icon-tag"></i>', array('class' => 'btn btn-mini btn-info btn-retake', 'data-module-nom'=>$moduleNom.'-'.$st['st1'],'style' => 'display:inline'));
         }
@@ -422,7 +445,7 @@ HTML;
                 $potoch = 0;
                 $moduleNom++;
             }else {
-                $tr .= table2Tr($date, $gr1, $st, $marks, $permLesson, $read_only, $model->type_lesson, $ps20, $ps55, $ps56,$sem7,$ps60,$min,$ps65,$ps66,$moduleNom);
+                $tr .= table2Tr($date, $gr1, $st, $marks, $permLesson, $read_only, $model->type_lesson, $ps20, $ps55, $ps56,$sem7,$ps60,$min,$ps65,$ps66,$moduleNom, $ps88);
                 $potoch+=getMarsForElgz3($date['elgz3'],$marks);
             }
         }

@@ -39,6 +39,7 @@ class MobileController extends Controller
 //---------------------Journal---------------------------------------------------------------
     public function actionJournal()
     {
+        throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
         $model = new FilterForm;
         $model->scenario = 'journal';
         /*if (isset($_REQUEST['showRetake'])) {

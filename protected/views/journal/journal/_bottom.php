@@ -113,6 +113,7 @@ if (!empty($model->sem1)):
         'ps55'  => $ps55,
         'ps56'  => $ps56,
         'ps57'  => $ps57,
+        'ps88'  => $ps88,
         'ps9'  => $ps9,
         'modules'=>$modules,
         'read_only'=>$read_only,

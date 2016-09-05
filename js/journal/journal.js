@@ -184,7 +184,7 @@ $(document).ready(function(){
             var url = $that.parents('[data-url]').data('url');
 
             $spinner1.show();
-            send(url,params,title,$td,$that,$spinner1,st1,ps84);
+            send(url,params,title,$td,$that,$spinner1,st1,ps84,ps88);
             $that.val('');
             $that.addClass('not-value');
             $td.find(':checkbox').attr('disabled','disabled');
@@ -231,7 +231,7 @@ $(document).ready(function(){
             return false;
         }
 
-        if (params.field=='elgzst3'&&params.value==0)
+        if (params.field=='elgzst3'&&params.value==0&&ps88==0)
         {
             if($td.find('[data-name="elgzst4"]').val()!=''&&typeLesson==1) {
                 addGritter(title, tt.error, 'error')
@@ -263,7 +263,7 @@ $(document).ready(function(){
         var url_check = $that.parents('[data-url-check]').data('url-check');
 
         $spinner1.show();
-        if ($that.is(':checkbox')&&params.value==1)
+        if (($that.is(':checkbox')&&params.value==1&&ps88==0)||($that.is(':checkbox')&&params.value==01&&ps88==1))
         {
             $.ajax({
                 url: url_check,
@@ -288,7 +288,7 @@ $(document).ready(function(){
                                         "class" : "btn btn-danger btn-mini",
                                         click: function() {
                                             $( this ).dialog( "close" );
-                                            send(url,params,title,$td,$that,$spinner1,st1,ps84);
+                                            send(url,params,title,$td,$that,$spinner1,st1,ps84,ps88);
 
                                         }
                                     }
@@ -306,7 +306,7 @@ $(document).ready(function(){
                             });
                         }else
                         {
-                            send(url,params,title,$td,$that,$spinner1,st1,ps84);
+                            send(url,params,title,$td,$that,$spinner1,st1,ps84,ps88);
                         }
 
                     }
@@ -319,7 +319,7 @@ $(document).ready(function(){
         }
         else
         {
-            send(url,params,title,$td,$that,$spinner1,st1,ps84);
+            send(url,params,title,$td,$that,$spinner1,st1,ps84,ps88);
         }
 
     });
@@ -539,7 +539,7 @@ function getError(data)
     }
 }
 
-function send(url,params,title,$td,$that,$spinner1,st1,ps84)
+function send(url,params,title,$td,$that,$spinner1,st1,ps84,ps88)
 {
     $.get(url, params, function(data){
 
@@ -562,7 +562,7 @@ function send(url,params,title,$td,$that,$spinner1,st1,ps84)
             if ($that.is(':checkbox'))
             {
                 var elem = $td.find('[data-name="elgzst5"]');
-                if ($that.is(':checked')) {
+                if (($that.is(':checked')&&ps88==0)||(!$that.is(':checked')&&ps88==1)) {
                     $td.find('[data-name="elgzst4"]').attr('disabled', 'disabled');
                     //elem.removeAttr('disabled');
                 }
@@ -612,7 +612,8 @@ function send(url,params,title,$td,$that,$spinner1,st1,ps84)
 
             var elem = $td.find('[data-name="elgzst5"]');
             if(elem.length>0){
-                if($td.find('[data-name="elgzst3"]').is(':checked')||(parseFloat($td.find('[data-name="elgzst4"]').val().replace(',','.'))<=minBal&&$td.data('type-lesson')==1)) {
+                var elgzst3 = $td.find('[data-name="elgzst3"]');
+                if(((elgzst3.is(':checked')&&ps88==0)||(!elgzst3.is(':checked')&&ps88==1))||(parseFloat($td.find('[data-name="elgzst4"]').val().replace(',','.'))<=minBal&&$td.data('type-lesson')==1)) {
                     if (parseFloat(elem.val().replace(',', '.')) > minBal) {
                         $td.find('.btn-retake').hide();
                         elem.attr('disabled', 'disabled');
@@ -627,7 +628,7 @@ function send(url,params,title,$td,$that,$spinner1,st1,ps84)
                     elem.attr('disabled', 'disabled');
                 }
             }else{
-                if($td.find('[data-name="elgzst3"]').is(':checked')) {
+                if((elgzst3.is(':checked')&&ps88==0)||(!elgzst3.is(':checked')&&ps88==1)) {
                     $td.find('.btn-retake').show();
                     elem.removeAttr('disabled');
                 }

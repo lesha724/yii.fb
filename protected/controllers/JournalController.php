@@ -201,8 +201,8 @@ SQL;
 
     public function actionInsertStMark()
     {
-        if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        //if (! Yii::app()->request->isAjaxRequest)
+            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $error=false;
         $errorType=0;
@@ -266,6 +266,15 @@ SQL;
                 throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
             $elgz = Elgz::model()->findByPk($elgz1);
+
+            if(PortalSettings::model()->findByPk(88)->ps2==1){
+                if($field=='elgzst3'){
+                    if($value==0){
+                        $value=1;
+                    }else
+                        $value=0;
+                }
+            }
 
             if(empty($elgz))
             {
@@ -627,8 +636,8 @@ SQL;
                     $count_result=true;
             }else
             {
-                $error = true;
-                $errorType=2;
+                //$error = true;
+                //$errorType=2;
             }
         }
 
