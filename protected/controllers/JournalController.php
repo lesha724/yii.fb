@@ -340,7 +340,7 @@ SQL;
                     if(!empty($nom)) {
 
                         $module = Vvmp::model()->checkModul($elg->elg2, $gr1,$nom);
-                        if (empty($module) || !empty($module['vmpv6'])) {
+                        if (!empty($module['vmpv6'])) {
                             $error = true;
                             $errorType = 6;
                         }
