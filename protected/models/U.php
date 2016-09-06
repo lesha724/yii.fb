@@ -391,7 +391,7 @@ SQL;
             inner join ucgn on (ucxg2 = ucgn1)
             inner join ucgns on (ucgn1 = ucgns2)
             where (uo22 = :U1_VIB_DISC) and (sem3 = :UCH_GOD1) and (sem5 = :SEMESTER1) and (ucgns5  = :UCH_GOD2) and (ucgns6 = :SEMESTER2) and ucgn2 = :GR1_KOD
-            group by d1,d2,UCGN1
+            group by d1,d2,UCGN1, ucx6
             order by d2 collate UNICODE
 SQL;
 
