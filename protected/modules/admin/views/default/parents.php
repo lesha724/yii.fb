@@ -49,13 +49,19 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                     'label'=>'<i class="icon-check bigger-120"></i>',
                     'imageUrl'=>false,
                     'url'=>'Yii::app()->createAbsoluteUrl("/admin/default/prntGrants", array("id" => $data->st1))',
-                    'options' => array('class' => 'btn btn-mini btn-success'),
+                    'options' => array(
+                        'class' => 'btn btn-mini btn-success',
+                        'title'=>tt('Редактировать'),
+                    ),
                 ),
                 'enter' => array(
                     'label'=>'<i class="icon-share bigger-120"></i>',
                     'imageUrl'=>false,
                     'url'=>'Yii::app()->createAbsoluteUrl("/admin/default/enter", array("id" => !empty($data->parentsAccount)? $data->parentsAccount->u1: "-1"))',
-                    'options' => array('class' => 'btn btn-mini btn-primary'),
+                    'options' => array(
+                        'class' => 'btn btn-mini btn-primary',
+                        'title'=>tt('Авторизироваться'),
+                    ),
                     'visible'=>'!empty($data->parentsAccount)'
                 ),
             ),
