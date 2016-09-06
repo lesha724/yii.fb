@@ -261,9 +261,11 @@ HTML;
                 }
 
                 $tooltip='<a href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="'.tt('Количество студентов записавшихся на дисциплину').$maxCountStr.'">'.$discipline['count_st'].$maxCountStr2.'</a>';
-                $controls .= '<div class="subscription-disc">'.
-                                CHtml::checkBox('disciplines[]', $isChecked, array('value' => $value)+$disabled).
-                                '<span>'.$discipline['d2'].' '.D::model()->getAd($discipline['d1']).' ('.$tooltip.')</span>'.
+                $controls .= '<div class="subscription-disc">';
+                if($maxCount>$discipline['count_st']) {
+                    $controls .= CHtml::checkBox('disciplines[]', $isChecked, array('value' => $value) + $disabled);
+                }
+                $controls .= '<span>'.$discipline['d2'].' '.D::model()->getAd($discipline['d1']).' ('.$tooltip.')</span>'.
                              '</div>';
             }
 
