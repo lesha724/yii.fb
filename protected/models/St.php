@@ -461,6 +461,36 @@ SQL;
             return true;
     }
 
+	public function renderPassport($id, $type)
+	{
+		$sql = <<<SQL
+			SELECT passport4 as passport
+			FROM passport
+			WHERE passport2 = {$id} AND passport3 = {$type}
+SQL;
+
+		$string = Yii::app()->db->connectionString;
+		$parts  = explode('=', $string);
+
+		$host     = trim($parts[1].'d');
+		$login    = Yii::app()->db->username;
+		$password = Yii::app()->db->password;
+		$dbh      = ibase_connect($host, $login, $password);
+
+		$result = ibase_query($dbh, $sql);
+		$data   = ibase_fetch_object($result);
+
+		if (empty($data->PASSPORT)) {
+			$defaultImg = imagecreatefrompng(Yii::app()->basePath.'/../theme/ace/assets/avatars/avatar2.png');
+			imagepng($defaultImg);
+		} else {
+			header("Content-type: image/jpeg");
+			ibase_blob_echo($data->PASSPORT);
+		}
+
+		ibase_free_result($result);
+	}
+
 	public function getFoto($st1)
 	{
 		$sql = <<<SQL

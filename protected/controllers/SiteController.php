@@ -290,6 +290,20 @@ HTML;
         Users::model()->renderPhoto($id, $type);
     }
 
+	public function actionStudentPassport()
+	{
+		if(!Yii::app()->user->isAdmin)
+			throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+		$id   = Yii::app()->request->getParam('_id', null);
+		$type = Yii::app()->request->getParam('type', null);
+
+		if (is_null($id) || is_null($type))
+			throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+		St::model()->renderPassport($id, $type);
+	}
+
 	public function actionIFrame($id)
 	{
 		$model = Pm::model()->findByPk($id);

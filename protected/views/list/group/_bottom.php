@@ -1,4 +1,11 @@
 <?php
+function getPassportLabel($id,$type, $pattern, $patternAdmin){
+    if(!Yii::app()->user->isAdmin)
+        echo sprintf($pattern,'success','+');
+    else{
+        echo sprintf($patternAdmin,'success','+');
+    }
+}
 /**
  * @var WorkPlanController $this
  * @var FilterForm $model
@@ -34,6 +41,8 @@
 <tbody>
 <?php
     $pattern ='<td><span class="label label-%s">%s</span></td>';
+    $patternAdmin ='<td><span class="label label-%s">%s</span></td>';
+
 	$type=array(
 		0=>tt('бюджет'),
 		1=>tt('контракт')
@@ -57,28 +66,28 @@
 		echo '<td>'.$student['st2'].' '.$student['st3'].' '.$student['st4'].'</td>';
         if($visible_passport){
             if(St::model()->checkPassport($dbh,$student['st1'],1)){
-                echo sprintf($pattern,'success','+');
+                getPassportLabel($student['st1'],1,$pattern, $patternAdmin);
             }else
             {
                 echo sprintf($pattern,'important','-');
             }
 
             if(St::model()->checkPassport($dbh,$student['st1'],2)){
-                echo sprintf($pattern,'success','+');
+                getPassportLabel($student['st1'],2,$pattern, $patternAdmin);
             }else
             {
                 echo sprintf($pattern,'important','-');
             }
 
             if(St::model()->checkPassport($dbh,$student['st1'],3)){
-                echo sprintf($pattern,'success','+');
+                getPassportLabel($student['st1'],3,$pattern, $patternAdmin);
             }else
             {
                 echo sprintf($pattern,'important','-');
             }
 
             if(St::model()->checkPassport($dbh,$student['st1'],4)){
-                echo sprintf($pattern,'success','+');
+                getPassportLabel($student['st1'],41,$pattern, $patternAdmin);
             }else
             {
                 echo sprintf($pattern,'important','-');
