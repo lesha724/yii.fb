@@ -306,11 +306,24 @@ SQL;
                     }
                 }else{
                     //Костыль клименка, если два занятия в один день будет ошибка. будет выгребать только первую запись
-                    $lesson = R::model()->findByAttributes(array('r1'=>$r1,'r2'=>$date));
-                    if($lesson==null)
+                    //$lesson = R::model()->findByAttributes(array('r1'=>$r1,'r2'=>$date));
+                    $sql = <<<SQL
+                        select FIRST 1 r4 FROM EL_GURNAL_ZAN(:ELG2, :GR1, :ELG3, :ELG4)
+                        WHERE nom=:NOM AND r2=:DATE
+SQL;
+                    $command = Yii::app()->db->createCommand($sql);
+                    $command->bindValue(':GR1', $gr1);
+                    $command->bindValue(':ELG2', $elg->elg2);
+                    $command->bindValue(':ELG3', $elg->elg3);
+                    $command->bindValue(':ELG4', $elg->elg4);
+                    $command->bindValue(':NOM', $elgz->elgz3);
+                    $command->bindValue(':DATE', $date);
+                    $r4 = $command->queryScalar();
+
+                    if($r4==null)
                         $error = true;
                     else {
-                        $rz = Rz::model()->findByPk($lesson->r4);
+                        $rz = Rz::model()->findByPk($r4);
 
                         $ps79 = PortalSettings::model()->findByPk(79)->ps2;
                         $date2 = new DateTime($date/*.' '.$rz->rz9.':'.$rz->rz10*/);

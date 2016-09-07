@@ -108,26 +108,7 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
         ? round($marks[$key]['elgzst5'], 1)
         :( isset($marks[$key]) && $marks[$key]['elgzst5']==-1?tt('Отработано'):'');
 
-    if($typeCheck == 0)
-    {
-        $tooltip=tt('Отсутсвует');
-        $disabled_input = 'disabled="disabled"';
-        //$disabled_input_1 = 'disabled="disabled"';
-    }else
-    {
-        $tooltip=tt('Присутсвует');
-        if(!empty($elgzst4)&&$elgzst4!=''&&$elgzst4!=0)
-            $disabled = 'disabled="disabled"';
 
-        if($ps55==1&&$elgzst4==''&&$elgzst3==''&&$type_lesson==1)
-        {
-            if($date1>=$date2&&isset($marks[$key]['elgzst4'])) {
-                $elgzst4 = round($marks[$key]['elgzst4']);
-                $class_1 = '';
-                $disabled = 'disabled="disabled"';
-            }
-        }
-    }
 
 
     $class_1='';
@@ -151,6 +132,26 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
     if($elgzst5!='')
         $disabled_input = 'disabled="disabled"';
 
+    if($typeCheck == 0)
+    {
+        $tooltip=tt('Отсутсвует');
+        $disabled_input = 'disabled="disabled"';
+        //$disabled_input_1 = 'disabled="disabled"';
+    }else
+    {
+        $tooltip=tt('Присутсвует');
+        if(!empty($elgzst4)&&$elgzst4!=''&&$elgzst4!=0)
+            $disabled = 'disabled="disabled"';
+
+        if($ps55==1&&$elgzst4==''&&$elgzst3==''&&$type_lesson==1)
+        {
+            if($date1>=$date2&&isset($marks[$key]['elgzst4'])) {
+                $elgzst4 = round($marks[$key]['elgzst4']);
+                $class_1 = '';
+                $disabled = 'disabled="disabled"';
+            }
+        }
+    }
 
     if(!$read_only)
         $elgzst3_input='<input type="checkbox" data-toggle="tooltip" data-module-nom="'.$moduleNom.'-'.$st['st1'].'" data-placement="right" data-original-title="'.$tooltip.'" '.$elgzst3.' data-name="elgzst3" '.$disabled.'>';
