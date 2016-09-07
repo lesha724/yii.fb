@@ -381,11 +381,11 @@ SQL;
     public function getDisciplines($u1_vib_disc, $uch_god, $semester, $gr1_kod)
     {
         $sql = <<<SQL
-            select d1,d2,ucgn1 as UCGN1_KOD, ucx6, c2
+            select d1,d2,ucgn1 as UCGN1_KOD, ucx6/*, c2*/
             from d
             inner join uo on (d.d1 = uo.uo3)
-            inner join u on (uo.uo22 = u.u1)
-            inner join c on (u.u15 = c.c1)
+            /*inner join u on (uo.uo22 = u.u1)
+            inner join c on (u.u15 = c.c1)*/
             inner join us on (uo.uo1 = us.us2)
             inner join sem on (us.us3 = sem.sem1)
             inner join (select ucx1, ucx6 from ucx where ucx5>1) on (uo.uo19 = ucx1)
@@ -393,7 +393,7 @@ SQL;
             inner join ucgn on (ucxg2 = ucgn1)
             inner join ucgns on (ucgn1 = ucgns2)
             where (uo22 = :U1_VIB_DISC) and (sem3 = :UCH_GOD1) and (sem5 = :SEMESTER1) and (ucgns5  = :UCH_GOD2) and (ucgns6 = :SEMESTER2) and ucgn2 = :GR1_KOD
-            group by d1,d2,UCGN1, ucx6, c2
+            group by d1,d2,UCGN1, ucx6/*, c2*/
             order by d2 collate UNICODE
 SQL;
 
@@ -409,6 +409,36 @@ SQL;
             $disciplines[$key]['count_st'] = $this->getCountSt($u1_vib_disc, $uch_god, $semester,$d['d1']);
         }
         return $disciplines;
+    }
+
+    public function getC2($u1_vib_disc, $uch_god, $semester, $gr1_kod)
+    {
+        $sql = <<<SQL
+            select first 1 c2
+            from d
+            inner join uo on (d.d1 = uo.uo3)
+            inner join u on (uo.uo22 = u.u1)
+            inner join c on (u.u15 = c.c1)
+            inner join us on (uo.uo1 = us.us2)
+            inner join sem on (us.us3 = sem.sem1)
+            inner join (select ucx1, ucx6 from ucx where ucx5>1) on (uo.uo19 = ucx1)
+            inner join ucxg on (ucx1 = ucxg1)
+            inner join ucgn on (ucxg2 = ucgn1)
+            inner join ucgns on (ucgn1 = ucgns2)
+            where (uo22 = :U1_VIB_DISC) and (sem3 = :UCH_GOD1) and (sem5 = :SEMESTER1) and (ucgns5  = :UCH_GOD2) and (ucgns6 = :SEMESTER2) and ucgn2 = :GR1_KOD
+            order by d2 collate UNICODE
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':U1_VIB_DISC', $u1_vib_disc);
+        $command->bindValue(':UCH_GOD1', $uch_god);
+        $command->bindValue(':SEMESTER1', $semester);
+        $command->bindValue(':UCH_GOD2', $uch_god);
+        $command->bindValue(':SEMESTER2', $semester);
+        $command->bindValue(':GR1_KOD', $gr1_kod);
+        $c2 = $command->queryScalar();
+
+        return $c2;
     }
 
     private function getCountSt($u1_vib_disc, $uch_god, $semester, $d1)

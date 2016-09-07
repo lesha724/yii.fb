@@ -239,10 +239,13 @@ HTML;
 
             $disciplines = U::model()->getDisciplines($_SESSION['u1_vib_disc'], $uch_god, $semester, $gr1_kod);
 
+            $c2 = U::model()->getC2($_SESSION['u1_vib_disc'], $uch_god, $semester, $gr1_kod);
+
             // ставиш точку напротив дисциплины, которую студент ранее выбрал (если изменили количество дисциплин для выбора)
             $alreadyCheckedDisc = U::model()->getAlreadyChecked($_SESSION['u1_vib_disc'], $uch_god, $semester, $st1);
 
             $controls = '';
+            $controls .= '<h5 class="name-c2">'.$c2.'</h5>';
             foreach ($disciplines as $discipline) {
                 $isChecked = in_array($discipline['d1'], $alreadyCheckedDisc);
                 $value     = $discipline['ucgn1_kod'];
@@ -261,7 +264,6 @@ HTML;
                 }
 
                 $tooltip='<a href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="'.tt('Количество студентов записавшихся на дисциплину').$maxCountStr.'">'.$discipline['count_st'].$maxCountStr2.'</a>';
-                $controls .= '<h5 class="name-c2">'.$discipline['c2'].'</h5>';
                 $controls .= '<div class="subscription-disc">';
                 if($maxCount>$discipline['count_st']||$maxCount==0) {
                     $controls .= CHtml::checkBox('disciplines[]', $isChecked, array('value' => $value) + $disabled);
