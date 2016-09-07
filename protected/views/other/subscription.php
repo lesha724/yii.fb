@@ -261,6 +261,7 @@ HTML;
                 }
 
                 $tooltip='<a href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="'.tt('Количество студентов записавшихся на дисциплину').$maxCountStr.'">'.$discipline['count_st'].$maxCountStr2.'</a>';
+                $controls .= '<h5 class="name-c2">'.$discipline['c2'].'</h5>';
                 $controls .= '<div class="subscription-disc">';
                 if($maxCount>$discipline['count_st']||$maxCount==0) {
                     $controls .= CHtml::checkBox('disciplines[]', $isChecked, array('value' => $value) + $disabled);
