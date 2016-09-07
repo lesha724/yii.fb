@@ -543,11 +543,8 @@ SQL;
             return array();
 
         $sql=<<<SQL
-                SELECT elgzst.*,r2,elgz3
-                FROM elgzst
-                inner join elgz on (elgzst2 = elgz1)
-                inner join r on (elgz1 = r8)
-                WHERE elgzst1=:ST1 and r2 >= :DATE1 and r2 <= :DATE2
+                SELECT *
+                FROM STAT_PROP(:ST1,:DATE1, :DATE2)
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
@@ -573,7 +570,7 @@ SQL;
             foreach ($rows as $row) {
 
                 $r2 = $row['r2'];
-                $elgzst3 = $row['elgzst3'];
+                $elgzst3 = $row['prop'];
 
                 $condition = $monthStatistic
                     ? date('Y-m-d', $start) == date('Y-m-d', strtotime($r2))
@@ -604,6 +601,28 @@ SQL;
 
         return $statistic;
     }
+
+    /*public static function getCountLesson($gr1, $sem1, $start, $end){
+        if (empty($gr1) || empty($sem1) || empty($start) || empty($end))
+            return '-';
+
+        $sql = <<<SQL
+			select count(*)
+			from elgz
+			inner join elg on (elgz.elgz2 = elg.elg1 and elg3={$sem1})
+			inner join EL_GURNAL_ZAN(elg.elg2,:GR1,:SEM1, elg.elg4) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
+			WHERE r2 >= :DATA1 and r2 <= :DATA2
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':GR1', $gr1);
+        $command->bindValue(':SEM1', $sem1);
+        $command->bindValue(':DATE1', $start);
+        $command->bindValue(':DATE2', $end);
+
+        $count = $command->queryScalar();
+        return $count;
+    }*/
+
     public static function getElgzst3Reatake($elgzst3)
     {
         $arr=self::model()->getElgzst3s();

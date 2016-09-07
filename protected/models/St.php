@@ -749,38 +749,21 @@ SQL;
 
         return $students;
     }
-	
+	/*статистика посещаемость, просомтр пропусков по студенту*/
 	public function getStatisticForStudent($st1, $sem1)
     {
-        /*$sql = <<<SQL
-        select 
-                d.d2,us4,stegn9,stegn3,stegn4
-		from us
-		   inner join stegn on (stegn.stegn2 = us.us1)
-		   inner join uo on (us.us2 = uo.uo1)
-		   inner join d on (uo.uo3 = d.d1)
-		where stegn1=:st1 and us3=:sem1 and stegn4>0
-                group by d.d2,us4,stegn9,stegn3,stegn4;
-SQL;*/
-        $sql = <<<SQL
-        select
-                d.d2,us1,us4,r2,elgzst3,elgz3
-		from uo
-		   inner join elg on (uo.uo1 = elg2)
-		   inner join elgz on (elg1 = elgz2)
-		   inner join r on (elgz1=r8)
-		   inner join elgzst on (elgz1 = elgzst2)
-		   INNER JOIN nr on (r.r1 = nr.nr1)
-		   INNER JOIN us on (nr.nr2 = us.us1)
-		   inner join d on (uo.uo3 = d.d1)
-		where elgzst1=:st1 and elg3=:sem1 and elgzst3>0
-                group by d.d2,us1,us4,r2,elgzst3,elgz3;
+		list($firstDay, $lastDay) = Sem::model()->getSemesterStartAndEnd($sem1);
+
+		$sql=<<<SQL
+                SELECT *
+                FROM STAT_PROP(:ST1,:DATE1, :DATE2) WHERE prop>0 ORDER by r2 DESC
 SQL;
 
-        $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':st1', $st1);
-        $command->bindValue(':sem1', $sem1);
-        $statistic = $command->queryAll();
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':ST1', $st1);
+		$command->bindValue(':DATE1', $firstDay);
+		$command->bindValue(':DATE2', $lastDay);
+		$statistic = $command->queryAll();
 
         return $statistic;
     }

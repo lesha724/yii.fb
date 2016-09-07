@@ -19,7 +19,7 @@
 		$i=1;
 		foreach($statistic as $key)
 		{
-			if($key['elgzst3']==2){
+			if($key['prop']==2){
 				$table.= '<tr class="success">';
 			}
 			else
