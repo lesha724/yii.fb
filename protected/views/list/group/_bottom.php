@@ -3,7 +3,7 @@ function getPassportLabel($id,$type, $pattern, $patternAdmin){
     if(!Yii::app()->user->isAdmin)
         echo sprintf($pattern,'success','+');
     else{
-        echo sprintf($patternAdmin,'success','+');
+        echo sprintf($patternAdmin,'success', Yii::app()->createUrl('/site/studentPassport',array('_id'=>$id, 'type'=>$type)),'+');
     }
 }
 /**
@@ -41,7 +41,7 @@ function getPassportLabel($id,$type, $pattern, $patternAdmin){
 <tbody>
 <?php
     $pattern ='<td><span class="label label-%s">%s</span></td>';
-    $patternAdmin ='<td><span class="label label-%s">%s</span></td>';
+    $patternAdmin ='<td><a class="passport-link btn btn-%s btn-mini" href="%s">%s</a></td>';
 
 	$type=array(
 		0=>tt('бюджет'),
@@ -96,6 +96,14 @@ function getPassportLabel($id,$type, $pattern, $patternAdmin){
 		echo '</tr>';
 		$i++;
 	}
+
+    $js=<<<JS
+        $(document).on('click','.passport-link',function(event){
+            event.preventDefault();
+            openImageWindow($(this).attr('href'));
+        });
+JS;
+Yii::app()->clientScript->registerScript('passport-link', $js, CClientScript::POS_READY);
 ?>
 </tbody>
 </table>
