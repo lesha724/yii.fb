@@ -317,7 +317,7 @@ class XmlController extends Controller
                 }
 
                 $sql=<<<SQL
-                    SELECT K1,K2,K3,K6,K10,K7
+                    SELECT K1,K2,K3,K10,K7
                         FROM F
                         inner join k on (f.f1 = k.k7)
                     WHERE f12='1' and f17='0' and k11='1' and (k9 is null) and K1>0 $where

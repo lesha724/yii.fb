@@ -45,11 +45,11 @@ class K extends CActiveRecord
 			array('k1, k7, k8, k10, k12, k14', 'numerical', 'integerOnly'=>true),
 			array('k2', 'length', 'max'=>200),
 			array('k3, k4, k5, k15, k16, k17, k18', 'length', 'max'=>600),
-			array('k6, k11', 'length', 'max'=>4),
+			array('k11', 'length', 'max'=>4),
 			array('k9, k13', 'length', 'max'=>8),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('k1, k2, k3, k4, k5, k6, k7, k8, k9, k10, k11, k12, k13, k14, k15, k16, k17, k18', 'safe', 'on'=>'search'),
+			array('k1, k2, k3, k4, k5, k7, k8, k9, k10, k11, k12, k13, k14, k15, k16, k17, k18', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -75,7 +75,7 @@ class K extends CActiveRecord
 			'k3' => 'K3',
 			'k4' => 'K4',
 			'k5' => 'K5',
-			'k6' => 'K6',
+			//'k6' => 'K6',
 			'k7' => 'K7',
 			'k8' => 'K8',
 			'k9' => 'K9',
@@ -114,7 +114,7 @@ class K extends CActiveRecord
 		$criteria->compare('k3',$this->k3,true);
 		$criteria->compare('k4',$this->k4,true);
 		$criteria->compare('k5',$this->k5,true);
-		$criteria->compare('k6',$this->k6,true);
+		//$criteria->compare('k6',$this->k6,true);
 		$criteria->compare('k7',$this->k7);
 		$criteria->compare('k8',$this->k8);
 		$criteria->compare('k9',$this->k9,true);
@@ -187,7 +187,7 @@ SQL;
     public function getOnlyChairsFor($filial)
     {
         $sql=<<<SQL
-            SELECT K1,K2,K3,K15,K16,K17,K6,K10, K18
+            SELECT K1,K2,K3,K15,K16,K17,K10, K18
 				FROM F
 				inner join k on (f.f1 = k.k7)
 			WHERE f12='1' and f17='0' and k11='1' and k10=:FILIAL and (k9 is null) and K1>0
@@ -246,7 +246,7 @@ SQL;
     {
         $query = mb_strimwidth($query, 0, 50);
         $sql = <<<SQL
-            SELECT K1,K2,K3,K15,K16,K17,K6,K10, K18
+            SELECT K1,K2,K3,K15,K16,K17,K10, K18
                 FROM F
                 inner join k on (f.f1 = k.k7)
             WHERE f12='1' and k11<>'2' and (k9 is null) and K1>0
