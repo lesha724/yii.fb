@@ -4,6 +4,48 @@ $(document).ready(function(){
 
     $spinner1 = $('#spinner1');
 
+    $('div .journal_div_table2 .change-theme').click(function(event ){
+        event.preventDefault();
+
+        var $that = $(this);
+
+        var elgz1  = $that.data('nom');
+        var r1  = $that.data('r1');
+        var gr1  = $that.parents('[data-gr1]').data('gr1');
+
+        var params = {
+            elgz1   : elgz1,
+            gr1   : gr1,
+            r1 : r1
+        }
+
+        var url = $that.parents('[data-url-change-theme]').data('url-change-theme');
+
+        $spinner1.show();
+
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            data:params,
+            success: function( data ) {
+                if (!data.error) {
+                    $('#modalChangeTheme .modal-header h4').html(data.title);
+                    $('#modalChangeTheme #modal-content').html(data.html);
+                    //alert(1);
+                    $('#modalChangeTheme').modal('show');
+                } else {
+                    addGritter(data.html, tt.error, 'error');
+                }
+                $spinner1.hide();
+            },
+            error: function( data ) {
+                addGritter(data.html, tt.error, 'error');
+                $spinner1.hide();
+            }
+        });
+
+    })
+
     $('#journal-print,#journal-print-itog').click(function(){
         var action=$("#filter-form").attr("action");
         $("#filter-form").attr("action", $(this).data('url'));

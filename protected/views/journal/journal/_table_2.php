@@ -313,13 +313,14 @@ HTML;
     return sprintf($pattern);
 }
 
-function generateColumnName($date,$type_lesson,$ps57,$ps59)
+function generateColumnName($date,$type_lesson,$ps57,$ps59, $ps90, $date1, $date2)
 {
     if($date['elgz4']>1&&$ps57==1) {
         $pattern = <<<HTML
 	<th colspan="4">
 	    <i class="icon-hand-right icon-animated-hand-pointer blue"></i>
         <span data-rel="popover" class="nom%s" data-placement="top" data-content="%s" class="green">%s</span>
+        %s
     </th>
 HTML;
     }else {
@@ -327,6 +328,7 @@ HTML;
 	<th colspan="2">
 	    <i class="icon-hand-right icon-animated-hand-pointer blue"></i>
         <span data-rel="popover" class="nom%s" data-placement="top" data-content="%s" class="green">%s</span>
+        %s
     </th>
 HTML;
     }
@@ -353,7 +355,15 @@ HTML;
     if($ps59==1)
         $name.= ' '.$date['k2'];
 
-    return sprintf($pattern,$date['elgz3'],$date['ustem5'], $name);
+    $a = '';
+    if($ps90==1&&$date1<=$date2){
+        $a = CHtml::link('<i class="icon-pencil"></i>','#',array(
+            'data-nom'=>  $date['elgz1'],
+            'data-r1'=>  $date['r1'],
+            'class'=>'change-theme'
+        ));
+    }
+    return sprintf($pattern,$date['elgz3'],$date['ustem5'], $name, $a);
 }
 
 function countMarkTotal($marks)
@@ -378,8 +388,10 @@ function countMarkTotal($marks)
     $urlRetake = Yii::app()->createUrl('/journal/journalRetake');
     $urlModule= Yii::app()->createUrl('/journal/updateVmp');
 
+    $changeTheme= Yii::app()->createUrl('/journal/changeTheme');
+
     $table = <<<HTML
-<div class="{$classTable2}" data-ps33="{$ps33}" data-gr1="{$gr1}" data-url-module="{$urlModule}" data-url="{$url}" data-url-retake="{$urlRetake}" data-url-check="{$url_check}">
+<div class="{$classTable2}" data-ps33="{$ps33}" data-gr1="{$gr1}" data-url-module="{$urlModule}" data-url="{$url}" data-url-change-theme="{$changeTheme}" data-url-retake="{$urlRetake}" data-url-check="{$url_check}">
     <table class="table table-striped table-bordered table-hover journal_table">
         <thead>
             <tr>
@@ -413,9 +425,15 @@ HTML;
     $elgz3Nom = 1;
     $dateDiff = -1;
     $date1 = new DateTime(date('Y-m-d H:i:s'));
+    /*добавлять ли не проставленые занятия*/
+    $ps89 = PortalSettings::model()->findByPk(89)->ps2;
+    /*Разрешено ли менять тему занятий*/
+    $ps90 = PortalSettings::model()->findByPk(90)->ps2;
 
     foreach($dates as $date) {
-            $th .= generateColumnName($date, $model->type_lesson,$ps57,$ps59);
+            $date2  = new DateTime($date['r2']);
+
+            $th .= generateColumnName($date, $model->type_lesson,$ps57,$ps59, $ps90, $date1, $date2);
             $th2 .= generateTh2($ps9, $date, $model->type_lesson,$ps57);
             array_push($elgz1_arr, $date['elgz1']);
             //$column++;
@@ -440,6 +458,20 @@ HTML;
         $tr .= '<tr data-st1="'.$st1.'">';
         list($total_1[$st1], $total_count_1[$st1]) = countMarkTotal($marks);
         foreach($dates as $key => $date) {
+            $_nom=$date['elgz3'];
+            $date2 = new DateTime($date['r2']);
+            //если нет оценки добавляем ее ps89
+            //костыль баг если выставить настроку ставить ноль
+            if(!isset($marks[$_nom])&&$date1>=$date2&&$ps89==1){
+                $elgzst = Elg::model()->addRowMark($st1,$date['elgz1']);
+                $marks[$_nom] = array(
+                    'elgz3'=>$_nom,
+                    'elgzst3'=>$elgzst->elgzst3,
+                    'elgzst4'=>$elgzst->elgzst4,
+                    'elgzst5'=>$elgzst->elgzst5,
+                );
+            }
+
             if($date['elgz4']>1&&$ps57==1)
             {
                 $tr .= table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$moduleNom,$uo1,$modules,$potoch,$sem7,$ps60);

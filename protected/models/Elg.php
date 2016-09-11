@@ -129,6 +129,22 @@ SQL;
         return $res;
     }
 
+	public function addRowMark($st1, $elgz1)
+	{
+		$elgzst = new Elgzst();
+		$elgzst->elgzst0 = new CDbExpression('GEN_ID(GEN_ELGZST, 1)');
+		$elgzst->elgzst1 = $st1;
+		$elgzst->elgzst2 = $elgz1;
+		$elgzst->elgzst7 = Yii::app()->user->dbModel->p1;
+		$elgzst->elgzst6 = date('Y-m-d H:i:s');
+		$elgzst->elgzst3 = 0;
+		$elgzst->elgzst4 = 0;
+		$elgzst->elgzst5 = 0;
+		$error = !$elgzst->save();
+
+		return $elgzst;
+	}
+
     public static function getElg1($uo1,$type_lesson,$sem1)
     {
         $sql=<<<SQL

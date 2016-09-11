@@ -157,4 +157,30 @@ order by elgz3*/
 
         return $dates;
     }
+
+	public function getDatesForJournalByChangeTheme($uo1, $gr1,$type_lesson, $sem1, $nom)
+	{
+		$sql = <<<SQL
+			select elgz3,r2,ustem5,us4,ustem7,ustem6,ustem1,elgz4,elgz1,nr30,k2,k3
+			from elgz
+			inner join elg on (elgz.elgz2 = elg.elg1 and elg2=:UO1 and elg4=:TYPE_LESSON and elg3={$sem1})
+			inner join ustem on (elgz.elgz7 = ustem.ustem1)
+			inner join EL_GURNAL_ZAN({$uo1},:GR1,:SEM1, {$type_lesson}) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
+			inner join rz on (EL_GURNAL_ZAN.r4 = rz1)
+			inner join nr on (r1 = nr1)
+			inner join k on (nr30 = k1)
+			WHERE elgz3>:NOM
+			order by elgz3
+SQL;
+
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':UO1', $uo1);
+		$command->bindValue(':GR1', $gr1);
+		$command->bindValue(':TYPE_LESSON', $type_lesson);
+		$command->bindValue(':SEM1', $sem1);
+		$command->bindValue(':NOM', $nom);
+		$dates = $command->queryAll();
+
+		return $dates;
+	}
 }

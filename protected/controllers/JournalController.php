@@ -24,6 +24,8 @@ class JournalController extends Controller
                     'journalExcel',
                     'updateVmp',
                     'journalExcelItog',
+                    'changeTheme',
+                    'saveChangeTheme',
 
                     'retake',
                     'searchRetake',
@@ -191,6 +193,147 @@ SQL;
                                 $command->execute();
                             }
                         }
+                    }
+                }
+            }
+        }
+
+        Yii::app()->end(CJSON::encode(array('error' => $error, 'errorType' => $errorType)));
+    }
+
+    public function actionChangeTheme()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $error=false;
+        $errorType=0;
+        $title='';
+        $html='';
+
+        $ps90 = PortalSettings::model()->findByPk(90)->ps2;
+        if($ps90!=1){
+            $error = true;
+            $errorType = 2;
+        }else {
+
+            $elgz1 = Yii::app()->request->getParam('elgz1', null);
+            $r1 = Yii::app()->request->getParam('r1', null);
+            $gr1 = Yii::app()->request->getParam('gr1', null);
+
+            if ($elgz1 == null || $gr1 == null|| $r1 == null) {
+                $error = true;
+                $errorType = 2;
+            } else {
+                $elgz = Elgz::model()->findByPk($elgz1);
+                $gr = Gr::model()->findByPk($gr1);
+                $elg = Elg::model()->findByPk($elgz->elgz2);
+
+                if (empty($elgz) || empty($gr)|| empty($elg)) {
+                    $error = true;
+                    $errorType = 2;
+                } else {
+                    $elgzu = Elgzu::model()->findByAttributes(array('elgzu2'=>$gr1, 'elgzu3'=>$elgz1));
+                    if($elgzu==null)
+                    {
+                        $elgzu = new Elgzu();
+                        $elgzu->elgzu2 = $gr1;
+                        $elgzu->elgzu3 = $elgz1;
+                    }
+                    $elgzu->r1 = $r1;
+
+                    $title = tt('Смена темы для занятия'). ' №'.$elgz->elgz3;
+                    $html .= $this->renderPartial('journal/_change_theme', array(
+                        'elgz'=>$elgz,
+                        'gr'=>$gr,
+                        'elg'=>$elg,
+                        'model'=>$elgzu
+                    ), true);
+                }
+            }
+        }
+
+        $res = array(
+            'title'=>$title,
+            'html'=>$html,
+            'error' => $error,
+            'errorType'=>$errorType
+        );
+
+        Yii::app()->end(CJSON::encode($res));
+    }
+
+    public function actionSaveChangeTheme()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $gr1 = Yii::app()->request->getParam('elgzu2', null);
+        $elgz1 = Yii::app()->request->getParam('elgzu3', null);
+        $ustem1 = Yii::app()->request->getParam('elgzu4', null);
+        $r1 = Yii::app()->request->getParam('r1', null);
+
+        $error=false;
+        $errorType=0;
+
+        if($elgz1==null || $gr1==null || $ustem1==null|| $r1==null)
+        {
+            $error = true;
+            $errorType=2;
+        }
+        else {
+            $elgz = Elgz::model()->findByPk($elgz1);
+            if(empty($elgz)){
+                $error = true;
+                $errorType = 2;
+            }
+            else {
+                $elg = Elg::model()->findByPk($elgz->elgz2);
+
+                $sql = <<<SQL
+                select elgz3
+                from elgz
+                inner join elg on (elgz.elgz2 = elg.elg1)
+                inner join EL_GURNAL_ZAN(:UO1,:GR1,:SEM1, :TYPE) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
+                WHERE elgz1=:ELGZ1 AND r1=:R1
+                order by elgz3
+SQL;
+                $command = Yii::app()->db->createCommand($sql);
+                $command->bindValue(':ELGZ1', $elgz1);
+                $command->bindValue(':R1', $r1);
+                $command->bindValue(':GR1', $gr1);
+                $command->bindValue(':UO1', $elg->elg2);
+                $command->bindValue(':SEM1', $elg->elg3);
+                $command->bindValue(':TYPE', $elg->elg4);
+                $res = $command->queryRow();
+                if (count($res) == 0 || empty($res)) {
+                    $error = true;
+                    $errorType = 2;
+                } else {
+                    $sql = <<<SQL
+                SELECT * FROM  EL_GURNAL(:P1,0,0,0,2,0,:R1,0,0);
+SQL;
+                    $command = Yii::app()->db->createCommand($sql);
+                    $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
+                    $command->bindValue(':R1', $r1);
+                    $res = $command->queryRow();
+                    if (count($res) == 0 || empty($res) || $res['dostup'] == 0) {
+                        $error = true;
+                        $errorType = 3;
+                    } else {
+                        $model = Elgzu::model()->findByAttributes(array('elgzu2' => $gr1, 'elgzu3' => $elgz1));
+                        if ($model == null) {
+                            $model = new Elgzu();
+                            $model->elgzu1 = new CDbExpression('GEN_ID(GEN_ELGZU, 1)');
+                            $model->elgzu2 = $gr1;
+                            $model->elgzu3 = $elgz1;
+                        }
+
+                        $model->elgzu4 = $ustem1;
+                        $model->elgzu6 = Yii::app()->user->dbModel->p1;
+                        $model->elgzu5 = date('Y-m-d H:i:s');
+
+                        $error = !$model->save();
                     }
                 }
             }
