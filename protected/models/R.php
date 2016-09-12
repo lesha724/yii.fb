@@ -153,6 +153,14 @@ order by elgz3*/
 			$dates[$key]['text'] = '№'.$dates[$key]['elgz3'].' '.$dates[$key]['formatted_date'].' '.$us4;
 			if($ps59==1)
 				$dates[$key]['text'].= ' '.$dates[$key]['k2'];
+
+			$row = Elgzu::model()->getUstemFromElgzuByElgz1AndGroup($date['elgz1'],$gr1);
+			if(!empty($row))
+			{
+				$dates[$key]['ustem5']=$row['ustem5'];
+				$dates[$key]['ustem6']=$row['ustem6'];
+				$dates[$key]['ustem7']=$row['ustem7'];
+			}
         }
 
         return $dates;
@@ -169,7 +177,7 @@ order by elgz3*/
 			inner join rz on (EL_GURNAL_ZAN.r4 = rz1)
 			inner join nr on (r1 = nr1)
 			inner join k on (nr30 = k1)
-			WHERE elgz3>:NOM
+			WHERE r2>=:DATE AND elgz3!=:NOM
 			order by elgz3
 SQL;
 
@@ -178,9 +186,19 @@ SQL;
 		$command->bindValue(':GR1', $gr1);
 		$command->bindValue(':TYPE_LESSON', $type_lesson);
 		$command->bindValue(':SEM1', $sem1);
+		$command->bindValue(':DATE', date('d.m.Y'));
 		$command->bindValue(':NOM', $nom);
 		$dates = $command->queryAll();
 
+		foreach($dates as $key=>$date){
+			$row = Elgzu::model()->getUstemFromElgzuByElgz1AndGroup($date['elgz1'],$gr1);
+			if(!empty($row))
+			{
+				$dates[$key]['ustem5']=$row['ustem5'];
+				$dates[$key]['ustem6']=$row['ustem6'];
+				$dates[$key]['ustem7']=$row['ustem7'];
+			}
+		}
 		return $dates;
 	}
 }

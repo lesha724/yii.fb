@@ -26,7 +26,7 @@ class Elgzu extends CActiveRecord
 		return 'elgzu';
 	}
 
-	public $r1;
+	public $r1, $elgz1;
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -36,7 +36,7 @@ class Elgzu extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('elgzu1', 'required'),
-			array('elgzu1, elgzu2, elgzu3, elgzu4, elgzu6', 'numerical', 'integerOnly'=>true),
+			array(' elgzu2, elgzu3, elgzu4, elgzu6', 'numerical', 'integerOnly'=>true),
 			array('elgzu5', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -112,5 +112,60 @@ class Elgzu extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+
+	public function getUstem1ByElgz1AndGroup($elgz1,$gr1,$elg){
+
+		$sql = <<<SQL
+			select elgzu4
+			from elgzu
+			WHERE elgzu2=:GR1 AND elgzu3=:ELGZ1
+SQL;
+
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':GR1', $gr1);
+		$command->bindValue(':ELGZ1', $elgz1);
+		$ustem1 = $command->queryScalar();
+
+		//print_r('--'.$ustem1.'--'.$elgz1.' '.$gr1.'--');
+
+		if(empty($ustem1)) {
+			$sql = <<<SQL
+				select ustem1
+				from elgz
+				inner join elg on (elgz.elgz2 = elg.elg1)
+				inner join ustem on (elgz.elgz7 = ustem.ustem1)
+				inner join EL_GURNAL_ZAN(:UO1,:GR1,:SEM1, :TYPE_LESSON ) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
+				WHERE elgz1=:ELGZ1
+SQL;
+
+			$command = Yii::app()->db->createCommand($sql);
+			$command->bindValue(':UO1', $elg->elg2);
+			$command->bindValue(':GR1', $gr1);
+			$command->bindValue(':TYPE_LESSON', $elg->elg4);
+			$command->bindValue(':SEM1', $elg->elg3);
+			$command->bindValue(':ELGZ1', $elgz1);
+			$ustem1 = $command->queryScalar();
+		}
+
+		//print_r('++'.$ustem1.'++');
+		return $ustem1;
+	}
+
+	public function getUstemFromElgzuByElgz1AndGroup($elgz1,$gr1){
+
+		$sql = <<<SQL
+			select ustem.*
+			from elgzu
+			INNER JOIN ustem on (elgzu4 = ustem1)
+			WHERE elgzu2=:GR1 AND elgzu3=:ELGZ1
+SQL;
+
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':GR1', $gr1);
+		$command->bindValue(':ELGZ1', $elgz1);
+		$ustem = $command->queryRow();
+
+		return $ustem;
 	}
 }

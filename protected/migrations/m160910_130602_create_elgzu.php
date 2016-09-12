@@ -4,6 +4,7 @@ class m160910_130602_create_elgzu extends CDbMigration
 {
 	public function safeUp()
 	{
+		/*Смена тем заняий для журнала*/
 		$sql = <<<SQL
 			CREATE TABLE ELGZU (
 				ELGZU1  INTE_NOT_NULL NOT NULL /* ключ */,

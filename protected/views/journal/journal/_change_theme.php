@@ -20,13 +20,13 @@
         $elgz->elgz3
     );
 
-    $items = CHtml::listData($dates, 'ustem1',
+    $items = CHtml::listData($dates, 'elgz1',
         function($data){
             return sprintf('<strong>'.tt('Занятие').' №%s</strong> %s',$data['elgz3'],$data['ustem5']);
         }
     );
 
-    echo $form->radioButtonList($model,'elgzu4',$items, array('separator'=>' '));
+    echo $form->radioButtonList($model,'elgz1',$items, array('separator'=>' '));
 
     $html .= '</div>';
     echo $html;

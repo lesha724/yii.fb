@@ -44,7 +44,55 @@ $(document).ready(function(){
             }
         });
 
-    })
+    });
+
+    $('#change-theme-journal').click(function(event ){
+        var $that =$(this);
+
+        var url = $that.parents('[data-url]').data('url');
+
+        var elgzu2=$('#Elgzu_elgzu2').val();
+        var elgzu3=$('#Elgzu_elgzu3').val();
+        var elgz1=$("input:radio[name='Elgzu[elgz1]']:checked").val();
+        var r1=$('#Elgzu_r1').val();
+
+        var params = {
+            elgzu2:elgzu2,
+            elgzu3:elgzu3,
+            elgz1:elgz1,
+            r1:r1
+        }
+
+        if (isNaN(params.elgz1)) {
+            addGritter('1', tt.error, 'error')
+            return false;
+        }
+
+        title='';
+
+        $.ajax({
+            url: url,
+            data:params,
+            dataType: 'json',
+            success: function( data ) {
+                if (!data.error) {
+                    addGritter(title, tt.success, 'success');
+                    //$td.find('[data-name="elgzst5"]').val(elgotr2);
+                    //recalculateBothTotal(st1,ps84);
+                    $('#filter-form').submit();
+                } else {
+                    addGritter(title, tt.error, 'error');
+                }
+                $spinner1.hide();
+                $('#modalChangeTheme').modal('hide');
+            },
+            error: function( data ) {
+                addGritter(title, tt.error, 'error');
+                $spinner1.hide();
+                $('#modalChangeTheme').modal('hide');
+            }
+        });
+    });
 
     $('#journal-print,#journal-print-itog').click(function(){
         var action=$("#filter-form").attr("action");
