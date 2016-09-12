@@ -1032,38 +1032,35 @@ SQL;
                             if(!empty($nom)) {
 
                                 $module = Vvmp::model()->checkModul($elg['elg2'], $gr1,$nom);
-                                if (empty($module) || !empty($module['vmpv6'])) {
+                                if (!empty($module['vmpv6'])) {
                                     $error = true;
                                     $errorType = 6;
                                 }
                             }
                         }
-
-                        if(!$error&&!empty($elgzst))
-                        {
-                            $model=new Elgotr();
-                            $model->elgotr0=new CDbExpression('GEN_ID(GEN_ELGOTR, 1)');
-                            $model->elgotr1=$elgzst->elgzst0;
-                            $model->elgotr2=$elgotr2;
-                            $model->elgotr3=$elgotr3;
-                            $model->elgotr4=$elgotr4;
-                            $model->elgotr5=date('Y-m-d H:i:s');
-                            $error=!$model->save();
-                            if(!$error)
-                            {
-                                $elgzst->elgzst5=$elgotr2;
-                                $elgzst->save();
-                            }else
-                            {
-                                $errorType=7;
+                        if(!$error) {
+                            if (!empty($elgzst)) {
+                                $model = new Elgotr();
+                                $model->elgotr0 = new CDbExpression('GEN_ID(GEN_ELGOTR, 1)');
+                                $model->elgotr1 = $elgzst->elgzst0;
+                                $model->elgotr2 = $elgotr2;
+                                $model->elgotr3 = $elgotr3;
+                                $model->elgotr4 = $elgotr4;
+                                $model->elgotr5 = date('Y-m-d H:i:s');
+                                $error = !$model->save();
+                                if (!$error) {
+                                    $elgzst->elgzst5 = $elgotr2;
+                                    $elgzst->save();
+                                } else {
+                                    $errorType = 7;
+                                }
+                            } else {
+                                /*print_r($error);*/
+                                $error = true;
+                                $errorType = 6;
+                                /*print_r($elgzst);
+                                print_r($us4);*/
                             }
-                        }else
-                        {
-                            /*print_r($error);*/
-                            $error=true;
-                            $errorType=6;
-                            /*print_r($elgzst);
-                            print_r($us4);*/
                         }
                     }else
                     {
