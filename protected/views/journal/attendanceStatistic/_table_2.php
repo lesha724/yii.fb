@@ -28,7 +28,7 @@ function tds($start, $attendance, $monthStatistic)
     $showWeekends = $monthStatistic && $start != 'summary';
     if ($showWeekends) {
         $dayOfWeek = date('N', $start);
-        $weekend   = in_array($dayOfWeek, array(6,7)) ? 'weekend': '';
+        $weekend   = in_array($dayOfWeek, array(7)) ? 'weekend': '';
     }
 
     return <<<HTML
