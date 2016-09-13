@@ -22,7 +22,22 @@
 
     $items = CHtml::listData($dates, 'elgz1',
         function($data){
-            return sprintf('<strong>'.tt('Занятие').' №%s</strong> %s',$data['elgz3'],$data['ustem5']);
+            switch($data['elgz4'])
+            {
+                case '0':
+                    $type='';
+                    break;
+                case '1':
+                    $type=tt('Субмодуль');
+                    break;
+                case '2':
+                    $type=tt('ПМК');
+                    break;
+                default:
+                    $type='';
+            }
+
+            return sprintf('<strong>'.tt('Занятие').' №%s '.tt('Тема').' №%s %s</strong> %s',$data['elgz3'],$data['ustem3'],$type,$data['ustem5']);
         }
     );
 

@@ -152,5 +152,24 @@ SQL;
 		else
 			return 0;
 	}
+	/*Для смены тем, проверка закрыто занятие иди нет*/
+	public function checkLesson($date,$permLesson,$ps78,$date1,$ps27){
+		$disabled = false;
+		if(isset($permLesson[$date['elgz1']]))
+			if(strtotime($permLesson[$date['elgz1']]) <= strtotime('yesterday'))
+				$disabled = true;
+
+		if($ps78==0) {
+			$date2 = new DateTime($date['r2']);
+			if (!empty($ps27) && !isset($permLesson[$date['elgz1']])) {
+				$diff = $date1->diff($date2)->days;
+				if ($diff > $ps27) {
+					$disabled = true;
+				}
+			}
+		}
+
+		return $disabled;
+	}
 
 }

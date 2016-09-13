@@ -313,7 +313,7 @@ HTML;
     return sprintf($pattern);
 }
 
-function generateColumnName($date,$type_lesson,$ps57,$ps59, $ps90, $date1, $date2)
+function generateColumnName($date,$type_lesson,$ps57,$ps59, $ps90,$permLesson, $date1, $ps78,$ps27)
 {
     if($date['elgz4']>1&&$ps57==1) {
         $pattern = <<<HTML
@@ -355,14 +355,17 @@ HTML;
     if($ps59==1)
         $name.= ' '.$date['k2'];
 
+    $disabled = Elgz::model()->checkLesson($date,$permLesson,$ps78,$date1,$ps27);
+
     $a = '';
-    if($ps90==1&&$date1<=$date2){
+    if($ps90==1&&!$disabled){
         $a = CHtml::link('<i class="icon-pencil"></i>','#',array(
             'data-nom'=>  $date['elgz1'],
             'data-r1'=>  $date['r1'],
             'class'=>'change-theme'
         ));
     }
+
     return sprintf($pattern,$date['elgz3'],$date['ustem5'], $name, $a);
 }
 
@@ -430,12 +433,20 @@ HTML;
     /*Разрешено ли менять тему занятий*/
     $ps90 = PortalSettings::model()->findByPk(90)->ps2;
 
+    $ps78 = PortalSettings::model()->findByPk(78)->ps2;
+    $ps27 = PortalSettings::model()->getSettingFor(27);
+
+    foreach($dates as $date) {
+        array_push($elgz1_arr, $date['elgz1']);
+    }
+
+    $permLesson=Elgr::model()->getList($gr1,$elgz1_arr);
+
     foreach($dates as $date) {
             $date2  = new DateTime($date['r2']);
 
-            $th .= generateColumnName($date, $model->type_lesson,$ps57,$ps59, $ps90, $date1, $date2);
+            $th .= generateColumnName($date, $model->type_lesson,$ps57,$ps59, $ps90, $permLesson,$date1, $ps78,$ps27);
             $th2 .= generateTh2($ps9, $date, $model->type_lesson,$ps57);
-            array_push($elgz1_arr, $date['elgz1']);
             //$column++;
 
             $date2  = new DateTime($date['r2']);
@@ -447,8 +458,6 @@ HTML;
             }
             $count_dates++;
     }
-
-    $permLesson=Elgr::model()->getList($gr1,$elgz1_arr);
 
     foreach($students as $st) {
         $potoch = 0;

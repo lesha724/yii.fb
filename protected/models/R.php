@@ -169,7 +169,7 @@ order by elgz3*/
 	public function getDatesForJournalByChangeTheme($uo1, $gr1,$type_lesson, $sem1, $nom)
 	{
 		$sql = <<<SQL
-			select elgz3,r2,ustem5,us4,ustem7,ustem6,ustem1,elgz4,elgz1,nr30,k2,k3
+			select elgz3,r2,ustem5,us4,ustem7,ustem6,ustem1,elgz4,elgz1,nr30,k2,k3,USTEM3
 			from elgz
 			inner join elg on (elgz.elgz2 = elg.elg1 and elg2=:UO1 and elg4=:TYPE_LESSON and elg3={$sem1})
 			inner join ustem on (elgz.elgz7 = ustem.ustem1)
@@ -177,7 +177,7 @@ order by elgz3*/
 			inner join rz on (EL_GURNAL_ZAN.r4 = rz1)
 			inner join nr on (r1 = nr1)
 			inner join k on (nr30 = k1)
-			WHERE r2>=:DATE AND elgz3!=:NOM
+			WHERE elgz3!=:NOM
 			order by elgz3
 SQL;
 
@@ -186,19 +186,41 @@ SQL;
 		$command->bindValue(':GR1', $gr1);
 		$command->bindValue(':TYPE_LESSON', $type_lesson);
 		$command->bindValue(':SEM1', $sem1);
-		$command->bindValue(':DATE', date('d.m.Y'));
+		//$command->bindValue(':DATE', date('d.m.Y'));
 		$command->bindValue(':NOM', $nom);
 		$dates = $command->queryAll();
 
-		foreach($dates as $key=>$date){
-			$row = Elgzu::model()->getUstemFromElgzuByElgz1AndGroup($date['elgz1'],$gr1);
-			if(!empty($row))
-			{
-				$dates[$key]['ustem5']=$row['ustem5'];
-				$dates[$key]['ustem6']=$row['ustem6'];
-				$dates[$key]['ustem7']=$row['ustem7'];
-			}
+		$rows = array();
+		$date1 = new DateTime(date('Y-m-d H:i:s'));
+		$ps78 = PortalSettings::model()->findByPk(78)->ps2;
+		$ps27 = PortalSettings::model()->getSettingFor(27);
+		$ps90 = PortalSettings::model()->findByPk(90)->ps2;
+
+		$elgz1_arr = array();
+		foreach($dates as $date) {
+			array_push($elgz1_arr, $date['elgz1']);
 		}
-		return $dates;
+
+		$permLesson=Elgr::model()->getList($gr1,$elgz1_arr);
+
+		foreach($dates as $key=>$date){
+
+			$disabled = Elgz::model()->checkLesson($date,$permLesson,$ps78,$date1,$ps27);
+			$a = '';
+			if($ps90==1&&!$disabled){
+				$rows[$key] = $date;
+				$row = Elgzu::model()->getUstemFromElgzuByElgz1AndGroup($date['elgz1'],$gr1);
+				if(!empty($row))
+				{
+					$rows[$key]['ustem5']=$row['ustem5'];
+					$rows[$key]['ustem6']=$row['ustem6'];
+					$rows[$key]['ustem7']=$row['ustem7'];
+				}
+			}
+
+
+
+		}
+		return $rows;
 	}
 }
