@@ -29,6 +29,8 @@ JS
     , CClientScript::POS_HEAD);
 
 $params = $model->subscriptionParams;
+if(empty($params))
+    throw new CHttpException(400, tt('Ошибка, возможно запись на дисциплины закрыта! Обратитесь к администратору!'));
 $params['st1'] = $model->st1;
 $params['semester'] =0;
 
