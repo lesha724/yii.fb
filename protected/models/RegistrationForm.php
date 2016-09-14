@@ -47,7 +47,7 @@ class RegistrationForm extends CFormModel
 
     public function checkExistence($attribute,$params)
     {
-        $st = St::model()->findAll('st15=:ID', array(':ID'=>$this->$attribute));
+        $st = St::model()->findAll('st15=:ID ORDER BY st1 DESC', array(':ID'=>$this->$attribute));
         $p  = P::model()->findAll('p13=:ID', array(':ID'=>$this->$attribute));
 
         $thereIsNotSuchId = count($st) + count($p) == 0;

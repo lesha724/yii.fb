@@ -196,6 +196,38 @@ class SiteController extends Controller
         $this->render('registration',array('model'=>$model));
     }
 
+	/**
+	 * Displays the RegistrationInternational
+	 */
+	public function actionRegistrationInternational()
+	{
+		$model=new RegistrationInternationalForm();
+		$model->scenario = 'step-1';
+
+		if(isset($_POST['RegistrationInternationalForm']))
+		{
+			$model->attributes=$_POST['RegistrationInternationalForm'];
+
+			//print_r($model);
+
+			if(!empty($model->number)&&$model->validate(array('number'))) {
+				$model->scenario = 'step-2';
+			}
+
+			if(!empty($model->serial)&&$model->validate(array('serial'))){
+				$model->scenario = 'step-3';
+			}
+
+			if ($model->scenario == 'step-3'&&$model->validate() && $model->register())
+			{
+				return $this->redirect('index');
+			}
+
+		}
+
+		$this->render('registration-international',array('model'=>$model));
+	}
+
     public function actionForgotPassword()
     {
         if (!Yii::app()->request->isAjaxRequest)
