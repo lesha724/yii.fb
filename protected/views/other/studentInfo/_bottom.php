@@ -159,6 +159,10 @@ $form=$this->beginWidget('CActiveForm', array(
             <i class="icon-print bigger-110"></i>
             <?=tt('Печать')?>
         </a>
+        <a class="btn btn-success" href="<?=Yii::app()->createUrl('/other/studentInfoPdf')?>">
+            <i class="icon-print bigger-110"></i>
+            <?=tt('Печать Pdf')?>
+        </a>
 
         <?php
             endif;

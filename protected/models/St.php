@@ -549,6 +549,33 @@ SQL;
         return $foto;
     }
 
+	public function getShortCodesImageRender($st1)
+	{
+		$sql = <<<SQL
+        SELECT foto4 as foto
+        FROM foto
+        WHERE foto1 = {$st1} AND foto2 = 1
+SQL;
+
+		$string = Yii::app()->db->connectionString;
+		$parts  = explode('=', $string);
+
+		$host     = trim($parts[1].'d');
+		$login    = Yii::app()->db->username;
+		$password = Yii::app()->db->password;
+		$dbh      = ibase_connect($host, $login, $password);
+
+		$result = ibase_query($dbh, $sql);
+		$data   = ibase_fetch_object($result);
+
+		if (!empty($data->FOTO)) {
+			header("Content-type: image/jpeg");
+			ibase_blob_echo($data->FOTO);
+		}
+
+		ibase_free_result($result);
+	}
+
     public function getInfoForStudentInfoExcel($st1)
     {
         if (empty($st1))

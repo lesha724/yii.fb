@@ -44,6 +44,7 @@ class OtherController extends Controller
                     'employment',
                     'studentInfo',
                     'studentInfoExcel',
+                    'studentInfoPdf',
                     'studentPassport',
                     'deletePassport',
                     'showPassport',
@@ -983,6 +984,135 @@ SQL;
             'model' => $model,
             'student'=>$student
         ));
+    }
+
+    public function actionStudentInfoPdf()
+    {
+        $model = new TimeTableForm;
+        if (Yii::app()->user->isStd) {
+
+            $model->student = Yii::app()->user->dbModel->st1;
+
+        } else
+            throw new CHttpException(404, '1You don\'t have an access to this service');
+
+        $stInfoForm = new StInfoForm();
+        $stInfoForm->fillData($model);
+
+        if(empty($model->student))
+            throw new CHttpException(404, '2You don\'t have an access to this service');
+        else
+        {
+            $student=St::model()->findByPk($model->student);
+            if(empty($student))
+                throw new CHttpException(404, '3You don\'t have an access to this service');
+            else
+            {
+                $discipline = D::model()->getDisciplineForCourseWork($model->student);
+                if ($discipline) {
+                    $courseWork = D::model()->getFirstCourseWork($model->student, $discipline['us1']);
+                    //list($rus, $eng) = Spkr::model()->findAllInArray();
+                    $nkrs1 = $courseWork['nkrs1'];
+                    $p1    = $courseWork['nkrs6'];
+                    $nkrs6 = P::model()->getTeacherNameWithDol($courseWork['nkrs6']);
+                    $nkrs7 = $courseWork['nkrs7'];
+                    $nkrs4 = $courseWork['nkrs4'];
+                    $nkrs5 = $courseWork['nkrs5'];
+                    list($zav, $kav) = P::model()->getZavKavByTeacher($p1);
+                    $k2=$kav['k3'];
+                    $st_info=St::model()->getInfoForStudentInfoExcel($model->student);
+                    $zav_name=Sh::getShortName($zav['p3'],$zav['p4'],$zav['p5']);
+                    if(empty($nkrs4))
+                    {
+                        $spkr=Spkr::model()->findByPk($nkrs7);
+                        if(!empty($spkr))
+                        {
+                            $nkrs4=$spkr->spkr2;
+                            $nkrs5=$spkr->spkr3;
+                        }
+                    }
+                    /* @var $mPDF1 mPDF*/
+                    $mPDF1 = Yii::app()->ePdf->mpdf();
+
+                    $patternTitle = <<<HTML
+                        <style>
+                        p {
+                            text-indent: 20px; /* Отступ первой строки в пикселах */
+                        }
+                        td,th {
+                        border: 1px solid black; /* Параметры рамки */
+                       }
+                        </style>
+                        <div style="margin-left: 50%%">
+                            <span>
+                                На кафедру <br>
+                                %s <br>
+                                (заведующий - профессор %s) <br>
+                                студента %s курса %s группы <br>
+                                %s <br>
+                                %s
+                            </span>
+                        </div>
+                        <h2 style="text-align: center">Заявление</h2>
+
+                        <p>Прошу утвердить тему моей курсовой/дипломной работы</p>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>Название на русском языке</td>
+                                    <td><strong>%s</strong></td>
+                                </tr>
+                               <tr>
+                                    <td>Название на английском языке</td>
+                                    <td><strong>%s</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>Научный руководитель %s</p>
+                        <p>
+                            <div style="float: left; width: 40%%">« ___ » __________ 20__г.</div><div style="float: right;text-align: right; width: 40%%">_____________</div>
+                        </p>
+
+                        <p>
+                            <div style="float: left; width: 30%%">«не возражаю»</div><div style="float: left; text-align: center;width: 30%%">_____________</div><div style="float: right;text-align: right; width: 30%%">Научный руководитель</div>
+                        </p>
+
+                        <p>
+                            <div style="float: left; width: 30%%">«не возражаю»</div><div style="float: left; text-align: center;width: 30%%">_____________</div><div style="float: right;text-align: right; width: 30%%">Заведующий кафедрой</div>
+                            <br>
+                            <div style="float: left; width: 30%%">(только для дипломных работ)</div>
+                        </p>
+HTML;
+
+                    $mPDF1->WriteHTML(sprintf(
+                        $patternTitle,
+                        $k2,
+                        $zav_name,
+                        $st_info['sem4'],
+                        $st_info['name'],
+                        $st_info['f3'],
+                        SH::getShortName($student->st2,$student->st3,$student->st4),
+                        $nkrs4,
+                        $nkrs5,
+                        $nkrs6
+                    ));
+
+                    $data=St::model()->getShortCodesImage($model->student);
+                    if($data!=null)
+                    {
+                        //штрихкод
+                        $url = $this->createAbsoluteUrl('/site/studentBarcode', array('_id' => $model->student));
+                        $mPDF1->WriteHTML('<p style="text-align:right;margin-top: 100px"><img src="'.$url.'" /><p>');
+                    }
+
+
+                    $mPDF1->Output();
+                }
+                else
+                    throw new CHttpException(404, '4You don\'t have an access to this service');
+            }
+        }
+
     }
 
     public function actionStudentInfoExcel()

@@ -322,6 +322,16 @@ HTML;
         Users::model()->renderPhoto($id, $type);
     }
 
+	public function actionStudentBarcode()
+	{
+		$id   = Yii::app()->request->getParam('_id', null);
+
+		if (is_null($id))
+			throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+		St::model()->getShortCodesImageRender($id);
+	}
+
 	public function actionStudentPassport()
 	{
 		if(!Yii::app()->user->isAdmin)
