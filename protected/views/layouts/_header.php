@@ -75,6 +75,12 @@
                                 </a>
                             </li>
                             <li>
+                                <a href="<?=Yii::app()->createUrl('site/registrationInternational')?>" id="registration-international">
+                                    <i class="icon-user"></i>
+                                    <?=tt('Регистрация иностр. граждан')?>
+                                </a>
+                            </li>
+                            <li>
                                 <a href="<?=Yii::app()->createUrl('site/forgotPassword')?>" id="forgot-password">
                                     <i class="icon-envelope"></i>
                                     <?=tt('Забыл пароль')?>
