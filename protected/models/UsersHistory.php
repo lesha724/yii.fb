@@ -37,9 +37,9 @@ class UsersHistory extends CActiveRecord
 		return array(
 			array('uh1', 'required'),
 			array('uh2, uh3,type,adm', 'numerical', 'integerOnly'=>true),
-			array('uh4,login,name', 'length', 'max'=>80),
-			array('uh5', 'length', 'max'=>20),
-			array('uh6', 'length', 'max'=>180),
+			array('uh4,login,name', 'length', 'max'=>200),
+			array('uh5', 'length', 'max'=>200),
+			array('uh6', 'length', 'max'=>200),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('uh1, uh2, uh3, uh4, uh5, uh6,type,login,name,adm', 'safe', 'on'=>'search'),
@@ -204,8 +204,8 @@ class UsersHistory extends CActiveRecord
 		$model->uh4 = self::getRealIp();
 		$model->uh5 = date('Y-m-d H:i:s');
 		$model->uh6 = SH::user_browser(Yii::app()->request->getUserAgent());
-		if(!$model->save())
-			print_r($model->getErrors());
+		$model->save();
+			//print_r($model->getErrors());
 	}
 
 	private static function getRealIp()
