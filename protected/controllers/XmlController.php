@@ -37,7 +37,8 @@ class XmlController extends Controller
                     'UploadStudentsId',
                     'UploadTeachersId',
                     'GetChairs',
-                    'GetFaculties'
+                    'GetFaculties',
+                    'GetGroups',
                 ),
             ),
             array('deny',
@@ -264,7 +265,89 @@ class XmlController extends Controller
             }
         }
     }
+    /**
+     * Список кафедр
+     * возможно через необязательные теги фильтрация по факультету, филиалу,кафедре черз логическое и
+     */
+    public function actionGetGroups(){
+        $xml = $this->getXmlFromPost();
+        if(empty($xml))
+            Yii::app()->end;
+        else{
+            /*Проверка есть ли тег GetGroups*/
+            if($xml->getName()!='Request'||!isset($xml->GetGroups))
+                $this->errorXml(self::ERROR_XML_STRUCTURE,'Ошибка струтуры xml');
+            else {
+                $xmlAction = $xml->GetGroups;
+                /*фильтры*/
+                $course = null;
+                $faculty = null;
+                $group = null;
+                /*перебираем всех наследников ищем наши фильтрі*/
+                foreach($xmlAction->children() as $child){
+                    /* @var $child SimpleXMLElement */
 
+                    $tag = $child->getName();
+
+                    switch($tag){
+                        case 'Faculty':
+                            $faculty = $child->__ToString();
+                            break;
+                        case 'Course':
+                            $course = $child->__ToString();
+                            break;
+                        case 'Group':
+                            $group = $child->__ToString();
+                            break;
+                    }
+                }
+
+                $where = '';
+
+                if($faculty!=null){
+                    $where.=' AND sp5=:FACULTY';
+                }
+
+                if($course!=null){
+                    $where.=' AND sem4=:COURSE';
+                }
+
+                if($group!=null){
+                    $where.=' AND GR1=:GROUP';
+                }
+
+                $sql=<<<SQL
+                    SELECT sg4, sem4, gr13,gr7,gr3,gr1, gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26, sp5
+                    from sp
+                       inner join sg on (sp.sp1 = sg.sg2)
+                       inner join sem on (sg.sg1 = sem.sem2)
+                       inner join gr on (sg.sg1 = gr.gr2)
+                       inner join ucgn on (gr.gr1 = ucgn.ucgn2)
+                       inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
+                       inner join ucxg on (ucgn.ucgn1 = ucxg.ucxg2)
+                    WHERE ucxg1<30000 and gr13=0 and gr6 is null
+                         and sem3=:YEAR1 and sem5=:SEM1 and ucgns5=:YEAR2 and ucgns6=:SEM2 $where
+                    GROUP BY sg4, sem4, gr13,gr7,gr3,gr1, gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,sp5
+                    ORDER BY sp5, sem4, gr7,gr3
+SQL;
+                list($year, $sem) = SH::getCurrentYearAndSem();
+
+                $command = Yii::app()->db->createCommand($sql);
+                $command->bindValue(':GROUP', $group);
+                $command->bindValue(':FACULTY', $faculty);
+                $command->bindValue(':COURSE', $course);
+                $command->bindValue(':YEAR1', $year);
+                $command->bindValue(':YEAR2', $year);
+                $command->bindValue(':SEM1', $sem);
+                $command->bindValue(':SEM2', $sem);
+                $chairs = $command->queryAll();
+
+                $this->render('groups',array(
+                    'groups'=>$chairs
+                ));
+            }
+        }
+    }
     /**
      * Список кафедр
      * возможно через необязательные теги фильтрация по факультету, филиалу,кафедре черз логическое и
