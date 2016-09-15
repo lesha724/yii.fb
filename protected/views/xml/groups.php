@@ -10,7 +10,7 @@
     <Groups>
         <?php
             foreach($groups as $group){
-                echo "<Group id=\"{$group['gr1']}\"  type=\"{$group['gr13']}\" faculty=\"{$group['sp5']}\" course=\"{$group['sem4']}\">";
+                echo "<Group id=\"{$group['gr1']}\" filial=\"{$group['f14']}\" sort=\"{$group['gr7']}\" type=\"{$group['gr13']}\" faculty=\"{$group['sp5']}\" course=\"{$group['sem4']}\">";
                 echo Gr::model()->getGroupName($group['sem4'], $group),'</Group>';
             }
         ?>

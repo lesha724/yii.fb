@@ -39,6 +39,7 @@ class XmlController extends Controller
                     'GetChairs',
                     'GetFaculties',
                     'GetGroups',
+                    'GetAudiences',
                 ),
             ),
             array('deny',
@@ -266,8 +267,68 @@ class XmlController extends Controller
         }
     }
     /**
-     * Список кафедр
-     * возможно через необязательные теги фильтрация по факультету, филиалу,кафедре черз логическое и
+     * Список Аудитории
+     * возможно через необязательные теги фильтрация по филиалу, адимтории
+     */
+    public function actionGetAudiences(){
+        $xml = $this->getXmlFromPost();
+        if(empty($xml))
+            Yii::app()->end;
+        else{
+            /*Проверка есть ли тег GetAudiences*/
+            if($xml->getName()!='Request'||!isset($xml->GetAudiences))
+                $this->errorXml(self::ERROR_XML_STRUCTURE,'Ошибка струтуры xml');
+            else {
+                $xmlAction = $xml->GetAudiences;
+                /*фильтры*/
+                $audience = null;
+                $filial = null;
+                /*перебираем всех наследников ищем наши фильтрі*/
+                foreach($xmlAction->children() as $child){
+                    /* @var $child SimpleXMLElement */
+
+                    $tag = $child->getName();
+
+                    switch($tag){
+                        case 'Audience':
+                            $audience = $child->__ToString();
+                            break;
+                        case 'Filial':
+                            $filial = $child->__ToString();
+                            break;
+                    }
+                }
+
+                $where = '';
+
+                if($filial!=null){
+                    $where.=' AND A6=:FILIAL';
+                }
+
+                if($audience!=null){
+                    $where.=' AND A1=:AUDIENCE';
+                }
+
+                $sql= <<<SQL
+                  SELECT *
+                  FROM A
+                  WHERE A5 is null and A1>0 {$where}
+                  ORDER BY A8,A9,A2
+SQL;
+                $command = Yii::app()->db->createCommand($sql);
+                $command->bindValue(':AUDIENCE', $audience);
+                $command->bindValue(':FILIAL', $filial);
+                $audiences = $command->queryAll();
+
+                $this->render('audiences',array(
+                    'audiences'=>$audiences
+                ));
+            }
+        }
+    }
+    /**
+     * Список Группы
+     * возможно через необязательные теги фильтрация по факультету,курсу,кафедре черз логическое и
      */
     public function actionGetGroups(){
         $xml = $this->getXmlFromPost();
@@ -282,6 +343,7 @@ class XmlController extends Controller
                 /*фильтры*/
                 $course = null;
                 $faculty = null;
+                $filial = null;
                 $group = null;
                 /*перебираем всех наследников ищем наши фильтрі*/
                 foreach($xmlAction->children() as $child){
@@ -292,6 +354,9 @@ class XmlController extends Controller
                     switch($tag){
                         case 'Faculty':
                             $faculty = $child->__ToString();
+                            break;
+                        case 'Filial':
+                            $filial = $child->__ToString();
                             break;
                         case 'Course':
                             $course = $child->__ToString();
@@ -308,6 +373,10 @@ class XmlController extends Controller
                     $where.=' AND sp5=:FACULTY';
                 }
 
+                if($filial!=null){
+                    $where.=' AND f14=:FILIAL';
+                }
+
                 if($course!=null){
                     $where.=' AND sem4=:COURSE';
                 }
@@ -317,8 +386,9 @@ class XmlController extends Controller
                 }
 
                 $sql=<<<SQL
-                    SELECT sg4, sem4, gr13,gr7,gr3,gr1, gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26, sp5
+                    SELECT sg4, sem4, gr13,gr7,gr3,gr1, gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26, sp5,f14
                     from sp
+                        inner join f on (sp.sp5 = f.f1)
                        inner join sg on (sp.sp1 = sg.sg2)
                        inner join sem on (sg.sg1 = sem.sem2)
                        inner join gr on (sg.sg1 = gr.gr2)
@@ -327,7 +397,7 @@ class XmlController extends Controller
                        inner join ucxg on (ucgn.ucgn1 = ucxg.ucxg2)
                     WHERE ucxg1<30000 and gr13=0 and gr6 is null
                          and sem3=:YEAR1 and sem5=:SEM1 and ucgns5=:YEAR2 and ucgns6=:SEM2 $where
-                    GROUP BY sg4, sem4, gr13,gr7,gr3,gr1, gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,sp5
+                    GROUP BY sg4, sem4, gr13,gr7,gr3,gr1, gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,sp5,f14
                     ORDER BY sp5, sem4, gr7,gr3
 SQL;
                 list($year, $sem) = SH::getCurrentYearAndSem();
@@ -335,6 +405,7 @@ SQL;
                 $command = Yii::app()->db->createCommand($sql);
                 $command->bindValue(':GROUP', $group);
                 $command->bindValue(':FACULTY', $faculty);
+                $command->bindValue(':FILIAL', $filial);
                 $command->bindValue(':COURSE', $course);
                 $command->bindValue(':YEAR1', $year);
                 $command->bindValue(':YEAR2', $year);
