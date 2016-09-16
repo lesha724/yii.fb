@@ -5,7 +5,7 @@
  * Date: 09.02.2016
  * Time: 11:00
  */
-Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/mobile/script/timeTable/script.js', CClientScript::POS_HEAD);
+Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/mobile/script/timetable/script.js', CClientScript::POS_HEAD);
 Yii::app()->clientScript->registerPackage('datepicker-mobile');
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/mobile/datepicker/locales/bootstrap-datepicker.'.Yii::app()->language.'.min.js', CClientScript::POS_END);
 
