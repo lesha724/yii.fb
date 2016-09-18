@@ -5,7 +5,7 @@ class XmlController extends Controller
     const FORMAT_DATE = 'd.m.Y'; //09.08.2016- формат дат
 
     const ERROR_NOT_POST = 101; //ошибка если не пост запрос
-    const ERROR_EMPTY_POST = 102; //ошибка если не пост параментры пусты
+    const ERROR_EMPTY_POST = 102; //ошибка если пост параментры пусты
     const ERROR_XML = 103; //ошибка если в потс параметре передаеться не хмл
     const ERROR_XML_STRUCTURE = 104; //ошибка если отсутсвют парамерты обязательные хмл
     const ERROR_PARAM = 105; //ошибка если парамтрры не валидные
@@ -17,6 +17,7 @@ class XmlController extends Controller
     const VIEW_STUDENT = 1;
     const VIEW_TEACHER = 2;
     const VIEW_GROUP = 3;
+    const VIEW_AUDIENCE = 4;
 
     public function filters() {
 
@@ -34,6 +35,7 @@ class XmlController extends Controller
                     'GetTimetableForStudent',
                     'GetTimetableForGroup',
                     'GetTimetableForTeacher',
+                    'GetTimetableForAudience',
                     'UploadStudentsId',
                     'UploadTeachersId',
                     'GetChairs',
@@ -110,7 +112,7 @@ class XmlController extends Controller
         if(empty($xml))
             Yii::app()->end;
         else{
-            /*Проверка есть ли тег TimetableForStudent*/
+            /*Проверка есть ли тег TimetableForGroup*/
             if($xml->getName()!='Request'||!isset($xml->TimetableForGroup))
                 $this->errorXml(self::ERROR_XML_STRUCTURE,'Ошибка струтуры xml');
             else {
@@ -148,9 +150,68 @@ class XmlController extends Controller
                     if(empty($timeTable))
                         $this->errorXml(self::ERROR_EMPTY_TIMETABLE, 'Расписание не найдено');
 
+                    $timeTable = $this->fillTimeTableByXml($timeTable,self::VIEW_GROUP);
+
                     $this->render('timeTableGroup',array(
                         'timeTable'=>$timeTable,
                         'type' => self::VIEW_GROUP
+                    ));
+                }
+            }
+        }
+    }
+
+    /**
+     * расписание аудитории
+     */
+    public function actionGetTimetableForAudience(){
+        $xml = $this->getXmlFromPost();
+        if(empty($xml))
+            Yii::app()->end;
+        else{
+            /*Проверка есть ли тег TimetableForAudience*/
+            if($xml->getName()!='Request'||!isset($xml->TimetableForAudience))
+                $this->errorXml(self::ERROR_XML_STRUCTURE,'Ошибка струтуры xml');
+            else {
+                $xmlAction = $xml->TimetableForAudience;
+                /*Проверка есть ли теги нужные параметры*/
+                if (
+                    !isset($xmlAction->Audience) ||
+                    !isset($xmlAction->PeriodStart) ||
+                    !isset($xmlAction->PeriodFinish)
+                )
+                    $this->errorXml(self::ERROR_XML_STRUCTURE, 'Ошибка струтуры(параметры) xml');
+                else {
+                    /*загрузка параментров*/
+
+                    $audienceID = $xmlAction->Audience->__ToString();
+                    //print_r($audience);
+                    $PeriodStart = $xmlAction->PeriodStart->__ToString();
+                    $PeriodFinish = $xmlAction->PeriodFinish->__ToString();
+
+                    $dateStart = date_create($PeriodStart);
+                    if($dateStart===false)
+                        $this->errorXml(self::ERROR_PARAM, 'PeriodStart не являеться датой');
+
+                    $dateFinish = date_create($PeriodFinish);
+                    if($dateFinish===false)
+                        $this->errorXml(self::ERROR_PARAM, 'PeriodFinish не являеться датой');
+
+                    $audience = A::model()->findByAttributes(array('a1'=>$audienceID));
+                    if($audience==null)
+                        $this->errorXml(self::ERROR_PARAM, 'audienceID '.$audienceID.' не являеться валидным');
+
+
+                    $timeTable=$this->getTimeTable($audience->a1, $dateStart->format(self::FORMAT_DATE), $dateFinish->format(self::FORMAT_DATE), 3);
+
+                    if(empty($timeTable))
+                        $this->errorXml(self::ERROR_EMPTY_TIMETABLE, 'Расписание не найдено');
+
+                    $timeTable = $this->fillTimeTableByXml($timeTable,self::VIEW_AUDIENCE);
+
+                    $this->render('timeTableAudience',array(
+                        'timeTable'=>$timeTable,
+                        'type' => self::VIEW_AUDIENCE
                     ));
                 }
             }
@@ -201,6 +262,8 @@ class XmlController extends Controller
 
                     if(empty($timeTable))
                         $this->errorXml(self::ERROR_EMPTY_TIMETABLE, 'Расписание не найдено');
+
+                    $timeTable = $this->fillTimeTableByXml($timeTable,self::VIEW_TEACHER);
 
                     $this->render('timeTableTeacher',array(
                         'timeTable'=>$timeTable,
@@ -257,6 +320,8 @@ class XmlController extends Controller
 
                     if(empty($timeTable))
                         $this->errorXml(self::ERROR_EMPTY_TIMETABLE, 'Расписание не найдено');
+
+                    $timeTable = $this->fillTimeTableByXml($timeTable,self::VIEW_STUDENT);
 
                     $this->render('timeTableStudent',array(
                         'timeTable'=>$timeTable,
@@ -841,10 +906,10 @@ SQL;
 
     /*Получить расписание*/
     /*
-     * $id -> индефикатор st1, gr1, p1
+     * $id -> индефикатор st1, gr1, p1, a1
      * $dateStart -> дата "c"
      * $dateFinish -> дата "по"
-     * $type - 1 расписание студента, 0 - расписание группы, 2-преподователя
+     * $type - 1 расписание студента, 0 - расписание группы, 2-преподователя, 3-аудитории
      * */
     private function getTimeTable($id, $dateStart, $dateFinish, $type){
         switch($type)
@@ -859,7 +924,7 @@ SQL;
                 $sql ='SELECT * FROM TTPR(:ID, :DATE_1, :DATE_2) ORDER BY ned, r2, r3';
                 break;
             case 3:
-                $sql ='SELECT * FROM RAPR(:ID, :DATE_1, :DATE_2) ORDER BY ned, r2, r3';
+                $sql ='SELECT * FROM RAA(:LANG,:ID, :DATE_1, :DATE_2) ORDER BY ned, r2,r3';
                 break;
         }
         $command = Yii::app()->db->createCommand($sql);
@@ -874,6 +939,26 @@ SQL;
             return array();
 
         return $timeTable;
+    }
+
+    private function fillTimeTableByXml($timeTable, $type)
+    {
+        $res = array();
+        foreach($timeTable as $key => $day) {
+
+            $r2 = strtotime($day['r2']); // date
+            $r3 = $day['r3'];            // lesson
+
+            if (! isset($res[$r2]['timeTable'][$r3])) {
+
+                $res[$r2]['timeTable'][$r3] = $day;
+                $res[$r2]['timeTable'][$r3]['gr'][$day['gr1']]=$day['gr13'];
+            } else
+                $res[$r2]['timeTable'][$r3]['gr'][$day['gr1']]=$day['gr13'];
+
+        }
+        //die(var_dump($res));
+        return $res;
     }
 
 }
