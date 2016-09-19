@@ -65,10 +65,12 @@ foreach($timeTable as $key=> $day) {
         echo '<Type>', $lesson['us4'], '</Type>';
 
         if ($type != XmlController::VIEW_GROUP) {
+            echo '<Groups>';
             /*Группа*/
             foreach($lesson['gr'] as $key=>$group) {
                 echo '<Group type="' . $group . '">', $key, '</Group>';
             }
+            echo '</Groups>';
         }
         /*Стандарное время или нет*/
         $pos = stripos($lesson['d3'], "(!)");
