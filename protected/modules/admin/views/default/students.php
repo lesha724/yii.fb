@@ -51,7 +51,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         ),
         array(
             'class'=>'CButtonColumn',
-            'template'=>'{grants} {enter}',
+            'template'=>'{grants} {enter} {delete}',
             //'header' => tt('Настройки'),
             'header'=>CHtml::dropDownList(
                     'pageSize',
@@ -78,6 +78,17 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                     'options' => array(
                         'class' => 'btn btn-mini btn-primary',
                         'title'=>tt('Авторизироваться'),
+                    ),
+                    'visible'=>'!empty($data->account)'
+                ),
+
+                'delete' => array(
+                    'label'=>'<i class="icon-trash bigger-120"></i>',
+                    'imageUrl'=>false,
+                    'url'=>'Yii::app()->createAbsoluteUrl("/admin/default/deleteUser", array("id" => !empty($data->account)? $data->account->u1: "-1"))',
+                    'options' => array(
+                        'class' => 'btn btn-mini btn-danger',
+                        'title'=>tt('Удалить'),
                     ),
                     'visible'=>'!empty($data->account)'
                 ),
