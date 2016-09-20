@@ -2,6 +2,11 @@
 
 class DefaultController extends AdminController
 {
+    public function actionGenerateUser()
+    {
+        $this->render('generateUser');
+    }
+
     public function actionEnter($id){
         $user = Users::model()->findByPk($id);
         if($user === null){
