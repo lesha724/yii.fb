@@ -4,7 +4,18 @@ class DefaultController extends AdminController
 {
     public function actionGenerateUser()
     {
-        $this->render('generateUser');
+        $model = new GenerateUserForm();
+        $model->unsetAttributes();  // clear any default values
+        if (isset($_GET['pageSize'])) {
+            Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
+            unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
+        }
+        if(isset($_GET['GenerateUserForm']))
+            $model->attributes=$_GET['GenerateUserForm'];
+
+        $this->render('generateUser',array(
+            'model'=>$model
+        ));
     }
 
     public function actionDeleteUser($id)
