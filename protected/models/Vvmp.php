@@ -301,8 +301,19 @@ SQL;
 		return $modules;*/
 	}
 
-	public function getModul($uo1,$gr1)
+	public function getModul($uo1,$gr1,$elgz3,$elg1)
 	{
+		$sql = <<<SQL
+			SELECT COUNT(*) from elgz
+			WHERE elgz4=2 AND elgz3<:NOM AND elgz2=:ELG1
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':NOM', $elgz3);
+		$command->bindValue(':ELG1', $elg1);
+		$countModulePrev = $command->queryScalar();
+
+		//print_r($countModulePrev);
+
 		$sql = <<<SQL
 			SELECT vvmp1,vmpv1,vmpv4,vmpv3,vmpv5,vvmp6,vmpv6 from vvmp
 			INNER JOIN vmpv on (vvmp1=vmpv2)
@@ -310,7 +321,7 @@ SQL;
 			SELECT  uo3 from uo where uo1=:UO1
 			)
 			and vmpv6 is null
-			and vmpv7=:GR1 and vvmp4 = (
+			and vmpv7=:GR1 AND vvmp6=:NOM and vvmp4 = (
 			select
 			   first 1 sem7
 				from sem
@@ -326,6 +337,7 @@ SQL;
 		$command->bindValue(':UO1', $uo1);
 		$command->bindValue(':YEAR', Yii::app()->session['year']);
 		$command->bindValue(':SEM', Yii::app()->session['sem']);
+		$command->bindValue(':NOM', $countModulePrev+1);
 		$res = $command->queryRow();
 
 		return $res;

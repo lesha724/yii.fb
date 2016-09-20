@@ -311,8 +311,9 @@ SQL;
             return;
 
         $elg = Elg::model()->findByPk($elgz->elgz2);
-        $module = Vvmp::model()->getModul($elg->elg2, $gr1);
-
+        $module = Vvmp::model()->getModul($elg->elg2, $gr1,$elgz->elgz3,$elg->elg1);
+        //var_dump($module);
+        //print_r(1);
         $sql=<<<SQL
             SELECT elgz3 FROM elgz WHERE elgz2=:ELGZ2 AND elgz4=2 AND elgz3>:ELGZ3 ORDER by elgz3 asc
 SQL;

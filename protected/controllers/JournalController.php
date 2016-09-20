@@ -159,7 +159,7 @@ SQL;
                         $errorType = 22;
                     } else {
                         $elg = Elg::model()->findByPk($elgz->elgz2);
-                        $module = Vvmp::model()->getModul($elg->elg2, $gr1);
+                        $module = Vvmp::model()->getModul($elg->elg2, $gr1,$elgz->elgz3,$elg->elg1);
                         //print_r($module['vmpv1']);
                         if ($module['vmpv1'] != $vmpv1) {
                             $error = true;
