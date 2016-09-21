@@ -22,6 +22,7 @@ $options = array(
     ' '.tt('Ведение модулей'),
     ' '.tt('Екзаменационная сессия'),
     ' '.tt('Общая успеваемость'),
+    ' '.tt('Общая информация'),
 );
 
 $htmlOptions = array(
@@ -65,6 +66,12 @@ $htmlOptions = array(
         <?=CHtml::checkBox('settings[52]', PortalSettings::model()->findByPk(52)->ps2, $htmlOptions2)?>
         <span class="lbl"> <?=tt('Показывать таб общая успеваемость')?></span>
         <?=CHtml::hiddenField('settings[52]', PortalSettings::model()->findByPk(52)->ps2)?>
+    </div>
+
+    <div class="control-group">
+        <?=CHtml::checkBox('settings[91]', PortalSettings::model()->findByPk(91)->ps2, $htmlOptions2)?>
+        <span class="lbl"> <?=tt('Показывать таб общая информация')?></span>
+        <?=CHtml::hiddenField('settings[91]', PortalSettings::model()->findByPk(91)->ps2)?>
     </div>
 
     <div class="form-actions">

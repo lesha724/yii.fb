@@ -125,6 +125,8 @@ HTML;
         array_push($tabs,array('label'=>tt('Екзаменационная сессия'), 'content'=>$this->renderPartial('studentCard/_exam', $params,true), 'active'=>$ps50==3));
     if(PortalSettings::model()->findByPk(52)->ps2==1)
         array_push($tabs,array('label'=>tt('Общая успеваемость'), 'content'=>$this->renderPartial('studentCard/_progress', $params,true), 'active'=>$ps50==4));
+    if(PortalSettings::model()->findByPk(91)->ps2==1)
+        array_push($tabs,array('label'=>tt('Общая Информация'), 'content'=>'', 'active'=>$ps50==5));
 
     /*array('label'=>Yii::t('main', 'Текущая задолженость'), 'content'=>$this->renderPartial('studentCard/_retake',$params,true), 'active'=>$ps50==1,'visible'=>PortalSettings::model()->findByPk(48)->ps2==1);
     array('label'=>Yii::t('main', 'Модульный контроль'), 'content'=>$this->renderPartial('studentCard/_module', $params,true), 'active'=>$ps50==2,'visible'=>PortalSettings::model()->findByPk(49)->ps2==1);
