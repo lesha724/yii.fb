@@ -18,6 +18,134 @@ class DefaultController extends AdminController
         ));
     }
 
+    public function actionGenerateUserExcel()
+    {
+        $model = new GenerateUserForm();
+        $model->unsetAttributes();  // clear any default values
+        if(isset($_POST['GenerateUserForm']))
+            $model->attributes=$_POST['GenerateUserForm'];
+
+        //var_dump($model->users);
+
+        if(empty($model->users))
+            throw new CHttpException(400,'Invalid request. Empty params.');
+
+        $users = explode(',',$model->users);
+
+        Yii::import('ext.phpexcel.XPHPExcel');
+        $objPHPExcel= XPHPExcel::createPHPExcel();
+        $objPHPExcel->getProperties()->setCreator("ACY")
+            ->setLastModifiedBy("ACY ".date('Y-m-d H-i'))
+            ->setTitle("Jornal ".date('Y-m-d H-i'))
+            ->setSubject("Jornal ".date('Y-m-d H-i'))
+            ->setDescription("Jornal document, generated using ACY Portal. ".date('Y-m-d H:i:'))
+            ->setKeywords("")
+            ->setCategory("Result file");
+        $objPHPExcel->setActiveSheetIndex(0);
+        $sheet=$objPHPExcel->getActiveSheet();
+
+        $sheet->setCellValueByColumnAndRow(0,1,tt('тип'));
+        $sheet->setCellValueByColumnAndRow(1,1,tt('ФИО'));
+        $sheet->setCellValueByColumnAndRow(2,1,tt('Дата рождения'));
+        $sheet->setCellValueByColumnAndRow(3,1,tt('логин'));
+        $sheet->setCellValueByColumnAndRow(4,1,tt('пароль'));
+
+        $sheet->getColumnDimension('A')->setWidth(15);
+        $sheet->getColumnDimension('B')->setWidth(30);
+        $sheet->getColumnDimension('C')->setWidth(18);
+        $sheet->getColumnDimension('D')->setWidth(18);
+        $sheet->getColumnDimension('E')->setWidth(18);
+
+        $i = 2;
+
+        foreach($users as $user){
+            if(empty($user))
+                continue;
+
+
+            list($id,$type) = explode('-',$user);
+
+            if(!in_array($type, array(0,1,2))){
+                $sheet->mergeCellsByColumnAndRow(0, $i, 4, $i)->setCellValueByColumnAndRow(0, $i,'Не верный тип '.$type);
+                continue;
+            }
+
+            $_card = null;
+            $name = $bDate = '';
+            $typeName = GenerateUserForm::getType($type);
+
+            if($type==0||$type==2){
+                /* @var $_card St*/
+                $_card = St::model()->findByPk($id);
+                if(!empty($_card)) {
+                    $name = SH::getShortName($_card->st2, $_card->st3, $_card->st4);
+                    $bDate = $_card->st7;;
+                }
+            }
+            if($type==1){
+                /* @var $_card P*/
+                $_card = P::model()->findByPk($id);
+                if(!empty($_card)) {
+                    $name = SH::getShortName($_card->p3, $_card->p4, $_card->p5);
+                    $bDate = $_card->p9;
+                }
+            }
+            if(empty($_card)){
+                $sheet->mergeCellsByColumnAndRow(0, $i, 4, $i)->setCellValueByColumnAndRow(0, $i,'Не найдена карточка '.$typeName.' '.$id);
+                continue;
+            }
+
+            $count = Users::model()->countByAttributes(array('u5'=>$type, 'u6'=>$id));
+            if($count>0){
+                //уже есть зарегистрированные пользователи
+                $sheet->mergeCellsByColumnAndRow(0, $i, 4, $i)->setCellValueByColumnAndRow(0, $i,'уже есть зарегистрированные пользователи '.$typeName.' '.$name.' '.$bDate);
+                continue;
+            }
+
+            $username = 'user'.($id+100000000).$type;
+            $password = bin2hex(openssl_random_pseudo_bytes(5));
+            $model = new Users;
+            $model->u1 = new CDbExpression('GEN_ID(GEN_USERS, 1)');
+            $model->u2 = $username;
+            $model->u3 = $password;
+            $model->u4 = '';
+            $model->u5 = $type;
+            $model->u6 = $id;
+            if($model->save(false)){
+                $sheet->setCellValueByColumnAndRow(0,$i,$typeName);
+                $sheet->setCellValueByColumnAndRow(1,$i,$name);
+                $sheet->setCellValueByColumnAndRow(2,$i,$bDate);
+                $sheet->setCellValueByColumnAndRow(3,$i,$username);
+                $sheet->setCellValueByColumnAndRow(4,$i,$password);
+            }else{
+                //ошибка сохранения
+                $sheet->mergeCellsByColumnAndRow(0, $i, 4, $i)->setCellValueByColumnAndRow(0, $i,'Ошибка сохранения '.$typeName.' '.$name.' '.$bDate);
+                continue;
+            }
+            $i++;
+        }
+
+        $sheet->getStyleByColumnAndRow(0,1,4,$i-1)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        // Redirect output to a clientâ€™s web browser (Excel5)
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="ACY_GENERATE_USER_'.date('Y-m-d H-i').'.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+    }
+
     public function actionDeleteUser($id)
     {
         if(Yii::app()->request->isPostRequest)

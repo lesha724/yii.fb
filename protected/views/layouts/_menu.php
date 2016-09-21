@@ -193,6 +193,11 @@ $this->widget('zii.widgets.CMenu', array(
                     'active' => $_a=='parents' || $_a=='prntGrants'
                 ),
                 array(
+                    'label'  => $_l2.tt('Генерация пользователей'),
+                    'url'    => _u('/admin/default/generateUser'),
+                    'active' => $_a=='generateUser'
+                ),
+                array(
                     'label'  => $_l2.tt('Карточка студента'),
                     'url'    => _u('/admin/default/studentCard'),
                     'active' => $_c=='default' && $_m=='studentCard'

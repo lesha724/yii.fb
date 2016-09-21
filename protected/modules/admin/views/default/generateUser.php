@@ -10,6 +10,9 @@ $this->pageHeader=tt('Генерация пользователей');
 $this->breadcrumbs=array(
     tt('Генерация пользователей'),
 );
+
+Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/admin/generateUser.js', CClientScript::POS_HEAD);
+
 ?>
 
 <div class="span8">
@@ -27,32 +30,38 @@ $this->breadcrumbs=array(
         'type'=>'striped hover bordered',
         'rowHtmlOptionsExpression' => 'array("data-id"=>$data["id"], "data-type"=>$data["type"])',
         'columns'=>array(
+            'lastName'=>array(
+                'name'=>'lastName',
+                'header'=>$model->getAttributeLabel('lastName'),
+                'value'=>function($data) {
+                    return $data['last_name'];
+                },
+            ),
             'firstName'=>array(
                 'name'=>'firstName',
+                'header'=>$model->getAttributeLabel('firstName'),
                 'value'=>function($data) {
                     return $data['first_name'];
                 },
             ),
             'secondName'=>array(
                 'name'=>'secondName',
+                'header'=>$model->getAttributeLabel('secondName'),
                 'value'=>function($data) {
                     return $data['second_name'];
                 },
             ),
-            'lastName'=>array(
-                'name'=>'lastName',
-                'value'=>function($data) {
-                    return $data['last_name'];
-                },
-            ),
+
             'bDate'=>array(
                 'name'=>'bDate',
+                'header'=>$model->getAttributeLabel('bDate'),
                 'value'=>function($data) {
                     return date_format(date_create_from_format('Y-m-d H:i:s', $data['b_date']), 'd-m-Y');
                 },
             ),
             'type'=>array(
                 'name'=>'type',
+                'header'=>$model->getAttributeLabel('type'),
                 'value'=>function($data) {
                     return GenerateUserForm::getType($data['type']);
                 },
@@ -72,10 +81,12 @@ $this->breadcrumbs=array(
                         'label'=>'<i class="icon-check bigger-120"></i>',
                         'imageUrl'=>false,
                         'options' => array(
-                            'class' => 'btn btn-mini btn-success',
+                            'class' => 'btn btn-mini btn-success btn-check-user',
                             'title'=>tt('Выбрать'),
                             'data-type'=>'$data["type"]',
-                            'data-id'=>'$data["id"]'
+                            'data-id'=>'$data["id"]',
+                            'data-name'=>'SH::getShortName($data["last_name"],$data["first_name"],$data["second_name"])',
+                            'data-type-name'=>'GenerateUserForm::getType($data["type"])'
                         ),
                     )
                 )
@@ -94,4 +105,19 @@ $this->breadcrumbs=array(
         <p><?=tt('Пользователи для генерации')?></p>
         <small><?=tt('Нажмите сгенерировать')?></small>
     </blockquote>
+    <ul class="nav nav-list user-list">
+        <li class="nav-header">List person</li>
+        <li class="li-empty"><?=tt('Выберите нужных людей')?></li>
+        <li class="divider"></li>
+        <li>
+            <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
+                'id'=>'generate-user-form',
+                'enableAjaxValidation'=>false,
+                'action'=>array('generateUserExcel')
+            )); ?>
+            <?=$form->hiddenField($model,'users')?>
+            <input type="submit" href="#" class="btn btn-primary btn-generate-user" value="<?=tt('Сгенерировать')?>"/>
+            <?php $this->endWidget(); ?>
+        </li>
+    </ul>
 </div>

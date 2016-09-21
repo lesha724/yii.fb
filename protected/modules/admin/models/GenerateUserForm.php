@@ -13,11 +13,13 @@ class GenerateUserForm extends CFormModel
     public $type;
     public $bDate;
 
+    public $users;
+
     public function rules()
     {
         return array(
 			array('type', 'numerical', 'integerOnly'=>true),
-			array('lastName,firstName,secondName', 'type', 'type'=>'string'),
+			array('lastName,firstName,secondName, users', 'type', 'type'=>'string'),
             array('bDate', 'type', 'type'=>'date'),
 		);
     }
@@ -29,7 +31,7 @@ class GenerateUserForm extends CFormModel
             'firstName'=>tt('Имя'),
             'secondName'=>tt('Отчество'),
             'bDate'=>tt('Дата рождения'),
-            'type'=>tt('Количество пар'),
+            'type'=>tt('Тип'),
         );
     }
 
@@ -76,8 +78,9 @@ class GenerateUserForm extends CFormModel
         $sql = 'SELECT st1 as id, st2 as last_name, st3 as first_name, st4 as second_name, 0 as type, st7 as b_date FROM st';
         $sql.= ' UNION ';
         $sql .= 'SELECT p1 as id, p3 as last_name, p4 as first_name, p5 as second_name, 1 as type, p9 as b_date FROM p';
-
-        $sql = 'SELECT * FROM ('.$sql.') WHERE last_name<>\'\' AND (SELECT COUNT(*) FROM USERS WHERE u6=id)=0 '.$where;
+        $sql.= ' UNION ';
+        $sql .= 'SELECT st1 as id, st2 as last_name, st3 as first_name, st4 as second_name, 2 as type, st7 as b_date FROM st';
+        $sql = 'SELECT * FROM ('.$sql.') t WHERE last_name<>\'\' AND (SELECT COUNT(*) FROM USERS WHERE u6=t.id and u5=t.type)=0 '.$where;
         $rawData = Yii::app()->db->createCommand($sql); //or use ->queryAll(); in CArrayDataProvider
         $count = Yii::app()->db->createCommand('SELECT COUNT(*) FROM (' . $sql . ') as count_record')->queryScalar(); //the count
 
