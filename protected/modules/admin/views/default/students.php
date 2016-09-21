@@ -51,7 +51,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         ),
         array(
             'class'=>'CButtonColumn',
-            'template'=>'{grants} {enter} {delete}',
+            'template'=>'{st165} {grants} {enter} {delete} ',
             //'header' => tt('Настройки'),
             'header'=>CHtml::dropDownList(
                     'pageSize',
@@ -61,6 +61,16 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                 ),
             'buttons'=>array
             (
+                'st165' => array(
+                    'label'=>'<i class="icon-info-sign bigger-120"></i>',
+
+                    'imageUrl'=>false,
+                    'url'=>'Yii::app()->createAbsoluteUrl("/admin/default/st165", array("id" => $data->st1))',
+                    'options' => array(
+                        'class' => 'btn btn-mini btn-info',
+                        'title'=>tt('Добавить общую информацию'),
+                    ),
+                ),
                 'grants' => array(
                     'label'=>'<i class="icon-check bigger-120"></i>',
 

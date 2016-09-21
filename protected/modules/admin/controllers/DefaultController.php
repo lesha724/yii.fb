@@ -2,6 +2,34 @@
 
 class DefaultController extends AdminController
 {
+    public function actionSt165($id)
+    {
+        $model = St::model()->findByPk($id);
+
+        if(empty($model))
+            throw new CHttpException(404,'The requested page does not exist.');
+
+        /*if (!isset($_POST["St"])) {
+            if (isset(Yii::app()->session["St"])){
+                $_POST["St"]=Yii::app()->session["St"];
+            }
+        }
+        else{
+            Yii::app()->session["St"]=$_POST["St"];
+        }*/
+
+        if(isset($_POST['St'])) {
+            $model->st165 = $_POST['St']['st165'];
+            $model->saveAttributes(array(
+                'st165'=>$model->st165
+            ));
+
+            $this->redirect(array('students'));
+        }
+
+        $this->render('st165',array('model'=>$model));
+    }
+
     public function actionGenerateUser()
     {
         $model = new GenerateUserForm();
