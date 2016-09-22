@@ -156,5 +156,48 @@ JS;
             Yii::app()->clientScript->registerScript('flash',$js,CClientScript::POS_END);
         }
     ?>
+
+    <?php if(Yii::app()->user->hasState('info_message')):?>
+    <?php
+        $message = Yii::app()->user->getState('info_message');
+        Yii::app()->user->setState('info_message',null);
+        $this->beginWidget(
+            'bootstrap.widgets.TbModal',
+            array(
+                'id' => 'modalInfo',
+            )
+        ); ?>
+
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">&times;</a>
+            <h4></h4>
+        </div>
+
+        <div class="modal-body">
+            <div id="modal-content">
+                <?=$message?>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <?php $this->widget(
+                'bootstrap.widgets.TbButton',
+                array(
+                    'label' => tt('Закрыть'),
+                    'url' => '#',
+                    'htmlOptions' => array('data-dismiss' => 'modal'),
+                )
+            ); ?>
+        </div>
+
+        <?php $this->endWidget();?>
+
+        <script type="text/javascript">
+            $(window).load(function() {
+                $('#modalInfo').modal('show');
+            });
+        </script>
+    <?php endif; ?>
+
 </body>
 </html>

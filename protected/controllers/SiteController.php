@@ -96,7 +96,7 @@ class SiteController extends Controller
 	 */
 	public function actionLogin()
 	{
-        if (! Yii::app()->request->isAjaxRequest)
+		if (! Yii::app()->request->isAjaxRequest)
             $this->redirect('index');
 
 		$model=new LoginForm;
@@ -113,8 +113,25 @@ class SiteController extends Controller
 		{
 			$model->attributes=$_POST['LoginForm'];
 			// validate user input and redirect to the previous page if valid
-			if($model->validate() && $model->login())
-                Yii::app()->end('ok');
+			if($model->validate() && $model->login()) {
+				$message = '';
+				$user = Users::model()->findByPk(Yii::app()->user->id);
+				switch($user->u5){
+					case 0:
+						$message = PortalSettings::model()->findByPk(92)->ps2;
+						break;
+					case 1:
+						$message = PortalSettings::model()->findByPk(93)->ps2;
+						break;
+					case 2:
+						$message = PortalSettings::model()->findByPk(94)->ps2;
+						break;
+				}
+
+				if(!empty($message))
+					Yii::app()->user->setState('info_message', $message);
+				Yii::app()->end('ok');
+			}
 				//$this->redirect(Yii::app()->user->returnUrl);
 		}
 		// display the login form

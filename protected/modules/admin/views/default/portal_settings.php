@@ -284,3 +284,78 @@ $options = array(
         </div>
     </div>
 </div>
+
+<div class="span6">
+    <div class="widget-box">
+        <div class="widget-header">
+            <h4><?=tt('Сообщения для пользователей после аторизации')?></h4>
+            <span class="widget-toolbar">
+                <a data-action="collapse" href="#">
+                    <i class="icon-chevron-up"></i>
+                </a>
+            </span>
+        </div>
+        <div class="widget-body">
+            <div class="widget-main">
+                <?php
+                $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+                    'id'=>'ps-message-info',
+                    'htmlOptions' => array('class' => 'form-horizontal'),
+                    'action' => '#'
+                ));
+                ?>
+
+                <div class="control-group">
+                    <span class="lbl"> <?=tt('Для студентов')?>:</span>
+                    <?php $this->widget('application.extensions.elFinderTinyMce.TinyMce',
+                        array(
+                            'name'=>'settings[92]',
+                            'value'=>PortalSettings::model()->findByPk(92)->ps2,
+                            'htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'tinymce'),
+                            'fileManager' => array(
+                                'class' => 'ext.elFinder.TinyMceElFinder',
+                                'connectorRoute'=>'/site/connector',
+                            ),
+                        )); ?>
+                </div>
+
+                <div class="control-group">
+                    <span class="lbl"> <?=tt('Для преподователей')?>:</span>
+                    <?php $this->widget('application.extensions.elFinderTinyMce.TinyMce',
+                        array(
+                            'name'=>'settings[93]',
+                            'value'=>PortalSettings::model()->findByPk(93)->ps2,
+                            'htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'tinymce'),
+                            'fileManager' => array(
+                                'class' => 'ext.elFinder.TinyMceElFinder',
+                                'connectorRoute'=>'/site/connector',
+                            ),
+                        )); ?>
+                </div>
+
+                <div class="control-group">
+                    <span class="lbl"> <?=tt('Для родителей')?>:</span>
+                    <?php $this->widget('application.extensions.elFinderTinyMce.TinyMce',
+                        array(
+                            'name'=>'settings[94]',
+                            'value'=>PortalSettings::model()->findByPk(94)->ps2,
+                            'htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'tinymce'),
+                            'fileManager' => array(
+                                'class' => 'ext.elFinder.TinyMceElFinder',
+                                'connectorRoute'=>'/site/connector',
+                            ),
+                        )); ?>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-info btn-small">
+                        <i class="icon-ok bigger-110"></i>
+                        <?=tt('Сохранить')?>
+                    </button>
+                </div>
+
+                <?php $this->endWidget();?>
+            </div>
+        </div>
+    </div>
+</div>
