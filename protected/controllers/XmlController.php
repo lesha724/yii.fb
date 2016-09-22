@@ -915,7 +915,7 @@ SQL;
         switch($type)
         {
             case 0:
-                $sql ='SELECT * FROM RAGR(:LANG, :ID, :DATE_1, :DATE_2) ORDER BY ned, r2, r3';
+                $sql ='SELECT * FROM TTGR(:ID, :DATE_1, :DATE_2) ORDER BY ned, r2, r3';
                 break;
             case 1:
                 $sql ='SELECT * FROM TTST(:ID, :DATE_1, :DATE_2) ORDER BY ned, r2, r3';
@@ -924,7 +924,7 @@ SQL;
                 $sql ='SELECT * FROM TTPR(:ID, :DATE_1, :DATE_2) ORDER BY ned, r2, r3';
                 break;
             case 3:
-                $sql ='SELECT * FROM RAA(:LANG,:ID, :DATE_1, :DATE_2) ORDER BY ned, r2,r3';
+                $sql ='SELECT * FROM TTA(:ID, :DATE_1, :DATE_2) ORDER BY ned, r2,r3';
                 break;
         }
         $command = Yii::app()->db->createCommand($sql);
