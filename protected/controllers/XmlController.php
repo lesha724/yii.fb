@@ -944,18 +944,21 @@ SQL;
     private function fillTimeTableByXml($timeTable, $type)
     {
         $res = array();
+
         foreach($timeTable as $key => $day) {
 
             $r2 = strtotime($day['r2']); // date
             $r3 = $day['r3'];            // lesson
-
-            if (! isset($res[$r2]['timeTable'][$r3])) {
-
+            if($type!=self::VIEW_GROUP) {
+                if (!isset($res[$r2]['timeTable'][$r3])) {
+                    $res[$r2]['timeTable'][$r3] = $day;
+                    $res[$r2]['timeTable'][$r3]['gr'][$day['gr1']] = $day['gr13'];
+                } else
+                    $res[$r2]['timeTable'][$r3]['gr'][$day['gr1']] = $day['gr13'];
+            }
+            else{
                 $res[$r2]['timeTable'][$r3] = $day;
-                $res[$r2]['timeTable'][$r3]['gr'][$day['gr1']]=$day['gr13'];
-            } else
-                $res[$r2]['timeTable'][$r3]['gr'][$day['gr1']]=$day['gr13'];
-
+            }
         }
         //die(var_dump($res));
         return $res;
