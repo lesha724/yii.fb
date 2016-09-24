@@ -10,6 +10,7 @@ class XmlController extends Controller
     const ERROR_XML_STRUCTURE = 104; //ошибка если отсутсвют парамерты обязательные хмл
     const ERROR_PARAM = 105; //ошибка если парамтрры не валидные
     const ERROR_EMPTY_TIMETABLE = 106; //ошибка расписание пустое
+    const ERROR_INVALID_LOGIN_OR_PASSWORD = 107; //не правльный логин или пароль
 
     public $layout = '/xml/layout';
 
@@ -630,11 +631,19 @@ SQL;
                 $this->errorXml(self::ERROR_XML_STRUCTURE,'Ошибка струтуры xml');
             else {
                 $uploads = $xml->UploadStudentsID;
-                if(!isset($uploads->Students))
+                if(!isset($uploads->Students)||!isset($uploads->Login)||!isset($uploads->Password))
                     $this->errorXml(self::ERROR_XML_STRUCTURE,'Ошибка струтуры xml');
                 else{
                     $errors = array();
                     $students = $uploads->Students;
+
+                    $ps95 = PortalSettings::model()->findByPk(95)->ps2;
+                    $ps96 = PortalSettings::model()->findByPk(96)->ps2;
+
+                    $login = $uploads->Login;
+                    $password = $uploads->Password;
+                    if($login!=$ps95||$password!=$ps96)
+                        $this->errorXml(self::ERROR_INVALID_LOGIN_OR_PASSWORD,'Неправльный логин иили пароль');
 
                     foreach($students->children() as $student){
 
@@ -773,11 +782,20 @@ SQL;
                 $this->errorXml(self::ERROR_XML_STRUCTURE,'Ошибка струтуры xml');
             else {
                 $uploads = $xml->UploadTeachersID;
-                if(!isset($uploads->Teachers))
+                if(!isset($uploads->Teachers)||!isset($uploads->Login)||!isset($uploads->Password))
                     $this->errorXml(self::ERROR_XML_STRUCTURE,'Ошибка струтуры xml');
                 else{
                     $errors = array();
                     $teachers = $uploads->Teachers;
+
+                    $ps95 = PortalSettings::model()->findByPk(95)->ps2;
+                    $ps96 = PortalSettings::model()->findByPk(96)->ps2;
+
+                    $login = $uploads->Login;
+                    $password = $uploads->Password;
+                    if($login!=$ps95||$password!=$ps96)
+                        $this->errorXml(self::ERROR_INVALID_LOGIN_OR_PASSWORD,'Неправльный логин иили пароль');
+
 
                     foreach($teachers->children() as $teacher){
 
