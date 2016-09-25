@@ -40,7 +40,7 @@ foreach($timeTable as $key=> $day) {
         $r3 = $lesson['r3'];
         echo sprintf('<Lesson number="%d">', $r3);
         //*Название*/
-        echo '<LessonName attr="',$lesson['d3'],'">', $lesson['d2'], '</LessonName>';
+        echo '<LessonName abr="',$lesson['d3'],'">', $lesson['d2'], '</LessonName>';
         /*Время начала*/
         echo '<TimeStart>', $lesson['rz2'], '</TimeStart>';
         /*Время окончаня*/
