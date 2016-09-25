@@ -249,6 +249,10 @@ class XmlController extends Controller
                     $PeriodStart = $xmlAction->PeriodStart->__ToString();
                     $PeriodFinish = $xmlAction->PeriodFinish->__ToString();
 
+                    $type = 0;
+                    if(isset($xmlAction->Type))
+                        $type = $xmlAction->Type->__ToString();
+
                     $dateStart = date_create($PeriodStart);
                     if($dateStart===false)
                         $this->errorXml(self::ERROR_PARAM, 'PeriodStart не являеться датой');
@@ -257,7 +261,12 @@ class XmlController extends Controller
                     if($dateFinish===false)
                         $this->errorXml(self::ERROR_PARAM, 'PeriodFinish не являеться датой');
 
-                    $teacher = P::model()->findByAttributes(array('p132'=>$TeacherID));
+                    if($type==0){
+                        $teacher = P::model()->findByAttributes(array('p132'=>$TeacherID));
+                    }else{
+                        $teacher = P::model()->findByAttributes(array('p1'=>$TeacherID));
+                    }
+
                     if($teacher==null)
                         $this->errorXml(self::ERROR_PARAM, 'TeacherID '.$TeacherID.' не являеться валидным');
 
@@ -306,6 +315,10 @@ class XmlController extends Controller
                     $PeriodStart = $xmlAction->PeriodStart->__ToString();
                     $PeriodFinish = $xmlAction->PeriodFinish->__ToString();
 
+                    $type = 0;
+                    if(isset($xmlAction->Type))
+                        $type = $xmlAction->Type->__ToString();
+
                     $dateStart = date_create($PeriodStart);
                     if($dateStart===false)
                         $this->errorXml(self::ERROR_PARAM, 'PeriodStart не являеться датой');
@@ -315,7 +328,12 @@ class XmlController extends Controller
                         $this->errorXml(self::ERROR_PARAM, 'PeriodFinish не являеться датой');
 
                     //$student = St::model()->findByAttributes(array('st1'=>$StudentID));
-                    $student = St::model()->findByAttributes(array('st108'=>$StudentID));
+                    if($type==0){
+                        $student = St::model()->findByAttributes(array('st108'=>$StudentID));
+                    }else{
+                        $student = St::model()->findByAttributes(array('st1'=>$StudentID));
+                    }
+
                     if($student==null)
                         $this->errorXml(self::ERROR_PARAM, 'StudentID '.$StudentID.' не являеться валидным');
 
