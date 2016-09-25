@@ -56,7 +56,12 @@ foreach($timeTable as $key=> $day) {
             foreach ($teachers as $teacher) {
                 if (!empty($teacher)) {
                     $teacherParam = explode('-', $teacher);
-                    echo '<Teacher id="' . $teacherParam[0] . '">', $teacherParam[1], '</Teacher>';
+                    $teacherModel = P::model()->findByPk($teacherParam[0]);
+                    if(!empty($teacherModel)) {
+                        echo '<Teacher id="' . $teacherModel->p1 . '" firstName="' . $teacherModel->p4 . '" secondName="' . $teacherModel->p5 . '" lastName="' . $teacherModel->p3 . '">', $teacherParam[1], '</Teacher>';
+                    }else{
+                        echo '<Teacher id="' . $teacherParam[0] . '" firstName="" secondName="" lastName="">', $teacherParam[1], '</Teacher>';
+                    }
                 }
             }
             echo '</Teachers>';

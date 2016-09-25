@@ -43,6 +43,7 @@ class XmlController extends Controller
                     'GetFaculties',
                     'GetGroups',
                     'GetAudiences',
+                    'GetTeachers',
                 ),
             ),
             array('deny',
@@ -107,7 +108,9 @@ class XmlController extends Controller
                 $filter->run();
         }
     }
-
+    /**
+     * расписание группы
+     */
     public function actionGetTimetableForGroup(){
         $xml = $this->getXmlFromPost();
         if(empty($xml))
@@ -557,6 +560,68 @@ SQL;
         }
     }
     /**
+     * Список Преподователей
+     * возможно через необязательные теги фильтрация по кафедре, фамилии() черз логическое и
+     */
+    public function actionGetTeachers(){
+        $xml = $this->getXmlFromPost();
+        if(empty($xml))
+            Yii::app()->end;
+        else{
+            /*Проверка есть ли тег GetFaculties*/
+            if($xml->getName()!='Request'||!isset($xml->GetFaculties))
+                $this->errorXml(self::ERROR_XML_STRUCTURE,'Ошибка струтуры xml');
+            else {
+                /* @var $xmlAction SimpleXMLElement */
+                $xmlAction = $xml->GetFaculties;
+                /*фильтры*/
+                $filial = null;
+                $faculty = null;
+                /*перебираем всех наследников ищем наши фильтрі*/
+                foreach($xmlAction->children() as $child){
+                    /* @var $child SimpleXMLElement */
+
+                    $tag = $child->getName();
+
+                    switch($tag){
+                        case 'Faculty':
+                            $faculty = $child->__ToString();
+                            break;
+                        case 'Filial':
+                            $filial = $child->__ToString();
+                            break;
+                    }
+                }
+
+                $where = '';
+
+                if($filial!=null){
+                    $where.=' AND f14=:FILIAL';
+                }
+
+                if($faculty!=null){
+                    $where.=' AND F1=:FACULTY';
+                }
+
+                $sql=<<<SQL
+                     SELECT f1,f2, f3, f14
+                    FROM f
+                    WHERE f1>0 and f12<>0 and f17=0 and (f19 is null) and f32 = 0 $where
+                    ORDER BY f15,f3 collate UNICODE
+SQL;
+
+                $command = Yii::app()->db->createCommand($sql);
+                $command->bindValue(':FILIAL', $filial);
+                $command->bindValue(':FACULTY', $faculty);
+                $faculties = $command->queryAll();
+
+                $this->render('faculties',array(
+                    'faculties'=>$faculties
+                ));
+            }
+        }
+    }
+    /**
      * Список факультетов
      * возможно через необязательные теги фильтрация по факультету, филиалу черз логическое и
      */
@@ -958,7 +1023,7 @@ SQL;
 
         return $timeTable;
     }
-
+    /**/
     private function fillTimeTableByXml($timeTable, $type)
     {
         $res = array();
