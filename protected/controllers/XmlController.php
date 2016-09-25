@@ -568,15 +568,15 @@ SQL;
         if(empty($xml))
             Yii::app()->end;
         else{
-            /*Проверка есть ли тег GetFaculties*/
-            if($xml->getName()!='Request'||!isset($xml->GetFaculties))
+            /*Проверка есть ли тег GetTeachers*/
+            if($xml->getName()!='Request'||!isset($xml->GetTeachers))
                 $this->errorXml(self::ERROR_XML_STRUCTURE,'Ошибка струтуры xml');
             else {
                 /* @var $xmlAction SimpleXMLElement */
-                $xmlAction = $xml->GetFaculties;
+                $xmlAction = $xml->GetTeachers;
                 /*фильтры*/
-                $filial = null;
-                $faculty = null;
+                $chair = null;
+                $name = null;
                 /*перебираем всех наследников ищем наши фильтрі*/
                 foreach($xmlAction->children() as $child){
                     /* @var $child SimpleXMLElement */
@@ -584,39 +584,44 @@ SQL;
                     $tag = $child->getName();
 
                     switch($tag){
-                        case 'Faculty':
-                            $faculty = $child->__ToString();
+                        case 'Chair':
+                            $chair = $child->__ToString();
                             break;
-                        case 'Filial':
-                            $filial = $child->__ToString();
+                        case 'Name':
+                            $name = $child->__ToString();
                             break;
                     }
                 }
 
                 $where = '';
 
-                if($filial!=null){
-                    $where.=' AND f14=:FILIAL';
+                if($chair!=null){
+                    $where.=' AND PD4 = :CHAIR';
                 }
 
-                if($faculty!=null){
-                    $where.=' AND F1=:FACULTY';
+                if($name!=null){
+                    $where.=' and P3 CONTAINING :NAME';
                 }
+
+                $today = date('d.m.Y 00:00');
 
                 $sql=<<<SQL
-                     SELECT f1,f2, f3, f14
-                    FROM f
-                    WHERE f1>0 and f12<>0 and f17=0 and (f19 is null) and f32 = 0 $where
-                    ORDER BY f15,f3 collate UNICODE
+                    SELECT P1,P3,P4,P5,P132
+                    FROM P
+                        INNER JOIN PD ON (P1=PD2)
+                        INNER JOIN DOL ON (PD45 = DOL1)
+                    WHERE PD28 in (0,2,5,9) and PD3=0 and (PD13 IS NULL or PD13>'{$today}') {$where}
+                    group by P1,P3,P4,P5,P132
+                    ORDER BY P3 collate UNICODE
 SQL;
 
                 $command = Yii::app()->db->createCommand($sql);
-                $command->bindValue(':FILIAL', $filial);
-                $command->bindValue(':FACULTY', $faculty);
-                $faculties = $command->queryAll();
+                $command->bindValue(':CHAIR', $chair);
+                $command->bindValue(':NAME', $name);
+                $teachers = $command->queryAll();
 
-                $this->render('faculties',array(
-                    'faculties'=>$faculties
+                $this->render('teachers',array(
+                    'teachers'=>$teachers
                 ));
             }
         }
