@@ -10,8 +10,8 @@
     <Teachers>
         <?php
             foreach($teachers as $teacher){
-                echo "<Teachers id=\"{$teacher['p1']}\" firstName=\"{$teacher['p4']}\" secondName=\"{$teacher['p5']}\" lastName=\"{$teacher['p3']}\">";
-                echo $teacher['p132'],'</Teachers>';
+                echo "<Teacher id=\"{$teacher['p1']}\" firstName=\"{$teacher['p4']}\" secondName=\"{$teacher['p5']}\" lastName=\"{$teacher['p3']}\">";
+                echo $teacher['p132'],'</Teacher>';
             }
         ?>
     </Teachers>
