@@ -115,8 +115,8 @@ global $count_dates;
 
 $total_2 =array();
 
-$ps83 = PortalSettings::model()->findByPk(83)->ps2;
-$ps85 = PortalSettings::model()->findByPk(85)->ps2;
+$ps83 = PortalSettings::model()->getSettingFor(83);
+$ps85 = PortalSettings::model()->getSettingFor(85);
 if($ps83==0) {
     $th  .= generateTotal1Header();
     $th2.='<th colspan="2"></th>';
@@ -132,7 +132,7 @@ if($ps85==0) {
     $th2 .= '<th></th>';
 }
 
-$ps84 = PortalSettings::model()->findByPk(84)->ps2;
+$ps84 = PortalSettings::model()->getSettingFor(84);
 $sem = Sem::model()->findByPk($model->sem1);
 
 foreach ($students as $st) {

@@ -19,10 +19,10 @@
     $st= tt('Ошибка! Студент заблокирован!');
     $error2= tt('Ошибка! Не найдены входящие данные!');
     $min=Elgzst::model()->getMin();
-    $ps44 = PortalSettings::model()->findByPk(44)->ps2;
-    $ps55 = PortalSettings::model()->findByPk(55)->ps2;
-    $ps84 = PortalSettings::model()->findByPk(84)->ps2;
-    $ps88 = PortalSettings::model()->findByPk(88)->ps2;
+    $ps44 = PortalSettings::model()->getSettingFor(44);
+    $ps55 = PortalSettings::model()->getSettingFor(55);
+    $ps84 = PortalSettings::model()->getSettingFor(84);
+    $ps88 = PortalSettings::model()->getSettingFor(88);
     $timeAccess = tt('Ошибка! Доступ на редактирование закрыт!');
 
 //errorType=0 error

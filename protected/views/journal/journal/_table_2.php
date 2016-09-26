@@ -37,7 +37,7 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
         else
             $disabled = '';
 
-    $ps78 = PortalSettings::model()->findByPk(78)->ps2;
+    $ps78 = PortalSettings::model()->getSettingFor(78);
     if($ps78==0) {
         $date1 = new DateTime(date('Y-m-d H:i:s'));
         $date2 = new DateTime($date_lesson);
@@ -49,7 +49,7 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
         }
     }else{
 
-        $ps79 = PortalSettings::model()->findByPk(79)->ps2;
+        $ps79 = PortalSettings::model()->getSettingFor(79);
         $date2 = new DateTime($date_lesson/*.' '.$rz->rz9.':'.$rz->rz10*/);
         $date2->modify('+'.$date['rz9'].' hours');
         $date2->modify('+'.$date['rz10'].' minutes');
@@ -124,7 +124,7 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
     }
 
 
-    $ps29 = PortalSettings::model()->findByPk(29)->ps2;
+    $ps29 = PortalSettings::model()->getSettingFor(29);
     if($ps29 == 1)
         $disabled_input_1 = 'disabled="disabled"';
 
@@ -412,10 +412,10 @@ function countMarkTotal($marks)
 HTML;
 
     $sem7 = Gr::model()->getSem7ByGr1ByDate($gr1,date('d.m.Y'));
-    $ps59 = PortalSettings::model()->findByPk(59)->ps2;
-    $ps60 = PortalSettings::model()->findByPk(60)->ps2;
-    $ps65 = PortalSettings::model()->findByPk(65)->ps2;
-    $ps66 = PortalSettings::model()->findByPk(66)->ps2;
+    $ps59 = PortalSettings::model()->getSettingFor(59);
+    $ps60 = PortalSettings::model()->getSettingFor(60);
+    $ps65 = PortalSettings::model()->getSettingFor(65);
+    $ps66 = PortalSettings::model()->getSettingFor(66);
 
     $min = Elgzst::model()->getMin();
     $elgz1_arr=array();
@@ -429,11 +429,11 @@ HTML;
     $dateDiff = -1;
     $date1 = new DateTime(date('Y-m-d H:i:s'));
     /*добавлять ли не проставленые занятия*/
-    $ps89 = PortalSettings::model()->findByPk(89)->ps2;
+    $ps89 = PortalSettings::model()->getSettingFor(89);
     /*Разрешено ли менять тему занятий*/
-    $ps90 = PortalSettings::model()->findByPk(90)->ps2;
+    $ps90 = PortalSettings::model()->getSettingFor(90);
 
-    $ps78 = PortalSettings::model()->findByPk(78)->ps2;
+    $ps78 = PortalSettings::model()->getSettingFor(78);
     $ps27 = PortalSettings::model()->getSettingFor(27);
 
     foreach($dates as $date) {
