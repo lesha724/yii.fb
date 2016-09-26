@@ -20,8 +20,10 @@ $this->breadcrumbs=array(
     $st= tt('Ошибка! Студент заблокирован!');
     $error2= tt('Ошибка! Не найдены входящие данные!');
     $min=Elgzst::model()->getMin();
-    $ps44 = PortalSettings::model()->findByPk(44)->ps2;
-    $ps55 = PortalSettings::model()->findByPk(55)->ps2;
+$ps44 = PortalSettings::model()->getSettingFor(44);
+$ps55 = PortalSettings::model()->getSettingFor(55);
+$ps84 = PortalSettings::model()->getSettingFor(84);
+$ps88 = PortalSettings::model()->getSettingFor(88);
 
     Yii::app()->clientScript->registerScript('translations', <<<JS
         minBal = {$min}
@@ -31,8 +33,10 @@ $this->breadcrumbs=array(
         _access = "{$access}" //errorType=3
         _st = "{$st}" //errorType=5
         _error2 = "{$error2}" //errorType=2
-        ps44 = {$ps44}
-        ps55 = {$ps55}
+         ps44 = {$ps44};
+        ps55 = {$ps55};
+        ps84 = {$ps84};
+        ps88 = {$ps88};
 JS
     , CClientScript::POS_READY);
 ?>

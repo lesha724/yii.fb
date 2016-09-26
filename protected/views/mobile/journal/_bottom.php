@@ -45,11 +45,11 @@ if(!empty($model->group)):
         tt($grName),
     );
 
-    $ps9  = PortalSettings::model()->findByPk(9)->ps2;
-    $ps20 = PortalSettings::model()->findByPk(20)->ps2;// use sub modules
-    $ps56 = PortalSettings::model()->findByPk(56)->ps2;//
-    $ps57 = PortalSettings::model()->findByPk(57)->ps2;//
-    $ps33=PortalSettings::model()->findByPk(33)->ps2;
+    $ps9  = PortalSettings::model()->getSettingFor(9);
+    $ps20 = PortalSettings::model()->getSettingFor(20);// use sub modules
+    $ps56 = PortalSettings::model()->getSettingFor(56);//
+    $ps57 = PortalSettings::model()->getSettingFor(57);//
+    $ps33=PortalSettings::model()->getSettingFor(33);
 
 $elg1=Elg::getElg1($uo1,$model->type_lesson,$model->sem1);
 $elg = Elg::model()->findByPk($elg1);
@@ -59,7 +59,7 @@ if(empty($elg))
 $students = St::model()->getStudentsForJournal($gr1, $uo1);
 
 $modules = null;
-$ps57 = PortalSettings::model()->findByPk(57)->ps2;
+$ps57 = PortalSettings::model()->getSettingFor(57);
 if($ps57==1)
     $modules = Vvmp::model()->getModule($uo1,$gr1);
 

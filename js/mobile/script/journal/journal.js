@@ -86,7 +86,7 @@ $(document).ready(function(){
             var url = $that.parents('[data-url]').data('url');
 
             $spinner1.show();
-            send(url,params,title,$trElem,$td,$that,$spinner1,st1,index);
+            send(url,params,title,$trElem,$td,$that,$spinner1,st1,index,ps84,ps88);
             $that.val('');
             $that.addClass('not-value');
             $trElem.find(':checkbox').attr('disabled','disabled');
@@ -176,7 +176,7 @@ $(document).ready(function(){
                                         "class" : "btn btn-danger btn-mini",
                                         click: function() {
                                             $( this ).dialog( "close" );
-                                            send(url,params,title,$trElem,$td,$that,$spinner1,st1,index);
+                                            send(url,params,title,$trElem,$td,$that,$spinner1,st1,index,ps84,ps88);
                                         }
                                     }
                                     ,
@@ -193,7 +193,7 @@ $(document).ready(function(){
                             });
                         }else
                         {
-                            send(url,params,title,$trElem,$td,$that,$spinner1,st1,index);
+                            send(url,params,title,$trElem,$td,$that,$spinner1,st1,index,ps84,ps88);
                         }
 
                     }
@@ -206,7 +206,7 @@ $(document).ready(function(){
         }
         else
         {
-            send(url,params,title,$trElem,$td,$that,$spinner1,st1,index);
+            send(url,params,title,$trElem,$td,$that,$spinner1,st1,index,ps84,ps88);
         }
 
     });
@@ -407,7 +407,7 @@ function getError(data)
     }
 }
 
-function send(url,params,title,$trElem,$td,$that,$spinner1,st1,index)
+function send(url,params,title,$trElem,$td,$that,$spinner1,st1,index,ps84,ps88)
 {
     $.ajax({
         url: url,
@@ -431,7 +431,7 @@ function send(url,params,title,$trElem,$td,$that,$spinner1,st1,index)
                 setTimeout(function() { $trElem.removeClass('success') }, 1000);
                 if ($that.is(':checkbox'))
                 {
-                    if ($that.prop('checked')) {
+                    if (($that.prop('checked')&&ps88==0)||(!$that.prop('checked')&&ps88==1)) {
                         elem4.attr('disabled', 'disabled');
                     }
                     else
@@ -478,7 +478,7 @@ function send(url,params,title,$trElem,$td,$that,$spinner1,st1,index)
 
 
                 if(elem5){
-                    if(elem3.prop('checked')||parseFloat(elem4.val())<=minBal) {
+                    if(((elem3.prop('checked')&&ps88==0)||(!elem3.prop('checked')&&ps88==1))||parseFloat(elem4.val())<=minBal) {
                         if (parseFloat(elem5.val()) > minBal) {
                             buttonRetake.hide();
                             elem5.attr('disabled', 'disabled');
@@ -493,7 +493,7 @@ function send(url,params,title,$trElem,$td,$that,$spinner1,st1,index)
                         elem5.attr('disabled', 'disabled');
                     }
                 }else{
-                    if(elem3.prop('checked')) {
+                    if((elem3.prop('checked')&&ps88==0)||(!elem3.prop('checked')&&ps88==1)) {
                         buttonRetake.show();
                         elem5.removeAttr('disabled');
                     }
