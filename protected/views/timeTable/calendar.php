@@ -71,8 +71,18 @@
                     else
                             $groups.=','.$event['gr3'];
                     $full_name=$event['d2'];
+                    $full_name = str_replace("'",'`', $full_name);
                     $full_name=str_replace( '"','&quot', $full_name);
                     $full_name=str_replace( "'",'&quot', $full_name);
+
+                    $tem_name = str_replace("'",'`', $tem_name);
+                    $tem_name=str_replace( '"','&quot', $tem_name);
+                    $tem_name=str_replace( "'",'&quot', $tem_name);
+
+                    $tem_name_full = str_replace("'",'`', $tem_name_full);
+                    $tem_name_full=str_replace( '"','&quot', $tem_name_full);
+                    $tem_name_full=str_replace( "'",'&quot', $tem_name_full);
+
                     $text='{';
                     $text.="id:'".$i."',";
                     $color = SH::getLessonColor($event['tip']);

@@ -216,6 +216,7 @@ SQL;
             $tem = $this->getTem($day['r1_'],$day['r2']);
             if(!empty($tem)) {
                 $tem_name = $tem['name_temi'];
+                $tem_name = str_replace("'",'`', $tem_name);
                 $tem_name = str_replace('"','&quot;', $tem_name);
             }
         }
@@ -270,6 +271,7 @@ TEXT;
             $tem = $this->getTem($day['r1_'],$day['r2']);
             if(!empty($tem))
             {
+                $tem_name = str_replace("'",'`', $tem_name);
                 $tem_name='&nbsp;'.tt('т.').$tem['nom_temi'];
                 if($tem['nom_zan']>0)
                     $tem_name.='&nbsp;'.tt('з.').$tem['nom_zan'];
@@ -366,6 +368,7 @@ SQL;
             $tem = $this->getTem($day['r1_'],$day['r2']);
             if(!empty($tem)) {
                 $tem_name = $tem['name_temi'];
+                $tem_name = str_replace("'",'`', $tem_name);
                 $tem_name = str_replace('"','&quot;', $tem_name);
             }
         }
