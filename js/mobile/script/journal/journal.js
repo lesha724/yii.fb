@@ -244,7 +244,7 @@ $(document).ready(function(){
                     $('#modalRetake .modal-header h4').html(data.title);
                     $('#modalRetake #modal-content').html(data.html);
                     $('#modalRetake .datepicker').datepicker({
-                        todayBtn: "linked",
+                        //todayBtn: "linked",
                         format: "dd.mm.yy",
                         language: 'ru',
                         daysOfWeekHighlighted: "0,6",
