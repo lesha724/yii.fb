@@ -12,13 +12,21 @@ class XmlController extends Controller
     const ERROR_EMPTY_TIMETABLE = 106; //ошибка расписание пустое
     const ERROR_INVALID_LOGIN_OR_PASSWORD = 107; //не правльный логин или пароль
 
+    /*Спецефические коды ошибок*/
+        /*методы получения информации по пользователю*/
+    const ERROR_NOT_FOUND_PERSON = 201;/*Не найден человек по задному критерию*/
+    const ERROR_FOUND_MANY_PERSON = 202;/*Найдены несколько человек по задному критерию*/
+
     public $layout = '/xml/layout';
 
-
+    /*расписание*/
     const VIEW_STUDENT = 1;
     const VIEW_TEACHER = 2;
     const VIEW_GROUP = 3;
     const VIEW_AUDIENCE = 4;
+    /*Персона*/
+    const PERSON_BY_INN = 5;
+    const PERSON_BY_PASSPORT = 6;
 
     public function filters() {
 
@@ -37,13 +45,18 @@ class XmlController extends Controller
                     'GetTimetableForGroup',
                     'GetTimetableForTeacher',
                     'GetTimetableForAudience',
+
                     'UploadStudentsId',
                     'UploadTeachersId',
+
                     'GetChairs',
                     'GetFaculties',
                     'GetGroups',
                     'GetAudiences',
                     'GetTeachers',
+
+                    'GetPersonByINN',
+                    'GetPersonByPassport'
                 ),
             ),
             array('deny',
@@ -106,6 +119,125 @@ class XmlController extends Controller
                 $this->errorXml(self::ERROR_EMPTY_POST,'Пустой Post запрос');
             }else
                 $filter->run();
+        }
+    }
+    /**
+     * Персона по ИНН
+     */
+    public function actionGetPersonByINN(){
+        $xml = $this->getXmlFromPost();
+        if(empty($xml))
+            Yii::app()->end;
+        else{
+            /*Проверка есть ли тег GetPersonByINN*/
+            if($xml->getName()!='Request'||!isset($xml->GetPersonByINN))
+                $this->errorXml(self::ERROR_XML_STRUCTURE,'Ошибка струтуры xml');
+            else {
+                $xmlAction = $xml->GetPersonByINN;
+                /*Проверка есть ли теги нужные параметры*/
+
+                if (!isset($xmlAction->INN))
+                    $this->errorXml(self::ERROR_XML_STRUCTURE, 'Ошибка струтуры(параметры) xml');
+                else {
+                    $INN = $xmlAction->INN->__ToString();
+
+                    $person = array();
+
+                    $st = St::model()->findAll('st15=:ID ORDER BY st1 DESC', array(':ID'=>$INN));
+                    $p  = P::model()->findAll('p13=:ID', array(':ID'=>$INN));
+
+                    $thereIsNotSuchId = count($st) + count($p) == 0;
+                    if ($thereIsNotSuchId)
+                        $this->errorXml(self::ERROR_NOT_FOUND_PERSON, 'По заданому критерию людей не найдено!');
+
+                    $thereIsDuplicate = count($st) + count($p) > 1;
+                    if ($thereIsDuplicate)
+                        $this->errorXml(self::ERROR_FOUND_MANY_PERSON, 'По заданому критерию найдено несколько людей!');
+
+                    if($p){
+                        $person['type'] = 1;
+                        $person['firstName'] = $p[0]->p4;
+                        $person['secondName'] = $p[0]->p5;
+                        $person['lastName'] = $p[0]->p3;
+                        $person['date'] = $p[0]->p9;
+                        $person['id'] = $p[0]->p1;
+                        $person['outId'] = $p[0]->p132;
+                    }else{
+                        $person['type'] = 0;
+                        $person['firstName'] = $st[0]->st3;
+                        $person['secondName'] = $st[0]->st4;
+                        $person['lastName'] = $st[0]->st2;
+                        $person['date'] = $st[0]->st7;
+                        $person['id'] = $st[0]->st1;
+                        $person['outId'] = $st[0]->st108;
+                    }
+
+                    $this->render('personByInn',array(
+                        'person'=>$person,
+                        'type' => self::PERSON_BY_INN
+                    ));
+                }
+            }
+        }
+    }
+    /**
+     * Персона по Пасорту (серии и номеру)
+     */
+    public function actionGetPersonByPassport(){
+        $xml = $this->getXmlFromPost();
+        if(empty($xml))
+            Yii::app()->end;
+        else{
+            /*Проверка есть ли тег GetPersonByPassport*/
+            if($xml->getName()!='Request'||!isset($xml->GetPersonByPassport))
+                $this->errorXml(self::ERROR_XML_STRUCTURE,'Ошибка струтуры xml');
+            else {
+                $xmlAction = $xml->GetPersonByPassport;
+                /*Проверка есть ли теги нужные параметры*/
+
+                if (!isset($xmlAction->Serial)||!isset($xmlAction->Number))
+                    $this->errorXml(self::ERROR_XML_STRUCTURE, 'Ошибка струтуры(параметры) xml');
+                else {
+                    $serial = $xmlAction->Serial->__ToString();
+                    $number = $xmlAction->Number->__ToString();
+
+                    $person = array();
+
+                    $st = St::model()->findAll('st17=:SERIAL AND st18=:NUMBER ORDER BY st1 DESC', array(':SERIAL'=>$serial, ':NUMBER'=>$number));
+                    $p  = P::model()->findAll('p15=:SERIAL AND p16=:NUMBER', array(':SERIAL'=>$serial, ':NUMBER'=>$number));
+
+                    $thereIsNotSuchId = count($st) + count($p) == 0;
+                    if ($thereIsNotSuchId)
+                        $this->errorXml(self::ERROR_NOT_FOUND_PERSON, 'По заданому критерию людей не найдено!');
+
+                    $thereIsDuplicate = count($st) + count($p) > 1;
+                    if ($thereIsDuplicate)
+                        $this->errorXml(self::ERROR_FOUND_MANY_PERSON, 'По заданому критерию найдено несколько людей!');
+
+                    if($p){
+                        $person['type'] = 1;
+                        $person['firstName'] = $p[0]->p4;
+                        $person['secondName'] = $p[0]->p5;
+                        $person['lastName'] = $p[0]->p3;
+                        $person['date'] = $p[0]->p9;
+                        $person['id'] = $p[0]->p1;
+                        $person['outId'] = $p[0]->p132;
+                    }else{
+                        $person['type'] = 0;
+                        $person['firstName'] = $st[0]->st3;
+                        $person['secondName'] = $st[0]->st4;
+                        $person['lastName'] = $st[0]->st2;
+                        $person['date'] = $st[0]->st7;
+                        $person['id'] = $st[0]->st1;
+                        $person['outId'] = $st[0]->st108;
+                    }
+
+                    $this->render('personByPassport',array(
+                        'person'=>$person,
+                        'type' => self::PERSON_BY_PASSPORT
+                    ));
+                }
+            }
         }
     }
     /**
