@@ -136,9 +136,18 @@ class XmlController extends Controller
                 $xmlAction = $xml->GetPersonByINN;
                 /*Проверка есть ли теги нужные параметры*/
 
-                if (!isset($xmlAction->INN))
+                if (!isset($xmlAction->INN)||!isset($xmlAction->Login)||!isset($xmlAction->Password))
                     $this->errorXml(self::ERROR_XML_STRUCTURE, 'Ошибка струтуры(параметры) xml');
                 else {
+
+                    $ps95 = PortalSettings::model()->findByPk(95)->ps2;
+                    $ps96 = PortalSettings::model()->findByPk(96)->ps2;
+
+                    $login = $xmlAction->Login;
+                    $password = $xmlAction->Password;
+                    if($login!=$ps95||$password!=$ps96)
+                        $this->errorXml(self::ERROR_INVALID_LOGIN_OR_PASSWORD,'Неправльный логин иили пароль');
+
                     $INN = $xmlAction->INN->__ToString();
 
                     $person = array();
@@ -195,9 +204,18 @@ class XmlController extends Controller
                 $xmlAction = $xml->GetPersonByPassport;
                 /*Проверка есть ли теги нужные параметры*/
 
-                if (!isset($xmlAction->Serial)||!isset($xmlAction->Number))
+                if (!isset($xmlAction->Serial)||!isset($xmlAction->Number)||!isset($xmlAction->Login)||!isset($xmlAction->Password))
                     $this->errorXml(self::ERROR_XML_STRUCTURE, 'Ошибка струтуры(параметры) xml');
                 else {
+
+                    $ps95 = PortalSettings::model()->findByPk(95)->ps2;
+                    $ps96 = PortalSettings::model()->findByPk(96)->ps2;
+
+                    $login = $xmlAction->Login;
+                    $password = $xmlAction->Password;
+                    if($login!=$ps95||$password!=$ps96)
+                        $this->errorXml(self::ERROR_INVALID_LOGIN_OR_PASSWORD,'Неправльный логин иили пароль');
+
                     $serial = $xmlAction->Serial->__ToString();
                     $number = $xmlAction->Number->__ToString();
 
