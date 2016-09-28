@@ -291,8 +291,8 @@ SQL;
         $command->bindValue(':ST1', $st1);
         $vmpv1 = $command->queryScalar();
 
-        //if(empty($vmpv1))
-            //return array();
+        if(empty($vmpv1))
+            return array();
 
         $sql = <<<SQL
           SELECT vmp.*,vmpv.* FROM vmp INNER JOIN vmpv on (vmp1=vmpv1) WHERE vmp2=:ST1 AND vmp1=:VMPV1
