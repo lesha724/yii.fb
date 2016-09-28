@@ -24,7 +24,7 @@ class UsersHistory extends CActiveRecord
 		return 'users_history';
 	}
 
-	public $name, $login,$type,$adm;
+	public $name, $login,$type, $adm;
 	public $st_name1, $st_name2,$st_name3;
 	public $p_name3, $p_name2,$p_name1;
 	/**
@@ -251,10 +251,15 @@ class UsersHistory extends CActiveRecord
 	public function getAdminType()
 	{
 		$arr=Users::model()->getAdminTypes();
-		if(isset( $arr[$this->adm]))
-			return $arr[$this->adm];
-		else
+		if(!empty($this->adm)) {
+			if (isset($arr[$this->adm]))
+				return $arr[$this->adm];
+			else
+				return '-';
+		}else{
 			return '-';
+
+		}
 	}
 
 	public function getTchName()
