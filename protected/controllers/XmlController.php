@@ -143,8 +143,8 @@ class XmlController extends Controller
                     $ps95 = PortalSettings::model()->findByPk(95)->ps2;
                     $ps96 = PortalSettings::model()->findByPk(96)->ps2;
 
-                    $login = $xmlAction->Login;
-                    $password = $xmlAction->Password;
+                    $login = $xmlAction->Login->__ToString();
+                    $password = $xmlAction->Password->__ToString();
                     if($login!=$ps95||$password!=$ps96||empty($login)||empty($password))
                         $this->errorXml(self::ERROR_INVALID_LOGIN_OR_PASSWORD,'Неправльный логин иили пароль');
 
@@ -211,8 +211,9 @@ class XmlController extends Controller
                     $ps95 = PortalSettings::model()->findByPk(95)->ps2;
                     $ps96 = PortalSettings::model()->findByPk(96)->ps2;
 
-                    $login = $xmlAction->Login;
-                    $password = $xmlAction->Password;
+                    $login = $xmlAction->Login->__ToString();
+                    $password = $xmlAction->Password->__ToString();
+
                     if($login!=$ps95||$password!=$ps96||empty($login)||empty($password))
                         $this->errorXml(self::ERROR_INVALID_LOGIN_OR_PASSWORD,'Неправльный логин иили пароль');
 
@@ -878,8 +879,8 @@ SQL;
                     $ps95 = PortalSettings::model()->findByPk(95)->ps2;
                     $ps96 = PortalSettings::model()->findByPk(96)->ps2;
 
-                    $login = $uploads->Login;
-                    $password = $uploads->Password;
+                    $login = $uploads->Login->__ToString();
+                    $password = $uploads->Password->__ToString();
                     if($login!=$ps95||$password!=$ps96||empty($login)||empty($password))
                         $this->errorXml(self::ERROR_INVALID_LOGIN_OR_PASSWORD,'Неправльный логин иили пароль');
 
@@ -1029,8 +1030,8 @@ SQL;
                     $ps95 = PortalSettings::model()->findByPk(95)->ps2;
                     $ps96 = PortalSettings::model()->findByPk(96)->ps2;
 
-                    $login = $uploads->Login;
-                    $password = $uploads->Password;
+                    $login = $uploads->Login->__ToString();
+                    $password = $uploads->Password->__ToString();
                     if($login!=$ps95||$password!=$ps96||empty($login)||empty($password))
                         $this->errorXml(self::ERROR_INVALID_LOGIN_OR_PASSWORD,'Неправльный логин иили пароль');
 
