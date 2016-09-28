@@ -145,7 +145,7 @@ class XmlController extends Controller
 
                     $login = $xmlAction->Login;
                     $password = $xmlAction->Password;
-                    if($login!=$ps95||$password!=$ps96)
+                    if($login!=$ps95||$password!=$ps96||empty($login)||empty($password))
                         $this->errorXml(self::ERROR_INVALID_LOGIN_OR_PASSWORD,'Неправльный логин иили пароль');
 
                     $INN = $xmlAction->INN->__ToString();
@@ -213,7 +213,7 @@ class XmlController extends Controller
 
                     $login = $xmlAction->Login;
                     $password = $xmlAction->Password;
-                    if($login!=$ps95||$password!=$ps96)
+                    if($login!=$ps95||$password!=$ps96||empty($login)||empty($password))
                         $this->errorXml(self::ERROR_INVALID_LOGIN_OR_PASSWORD,'Неправльный логин иили пароль');
 
                     $serial = $xmlAction->Serial->__ToString();
@@ -880,7 +880,7 @@ SQL;
 
                     $login = $uploads->Login;
                     $password = $uploads->Password;
-                    if($login!=$ps95||$password!=$ps96)
+                    if($login!=$ps95||$password!=$ps96||empty($login)||empty($password))
                         $this->errorXml(self::ERROR_INVALID_LOGIN_OR_PASSWORD,'Неправльный логин иили пароль');
 
                     foreach($students->children() as $student){
@@ -1031,7 +1031,7 @@ SQL;
 
                     $login = $uploads->Login;
                     $password = $uploads->Password;
-                    if($login!=$ps95||$password!=$ps96)
+                    if($login!=$ps95||$password!=$ps96||empty($login)||empty($password))
                         $this->errorXml(self::ERROR_INVALID_LOGIN_OR_PASSWORD,'Неправльный логин иили пароль');
 
 

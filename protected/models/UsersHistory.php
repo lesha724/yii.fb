@@ -210,7 +210,7 @@ class UsersHistory extends CActiveRecord
 
 	private static function getRealIp()
 	{
-		if (!empty($_SERVER['HTTP_CLIENT_IP']))   //check ip from share internet
+		/*if (!empty($_SERVER['HTTP_CLIENT_IP']))   //check ip from share internet
 		{
 			$ip=$_SERVER['HTTP_CLIENT_IP'];
 		}
@@ -220,8 +220,10 @@ class UsersHistory extends CActiveRecord
 		}
 		else
 		{
-			$ip=$_SERVER['REMOTE_ADDR'];
-		}
+
+		}*/
+		$ip=$_SERVER['REMOTE_ADDR'];
+
 		return $ip;
 	}
 
