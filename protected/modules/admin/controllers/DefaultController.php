@@ -481,7 +481,7 @@ class DefaultController extends AdminController
             if($model->validate())
             {
                 $model->u1=new CDbExpression('GEN_ID(GEN_USERS, 1)');
-                if($model->save())
+                if($model->save(false))
                     $this->redirect(array('admin'));
             }
 
