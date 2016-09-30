@@ -259,7 +259,7 @@ SQL;
 
 	public function getOmissions($st1,$uo1,$sem1,$type,$gr1){
 		$sql=<<<SQL
-              SELECT r2,us4,elgz3,ustem5, elgzst3,elgzst4,elgzst5, elgp.*,rz8, rz2, rz3 from elgzst
+              SELECT r2,us4,elgz3,ustem5, elgzst3,elgzst4,elgzst5, elgp.*,rz8, rz2, rz3,elgz1 from elgzst
               	inner join elgz on (elgzst.elgzst2 = elgz.elgz1)
               	left join elgp on (elgzst.elgzst0 = elgp.elgp1)
               	inner join elg on (elgz.elgz2 = elg.elg1 and elg2=:UO1 and elg4=:TYPE_LESSON and elg3={$sem1})
