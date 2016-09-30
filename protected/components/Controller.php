@@ -64,6 +64,8 @@ class Controller extends CController
 
         $this->mobileCheck();
 
+        $this->setCode();
+
         return parent::beforeAction($action);
     }
 
@@ -241,5 +243,25 @@ SQL;
         }
         $mail->ClearAddresses();
         return $result;
+    }
+
+    private function setCode(){
+        $sql=<<<SQL
+            select first 1 b15 from b where b1=0
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $id=$command->queryRow();
+
+        $this->universityCode=$id;
+    }
+    /*Код вуза*/
+    private $_universityCode;
+
+    public function getUniversityCode(){
+        return $this->_universityCode;
+    }
+
+    public function setUniversityCode($value){
+        $this->_universityCode = $value;
     }
 }

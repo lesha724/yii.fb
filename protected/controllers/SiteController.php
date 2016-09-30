@@ -130,6 +130,12 @@ class SiteController extends Controller
 
 				if(!empty($message))
 					Yii::app()->user->setState('info_message', $message);
+
+
+				if($this->universityCode==38){
+
+				}
+
 				Yii::app()->end('ok');
 			}
 				//$this->redirect(Yii::app()->user->returnUrl);
