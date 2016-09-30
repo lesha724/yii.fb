@@ -259,12 +259,13 @@ SQL;
 
 	public function getOmissions($st1,$uo1,$sem1,$type,$gr1){
 		$sql=<<<SQL
-              SELECT r2,us4,elgz3,ustem5, elgzst3,elgzst4,elgzst5, elgp.* from elgzst
+              SELECT r2,us4,elgz3,ustem5, elgzst3,elgzst4,elgzst5, elgp.*,rz8, rz2, rz3 from elgzst
               	inner join elgz on (elgzst.elgzst2 = elgz.elgz1)
               	left join elgp on (elgzst.elgzst0 = elgp.elgp1)
               	inner join elg on (elgz.elgz2 = elg.elg1 and elg2=:UO1 and elg4=:TYPE_LESSON and elg3={$sem1})
 				inner join ustem on (elgz.elgz7 = ustem.ustem1)
 				inner join EL_GURNAL_ZAN({$uo1},:GR1,:SEM1, {$type}) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
+				inner join rz on (EL_GURNAL_ZAN.r4 = rz1)
 			  WHERE elgzst1=:ST1 AND elgzst3 > 0
 SQL;
 
@@ -275,6 +276,14 @@ SQL;
 		$command->bindValue(':GR1', $gr1);
 		$command->bindValue(':TYPE_LESSON', $type);
 		$res = $command->queryAll();
+
+		foreach($res as $key => $date) {
+			$row = Elgzu::model()->getUstemFromElgzuByElgz1AndGroup($date['elgz1'],$gr1);
+			if(!empty($row))
+			{
+				$res[$key]['ustem5']=$row['ustem5'];
+			}
+		}
 		return $res;
 	}
 
@@ -287,11 +296,12 @@ SQL;
 		$min = Elgzst::model()->getMin();
 
 		$sql=<<<SQL
-              SELECT r2,us4,elgz3,ustem5, elgzst3,elgzst4,elgzst5 from elgzst
+              SELECT r2,us4,elgz3,ustem5, elgzst3,elgzst4,elgzst5,rz8, rz2, rz3 from elgzst
               	inner join elgz on (elgzst.elgzst2 = elgz.elgz1)
               	inner join elg on (elgz.elgz2 = elg.elg1 and elg2={$uo1} and elg4=:TYPE_LESSON and elg3={$sem1})
 				inner join ustem on (elgz.elgz7 = ustem.ustem1)
 				inner join EL_GURNAL_ZAN({$uo1},:GR1,:SEM1, {$type}) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
+				inner join rz on (EL_GURNAL_ZAN.r4 = rz1)
 			  WHERE elgzst1=:ST1 AND elg4!=0 AND elgzst3=0 AND {$elgzst4_str} AND elgzst4<=:MIN
 
 SQL;

@@ -19,6 +19,7 @@
                     <th>№</th>
                         <th>'.tt('Отработка').'</th>
                         <th>'.tt('Дата зан.').'</th>
+                        <th>'.tt('Время').'</th>
                         <th>'.tt('№ зан.').'</th>
                         <th>'.tt('Тема').'</th>
                         <th>'.tt('Тип').'</th>
@@ -38,6 +39,7 @@
                 <td>%s</td>
                 <td class="retake">%s</td>
                 <td class="date">%s</td>
+                <td class="time">%s - %s</td>
                 <td class="nom">%s</td>
                 <td class="t-name">%s</td>
                 <td class="type-us">%s</td>
@@ -63,7 +65,7 @@ HTML;
             }elseif($key['elgzst5']==-1){
                 $elgzst5=tt('Отработано');
             }
-            $tr .= sprintf($pattern, $i,$elgzst5, date('d.m.Y', strtotime($key['r2'])),$key['elgz3'], $key['ustem5'], SH::convertUS4($key['us4']), $type, $key['elgp3'], $key['elgp2']>0?$typesElgp[$key['elgp2']]:"", $key['elgp2']==5?$key['elgp4']:"", $key['elgp2']==5?date('d.m.Y', strtotime($key['elgp5'])):"");
+            $tr .= sprintf($pattern, $i,$elgzst5, date('d.m.Y', strtotime($key['r2'])),$key['rz2'],$key['rz3'],$key['elgz3'], $key['ustem5'], SH::convertUS4($key['us4']), $type, $key['elgp3'], $key['elgp2']>0?$typesElgp[$key['elgp2']]:"", $key['elgp2']==5?$key['elgp4']:"", $key['elgp2']==5?date('d.m.Y', strtotime($key['elgp5'])):"");
             $i++;
         }
         echo sprintf($table,$tr);
@@ -81,6 +83,7 @@ HTML;
                         <th>'.tt('Оценка.').'</th>
                         <th>'.tt('Отработка').'</th>
                         <th>'.tt('Дата зан.').'</th>
+                        <th>'.tt('Время').'</th>
                         <th>'.tt('№ зан.').'</th>
                         <th>'.tt('Тема').'</th>
                         <th>'.tt('Тип').'</th>
@@ -99,19 +102,23 @@ HTML;
                 <td class="ball">%s</td>
                 <td class="retake">%s</td>
                 <td class="date">%s</td>
+                <td class="time">%s - %s</td>
                 <td class="nom">%s</td>
                 <td class="t-name">%s</td>
                 <td class="type-us">%s</td>
         </tr>
 HTML;
         $tr="";
+        $i=1;
         foreach($f as $key){
             if($key['elgzst5']>0){
                 $elgzst5=(float)$key['elgzst5'];
             }elseif($key['elgzst5']==-1){
                 $elgzst5=tt('Отработано');
+            }else{
+                $elgzst5='';
             }
-            $tr .= sprintf($pattern, $i,(float)$key['elgzst4'],$elgzst5, date('d.m.Y', strtotime($key['r2'])),$key['elgz3'], $key['ustem5'], SH::convertUS4($key['us4']));
+            $tr .= sprintf($pattern, $i,(float)$key['elgzst4'],$elgzst5, date('d.m.Y', strtotime($key['r2'])),$key['rz2'],$key['rz3'],$key['elgz3'], $key['ustem5'], SH::convertUS4($key['us4']));
             $i++;
         }
 
