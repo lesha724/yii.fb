@@ -825,7 +825,7 @@ SQL;
             FROM st
             INNER JOIN std on (st.st1 = std.std2)
             INNER JOIN sgr on (st.st32 = sgr.sgr1)
-            WHERE st101<>7 and STD3=:GR1 and STD11 in (0,6,8) and (STD7 is null)
+            WHERE st101<>7 and STD3=:GR1 and STD11 in (0,5,6,8) and (STD7 is null)
             ORDER BY ST2 collate UNICODE
 SQL;
 
