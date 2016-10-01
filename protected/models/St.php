@@ -848,7 +848,7 @@ SQL;
 			 FROM ST
 			   LEFT JOIN SK ON (SK.SK2 = ST.ST1)
 			   LEFT JOIN STD ON (ST.ST1 = STD.STD2)
-			 WHERE std7 is null and sk5 is null and std11 in (0,6,8) and std3=:gr1
+			 WHERE std7 is null and sk5 is null and std11 in (0,5,6,8) and std3=:gr1
 			 ORDER BY st2 collate UNICODE
 SQL;
 
