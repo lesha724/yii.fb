@@ -428,8 +428,6 @@ SQL;
 
 class SH extends ShortCodes
 {
-    const ZAP_SUPPORT_HREF = 'support.zsmu.zp.ua';//запорожье
-
     protected static $_instance;
 
     private function __construct(){}

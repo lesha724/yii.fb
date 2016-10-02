@@ -199,14 +199,18 @@ JS;
         </script>
     <?php endif; ?>
 
-    <?php if(Yii::app()->user->hasState('api-func-login')) {
+    <?php
+    /*Запорожье авторизация на поддержке*/
+    if(Yii::app()->user->hasState('api-func-login')) {
         $image = Yii::app()->user->getState('api-func-login');
         Yii::app()->user->setState('api-func-login', null);
         echo $image;
     }
     ?>
 
-    <?php if(Yii::app()->user->hasState('api-func-logout')) {
+    <?php
+    /*Запорожье выход с поддержки*/
+    if(Yii::app()->user->hasState('api-func-logout')) {
         $image = Yii::app()->user->getState('api-func-logout');
         Yii::app()->user->setState('api-func-logout', null);
         echo $image;

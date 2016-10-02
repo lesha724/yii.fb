@@ -11,6 +11,8 @@ class RegistrationForm extends CFormModel
     private $_u5;
     private $_u6;
 
+    private $_fio;
+
 	public function rules()
 	{
 		return array(
@@ -64,6 +66,8 @@ class RegistrationForm extends CFormModel
             //$this->_u6 = $st ? $st[0]->st1 : $p[0]->p1;
             $this->_u5 = $p ? 1 : 0;
             $this->_u6 = $p ? $p[0]->p1 : $st[0]->st1;
+
+            $this->_fio = $p ? $p[0]->p3.' '.$p[0]->p4.' '.$p[0]->p5 : $st[0]->st2.' '.$st[0]->st3.' '.$st[0]->st4;
             //$alreadyRegistered = 1 <= Users::model()->count('u5=:U5 AND u6=:U6 AND u2!=""',array(':U5'=>$this->_u5,':U6'=>$this->_u6));
             $alreadyRegistered = 1 <= Users::model()->countByAttributes(
                 array('u5'=>$this->_u5,'u6'=>$this->_u6),
@@ -91,5 +95,9 @@ class RegistrationForm extends CFormModel
         $user->save(false);
 
         return true;
+    }
+
+    public function getFio(){
+        return $this->_fio;
     }
 }

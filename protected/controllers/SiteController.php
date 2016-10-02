@@ -137,7 +137,7 @@ class SiteController extends Controller
 					$password ='';
 					if(!empty($sKeySettings))
 						$password = md5($sKeySettings->ps2.$model->password);
-					$image = '<img src="http://'.SH::ZAP_SUPPORT_HREF.'/api-login.php?email='.$user->u4.'&pass='.$password.'" style="display:none"/>';
+					$image = '<img src="http://'.UniversityCommon::ZAP_SUPPORT_HREF.'/api-login.php?email='.$user->u4.'&pass='.$password.'" style="display:none"/>';
 					Yii::app()->user->setState('api-func-login', $image);
 				}
 
@@ -185,8 +185,18 @@ class SiteController extends Controller
 			$model->u4=$_POST['Users']['u4'];
 			// validate user input and redirect to the previous page if valid
 			if($model->save()) {
-				if($this->universityCode==38){
+				if($this->universityCode==U_ZSMU){
+					$message = '"account" : {
+						"email" : "%s",
+						"pass" : "%s"
+					}';
 
+					$message = sprintf($message, $model->u4, $password);
+					if(UniversityCommon::SendZapApiRequest(UniversityCommon::CHANGE_PASSWORD_TYPE, $message)){
+						//Yii::app()->user->setState('info_message', $message);
+					}else{
+						Yii::app()->user->setState('info_message', tt('Ошибка отправки сообщения на поодержку!'));
+					}
 				}
 				Yii::app()->end('ok');
 			}
@@ -207,7 +217,7 @@ class SiteController extends Controller
 
 		if($this->universityCode==U_ZSMU&&!empty($user)){
 			Yii::app()->user->logout(false);
-			Yii::app()->user->setState('api-func-logout', '<img src="http://'.SH::ZAP_SUPPORT_HREF.'/api-logout.php?email='.$user->u4.'" style="display:none"/>');
+			Yii::app()->user->setState('api-func-logout', '<img src="http://'.UniversityCommon::ZAP_SUPPORT_HREF.'/api-logout.php?email='.$user->u4.'" style="display:none"/>');
 		}else{
 			Yii::app()->user->logout();
 		}
@@ -228,8 +238,29 @@ class SiteController extends Controller
         {
             $model->attributes=$_POST['RegistrationForm'];
 
-            if ($model->validate() && $model->register())
-                Yii::app()->end('registered');
+            if ($model->validate() && $model->register()) {
+				if($this->universityCode==U_ZSMU){
+					$message = '"accounts" : {
+							"account": {
+								"name" : "%s",
+								"email" : "%s",
+								"password" : "%s",
+								"timezone" : "Europe\/Kiev",
+								"ip" : "%s",
+								"language" : "%s",
+								"notes" : ""
+							}
+					}';
+
+					$message = sprintf($message, $model->getFio(), $model->email, $model->password,Yii::app()->request->userHostAddress, Yii::app()->language);
+					if(UniversityCommon::SendZapApiRequest(UniversityCommon::REGISTER_TYPE, $message)){
+						//Yii::app()->user->setState('info_message', $message);
+					}else{
+						Yii::app()->user->setState('info_message', tt('Ошибка отправки сообщения на поодержку!'));
+					}
+				}
+				Yii::app()->end('registered');
+			}
 
         }
 
@@ -260,6 +291,26 @@ class SiteController extends Controller
 
 			if ($model->scenario == 'step-3'&&$model->validate() && $model->register())
 			{
+				if($this->universityCode==U_ZSMU){
+					$message = '"accounts" : {
+							"account": {
+								"name" : "%s",
+								"email" : "%s",
+								"password" : "%s",
+								"timezone" : "Europe\/Kiev",
+								"ip" : "%s",
+								"language" : "%s",
+								"notes" : ""
+							}
+					}';
+
+					$message = sprintf($message, $model->getFio(), $model->email, $model->password,Yii::app()->request->userHostAddress, Yii::app()->language);
+					if(UniversityCommon::SendZapApiRequest(UniversityCommon::REGISTER_TYPE, $message)){
+						//Yii::app()->user->setState('info_message', $message);
+					}else{
+						Yii::app()->user->setState('info_message', tt('Ошибка отправки сообщения на поодержку!'));
+					}
+				}
 				return $this->redirect('index');
 			}
 
