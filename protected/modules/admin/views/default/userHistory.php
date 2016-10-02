@@ -11,7 +11,7 @@
         tt('История авторизации'),
     );
 ?>
-
+<button id="excel-import" class="btn btn-info"><i class="icon-print"></i> Excel</button>
 <?php
 $pageSize=Yii::app()->user->getState('pageSize',10);
 $this->widget('bootstrap.widgets.TbGridView',array(
@@ -65,4 +65,13 @@ Yii::app()->clientScript->registerScript('initPageSize',"
 	   $(document).on('change','.change-pageSize', function() {
 	        $.fn.yiiGridView.update('user-history-grid',{ data:{ pageSize: $(this).val() }})
 	    });",CClientScript::POS_READY);
+
+Yii::app()->clientScript->registerScript('excelPrint',"
+    $(function(){
+        $('body').on('click','#excel-import', function() {
+           var data = $('#user-history-grid .filters input').serialize();
+           return false;
+        });
+    });
+", CClientScript::POS_READY);
 ?>
