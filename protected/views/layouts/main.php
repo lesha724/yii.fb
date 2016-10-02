@@ -199,5 +199,19 @@ JS;
         </script>
     <?php endif; ?>
 
+    <?php if(Yii::app()->user->hasState('api-func-login')) {
+        $image = Yii::app()->user->getState('api-func-login');
+        Yii::app()->user->setState('api-func-login', null);
+        echo $image;
+    }
+    ?>
+
+    <?php if(Yii::app()->user->hasState('api-func-logout')) {
+        $image = Yii::app()->user->getState('api-func-logout');
+        Yii::app()->user->setState('api-func-logout', null);
+        echo $image;
+        Yii::app()->user->logout(true);//костыль для показа сообщения что бы при лог ауте не дестроилась сессия
+    }
+    ?>
 </body>
 </html>

@@ -250,9 +250,9 @@ SQL;
             select first 1 b15 from b where b1=0
 SQL;
         $command = Yii::app()->db->createCommand($sql);
-        $id=$command->queryRow();
+        $id=$command->queryScalar();
 
-        $this->universityCode=$id;
+        $this->_universityCode=$id;
     }
     /*Код вуза*/
     private $_universityCode;
@@ -261,7 +261,7 @@ SQL;
         return $this->_universityCode;
     }
 
-    public function setUniversityCode($value){
-        $this->_universityCode = $value;
-    }
+    //public function setUniversityCode($value){
+        //$this->_universityCode = $value;
+    //}
 }

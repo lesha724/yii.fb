@@ -132,8 +132,13 @@ class SiteController extends Controller
 					Yii::app()->user->setState('info_message', $message);
 
 
-				if($this->universityCode==38){
-
+				if($this->universityCode==U_ZSMU){
+					$sKeySettings = PortalSettings::model()->findByPk(PortalSettings::ZAP_SUPPORT_SECRET_KEY_ID);
+					$password ='';
+					if(!empty($sKeySettings))
+						$password = md5($sKeySettings->ps2.$model->password);
+					$image = '<img src="http://'.SH::ZAP_SUPPORT_HREF.'/api-login.php?email='.$user->u4.'&pass='.$password.'" style="display:none"/>';
+					Yii::app()->user->setState('api-func-login', $image);
 				}
 
 				Yii::app()->end('ok');
@@ -175,11 +180,16 @@ class SiteController extends Controller
 		{
 			$model->u3=$_POST['Users']['u3'];
 			$model->password=$_POST['Users']['password'];
+			$password = $model->password;
 			$model->u2=$_POST['Users']['u2'];
 			$model->u4=$_POST['Users']['u4'];
 			// validate user input and redirect to the previous page if valid
-			if($model->save())
+			if($model->save()) {
+				if($this->universityCode==38){
+
+				}
 				Yii::app()->end('ok');
+			}
 			/*else
 				print_r($model->getErrors());*/
 			//$this->redirect(Yii::app()->user->returnUrl);
@@ -193,7 +203,14 @@ class SiteController extends Controller
 	 */
 	public function actionLogout()
 	{
-		Yii::app()->user->logout();
+		$user = Users::model()->findByPk(Yii::app()->user->id);
+
+		if($this->universityCode==U_ZSMU&&!empty($user)){
+			Yii::app()->user->logout(false);
+			Yii::app()->user->setState('api-func-logout', '<img src="http://'.SH::ZAP_SUPPORT_HREF.'/api-logout.php?email='.$user->u4.'" style="display:none"/>');
+		}else{
+			Yii::app()->user->logout();
+		}
 		$this->redirect(Yii::app()->homeUrl);
 	}
 
@@ -202,8 +219,8 @@ class SiteController extends Controller
      */
     public function actionRegistration()
     {
-        //if (!Yii::app()->request->isAjaxRequest)
-            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        if (!Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $model=new RegistrationForm;
 

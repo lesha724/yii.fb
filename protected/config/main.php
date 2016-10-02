@@ -36,6 +36,7 @@ $config = array(
 	'components'=>array(
 		'request'=>array(
 				'enableCookieValidation'=>true,
+				//'enableCsrfValidation'=>true,
 		),
 		'user'=>array(
 			// enable cookie-based authentication
