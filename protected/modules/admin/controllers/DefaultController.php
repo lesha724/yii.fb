@@ -64,9 +64,9 @@ class DefaultController extends AdminController
         $objPHPExcel= XPHPExcel::createPHPExcel();
         $objPHPExcel->getProperties()->setCreator("ACY")
             ->setLastModifiedBy("ACY ".date('Y-m-d H-i'))
-            ->setTitle("Jornal ".date('Y-m-d H-i'))
-            ->setSubject("Jornal ".date('Y-m-d H-i'))
-            ->setDescription("Jornal document, generated using ACY Portal. ".date('Y-m-d H:i:'))
+            ->setTitle("GENERATE_USER ".date('Y-m-d H-i'))
+            ->setSubject("GENERATE_USER ".date('Y-m-d H-i'))
+            ->setDescription("GENERATE_USER document, generated using ACY Portal. ".date('Y-m-d H:i:'))
             ->setKeywords("")
             ->setCategory("Result file");
         $objPHPExcel->setActiveSheetIndex(0);
@@ -344,34 +344,58 @@ class DefaultController extends AdminController
     {
         $model = new UsersHistory();
         $model->unsetAttributes();  // clear any default values
-        if(isset($_POST['UsersHistory']))
-            $model->attributes=$_POST['UsersHistory'];
 
-        //var_dump($model->users);
+        $searchParams = Yii::app()->user->getState('SearchParamsUH');
+        if ( isset($searchParams) )
+        {
+            $model->attributes = $searchParams;
+        }
 
-        if(empty($model->users))
-            throw new CHttpException(400,'Invalid request. Empty params.');
-
-        $users = explode(',',$model->users);
+        $dataProvider = $model->search();
 
         Yii::import('ext.phpexcel.XPHPExcel');
         $objPHPExcel= XPHPExcel::createPHPExcel();
         $objPHPExcel->getProperties()->setCreator("ACY")
             ->setLastModifiedBy("ACY ".date('Y-m-d H-i'))
-            ->setTitle("Jornal ".date('Y-m-d H-i'))
-            ->setSubject("Jornal ".date('Y-m-d H-i'))
-            ->setDescription("Jornal document, generated using ACY Portal. ".date('Y-m-d H:i:'))
+            ->setTitle("USER_HISTORY ".date('Y-m-d H-i'))
+            ->setSubject("USER_HISTORY ".date('Y-m-d H-i'))
+            ->setDescription("USER_HISTORY document, generated using ACY Portal. ".date('Y-m-d H:i:'))
             ->setKeywords("")
             ->setCategory("Result file");
         $objPHPExcel->setActiveSheetIndex(0);
         $sheet=$objPHPExcel->getActiveSheet();
+
+        $sheet->setCellValue('A1', '#');
+        $sheet->setCellValue('B1', UsersHistory::model()->getAttributeLabel('name'));
+        $sheet->setCellValue('C1', UsersHistory::model()->getAttributeLabel('type'));
+        $sheet->setCellValue('D1', UsersHistory::model()->getAttributeLabel('adm'));
+        $sheet->setCellValue('E1', UsersHistory::model()->getAttributeLabel('uh3'));
+        $sheet->setCellValue('F1', UsersHistory::model()->getAttributeLabel('uh4'));
+        $sheet->setCellValue('G1', UsersHistory::model()->getAttributeLabel('uh5'));
+        $sheet->setCellValue('H1', UsersHistory::model()->getAttributeLabel('uh6'));
+
+        $i = 2;
+        $dataProvider->pagination=false;
+        foreach($dataProvider->getData(true) as $data){
+            $sheet->setCellValueByColumnAndRow(0,$i,$i-1);
+            $sheet->setCellValueByColumnAndRow(1,$i,($data->type==1)?$data->getTchName():$data->getStdName());
+            $sheet->setCellValueByColumnAndRow(2,$i,$data->getType());
+            $sheet->setCellValueByColumnAndRow(3,$i,$data->getAdminType());
+            $sheet->setCellValueByColumnAndRow(4,$i,$data->getDeviceType());
+            $sheet->setCellValueByColumnAndRow(5,$i,$data->uh4);
+            $sheet->setCellValueByColumnAndRow(6,$i,$data->uh5);
+            $sheet->setCellValueByColumnAndRow(7,$i,$data->uh6);
+            $i++;
+        }
+
+        $sheet->getStyleByColumnAndRow(0,1,7,$i-1)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
 
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a clientâ€™s web browser (Excel5)
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="ACY_GENERATE_USER_'.date('Y-m-d H-i').'.xls"');
+        header('Content-Disposition: attachment;filename="ACY_USER_HISTORY_'.date('Y-m-d H-i').'.xls"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

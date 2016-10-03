@@ -40,6 +40,7 @@ class AdminController extends Controller
                     'mail',
                     'rating',
                     'userHistory',
+                    'userHistoryExcel',
                     'deleteUserHistory',
                     'enter',
                     'generateUser',

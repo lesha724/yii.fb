@@ -11,7 +11,10 @@
         tt('История авторизации'),
     );
 ?>
-<button id="excel-import" class="btn btn-info"><i class="icon-print"></i> Excel</button>
+<form id="excel-form" type="get">
+    <button id="excel-import" class="btn btn-info"><i class="icon-print"></i> Excel</button>
+</form>
+
 <?php
 $pageSize=Yii::app()->user->getState('pageSize',10);
 $this->widget('bootstrap.widgets.TbGridView',array(
@@ -69,14 +72,15 @@ Yii::app()->clientScript->registerScript('initPageSize',"
 $url = Yii::app()->createUrl('/admin/default/userHistoryExcel');
 Yii::app()->clientScript->registerScript('excelPrint',"
     $(function(){
+        var url = '$url';
+
         $('body').on('click','#excel-import', function() {
-           var data = $('#user-history-grid .filters input,#user-history-grid .filters select').serialize();
+           //var data = $('#user-history-grid .filters input,#user-history-grid .filters select').serialize();
            //alert(data);
-            var jqxhr = $.post('$url',data)
-              .success(function() { alert('Успешное выполнение'); })
-              .error(function() { alert('Ошибка выполнения'); })
-              .complete(function() { alert('Завершение выполнения'); });
-           return false;
+             $('#excel-form').attr('action', url);
+             //alert( url+'/?'+data);
+             $('#excel-form').submit();
+             document.location.reload();
         });
     });
 ", CClientScript::POS_READY);
