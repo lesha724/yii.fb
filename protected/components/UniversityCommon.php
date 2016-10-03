@@ -15,12 +15,17 @@ class UniversityCommon extends CApplicationComponent
     /*мето для отпрваки пост завпроса для апи поддержки запорожья*/
     public static function SendZapApiRequest($type,$message){
         $pattern = '{
-                "api" : "API_KEY",
+                "api" : "%s",
                 "op" : "%s",
                 %s
         }';
 
-        $src = sprintf($pattern, $type, $message);
+        $sKeySettings = PortalSettings::model()->findByPk(PortalSettings::ZAP_SUPPORT_API_KEY_ID);
+        $key ='';
+        if(!empty($sKeySettings))
+            $key = $sKeySettings->ps2;
+
+        $src = sprintf($pattern,$key, $type, $message);
 
         $url = 'http://'.self::ZAP_SUPPORT_HREF.'/index.php?api=yes';
         $curl = curl_init();
