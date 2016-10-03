@@ -66,10 +66,16 @@ Yii::app()->clientScript->registerScript('initPageSize',"
 	        $.fn.yiiGridView.update('user-history-grid',{ data:{ pageSize: $(this).val() }})
 	    });",CClientScript::POS_READY);
 
+$url = Yii::app()->createUrl('/admin/default/userHistoryExcel');
 Yii::app()->clientScript->registerScript('excelPrint',"
     $(function(){
         $('body').on('click','#excel-import', function() {
-           var data = $('#user-history-grid .filters input').serialize();
+           var data = $('#user-history-grid .filters input,#user-history-grid .filters select').serialize();
+           //alert(data);
+            var jqxhr = $.post('$url',data)
+              .success(function() { alert('Успешное выполнение'); })
+              .error(function() { alert('Ошибка выполнения'); })
+              .complete(function() { alert('Завершение выполнения'); });
            return false;
         });
     });

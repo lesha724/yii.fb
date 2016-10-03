@@ -340,6 +340,51 @@ class DefaultController extends AdminController
         ));
     }
 
+    public function actionUserHistoryExcel()
+    {
+        $model = new UsersHistory();
+        $model->unsetAttributes();  // clear any default values
+        if(isset($_POST['UsersHistory']))
+            $model->attributes=$_POST['UsersHistory'];
+
+        //var_dump($model->users);
+
+        if(empty($model->users))
+            throw new CHttpException(400,'Invalid request. Empty params.');
+
+        $users = explode(',',$model->users);
+
+        Yii::import('ext.phpexcel.XPHPExcel');
+        $objPHPExcel= XPHPExcel::createPHPExcel();
+        $objPHPExcel->getProperties()->setCreator("ACY")
+            ->setLastModifiedBy("ACY ".date('Y-m-d H-i'))
+            ->setTitle("Jornal ".date('Y-m-d H-i'))
+            ->setSubject("Jornal ".date('Y-m-d H-i'))
+            ->setDescription("Jornal document, generated using ACY Portal. ".date('Y-m-d H:i:'))
+            ->setKeywords("")
+            ->setCategory("Result file");
+        $objPHPExcel->setActiveSheetIndex(0);
+        $sheet=$objPHPExcel->getActiveSheet();
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        // Redirect output to a clientâ€™s web browser (Excel5)
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="ACY_GENERATE_USER_'.date('Y-m-d H-i').'.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+    }
+
     public function actionDeleteUserHistory($id)
     {
         if(Yii::app()->request->isPostRequest)
