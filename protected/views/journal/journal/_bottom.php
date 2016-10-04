@@ -86,9 +86,15 @@ if (!empty($model->sem1)):
     $this->renderPartial('journal/_table_1', array(
         'students' => $students
     ));
+
     //доп колонки
     Elgd::checkEmptyElgd($elg1);
-    $elgd=Elgd::model()->getDop($elg1);
+    $elgd = array();
+    $ps97 = PortalSettings::model()->findByPk(97)->ps2;
+    $ps85 = PortalSettings::model()->findByPk(85)->ps2;
+    $ps83 = PortalSettings::model()->findByPk(83)->ps2;
+    if($ps97==0)
+        $elgd=Elgd::model()->getDop($elg1);
 
     $modules = null;
     if($ps57==1)
@@ -99,7 +105,7 @@ if (!empty($model->sem1)):
         $xam = Stus::model()->getExam($uo1,$gr1,$model->sem1,$model->discipline);*/
 
     $classTable2='journal_div_table2';
-    if($model->type_lesson==0 /*|| empty($elgd)*/)
+    if($model->type_lesson==0 || (empty($elgd)&&$ps85==1&&$ps83==1))
         $classTable2='journal_div_table2 journal_div_table2_1';
 
     $this->renderPartial('journal/_table_2', array(
@@ -122,7 +128,7 @@ if (!empty($model->sem1)):
     ));
 
 
-    if($model->type_lesson!=0/*&&!empty($elgd)*/)
+    if($model->type_lesson!=0&&!(empty($elgd)&&$ps85==1&&$ps83==1))
     {
         $this->renderPartial('journal/_table_3', array(
             'students' => $students,

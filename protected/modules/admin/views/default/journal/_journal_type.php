@@ -98,6 +98,12 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
         <?=CHtml::hiddenField('settings[85]', PortalSettings::model()->findByPk(85)->ps2)?>
     </div>
 
+    <div class="control-group">
+        <?=CHtml::checkBox('', PortalSettings::model()->findByPk(97)->ps2, $htmlOptions2)?>
+        <span class="lbl"> <?=tt('Скрывать столбец Доп колонки')?></span>
+        <?=CHtml::hiddenField('settings[97]', PortalSettings::model()->findByPk(97)->ps2)?>
+    </div>
+
     <?php /*<div class="control-group">
         <?=CHtml::checkBox('', PortalSettings::model()->findByPk(84)->ps2, $htmlOptions2)?>
         <span class="lbl"> <?=tt('Запись Итоговой оценки')?></span>
