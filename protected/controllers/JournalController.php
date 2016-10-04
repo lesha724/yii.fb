@@ -1092,6 +1092,16 @@ SQL;
                                 if (!$error) {
                                     $elgzst->elgzst5 = $elgotr2;
                                     $elgzst->save();
+
+                                    if ($ps57==1) {
+                                        Vmp::model()->recalculate($elgzst->elgzst1, $elgz, $gr1);
+                                    }
+
+                                    $ps84 = PortalSettings::model()->findByPk(84)->ps2;
+                                    if ($ps84==1){
+                                        $sem7 = Gr::model()->getSem7ByGr1ByDate($gr1,date('d.m.Y'));
+                                        Stus::model()->recalculateStusMark($elgzst->elgzst1,$gr1,$sem7,$elg);
+                                    }
                                 } else {
                                     $errorType = 7;
                                 }
