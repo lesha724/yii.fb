@@ -129,6 +129,6 @@
 
 Yii::app()->clientScript->registerScript('initPageSize',"
 	   $(document).on('change','.change-pageSize', function() {
-	        $.fn.yiiGridView.update('teachers',{ data:{ pageSize: $(this).val() }})
+	        $.fn.yiiGridView.update('teachers',{ data:{ pageSize: $(this).val(), chairId: $('#chairs').val() }})
 	    });",CClientScript::POS_READY);
 

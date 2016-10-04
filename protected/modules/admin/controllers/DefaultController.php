@@ -475,10 +475,10 @@ class DefaultController extends AdminController
             Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
             unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
         }
-        /*if (isset($_REQUEST['P']))
-            $model->attributes = $_REQUEST['P'];*/
-
         if (isset($_REQUEST['P']))
+            $model->attributes = $_REQUEST['P'];
+
+        /*if (isset($_REQUEST['P']))
         {
             $model->attributes = $_REQUEST['P'];
             Yii::app()->user->setState('SearchParamsP', $_REQUEST['P']);
@@ -492,7 +492,7 @@ class DefaultController extends AdminController
             {
                 $model->attributes = $searchParams;
             }
-        }
+        }*/
         /*$page = null;
         if (isset($_REQUEST['P_page']))
         {

@@ -497,7 +497,9 @@ SQL;
                 'select' => false,
                 'together' => true
             );
+			$today = date('d.m.Y 00:00');
             $criteria->compare('pd4', $chairId);
+			$criteria->addCondition("PD28 in (0,2,5,9) and PD3=0 and (PD13 IS NULL or PD13>'{$today}')");
         }
 
         $criteria->addCondition("p3 <> ''");
