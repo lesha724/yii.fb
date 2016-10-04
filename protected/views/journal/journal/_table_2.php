@@ -258,6 +258,18 @@ function table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$nom,$uo1,$modules,$pot
                 $pot = round($mark['vmp5'],2);
                 $itog = round($mark['vmp4'],2);
                 $pmk = round($mark['vmp7'],2);
+
+                switch($pmk){
+                    case '-4':
+                        $pmk = tt('н/я');
+                        break;
+                    case '-2':
+                        $pmk = tt('неув');
+                        break;
+                    case '-1':
+                        $pmk = tt('уваж');
+                        break;
+                }
                 $vmpv1 = $mark['vmpv1'];
 
                 $nom_=$date['elgz3'];
