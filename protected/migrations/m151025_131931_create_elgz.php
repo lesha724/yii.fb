@@ -30,10 +30,20 @@ SQL;
         ALTER TABLE elgz ADD constraint FK_elgz7_ustem1 FOREIGN KEY (elgz7) REFERENCES ustem (ustem1) ON DELETE SET DEFAULT ON UPDATE CASCADE;
 SQL;
 			$this->execute($sql);
+
 			$sql = <<<SQL
+        SELECT elg1
+        FROM elg
+        WHERE elg1=0
+SQL;
+			$command = Yii::app()->db->createCommand($sql);
+			$row = $command->queryRow();
+			if(empty($row)) {
+				$sql = <<<SQL
         INSERT INTO elg(elg1) VALUES (0);
 SQL;
-			$this->execute($sql);
+				$this->execute($sql);
+			}
 		}
 	}
 
