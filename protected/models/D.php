@@ -608,13 +608,21 @@ SQL;
             }
 
 
-            if (! isset($data[$i]))
+            if (! isset($data[$i])) {
                 $data[$i] = $discipline;
+                $data[$i]['hours'] = array();
+            }
 
             // takes hours only for one row from the query
-            $data[$i]['hours']    = array($discipline['nr3']);
+            if($_ug3 != $ug3) {
+                array_push($data[$i]['hours'], $discipline['nr3']);
+            }else{
+                $data[$i]['hours'] = array($discipline['nr3']);
+            }
             $data[$i]['groups'][] = Gr::model()->getGroupName($discipline['sem4'], $discipline);
             $data[$i]['ids'][]    = $discipline['gr1'];
+
+
         }
 
         $prak = $this->getPrakForWorkLoad($model);
