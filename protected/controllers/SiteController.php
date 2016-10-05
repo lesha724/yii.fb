@@ -133,10 +133,10 @@ class SiteController extends Controller
 
 
 				if($this->universityCode==U_ZSMU){
-					$sKeySettings = PortalSettings::model()->findByPk(PortalSettings::ZAP_SUPPORT_SECRET_KEY_ID);
-					$password ='';
-					if(!empty($sKeySettings))
-						$password = md5($sKeySettings->ps2.$model->password);
+					//$sKeySettings = PortalSettings::model()->findByPk(PortalSettings::ZAP_SUPPORT_SECRET_KEY_ID);
+					/*$password ='';
+					if(!empty($sKeySettings))*/
+					$password = crypt($model->password,$user->u9);
 					$image = '<img src="http://'.UniversityCommon::ZAP_SUPPORT_HREF.'/api-login.php?email='.$user->u4.'&pass='.$password.'" style="display:none"/>';
 					Yii::app()->user->setState('api-func-login', $image);
 				}
@@ -188,10 +188,11 @@ class SiteController extends Controller
 				if($this->universityCode==U_ZSMU){
 					$message = '"account" : {
 						"email" : "%s",
-						"pass" : "%s"
+						"pass" : "%s",
+						"salt" : "%s"
 					}';
 
-					$message = sprintf($message, $model->u4, $password);
+					$message = sprintf($message, $model->u4, $password, $model->u9);
 					if(UniversityCommon::SendZapApiRequest(UniversityCommon::CHANGE_PASSWORD_TYPE, $message)){
 						//Yii::app()->user->setState('info_message', $message);
 					}else{
@@ -245,6 +246,7 @@ class SiteController extends Controller
 								"name" : "%s",
 								"email" : "%s",
 								"password" : "%s",
+								"salt" : "%s",
 								"timezone" : "Europe\/Kiev",
 								"ip" : "%s",
 								"language" : "%s",
@@ -252,7 +254,8 @@ class SiteController extends Controller
 							}
 					}';
 
-					$message = sprintf($message, $model->getFio(), $model->email, $model->password,Yii::app()->request->userHostAddress, Yii::app()->language);
+					$user = Users::model()->findByAttributes(array('u4'=>$model->email));
+					$message = sprintf($message, $model->getFio(), $model->email, $model->password,$user->u9,Yii::app()->request->userHostAddress, Yii::app()->language);
 					if(UniversityCommon::SendZapApiRequest(UniversityCommon::REGISTER_TYPE, $message)){
 						//Yii::app()->user->setState('info_message', $message);
 					}else{

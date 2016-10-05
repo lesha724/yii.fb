@@ -10,7 +10,7 @@
 class PortalSettings extends CActiveRecord
 {
     const ZAP_SUPPORT_API_KEY_ID = 38999999;//запорожье
-	const ZAP_SUPPORT_SECRET_KEY_ID = 38999998;//запорожье
+	//const ZAP_SUPPORT_SECRET_KEY_ID = 38999998;//запорожье
 
 	private  $settings = array();
 	/**
