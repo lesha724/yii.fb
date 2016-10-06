@@ -249,11 +249,11 @@ function table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$nom,$uo1,$modules,$pot
         case 2:
 
             if(!isset($modules[(int)$nom-1]))
-                return '<td colspan="4">'.tt('Модуль не найден!').'</td>';
+                return '<td colspan="4">'.tt('Нет ведомости, обращайтесь в деканат!').'</td>';
             else{
                 $mark = Vmp::model()->getMarks($modules[(int)$nom-1]['vvmp1'],$st['st1'],$gr1);
                 if(empty($mark))
-                    return '<td colspan="4">'.tt('Модуль не найден!').'</td>';
+                    return '<td colspan="4">'.tt('Нет ведомости, обращайтесь в деканат!').'</td>';
                 $ind = round($mark['vmp6'],2);
                 $pot = round($mark['vmp5'],2);
                 $itog = round($mark['vmp4'],2);
