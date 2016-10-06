@@ -493,7 +493,7 @@ HTML;
                 );
             }
 
-            if($date['elgz4']>1&&$ps57==1)
+            if($date['elgz4']==2&&$ps57==1)
             {
                 $tr .= table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$moduleNom,$uo1,$modules,$potoch,$sem7,$ps60);
                 $potoch = 0;
