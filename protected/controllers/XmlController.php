@@ -892,6 +892,9 @@ SQL;
                         if($student->getName()=='Student'){
                             /*берем айди из контента тега*/
                             $id = $student->__ToString();
+                            if(!is_numeric($id)){
+                                $this->errorXml(self::ERROR_XML_STRUCTURE, 'Ошибка струтуры(параметры) xml');
+                            }
                             /*если пустой айди добавляем ошибку*/
                             if(empty($id)){
                                 array_push($errors,
@@ -1044,6 +1047,9 @@ SQL;
                         if($teacher->getName()=='Teacher'){
                             /*берем айди из контента тега*/
                             $id = $teacher->__ToString();
+                            if(!is_numeric($id)){
+                                $this->errorXml(self::ERROR_XML_STRUCTURE, 'Ошибка струтуры(параметры) xml');
+                            }
                             /*если пустой айди добавляем ошибку*/
                             if(empty($id)){
                                 array_push($errors,
