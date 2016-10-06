@@ -64,6 +64,26 @@ if (!empty($model->sem1)):
 
     $this->renderPartial('/filter_form/default/_refresh_filter_form_button');
 
+
+    $ps57 = PortalSettings::model()->getSettingFor(57);//
+    $modules = null;
+    if($ps57==1)
+        $modules = Vvmp::model()->getModule($uo1,$gr1);
+    if(!empty($modules))
+        $this->widget('bootstrap.widgets.TbButton', array(
+            'buttonType'=>'button',
+            'type'=>'danger',
+
+            'icon'=>'refresh',
+            'label'=>tt('Пересчетать ведомости'),
+            'htmlOptions'=>array(
+                'class'=>'btn-small',
+                'data-url'=>Yii::app()->createUrl('/journal/recalculateVmp',array('uo1'=>$uo1,'gr1'=>$gr1)),
+                'id'=>'recalculate-vmp',
+            )
+        ));
+
+
     ?>
         <span><label class="label label-warning">&nbsp;&nbsp;</label> - <?=tt('Информация требует обновления страницы')?></span>
     <?php
@@ -76,7 +96,6 @@ if (!empty($model->sem1)):
     $ps9  = PortalSettings::model()->getSettingFor(9);
     $ps20 = PortalSettings::model()->getSettingFor(20);// use sub modules
     $ps56 = PortalSettings::model()->getSettingFor(56);//
-    $ps57 = PortalSettings::model()->getSettingFor(57);//
     $ps33=PortalSettings::model()->getSettingFor(33);
 
     $students = St::model()->getStudentsForJournal($gr1, $uo1);
@@ -95,10 +114,6 @@ if (!empty($model->sem1)):
     $ps83 = PortalSettings::model()->findByPk(83)->ps2;
     if($ps97==0)
         $elgd=Elgd::model()->getDop($elg1);
-
-    $modules = null;
-    if($ps57==1)
-        $modules = Vvmp::model()->getModule($uo1,$gr1);
 
     $exam = null;
     /*if($ps57==1)

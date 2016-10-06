@@ -26,6 +26,7 @@ class JournalController extends Controller
                     'journalExcelItog',
                     'changeTheme',
                     'saveChangeTheme',
+                    'recalculateVmp',
 
                     'retake',
                     'searchRetake',
@@ -101,6 +102,11 @@ SQL;
         ));
     }
 
+    public function actionRecalculateVmp()
+    {
+        if (!Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+    }
 
     public function actionUpdateVmp()
     {
