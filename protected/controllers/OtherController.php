@@ -629,8 +629,14 @@ SQL;
     public function actionCancelSubscription()
     {
         if(St::model()->enableSubcription(Yii::app()->user->dbModel->st1)) {
-            U::model()->cancelSubscription();
-            unset($_SESSION['u1_vib'], $_SESSION['u1_vib_disc'], $_SESSION['func'], $_SESSION['min_block']);
+            $model = St::model()->findByPk(Yii::app()->user->dbModel->st1);
+            if(!empty($model)) {
+                $params = $model->subscriptionParams;
+                if(!empty($params)) {
+                    U::model()->cancelSubscription();
+                    unset($_SESSION['u1_vib'], $_SESSION['u1_vib_disc'], $_SESSION['func'], $_SESSION['min_block']);
+                }
+            }
         }
 
         Yii::app()->end(CJSON::encode(array('res' => true)));
