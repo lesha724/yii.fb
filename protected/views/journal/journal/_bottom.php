@@ -78,7 +78,7 @@ if (!empty($model->sem1)):
             'label'=>tt('Пересчетать ведомости'),
             'htmlOptions'=>array(
                 'class'=>'btn-small',
-                'data-url'=>Yii::app()->createUrl('/journal/recalculateVmp',array('uo1'=>$uo1,'gr1'=>$gr1)),
+                'data-url'=>Yii::app()->createUrl('/journal/recalculateVmp',array('uo1'=>$uo1,'gr1'=>$gr1,'sem1'=>$model->sem1,'type'=>$model->type_lesson)),
                 'id'=>'recalculate-vmp',
             )
         ));

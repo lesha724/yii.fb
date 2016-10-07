@@ -106,6 +106,84 @@ SQL;
     {
         if (!Yii::app()->request->isAjaxRequest)
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $ps57 = PortalSettings::model()->findByPk(57)->ps2;
+        if($ps57!=1)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $error=false;
+        $errorType=0;
+
+        $gr1 = Yii::app()->request->getParam('gr1', null);
+        $uo1 = Yii::app()->request->getParam('uo1', null);
+        $sem1 = Yii::app()->request->getParam('sem1', null);
+        $type = Yii::app()->request->getParam('type', null);
+
+        if($uo1==null || $gr1==null || $sem1==null || $type==null)
+        {
+            $error = true;
+            $errorType=2;
+        }
+        else
+        {
+            $elg1=Elg::getElg1($uo1,$type,$sem1);
+            $elg = Elg::model()->findByPk($elg1);
+            if(empty($elg))
+                throw new CHttpException(404, tt('Не задана структура журнала. Обратитесь к Администратору системы').'.');
+
+            $modules = Vvmp::model()->getModule($uo1,$gr1);
+            if(empty($modules)){
+                $error = true;
+                $errorType=2;
+            }else{
+                $sem7 = Gr::model()->getSem7ByGr1ByDate($gr1,date('d.m.Y'));
+                $students = St::model()->getStudentsForJournal($gr1, $uo1);
+                if(empty($students)){
+                    $error = true;
+                    $errorType=2;
+                }else{
+                    $datesPmk = R::model()->getDatesPmkForJournal(
+                        $uo1,
+                        $gr1,
+                        $type,
+                        $sem1
+                    );
+                    if(empty($datesPmk)){
+                        $error = true;
+                        $errorType=2;
+                    }else{
+                        foreach($datesPmk as $key=> $pmk){
+                            $nom = $key+1;
+                            if(!isset($modules[(int)$nom-1]))
+                                continue;
+                            else {
+                                $vvmp1 = $modules[(int)$nom - 1]['vvmp1'];
+                                foreach ($students as $student) {
+                                    $mark = Vmp::model()->getMarks($vvmp1, $student['st1'], $gr1);
+                                    if (empty($mark))
+                                        continue;
+                                    else {
+                                        $vmpv6 = $mark['vmpv6'];
+                                        if (!empty($vmpv6)) {
+                                            continue;
+                                        } else {
+                                            $elgz =Elgz::model()->findByPk($pmk['elgz1']);
+                                            if(empty($elgz))
+                                                continue;
+                                            else
+                                                Vmp::model()->recalculate($student['st1'], $elgz, $gr1);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+        Yii::app()->end(CJSON::encode(array('error' => $error, 'errorType' => $errorType)));
     }
 
     public function actionUpdateVmp()
