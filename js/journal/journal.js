@@ -69,7 +69,7 @@ $(document).ready(function(){
         }
 
         title='';
-
+        $spinner1.show();
         $.ajax({
             url: url,
             data:params,
@@ -99,6 +99,31 @@ $(document).ready(function(){
         $("#filter-form").attr("action", $(this).data('url'));
         $("#filter-form").submit();
         $("#filter-form").attr("action", action);
+    });
+
+    $('#recalculate-vmp').click(function(){
+        var $that =$(this);
+
+        var url = $that.data('url');
+        title='';
+        $spinner1.show();
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            success: function( data ) {
+                if (!data.error) {
+                    addGritter(title, tt.success, 'success');
+                    $('#filter-form').submit();
+                } else {
+                    addGritter(title, tt.error, 'error');
+                }
+                $spinner1.hide();
+            },
+            error: function( data ) {
+                addGritter(title, tt.error, 'error');
+                $spinner1.hide();
+            }
+        });
     });
 
     $('tr.min-max input').keyup(function(event ){
