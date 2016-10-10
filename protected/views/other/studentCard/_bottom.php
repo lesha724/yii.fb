@@ -82,8 +82,12 @@ echo '<div id="studentCard">';
     </div>
 HTML;
 
+    $name = $st->st2.' '.$st->st3.' '.$st->st4;
+    if(Yii::app()->language=='en'&&!(empty($st->st74)))
+        $name = $st->st74.' '.$st->st75.' '.$st->st76;
+
     echo sprintf($infoHtml,
-        tt('ФИО'),$st->st2.' '.$st->st3.' '.$st->st4,
+        tt('ФИО'),$name,
         tt('Гражданство'),$studentInfo['sgr2'],
         tt('Дата рождения'),date("m.d.y",strtotime($st->st7)),
         tt('Факультет'), $studentInfo['f3'],
