@@ -2,6 +2,8 @@
 
 class XmlController extends Controller
 {
+    const VERSION = '0.0.1';
+
     const FORMAT_DATE = 'd.m.Y'; //09.08.2016- формат дат
 
     const ERROR_NOT_POST = 101; //ошибка если не пост запрос
@@ -41,6 +43,8 @@ class XmlController extends Controller
         return array(
             array('allow',
                 'actions' => array(
+                    'GetVersion',
+
                     'GetTimetableForStudent',
                     'GetTimetableForGroup',
                     'GetTimetableForTeacher',
@@ -121,6 +125,23 @@ class XmlController extends Controller
                 $this->errorXml(self::ERROR_EMPTY_POST,'Пустой Post запрос');
             }else
                 $filter->run();
+        }
+    }
+    /**
+     * Версия
+     */
+    public function actionGetVersion(){
+        $xml = $this->getXmlFromPost();
+        if(empty($xml))
+            Yii::app()->end;
+        else{
+            if($xml->getName()!='Request'||!isset($xml->GetVersion))
+                $this->errorXml(self::ERROR_XML_STRUCTURE,'Ошибка струтуры xml');
+            else {
+                $this->render('version',array(
+                    'version'=>self::VERSION
+                ));
+            }
         }
     }
     /**
