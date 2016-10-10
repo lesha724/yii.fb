@@ -56,7 +56,9 @@ class XmlController extends Controller
                     'GetTeachers',
 
                     'GetPersonByINN',
-                    'GetPersonByPassport'
+                    'GetPersonByPassport',
+
+                    'GetJournalMark'
                 ),
             ),
             array('deny',
@@ -119,6 +121,53 @@ class XmlController extends Controller
                 $this->errorXml(self::ERROR_EMPTY_POST,'Пустой Post запрос');
             }else
                 $filter->run();
+        }
+    }
+    /**
+     * Оценки по журналу
+     */
+    public function actionGetJourmalMark(){
+        $xml = $this->getXmlFromPost();
+        if(empty($xml))
+            Yii::app()->end;
+        else{
+            /*Проверка есть ли тег GetPersonByINN*/
+            if($xml->getName()!='Request'||!isset($xml->GetJourmalMark))
+                $this->errorXml(self::ERROR_XML_STRUCTURE,'Ошибка струтуры xml');
+            else {
+                $xmlAction = $xml->GetJourmalMark;
+                /*Проверка есть ли теги нужные параметры*/
+                if (
+                    !isset($xmlAction->Group) ||
+                    !isset($xmlAction->PeriodStart) ||
+                    !isset($xmlAction->PeriodFinish)
+                )
+                    $this->errorXml(self::ERROR_XML_STRUCTURE, 'Ошибка струтуры(параметры) xml');
+                else {
+                    /*загрузка параментров*/
+
+                    $Faculty = $xmlAction->Faculty->__ToString();
+                    //print_r($StudentID);
+                    $PeriodStart = $xmlAction->PeriodStart->__ToString();
+                    $PeriodFinish = $xmlAction->PeriodFinish->__ToString();
+
+                    $dateStart = date_create($PeriodStart);
+                    if ($dateStart === false)
+                        $this->errorXml(self::ERROR_PARAM, 'PeriodStart не являеться датой');
+
+                    $dateFinish = date_create($PeriodFinish);
+                    if ($dateFinish === false)
+                        $this->errorXml(self::ERROR_PARAM, 'PeriodFinish не являеться датой');
+
+                    $faculty = F::model()->findByAttributes(array('f1'=>$Faculty));
+                    if($faculty==null)
+                        $this->errorXml(self::ERROR_PARAM, 'Faculty '.$Faculty.' не являеться валидным');
+
+                    $this->render('journalMark',array(
+                        'faculty'=>$faculty
+                    ));
+                }
+            }
         }
     }
     /**
