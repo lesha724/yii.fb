@@ -138,18 +138,52 @@ class XmlController extends Controller
                 $xmlAction = $xml->GetJourmalMark;
                 /*Проверка есть ли теги нужные параметры*/
                 if (
-                    !isset($xmlAction->Group) ||
+                    !isset($xmlAction->Faculty) ||
+                    !isset($xmlAction->Semestr) ||
                     !isset($xmlAction->PeriodStart) ||
-                    !isset($xmlAction->PeriodFinish)
+                    !isset($xmlAction->PeriodFinish)||
+                    !isset($xmlAction->Login)||
+                    !isset($xmlAction->Password)
                 )
                     $this->errorXml(self::ERROR_XML_STRUCTURE, 'Ошибка струтуры(параметры) xml');
                 else {
-                    /*загрузка параментров*/
+                    $this->checkAccess($xmlAction);
 
+                    /*загрузка параментров*/
                     $Faculty = $xmlAction->Faculty->__ToString();
+                    $Semestr = $xmlAction->Semestr->__ToString();
                     //print_r($StudentID);
                     $PeriodStart = $xmlAction->PeriodStart->__ToString();
                     $PeriodFinish = $xmlAction->PeriodFinish->__ToString();
+
+                    /*фильтры*/
+                    $chair = null;
+                    $student = null;
+                    /*перебираем всех наследников ищем наши фильтрі*/
+                    foreach($xmlAction->children() as $child){
+                        /* @var $child SimpleXMLElement */
+
+                        $tag = $child->getName();
+
+                        switch($tag){
+                            case 'Chair':
+                                $chair = $child->__ToString();
+                                break;
+                            case 'Student':
+                                $student = $child->__ToString();
+                                break;
+                        }
+                    }
+
+                    $where = '';
+
+                    if($chair!=null){
+                        $where.=' AND k1=:STUDENT';
+                    }
+
+                    if($student!=null){
+                        $where.=' AND st1=:STUDENT';
+                    }
 
                     $dateStart = date_create($PeriodStart);
                     if ($dateStart === false)
@@ -189,13 +223,7 @@ class XmlController extends Controller
                     $this->errorXml(self::ERROR_XML_STRUCTURE, 'Ошибка струтуры(параметры) xml');
                 else {
 
-                    $ps95 = PortalSettings::model()->findByPk(95)->ps2;
-                    $ps96 = PortalSettings::model()->findByPk(96)->ps2;
-
-                    $login = $xmlAction->Login->__ToString();
-                    $password = $xmlAction->Password->__ToString();
-                    if($login!=$ps95||$password!=$ps96||empty($login)||empty($password))
-                        $this->errorXml(self::ERROR_INVALID_LOGIN_OR_PASSWORD,'Неправльный логин иили пароль');
+                    $this->checkAccess($xmlAction);
 
                     $INN = $xmlAction->INN->__ToString();
 
@@ -257,14 +285,7 @@ class XmlController extends Controller
                     $this->errorXml(self::ERROR_XML_STRUCTURE, 'Ошибка струтуры(параметры) xml');
                 else {
 
-                    $ps95 = PortalSettings::model()->findByPk(95)->ps2;
-                    $ps96 = PortalSettings::model()->findByPk(96)->ps2;
-
-                    $login = $xmlAction->Login->__ToString();
-                    $password = $xmlAction->Password->__ToString();
-
-                    if($login!=$ps95||$password!=$ps96||empty($login)||empty($password))
-                        $this->errorXml(self::ERROR_INVALID_LOGIN_OR_PASSWORD,'Неправльный логин иили пароль');
+                    $this->checkAccess($xmlAction);
 
                     $serial = $xmlAction->Serial->__ToString();
                     $number = $xmlAction->Number->__ToString();
@@ -1274,6 +1295,21 @@ SQL;
         }
         //die(var_dump($res));
         return $res;
+    }
+
+    /**
+     * проверка логина и пароля
+     * @param $xmlAction
+     */
+    private function checkAccess($xmlAction)
+    {
+        $ps95 = PortalSettings::model()->findByPk(95)->ps2;
+        $ps96 = PortalSettings::model()->findByPk(96)->ps2;
+
+        $login = $xmlAction->Login->__ToString();
+        $password = $xmlAction->Password->__ToString();
+        if ($login != $ps95 || $password != $ps96 || empty($login) || empty($password))
+            $this->errorXml(self::ERROR_INVALID_LOGIN_OR_PASSWORD, 'Неправльный логин иили пароль');
     }
 
 }
