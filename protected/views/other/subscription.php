@@ -71,9 +71,9 @@ function PROCEDURA_CIKL_PO_BLOKAM($params)
         return;
     }
 
-    list($min_block, $max_block) = U::model()->getMinMAxBlocks($sg1_kod);
-    //print_r('Тек min_block 1:'. $min_block.'<br>');
-    $min_block = isset($_SESSION['min_block']) ? $_SESSION['min_block'] : (int)$min_block;
+    list($min_block_, $max_block) = U::model()->getMinMAxBlocks($sg1_kod);
+    //print_r('Тек min_block 1:'. $min_block_.'<br>');
+    $min_block = isset($_SESSION['min_block']) ? $_SESSION['min_block'] : (int)$min_block_;
     //print_r('Тек min_block 2:'. $min_block.'<br>');
     $enable= false;
     for ($block = $min_block; $block <= $max_block+1; $block ++) {
@@ -158,12 +158,16 @@ function PROCEDURA_CIKL_PO_BLOKAM($params)
                 continue;
         }
     }
+    /*var_dump($min_block);
+    var_dump($block);
+    var_dump($max_block);
+    var_dump($_SESSION['u1_vib']);*/
     if($block>$max_block){
         //print_r('Переход:<br>');
         $params['semester']++;
         //print_r('Тек семест:'. $params['semester'].'<br>');
-        $_SESSION['min_block'] = $min_block;
-        //print_r('Тек min_block:'. $min_block.'<br>');
+        $_SESSION['min_block'] = $min_block_;
+        //print_r('Тек min_block:'. $_SESSION['min_block'].'<br>');
         if ($params['semester'] <= 1)
             PROCEDURA_CIKL_PO_BLOKAM($params);
     }
