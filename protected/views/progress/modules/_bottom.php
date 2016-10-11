@@ -31,6 +31,8 @@ JS
     list($uo1,$gr1)=explode('/',$model->group);
     $students=Jpv::model()->getStudents($uo1,$gr1);
 
+    //Jpv::model()->fillPermition($uo1, $gr1);
+
     $modules = Jpv::model()->getModules($model->group);
     $url = Yii::app()->createUrl('/progress/getCxmb');
     echo '<div id="modules" data-url-cxmb="'.$url.'">';
