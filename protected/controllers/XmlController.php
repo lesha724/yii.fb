@@ -160,6 +160,7 @@ class XmlController extends Controller
                 /*Проверка есть ли теги нужные параметры*/
                 if (
                     !isset($xmlAction->Faculty) ||
+                    !isset($xmlAction->Year) ||
                     !isset($xmlAction->Semestr) ||
                     !isset($xmlAction->PeriodStart) ||
                     !isset($xmlAction->PeriodFinish)||
@@ -173,6 +174,7 @@ class XmlController extends Controller
                     /*загрузка параментров*/
                     $Faculty = $xmlAction->Faculty->__ToString();
                     $Semestr = $xmlAction->Semestr->__ToString();
+                    $Year = $xmlAction->Year->__ToString();
                     //print_r($StudentID);
                     $PeriodStart = $xmlAction->PeriodStart->__ToString();
                     $PeriodFinish = $xmlAction->PeriodFinish->__ToString();
@@ -199,7 +201,7 @@ class XmlController extends Controller
                     $where = '';
 
                     if($chair!=null){
-                        $where.=' AND k1=:STUDENT';
+                        $where.=' AND k1=:CHAIR';
                     }
 
                     if($student!=null){
@@ -218,8 +220,39 @@ class XmlController extends Controller
                     if($faculty==null)
                         $this->errorXml(self::ERROR_PARAM, 'Faculty '.$Faculty.' не являеться валидным');
 
+                    $sql = <<<SQL
+                        SELECT elgzst3, elgzst4, elgzst5, d2, r2, us4, k1, k2, st1, st108, st2, st3, st4, gr1, gr3, elgp2, elgp3, elgp4, elgp5, sp1, sp2
+                        from elgzst
+                            inner join st ON (elgzst.elgzst1=st.st1)
+                            inner join std ON (st.st1=std.std2)
+                            inner join gr ON (std.std3=gr.gr1)
+                            inner join sg ON (gr.gr2=sg.sg1)
+                            inner join sp ON (sg.sg2=sp.sp1)
+                            inner join elgp ON (elgzst.elgzst0=elgp.elgp1)
+                            inner join elgz on (elgzst.elgzst2 = elgz.elgz1)
+                            inner join elg on (elgz.elgz2 = elg.elg1)
+                            inner join uo ON (elg.elg2=uo.uo1)
+                            inner join d ON (uo.uo3=d.d1)
+                            inner join sem on (elg.elg3 = sem.sem1)
+                            inner join EL_GURNAL_ZAN(elg.elg2,gr1,elg.elg3, elg.elg4) on (elgz.elgz3 = EL_GURNAL_ZAN.nom AND EL_GURNAL_ZAN.r2>=:DATE_1 and EL_GURNAL_ZAN.r2<=:DATE_2)
+                            inner join nr on (r1 = nr1)
+                            inner join k on (nr30 = k1)
+                        WHERE sem3=:YEAR and sem5=:SEM and sp5=:FACULTY {$where}
+SQL;
+                    $command = Yii::app()->db->createCommand($sql);
+                    //if($type!=2)
+                    $command->bindValue(':STUDENT', $student);
+                    $command->bindValue(':CHAIR', $chair);
+                    $command->bindValue(':FACULTY', $Faculty);
+                    $command->bindValue(':YEAR', $Year);
+                    $command->bindValue(':SEM', $Semestr);
+                    $command->bindValue(':DATE_1', $dateStart);
+                    $command->bindValue(':DATE_2', $dateFinish);
+                    $rows = $command->queryAll();
+
                     $this->render('journalMark',array(
-                        'faculty'=>$faculty
+                        'faculty'=>$faculty,
+                        'rows'=>$rows
                     ));
                 }
             }
