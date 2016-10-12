@@ -35,7 +35,7 @@ HTML;
     $name =tt('№').$module['jpv4'];
     if(isset($cxm['cxm'.$module['jpv4']]))
         $name = $cxm['cxm'.$module['jpv4']];
-    
+
     if(empty($module['jpvp2']))
     {
         //$name.='('.tt('Просмотр').')';

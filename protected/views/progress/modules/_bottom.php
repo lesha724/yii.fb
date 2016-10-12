@@ -46,7 +46,7 @@ JS
     $this->renderPartial('modules/_table_2', array(
         'students' => $students,
         'modules'=>$modules,
-        'cxm' => $this->getCxmByUo1AndSemestr($uo1),
+        'cxm' => Jpv::model()->getCxmByUo1AndSemestr($uo1),
         'uo1'=>$uo1,
         'gr1'=>$gr1,
         'model' => $model,
