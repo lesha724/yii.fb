@@ -959,7 +959,7 @@ SQL;
     }
 
     public function getSem1ByGroup($gr1, $year, $sem){
-        if(empty($gr1)||empty($year)||empty($sem))
+        if(empty($gr1)||empty($year)||$sem===null)
             return null;
 
         $sql = <<<SQL
@@ -971,8 +971,8 @@ SQL;
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':GR1', $gr1);
-        $command->bindValue(':GR1', $year);
-        $command->bindValue(':GR1', $sem);
+        $command->bindValue(':YEAR', $year);
+        $command->bindValue(':SEM', $sem);
         $sem1 = $command->queryScalar();
 
         return $sem1;

@@ -33,7 +33,7 @@ class Jpv extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('jpv1', 'required'),
-			array('jpv1, jpv2, jpv3, jpv4, jpv5', 'numerical', 'integerOnly'=>true),
+			array('jpv2, jpv3, jpv4, jpv5', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('jpv1, jpv2, jpv3, jpv4, jpv5', 'safe', 'on'=>'search'),
@@ -154,22 +154,12 @@ SQL;
         $command->bindValue(':YEAR', Yii::app()->session['year']);
         $command->bindValue(':SEM', Yii::app()->session['sem']);
         $command->bindValue(':UO1', $uo1);
-        $res = $command->queryRow();
+        $res = $command->queryAll();
 
         foreach ($res as $value){
             for($i=1; $i<=$cxm21; $i++)
             {
-                $sql=<<<SQL
-                      select jpv1
-                      from jpv
-                      where jpv2=:SEM1 AND and jpv3=:UO1 and jpv4=:NOM and jpv5=:UCGN2
-SQL;
-                $command = Yii::app()->db->createCommand($sql);
-                $command->bindValue(':SEM1', $sem1);
-                $command->bindValue(':UO1', $uo1);
-                $command->bindValue(':NOM', $i);
-                $command->bindValue(':UCGN2', $value['ucgn2']);
-                $jpv1 = $command->queryScalar();
+                $jpv1 = $this->getJvp1($uo1, $sem1, $i, $value);
 
                 if(empty($jpv1)||$jpv1==0){
                     $jpv = new Jpv();
@@ -178,8 +168,9 @@ SQL;
                     $jpv->jpv3 = $uo1;
                     $jpv->jpv4 = $i;
                     $jpv->jpv5 = $value['ucgn2'];
-                    if($jpv->save())
-                        $jpv1 = $jpv->jpv1;
+                    if($jpv->save()) {
+                        $jpv1 = $this->getJvp1($uo1, $sem1, $i, $value);
+                    }
                 }
 
                 if($jpv1>0){
@@ -190,8 +181,9 @@ SQL;
                         inner join nr on (us1 = nr2)
                         inner join ug on (nr1 = ug3)
                         inner join pd on (nr6 = pd1)
-                        where nr6>0 and us4>=1 and uo1=:UO1 and us3=:SEM1 and ug2=:UCGN2
+                        where nr6>0 and us4>=1 and us4<=4 and uo1=:UO1 and us3=:SEM1 and ug2=:UCGN2
                         group by us4,pd2
+                        order by us4 DESC
 SQL;
                     $command = Yii::app()->db->createCommand($sql);
                     $command->bindValue(':SEM1', $sem1);
@@ -212,7 +204,7 @@ SQL;
             }
 
             $sql=<<<SQL
-                select count(*) from jpv where jpv2=:SEM1 and jpv3=:UO1 and jpv4>:NOM and and jpv5=:UCGN2
+                select count(*) from jpv where jpv2=:SEM1 and jpv3=:UO1 and jpv4>:NOM and jpv5=:UCGN2
 SQL;
             $command = Yii::app()->db->createCommand($sql);
             $command->bindValue(':SEM1', $sem1);
@@ -223,7 +215,7 @@ SQL;
 
             if($count>0){
                 $sql=<<<SQL
-                DELETE FROM jpv where jpv2=:SEM1 and jpv3=:UO1 and jpv4>:NOM and and jpv5=:UCGN2
+                DELETE FROM jpv where jpv2=:SEM1 and jpv3=:UO1 and jpv4>:NOM and jpv5=:UCGN2
 SQL;
                 $command = Yii::app()->db->createCommand($sql);
                 $command->bindValue(':SEM1', $sem1);
@@ -422,5 +414,28 @@ SQL;
         $module = $command->queryRow();
 
         return $module;
+    }
+
+    /**
+     * @param $uo1
+     * @param $sem1
+     * @param $i
+     * @param $value
+     * @return array
+     */
+    public function getJvp1($uo1, $sem1, $i, $value)
+    {
+        $sql = <<<SQL
+                      select jpv1
+                      from jpv
+                      where jpv2=:SEM1 AND jpv3=:UO1 and jpv4=:NOM and jpv5=:UCGN2
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':SEM1', $sem1);
+        $command->bindValue(':UO1', $uo1);
+        $command->bindValue(':NOM', $i);
+        $command->bindValue(':UCGN2', $value['ucgn2']);
+        $jpv1 = $command->queryScalar();
+        return $jpv1;
     }
 }
