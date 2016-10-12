@@ -23,7 +23,7 @@ HTML;
         return sprintf($pattern,$module['jpv1'],$mark);
     }
 }
-function generateColumnName($module)
+function generateColumnName($module, $cxm)
 {
     $pattern = <<<HTML
 	<th>
@@ -33,6 +33,9 @@ HTML;
 
     $class='green';
     $name =tt('№').$module['jpv4'];
+    if(isset($cxm['cxm'.$module['jpv4']]))
+        $name = $cxm['cxm'.$module['jpv4']];
+    
     if(empty($module['jpvp2']))
     {
         //$name.='('.tt('Просмотр').')';
@@ -81,7 +84,7 @@ HTML;
     $count_modules=0;
 
     foreach($modules as $module) {
-        $th .= generateColumnName($module);
+        $th .= generateColumnName($module, $cxm);
         $count_modules++;
     }
 

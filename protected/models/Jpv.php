@@ -106,9 +106,8 @@ class Jpv extends CActiveRecord
 	{
 		return parent::model($className);
 	}
-    /*добавляет или удаляет лишний права на дисциплины*/
-    public function fillPermition($uo1, $gr1)
-    {
+
+    public function getCxmByUo1AndSemestr($uo1){
         $sql=<<<SQL
            select cxm21,cxm1,cxm2,cxm3,cxm4,cxm5,cxm6,cxm7
            from cxm
@@ -124,6 +123,17 @@ SQL;
         $command->bindValue(':SEM', Yii::app()->session['sem']);
         $command->bindValue(':UO1', $uo1);
         $cxm = $command->queryRow();
+
+        return $cxm;
+    }
+    /*добавляет или удаляет лишний права на дисциплины*/
+    public function fillPermition($uo1, $gr1)
+    {
+        $sem1 = Gr::model()->getSem1ByGroup($gr1, Yii::app()->session['year'],  Yii::app()->session['sem']);
+        if(empty($sem1))
+            return;
+
+        $cxm = $this->getCxmByUo1AndSemestr($uo1);
 
         if(empty($cxm))
             return;
@@ -152,12 +162,10 @@ SQL;
                 $sql=<<<SQL
                       select jpv1
                       from jpv
-                      INNER JOIN sem on (jpv2 = sem1)
-                      where sem3=:YEAR AND sem5=:SEM AND and jpv3=:UO1 and jpv4=:NOM and jpv5=:UCGN2
+                      where jpv2=:SEM1 AND and jpv3=:UO1 and jpv4=:NOM and jpv5=:UCGN2
 SQL;
                 $command = Yii::app()->db->createCommand($sql);
-                $command->bindValue(':YEAR', Yii::app()->session['year']);
-                $command->bindValue(':SEM', Yii::app()->session['sem']);
+                $command->bindValue(':SEM1', $sem1);
                 $command->bindValue(':UO1', $uo1);
                 $command->bindValue(':NOM', $i);
                 $command->bindValue(':UCGN2', $value['ucgn2']);
@@ -166,6 +174,7 @@ SQL;
                 if(empty($jpv1)||$jpv1==0){
                     $jpv = new Jpv();
                     $jpv->jpv1=new CDbExpression('GEN_ID(GEN_JPV, 1)');
+                    $jpv->jpv2 = $sem1;
                     $jpv->jpv3 = $uo1;
                     $jpv->jpv4 = $i;
                     $jpv->jpv5 = $value['ucgn2'];
@@ -181,13 +190,11 @@ SQL;
                         inner join nr on (us1 = nr2)
                         inner join ug on (nr1 = ug3)
                         inner join pd on (nr6 = pd1)
-                        INNER JOIN sem on (us3 = sem1)
-                        where nr6>0 and us4>=1 and uo1=:UO1 and sem3=:YEAR AND sem5=:SEM and ug2=:UCGN2
+                        where nr6>0 and us4>=1 and uo1=:UO1 and us3=:SEM1 and ug2=:UCGN2
                         group by us4,pd2
 SQL;
                     $command = Yii::app()->db->createCommand($sql);
-                    $command->bindValue(':YEAR', Yii::app()->session['year']);
-                    $command->bindValue(':SEM', Yii::app()->session['sem']);
+                    $command->bindValue(':SEM1', $sem1);
                     $command->bindValue(':UO1', $uo1);
                     $command->bindValue(':UCGN2', $value['ucgn2']);
                     $row = $command->queryRow();
@@ -204,18 +211,27 @@ SQL;
                 }
             }
 
+            $sql=<<<SQL
+                select count(*) from jpv where jpv2=:SEM1 and jpv3=:UO1 and jpv4>:NOM and and jpv5=:UCGN2
+SQL;
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':SEM1', $sem1);
+            $command->bindValue(':UO1', $uo1);
+            $command->bindValue(':NOM', $cxm21);
+            $command->bindValue(':UCGN2', $value['ucgn2']);
+            $count = $command->queryScalar();
 
-            /*
-             * // ѕровер¤ю, нет ли лишних модулей
-              D_M.QSel1.Sql.Clear;
-              D_M.QSel1.Sql.Add('select jpv1 from jpv where jpv2='+sem1+' and jpv3='+uo1+' and jpv4>'+IntToStr(kol)+' and jpv5='+D_M.QSel.FieldByName('ucgn2').AsString);
-              D_M.QSel1.Close; D_M.QSel1.Open;
-              if D_M.QSel1.FieldByName('jpv1').AsInteger > 0 then begin
-                D_M.QInsert.Sql.Clear;
-                D_M.QInsert.Sql.Add('DELETE FROM jpv WHERE jpv2='+sem1+' and jpv3='+uo1+' and jpv4>'+IntToStr(kol)+' and jpv5='+D_M.QSel.FieldByName('ucgn2').AsString);
-                D_M.QInsert.Close; D_M.TQInsert.Active:=True; D_M.QInsert.ExecSQL; D_M.TQInsert.Commit;
-              end;
-            */
+            if($count>0){
+                $sql=<<<SQL
+                DELETE FROM jpv where jpv2=:SEM1 and jpv3=:UO1 and jpv4>:NOM and and jpv5=:UCGN2
+SQL;
+                $command = Yii::app()->db->createCommand($sql);
+                $command->bindValue(':SEM1', $sem1);
+                $command->bindValue(':UO1', $uo1);
+                $command->bindValue(':NOM', $cxm21);
+                $command->bindValue(':UCGN2', $value['ucgn2']);
+                $command->execute();
+            }
         }
     }
 

@@ -31,7 +31,7 @@ JS
     list($uo1,$gr1)=explode('/',$model->group);
     $students=Jpv::model()->getStudents($uo1,$gr1);
 
-    //Jpv::model()->fillPermition($uo1, $gr1);
+    Jpv::model()->fillPermition($uo1, $gr1);
 
     $modules = Jpv::model()->getModules($model->group);
     $url = Yii::app()->createUrl('/progress/getCxmb');
@@ -46,6 +46,7 @@ JS
     $this->renderPartial('modules/_table_2', array(
         'students' => $students,
         'modules'=>$modules,
+        'cxm' => $this->getCxmByUo1AndSemestr($uo1),
         'uo1'=>$uo1,
         'gr1'=>$gr1,
         'model' => $model,

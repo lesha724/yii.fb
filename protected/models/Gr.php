@@ -957,4 +957,24 @@ SQL;
 
         return $groups;
     }
+
+    public function getSem1ByGroup($gr1, $year, $sem){
+        if(empty($gr1)||empty($year)||empty($sem))
+            return null;
+
+        $sql = <<<SQL
+          select  first 1 sem1
+            from sg
+               inner join sem on (sg.sg1 = sem.sem2)
+               inner join gr on (sg.sg1 = gr.gr2)
+            where gr1=:GR1 and sem3=:YEAR and sem5=:SEM
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':GR1', $gr1);
+        $command->bindValue(':GR1', $year);
+        $command->bindValue(':GR1', $sem);
+        $sem1 = $command->queryScalar();
+
+        return $sem1;
+    }
 }
