@@ -1305,9 +1305,9 @@ HTML;
                 "password"=>$PASSWORD,
                 "soap_version" => SOAP_1_1,
                 "features" => SOAP_SINGLE_ELEMENT_ARRAYS,
-                "timeout" => 300,
+                //"timeout" => 300,
                 # PHP 5.6
-                "stream_context"=>stream_context_create(
+                /*"stream_context"=>stream_context_create(
                     array(
                         "ssl"=>array(
                             "verify_peer"=>false
@@ -1315,7 +1315,7 @@ HTML;
                         ,"verify_peer_name"=>false
                         )
                     )
-                )));
+                )*/));
 
 
 // Используется для получения ссылок на отчеты
