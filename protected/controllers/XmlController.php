@@ -2,7 +2,7 @@
 
 class XmlController extends Controller
 {
-    const VERSION = '0.0.1';
+    const VERSION = '0.0.2';
 
     const FORMAT_DATE = 'd.m.Y'; //09.08.2016- формат дат
 
@@ -147,16 +147,16 @@ class XmlController extends Controller
     /**
      * Оценки по журналу
      */
-    public function actionGetJourmalMark(){
+    public function actionGetJournalMark(){
         $xml = $this->getXmlFromPost();
         if(empty($xml))
             Yii::app()->end;
         else{
             /*Проверка есть ли тег GetPersonByINN*/
-            if($xml->getName()!='Request'||!isset($xml->GetJourmalMark))
+            if($xml->getName()!='Request'||!isset($xml->GetJournalMark))
                 $this->errorXml(self::ERROR_XML_STRUCTURE,'Ошибка струтуры xml');
             else {
-                $xmlAction = $xml->GetJourmalMark;
+                $xmlAction = $xml->GetJournalMark;
                 /*Проверка есть ли теги нужные параметры*/
                 if (
                     !isset($xmlAction->Faculty) ||
@@ -182,6 +182,8 @@ class XmlController extends Controller
                     /*фильтры*/
                     $chair = null;
                     $student = null;
+                    $course = null;
+                    $group = null;
                     /*перебираем всех наследников ищем наши фильтрі*/
                     foreach($xmlAction->children() as $child){
                         /* @var $child SimpleXMLElement */
@@ -195,6 +197,12 @@ class XmlController extends Controller
                             case 'Student':
                                 $student = $child->__ToString();
                                 break;
+                            case 'Group':
+                                $group = $child->__ToString();
+                                break;
+                            case 'Course':
+                                $course = $child->__ToString();
+                                break;
                         }
                     }
 
@@ -206,6 +214,14 @@ class XmlController extends Controller
 
                     if($student!=null){
                         $where.=' AND st1=:STUDENT';
+                    }
+
+                    if($course!=null){
+                        $where.=' AND sem4=:COURSE';
+                    }
+
+                    if($group!=null){
+                        $where.=' AND gr1=:GROUP';
                     }
 
                     $dateStart = date_create($PeriodStart);
@@ -221,8 +237,9 @@ class XmlController extends Controller
                         $this->errorXml(self::ERROR_PARAM, 'Faculty '.$Faculty.' не являеться валидным');
 
                     $sql = <<<SQL
-                        SELECT elgzst3, elgzst4, elgzst5, d2, r2, us4, k1, k2, st1, st108, st2, st3, st4, gr1, gr3, elgp2, elgp3, elgp4, elgp5, sp1, sp2
-                        from elgzst
+                        SELECT elgzst3, elgzst4, elgzst5,d1, d2, r2, us4, k1, st1, st108, st2, st3, st4, st5,
+                         gr1,elgp2, elgp3, elgp4, elgp5, sp1, sp2, sem4, (SELECT COUNT(*) FROM elgotr WHERE elgotr1 = elgzst0) as count_retake
+                            FROM elgzst
                             inner join st ON (elgzst.elgzst1=st.st1)
                             inner join std ON (st.st1=std.std2)
                             inner join gr ON (std.std3=gr.gr1)
@@ -242,12 +259,14 @@ SQL;
                     $command = Yii::app()->db->createCommand($sql);
                     //if($type!=2)
                     $command->bindValue(':STUDENT', $student);
+                    $command->bindValue(':COURSE', $course);
                     $command->bindValue(':CHAIR', $chair);
                     $command->bindValue(':FACULTY', $Faculty);
+                    $command->bindValue(':GROUP', $group);
                     $command->bindValue(':YEAR', $Year);
                     $command->bindValue(':SEM', $Semestr);
-                    $command->bindValue(':DATE_1', $dateStart);
-                    $command->bindValue(':DATE_2', $dateFinish);
+                    $command->bindValue(':DATE_1', $dateStart->format(self::FORMAT_DATE));
+                    $command->bindValue(':DATE_2', $dateFinish->format(self::FORMAT_DATE));
                     $rows = $command->queryAll();
 
                     $this->render('journalMark',array(
