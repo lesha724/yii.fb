@@ -61,6 +61,7 @@ class XmlController extends Controller
 
                     'GetPersonByINN',
                     'GetPersonByPassport',
+                    'GetStudentPerson',
 
                     'GetJournalMark'
                 ),
@@ -272,6 +273,45 @@ SQL;
                     $this->render('journalMark',array(
                         'faculty'=>$faculty,
                         'rows'=>$rows
+                    ));
+                }
+            }
+        }
+    }
+    /**
+     * Персона студента
+     */
+    public function actionGetStudentPerson(){
+        $xml = $this->getXmlFromPost();
+        if(empty($xml))
+            Yii::app()->end;
+        else{
+            /*Проверка есть ли тег GetStudentPerson*/
+            if($xml->getName()!='Request'||!isset($xml->GetStudentPerson))
+                $this->errorXml(self::ERROR_XML_STRUCTURE,'Ошибка струтуры xml');
+            else {
+                $xmlAction = $xml->GetStudentPerson;
+                /*Проверка есть ли теги нужные параметры*/
+
+                if (!isset($xmlAction->Id)||!isset($xmlAction->Login)||!isset($xmlAction->Password))
+                    $this->errorXml(self::ERROR_XML_STRUCTURE, 'Ошибка струтуры(параметры) xml');
+                else {
+
+                    $this->checkAccess($xmlAction);
+
+                    $id = $xmlAction->Id->__ToString();
+                    $type = 0;
+                    if(isset($xmlAction->Type))
+                        $type = $xmlAction->Type->__ToString();
+
+                    if($type==0){
+                        $student = St::model()->findByAttributes(array('st108'=>$id));
+                    }else{
+                        $student = St::model()->findByAttributes(array('st1'=>$id));
+                    }
+
+                    $this->render('personStudent',array(
+                        'student'=>$student
                     ));
                 }
             }
