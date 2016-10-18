@@ -88,7 +88,7 @@ class TimeTableController extends Controller
         }
         elseif(Yii::app()->user->isTch)
         {
-            $title=tt('Расписание преподователя: Личное');
+            $title=tt('Расписание преподавателя: Личное');
             $model->teacher=Yii::app()->user->dbModel->p1;
             list($minMax, $timeTable) = $model->generateTeacherTimeTable();
 
