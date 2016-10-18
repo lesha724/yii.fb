@@ -302,8 +302,10 @@ HTML
 
 function generateTh2($ps9,$date,$type_lesson,$ps57)
 {
-    if($date['elgz4']>1&&$ps57==1) {
+    if($date['elgz4']==2&&$ps57==1) {
         return sprintf('<th>%s</th><th>%s</th><th>%s</th><th>%s</th>',tt('Тек.'),tt('Инд.р.'),tt('ПМК'),tt('Итог.'));
+    }elseif(($date['elgz4']==3||$date['elgz4']==4||$date['elgz4']==5)&&$ps57==1){
+        return '<th></th><th></th>';
     }
     if ($type_lesson == '0')
         return '<th></th><th></th>';
@@ -327,7 +329,7 @@ HTML;
 
 function generateColumnName($date,$type_lesson,$ps57,$ps59, $ps90,$permLesson, $date1, $ps78,$ps27)
 {
-    if($date['elgz4']>1&&$ps57==1) {
+    if($date['elgz4']==2&&$ps57==1) {
         $pattern = <<<HTML
 	<th colspan="4">
 	    <i class="icon-hand-right icon-animated-hand-pointer blue"></i>
@@ -345,7 +347,7 @@ HTML;
 HTML;
     }
 
-    switch($date['elgz4'])
+    /*switch($date['elgz4'])
     {
         case '0':
             $type='';
@@ -358,7 +360,10 @@ HTML;
             break;
         default:
             $type='';
-    }
+    }*/
+
+    $type = Ustem::model()->getUstem6Value($date['elgz4']);
+
     $type=' '.$type;
     $us4=SH::convertUS4(1);
     if($type_lesson!=0)
@@ -498,6 +503,8 @@ HTML;
                 $tr .= table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$moduleNom,$uo1,$modules,$potoch,$sem7,$ps60);
                 $potoch = 0;
                 $moduleNom++;
+            }elseif(($date['elgz4']==3||$date['elgz4']==4||$date['elgz4']==5)&&$ps57==1){
+                $tr.='<th></th><th></th>';
             }else {
                 $tr .= table2Tr($date, $gr1, $st, $marks, $permLesson, $read_only, $model->type_lesson, $ps20, $ps55, $ps56,$sem7,$ps60,$min,$ps65,$ps66,$moduleNom, $ps88);
                 $potoch+=getMarsForElgz3($date['elgz3'],$marks);
