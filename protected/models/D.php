@@ -1091,8 +1091,8 @@ SQL;*/
 				  inner join d on (uo.uo3 = d.d1)
 			   where us4 = 8 and ucsn2=:ST1 and u38<=current_timestamp and u39>=current_timestamp and
 			   sem3=:SG40
-			   and
-			   sem5=:SG41
+			   /*and
+			   sem5=:SG41*/
 			   group by us1,d2
 SQL;
        /* $sql = <<<SQL
