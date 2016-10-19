@@ -307,7 +307,7 @@ class TimeTableController extends Controller
         $timeTable = $minMax = $maxLessons = array();
         if (! empty($model->teacher))
         {
-            $title=tt('Расписание преподователя');
+            $title=tt('Расписание преподавателя');
             $p=P::model()->getTeacherNameBy($model->teacher,true);
             $title.=' '.$p;
             list($minMax, $timeTable) = $model->generateTeacherTimeTable();
