@@ -2,7 +2,7 @@
 
 class XmlController extends Controller
 {
-    const VERSION = '0.0.2';
+    const VERSION = '0.0.3';
 
     const FORMAT_DATE = 'd.m.Y'; //09.08.2016- формат дат
 
@@ -293,13 +293,13 @@ SQL;
                 $xmlAction = $xml->GetStudentPerson;
                 /*Проверка есть ли теги нужные параметры*/
 
-                if (!isset($xmlAction->Id)||!isset($xmlAction->Login)||!isset($xmlAction->Password))
+                if (!isset($xmlAction->StudentID)||!isset($xmlAction->Login)||!isset($xmlAction->Password))
                     $this->errorXml(self::ERROR_XML_STRUCTURE, 'Ошибка струтуры(параметры) xml');
                 else {
 
                     $this->checkAccess($xmlAction);
 
-                    $id = $xmlAction->Id->__ToString();
+                    $id = $xmlAction->StudentID->__ToString();
                     $type = 0;
                     if(isset($xmlAction->Type))
                         $type = $xmlAction->Type->__ToString();
@@ -309,6 +309,9 @@ SQL;
                     }else{
                         $student = St::model()->findByAttributes(array('st1'=>$id));
                     }
+
+                    if($student==null)
+                        $this->errorXml(self::ERROR_PARAM, 'StudentID '.$id.' не являеться валидным');
 
                     $this->render('personStudent',array(
                         'student'=>$student
