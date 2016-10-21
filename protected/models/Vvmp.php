@@ -321,7 +321,7 @@ SQL;
 			SELECT  uo3 from uo where uo1=:UO1
 			)
 			and vmpv6 is null
-			and vmpv7=:GR1 AND vvmp6=:NOM and vvmp4 = (
+			and vmpv7=:GR1 and vvmp4 = (
 			select
 			   first 1 sem7
 				from sem
@@ -330,17 +330,23 @@ SQL;
 				WHERE gr1={$gr1} and sem3=:YEAR and sem5=:SEM
 			) and vvmp25=(
 			SELECT  gr2 from gr where gr1={$gr1}
-			)
+			) ORDER by vvmp6 ASC
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':GR1', $gr1);
 		$command->bindValue(':UO1', $uo1);
 		$command->bindValue(':YEAR', Yii::app()->session['year']);
 		$command->bindValue(':SEM', Yii::app()->session['sem']);
-		$command->bindValue(':NOM', $countModulePrev+1);
-		$res = $command->queryRow();
+		//$command->bindValue(':NOM', $countModulePrev+1);
+		$res = $command->queryAll();
 
-		return $res;
+		//var_dump($res);
+		//var_dump($command);
+
+		if(empty($res)||!isset($res[$countModulePrev]))
+			return false;
+
+		return $res[$countModulePrev];
 	}
 
 	public function checkModul($uo1,$gr1,$nom)
