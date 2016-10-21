@@ -761,8 +761,8 @@ SQL;
            inner join ug on (ucgn.ucgn1 = ug.ug4)
            inner join nr on (ug.ug3 = nr.nr1)
            inner join us on (nr.nr2 = us.us1)
-           /*inner join std on (st1 = std2 and std3 = {$gr1})*/ /*Єто бі закомнтировано (Раскометировали ИС, изза виртуальніх групп)*/
-        where UCGNS5=:YEAR and UCGNS6=:SEM and us2=:UO1 and ug2=:GR1 /*and std11 in (0,6,8) and (std7 is null)*/
+           inner join std on (st1 = std2) /*Єто бі закомнтировано (Раскометировали ИС, изза виртуальніх групп)*/
+        where UCGNS5=:YEAR and UCGNS6=:SEM and us2=:UO1 and ug2=:GR1 and std11 in (0,6,8) and (std7 is null)
         group by st1,st2,st3,st4,st45,st71,st163
         order by st2 collate UNICODE
 SQL;
