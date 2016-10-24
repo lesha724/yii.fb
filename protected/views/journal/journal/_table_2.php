@@ -536,7 +536,7 @@ HTML;
                 $moduleNom++;
             }elseif(($date['elgz4']==3||$date['elgz4']==4||$date['elgz4']==5)&&$ps57==1){
                 if($date['elgz4']==3){
-                    $tr .= table2TrModule2($date, $gr1, $st,$moduleNom);
+                    $tr .= table2TrModule2($date,$gr1,$st,$ps56,$moduleNom,$modules,$sem7,$ps60);
                 }else
                     $tr.='<th></th><th></th>';
                 $moduleNom++;
