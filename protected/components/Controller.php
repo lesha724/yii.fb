@@ -90,7 +90,7 @@ class Controller extends CController
             if (Yii::app()->user->isGuest)
                 throw new CHttpException(500, tt('Сервис доступен только для авторизированных пользователей!'));
 
-        if (! SH::checkServiceFor(MENU_ELEMENT_VISIBLE, Yii::app()->controller->id, 'main', true))
+        if (! SH::checkServiceFor(MENU_ELEMENT_VISIBLE, Yii::app()->controller->id, $action->id, true))
             throw new CHttpException(404, tt('Сервис закрыт!'));
     }
 
