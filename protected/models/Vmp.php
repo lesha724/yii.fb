@@ -315,13 +315,14 @@ SQL;
         //var_dump($module);
         //print_r(1);
         $sql=<<<SQL
-            SELECT elgz3 FROM elgz WHERE elgz2=:ELGZ2 AND elgz4 in (2,3,4) AND elgz3>:ELGZ3 ORDER by elgz3 asc
+            SELECT elgz3 FROM elgz WHERE elgz2=:ELGZ2 AND elgz4 in (2,3,4) AND elgz3>=:ELGZ3 ORDER by elgz3 asc
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':ELGZ2', $elgz->elgz2);
         $command->bindValue(':ELGZ3', $elgz->elgz3);
         $pmkLessonNom = $command->queryScalar();
 
+        //var_dump($pmkLessonNom);
         //$marks = array();
         if(empty($pmkLessonNom)||empty($module))
             return;
@@ -367,7 +368,7 @@ SQL;
                     $command->bindValue(':UO1', $uo1);
                     $pmkLessonNomPrevSem = $command->queryScalar();
 
-                    //print_r($pmkLessonNomPrevSem.'<br>');
+                    //var_dump($pmkLessonNomPrevSem);
                     if(!empty($pmkLessonNomPrevSem)){
                         $sql=<<<SQL
                           SELECT elgzst5,elgzst4,elgzst3 FROM elg
@@ -462,6 +463,7 @@ SQL;
                 $command->bindValue(':VMPV1', $module['vmpv1']);
                 $vmp = $command->queryRow();
 
+                //var_dump($vmp);
                 if(!empty($vmp)){
                     $itog = $tek + $vmp['vmp6'] + $vmp['vmp7'];
 
