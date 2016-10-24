@@ -305,7 +305,7 @@ SQL;
 	{
 		$sql = <<<SQL
 			SELECT COUNT(*) from elgz
-			WHERE elgz4=2 AND elgz3<:NOM AND elgz2=:ELG1
+			WHERE elgz4 in (2,3,4) AND elgz3<:NOM AND elgz2=:ELG1
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':NOM', $elgz3);
