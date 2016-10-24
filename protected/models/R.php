@@ -177,6 +177,7 @@ order by elgz3*/
 			inner join rz on (EL_GURNAL_ZAN.r4 = rz1)
 			inner join nr on (r1 = nr1)
 			inner join k on (nr30 = k1)
+			where elgz4 in (2,3,4)
 			order by elgz3
 SQL;
 		$command = Yii::app()->db->createCommand($sql);

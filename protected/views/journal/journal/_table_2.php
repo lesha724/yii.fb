@@ -231,6 +231,37 @@ HTML;
 
 }
 
+function table2TrModule2($date,$gr1,$st,$ps56,$nom,$modules,$sem7,$ps60)
+{
+    if ($st['st71']!=$sem7 && $ps60 ==1)
+        return '<td colspan="4"></td>';
+
+    if (stripos($date['r2'], '11.11.1111')!==false )
+        return '<td colspan="4"></td>';
+
+    /*if (strtotime($date['r2']) > strtotime('now'))
+        return '<td colspan="4"></td>';*/
+
+    if ($ps56 == 1 && $date['elgz4']>0)
+        return '<td colspan="4"></td>';
+
+    if(!isset($modules[(int)$nom-1]))
+        return '<td colspan="4">'.tt('Нет ведомости, обращайтесь в деканат!').'</td>';
+    else{
+        $mark = Vmp::model()->getMarks($modules[(int)$nom-1]['vvmp1'],$st['st1'],$gr1);
+        if(empty($mark))
+            return '<td colspan="4">'.tt('Нет ведомости, обращайтесь в деканат!').'</td>';
+        $pot = round($mark['vmp5'],2);
+        $itog = round($mark['vmp4'],2);
+
+        return sprintf(<<<HTML
+                    <td class="module-tr">%s</td>
+                    <td class="module-tr">%s</td>
+HTML
+            ,$pot,$itog);
+    }
+}
+
 function table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$nom,$uo1,$modules,$potoch,$sem7,$ps60)
 {
     if ($st['st71']!=$sem7 && $ps60 ==1)
@@ -504,7 +535,11 @@ HTML;
                 $potoch = 0;
                 $moduleNom++;
             }elseif(($date['elgz4']==3||$date['elgz4']==4||$date['elgz4']==5)&&$ps57==1){
-                $tr.='<th></th><th></th>';
+                if($date['elgz4']==3){
+                    $tr .= table2TrModule2($date, $gr1, $st,$moduleNom);
+                }else
+                    $tr.='<th></th><th></th>';
+                $moduleNom++;
             }else {
                 $tr .= table2Tr($date, $gr1, $st, $marks, $permLesson, $read_only, $model->type_lesson, $ps20, $ps55, $ps56,$sem7,$ps60,$min,$ps65,$ps66,$moduleNom, $ps88);
                 $potoch+=getMarsForElgz3($date['elgz3'],$marks);
