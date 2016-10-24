@@ -315,7 +315,7 @@ SQL;
         //var_dump($module);
         //print_r(1);
         $sql=<<<SQL
-            SELECT elgz3 FROM elgz WHERE elgz2=:ELGZ2 AND elgz4=2 AND elgz3>:ELGZ3 ORDER by elgz3 asc
+            SELECT elgz3 FROM elgz WHERE elgz2=:ELGZ2 AND elgz4 in (2,3,4) AND elgz3>:ELGZ3 ORDER by elgz3 asc
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':ELGZ2', $elgz->elgz2);
@@ -328,7 +328,7 @@ SQL;
         else
         {
             $sql=<<<SQL
-            SELECT elgz3 FROM elgz WHERE elgz2=:ELGZ2 AND elgz4=2 AND elgz3<:ELGZ3 ORDER by elgz3 asc
+            SELECT elgz3 FROM elgz WHERE elgz2=:ELGZ2 AND elgz4 in (2,3,4) AND elgz3<:ELGZ3 ORDER by elgz3 asc
 SQL;
             $command = Yii::app()->db->createCommand($sql);
             $command->bindValue(':ELGZ2', $elgz->elgz2);
@@ -359,7 +359,7 @@ SQL;
                     $sql=<<<SQL
                       SELECT MIN(elgz3) as nom FROM elgz
                         INNER JOIN elg on (elgz2 = elg1)
-                     WHERE elg3=:SEM1 AND elgz4=2 AND elg2=:UO1 AND elgz3>:NOM ORDER by nom asc
+                     WHERE elg3=:SEM1 AND elgz4 in (2,3,4) AND elg2=:UO1 AND elgz3>:NOM ORDER by nom asc
 SQL;
                     $command = Yii::app()->db->createCommand($sql);
                     $command->bindValue(':SEM1', $sem1);

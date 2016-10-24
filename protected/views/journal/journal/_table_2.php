@@ -253,6 +253,14 @@ function table2TrModule2($date,$gr1,$st,$ps56,$nom,$modules,$sem7,$ps60)
             return '<td colspan="4">'.tt('Нет ведомости, обращайтесь в деканат!').'</td>';
         $pot = round($mark['vmp5'],2);
         $itog = round($mark['vmp4'],2);
+        $vmpv6 = $mark['vmpv6'];
+        if(!empty($vmpv6)) {
+            $js=<<<JS
+                        $('*[data-module-nom="{$nom}-{$st['st1']}"]').prop('disabled',true);
+JS;
+            Yii::app()->clientScript->registerScript('module-nom'.$nom.'-'.$st['st1'], $js, CClientScript::POS_END);
+
+        }
 
         return sprintf(<<<HTML
                     <td class="module-tr">%s</td>
