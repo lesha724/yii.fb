@@ -465,19 +465,40 @@ SQL;
 
                 //var_dump($vmp);
                 if(!empty($vmp)){
-                    $itog = $tek + $vmp['vmp6'] + $vmp['vmp7'];
+                    $_elgz = Elgz::model()->findByAttributes(array('elgz2'=>$elg->elg1,'elgz3'=>$pmkLessonNom));
+                    //var_dump($_elgz->elgz4);
+                    if(empty($_elgz))
+                        return;
 
-                    $sql = <<<SQL
+                    if($_elgz->elgz4==2) {
+                        $itog = $tek + $vmp['vmp6'] + $vmp['vmp7'];
+
+                        $sql = <<<SQL
                               UPDATE vmp set vmp4=:VMP4, vmp5=:VMP5, vmp10=:VMP10, vmp12=:VMP12 WHERE vmp2=:ST1 AND vmp1=:VMPV1
 SQL;
-                    $command = Yii::app()->db->createCommand($sql);
-                    $command->bindValue(':VMP5', $tek);
-                    $command->bindValue(':VMP4', $itog);
-                    $command->bindValue(':ST1', $st1);
-                    $command->bindValue(':VMPV1', $module['vmpv1']);
-                    $command->bindValue(':VMP12', Yii::app()->user->dbModel->p1);
-                    $command->bindValue(':VMP10', date('Y-m-d H:i:s'));
-                    $command->execute();
+                        $command = Yii::app()->db->createCommand($sql);
+                        $command->bindValue(':VMP5', $tek);
+                        $command->bindValue(':VMP4', $itog);
+                        $command->bindValue(':ST1', $st1);
+                        $command->bindValue(':VMPV1', $module['vmpv1']);
+                        $command->bindValue(':VMP12', Yii::app()->user->dbModel->p1);
+                        $command->bindValue(':VMP10', date('Y-m-d H:i:s'));
+                        $command->execute();
+                    }elseif($_elgz->elgz4==3||$_elgz->elgz4==4){
+                        $sql = <<<SQL
+                              UPDATE vmp set vmp4=:VMP4, vmp5=:VMP5, vmp6=:VMP6, vmp7=:VMP7, vmp10=:VMP10, vmp12=:VMP12 WHERE vmp2=:ST1 AND vmp1=:VMPV1
+SQL;
+                        $command = Yii::app()->db->createCommand($sql);
+                        $command->bindValue(':VMP5', 0);
+                        $command->bindValue(':VMP4', $tek);
+                        $command->bindValue(':VMP6', 0);
+                        $command->bindValue(':VMP7', $tek);
+                        $command->bindValue(':ST1', $st1);
+                        $command->bindValue(':VMPV1', $module['vmpv1']);
+                        $command->bindValue(':VMP12', Yii::app()->user->dbModel->p1);
+                        $command->bindValue(':VMP10', date('Y-m-d H:i:s'));
+                        $command->execute();
+                    }
                 }
             }
         }

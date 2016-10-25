@@ -251,9 +251,11 @@ function table2TrModule2($date,$gr1,$st,$ps56,$nom,$modules,$sem7,$ps60)
         $mark = Vmp::model()->getMarks($modules[(int)$nom-1]['vvmp1'],$st['st1'],$gr1);
         if(empty($mark))
             return '<td colspan="4">'.tt('Нет ведомости, обращайтесь в деканат!').'</td>';
-        $pot = round($mark['vmp5'],2);
+        $_itog = round($mark['vmp7'],2);
         $itog = round($mark['vmp4'],2);
         $vmpv6 = $mark['vmpv6'];
+        $vvmp1 = $modules[(int)$nom-1]['vvmp1'];
+
         if(!empty($vmpv6)) {
             $js=<<<JS
                         $('*[data-module-nom="{$nom}-{$st['st1']}"]').prop('disabled',true);
@@ -266,7 +268,7 @@ JS;
                     <td class="module-tr">%s</td>
                     <td class="module-tr">%s</td>
 HTML
-            ,$pot,$itog);
+            ,$_itog,$itog);
     }
 }
 
