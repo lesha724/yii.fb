@@ -268,7 +268,7 @@ JS;
                     <td class="module-tr">%s</td>
                     <td class="module-tr">%s</td>
 HTML
-            ,$total,$itog);
+            ,$total,($total!=$itog)?'<label class="label label-warning">'.$itog.'</label>':$itog);
     }
 }
 
