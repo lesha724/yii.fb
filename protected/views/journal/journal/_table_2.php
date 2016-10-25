@@ -231,7 +231,7 @@ HTML;
 
 }
 
-function table2TrModule2($date,$gr1,$st,$ps56,$nom,$modules,$sem7,$ps60)
+function table2TrModule2($date,$gr1,$st,$ps56,$nom,$modules,$sem7,$ps60, $total)
 {
     if ($st['st71']!=$sem7 && $ps60 ==1)
         return '<td colspan="4"></td>';
@@ -268,7 +268,7 @@ JS;
                     <td class="module-tr">%s</td>
                     <td class="module-tr">%s</td>
 HTML
-            ,$_itog,$itog);
+            ,$total,$itog);
     }
 }
 
@@ -442,6 +442,18 @@ function countMarkTotal($marks)
     return array($total,$count);
 }
 
+function getMarkByLesson($marks, $nom){
+    if(isset($marks[$nom])){
+        $mark = $marks[$nom];
+        $m = $mark['elgzst5'] != 0
+            ? $mark['elgzst5']
+            : $mark['elgzst4'];
+
+        return $m;
+    }
+    return 0;
+}
+
 
     $url       = Yii::app()->createUrl('/journal/insertStMark');
     $url_check = Yii::app()->createUrl('/journal/checkCountRetake');
@@ -518,6 +530,8 @@ HTML;
     }
 
     foreach($students as $st) {
+        //для дивзачета сумарная
+        $divZachTotal = 0;
         $potoch = 0;
         $moduleNom=1;
         $st1 = $st['st1'];
@@ -539,6 +553,8 @@ HTML;
                 );
             }
 
+            $divZachTotal+=getMarkByLesson($marks,$date['elgz3']);
+
             if($date['elgz4']==2&&$ps57==1)
             {
                 $tr .= table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$moduleNom,$uo1,$modules,$potoch,$sem7,$ps60);
@@ -546,7 +562,8 @@ HTML;
                 $moduleNom++;
             }elseif(($date['elgz4']==3||$date['elgz4']==4||$date['elgz4']==5)&&$ps57==1){
                 if($date['elgz4']==3){
-                    $tr .= table2TrModule2($date,$gr1,$st,$ps56,$moduleNom,$modules,$sem7,$ps60);
+                    $tr .= table2TrModule2($date,$gr1,$st,$ps56,$moduleNom,$modules,$sem7,$ps60,$divZachTotal);
+                    $divZachTotal = 0;
                 }else
                     $tr.='<th></th><th></th>';
                 $moduleNom++;
