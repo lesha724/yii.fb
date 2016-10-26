@@ -238,25 +238,44 @@ class XmlController extends Controller
                         $this->errorXml(self::ERROR_PARAM, 'Faculty '.$Faculty.' не являеться валидным');
 
                     $sql = <<<SQL
-                        SELECT elgzst3, elgzst4, elgzst5,d1, d2, r2, us4, k1, st1, st108, st2, st3, st4, st5,
-                          gr1,elgp2, elgp3, elgp4, elgp5, sp1, sp2, sem4, (SELECT COUNT(*) FROM elgotr WHERE elgotr1 = elgzst0) as count_retake
-                        FROM elgzst
-                             inner join st ON (elgzst.elgzst1=st.st1)
-                             inner join std ON (st.st1=std.std2)
-                             inner join gr ON (std.std3=gr.gr1)
-                             inner join elgp ON (elgzst.elgzst0=elgp.elgp1)
-                             inner join elgz on (elgzst.elgzst2 = elgz.elgz1)
-                             inner join elg on (elgz.elgz2 = elg.elg1)
-                             inner join uo ON (elg.elg2=uo.uo1)
-                             inner join u ON (uo.uo22=u.u1)
-                             inner join sg ON (gr.gr2=sg.sg1)
-                             inner join sp ON (sg.sg2=sp.sp1)
-                             inner join d ON (uo.uo3=d.d1)
-                             inner join sem on (elg.elg3 = sem.sem1)
-                             inner join EL_GURNAL_ZAN(elg.elg2,gr1,elg.elg3, elg.elg4) on (elgz.elgz3 = EL_GURNAL_ZAN.nom AND EL_GURNAL_ZAN.r2>=:DATE_1 and EL_GURNAL_ZAN.r2<=:DATE_2)
-                             inner join nr on (r1 = nr1)
-                             inner join k on (nr30 = k1)
-                        WHERE sem3=:YEAR and sem5=:SEM and sp5=:FACULTY and std11<>1 and std7 is null {$where}
+                    SELECT elgzst3, elgzst4, elgzst5,d1, d2, r2, us4, k1, st1, st108, st2, st3, st4, st5,
+                      gr1,null as elgp2, null as elgp3, null as elgp4, null as elgp5, sp1, sp2, sem4, (SELECT COUNT(*) FROM elgotr WHERE elgotr1 = elgzst0) as count_retake
+                    FROM elgzst
+                         inner join st ON (elgzst.elgzst1=st.st1)
+                         inner join std ON (st.st1=std.std2)
+                         inner join gr ON (std.std3=gr.gr1)
+                         inner join elgz on (elgzst.elgzst2 = elgz.elgz1)
+                         inner join elg on (elgz.elgz2 = elg.elg1)
+                         inner join uo ON (elg.elg2=uo.uo1)
+                         inner join u ON (uo.uo22=u.u1)
+                         inner join sg ON (gr.gr2=sg.sg1)
+                         inner join sp ON (sg.sg2=sp.sp1)
+                         inner join d ON (uo.uo3=d.d1)
+                         inner join sem on (elg.elg3 = sem.sem1)
+                         inner join EL_GURNAL_ZAN(elg.elg2,gr1,elg.elg3, elg.elg4) on (elgz.elgz3 = EL_GURNAL_ZAN.nom AND EL_GURNAL_ZAN.r2>=:DATE_1 and EL_GURNAL_ZAN.r2<=:DATE_2)
+                         inner join nr on (r1 = nr1)
+                         inner join k on (nr30 = k1)
+                    WHERE sem3=:YEAR and sem5=:SEM and sp5=:FACULTY and elgzst.elgzst3=0 and std11<>1 and std7 is null {$where}
+                    UNION
+                    SELECT elgzst3, elgzst4, elgzst5,d1, d2, r2, us4, k1, st1, st108, st2, st3, st4, st5,
+                      gr1,elgp2,elgp3, elgp4, elgp5, sp1, sp2, sem4, (SELECT COUNT(*) FROM elgotr WHERE elgotr1 = elgzst0) as count_retake
+                    FROM elgzst
+                         inner join st ON (elgzst.elgzst1=st.st1)
+                         inner join std ON (st.st1=std.std2)
+                         inner join gr ON (std.std3=gr.gr1)
+                         inner join elgp ON (elgzst.elgzst0=elgp.elgp1)
+                         inner join elgz on (elgzst.elgzst2 = elgz.elgz1)
+                         inner join elg on (elgz.elgz2 = elg.elg1)
+                         inner join uo ON (elg.elg2=uo.uo1)
+                         inner join u ON (uo.uo22=u.u1)
+                         inner join sg ON (gr.gr2=sg.sg1)
+                         inner join sp ON (sg.sg2=sp.sp1)
+                         inner join d ON (uo.uo3=d.d1)
+                         inner join sem on (elg.elg3 = sem.sem1)
+                         inner join EL_GURNAL_ZAN(elg.elg2,gr1,elg.elg3, elg.elg4) on (elgz.elgz3 = EL_GURNAL_ZAN.nom AND EL_GURNAL_ZAN.r2>=:DATE_1 and EL_GURNAL_ZAN.r2<=:DATE_2)
+                         inner join nr on (r1 = nr1)
+                         inner join k on (nr30 = k1)
+                    WHERE sem3=:YEAR and sem5=:SEM and sp5=:FACULTY and elgzst.elgzst3>0 and std11<>1 and std7 is null {$where}
 SQL;
                     $command = Yii::app()->db->createCommand($sql);
                     //if($type!=2)
