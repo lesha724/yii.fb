@@ -8,7 +8,7 @@
 
 function tableRow($date,$st,$marks,$type_lesson,$ps56,$sem7,$ps60,$ps55)
 {
-    if ($st['st71']!=$sem7 &&$ps60==1)
+    if (($st['st71']!=$sem7&&$st['st71']!=$sem7+1) &&$ps60==1)
         return '<td colspan="2"></td>';
 
     if (stripos($date['r2'], '11.11.1111')!==false )

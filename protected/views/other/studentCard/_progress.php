@@ -106,6 +106,8 @@ foreach ($marks as $mark) {
 
         $tableSem[$sem]['count']++;
         $tableSem[$sem]['value'] += $stus8;
+        if(!isset($tableMark[$stus8]))
+            $tableSem[$sem][$stus8]=0;
         $tableSem[$sem][$stus8]++;
     }
 
