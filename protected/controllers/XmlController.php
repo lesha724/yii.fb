@@ -207,22 +207,26 @@ class XmlController extends Controller
                         }
                     }
 
-                    $where = '';
+                    $where1 = $where2 = '';
 
                     if($chair!=null){
-                        $where.=' AND k1=:CHAIR';
+                        $where1.=' AND k1=:CHAIR1';
+                        $where2.=' AND k1=:CHAIR2';
                     }
 
                     if($student!=null){
-                        $where.=' AND st1=:STUDENT';
+                        $where1.=' AND st1=:STUDENT1';
+                        $where2.=' AND st1=:STUDENT2';
                     }
 
                     if($course!=null){
-                        $where.=' AND sem4=:COURSE';
+                        $where1.=' AND sem4=:COURSE1';
+                        $where2.=' AND sem4=:COURSE2';
                     }
 
                     if($group!=null){
-                        $where.=' AND gr1=:GROUP';
+                        $where1.=' AND gr1=:GROUP1';
+                        $where2.=' AND gr1=:GROUP2';
                     }
 
                     $dateStart = date_create($PeriodStart);
@@ -252,10 +256,10 @@ class XmlController extends Controller
                          inner join sp ON (sg.sg2=sp.sp1)
                          inner join d ON (uo.uo3=d.d1)
                          inner join sem on (elg.elg3 = sem.sem1)
-                         inner join EL_GURNAL_ZAN(elg.elg2,gr1,elg.elg3, elg.elg4) on (elgz.elgz3 = EL_GURNAL_ZAN.nom AND EL_GURNAL_ZAN.r2>=:DATE_1 and EL_GURNAL_ZAN.r2<=:DATE_2)
+                         inner join EL_GURNAL_ZAN(elg.elg2,gr1,elg.elg3, elg.elg4) on (elgz.elgz3 = EL_GURNAL_ZAN.nom AND EL_GURNAL_ZAN.r2>=:DATE_11 and EL_GURNAL_ZAN.r2<=:DATE_21)
                          inner join nr on (r1 = nr1)
                          inner join k on (nr30 = k1)
-                    WHERE sem3=:YEAR and sem5=:SEM and sp5=:FACULTY and elgzst.elgzst3=0 and std11<>1 and std7 is null {$where}
+                    WHERE sem3=:YEAR1 and sem5=:SEM1 and sp5=:FACULTY1 and elgzst.elgzst3=0 and std11<>1 and std7 is null {$where1}
                     UNION
                     SELECT elgzst3, elgzst4, elgzst5,d1, d2, r2, us4, k1, st1, st108, st2, st3, st4, st5,
                       gr1,elgp2,elgp3, elgp4, elgp5, sp1, sp2, sem4, (SELECT COUNT(*) FROM elgotr WHERE elgotr1 = elgzst0) as count_retake
@@ -272,22 +276,34 @@ class XmlController extends Controller
                          inner join sp ON (sg.sg2=sp.sp1)
                          inner join d ON (uo.uo3=d.d1)
                          inner join sem on (elg.elg3 = sem.sem1)
-                         inner join EL_GURNAL_ZAN(elg.elg2,gr1,elg.elg3, elg.elg4) on (elgz.elgz3 = EL_GURNAL_ZAN.nom AND EL_GURNAL_ZAN.r2>=:DATE_1 and EL_GURNAL_ZAN.r2<=:DATE_2)
+                         inner join EL_GURNAL_ZAN(elg.elg2,gr1,elg.elg3, elg.elg4) on (elgz.elgz3 = EL_GURNAL_ZAN.nom AND EL_GURNAL_ZAN.r2>=:DATE_12 and EL_GURNAL_ZAN.r2<=:DATE_22)
                          inner join nr on (r1 = nr1)
                          inner join k on (nr30 = k1)
-                    WHERE sem3=:YEAR and sem5=:SEM and sp5=:FACULTY and elgzst.elgzst3>0 and std11<>1 and std7 is null {$where}
+                    WHERE sem3=:YEAR2 and sem5=:SEM2 and sp5=:FACULTY2 and elgzst.elgzst3>0 and std11<>1 and std7 is null {$where2}
 SQL;
                     $command = Yii::app()->db->createCommand($sql);
                     //if($type!=2)
-                    $command->bindValue(':STUDENT', $student);
-                    $command->bindValue(':COURSE', $course);
-                    $command->bindValue(':CHAIR', $chair);
-                    $command->bindValue(':FACULTY', $Faculty);
-                    $command->bindValue(':GROUP', $group);
-                    $command->bindValue(':YEAR', $Year);
-                    $command->bindValue(':SEM', $Semestr);
-                    $command->bindValue(':DATE_1', $dateStart->format(self::FORMAT_DATE));
-                    $command->bindValue(':DATE_2', $dateFinish->format(self::FORMAT_DATE));
+                    $command->bindValue(':STUDENT1', $student);
+                    $command->bindValue(':COURSE1', $course);
+                    $command->bindValue(':CHAIR1', $chair);
+                    $command->bindValue(':GROUP1', $group);
+
+                    $command->bindValue(':STUDENT2', $student);
+                    $command->bindValue(':COURSE2', $course);
+                    $command->bindValue(':CHAIR2', $chair);
+                    $command->bindValue(':GROUP2', $group);
+
+                    $command->bindValue(':FACULTY1', $Faculty);
+                    $command->bindValue(':YEAR1', $Year);
+                    $command->bindValue(':SEM1', $Semestr);
+                    $command->bindValue(':DATE_11', $dateStart->format(self::FORMAT_DATE));
+                    $command->bindValue(':DATE_21', $dateFinish->format(self::FORMAT_DATE));
+
+                    $command->bindValue(':FACULTY2', $Faculty);
+                    $command->bindValue(':YEAR2', $Year);
+                    $command->bindValue(':SEM2', $Semestr);
+                    $command->bindValue(':DATE_12', $dateStart->format(self::FORMAT_DATE));
+                    $command->bindValue(':DATE_22', $dateFinish->format(self::FORMAT_DATE));
                     $rows = $command->queryAll();
 
                     $this->render('journalMark',array(
