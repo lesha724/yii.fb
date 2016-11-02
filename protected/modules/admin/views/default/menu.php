@@ -66,7 +66,7 @@
                     ),
                 ),
                 array(
-                    'name'       => 'Эл. журнал',
+                    'name'       => 'Для моб.',
                     'controller' => 'mobile',
                     'items' => array(
                         'journal' => 'Эл. журнал (моб.)',
