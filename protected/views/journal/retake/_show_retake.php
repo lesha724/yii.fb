@@ -18,7 +18,7 @@
         $tr="";
         $i=1;
         foreach ($models as $model) {
-            $mark=round($model->elgotr2);
+            $mark=round($model->elgotr2,1);
             if($us4==1)
                 $mark=$model->getElgotr2ByLk();
             $tr.='<tr>'.
