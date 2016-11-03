@@ -396,6 +396,7 @@ HTML;
 {$time}
  {$tem_name}
  <br>{$d2}[{$tip}]<br>
+ {$gr3}<br>
 {$class}. {$a2}<br>
 {$fio}<br>
 {$text}: {$added}<br>
