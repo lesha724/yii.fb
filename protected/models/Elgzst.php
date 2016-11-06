@@ -239,9 +239,14 @@ class Elgzst extends CActiveRecord
             ';
         $from = sprintf($from,$this->uo1, Yii::app()->session['year'], Yii::app()->session['sem']);
 
+        $ps55 = PortalSettings::model()->findByPk(55)->ps2;
+        if($ps55==0)
+            $operation = '>';
+        else
+            $operation = '>=';
         $where = '
                 WHERE   elg4='.$type_lesson.' AND
-                        ((elgzst3 > 0) OR (elgzst4<='.Elgzst::model()->getMin().' and elgzst4>0))
+                        ((elgzst3 > 0) OR (elgzst4<='.Elgzst::model()->getMin().' and elgzst4 '.$operation.' 0))
         ';
         //$where = '';
         /*$params = array(
