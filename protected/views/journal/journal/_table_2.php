@@ -543,7 +543,7 @@ HTML;
             $date2 = new DateTime($date['r2']);
             //если нет оценки добавляем ее ps89
             //костыль баг если выставить настроку ставить ноль
-            if(!isset($marks[$_nom])&&$date1>=$date2&&$ps89==1){
+            if(!isset($marks[$_nom])&&$date1>$date2&&$ps89==1){
                 $elgzst = Elg::model()->addRowMark($st1,$date['elgz1']);
                 $marks[$_nom] = array(
                     'elgz3'=>$_nom,
