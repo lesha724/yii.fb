@@ -209,6 +209,9 @@ SQL;
         $tip = $day['tip'];
 
         $gr3 = '{$gr3}';
+        $gr3_ = '';
+        if(isset($day['gr3']))
+            $gr3_ = $day['gr3'];
         $a2  = $day['a2'];
         $tem_name='';
         if(isset($day['r1_']))
@@ -241,6 +244,7 @@ TEXT;
 {$time}
 {$tem_name}
 {$d2}[{$tip}]
+{$gr3_}
 {$class}. {$a2}
 {$fio}
 TEXT;
