@@ -1178,7 +1178,7 @@ SQL;
             return;
 
         $sql = <<<SQL
-		 select sg40, sg41
+		 /*select sg40, sg41
 		   from u
 			  inner join uo on (u.u1 = uo.uo22)
 			  inner join us on (uo.uo1 = us.us2)
@@ -1188,7 +1188,14 @@ SQL;
 			  inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
 			  inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
 			  inner join sg on (u.u2 = sg.sg1)
-		   where ucsn2=:ST1 and u38<=current_timestamp and u39>=current_timestamp
+		   where ucsn2=:ST1 and u38<=current_timestamp and u39>=current_timestamp*/
+SQL;
+        $sql = <<<SQL
+		   select first 1 sg40, sg41
+            from sg
+               inner join gr on (sg.sg1 = gr.gr2)
+               inner join std on (gr.gr1 = std.std3)
+            where std2=:ST1 and std7 is null and std11 in (0,5,6,8)
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':ST1', $st1);

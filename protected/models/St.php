@@ -903,8 +903,9 @@ SQL;
 			   inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
 			   inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
 			   inner join st on (ucsn.ucsn2 = st.st1)
+			   inner join std on (st1=std2)
 			   inner join nr on (ug.ug3 = nr.nr1)
-			where nr1=:nr1 and ucgns5=:sem3 and ucgns6=:sem5
+			where nr1=:nr1 and ucgns5=:sem3 and ucgns6=:sem5 and std7 is null and std11 in (0,5,6,8)
 			ORDER BY gr7,gr3,st2 collate UNICODE
 SQL;
 
