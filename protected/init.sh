@@ -10,5 +10,7 @@ test -f ./protected/config/main-local.php || cp ./protected/config/main-local.ex
 
 touch ./protected/config/params.inc
 chmod 777 ./protected/config/params.inc
+touch ./protected/config/mail.inc
+chmod 777 ./protected/config/mail.inc
 touch ./protected/data/menu.txt
 chmod 777 ./protected/data/menu.txt
