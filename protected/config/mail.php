@@ -7,7 +7,7 @@ if(file_exists($file))
     if(!empty($content))
         $arr = unserialize(base64_decode($content));
 }else{
-    $file_ = fopen($file, 'w');
+    $file_ = fopen($file, 'w+');
     fclose($file_);
 }
 return $arr;
