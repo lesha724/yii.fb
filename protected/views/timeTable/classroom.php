@@ -28,6 +28,8 @@ $form=$this->beginWidget('CActiveForm', array(
         $html .= $form->label($model, 'filial');
         $html .= $form->dropDownList($model, 'filial', $filials, $options);
         $html .= '</div>';
+    }else{
+        $model->filial = key($filials);
     }
 
     $housings = CHtml::listData(Ka::model()->getHousingFor($model->filial), 'ka1', 'ka2');

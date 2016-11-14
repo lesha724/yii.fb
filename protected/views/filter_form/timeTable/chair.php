@@ -23,6 +23,8 @@ if (count($filials) > 1) {
     $html .= $form->label($model, 'filial');
     $html .= $form->dropDownList($model, 'filial', $filials, $attr);
     $html .= '</div>';
+}else{
+    $model->filial = key($filials);
 }
 
 //$chairs = CHtml::listData(K::model()->getOnlyChairsFor($model->filial), 'k1', 'k3');

@@ -19,6 +19,8 @@ $form=$this->beginWidget('CActiveForm', array(
         $html .= $form->label($model, 'filial');
         $html .= $form->dropDownList($model, 'filial', $filials, $options);
         $html .= '</div>';
+    }else{
+        $model->filial = key($filials);
     }
 
     //$faculties = CHtml::listData(F::model()->getFacultiesFor($model->filial), 'f1', 'f3');

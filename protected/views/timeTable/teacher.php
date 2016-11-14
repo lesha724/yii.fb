@@ -62,7 +62,9 @@ $html = '<div>';
         	$html .= $form->label($model, 'filial');
         $html .= ($ps64==1)?$form->hiddenField($model,'filial'):$form->dropDownList($model, 'filial', $filials, $attr);
         $html .= '</div>';
-    }
+    }else{
+		$model->filial = key($filials);
+	}
 
     //$chairs = CHtml::listData(K::model()->getOnlyChairsFor($model->filial), 'k1', 'k3');
 	$chairs = K::model()->getOnlyChairsFor($model->filial);

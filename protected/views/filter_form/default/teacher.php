@@ -21,6 +21,8 @@ $form=$this->beginWidget('CActiveForm', array(
             $html .= $form->label($model, 'filial');
             $html .= $form->dropDownList($model, 'filial', $filials, $options);
             $html .= '</div>';
+        }else{
+            $model->filial = key($filials);
         }
 
         //$chairs = CHtml::listData(K::model()->getOnlyChairsFor($model->filial), 'k1', 'k3');

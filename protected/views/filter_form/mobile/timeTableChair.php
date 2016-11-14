@@ -21,6 +21,8 @@ if (count($filials) > 1) {
     $html .= $form->label($model, 'filial');
     $html .= $form->dropDownList($model, 'filial', $filials, $options);
     $html .= '</div>';
+}else{
+    $model->filial = key($filials);
 }
 
 $chairs = K::model()->getOnlyChairsFor($model->filial);

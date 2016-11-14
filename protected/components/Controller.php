@@ -246,13 +246,7 @@ SQL;
     }
 
     private function setCode(){
-        $sql=<<<SQL
-            select first 1 b15 from b where b1=0
-SQL;
-        $command = Yii::app()->db->createCommand($sql);
-        $id=$command->queryScalar();
-
-        $this->_universityCode=$id;
+        $this->_universityCode=SH::getUniversityCod();
     }
     /*Код вуза*/
     private $_universityCode;
