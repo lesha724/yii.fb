@@ -19,6 +19,6 @@ switch (Yii::app()->language){
 }
 
 echo PortalSettings::model()->findByPk($id)->ps2;
-echo Yii::app()->baseUrl;
+echo Yii::app()->getBaseUrl(true);
 ?>
 
