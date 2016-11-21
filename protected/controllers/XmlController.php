@@ -62,6 +62,7 @@ class XmlController extends Controller
                     'GetPersonByINN',
                     'GetPersonByPassport',
                     'GetStudentPerson',
+                    'GetTeacherPerson',
 
                     'GetJournalMark'
                 ),
@@ -351,6 +352,48 @@ SQL;
 
                     $this->render('personStudent',array(
                         'student'=>$student
+                    ));
+                }
+            }
+        }
+    }
+    /**
+     * Персона преподователя
+     */
+    public function actionGetTeacherPerson(){
+        $xml = $this->getXmlFromPost();
+        if(empty($xml))
+            Yii::app()->end;
+        else{
+            /*Проверка есть ли тег GetTeacherPerson*/
+            if($xml->getName()!='Request'||!isset($xml->GetTeacherPerson))
+                $this->errorXml(self::ERROR_XML_STRUCTURE,'Ошибка струтуры xml');
+            else {
+                $xmlAction = $xml->GetTeacherPerson;
+                /*Проверка есть ли теги нужные параметры*/
+
+                if (!isset($xmlAction->TeacherID)||!isset($xmlAction->Login)||!isset($xmlAction->Password))
+                    $this->errorXml(self::ERROR_XML_STRUCTURE, 'Ошибка струтуры(параметры) xml');
+                else {
+
+                    $this->checkAccess($xmlAction);
+
+                    $id = $xmlAction->TeacherID->__ToString();
+                    $type = 0;
+                    if(isset($xmlAction->Type))
+                        $type = $xmlAction->Type->__ToString();
+
+                    if($type==0){
+                        $teacher = P::model()->findByAttributes(array('p132'=>$id));
+                    }else{
+                        $teacher = P::model()->findByAttributes(array('p1'=>$id));
+                    }
+
+                    if($teacher==null)
+                        $this->errorXml(self::ERROR_PARAM, 'TeacherID '.$id.' не являеться валидным');
+
+                    $this->render('personTeacher',array(
+                        'teacher'=>$teacher
                     ));
                 }
             }
