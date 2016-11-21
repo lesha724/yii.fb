@@ -36,7 +36,18 @@ if (! empty($model->semester)) :
             7 => tt('Кр'),
         );
 ?>
+<?php
 
+    $text = tt('Для просмотра программы дисциплины нажмите значок рядом с ее названием');
+    echo <<<HTML
+    <h3 class="blue header lighter tooltip-info noprint">
+        <i class="icon-info-sign show-info" style="cursor:pointer"></i>
+        <small>
+            <i class="icon-double-angle-right"></i> {$text}
+        </small>
+    </h3>
+HTML;
+    ?>
 <table id="disciplines" class="table table-striped table-bordered table-hover small-rows"  data-getGroupUrl="<?=$getGroupUrl?>">
     <thead>
         <tr>
