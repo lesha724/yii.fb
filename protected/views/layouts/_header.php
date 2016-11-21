@@ -74,12 +74,17 @@
                                     <?=tt('Регистрация')?>
                                 </a>
                             </li>
+                            <?php
+                             $ps98 = PortalSettings::model()->findByPk(98)->ps2;
+                             if($ps98==0){
+                             ?>
                             <li>
                                 <a href="<?=Yii::app()->createUrl('site/registrationInternational')?>" id="registration-international">
                                     <i class="icon-user"></i>
                                     <?=tt('Регистрация иностр. граждан')?>
                                 </a>
                             </li>
+                            <?php }?>
                             <li>
                                 <a href="<?=Yii::app()->createUrl('site/forgotPassword')?>" id="forgot-password">
                                     <i class="icon-envelope"></i>

@@ -69,6 +69,12 @@ $options = array(
                 </div>
 
                 <div class="control-group">
+                    <?=CHtml::checkBox('', PortalSettings::model()->findByPk(98)->ps2, $checkboxStyle)?>
+                    <span class="lbl"> <?=tt('Скрывать регистрацию для иностранцев')?></span>
+                    <?=CHtml::hiddenField('settings[98]', PortalSettings::model()->findByPk(98)->ps2)?>
+                </div>
+
+                <div class="control-group">
                     <span class="lbl"> <?=tt('Текст тех. обслуживания')?>:</span>
                     <?=CHtml::textField('settings[39]', PortalSettings::model()->findByPk(39)->ps2)?>
                 </div>
