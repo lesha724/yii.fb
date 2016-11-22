@@ -299,7 +299,7 @@ SQL;
         if (empty($discipline))
             return array();
         $sql = <<<SQL
-             SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,:D1,1,0,0,5,1) ORDER by gr7 DESC, gr3 ASC;
+             SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,:D1,1,0,0,5,2) ORDER by gr7 DESC, gr3 ASC;
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
