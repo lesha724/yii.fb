@@ -108,7 +108,7 @@ Yii::app()->clientScript->registerCoreScript('jquery');
         </main>
 
         <footer class="footer">
-            ©2015 ООО НПП "МКР", <a target="_ablank" title="www.mkr.org.ua" href="http://mkr.org.ua/">www.mkr.org.ua</a>
+            <?php require_once('_footer.php');?>
         </footer>
         <link rel="stylesheet" type="text/css" href="<?=Yii::app()->baseUrl?>/css/mobile/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="<?=Yii::app()->baseUrl?>/css/mobile/full_modal.css">

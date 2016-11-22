@@ -85,6 +85,11 @@ $options = array(
                 </div>
 
                 <div class="control-group">
+                    <span class="lbl"> <?=tt('Текст в футер')?>:</span>
+                    <?=CHtml::textField('settings[99]', PortalSettings::model()->findByPk(99)->ps2)?>
+                </div>
+
+                <div class="control-group">
                     <span class="lbl"> <?=tt('Начало Весеннего семестра')?>:</span>
                     <?=CHtml::textField('settings[53]', PortalSettings::model()->findByPk(53)->ps2,array('class' => 'sem-start datepicker'))?>
                 </div>

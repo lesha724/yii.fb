@@ -1,3 +1,8 @@
+footer .user-block{
+    float: left;
+    text-align: left;
+}
+
 h5.name-c2{
     text-decoration:underline;
     margin-left: 5px;
