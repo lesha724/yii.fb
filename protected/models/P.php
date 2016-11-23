@@ -553,13 +553,13 @@ SQL;
 
         $today = date('d.m.Y 00:00');
         $sql = <<<SQL
-            SELECT P1,P3,P4,P5,DOL2,PD1
+            SELECT P1,P3,P4,P5,pd7,DOL2,PD1
             FROM P
                 INNER JOIN PD ON (P1=PD2)
                 INNER JOIN DOL ON (PD45 = DOL1)
             WHERE PD4 = {$chairId} and PD28 in (0,2,5,9) and PD3=0 and (PD13 IS NULL or PD13>'{$today}')
-            group by P1,P3,P4,P5,DOL2,PD1
-            ORDER BY P3 collate UNICODE
+            group by P1,P3,P4,P5,pd7,DOL2,PD1
+            ORDER BY P3 collate UNICODE, pd7 desc
 SQL;
 
         $teachers = Yii::app()->db->createCommand($sql)->queryAll();
