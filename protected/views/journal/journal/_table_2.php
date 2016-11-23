@@ -409,9 +409,17 @@ HTML;
     $us4=SH::convertUS4(1);
     if($type_lesson!=0)
     $us4=SH::convertUS4($date['us4']);
+
+    $time = sprintf('%02d-%02d:%02d-%02d',$date['rz9'],$date['rz10'],$date['rz11'],$date['rz12']);
+
     $name = '№'.$date['elgz3'].' '.$date['formatted_date'].' '.$us4.$type;
     if($ps59==1)
         $name.= ' '.$date['k2'];
+
+    $ps100 = PortalSettings::model()->getSettingFor(100);
+    if($ps100==1)
+        $name.= ' '.$time;
+
 
     $disabled = Elgz::model()->checkLesson($date,$permLesson,$ps78,$date1,$ps27);
 
@@ -424,7 +432,7 @@ HTML;
         ));
     }
 
-    return sprintf($pattern,$date['elgz3'],$date['ustem5'], $name, $a);
+    return sprintf($pattern,$date['elgz3'],$time.'<br>'.$date['k2'].'<br>'.$date['ustem5'], $name, $a);
 }
 
 function countMarkTotal($marks)

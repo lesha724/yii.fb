@@ -290,13 +290,13 @@ SQL;
                 $type=tt('ПМК');
                 break;
             case '3':
-                $type=tt('Диф. Зачет');
+                $type=tt('Диф.зач');
                 break;
             case '4':
-                $type=tt('Зачет');
+                $type=tt('Зач.');
                 break;
             case '5':
-                $type=tt('Экзамен');
+                $type=tt('Экз.');
                 break;
             default:
                 $type='';

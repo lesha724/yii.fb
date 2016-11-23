@@ -120,7 +120,7 @@ class R extends CActiveRecord
 			return array();*/
 
 		$sql = <<<SQL
-			select elgz3,r2,r1,ustem5,us4,ustem7,ustem6,elgz4,elgz1,elgz5,elgz6,nr30,k2,k3,rz9,rz10
+			select elgz3,r2,r1,ustem5,us4,ustem7,ustem6,elgz4,elgz1,elgz5,elgz6,nr30,k2,k3,rz9,rz10, rz11,rz12
 			from elgz
 			inner join elg on (elgz.elgz2 = elg.elg1 and elg2=:UO1 and elg4=:TYPE_LESSON and elg3={$sem1})
 			inner join ustem on (elgz.elgz7 = ustem.ustem1)

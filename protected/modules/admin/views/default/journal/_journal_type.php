@@ -121,6 +121,12 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     </div>
 
     <div class="control-group">
+        <?=CHtml::checkBox('', PortalSettings::model()->findByPk(100)->ps2, $htmlOptions2)?>
+        <span class="lbl"> <?=tt('Показывать время занятия')?></span>
+        <?=CHtml::hiddenField('settings[100]', PortalSettings::model()->findByPk(100)->ps2)?>
+    </div>
+
+    <div class="control-group">
         <?=CHtml::checkBox('', PortalSettings::model()->findByPk(66)->ps2, $htmlOptions2)?>
         <span class="lbl"> <?=tt('Проставление отработок из журнала')?></span>
         <?=CHtml::hiddenField('settings[66]', PortalSettings::model()->findByPk(66)->ps2)?>
