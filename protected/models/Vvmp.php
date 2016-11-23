@@ -320,7 +320,7 @@ SQL;
 			WHERE vvmp3=(
 			SELECT  uo3 from uo where uo1=:UO1
 			)
-			and vmpv6 is null
+			/*and vmpv6 is null*/
 			and vmpv7=:GR1 and vvmp4 = (
 			select
 			   first 1 sem7
@@ -343,7 +343,7 @@ SQL;
 		//var_dump($res);
 		//var_dump($command);
 
-		if(empty($res)||!isset($res[$countModulePrev]))
+		if(empty($res)||!isset($res[$countModulePrev])||!empty($res[$countModulePrev]['vmpv6']))
 			return false;
 
 		return $res[$countModulePrev];
