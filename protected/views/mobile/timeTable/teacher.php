@@ -24,7 +24,7 @@ if (! empty($model->teacher)) {
         'rz' => $rz,
     ));
 }else{
-    $this->pageHeader=tt('Расписание преподователя');
+    $this->pageHeader=tt('Расписание преподавателя');
     $this->breadcrumbs=array(
         tt('Расписание'),
     );
