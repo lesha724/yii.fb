@@ -308,7 +308,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'visible' => _ch('other', 'subscription') && $isStd,
                 ),
                 array(
-                    'label'   => $_l2.tt('Данные студенты'),
+                    'label'   => $_l2.tt('Данные студента'),
                     'url'     => _u('/other/studentInfo'),
                     'active'  => $_c=='other' && $_a=='studentInfo',
                     'visible' => _ch('other', 'studentInfo') && ($isTch || $isStd),
@@ -644,7 +644,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'visible' => _ch('other', 'subscription') && $isStd,
                 ),
                 array(
-                    'label'   => $_l2.tt('Данные студенты'),
+                    'label'   => $_l2.tt('Данные студента'),
                     'url'     => _u('/other/studentInfo'),
                     'active'  => $_c=='other' && $_a=='studentInfo',
                     'visible' => _ch('other', 'studentInfo') && ($isTch || $isStd),
