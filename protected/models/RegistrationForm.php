@@ -49,7 +49,18 @@ class RegistrationForm extends CFormModel
 
     public function checkExistence($attribute,$params)
     {
-        $st = St::model()->findAll('st15=:ID ORDER BY st1 DESC', array(':ID'=>$this->$attribute));
+        /*$st = St::model()->with(array(
+            'std' => array(
+                'join' => 'inner join std on (st1 = std2)',
+                'condition' => "std11 in (0,3,5,7,6,8) and (std7 is null)",
+            )
+        ))->findAll('st15=:ID ORDER BY st1 DESC', );*/
+        $st = St::model()->findAllBySql(<<<SQL
+          SELECT st.* FROM st
+            inner join std on (st1 = std2)
+          WHERE std11 in (0,3,5,7,6,8) and (std7 is null) AND st15=:ID ORDER BY st1 DESC
+SQL
+            ,array(':ID'=>$this->$attribute));
         $p  = P::model()->findAll('p13=:ID', array(':ID'=>$this->$attribute));
 
         $thereIsNotSuchId = count($st) + count($p) == 0;
