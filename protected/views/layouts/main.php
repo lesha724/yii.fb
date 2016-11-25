@@ -217,5 +217,9 @@ JS;
         Yii::app()->user->logout(true);//костыль для показа сообщения что бы при лог ауте не дестроилась сессия
     }
     ?>
+
+    <?php if(!empty(Yii::app()->params['analyticsYandex']))
+        echo Yii::app()->params['analyticsYandex'];
+    ?>
 </body>
 </html>
