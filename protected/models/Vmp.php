@@ -311,8 +311,22 @@ SQL;
             return;
 
         $elg = Elg::model()->findByPk($elgz->elgz2);
-        $module = Vvmp::model()->getModul($elg->elg2, $gr1,$elgz->elgz3,$elg->elg1);
+        $module = Vvmp::model()->getModul($elg->elg2, $gr1,$elgz->elgz3,$elg->elg1, $st1);
         //var_dump($module);
+        if(empty($module))
+            return;
+
+        $sql = <<<SQL
+                              SELECT * FROM vmp WHERE vmp2=:ST1 AND vmp1=:VMPV1
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ST1', $st1);
+        $command->bindValue(':VMPV1', $module['vmpv1']);
+        $vmp = $command->queryRow();
+
+        if(empty($vmp))
+            return;
+
         //print_r(1);
         $sql=<<<SQL
             SELECT elgz3 FROM elgz WHERE elgz2=:ELGZ2 AND elgz4 in (2,3,4) AND elgz3>=:ELGZ3 ORDER by elgz3 asc
@@ -321,7 +335,6 @@ SQL;
         $command->bindValue(':ELGZ2', $elgz->elgz2);
         $command->bindValue(':ELGZ3', $elgz->elgz3);
         $pmkLessonNom = $command->queryScalar();
-
         //var_dump($pmkLessonNom);
         //$marks = array();
         if(empty($pmkLessonNom)||empty($module))
@@ -347,14 +360,12 @@ SQL;
                 }else{
                     $year--;
                 }
-
                 $sem1 = Sem::model()->getSemestrForGroupByYearAndSem($gr1,$year,$sem);
                 //$prevSem = $sem1;
                 $uo1 = Elgz::model()->getUo1($elgz->elgz1);
 
                 //print_r($sem1.'<br>');
                 //print_r($uo1.'<br>');
-
                 if($sem1!=0){
 
                     $sql=<<<SQL
@@ -455,13 +466,13 @@ SQL;
                     //print_r($tek);
                 }
 
-                $sql = <<<SQL
+                /*$sql = <<<SQL
                               SELECT * FROM vmp WHERE vmp2=:ST1 AND vmp1=:VMPV1
 SQL;
                 $command = Yii::app()->db->createCommand($sql);
                 $command->bindValue(':ST1', $st1);
                 $command->bindValue(':VMPV1', $module['vmpv1']);
-                $vmp = $command->queryRow();
+                $vmp = $command->queryRow();*/
 
                 //var_dump($vmp);
                 if(!empty($vmp)){

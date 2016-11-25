@@ -301,7 +301,7 @@ SQL;
 		return $modules;*/
 	}
 
-	public function getModul($uo1,$gr1,$elgz3,$elg1)
+	public function getModul($uo1,$gr1,$elgz3,$elg1, $st1)
 	{
 		$sql = <<<SQL
 			SELECT COUNT(*) from elgz
@@ -311,12 +311,12 @@ SQL;
 		$command->bindValue(':NOM', $elgz3);
 		$command->bindValue(':ELG1', $elg1);
 		$countModulePrev = $command->queryScalar();
-
 		//print_r($countModulePrev);
 
 		$sql = <<<SQL
-			SELECT vvmp1,vmpv1,vmpv4,vmpv3,vmpv5,vvmp6,vmpv6 from vvmp
+			SELECT vvmp1, vmpv1, vmpv4, vmpv3, vmpv5, vvmp6, vmpv6, vmp1,vmp2 from vvmp
 			INNER JOIN vmpv on (vvmp1=vmpv2)
+			INNER JOIN vmp on (vmpv1=vmp1 and vmp2=:ST1)
 			WHERE vvmp3=(
 			SELECT  uo3 from uo where uo1=:UO1
 			)
@@ -335,18 +335,33 @@ SQL;
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':GR1', $gr1);
 		$command->bindValue(':UO1', $uo1);
+		$command->bindValue(':ST1', $st1);
 		$command->bindValue(':YEAR', Yii::app()->session['year']);
 		$command->bindValue(':SEM', Yii::app()->session['sem']);
 		//$command->bindValue(':NOM', $countModulePrev+1);
 		$res = $command->queryAll();
-
 		//var_dump($res);
 		//var_dump($command);
+		$_res = array();
 
-		if(empty($res)||!isset($res[$countModulePrev])||!empty($res[$countModulePrev]['vmpv6']))
+		$i=0;
+		foreach($res as $value){
+			if(!isset($_res[$i]))
+				$_res[$i] = $value;
+			else{
+				if($_res[$i]['vvmp1']!=$value['vvmp1']){
+					$i++;
+				}
+				$_res[$i] = $value;
+			}
+		}
+
+		//var_dump($_res);
+
+		if(empty($_res)||!isset($_res[$countModulePrev])||!empty($_res[$countModulePrev]['vmpv6']))
 			return false;
 
-		return $res[$countModulePrev];
+		return $_res[$countModulePrev];
 	}
 
 	public function checkModul($uo1,$gr1,$nom)
