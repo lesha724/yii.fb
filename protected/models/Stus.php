@@ -8,7 +8,6 @@
  * @property integer $stus1
  * @property integer $stus3
  * @property integer $stus4
- * @property integer $stus5
  * @property string $stus6
  * @property string $stus7
  * @property integer $stus8
@@ -23,7 +22,6 @@
  * @property integer $stus18
  * @property integer $stus19
  * @property integer $stus20
- * @property integer $stus21
  */
 class Stus extends CActiveRecord
 {
@@ -43,12 +41,12 @@ class Stus extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('stus0, stus1, stus3, stus4, stus5, stus8, stus10, stus16, stus17, stus18, stus19, stus20, stus21', 'numerical', 'integerOnly'=>true),
+			array('stus0, stus1, stus3, stus4, stus8, stus10, stus16, stus17, stus18, stus19, stus20', 'numerical', 'integerOnly'=>true),
 			array('stus6, stus9, stus11', 'length', 'max'=>20),
 			array('stus7', 'length', 'max'=>60),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('stus0, stus1, stus3, stus4, stus5, stus6, stus7, stus8, stus9, stus10, stus11, stus16, stus17, stus18, stus19, stus20, stus21', 'safe', 'on'=>'search'),
+			array('stus0, stus1, stus3, stus4, stus6, stus7, stus8, stus9, stus10, stus11, stus16, stus17, stus18, stus19, stus20', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -73,7 +71,7 @@ class Stus extends CActiveRecord
 			'stus1' => 'Stus1',
 			'stus3' => 'Stus3',
 			'stus4' => 'Stus4',
-			'stus5' => 'Stus5',
+			//'stus5' => 'Stus5',
 			'stus6' => 'Stus6',
 			'stus7' => 'Stus7',
 			'stus8' => 'Stus8',
@@ -88,7 +86,6 @@ class Stus extends CActiveRecord
 			'stus18' => 'Stus18',
 			'stus19' => 'Stus19',
 			'stus20' => 'Stus20',
-			'stus21' => 'Stus21',
 		);
 	}
 
@@ -114,7 +111,7 @@ class Stus extends CActiveRecord
 		$criteria->compare('stus1',$this->stus1);
 		$criteria->compare('stus3',$this->stus3);
 		$criteria->compare('stus4',$this->stus4);
-		$criteria->compare('stus5',$this->stus5);
+		//$criteria->compare('stus5',$this->stus5);
 		$criteria->compare('stus6',$this->stus6,true);
 		$criteria->compare('stus7',$this->stus7,true);
 		$criteria->compare('stus8',$this->stus8);
