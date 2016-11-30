@@ -3,25 +3,29 @@
     <script type="text/javascript">
         try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
     </script>
+    <?php
+        $ps101= PortalSettings::model()->findByPk(101)->ps2;
+        if($ps101==0) {
+    ?>
+        <div id="sidebar-shortcuts" class="sidebar-shortcuts">
+            <div id="sidebar-shortcuts-large" class="sidebar-shortcuts-large">
+                <?php
+                    $this->widget('ext.LangPick.ELangPick', array(
+                        'excludeFromList' => array(),           // list of languages to exclude from list
+                        'pickerType' => 'buttons',              // buttons, links, dropdown
+                        'linksSeparator' => '<b> | </b>',       // if picker type is set to 'links'
+                        'buttonsSize' => 'mini',                // mini, small, large
+                        'buttonsColor' => 'info',             // primary, info, success, warning, danger, inverse
+                        'htmlOptions' => array('id'=>'languages-list')
+                    ));
+                ?>
+            </div>
 
-    <div id="sidebar-shortcuts" class="sidebar-shortcuts">
-        <div id="sidebar-shortcuts-large" class="sidebar-shortcuts-large">
-            <?php
-                $this->widget('ext.LangPick.ELangPick', array(
-                    'excludeFromList' => array(),           // list of languages to exclude from list
-                    'pickerType' => 'buttons',              // buttons, links, dropdown
-                    'linksSeparator' => '<b> | </b>',       // if picker type is set to 'links'
-                    'buttonsSize' => 'mini',                // mini, small, large
-                    'buttonsColor' => 'info',             // primary, info, success, warning, danger, inverse
-                    'htmlOptions' => array('id'=>'languages-list')
-                ));
-            ?>
+            <div id="sidebar-shortcuts-mini" class="sidebar-shortcuts-mini">
+                <span class="btn btn-info"></span>
+            </div>
         </div>
-
-        <div id="sidebar-shortcuts-mini" class="sidebar-shortcuts-mini">
-            <span class="btn btn-info"></span>
-        </div>
-    </div>
+    <?php } ?>
 
     <?php require_once('_menu.php')?>
 

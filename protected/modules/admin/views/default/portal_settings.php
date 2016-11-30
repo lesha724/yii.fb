@@ -75,6 +75,30 @@ $options = array(
                 </div>
 
                 <div class="control-group">
+                    <?=CHtml::checkBox('', PortalSettings::model()->findByPk(102)->ps2, $checkboxStyle)?>
+                    <span class="lbl"> <?=tt('Скрывать регистрацию')?></span>
+                    <?=CHtml::hiddenField('settings[102]', PortalSettings::model()->findByPk(102)->ps2)?>
+                </div>
+
+                <div class="control-group">
+                    <?=CHtml::checkBox('', PortalSettings::model()->findByPk(103)->ps2, $checkboxStyle)?>
+                    <span class="lbl"> <?=tt('Скрывать забыль пароль')?></span>
+                    <?=CHtml::hiddenField('settings[103]', PortalSettings::model()->findByPk(103)->ps2)?>
+                </div>
+
+                <div class="control-group">
+                    <?=CHtml::checkBox('', PortalSettings::model()->findByPk(101)->ps2, $checkboxStyle)?>
+                    <span class="lbl"> <?=tt('Скрывать выбор языка')?></span>
+                    <?=CHtml::hiddenField('settings[101]', PortalSettings::model()->findByPk(101)->ps2)?>
+                </div>
+
+                <div class="control-group">
+                    <?=CHtml::checkBox('', PortalSettings::model()->findByPk(104)->ps2, $checkboxStyle)?>
+                    <span class="lbl"> <?=tt('в футере mkr текстом')?></span>
+                    <?=CHtml::hiddenField('settings[104]', PortalSettings::model()->findByPk(104)->ps2)?>
+                </div>
+
+                <div class="control-group">
                     <span class="lbl"> <?=tt('Текст тех. обслуживания')?>:</span>
                     <?=CHtml::textField('settings[39]', PortalSettings::model()->findByPk(39)->ps2)?>
                 </div>

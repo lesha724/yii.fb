@@ -233,6 +233,9 @@ class SiteController extends Controller
         if (!Yii::app()->request->isAjaxRequest)
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
+		if (PortalSettings::model()->findByPk(102)->ps2==1)
+			throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
         $model=new RegistrationForm;
 
         if(isset($_POST['RegistrationForm']))
@@ -275,6 +278,9 @@ class SiteController extends Controller
 	 */
 	public function actionRegistrationInternational()
 	{
+		if (PortalSettings::model()->findByPk(98)->ps2==1)
+			throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
 		$model=new RegistrationInternationalForm();
 		$model->scenario = 'step-1';
 
@@ -326,6 +332,9 @@ class SiteController extends Controller
     {
         if (!Yii::app()->request->isAjaxRequest)
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+		if (PortalSettings::model()->findByPk(103)->ps2==1)
+			throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $model=new ForgotPasswordForm;
 
