@@ -283,7 +283,7 @@ SQL;
           SELECT FIRST 1 vmpv1 from vvmp
 			INNER JOIN vmpv on (vvmp1=vmpv2)
 			INNER JOIN vmp on (vmp1=vmpv1)
-          WHERE vmp2=:ST1 AND vvmp1=:VVMP1 ORDER BY vmpv8 DESC,vmpv4 DESC,vmpv1 DESC
+          WHERE vmp2=:ST1 AND vvmp1=:VVMP1 and vmpv7=:GR1 ORDER BY vmpv8 DESC,vmpv4 DESC,vmpv1 DESC
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':VVMP1', $vvmp1);
@@ -408,6 +408,10 @@ SQL;
             $command->bindValue(':MIN', $pmkPrevLessonNom);
             $command->bindValue(':MAX', $pmkLessonNom);
             $marks= $command->queryAll();
+
+            ///var_dump($marks);
+
+            //var_dump($command);
 
             if(!empty($marks)){
                 $tek =0;
