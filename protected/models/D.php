@@ -1068,6 +1068,37 @@ SQL;*/
 
         return $name;
     }
+    /*
+     * группы по факультеты курсу и семестру для фильтра в списки виртуальных групп
+     */
+    public  function getDisciplinesByFacultySemectrCourse($f1, $course){
+        if(empty($f1)||empty($course))
+            return array();
+
+        $sql = <<<SQL
+			select d2,d1
+                from sp
+                   inner join sg on (sp.sp1 = sg.sg2)
+                   inner join u on (sg.sg1 = u.u2)
+                   inner join uo on (u.u1 = uo.uo22)
+                   inner join d on (uo.uo3 = d.d1)
+                   inner join us on (uo.uo1 = us.us2)
+                   inner join sem on (us.us3 = sem.sem1)
+                   inner join ucx on (uo.uo19 = ucx.ucx1)
+                where ucx5=3 and sem3=:YEAR and sem5=:SEM and sp5=:F1 and sem4=:COURSE
+                group by d2,d1
+                order by d2 collate UNICODE
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':F1', $f1);
+        $command->bindValue(':COURSE', $course);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $disciplines = $command->queryAll();
+
+        return $disciplines;
+    }
 
     public function getDisciplineForCourseWork($st1)
     {

@@ -503,6 +503,41 @@ SQL;
 
         return $groups;
     }
+    /*
+     * Список фиртуальных груп по дисциплине
+     */
+    public function getVirtualGroupsByDisciplines($faculty, $course, $discipline)
+    {
+        if(empty($faculty)||empty($course)||empty($discipline))
+            return array();
+
+        $sql=<<<SQL
+           select gr3,gr1
+            from sem
+               inner join us on (sem.sem1 = us.us3)
+               inner join uo on (us.us2 = uo.uo1)
+               inner join ucx on (uo.uo19 = ucx.ucx1)
+               inner join u on (uo.uo22 = u.u1)
+               inner join sg on (u.u2 = sg.sg1)
+               inner join sp on (sg.sg2 = sp.sp1)
+               inner join nr on (us.us1 = nr.nr2)
+               inner join ug on (nr.nr1 = ug.ug1)
+               inner join gr on (ug.ug2 = gr.gr1)
+            where ucx5=3 and sem3=:YEAR and sem5=:SEM and sp5=:F1 and sem4=:COURSE and uo3=:D1
+            group by gr3,gr1
+            order by gr3 collate UNICODE
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':F1', $faculty);
+        $command->bindValue(':COURSE', $course);
+        $command->bindValue(':D1', $discipline);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $groups = $command->queryAll();
+
+        return $groups;
+    }
 
     public function getStarostaFromGr1($gr1)
     {

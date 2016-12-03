@@ -88,6 +88,7 @@
                     'items' => array(
                         'group'      => 'Группы',
                         'chair'      => 'Кафедры',
+                        'virtualGroup' => 'Виртуальные группы',
                     ),
                 ),
                 array(

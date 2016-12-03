@@ -860,6 +860,31 @@ SQL;
         return $students;
     }
 
+	public function getListVirtualGroup($gr1)
+	{
+
+		$sql=<<<SQL
+            SELECT st1,st2,st3,st4,st5,sk3
+			from ucgn
+			   inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
+			   inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
+			   inner join st on (ucsn.ucsn2 = st.st1)
+			   inner join gr on (ucsn.ucsn3 = gr.gr1)
+			   LEFT JOIN SK ON (SK.SK2 = ST.ST1)
+			where ucgns5=:YEAR and ucgns6=:SEM and ucgn2=:GR1
+			group by st1,st2,st3,st4,st5,sk3
+			order by st2 collate UNICODE
+SQL;
+
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':GR1', $gr1);
+		$command->bindValue(':YEAR', Yii::app()->session['year']);
+		$command->bindValue(':SEM', Yii::app()->session['sem']);
+		$students = $command->queryAll();
+
+		return $students;
+	}
+
 	public function getStudentsOfUo($uo1,$year,$sem)
 	{
 		if (empty($uo1))

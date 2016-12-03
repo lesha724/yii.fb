@@ -19,7 +19,7 @@ class ListController extends Controller
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),*/
             array('allow',
-                'actions' => array('group','chair','searchStudent')
+                'actions' => array('group','chair','searchStudent','virtualGroup')
             ),
             array('deny',
                 'users' => array('*'),
@@ -60,7 +60,20 @@ class ListController extends Controller
             'student'=>$student
         ));
     }
-    
+
+    public function actionVirtualGroup()
+    {
+        $model = new FilterForm();
+        $model->scenario = 'list-virtual-group';
+
+        if (isset($_REQUEST['FilterForm']))
+            $model->attributes=$_REQUEST['FilterForm'];
+
+        $this->render('virtual-group', array(
+            'model' => $model,
+        ));
+    }
+
     public function actionChair()
     {
         $model = new TimeTableForm();
