@@ -15,17 +15,32 @@
 	");
 
 //$ps34=PortalSettings::model()->findByPk(34)->ps2;
+
+$this->widget('bootstrap.widgets.TbButton', array(
+    'buttonType'=>'button',
+    'type'=>'primary',
+
+    'icon'=>'print',
+    'label'=>tt('Печать'),
+    'htmlOptions'=>array(
+        'class'=>'btn-small',
+        'data-url'=>Yii::app()->createUrl('/list/virtualGroupExcel'),
+        'id'=>'journal-print',
+    )
+));
 ?>
 
 <table id="list-virtual-group" class="table table-striped table-hover">
     <thead>
     <tr>
         <th style="width:40px">№</th>
+        <th><?=tt('Ф.И.О.')?></th>
+        <th><?=tt('Академ. группа')?></th>
         <th style="width:200px">№ <?=tt('зач. книжки')?></th>
         <?php /*if($ps34==1):?>
             <th style="width:90px"><?=tt('Вид фин.')?></th>
         <?php endif;*/?>
-        <th><?=tt('Ф.И.О.')?></th>
+
     </tr>
     </thead>
     <tbody>
@@ -47,10 +62,11 @@
         }else*/
             echo '<tr class="info">';
         echo '<td>'.$i.'</td>';
+        echo '<td>'.$student['st2'].' '.$student['st3'].' '.$student['st4'].'</td>';
+        echo '<td>'.Gr::model()->getGroupName($model->course, $student).'</td>';
         echo '<td>'.$student['st5'].'</td>';
         /*if($ps34==1)
             echo '<td>'.$type[$student['sk3']].'</td>';*/
-        echo '<td>'.$student['st2'].' '.$student['st3'].' '.$student['st4'].'</td>';
         echo '</tr>';
         $i++;
     }
