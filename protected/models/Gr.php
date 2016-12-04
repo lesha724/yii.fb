@@ -503,6 +503,31 @@ SQL;
 
         return $groups;
     }
+    public function getVirtualGroupByDiscipline($group)
+    {
+        $sql=<<<SQL
+           select gr3,gr1
+            from sem
+               inner join us on (sem.sem1 = us.us3)
+               inner join uo on (us.us2 = uo.uo1)
+               inner join ucx on (uo.uo19 = ucx.ucx1)
+               inner join u on (uo.uo22 = u.u1)
+               inner join sg on (u.u2 = sg.sg1)
+               inner join sp on (sg.sg2 = sp.sp1)
+               inner join nr on (us.us1 = nr.nr2)
+               inner join ug on (nr.nr1 = ug.ug1)
+               inner join gr on (ug.ug2 = gr.gr1)
+            where ucx5=3 and gr1=:GR1
+            group by gr3,gr1
+            order by gr3 collate UNICODE
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':GR1', $group);
+        $group = $command->queryRow();
+
+        return $group;
+    }
     /*
      * Список фиртуальных груп по дисциплине
      */
