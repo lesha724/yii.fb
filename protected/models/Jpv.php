@@ -109,7 +109,7 @@ class Jpv extends CActiveRecord
 
     public function getCxmByUo1AndSemestr($uo1){
         $sql=<<<SQL
-           select cxm21,cxm1,cxm2,cxm3,cxm4,cxm5,cxm6,cxm7
+           select cxm21, cxm22, cxm23 ,cxm1,cxm2,cxm3,cxm4,cxm5,cxm6,cxm7
            from cxm
            where cxm0=(
               select us13
@@ -135,8 +135,18 @@ SQL;
 
         $cxm = $this->getCxmByUo1AndSemestr($uo1);
 
-        if(empty($cxm))
+        if(empty($cxm)) {
+            //return;
+            $cxm = Cxm::model()->findByPk(0);
+            if($cxm->cxm21==0){
+                $cxm->cxm21 = 6;
+                $cxm->save();
+            }
+        }
+
+        if(empty($cxm)) {
             return;
+        }
 
         $cxm21 = $cxm['cxm21'];
 
