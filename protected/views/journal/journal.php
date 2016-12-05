@@ -24,6 +24,7 @@
     $ps84 = PortalSettings::model()->getSettingFor(84);
     $ps88 = PortalSettings::model()->getSettingFor(88);
     $timeAccess = tt('Ошибка! Доступ на редактирование закрыт!');
+    $notFoundVmpv = tt('Ошибка! Ведомость не найдена или закрыта!');
 
 //errorType=0 error
 //errorType=4 minMaxError
@@ -31,6 +32,7 @@
 //errorType=5 st
 //errorType=2 error2
 //errorType=6 timeAccess
+//errorType=9 Not Found vmpv
     Yii::app()->clientScript->registerScript('translations', <<<JS
         minBal = {$min}
         tt.error       = "{$error}";
@@ -40,6 +42,7 @@
         tt.access = "{$access}";
         tt.st = "{$st}";
         tt.error2 = "{$error2}";
+        tt.notFoundVmpv = "{$notFoundVmpv}";
         ps44 = {$ps44};
         ps55 = {$ps55};
         ps84 = {$ps84};

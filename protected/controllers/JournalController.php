@@ -247,7 +247,7 @@ SQL;
                         //var_dump($module);
                         if ($module['vmpv1'] != $vmpv1 ) {
                             $error = true;
-                            $errorType = 21;
+                            $errorType = 9;
                         } else {
                             $sql = <<<SQL
                               SELECT * FROM vmp WHERE vmp2=:ST1 AND vmp1=:VMPV1
