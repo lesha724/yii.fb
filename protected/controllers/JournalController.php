@@ -236,11 +236,11 @@ SQL;
             if(!$error) {
                 if (empty($elgz)) {
                     $error = true;
-                    $errorType = 23;
+                    $errorType = 2;
                 } else {
                     if ($elgz->elgz4 != 2) {
                         $error = true;
-                        $errorType = 22;
+                        $errorType = 2;
                     } else {
                         $elg = Elg::model()->findByPk($elgz->elgz2);
                         $module = Vvmp::model()->getModul($elg->elg2, $gr1,$elgz->elgz3,$elg->elg1,$st1);
@@ -259,7 +259,7 @@ SQL;
 
                             if(empty($vmp)){
                                 $error = true;
-                                $errorType = 24;
+                                $errorType = 9;
                             }
                             else {
                                 $itog = $vmp['vmp5']+$value+$vmp['vmp7'];

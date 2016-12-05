@@ -248,7 +248,8 @@ $(document).ready(function(){
             data:params,
             success: function( data ) {
                 if (data.error) {
-                    addGritter(title, tt.error, 'error')
+                    addGritter(title, getError(data), 'error')
+
                     $td.addClass('error');
                 } else {
                     addGritter(title, tt.success, 'success')
