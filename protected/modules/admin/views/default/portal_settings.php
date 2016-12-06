@@ -99,6 +99,12 @@ $options = array(
                 </div>
 
                 <div class="control-group">
+                    <?=CHtml::checkBox('', PortalSettings::model()->findByPk(105)->ps2, $checkboxStyle)?>
+                    <span class="lbl"> <?=tt('Скрывть хлебные крошки')?></span>
+                    <?=CHtml::hiddenField('settings[105]', PortalSettings::model()->findByPk(105)->ps2)?>
+                </div>
+
+                <div class="control-group">
                     <span class="lbl"> <?=tt('Текст тех. обслуживания')?>:</span>
                     <?=CHtml::textField('settings[39]', PortalSettings::model()->findByPk(39)->ps2)?>
                 </div>
