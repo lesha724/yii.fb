@@ -185,13 +185,20 @@ SQL;
 
                 if($jpv1>0){
                     $sql=<<<SQL
-                      select first 1 us4,pd2
-                        from uo
-                        inner join us on (uo1 = us2)
-                        inner join nr on (us1 = nr2)
-                        inner join ug on (nr1 = ug3)
+                        select first 1 us4,pd2
+                        from nr
+                        inner join (select ug3
+                                    from uo
+                                       inner join us on (uo1 = us2)
+                                       inner join nr on (us1 = nr2)
+                                       inner join ug on (nr1 = ug1)
+                                       inner join pd on (nr6 = pd1)
+                                    where us4>=1 and us4<=4 and uo1=:UO1 and us3=:SEM1 and ug2=:UCGN2
+                                    group by ug3)
+                               on (nr1 = ug3)
                         inner join pd on (nr6 = pd1)
-                        where nr6>0 and us4>=1 and us4<=4 and uo1=:UO1 and us3=:SEM1 and ug2=:UCGN2
+                        inner join us on (nr2 = us1)
+                        where nr6>0
                         group by us4,pd2
                         order by us4 DESC
 SQL;
