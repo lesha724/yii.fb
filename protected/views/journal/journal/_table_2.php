@@ -233,7 +233,7 @@ HTML;
 
 function table2TrModule2($date,$gr1,$st,$ps56,$nom,$modules,$sem7,$ps60, $total)
 {
-    if ($st['st71']!=$sem7 && $ps60 ==1)
+    if (($st['st71']!=$sem7&&$st['st71']!=$sem7+1) && $ps60 ==1)
         return '<td colspan="4"></td>';
 
     if (stripos($date['r2'], '11.11.1111')!==false )
@@ -274,7 +274,7 @@ HTML
 
 function table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$nom,$uo1,$modules,$potoch,$sem7,$ps60)
 {
-    if ($st['st71']!=$sem7 && $ps60 ==1)
+    if (($st['st71']!=$sem7&&$st['st71']!=$sem7+1) && $ps60 ==1)
         return '<td colspan="4"></td>';
 
     if (stripos($date['r2'], '11.11.1111')!==false )
