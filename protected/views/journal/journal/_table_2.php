@@ -561,8 +561,6 @@ HTML;
                 );
             }
 
-            $divZachTotal+=getMarkByLesson($marks,$date['elgz3']);
-
             if($date['elgz4']==2&&$ps57==1)
             {
                 $tr .= table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$moduleNom,$uo1,$modules,$potoch,$sem7,$ps60);
@@ -578,6 +576,9 @@ HTML;
             }else {
                 $tr .= table2Tr($date, $gr1, $st, $marks, $permLesson, $read_only, $model->type_lesson, $ps20, $ps55, $ps56,$sem7,$ps60,$min,$ps65,$ps66,$moduleNom, $ps88);
                 $potoch+=getMarsForElgz3($date['elgz3'],$marks);
+
+                if($ps57==1)
+                    $divZachTotal+=getMarkByLesson($marks,$date['elgz3']);
             }
         }
         $tr .= '</tr>';
