@@ -22,18 +22,28 @@ $(document).ready(function(){
 
 $(document).on('click','.print-btn',
     function(){
-        $("#filter-form").attr("action", $(this).data('url'));
+        var action=$("#filter-form").attr("action");
+        var url = $(this).data('url');
+        $("#filter-form").attr("action", getUrlPrint(url));
         $("#filter-form").submit();
+        $("#filter-form").attr("action", action);
     }
 );
+
+function getUrlPrint(url){
+    var type = 1;
+    if(!$("#TimeTableForm_printAttr").is(':checked'))
+        type=0;
+    return url.replace('%type%', type);
+}
 
 $(document).on('click','.print-btn-tch',
     function(){
         var action=$("#timeTable-form").attr("action");
-        $("#timeTable-form").attr("action", $(this).data('url'));
+        var url = $(this).data('url');
+        $("#timeTable-form").attr("action", getUrlPrint(url));
         $("#timeTable-form").submit();
         $("#timeTable-form").attr("action", action);
-
     }
 );
 

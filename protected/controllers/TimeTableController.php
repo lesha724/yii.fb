@@ -78,6 +78,9 @@ class TimeTableController extends Controller
         $model->date1 = Yii::app()->session['date1'];
         $model->date2 = Yii::app()->session['date2'];
 
+        $model->printAttr = Yii::app()->request->getParam('type', 0);
+        Yii::app()->session['printAttr'] = $model->printAttr;
+
         $timeTable = $minMax = $maxLessons = array();
         $title=tt('Расписание личное');
         if(Yii::app()->user->isStd)
@@ -218,6 +221,9 @@ class TimeTableController extends Controller
         if (isset($_REQUEST['TimeTableForm']))
             $model->attributes=$_REQUEST['TimeTableForm'];
 
+        $model->printAttr = Yii::app()->request->getParam('type', 0);
+        Yii::app()->session['printAttr'] = $model->printAttr;
+
         $model->date1 = Yii::app()->session['date1'];
         $model->date2 = Yii::app()->session['date2'];
 
@@ -246,6 +252,9 @@ class TimeTableController extends Controller
 
         $model->date1 = Yii::app()->session['date1'];
         $model->date2 = Yii::app()->session['date2'];
+
+        $model->printAttr = Yii::app()->request->getParam('type', 0);
+        Yii::app()->session['printAttr'] = $model->printAttr;
 
         $timeTable = $minMax = $maxLessons = array();
         if (! empty($model->student))
@@ -276,6 +285,9 @@ class TimeTableController extends Controller
         $model->date1 = Yii::app()->session['date1'];
         $model->date2 = Yii::app()->session['date2'];
 
+        $model->printAttr = Yii::app()->request->getParam('type', 0);
+        Yii::app()->session['printAttr'] = $model->printAttr;
+
         $timeTable = $minMax = $maxLessons = array();
         /*if ($model->validate())
             list($minMax, $timeTable) = $model->generateClassroomTimeTable();*/
@@ -300,6 +312,9 @@ class TimeTableController extends Controller
 
         if (isset($_REQUEST['TimeTableForm']))
             $model->attributes=$_REQUEST['TimeTableForm'];
+
+        $model->printAttr = Yii::app()->request->getParam('type', 0);
+        Yii::app()->session['printAttr'] = $model->printAttr;
 
         $model->date1 = Yii::app()->session['date1'];
         $model->date2 = Yii::app()->session['date2'];

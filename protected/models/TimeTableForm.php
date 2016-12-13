@@ -15,6 +15,7 @@ class TimeTableForm extends CFormModel
 	public $lessonStart = 1;
 	public $lessonEnd   = 1;
 
+    public $printAttr = 1;//печать расписание с абривиатурой или полным названием дисциплин
 
     public $date1;
     public $date2;
@@ -30,7 +31,7 @@ class TimeTableForm extends CFormModel
 	{
 		return array(
             array('filial, date1, date2, r11', 'required'),
-
+            array('printAttr', 'numerical'),
             array('chair, teacher', 'numerical', 'allowEmpty' => false, 'on' => 'teacher,mobile-teacher'),
             array('chair', 'numerical', 'allowEmpty' => false, 'on' => 'chair,mobile-chair'),
             array('chair, teacher', 'required', 'on' => 'teacher,mobile-teacher'),
@@ -86,6 +87,7 @@ SQL;
                     'chair'=> tt('Кафедра'),
                     //'faculty'=> tt('Факультет'),
                     'course'=> tt('Курс'),
+                    'printAttr'=>tt('Печать расписания с аббревиатурой дисциплин'),
                     'group'=> tt('Группа'),
                     'teacher'=> tt('Преподаватель'),
                     'student'=> tt('Студент'),
@@ -211,8 +213,18 @@ SQL;
 
     private function cellPrintTextFor($day, $type)
     {
-        $d2  = $day['d2'];
-        $d2 = str_replace('"','&quot;', $d2);
+        $printAttr=0;
+        if(isset(Yii::app()->session['printAttr']))
+            $printAttr = Yii::app()->session['printAttr'];
+
+        if($printAttr==0) {
+            $d2 = $day['d2'];
+        }else
+        {
+            $d2 = $day['d3'];
+        }
+        $d2 = str_replace('"', '&quot;', $d2);
+
         //$tip = SH::convertUS4($day['us4']);
         $tip = $day['tip'];
 
@@ -251,8 +263,7 @@ TEXT;
             $pattern = <<<TEXT
 {$time}
 {$tem_name}
-{$d2}[{$tip}]
-{$gr3_}
+{$d2}[{$tip}] {$gr3_}
 {$class}. {$a2}
 {$fio}
 TEXT;
