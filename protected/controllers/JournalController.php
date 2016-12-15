@@ -1062,7 +1062,7 @@ SQL;
         $elgotr3=Yii::app()->request->getParam('elgotr3', null);
         $elgotr4=Yii::app()->request->getParam('elgotr4', null);
 
-        if($elgotr1==null || $elgotr2==null || $elgotr3==null)
+        if($elgotr1==null || $elgotr2===null || $elgotr3==null)
         {
             $error = true;
             $errorType=2;
