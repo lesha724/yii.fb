@@ -75,14 +75,16 @@ class DefaultController extends AdminController
         $sheet->setCellValueByColumnAndRow(0,1,tt('тип'));
         $sheet->setCellValueByColumnAndRow(1,1,tt('ФИО'));
         $sheet->setCellValueByColumnAndRow(2,1,tt('Дата рождения'));
-        $sheet->setCellValueByColumnAndRow(3,1,tt('логин'));
-        $sheet->setCellValueByColumnAndRow(4,1,tt('пароль'));
+        $sheet->setCellValueByColumnAndRow(3,1,tt('id'));
+        $sheet->setCellValueByColumnAndRow(4,1,tt('логин'));
+        $sheet->setCellValueByColumnAndRow(5,1,tt('пароль'));
 
         $sheet->getColumnDimension('A')->setWidth(15);
         $sheet->getColumnDimension('B')->setWidth(30);
         $sheet->getColumnDimension('C')->setWidth(18);
         $sheet->getColumnDimension('D')->setWidth(18);
         $sheet->getColumnDimension('E')->setWidth(18);
+        $sheet->getColumnDimension('F')->setWidth(18);
 
         $i = 2;
 
@@ -106,7 +108,8 @@ class DefaultController extends AdminController
                 /* @var $_card St*/
                 $_card = St::model()->findByPk($id);
                 if(!empty($_card)) {
-                    $name = SH::getShortName($_card->st2, $_card->st3, $_card->st4);
+                    //$name = SH::getShortName($_card->st2, $_card->st3, $_card->st4);
+                    $name = $_card->st2 .' '. $_card->st3 .' '. $_card->st4;
                     $bDate = $_card->st7;;
                 }
             }
@@ -114,7 +117,8 @@ class DefaultController extends AdminController
                 /* @var $_card P*/
                 $_card = P::model()->findByPk($id);
                 if(!empty($_card)) {
-                    $name = SH::getShortName($_card->p3, $_card->p4, $_card->p5);
+                    //$name = SH::getShortName($_card->p3, $_card->p4, $_card->p5);
+                    $name = $_card->p3 .' '. $_card->p4 .' '. $_card->p5;
                     $bDate = $_card->p9;
                 }
             }
@@ -143,8 +147,9 @@ class DefaultController extends AdminController
                 $sheet->setCellValueByColumnAndRow(0,$i,$typeName);
                 $sheet->setCellValueByColumnAndRow(1,$i,$name);
                 $sheet->setCellValueByColumnAndRow(2,$i,$bDate);
-                $sheet->setCellValueByColumnAndRow(3,$i,$username);
-                $sheet->setCellValueByColumnAndRow(4,$i,$password);
+                $sheet->setCellValueByColumnAndRow(3,$i,$id);
+                $sheet->setCellValueByColumnAndRow(4,$i,$username);
+                $sheet->setCellValueByColumnAndRow(5,$i,$password);
             }else{
                 //ошибка сохранения
                 $sheet->mergeCellsByColumnAndRow(0, $i, 4, $i)->setCellValueByColumnAndRow(0, $i,'Ошибка сохранения '.$typeName.' '.$name.' '.$bDate);
