@@ -104,9 +104,19 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
         ? round($marks[$key]['elgzst4'], 1)
         : '';
 
-    $elgzst5 = isset($marks[$key]) && $marks[$key]['elgzst5'] != 0 && $marks[$key]['elgzst5']!=-1
-        ? round($marks[$key]['elgzst5'], 1)
-        :( isset($marks[$key]) && $marks[$key]['elgzst5']==-1?tt('Отработано'):'');
+    $isset = isset($marks[$key]);
+    $elgzst5 = $isset && $marks[$key]['elgzst5'] != 0 && $marks[$key]['elgzst5']!=-1
+        ?
+            round($marks[$key]['elgzst5'], 1)
+        :
+            (
+                $isset && $marks[$key]['elgzst5']==-1
+                ?
+                tt('Отработано'):
+                    (
+                        $isset&&$marks[$key]['elgotr0']>0?round($marks[$key]['elgzst5'], 1):''
+                    )
+            );
 
 
 
@@ -119,7 +129,7 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
     {
         if($elgzst4=='')
             $class_1 = 'class="not-value"';
-        if($elgzst5=='')
+        if($elgzst5==='')
             $class_2 = 'class="not-value"';
     }
 
@@ -129,7 +139,7 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
         $disabled_input_1 = 'disabled="disabled"';
 
 
-    if($elgzst5!='')
+    if($elgzst5!=='')
         $disabled_input = 'disabled="disabled"';
 
     if($typeCheck == 0)

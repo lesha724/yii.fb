@@ -109,7 +109,7 @@ class Elg extends CActiveRecord
     public function getMarksForStudent($st1)
     {
         $sql=<<<SQL
-                SELECT elgzst3,elgzst4,elgzst5,elgz3
+                SELECT elgzst3,elgzst4,elgzst5,elgz3, (select first 1 elgotr0 from elgotr where elgotr1=ELGZST0) as elgotr0
                 FROM elgzst
                     INNER JOIN elgz on (elgzst2 = elgz1)
                 WHERE elgz2=:ELG1 and elgzst1= :ST1

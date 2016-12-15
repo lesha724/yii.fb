@@ -94,8 +94,8 @@
                         'icon'=>'icon-eye-open bigger-120',
                         'url'=>'array("showRetake","elgzst0"=>$data["elgzst0"],"sem1"=>$data["sem1"],"gr1"=>$data["gr1"])',
                         'options' => array('class' => 'btn btn-mini btn-success btn-view-retake'),
-                        //'visible'=>'$data->count_elgotr!=0'
-                        'visible'=>'$data["elgzst5"]!=0'
+                        'visible'=>'$data["count_elgotr"]!=0'
+                        //'visible'=>'$data["elgzst5"]!=0'
                     ),
                 ),
             ),

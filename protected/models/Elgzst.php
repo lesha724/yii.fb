@@ -232,7 +232,7 @@ class Elgzst extends CActiveRecord
             $type_lesson=1;
         $sem1 = Sem::model()->getSem1ByUo1($this->uo1);
 
-        $fields = ' EL_GURNAL_OTR.* ';
+        $fields = ' EL_GURNAL_OTR.*, (select count(*) from elgotr where elgotr1=ELGZST0) as count_elgotr ';
 
         $from = '
             FROM EL_GURNAL_OTR(0,%s,%s,%s)
