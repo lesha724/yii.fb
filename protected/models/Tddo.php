@@ -10,7 +10,7 @@
  * @property string $tddo4
  * @property string $tddo5
  * @property string $tddo6
- * @property integer $tddo7
+ * @property string $tddo7
  * @property string $tddo8
  * @property string $tddo9
  * @property integer $tddo10
@@ -19,17 +19,27 @@
  * @property string $tddo13
  * @property string $tddo14
  * @property integer $tddo15
+ * @property integer $tddo16
+ * @property integer $tddo17
+ * @property integer $tddo18
+ * @property string $tddo19
+ * @property integer $tddo20
+ * @property string $tddo21
+ * @property integer $tddo22
+ * @property integer $tddo23
+ *
+ * The followings are the available model relations:
+ * @property Ido[] $idos
+ * @property Ddo $tddo24
+ * @property I $tddo150
+ * @property Tddo $tddo160
+ * @property Tddo[] $tddos
+ * @property Org $tddo180
+ * @property Tdo $tddo200
+ * @property Dkid[] $dks
  */
 class Tddo extends CActiveRecord
 {
-    /*public $executor;*/
-
-    //public $executorType = 0;
-    public $executionDates;
-
-    const ONLY_TEACHERS = 1;
-    const ONLY_INDEXES  = 2;
-    const ONLY_CHAIRS   = 3;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -46,17 +56,16 @@ class Tddo extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-            array('tddo1,tddo13', 'safe'),
-			array('tddo2, tddo3, tddo7, tddo10, tddo11, tddo15', 'numerical', 'integerOnly'=>true),
-			array('tddo4, tddo9', 'length', 'max'=>10),
-			array('tddo5', 'length', 'max'=>400),
+			array('tddo1, tddo2, tddo3, tddo10, tddo11, tddo15, tddo16, tddo17, tddo18, tddo20, tddo22, tddo23', 'numerical', 'integerOnly'=>true),
+			array('tddo4, tddo9, tddo13, tddo21', 'length', 'max'=>8),
+			array('tddo5, tddo19', 'length', 'max'=>400),
 			array('tddo6', 'length', 'max'=>4000),
-			array('tddo8, tddo12', 'length', 'max'=>180),
+			array('tddo7, tddo8, tddo12', 'length', 'max'=>180),
 			array('tddo14', 'length', 'max'=>1000),
-            array('executorType' , 'safe'),
+			array('tddo23', 'default', 'value'=> date('Y')),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('tddo1, tddo2, tddo3, tddo4, tddo5, tddo6, tddo7, tddo8, tddo9, tddo10, tddo11, tddo12, tddo13, tddo14, tddo15', 'safe', 'on'=>'search'),
+			array('tddo1, tddo2, tddo3, tddo4, tddo5, tddo6, tddo7, tddo8, tddo9, tddo10, tddo11, tddo12, tddo13, tddo14, tddo15, tddo16, tddo17, tddo18, tddo19, tddo20, tddo21, tddo22, tddo23', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,8 +77,14 @@ class Tddo extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-            'ido' => array(self::HAS_MANY, 'Ido', 'ido1'),
-            'idok' => array(self::HAS_MANY, 'Idok', 'idok1')
+			'idos' => array(self::HAS_MANY, 'Ido', 'ido1'),
+			'tddo24' => array(self::BELONGS_TO, 'Ddo', 'tddo2'),
+			'tddo150' => array(self::BELONGS_TO, 'I', 'tddo15'),
+			'tddo160' => array(self::BELONGS_TO, 'Tddo', 'tddo16'),
+			'tddos' => array(self::HAS_MANY, 'Tddo', 'tddo16'),
+			'tddo180' => array(self::BELONGS_TO, 'Org', 'tddo18'),
+			'tddo200' => array(self::BELONGS_TO, 'Tdo', 'tddo20'),
+			'dks' => array(self::HAS_MANY, 'Dkid', 'dkid1'),
 		);
 	}
 
@@ -78,27 +93,30 @@ class Tddo extends CActiveRecord
 	 */
 	public function attributeLabels()
 	{
-        $tddo5Header = Tddo::getTddo5Header($this->tddo2);
 		return array(
 			'tddo1' => 'Tddo1',
-			'tddo2' => 'Tddo2',
-			'tddo3' => '№',
-			'tddo4' => tt('Дата'),
-			'tddo5' => $tddo5Header,
-			'tddo6' => tt('Краткое содержание'),
-			'tddo7' => tt('Входящий номер регистрации'),
-			'tddo8' => tt('Исходящий номер регистрации'),
-			'tddo9' => tt('Дата'),
-			'tddo10' => tt('Сдан оригинал в канц.'),
+			'tddo2' => tt('Тип'),
+			'tddo3' => tt('Номер'),
+			'tddo4' => 'Tddo4',
+			'tddo5' => 'Tddo5',
+			'tddo6' => 'Tddo6',
+			'tddo7' => 'Tddo7',
+			'tddo8' => 'Tddo8',
+			'tddo9' => 'Tddo9',
+			'tddo10' => 'Tddo10',
 			'tddo11' => 'Tddo11',
 			'tddo12' => 'Tddo12',
 			'tddo13' => 'Tddo13',
 			'tddo14' => 'Tddo14',
 			'tddo15' => 'Tddo15',
-            'executor' => tt('Исполнитель'),
-            'executorType' => tt('Исполнитель'),
-            'executionDates' => tt('Даты контроля исполнений'),
-
+			'tddo16' => 'Tddo16',
+			'tddo17' => 'Tddo17',
+			'tddo18' => 'Tddo18',
+			'tddo19' => 'Tddo19',
+			'tddo20' => 'Tddo20',
+			'tddo21' => tt('Дата создания'),
+			'tddo22' => 'Tddo22',
+			'tddo23' => tt('Год'),
 		);
 	}
 
@@ -126,7 +144,7 @@ class Tddo extends CActiveRecord
 		$criteria->compare('tddo4',$this->tddo4,true);
 		$criteria->compare('tddo5',$this->tddo5,true);
 		$criteria->compare('tddo6',$this->tddo6,true);
-		$criteria->compare('tddo7',$this->tddo7);
+		$criteria->compare('tddo7',$this->tddo7,true);
 		$criteria->compare('tddo8',$this->tddo8,true);
 		$criteria->compare('tddo9',$this->tddo9,true);
 		$criteria->compare('tddo10',$this->tddo10);
@@ -135,9 +153,27 @@ class Tddo extends CActiveRecord
 		$criteria->compare('tddo13',$this->tddo13,true);
 		$criteria->compare('tddo14',$this->tddo14,true);
 		$criteria->compare('tddo15',$this->tddo15);
+		$criteria->compare('tddo16',$this->tddo16);
+		$criteria->compare('tddo17',$this->tddo17);
+		$criteria->compare('tddo18',$this->tddo18);
+		$criteria->compare('tddo19',$this->tddo19,true);
+		$criteria->compare('tddo20',$this->tddo20);
+		$criteria->compare('tddo21',$this->tddo21,true);
+		$criteria->compare('tddo22',$this->tddo22);
+		$criteria->compare('tddo23',$this->tddo23);
+		$criteria->addCondition("tddo3>0");
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			'sort' => array(
+
+				'defaultOrder' => array(
+						'tddo3' => CSort::SORT_DESC, //default sort value
+				),
+			),
+			'pagination' => array(
+					'pageSize' => Yii::app()->user->getState('pageSize',10),
+			),
 		));
 	}
 
@@ -151,287 +187,4 @@ class Tddo extends CActiveRecord
 	{
 		return parent::model($className);
 	}
-
-    public function getDocsFor($docType)
-    {
-        $criteria=new CDbCriteria;
-
-        $criteria->compare('tddo2', $docType);
-
-        $criteria->compare('tddo3', $this->tddo3);
-        $criteria->compare('tddo7', $this->tddo7);
-        $criteria->compare('tddo4', $this->tddo4);
-        $criteria->addSearchCondition('tddo8', $this->tddo8);
-        $criteria->compare('tddo9', $this->tddo9);
-        $criteria->addSearchCondition('tddo5', $this->tddo5);
-        $criteria->addSearchCondition('tddo6', $this->tddo6);
-
-        $id = Yii::app()->request->getParam('executor', null);
-        if (! empty($id)) {
-            if ($this->executorType == Tddo::ONLY_TEACHERS) {
-                $criteria->with = array(
-                    'ido' => array(
-                        'select' => false
-                    )
-                );
-                $criteria->compare('ido2', $id);
-
-            } else if ($this->executorType == Tddo::ONLY_INDEXES) {
-                $criteria->with = array(
-                    'ido' => array(
-                        'select' => false
-                    )
-                );
-                $criteria->compare('ido4', $id);
-
-            } else if ($this->executorType == Tddo::ONLY_CHAIRS) {
-                $criteria->with = array(
-                    'idok' => array(
-                        'select' => false
-                    )
-                );
-                $criteria->compare('idok2', $id);
-            }
-
-            $criteria->together = true;
-        }
-
-        $isPrintMode = stristr(Yii::app()->controller->action->id, 'print');
-
-        $provider = new CActiveDataProvider($this, array(
-            'criteria'=>$criteria,
-            'pagination' => array(
-                'pageSize' => $isPrintMode ? 100 : 10,
-            ),
-            'sort' => array(
-                'defaultOrder' => 'EXTRACT (year FROM tddo4) DESC, tddo3 DESC'
-            ),
-        ));
-
-        $items = $provider->getData();
-        foreach ($items as $key => $item) {
-            $items[$key]->executor = $item->executorNames;
-        }
-        $provider->setData($items);
-
-        return $provider;
-    }
-
-    /*public function getDocsFor($docType)
-    {
-        $criteria=new CDbCriteria;
-
-        $criteria->compare('tddo2', $docType);
-
-        $criteria->compare('tddo3', $this->tddo3);
-        $criteria->compare('tddo7', $this->tddo7);
-        $criteria->compare('tddo4', $this->tddo4);
-        $criteria->addSearchCondition('tddo8', $this->tddo8);
-        $criteria->addCondition(' TDDO1>0 AND TDDO3!=-2 AND EXTRACT(YEAR FROM tddo13) ='.date('Y'));
-        $criteria->compare('tddo9', $this->tddo9);
-        $criteria->addSearchCondition('tddo5', $this->tddo5);
-        $criteria->addSearchCondition('tddo6', $this->tddo6);
-
-        $pageSize=Yii::app()->user->getState('pageSize',10);
-        if($pageSize==0)
-            $pageSize=10;
-
-        $sort = new CSort();
-        $sort->sortVar = 'sort';
-        $sort->defaultOrder = 'EXTRACT (year FROM tddo4) DESC, tddo3 DESC';
-        $sort->attributes = array(
-            'tddo3'=>array(
-                'asc'=>'tddo3 ASC',
-                'desc'=>'tddo3 DESC',
-                'default'=>'DESC',
-            ),
-        );
-
-
-        $provider = new CActiveDataProvider($this, array(
-            'criteria'=>$criteria,
-            'pagination' => array(
-                'pageSize' =>$pageSize
-            ),
-            'sort' => $sort,
-        ));
-
-        /*$items = $provider->getData();
-        foreach ($items as $key => $item) {
-            $items[$key]->executor = $item->executorNames;
-        }
-        $provider->setData($items);*/
-
-        /*return $provider;
-    }*/
-
-    public static function getTddo5Header($docType)
-    {
-        if ($docType == 1)
-            $header = tt('Город и название организации отправителя');
-        elseif ($docType == 2)
-            $header = tt('Город и название организации получателя');
-        else
-            $header = tt('От кого');
-
-        return $header;
-    }
-
-    public function getExecutorNames()
-    {
-        $executors = array();
-
-        $sql = <<<SQL
-            SELECT ido2, ido3, ido4, ido5, p3, p4, p5, innf2, innf3
-            FROM IDO
-            LEFT JOIN PD on (pd1 = ido2)
-            LEFT JOIN P on (p1 = pd2)
-            LEFT JOIN INNF on (innf1 = ido4)
-            WHERE ido1 = :IDO1
-SQL;
-        $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':IDO1', $this->tddo1);
-        $result = $command->queryAll();
-
-        foreach ($result as $executor) {
-
-            if (empty($executor['ido2'])) // teacher
-                continue;
-
-            $symbol = SH::showIcon($executor['ido5']);
-
-            $executors[] = $symbol.' '.SH::getShortName($executor['p3'], $executor['p4'], $executor['p5']);
-
-            $this->executorType = Tddo::ONLY_TEACHERS;
-        }
-
-        if (empty($executors)) {
-            foreach ($result as $executor) {
-
-                if (empty($executor['ido4'])) // indexes
-                    continue;
-
-                $executors[] = $executor['innf2'].' '.$executor['innf3'];
-                $this->executorType = Tddo::ONLY_INDEXES;
-            }
-        }
-
-        // chairs
-        if (empty($executors)) {
-            $sql = <<<SQL
-                SELECT idok2, idok3, idok4, k3
-                FROM idok
-                LEFT JOIN K on (k1 = idok2)
-                WHERE idok1 = :IDOK1
-SQL;
-            $command = Yii::app()->db->createCommand($sql);
-            $command->bindValue(':IDOK1', $this->tddo1);
-            $chairs = $command->queryAll();
-
-            foreach ($chairs as $chair) {
-                $symbol = SH::showIcon($chair['idok4']);
-                $executors[] = $symbol.' '.$chair['k3'];
-                $this->executorType = Tddo::ONLY_CHAIRS;
-            }
-
-        }
-
-        return implode('<br>', $executors);
-    }
-
-    public static function getNextNumberFor($docType, $date = null)
-    {
-        if (empty($date))
-            $date = date('d.m.Y H:i');
-
-        $year = DateTime::createFromFormat('d.m.Y H:i', $date)->format('Y');
-
-        $sql = <<<SQL
-          SELECT max(tddo3)
-          FROM tddo
-          WHERE tddo2 = :DOC_TYPE and EXTRACT (year FROM tddo4) = :YEAR
-SQL;
-        $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':DOC_TYPE', $docType);
-        $command->bindValue(':YEAR', $year);
-        $count = $command->queryScalar();
-
-        return $count + 1;
-    }
-
-    public static function showExecutorFor($docType)
-    {
-        return (Yii::app()->params['code'] == U_FARM && in_array($docType, array(1,2,3,4))) ||
-               (Yii::app()->params['code'] == U_NULAU && $docType != 2);
-    }
-
-    public static function getLastInsertId()
-    {
-        $sql = <<<'SQL'
-          SELECT gen_ID(GEN_TDDO, 0)
-          FROM RDB$DATABASE
-SQL;
-        $tddo1 = Yii::app()->db->createCommand($sql)->queryScalar();
-
-        return $tddo1;
-    }
-
-    public function getTddo4Formatted()
-    {
-        return SH::formatDate('Y-m-d H:i:s', 'd.m.Y', $this->tddo4);
-    }
-
-    public function getTddo9Formatted()
-    {
-        return SH::formatDate('Y-m-d H:i:s', 'd.m.Y', $this->tddo9);
-    }
-
-    public function getExecutorType()
-    {
-        if ($this->isNewRecord) {
-            $type = $this->tddo2 == 2 ? Tddo::ONLY_INDEXES : Tddo::ONLY_TEACHERS;
-        } else {
-            if ($this->tddo2 == 2)
-                $type = Tddo::ONLY_INDEXES;
-            else {
-                $tddo1 = $this->tddo1;
-                if (Idok::model()->exists('idok1='.$tddo1))
-                    $type = Tddo::ONLY_CHAIRS;
-                elseif (Ido::model()->exists('ido1='.$tddo1))
-                    $type = Tddo::ONLY_TEACHERS;
-                else
-                    $type = null;
-            }
-        }
-
-        $emptyTypeOnEdit = $this->scenario == 'edit' &&
-                           is_null($type);
-        if ($emptyTypeOnEdit)
-            $type = Tddo::ONLY_TEACHERS;
-
-
-        $filterScenario = $this->scenario == 'filter' &&
-                          isset($_REQUEST['executorType']);
-        if ($filterScenario)
-            $type = $_REQUEST['executorType'];
-
-
-        return $type;
-    }
-
-    public function setExecutorType($value)
-    {
-        $this->executorType = $value;
-    }
-
-    public function hasAttachedFiles()
-    {
-        return Fpdd::model()->exists('fpdd1 = '.$this->tddo1);
-    }
-
-    public function isOnControl()
-    {
-        return Dkid::model()->exists('dkid1 = '.$this->tddo1);
-    }
-
 }
