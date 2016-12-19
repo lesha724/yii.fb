@@ -338,22 +338,27 @@ $(document).ready(function(){
         var $td    = $that.parent();
         if (isNaN(params.value)||(params.value<0)) {
             addGritter(title, tt.error, 'error')
-            $td.addClass('error')
+            $td.addClass('error');
+            //alert(2);
             return false;
         }
         if (params.field!='elgzst3'&&params.value==0&&!$that.is(':checkbox')&&ps55==0) {
             addGritter(title, tt.error, 'error')
+            //alert(1);
             $td.addClass('error')
             return false;
         }
 
         if (params.field=='elgzst3'&&params.value==0&&ps88==0)
         {
-            if($td.find('[data-name="elgzst4"]').val()!=''&&typeLesson==1) {
-                addGritter(title, tt.error, 'error')
-                $td.addClass('error')
-                $that.removeAttr('checked');
-                return false;
+            if(!isStd) {
+                if ($td.find('[data-name="elgzst4"]').val() != '' && typeLesson == 1) {
+                    addGritter(title, tt.error, 'error');
+                    $td.addClass('error');
+                    //alert(3);
+                    $that.removeAttr('checked');
+                    return false;
+                }
             }
         }
         // min max check
@@ -379,7 +384,7 @@ $(document).ready(function(){
         var url_check = $that.parents('[data-url-check]').data('url-check');
 
         $spinner1.show();
-        if (($that.is(':checkbox')&&params.value==1&&ps88==0)||($that.is(':checkbox')&&params.value==01&&ps88==1))
+        if (($that.is(':checkbox')&&params.value==1&&ps88==0)||($that.is(':checkbox')&&params.value==0&&ps88==1))
         {
             $.ajax({
                 url: url_check,
@@ -389,37 +394,44 @@ $(document).ready(function(){
                     if (data.error) {
                         addGritter(title, tt.error, 'error')
                         $td.addClass('error');
+                        //alert(4);
                         $enable=false;
                     } else {
                         if(data.count)
                         {
-                            $( "#dialog-confirm" ).dialog({
-                                resizable: false,
-                                modal: true,
-                                title: "<div class='widget-header'><h4 class='smaller'><i class='icon-warning-sign red'></i>Удаление</h4></div>",
-                                title_html: true,
-                                buttons: [
-                                    {
-                                        html: "<i class='icon-trash bigger-110'></i>&nbsp; Удалить",
-                                        "class" : "btn btn-danger btn-mini",
-                                        click: function() {
-                                            $( this ).dialog( "close" );
-                                            send(url,params,title,$td,$that,$spinner1,st1,ps84,ps88);
+                            if(isStd)
+                            {
+                                addGritter(title, tt.errorEnableCount, 'error');
+                                $spinner1.hide();
+                            }else {
+                                $("#dialog-confirm").dialog({
+                                    resizable: false,
+                                    modal: true,
+                                    title: "<div class='widget-header'><h4 class='smaller'><i class='icon-warning-sign red'></i>Удаление</h4></div>",
+                                    title_html: true,
+                                    buttons: [
+                                        {
+                                            html: "<i class='icon-trash bigger-110'></i>&nbsp; Удалить",
+                                            "class": "btn btn-danger btn-mini",
+                                            click: function () {
+                                                $(this).dialog("close");
+                                                send(url, params, title, $td, $that, $spinner1, st1, ps84, ps88);
 
+                                            }
                                         }
-                                    }
-                                    ,
-                                    {
-                                        html: "<i class='icon-remove bigger-110'></i>&nbsp; Отмена",
-                                        "class" : "btn btn-mini",
-                                        click: function() {
-                                            $( this ).dialog( "close" );
-                                            $spinner1.hide();
-                                            $that.prop( 'checked', true );
+                                        ,
+                                        {
+                                            html: "<i class='icon-remove bigger-110'></i>&nbsp; Отмена",
+                                            "class": "btn btn-mini",
+                                            click: function () {
+                                                $(this).dialog("close");
+                                                $spinner1.hide();
+                                                $that.prop('checked', true);
+                                            }
                                         }
-                                    }
-                                ]
-                            });
+                                    ]
+                                });
+                            }
                         }else
                         {
                             send(url,params,title,$td,$that,$spinner1,st1,ps84,ps88);

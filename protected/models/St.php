@@ -1212,5 +1212,20 @@ SQL;
 
 		return $count>0;
 	}
+	/*
+	 * являеться ли текущий студент старостой
+	 * возращает группу
+	 * */
+	public function isSst(){
+		$sql = <<<SQL
+		select *
+			from sst
+		where SST2=:ST1 and sst6 is null
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':ST1', $this->st1);
+		$row = $command->queryRow();
 
+		return $row;
+	}
 }

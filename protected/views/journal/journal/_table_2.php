@@ -8,7 +8,7 @@ function getMarsForElgz3($nom,$marks){
     }
     return 0;
 }
-function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps20,$ps55,$ps56,$sem7,$ps60,$min,$ps65,$show,$moduleNom,$ps88)
+function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps20,$ps55,$ps56,$sem7,$ps60,$min,$ps65,$show,$moduleNom,$ps88, $isStd)
 {
     if (($st['st71']!=$sem7&&$st['st71']!=$sem7+1) &&$ps60==1)
         return '<td colspan="2"></td>';
@@ -173,6 +173,10 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
             $elgzst3='+';
         $elgzst3_input='<label class="label label-warning">'.$elgzst3.'</label>';
     }
+    /*костыль для блокировки ввода оценок по занятимя*/
+    if($isStd)
+        $read_only = true;
+
     if($type_lesson==1)
     {
         if(!$read_only){
@@ -218,7 +222,7 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
         else
             $elgzst5_input='<label class="label label-warning">'.$elgzst5.'</label>';
     }
-    if($show==0)
+    if($show==0||$isStd)
         $button='';
     else {
         $button = CHtml::htmlButton('<i class="icon-tag"></i>', array('class' => 'btn btn-mini btn-info btn-retake', 'data-module-nom'=>$moduleNom.'-'.$st['st1'], 'style' => 'display:none'));
@@ -584,7 +588,7 @@ HTML;
                     $tr.='<th></th><th></th>';
                 $moduleNom++;
             }else {
-                $tr .= table2Tr($date, $gr1, $st, $marks, $permLesson, $read_only, $model->type_lesson, $ps20, $ps55, $ps56,$sem7,$ps60,$min,$ps65,$ps66,$moduleNom, $ps88);
+                $tr .= table2Tr($date, $gr1, $st, $marks, $permLesson, $read_only, $model->type_lesson, $ps20, $ps55, $ps56,$sem7,$ps60,$min,$ps65,$ps66,$moduleNom, $ps88, $isStd);
                 $potoch+=getMarsForElgz3($date['elgz3'],$marks);
 
                 if($ps57==1)

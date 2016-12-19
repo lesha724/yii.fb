@@ -18,7 +18,6 @@ class JournalController extends Controller
                     'insertStMark',
                     'insertDopMark',
                     'insertMinMaxMark',
-                    'checkCountRetake',
                     'journalRetake',
                     'saveJournalRetake',
                     'journalExcel',
@@ -52,6 +51,21 @@ class JournalController extends Controller
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
+            array(
+                'allow',
+                'actions'=>array(
+                    'stJournal',
+                ),
+                'expression' => 'Yii::app()->user->isStd',
+            ),
+            array(
+                'allow',
+                'actions'=>array(
+                    'insertStMark',
+                    'checkCountRetake',
+                ),
+                'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isStd || Yii::app()->user->isTch',
+            ),
             array('allow',
                 'actions' => array('attendanceStatistic')
             ),
@@ -61,6 +75,29 @@ class JournalController extends Controller
         );
     }
 //---------------------Journal---------------------------------------------------------------
+    public function actionStJournal()
+    {
+        $ps106 = PortalSettings::model()->getSettingFor(106);
+        if($ps106!=1)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        $sstRow = Yii::app()->user->dbModel->isSst();
+
+        if(empty($sstRow)||!isset($sstRow['sst3']))
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $model = new FilterForm;
+        $model->scenario = 'stJournal';
+
+        if (isset($_REQUEST['FilterForm']))
+            $model->attributes=$_REQUEST['FilterForm'];
+
+        $model->group = $sstRow['sst3'];
+
+        $this->render('stJournal', array(
+            'model' => $model,
+        ));
+    }
+
     public function actionJournal()
     {
         $model = new FilterForm;
@@ -490,19 +527,35 @@ SQL;
             $errorType=2;
         }
         else {
-            $sql = <<<SQL
+            if(Yii::app()->user->isStd){
+                if($field!='elgzst3'){
+                    throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+                }
+
+                $ps106 = PortalSettings::model()->getSettingFor(106);
+                if($ps106!=1)
+                    throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+                $sstRow = Yii::app()->user->dbModel->isSst();
+
+                if(empty($sstRow)||!isset($sstRow['sst3']))
+                    throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+                if($sstRow['sst3']!=$gr1)
+                    throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+            }elseif(Yii::app()->user->isTch) {
+                $sql = <<<SQL
             SELECT * FROM  EL_GURNAL(:P1,0,0,0,2,0,:R1,0,0);
 SQL;
-            $command = Yii::app()->db->createCommand($sql);
-            $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
-            $command->bindValue(':R1', $r1);
-            $res = $command->queryRow();
-            if(count($res)==0 || empty($res)||$res['dostup']==0)
-            {
-                $error=true;
-                $errorType=3;
+                $command = Yii::app()->db->createCommand($sql);
+                $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
+                $command->bindValue(':R1', $r1);
+                $res = $command->queryRow();
+                if (count($res) == 0 || empty($res) || $res['dostup'] == 0) {
+                    $error = true;
+                    $errorType = 3;
+                }
             }
-
             try {
                 $sql = <<<SQL
                     select elgz3,r2,r1,elgz1
@@ -738,7 +791,7 @@ SQL;
                             $elgzst->elgzst0 = new CDbExpression('GEN_ID(GEN_ELGZST, 1)');
                             $elgzst->elgzst1 = $st1;
                             $elgzst->elgzst2 = $elgz1;
-                            $elgzst->elgzst7 = Yii::app()->user->dbModel->p1;
+                            $elgzst->elgzst7 = Yii::app()->user->isTch?Yii::app()->user->dbModel->p1:0;
                             $elgzst->elgzst6 = date('Y-m-d H:i:s');
                             $elgzst->elgzst3 = 0;
                             $elgzst->elgzst4 = 0;
@@ -754,14 +807,15 @@ SQL;
 
                     if(!$error)
                     {
+                        if(Yii::app()->user->isTch) {
+                            if ($ps57 == 1) {
+                                Vmp::model()->recalculate($st1, $elgz, $gr1);
+                            }
 
-                        if ($ps57==1) {
-                            Vmp::model()->recalculate($st1, $elgz, $gr1);
-                        }
-
-                        $ps84 = PortalSettings::model()->findByPk(84)->ps2;
-                        if ($ps84==1){
-                            Stus::model()->recalculateStusMark($st1,$gr1,$sem7,$elg);
+                            $ps84 = PortalSettings::model()->findByPk(84)->ps2;
+                            if ($ps84 == 1) {
+                                Stus::model()->recalculateStusMark($st1, $gr1, $sem7, $elg);
+                            }
                         }
 
                         if($field == 'elgzst3'&&$value==0)
@@ -781,7 +835,7 @@ SQL;
                                 $elgp->elgp3='';
                                 $elgp->elgp4='';
                                 $elgp->elgp5=date('Y-m-d H:i:s');
-                                $elgp->elgp7=Yii::app()->user->dbModel->p1;
+                                $elgp->elgp7=Yii::app()->user->isTch?Yii::app()->user->dbModel->p1:0;
                                 $elgp->elgp6=date('Y-m-d H:i:s');
                                 $error =!$elgp->save();
                             }

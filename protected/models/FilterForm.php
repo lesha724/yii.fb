@@ -52,9 +52,9 @@ class FilterForm extends CFormModel
 	public function rules()
 	{
             return array(
-                array('discipline, group', 'required', 'on' => 'journal, modules,thematicPlan'),
+                array('discipline, group', 'required', 'on' => 'journal, stJournal, modules,thematicPlan'),
                 array('module', 'required', 'on' => 'modules'),
-                array('type_lesson, sem1', 'required', 'on' => 'journal'),
+                array('type_lesson, sem1', 'required', 'on' => 'journal, stJournal'),
                 array('module, chair,stream, discipline, group,statement', 'required', 'on' => 'module'),
                 array('discipline', 'required', 'on' => 'exam-session'),
                 array('filial, faculty, speciality, course, group,discipline', 'required', 'on' => 'retake'),

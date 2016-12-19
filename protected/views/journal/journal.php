@@ -47,6 +47,7 @@
         ps55 = {$ps55};
         ps84 = {$ps84};
         ps88 = {$ps88};
+        isStd = false;
 JS
     , CClientScript::POS_READY);
 

@@ -5,6 +5,9 @@
 if(!empty($model->group)):
 list($uo1,$gr1) = explode("/", $model->group);
 
+if(!isset($isStd))
+    $isStd = false;
+
 $sem1List =  Sem::model()->getSem1List($uo1);
 if(count($sem1List)!=1) {
     $options =  array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;');
@@ -35,7 +38,11 @@ if (!empty($model->sem1)):
     if(count($dates)==0)
         throw new CHttpException(404, tt('Не найдены занятия.'));
 
+    $ps57 = PortalSettings::model()->getSettingFor(57);//
+    $modules = null;
+
     echo '<div class="container">';
+    if(!$isStd):
     $this->widget('bootstrap.widgets.TbButton', array(
         'buttonType'=>'button',
         'type'=>'primary',
@@ -65,28 +72,29 @@ if (!empty($model->sem1)):
     $this->renderPartial('/filter_form/default/_refresh_filter_form_button');
 
 
-    $ps57 = PortalSettings::model()->getSettingFor(57);//
-    $modules = null;
+
+
     if($ps57==1)
         $modules = Vvmp::model()->getModule($uo1,$gr1);
-    if(!empty($modules))
+    if(!empty($modules)) {
         $this->widget('bootstrap.widgets.TbButton', array(
-            'buttonType'=>'button',
-            'type'=>'danger',
+            'buttonType' => 'button',
+            'type' => 'danger',
 
-            'icon'=>'refresh',
-            'label'=>tt('Пересчетать ведомости'),
-            'htmlOptions'=>array(
-                'class'=>'btn-small',
-                'data-url'=>Yii::app()->createUrl('/journal/recalculateVmp',array('uo1'=>$uo1,'gr1'=>$gr1,'sem1'=>$model->sem1,'type'=>$model->type_lesson)),
-                'id'=>'recalculate-vmp',
+            'icon' => 'refresh',
+            'label' => tt('Пересчетать ведомости'),
+            'htmlOptions' => array(
+                'class' => 'btn-small',
+                'data-url' => Yii::app()->createUrl('/journal/recalculateVmp', array('uo1' => $uo1, 'gr1' => $gr1, 'sem1' => $model->sem1, 'type' => $model->type_lesson)),
+                'id' => 'recalculate-vmp',
             )
         ));
-
+    }
 
     ?>
         <span><label class="label label-warning">&nbsp;&nbsp;</label> - <?=tt('Информация требует обновления страницы')?></span>
     <?php
+    endif;
 
     $elg1=Elg::getElg1($uo1,$model->type_lesson,$model->sem1);
     $elg = Elg::model()->findByPk($elg1);
@@ -139,7 +147,8 @@ if (!empty($model->sem1)):
         'modules'=>$modules,
         'read_only'=>$read_only,
         'model' => $model,
-        'classTable2'=>$classTable2
+        'classTable2'=>$classTable2,
+        'isStd'=>$isStd
     ));
 
 

@@ -87,6 +87,12 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     </div>
 
     <div class="control-group">
+        <?=CHtml::checkBox('', PortalSettings::model()->findByPk(106)->ps2, $htmlOptions2)?>
+        <span class="lbl"> <?=tt('Ввод старостами посещаемости')?></span>
+        <?=CHtml::hiddenField('settings[106]', PortalSettings::model()->findByPk(106)->ps2)?>
+    </div>
+
+    <div class="control-group">
         <?=CHtml::checkBox('', PortalSettings::model()->findByPk(83)->ps2, $htmlOptions2)?>
         <span class="lbl"> <?=tt('Скрывать столбец "Итог"')?></span>
         <?=CHtml::hiddenField('settings[83]', PortalSettings::model()->findByPk(83)->ps2)?>
