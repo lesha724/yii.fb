@@ -62,7 +62,8 @@
                         'thematicPlan' => 'Тематический план',
                         'journal' => 'Эл. журнал',
                         'retake' => 'Отработка',
-                        'attendanceStatistic'=>'Статистика посещаемости'
+                        'attendanceStatistic'=>'Статистика посещаемости',
+                        'stJournal'=>'Ввод посещаемости (для старост)'
                     ),
                 ),
                 array(

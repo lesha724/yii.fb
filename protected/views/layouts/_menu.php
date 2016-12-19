@@ -476,6 +476,12 @@ $this->widget('zii.widgets.CMenu', array(
                     'active'  => $_c=='journal' && $_a=='omissions'
                 ),
                 array(
+                    'label'   => $_l2.tt('Ввод посещаемости (для старост)'),
+                    'url'     => _u('/journal/stJournal'),
+                    'visible' => _ch('journal', 'stJournal')&& $isStd && PortalSettings::model()->getSettingFor(106)==1,
+                    'active'  => $_c=='journal' && $_a=='stJournal'
+                ),
+                array(
                     'label'   => $_l2.tt('Статистика посещаемости'),
                     'url'     => _u('/journal/attendanceStatistic'),
                     'visible' => _ch('journal', 'attendanceStatistic'),
