@@ -195,8 +195,8 @@ class CDateFormatter extends CComponent
 
 	/**
 	 * Get the year.
-	 * "yy" will return the last two digits of year.
-	 * "y...y" will pad the year with 0 in the front, e.g. "yyyyy" will generate "02008" for year 2008.
+ 	 * "yy" will return the last two digits of year.
+ 	 * "y...y" will pad the year with 0 in the front, e.g. "yyyyy" will generate "02008" for year 2008.
 	 * @param string $pattern a pattern.
 	 * @param array $date result of {@link CTimestamp::getdate}.
 	 * @return string formatted year
@@ -254,7 +254,7 @@ class CDateFormatter extends CComponent
 
 	/**
 	 * Get the day of the month.
-	 * "d" for non-padding, "dd" will always return 2 digits day numbers, e.g. 05.
+ 	 * "d" for non-padding, "dd" will always return 2 digits day numbers, e.g. 05.
 	 * @param string $pattern a pattern.
 	 * @param array $date result of {@link CTimestamp::getdate}.
 	 * @throws CException if "day" pattern is unknown
@@ -305,9 +305,9 @@ class CDateFormatter extends CComponent
 
 	/**
 	 * Get the day of the week.
-	 * "E", "EE", "EEE" will return abbreviated week day name, e.g. "Tues";
-	 * "EEEE" will return full week day name;
-	 * "EEEEE" will return the narrow week day name, e.g. "T";
+ 	 * "E", "EE", "EEE" will return abbreviated week day name, e.g. "Tues";
+ 	 * "EEEE" will return full week day name;
+ 	 * "EEEEE" will return the narrow week day name, e.g. "T";
 	 * @param string $pattern a pattern.
 	 * @param array $date result of {@link CTimestamp::getdate}.
 	 * @throws CException if "dayInWeek" pattern is unknown
@@ -526,7 +526,7 @@ class CDateFormatter extends CComponent
 		if($pattern[0]==='z' || $pattern[0]==='v')
 			return @date('T', @mktime($date['hours'], $date['minutes'], $date['seconds'], $date['mon'], $date['mday'], $date['year']));
 		elseif($pattern[0]==='Z')
-			return @date('O', @mktime($date['hours'], $date['minutes'], $date['seconds'], $date['mon'], $date['mday'], $date['year']));
+			return @date('P', @mktime($date['hours'], $date['minutes'], $date['seconds'], $date['mon'], $date['mday'], $date['year']));
 		else
 			throw new CException(Yii::t('yii','The pattern for time zone must be "z" or "v".'));
 	}

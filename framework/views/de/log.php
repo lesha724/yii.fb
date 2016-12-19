@@ -6,7 +6,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th style="width:120px">Zeitstempel</th>
+	    <th style="width:120px">Zeitstempel</th>
 		<th>Stufe</th>
 		<th>Kategorie</th>
 		<th>Nachricht</th>

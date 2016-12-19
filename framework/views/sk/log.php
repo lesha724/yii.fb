@@ -11,7 +11,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th style="width:120px">Čas</th>
+	    <th style="width:120px">Čas</th>
 		<th>Úroveň</th>
 		<th>Kategória</th>
 		<th>Zpráva</th>

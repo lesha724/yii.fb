@@ -8,7 +8,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th>程序</th>
+	    <th>程序</th>
 		<th>計數</th>
 		<th>總計 (秒)</th>
 		<th>平均 (秒)</th>

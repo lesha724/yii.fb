@@ -6,7 +6,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th>Proseduuri</th>
+	    <th>Proseduuri</th>
 		<th>Aika (s)</th>
 	</tr>
 <?php

@@ -67,14 +67,14 @@ PARAMETERS
 
 EXAMPLES
  * Generates CRUD for the Post model:
-		crud Post
+        crud Post
 
  * Generates CRUD for the Post model which belongs to module 'admin':
-		crud admin.models.Post
+        crud admin.models.Post
 
  * Generates CRUD for the Post model. The generated controller should
    belong to module 'admin', but not the model class:
-		crud Post admin/post
+        crud Post admin/post
 
 EOD;
 	}

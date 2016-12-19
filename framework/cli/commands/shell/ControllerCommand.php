@@ -51,19 +51,19 @@ PARAMETERS
 
 EXAMPLES
  * Generates the 'post' controller:
-		controller post
+        controller post
 
  * Generates the 'post' controller with additional actions 'contact'
    and 'about':
-		controller post contact about
+        controller post contact about
 
  * Generates the 'post' controller which should be located under
    the 'admin' subdirectory of the base controller path:
-		controller admin/post
+        controller admin/post
 
  * Generates the 'post' controller which should belong to
    the 'admin' module:
-		controller admin/post
+        controller admin/post
 
 NOTE: in the last two examples, the commands are the same, but
 the generated controller file is located under different directories.
@@ -151,10 +151,10 @@ EOD;
 		echo <<<EOD
 
 Controller '{$controllerID}' has been created in the following file:
-	$controllerFile
+    $controllerFile
 
 You may access it in the browser using the following URL:
-	http://hostname/path/to/index.php?r={$moduleID}{$controllerID}
+    http://hostname/path/to/index.php?r={$moduleID}{$controllerID}
 
 EOD;
 	}

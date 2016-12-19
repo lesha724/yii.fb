@@ -42,35 +42,35 @@ require_once dirname(__FILE__).'/../Renderer/Array.php';
 class Text_Highlighter_Renderer_JSON extends Text_Highlighter_Renderer_Array
 {
 
-	/**
-	 * Signals that no more tokens are available
-	 *
-	 * @abstract
-	 * @access public
-	 */
-	function finalize()
-	{
+    /**
+     * Signals that no more tokens are available
+     *
+     * @abstract
+     * @access public
+     */
+    function finalize()
+    {
 
-		parent::finalize();
-		$output = parent::getOutput();
+        parent::finalize();
+        $output = parent::getOutput();
 
-		$json_array = array();
+        $json_array = array();
 
-		foreach ($output AS $token) {
+        foreach ($output AS $token) {
 
-			if ($this->_enumerated) {
-				$json_array[] = '["' . $token[0] . '","' . $token[1] . '"]';
-			} else {
-				$key = key($token);
-				$json_array[] = '{"class": "' . $key . '","content":"' . $token[$key] . '"}';
-			}
+            if ($this->_enumerated) {
+                $json_array[] = '["' . $token[0] . '","' . $token[1] . '"]';
+            } else {
+                $key = key($token);
+                $json_array[] = '{"class": "' . $key . '","content":"' . $token[$key] . '"}';
+            }
 
-		}
+        }
 
-		$this->_output  = '['. implode(',', $json_array) .']';
-		$this->_output = str_replace("\n", '\n', $this->_output);
+        $this->_output  = '['. implode(',', $json_array) .']';
+        $this->_output = str_replace("\n", '\n', $this->_output);
 
-	}
+    }
 
 
 }

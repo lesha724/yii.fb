@@ -35,109 +35,109 @@
 
 class Text_Highlighter_Renderer
 {
-	/**
-	 * Renderer options
-	 *
-	 * @var array
-	 * @access protected
-	 */
-	public $_options = array();
+    /**
+     * Renderer options
+     *
+     * @var array
+     * @access protected
+     */
+    public $_options = array();
 
-	/**
-	 * Current language
-	 *
-	 * @var string
-	 * @access protected
-	 */
-	public $_language = '';
+    /**
+     * Current language
+     *
+     * @var string
+     * @access protected
+     */
+    public $_language = '';
 
-	/**
-	 * Constructor
-	 *
-	 * @access public
-	 *
-	 * @param  array $options  Rendering options. Renderer-specific.
-	 */
-	function __construct($options = array())
-	{
-		$this->_options = $options;
-	}
+    /**
+     * Constructor
+     *
+     * @access public
+     *
+     * @param  array $options  Rendering options. Renderer-specific.
+     */
+    function __construct($options = array())
+    {
+        $this->_options = $options;
+    }
 
-	/**
-	 * Resets renderer state
-	 *
-	 * @access public
-	 *
-	 * @param  array $options  Rendering options. Renderer-specific.
-	 */
-	function reset()
-	{
-		return;
-	}
+    /**
+     * Resets renderer state
+     *
+     * @access public
+     *
+     * @param  array $options  Rendering options. Renderer-specific.
+     */
+    function reset()
+    {
+        return;
+    }
 
-	/**
-	 * Preprocesses code
-	 *
-	 * @access public
-	 *
-	 * @param  string $str Code to preprocess
-	 * @return string Preprocessed code
-	 */
-	function preprocess($str)
-	{
-		return $str;
-	}
+    /**
+     * Preprocesses code
+     *
+     * @access public
+     *
+     * @param  string $str Code to preprocess
+     * @return string Preprocessed code
+     */
+    function preprocess($str)
+    {
+        return $str;
+    }
 
-	/**
-	 * Accepts next token
-	 *
-	 * @abstract
-	 * @access public
-	 *
-	 * @param  string $class   Token class
-	 * @param  string $content Token content
-	 */
-	function acceptToken($class, $content)
-	{
-		return;
-	}
+    /**
+     * Accepts next token
+     *
+     * @abstract
+     * @access public
+     *
+     * @param  string $class   Token class
+     * @param  string $content Token content
+     */
+    function acceptToken($class, $content)
+    {
+        return;
+    }
 
-	/**
-	 * Signals that no more tokens are available
-	 *
-	 * @access public
-	 *
-	 */
-	function finalize()
-	{
-		return;
-	}
+    /**
+     * Signals that no more tokens are available
+     *
+     * @access public
+     *
+     */
+    function finalize()
+    {
+        return;
+    }
 
-	/**
-	 * Get generated output
-	 *
-	 * @abstract
-	 * @return mixed Renderer-specific
-	 * @access public
-	 *
-	 */
-	function getOutput()
-	{
-		return;
-	}
+    /**
+     * Get generated output
+     *
+     * @abstract
+     * @return mixed Renderer-specific
+     * @access public
+     *
+     */
+    function getOutput()
+    {
+        return;
+    }
 
-	/**
-	 * Set current language
-	 *
-	 * @abstract
-	 * @return void
-	 * @access public
-	 *
-	 */
-	function setCurrentLanguage($lang)
-	{
-		$this->_language = $lang;
-	}
+    /**
+     * Set current language
+     *
+     * @abstract
+     * @return void
+     * @access public
+     *
+     */
+    function setCurrentLanguage($lang)
+    {
+        $this->_language = $lang;
+    }
 
 }
 

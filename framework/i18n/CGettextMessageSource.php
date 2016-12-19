@@ -11,7 +11,7 @@
 /**
  * CGettextMessageSource represents a message source that is based on GNU Gettext.
  *
- * Each CGettextMessageSource instance represents the message tranlations
+ * Each CGettextMessageSource instance represents the message translations
  * for a single domain. And each message category represents a message context
  * in Gettext. Translated messages are stored as either a MO or PO file,
  * depending on the {@link useMoFile} property value.
@@ -83,11 +83,11 @@ class CGettextMessageSource extends CMessageSource
 	 */
 	protected function loadMessages($category, $language)
 	{
-		$messageFile=$this->basePath . DIRECTORY_SEPARATOR . $language . DIRECTORY_SEPARATOR . $this->catalog;
-		if($this->useMoFile)
-			$messageFile.=self::MO_FILE_EXT;
-		else
-			$messageFile.=self::PO_FILE_EXT;
+        $messageFile=$this->basePath . DIRECTORY_SEPARATOR . $language . DIRECTORY_SEPARATOR . $this->catalog;
+        if($this->useMoFile)
+        	$messageFile.=self::MO_FILE_EXT;
+        else
+        	$messageFile.=self::PO_FILE_EXT;
 
 		if ($this->cachingDuration > 0 && $this->cacheID!==false && ($cache=Yii::app()->getComponent($this->cacheID))!==null)
 		{

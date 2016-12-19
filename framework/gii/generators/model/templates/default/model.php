@@ -25,28 +25,28 @@
 <?php foreach($relations as $name=>$relation): ?>
  * @property <?php
 	if (preg_match("~^array\(self::([^,]+), '([^']+)', '([^']+)'\)$~", $relation, $matches))
-	{
-		$relationType = $matches[1];
-		$relationModel = $matches[2];
+    {
+        $relationType = $matches[1];
+        $relationModel = $matches[2];
 
-		switch($relationType){
-			case 'HAS_ONE':
-				echo $relationModel.' $'.$name."\n";
-			break;
-			case 'BELONGS_TO':
-				echo $relationModel.' $'.$name."\n";
-			break;
-			case 'HAS_MANY':
-				echo $relationModel.'[] $'.$name."\n";
-			break;
-			case 'MANY_MANY':
-				echo $relationModel.'[] $'.$name."\n";
-			break;
-			default:
-				echo 'mixed $'.$name."\n";
-		}
+        switch($relationType){
+            case 'HAS_ONE':
+                echo $relationModel.' $'.$name."\n";
+            break;
+            case 'BELONGS_TO':
+                echo $relationModel.' $'.$name."\n";
+            break;
+            case 'HAS_MANY':
+                echo $relationModel.'[] $'.$name."\n";
+            break;
+            case 'MANY_MANY':
+                echo $relationModel.'[] $'.$name."\n";
+            break;
+            default:
+                echo 'mixed $'.$name."\n";
+        }
 	}
-	?>
+    ?>
 <?php endforeach; ?>
 <?php endif; ?>
  */
@@ -98,7 +98,7 @@ class <?php echo $modelClass; ?> extends <?php echo $this->baseClass."\n"; ?>
 	{
 		return array(
 <?php foreach($labels as $name=>$label): ?>
-			<?php echo "'$name' => '$label',\n"; ?>
+			<?php echo "'".$name."' => '".str_replace("'","\'",$label)."',\n"; ?>
 <?php endforeach; ?>
 		);
 	}

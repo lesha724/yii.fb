@@ -6,7 +6,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th style="width:120px">זמן</th>
+	    <th style="width:120px">זמן</th>
 		<th>רמה</th>
 		<th>קטגוריה</th>
 		<th>הודעה</th>

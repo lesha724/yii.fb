@@ -8,7 +8,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th>Proseduuri</th>
+	    <th>Proseduuri</th>
 		<th>Lukumäärä</th>
 		<th>Yhteensä (s)</th>
 		<th>Keskim. (s)</th>

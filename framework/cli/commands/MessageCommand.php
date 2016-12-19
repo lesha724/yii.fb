@@ -42,25 +42,28 @@ PARAMETERS
    - sourcePath: string, root directory of all source files.
    - messagePath: string, root directory containing message translations.
    - languages: array, list of language codes that the extracted messages
-	 should be translated to. For example, array('zh_cn','en_au').
+     should be translated to. For example, array('zh_cn','en_au').
    - fileTypes: array, a list of file extensions (e.g. 'php', 'xml').
-	 Only the files whose extension name can be found in this list
-	 will be processed. If empty, all files will be processed.
+     Only the files whose extension name can be found in this list
+     will be processed. If empty, all files will be processed.
    - exclude: array, a list of directory and file exclusions. Each
-	 exclusion can be either a name or a path. If a file or directory name
-	 or path matches the exclusion, it will not be copied. For example,
-	 an exclusion of '.svn' will exclude all files and directories whose
-	 name is '.svn'. And an exclusion of '/a/b' will exclude file or
-	 directory 'sourcePath/a/b'.
+     exclusion can be either a name or a path. If a file or directory name
+     or path matches the exclusion, it will not be copied. For example,
+     an exclusion of '.svn' will exclude all files and directories whose
+     name is '.svn'. And an exclusion of '/a/b' will exclude file or
+     directory 'sourcePath/a/b'.
    - translator: the name of the function for translating messages.
-	 Defaults to 'Yii::t'. This is used as a mark to find messages to be
-	 translated. Accepts both string for single function name or array for
-	 multiple function names.
+     Defaults to 'Yii::t'. This is used as a mark to find messages to be
+     translated. Accepts both string for single function name or array for
+     multiple function names.
    - overwrite: if message file must be overwritten with the merged messages.
    - removeOld: if message no longer needs translation it will be removed,
-	 instead of being enclosed between a pair of '@@' marks.
+     instead of being enclosed between a pair of '@@' marks.
    - sort: sort messages by key when merging, regardless of their translation
-	 state (new, obsolete, translated.)
+     state (new, obsolete, translated.)
+   - fileHeader: A boolean indicating whether the file should contain a default
+     comment that explains the message file or a string representing
+     some PHP code or comment to add before the return tag in the message file.
 
 EOD;
 	}
@@ -98,6 +101,9 @@ EOD;
 		if(!isset($sort))
 			$sort = false;
 
+		if(!isset($fileHeader))
+			$fileHeader = true;
+
 		$options=array();
 		if(isset($fileTypes))
 			$options['fileTypes']=$fileTypes;
@@ -117,7 +123,7 @@ EOD;
 			foreach($messages as $category=>$msgs)
 			{
 				$msgs=array_values(array_unique($msgs));
-				$this->generateMessageFile($msgs,$dir.DIRECTORY_SEPARATOR.$category.'.php',$overwrite,$removeOld,$sort);
+				$this->generateMessageFile($msgs,$dir.DIRECTORY_SEPARATOR.$category.'.php',$overwrite,$removeOld,$sort,$fileHeader);
 			}
 		}
 	}
@@ -147,7 +153,7 @@ EOD;
 		return $messages;
 	}
 
-	protected function generateMessageFile($messages,$fileName,$overwrite,$removeOld,$sort)
+	protected function generateMessageFile($messages,$fileName,$overwrite,$removeOld,$sort,$fileHeader)
 	{
 		echo "Saving messages to $fileName...";
 		if(is_file($fileName))
@@ -201,8 +207,8 @@ EOD;
 			echo "saved.\n";
 		}
 		$array=str_replace("\r",'',var_export($merged,true));
-		$content=<<<EOD
-<?php
+		if($fileHeader===true)
+			$fileHeader=<<<EOD
 /**
  * Message translations.
  *
@@ -220,9 +226,16 @@ EOD;
  *
  * NOTE, this file must be saved in UTF-8 encoding.
  */
+EOD;
+		elseif($fileHeader===false)
+			$fileHeader='';
+
+		file_put_contents($fileName,<<<EOD
+<?php
+$fileHeader
 return $array;
 
-EOD;
-		file_put_contents($fileName, $content);
+EOD
+		);
 	}
 }

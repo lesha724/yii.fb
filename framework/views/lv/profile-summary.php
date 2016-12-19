@@ -8,7 +8,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th>Procedūra</th>
+	    <th>Procedūra</th>
 		<th>Izsaukumu skaits</th>
 		<th>Kopējais (s)</th>
 		<th>Vidējais (s)</th>

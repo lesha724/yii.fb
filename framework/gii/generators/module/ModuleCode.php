@@ -32,10 +32,10 @@ EOD;
 		$code=<<<EOD
 <?php
 return array(
-	'modules'=>array(
-		'{$this->moduleID}',
-	),
-	......
+    'modules'=>array(
+        '{$this->moduleID}',
+    ),
+    ......
 );
 EOD;
 
@@ -67,7 +67,7 @@ EOD;
 			{
 				if(CFileHelper::getExtension($file)==='php')
 					$content=$this->render($file);
-				elseif(basename($file)==='.yii')  // an empty directory
+				elseif(basename($file)==='.gitkeep')  // an empty directory
 				{
 					$file=dirname($file);
 					$content=null;

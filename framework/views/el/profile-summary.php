@@ -8,7 +8,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th>Διαδικασία</th>
+	    <th>Διαδικασία</th>
 		<th>Αριθμός</th>
 		<th>Σύνολο (δευτ.)</th>
 		<th>Μέση τιμή (δευτ.)</th>

@@ -8,7 +8,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th>Процедура</th>
+	    <th>Процедура</th>
 		<th>Номер</th>
 		<th>Всього (с)</th>
 		<th>Середн. (с)</th>

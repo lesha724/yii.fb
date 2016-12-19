@@ -43,51 +43,51 @@ class Text_Highlighter_Renderer_XML extends Text_Highlighter_Renderer_Array
 {
 
 
-	/**
-	 * Options for XML_Serializer
-	 *
-	 * @access private
-	 * @var array
-	 */
-	var $_serializer_options = array();
+    /**
+     * Options for XML_Serializer
+     *
+     * @access private
+     * @var array
+     */
+    var $_serializer_options = array();
 
 
-	/**
-	 * Resets renderer state
-	 *
-	 * Descendents of Text_Highlighter call this method from the constructor,
-	 * passing $options they get as parameter.
-	 *
-	 * @access protected
-	 */
-	function reset()
-	{
-		parent::reset();
-		if (isset($this->_options['xml_serializer'])) {
-			$this->_serializer_options = $this->_options['xml_serializer'];
-		}
-	}
+    /**
+     * Resets renderer state
+     *
+     * Descendents of Text_Highlighter call this method from the constructor,
+     * passing $options they get as parameter.
+     *
+     * @access protected
+     */
+    function reset()
+    {
+        parent::reset();
+        if (isset($this->_options['xml_serializer'])) {
+            $this->_serializer_options = $this->_options['xml_serializer'];
+        }
+    }
 
 
-	/**
-	 * Signals that no more tokens are available
-	 *
-	 * @abstract
-	 * @access public
-	 */
-	function finalize()
-	{
+    /**
+     * Signals that no more tokens are available
+     *
+     * @abstract
+     * @access public
+     */
+    function finalize()
+    {
 
-		// call parent's finalize(), then serialize array into XML
-		parent::finalize();
-		$output = parent::getOutput();
+        // call parent's finalize(), then serialize array into XML
+        parent::finalize();
+        $output = parent::getOutput();
 
-		$serializer = new XML_Serializer($this->_serializer_options);
-		$result = $serializer->serialize($output);
-		if ($result === true) {
-			$this->_output = $serializer->getSerializedData();
-		}
-	}
+        $serializer = new XML_Serializer($this->_serializer_options);
+        $result = $serializer->serialize($output);
+        if ($result === true) {
+            $this->_output = $serializer->getSerializedData();
+        }
+    }
 
 
 }

@@ -8,7 +8,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th>Prosedur</th>
+	    <th>Prosedur</th>
 		<th>Jumlah</th>
 		<th>Total</th>
 		<th>Rata-Rata</th>

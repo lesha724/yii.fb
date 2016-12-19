@@ -8,7 +8,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th>Fonction</th>
+	    <th>Fonction</th>
 		<th>Nb</th>
 		<th>Total (s)</th>
 		<th>Moy. (s)</th>

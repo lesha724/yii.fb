@@ -6,7 +6,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th style="width:120px">时间</th>
+	    <th style="width:120px">时间</th>
 		<th>等级</th>
 		<th>类别</th>
 		<th>信息</th>

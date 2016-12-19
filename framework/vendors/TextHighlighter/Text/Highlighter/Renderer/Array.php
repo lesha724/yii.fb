@@ -53,139 +53,139 @@ require_once dirname(__FILE__).'/../Renderer.php';
 class Text_Highlighter_Renderer_Array extends Text_Highlighter_Renderer
 {
 
-	/**#@+
-	 * @access private
-	 */
+    /**#@+
+     * @access private
+     */
 
-	/**
-	 * Tab size
-	 *
-	 * @var integer
-	 */
-	var $_tabsize = 4;
+    /**
+     * Tab size
+     *
+     * @var integer
+     */
+    var $_tabsize = 4;
 
-	/**
-	 * Should htmlentities() will be called
-	 *
-	 * @var boolean
-	 */
-	var $_htmlspecialchars = true;
+    /**
+     * Should htmlentities() will be called
+     *
+     * @var boolean
+     */
+    var $_htmlspecialchars = true;
 
-	/**
-	 * Enumerated or associative array
-	 *
-	 * @var integer
-	 */
-	var $_enumerated = false;
+    /**
+     * Enumerated or associative array
+     *
+     * @var integer
+     */
+    var $_enumerated = false;
 
-	/**
-	 * Array containing highlighting rules
-	 *
-	 * @var array
-	 */
-	var $_output = array();
+    /**
+     * Array containing highlighting rules
+     *
+     * @var array
+     */
+    var $_output = array();
 
-	/**#@-*/
+    /**#@-*/
 
-	/**
-	 * Preprocesses code
-	 *
-	 * @access public
-	 *
-	 * @param  string $str Code to preprocess
-	 * @return string Preprocessed code
-	 */
-	function preprocess($str)
-	{
-		// normalize whitespace and tabs
-		$str = str_replace("\r\n","\n", $str);
-		// some browsers refuse to display empty lines
-		$str = preg_replace('~^$~m'," ", $str);
-		$str = str_replace("\t",str_repeat(' ', $this->_tabsize), $str);
-		return rtrim($str);
-	}
-
-
-	/**
-	 * Resets renderer state
-	 *
-	 * Descendents of Text_Highlighter call this method from the constructor,
-	 * passing $options they get as parameter.
-	 *
-	 * @access protected
-	 */
-	function reset()
-	{
-		$this->_output = array();
-		$this->_lastClass = 'default';
-		if (isset($this->_options['tabsize'])) {
-			$this->_tabsize = $this->_options['tabsize'];
-		}
-		if (isset($this->_options['htmlspecialchars'])) {
-			$this->_htmlspecialchars = $this->_options['htmlspecialchars'];
-		}
-		if (isset($this->_options['enumerated'])) {
-			$this->_enumerated = $this->_options['enumerated'];
-		}
-	}
+    /**
+     * Preprocesses code
+     *
+     * @access public
+     *
+     * @param  string $str Code to preprocess
+     * @return string Preprocessed code
+     */
+    function preprocess($str)
+    {
+        // normalize whitespace and tabs
+        $str = str_replace("\r\n","\n", $str);
+        // some browsers refuse to display empty lines
+        $str = preg_replace('~^$~m'," ", $str);
+        $str = str_replace("\t",str_repeat(' ', $this->_tabsize), $str);
+        return rtrim($str);
+    }
 
 
-
-	/**
-	 * Accepts next token
-	 *
-	 * @abstract
-	 * @access public
-	 * @param  string $class   Token class
-	 * @param  string $content Token content
-	 */
-	function acceptToken($class, $content)
-	{
-
-
-		$theClass = $this->_getFullClassName($class);
-		if ($this->_htmlspecialchars) {
-			$content = htmlspecialchars($content);
-		}
-		if ($this->_enumerated) {
-			$this->_output[] = array($class, $content);
-		} else {
-			$this->_output[][$class] = $content;
-		}
-		$this->_lastClass = $class;
-
-	}
+    /**
+     * Resets renderer state
+     *
+     * Descendents of Text_Highlighter call this method from the constructor,
+     * passing $options they get as parameter.
+     *
+     * @access protected
+     */
+    function reset()
+    {
+        $this->_output = array();
+        $this->_lastClass = 'default';
+        if (isset($this->_options['tabsize'])) {
+            $this->_tabsize = $this->_options['tabsize'];
+        }
+        if (isset($this->_options['htmlspecialchars'])) {
+            $this->_htmlspecialchars = $this->_options['htmlspecialchars'];
+        }
+        if (isset($this->_options['enumerated'])) {
+            $this->_enumerated = $this->_options['enumerated'];
+        }
+    }
 
 
-	/**
-	 * Given a CSS class name, returns the class name
-	 * with language name prepended, if necessary
-	 *
-	 * @access private
-	 *
-	 * @param  string $class   Token class
-	 */
-	function _getFullClassName($class)
-	{
-		if (!empty($this->_options['use_language'])) {
-			$theClass = $this->_language . '-' . $class;
-		} else {
-			$theClass = $class;
-		}
-		return $theClass;
-	}
 
-	/**
-	 * Get generated output
-	 *
-	 * @abstract
-	 * @return array Highlighted code as an array
-	 * @access public
-	 */
-	function getOutput()
-	{
-		return $this->_output;
-	}
+    /**
+     * Accepts next token
+     *
+     * @abstract
+     * @access public
+     * @param  string $class   Token class
+     * @param  string $content Token content
+     */
+    function acceptToken($class, $content)
+    {
+
+
+        $theClass = $this->_getFullClassName($class);
+        if ($this->_htmlspecialchars) {
+            $content = htmlspecialchars($content);
+        }
+        if ($this->_enumerated) {
+            $this->_output[] = array($class, $content);
+        } else {
+            $this->_output[][$class] = $content;
+        }
+        $this->_lastClass = $class;
+
+    }
+
+
+    /**
+     * Given a CSS class name, returns the class name
+     * with language name prepended, if necessary
+     *
+     * @access private
+     *
+     * @param  string $class   Token class
+     */
+    function _getFullClassName($class)
+    {
+        if (!empty($this->_options['use_language'])) {
+            $theClass = $this->_language . '-' . $class;
+        } else {
+            $theClass = $class;
+        }
+        return $theClass;
+    }
+
+    /**
+     * Get generated output
+     *
+     * @abstract
+     * @return array Highlighted code as an array
+     * @access public
+     */
+    function getOutput()
+    {
+        return $this->_output;
+    }
 }
 
 /*

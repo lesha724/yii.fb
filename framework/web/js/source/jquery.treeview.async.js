@@ -48,8 +48,8 @@ function load(settings, root, child, container) {
 		success: function(response) {
 			child.empty();
 			$.each(response, createNode, [child]);
-			$(container).treeview({add: child});
-		}
+	        $(container).treeview({add: child});
+	    }
 	}, settings.ajax));
 	/*
 	$.getJSON(settings.url, {root: root}, function(response) {
@@ -78,9 +78,9 @@ function load(settings, root, child, container) {
 		}
 		child.empty();
 		$.each(response, createNode, [child]);
-		$(container).treeview({add: child});
-	});
-	*/
+        $(container).treeview({add: child});
+    });
+    */
 }
 
 var proxied = $.fn.treeview;

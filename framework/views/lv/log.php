@@ -6,7 +6,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th style="width:120px">Laiks</th>
+	    <th style="width:120px">Laiks</th>
 		<th>Līmenis</th>
 		<th>Kategorija</th>
 		<th>Ziņojums</th>

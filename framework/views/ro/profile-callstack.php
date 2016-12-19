@@ -6,7 +6,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th>Procedura</th>
+	    <th>Procedura</th>
 		<th>Timp(i)</th>
 	</tr>
 <?php

@@ -6,7 +6,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th>Διαδικασία</th>
+	    <th>Διαδικασία</th>
 		<th>Χρόνος (δευτ.)</th>
 	</tr>
 <?php

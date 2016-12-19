@@ -8,7 +8,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th>Funksjon</th>
+	    <th>Funksjon</th>
 		<th>Antall</th>
 		<th>Totalt (sek)</th>
 		<th>Gjennomsnitt (sek)</th>

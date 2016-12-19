@@ -8,7 +8,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th>プロシージャ</th>
+	    <th>プロシージャ</th>
 		<th>回数</th>
 		<th>合計 (s)</th>
 		<th>平均 (s)</th>

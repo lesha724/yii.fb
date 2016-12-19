@@ -42,8 +42,8 @@ h3
 
 #content
 {
-	padding: 20px;
-	min-height: 400px;
+    padding: 20px;
+    min-height: 400px;
 }
 
 #sidebar
@@ -202,7 +202,7 @@ div.form fieldset
 	border: 1px solid #DDD;
 	padding: 10px;
 	margin: 0 0 10px 0;
-	-moz-border-radius:7px;
+    -moz-border-radius:7px;
 }
 
 div.form label
@@ -325,10 +325,10 @@ div.wide.form .buttons, div.wide.form .hint, div.wide.form .errorMessage
 div.form .tooltip
 {
 	display: none;
-	background-color:#EFFDFF;
-	border:1px solid #79B4DC;
-	padding: 10px;
-	width: 300px;
+    background-color:#EFFDFF;
+    border:1px solid #79B4DC;
+    padding: 10px;
+    width: 300px;
 }
 
 div.form .tooltip ul

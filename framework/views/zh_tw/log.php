@@ -6,7 +6,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th style="width:120px">時間戳</th>
+	    <th style="width:120px">時間戳</th>
 		<th>等級</th>
 		<th>分類</th>
 		<th>訊息</th>

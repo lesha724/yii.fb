@@ -6,7 +6,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th style="width:120px">Tid</th>
+	    <th style="width:120px">Tid</th>
 		<th>Nivå</th>
 		<th>Kategori</th>
 		<th>Melding</th>

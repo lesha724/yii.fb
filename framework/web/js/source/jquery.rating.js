@@ -26,7 +26,7 @@
 				var args = arguments;
 				return this.each(function(){
 					$.fn.rating.apply($(this), args);
-	});
+    });
 			};
 			// Invoke API method handler
 			$.fn.rating[arguments[0]].apply(this, $.makeArray(arguments).slice(1) || []);
@@ -167,8 +167,8 @@
 			
 			// set current select for links
 			if(this.nodeName=="A"){
-	if($(this).hasClass('selected'))
-	 control.current = star;
+    if($(this).hasClass('selected'))
+     control.current = star;
    };
 			
 			// hide input element
@@ -177,7 +177,7 @@
 			// backward compatibility, form element to plugin
 			input.on('change.rating',function(event){
 				if(event.selfTriggered) return false;
-	$(this).rating('select');
+    $(this).rating('select');
    });
 			
 			// attach reference to star to input element and vice-versa
@@ -275,16 +275,16 @@
 			if(typeof value!='undefined' || this.length>1){
 			 // select by index (0 based)
 				if(typeof value=='number')
-			 return $(control.stars[value]).rating('select',undefined,wantCallBack);
+ 			 return $(control.stars[value]).rating('select',undefined,wantCallBack);
 				// select by literal value (must be passed as a string
 				if(typeof value=='string'){
 					//return
 					$.each(control.stars, function(){
-					//console.log($(this).data('rating.input'), $(this).data('rating.input').val(), value, $(this).data('rating.input').val()==value?'BINGO!':'');
+ 					//console.log($(this).data('rating.input'), $(this).data('rating.input').val(), value, $(this).data('rating.input').val()==value?'BINGO!':'');
 						if($(this).data('rating.input').val()==value) $(this).rating('select',undefined,wantCallBack);
 					});
 					// don't break the chain
-			return this;
+  			return this;
 				};
 			}
 			else{

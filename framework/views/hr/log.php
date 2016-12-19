@@ -6,7 +6,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th style="width:120px">Vremenska oznaka</th>
+	    <th style="width:120px">Vremenska oznaka</th>
 		<th>Razina</th>
 		<th>Kategorija</th>
 		<th>Poruka</th>

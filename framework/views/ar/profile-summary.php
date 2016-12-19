@@ -8,7 +8,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th>الإجراء</th>
+	    <th>الإجراء</th>
 		<th>العدد</th>
 		<th>المجموع (ث)</th>
 		<th>المعدل (ث)</th>

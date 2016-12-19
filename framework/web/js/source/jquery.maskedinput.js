@@ -6,10 +6,10 @@
 */
 (function($) {
 	function getPasteEvent() {
-	var el = document.createElement('input'),
-		name = 'onpaste';
-	el.setAttribute(name, '');
-	return (typeof el[name] === 'function')?'paste':'input';             
+    var el = document.createElement('input'),
+        name = 'onpaste';
+    el.setAttribute(name, '');
+    return (typeof el[name] === 'function')?'paste':'input';             
 }
 
 var pasteEventName = getPasteEvent() + ".mask",

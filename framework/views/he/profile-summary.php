@@ -8,7 +8,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th>פרוצדורה</th>
+	    <th>פרוצדורה</th>
 		<th>כמות</th>
 		<th>סך הכל</th>
 		<th>ממוצע</th>

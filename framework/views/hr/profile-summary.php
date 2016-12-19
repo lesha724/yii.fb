@@ -8,7 +8,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th>Postupak</th>
+	    <th>Postupak</th>
 		<th>Izbrojati</th>
 		<th>Ukupno (s)</th>
 		<th>Prosjek (s)</th>

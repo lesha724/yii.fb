@@ -6,7 +6,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th>程序</th>
+	    <th>程序</th>
 		<th>時間 (秒)</th>
 	</tr>
 <?php

@@ -6,7 +6,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th>Postupak</th>
+	    <th>Postupak</th>
 		<th>Time (s)</th>
 	</tr>
 <?php

@@ -26,9 +26,11 @@ class CMssqlSchema extends CDbSchema
 	 */
 	public $columnTypes=array(
 		'pk' => 'int IDENTITY PRIMARY KEY',
+		'bigpk' => 'bigint IDENTITY PRIMARY KEY',
 		'string' => 'varchar(255)',
 		'text' => 'text',
 		'integer' => 'int',
+		'bigint' => 'bigint',
 		'float' => 'float',
 		'decimal' => 'decimal',
 		'datetime' => 'datetime',
@@ -236,7 +238,7 @@ EOD;
 		//From http://msdn2.microsoft.com/en-us/library/aa175805(SQL.80).aspx
 		$sql = <<<EOD
 		SELECT
-			 KCU1.CONSTRAINT_NAME AS 'FK_CONSTRAINT_NAME'
+		     KCU1.CONSTRAINT_NAME AS 'FK_CONSTRAINT_NAME'
 		   , KCU1.TABLE_NAME AS 'FK_TABLE_NAME'
 		   , KCU1.COLUMN_NAME AS 'FK_COLUMN_NAME'
 		   , KCU1.ORDINAL_POSITION AS 'FK_ORDINAL_POSITION'

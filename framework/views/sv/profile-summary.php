@@ -8,7 +8,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th>Procedur</th>
+	    <th>Procedur</th>
 		<th>Antal</th>
 		<th>Total (s)</th>
 		<th>Medel. (s)</th>

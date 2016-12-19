@@ -68,110 +68,110 @@ require_once dirname(__FILE__).'/../Renderer/Array.php';
 class Text_Highlighter_Renderer_HtmlTags extends Text_Highlighter_Renderer_Array
 {
 
-	/**#@+
-	 * @access private
-	 */
+    /**#@+
+     * @access private
+     */
 
-	/**
-	 * Line numbering - will use 'ol' tag
-	 *
-	 * @var boolean
-	 */
-	var $_numbers = false;
+    /**
+     * Line numbering - will use 'ol' tag
+     *
+     * @var boolean
+     */
+    var $_numbers = false;
 
-	/**
-	 * HTML tags map
-	 *
-	 * @var array
-	 */
-	var $_hilite_tags = array(
-		'default'    => '',
-		'code'       => '',
-		'brackets'   => 'b',
-		'comment'    => 'i',
-		'mlcomment'  => 'i',
-		'quotes'     => '',
-		'string'     => 'i',
-		'identifier' => 'b',
-		'builtin'    => 'b',
-		'reserved'   => 'u',
-		'inlinedoc'  => 'i',
-		'var'        => 'b',
-		'url'        => 'i',
-		'special'    => '',
-		'number'     => '',
-		'inlinetags' => '',
-	);
+    /**
+     * HTML tags map
+     *
+     * @var array
+     */
+    var $_hilite_tags = array(
+        'default'    => '',
+        'code'       => '',
+        'brackets'   => 'b',
+        'comment'    => 'i',
+        'mlcomment'  => 'i',
+        'quotes'     => '',
+        'string'     => 'i',
+        'identifier' => 'b',
+        'builtin'    => 'b',
+        'reserved'   => 'u',
+        'inlinedoc'  => 'i',
+        'var'        => 'b',
+        'url'        => 'i',
+        'special'    => '',
+        'number'     => '',
+        'inlinetags' => '',
+    );
 
-	/**#@-*/
+    /**#@-*/
 
-	/**
-	 * Resets renderer state
-	 *
-	 * @access protected
-	 *
-	 *
-	 * Descendents of Text_Highlighter call this method from the constructor,
-	 * passing $options they get as parameter.
-	 */
-	function reset()
-	{
-		parent::reset();
-		if (isset($this->_options['numbers'])) {
-			$this->_numbers = $this->_options['numbers'];
-		}
-		if (isset($this->_options['tags'])) {
-			$this->_hilite_tags = array_merge($this->_tags, $this->_options['tags']);
-		}
-	}
-
-
-	/**
-	 * Signals that no more tokens are available
-	 *
-	 * @abstract
-	 * @access public
-	 *
-	 */
-	function finalize()
-	{
-
-		// get parent's output
-		parent::finalize();
-		$output = parent::getOutput();
-
-		$html_output = '';
-
-		// loop through each class=>content pair
-		foreach ($output AS $token) {
-
-			if ($this->_enumerated) {
-				$class = $token[0];
-				$content = $token[1];
-			} else {
-				$key = key($token);
-				$class = $key;
-				$content = $token[$key];
-			}
-
-			$iswhitespace = ctype_space($content);
-			if (!$iswhitespace && !empty($this->_hilite_tags[$class])) {
-				$html_output .= '<'. $this->_hilite_tags[$class] . '>' . $content . '</'. $this->_hilite_tags[$class] . '>';
-			} else {
-				$html_output .= $content;
-			}
-		}
+    /**
+     * Resets renderer state
+     *
+     * @access protected
+     *
+     *
+     * Descendents of Text_Highlighter call this method from the constructor,
+     * passing $options they get as parameter.
+     */
+    function reset()
+    {
+        parent::reset();
+        if (isset($this->_options['numbers'])) {
+            $this->_numbers = $this->_options['numbers'];
+        }
+        if (isset($this->_options['tags'])) {
+            $this->_hilite_tags = array_merge($this->_tags, $this->_options['tags']);
+        }
+    }
 
 
-		if ($this->_numbers) {
-			/* additional whitespace for browsers that do not display
-			empty list items correctly */
-			$html_output = '<li>&nbsp;' . str_replace("\n", "</li>\n<li>&nbsp;", $html_output) . '</li>';
-			$this->_output = '<ol>' . str_replace(' ', '&nbsp;', $html_output) . '</ol>';
-		} else {
-			$this->_output = '<pre>' . $html_output . '</pre>';
-		}
-	}
+    /**
+     * Signals that no more tokens are available
+     *
+     * @abstract
+     * @access public
+     *
+     */
+    function finalize()
+    {
+
+        // get parent's output
+        parent::finalize();
+        $output = parent::getOutput();
+
+        $html_output = '';
+
+        // loop through each class=>content pair
+        foreach ($output AS $token) {
+
+            if ($this->_enumerated) {
+                $class = $token[0];
+                $content = $token[1];
+            } else {
+                $key = key($token);
+                $class = $key;
+                $content = $token[$key];
+            }
+
+            $iswhitespace = ctype_space($content);
+            if (!$iswhitespace && !empty($this->_hilite_tags[$class])) {
+                $html_output .= '<'. $this->_hilite_tags[$class] . '>' . $content . '</'. $this->_hilite_tags[$class] . '>';
+            } else {
+                $html_output .= $content;
+            }
+        }
+
+
+        if ($this->_numbers) {
+            /* additional whitespace for browsers that do not display
+            empty list items correctly */
+            $html_output = '<li>&nbsp;' . str_replace("\n", "</li>\n<li>&nbsp;", $html_output) . '</li>';
+            $this->_output = '<ol>' . str_replace(' ', '&nbsp;', $html_output) . '</ol>';
+        } else {
+            $this->_output = '<pre>' . $html_output . '</pre>';
+        }
+    }
 
 
 }

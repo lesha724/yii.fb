@@ -6,7 +6,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th style="width:120px">Heure</th>
+	    <th style="width:120px">Heure</th>
 		<th>Niveau</th>
 		<th>Categorie</th>
 		<th>Message</th>

@@ -19,9 +19,9 @@ del{text-decoration:line-through;}
 table{border-collapse:collapse;border-spacing:0;}
 
 body {
-	font-family: Verdana, 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic ProN', sans-serif;
+    font-family: Verdana, 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic ProN', sans-serif;
 	font-weight:normal;
-	font-size:9pt;
+    font-size:9pt;
 	color: #000;
 	background: #fff;
 }
@@ -41,13 +41,13 @@ h2 {
 }
 
 h3 {
-	font-weight:bold;
+    font-weight:bold;
 	font-size: 11pt;
 }
 
 pre {
-	font-family: Menlo, Consolas, "Lucida Console", 'ＭＳ Ｐゴシック', Monospace;
-	font-weight:bold;
+    font-family: Menlo, Consolas, "Lucida Console", 'ＭＳ Ｐゴシック', Monospace;
+    font-weight:bold;
 	font-size: 11pt;
 }
 

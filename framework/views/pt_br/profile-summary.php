@@ -8,7 +8,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th>Procedimento</th>
+	    <th>Procedimento</th>
 		<th>Contagem</th>
 		<th>Total (s)</th>
 		<th>M�d. (s)</th>

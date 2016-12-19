@@ -6,7 +6,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th>プロシージャ</th>
+	    <th>プロシージャ</th>
 		<th>時間 (s)</th>
 	</tr>
 <?php

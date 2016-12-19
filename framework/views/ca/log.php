@@ -6,7 +6,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th style="width:120px">Estampa de temps (Timestamp)</th>
+	    <th style="width:120px">Estampa de temps (Timestamp)</th>
 		<th>Nivell</th>
 		<th>Categoria</th>
 		<th>Missatge</th>

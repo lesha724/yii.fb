@@ -6,7 +6,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th style="width:120px">Laiko žyma</th>
+	    <th style="width:120px">Laiko žyma</th>
 		<th>Lygmuo</th>
 		<th>Kategorija</th>
 		<th>Pranešimas</th>

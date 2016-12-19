@@ -4,6 +4,7 @@
  * https://github.com/jquerytools/jquerytools/commit/4f3f3f14e83b0ff276a795e9f45400930904adff#src/tooltip/tooltip.js
  * 2. Original `$.fn.tooltip` has been changed to `$.fn.tooltip2` to prevent conflict between jQuery UI Tooltip and
  * jQuery Tools Tooltip.
+ * 3. Fixed compatibility for jQuery 1.9+ (.browser is deprecated)
  *
  * @license 
  * jQuery Tools @VERSION Tooltip - UI essentials
@@ -30,7 +31,7 @@
 			delay: 30,
 			opacity: 1,			
 			tip: 0,
-			fadeIE: false, // enables fade effect in IE
+            fadeIE: false, // enables fade effect in IE
 			
 			// 'top', 'bottom', 'right', 'left', 'center'
 			position: ['top', 'center'], 
@@ -75,7 +76,7 @@
 		fade: [
 			function(done) {
 				var conf = this.getConf();
-				if (!$.browser.msie || conf.fadeIE) {
+				if (navigator.userAgent.match(/MSIE/i) === null || conf.fadeIE) {
 					this.getTip().fadeTo(conf.fadeInSpeed, conf.opacity, done);
 				}
 				else {
@@ -85,7 +86,7 @@
 			},
 			function(done) {
 				var conf = this.getConf();
-				if (!$.browser.msie || conf.fadeIE) {
+				if (navigator.userAgent.match(/MSIE/i) === null || conf.fadeIE) {
 					this.getTip().fadeOut(conf.fadeOutSpeed, done);
 				}
 				else {
@@ -215,12 +216,12 @@
 					
 					if (!tip.length) { throw "Cannot find tooltip for " + trigger;	}
 				} 
+			 	
+			 	if (self.isShown()) { return self; }  
 				
-				if (self.isShown()) { return self; }  
-				
-				// stop previous animation
-				tip.stop(true, true); 			 	
-				
+			 	// stop previous animation
+			 	tip.stop(true, true); 			 	
+			 	
 				// get position
 				var pos = getPosition(trigger, tip, conf);			
 		
@@ -251,7 +252,7 @@
 					fire.trigger(e);		 
 				});					
 
-		
+	 	
 				// tooltip events       
 				var event = conf.events.tooltip.split(/,\s*/);
 

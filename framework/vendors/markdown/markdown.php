@@ -781,7 +781,7 @@ class Markdown_Parser {
 					  )
 					|
 					  (?=						# Lookahead for another kind of list
-						\n
+					    \n
 						\3						# Must have the same indentation
 						'.$other_marker_re.'[ ]+
 					  )

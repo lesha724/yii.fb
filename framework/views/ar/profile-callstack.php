@@ -6,7 +6,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th>الإجراء</th>
+	    <th>الإجراء</th>
 		<th>الزمن (ث)</th>
 	</tr>
 <?php

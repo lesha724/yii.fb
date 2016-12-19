@@ -32,7 +32,7 @@ class CRegularExpressionValidator extends CValidator
 	 * the regular expression defined via {@link pattern} should NOT match the attribute value.
 	 * @since 1.1.5
 	 **/
-	public $not=false;
+ 	public $not=false;
 
 	/**
 	 * Validates the attribute of the object.

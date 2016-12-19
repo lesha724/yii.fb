@@ -8,7 +8,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th>Procedūra</th>
+	    <th>Procedūra</th>
 		<th>Kiekis</th>
 		<th>Viso (s)</th>
 		<th>Vid. (s)</th>

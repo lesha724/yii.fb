@@ -6,7 +6,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th style="width:120px">الختم الزمني</th>
+	    <th style="width:120px">الختم الزمني</th>
 		<th>المستوى</th>
 		<th>التصنيف</th>
 		<th>الرسالة</th>

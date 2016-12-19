@@ -77,29 +77,29 @@ PARAMETERS
 
 EXAMPLES
  * Generates the Post model:
-		model Post
+        model Post
 
  * Generates the Post model which is associated with table 'posts':
-		model Post posts
+        model Post posts
 
  * Generates the Post model which should belong to module 'admin':
-		model admin.models.Post
+        model admin.models.Post
 
  * Generates a model class for every table in the current database:
-		model *
+        model *
 
  * Same as above, but the model class files should be generated
    under 'protected/models2':
-		model application.models2.*
+        model application.models2.*
 
  * Generates a model class for every table whose name is prefixed
    with 'tbl_' in the current database. The model class will not
    contain the table prefix.
-		model /^tbl_(.*)$/
+        model /^tbl_(.*)$/
 
  * Same as above, but the model class files should be generated
    under 'protected/models2':
-		model application.models2./^tbl_(.*)$/
+        model application.models2./^tbl_(.*)$/
 
 EOD;
 	}
@@ -371,11 +371,11 @@ EOD;
 		echo <<<EOD
 
 The following model classes are successfully generated:
-	$classes
+    $classes
 
 If you have a 'db' database connection, you can test these models now with:
-	\$model={$className}::model()->find();
-	print_r(\$model);
+    \$model={$className}::model()->find();
+    print_r(\$model);
 
 EOD;
 	}

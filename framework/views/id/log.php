@@ -6,7 +6,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th style="width:120px">Waktu</th>
+	    <th style="width:120px">Waktu</th>
 		<th>Tingkat</th>
 		<th>Kategori</th>
 		<th>Pesan</th>

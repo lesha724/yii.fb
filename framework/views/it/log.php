@@ -6,7 +6,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th style="width:120px">Timestamp</th>
+	    <th style="width:120px">Timestamp</th>
 		<th>Livello</th>
 		<th>Categoria/th>
 		<th>Messaggio</th>

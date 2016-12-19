@@ -6,7 +6,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th style="width:120px">Aikaleima</th>
+	    <th style="width:120px">Aikaleima</th>
 		<th>Taso</th>
 		<th>Kategoria</th>
 		<th>Viesti</th>

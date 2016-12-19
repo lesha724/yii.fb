@@ -6,7 +6,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th>Procedūra</th>
+	    <th>Procedūra</th>
 		<th>Laikas (s)</th>
 	</tr>
 <?php

@@ -51,7 +51,7 @@ PARAMETERS
 
 EXAMPLES
  * Generates the view script for the 'ContactForm' model:
-		form ContactForm application.views.site.contact
+        form ContactForm application.views.site.contact
 
 EOD;
 	}

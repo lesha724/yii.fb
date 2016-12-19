@@ -26,9 +26,11 @@ class COciSchema extends CDbSchema
 	 */
 	public $columnTypes=array(
 		'pk' => 'NUMBER(10) NOT NULL PRIMARY KEY',
+		'bigpk' => 'NUMBER(20) NOT NULL PRIMARY KEY',
 		'string' => 'VARCHAR2(255)',
 		'text' => 'CLOB',
 		'integer' => 'NUMBER(10)',
+		'bigint' => 'NUMBER(20)',
 		'float' => 'NUMBER',
 		'decimal' => 'NUMBER',
 		'datetime' => 'TIMESTAMP',
@@ -164,29 +166,29 @@ class COciSchema extends CDbSchema
 
 		$sql=<<<EOD
 SELECT a.column_name, a.data_type ||
-	case
-		when data_precision is not null
-			then '(' || a.data_precision ||
-					case when a.data_scale > 0 then ',' || a.data_scale else '' end
-				|| ')'
-		when data_type = 'DATE' then ''
-		when data_type = 'NUMBER' then ''
-		else '(' || to_char(a.data_length) || ')'
-	end as data_type,
-	a.nullable, a.data_default,
-	(   SELECT D.constraint_type
-		FROM ALL_CONS_COLUMNS C
-		inner join ALL_constraints D on D.OWNER = C.OWNER and D.constraint_name = C.constraint_name
-		WHERE C.OWNER = B.OWNER
-		   and C.table_name = B.object_name
-		   and C.column_name = A.column_name
-		   and D.constraint_type = 'P') as Key,
-	com.comments as column_comment
+    case
+        when data_precision is not null
+            then '(' || a.data_precision ||
+                    case when a.data_scale > 0 then ',' || a.data_scale else '' end
+                || ')'
+        when data_type = 'DATE' then ''
+        when data_type = 'NUMBER' then ''
+        else '(' || to_char(a.data_length) || ')'
+    end as data_type,
+    a.nullable, a.data_default,
+    (   SELECT D.constraint_type
+        FROM ALL_CONS_COLUMNS C
+        inner join ALL_constraints D on D.OWNER = C.OWNER and D.constraint_name = C.constraint_name
+        WHERE C.OWNER = B.OWNER
+           and C.table_name = B.object_name
+           and C.column_name = A.column_name
+           and D.constraint_type = 'P') as Key,
+    com.comments as column_comment
 FROM ALL_TAB_COLUMNS A
 inner join ALL_OBJECTS B ON b.owner = a.owner and ltrim(B.OBJECT_NAME) = ltrim(A.TABLE_NAME)
-LEFT JOIN user_col_comments com ON (A.table_name = com.table_name AND A.column_name = com.column_name)
+LEFT JOIN all_col_comments com ON (A.owner = com.owner AND A.table_name = com.table_name AND A.column_name = com.column_name)
 WHERE
-	a.owner = '{$schemaName}'
+    a.owner = '{$schemaName}'
 	and (b.object_type = 'TABLE' or b.object_type = 'VIEW')
 	and b.object_name = '{$tableName}'
 ORDER by a.column_id
@@ -245,16 +247,16 @@ EOD;
 	{
 		$sql=<<<EOD
 		SELECT D.constraint_type as CONSTRAINT_TYPE, C.COLUMN_NAME, C.position, D.r_constraint_name,
-				E.table_name as table_ref, f.column_name as column_ref,
-				C.table_name
-		FROM ALL_CONS_COLUMNS C
-		inner join ALL_constraints D on D.OWNER = C.OWNER and D.constraint_name = C.constraint_name
-		left join ALL_constraints E on E.OWNER = D.r_OWNER and E.constraint_name = D.r_constraint_name
-		left join ALL_cons_columns F on F.OWNER = E.OWNER and F.constraint_name = E.constraint_name and F.position = c.position
-		WHERE C.OWNER = '{$table->schemaName}'
-		   and C.table_name = '{$table->name}'
-		   and D.constraint_type <> 'P'
-		order by d.constraint_name, c.position
+                E.table_name as table_ref, f.column_name as column_ref,
+            	C.table_name
+        FROM ALL_CONS_COLUMNS C
+        inner join ALL_constraints D on D.OWNER = C.OWNER and D.constraint_name = C.constraint_name
+        left join ALL_constraints E on E.OWNER = D.r_OWNER and E.constraint_name = D.r_constraint_name
+        left join ALL_cons_columns F on F.OWNER = E.OWNER and F.constraint_name = E.constraint_name and F.position = c.position
+        WHERE C.OWNER = '{$table->schemaName}'
+           and C.table_name = '{$table->name}'
+           and D.constraint_type <> 'P'
+        order by d.constraint_name, c.position
 EOD;
 		$command=$this->getDbConnection()->createCommand($sql);
 		foreach($command->queryAll() as $row)

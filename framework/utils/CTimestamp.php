@@ -75,10 +75,10 @@ class CTimestamp
 		}
 
 		$day =  floor((13 * $month - 1) / 5) +
-				$day + ($year % 100) +
-				floor(($year % 100) / 4) +
-				floor(($year / 100) / 4) - 2 *
-				floor($year / 100) + 77 + $greg_correction;
+		        $day + ($year % 100) +
+		        floor(($year % 100) / 4) +
+		        floor(($year / 100) / 4) - 2 *
+		        floor($year / 100) + 77 + $greg_correction;
 
 		return $day - 7 * floor($day / 7);
 	}

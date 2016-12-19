@@ -8,7 +8,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th>Funkcia</th>
+	    <th>Funkcia</th>
 		<th>Počet</th>
 		<th>Celkom (s)</th>
 		<th>Priemer. (s)</th>

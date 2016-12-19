@@ -6,7 +6,7 @@
 		</th>
 	</tr>
 	<tr style="background-color: #ccc;">
-		<th style="width:120px">Χρονική ετικέτα</th>
+	    <th style="width:120px">Χρονική ετικέτα</th>
 		<th>Επίπεδο</th>
 		<th>Κατηγορία</th>
 		<th>Μήνυμα</th>
@@ -22,16 +22,16 @@ foreach($data as $index=>$log)
 {
   $color=($index%2)?'#F5F5F5':'#FFFFFF';
   if(isset($colors[$log[1]]))
-	$color=$colors[$log[1]];
+    $color=$colors[$log[1]];
   $message='<pre>'.CHtml::encode(wordwrap($log[0])).'</pre>';
   $time=date('H:i:s.',$log[3]).sprintf('%06d',(int)(($log[3]-(int)$log[3])*1000000));
 
   echo <<<EOD
   <tr style="background:{$color}">
-	<td align="center">{$time}</td>
-	<td>{$log[1]}</td>
-	<td>{$log[2]}</td>
-	<td>{$message}</td>
+    <td align="center">{$time}</td>
+    <td>{$log[1]}</td>
+    <td>{$log[2]}</td>
+    <td>{$message}</td>
   </tr>
 EOD;
 }
