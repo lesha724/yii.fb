@@ -102,7 +102,7 @@ HTML;
         'dataProvider' => $model->search(),
         'type'=>'striped hover bordered',
         'template' => '{items} '.sprintf($pager, tt('Распечатать')),
-        'rowHtmlOptionsExpression' => 'array("data-id" => $data->tddo1)',
+        'rowHtmlOptionsExpression' => 'array("data-id" => $data->tddo1, "class"=>$data->isControl()?"warning":"")',
         'filter' => $model,
         'ajaxUrl' => Yii::app()->createAbsoluteUrl('/doc/index',array('docType'=>$model->tddo2,'docYear'=>$model->tddo23)),
         'columns' =>

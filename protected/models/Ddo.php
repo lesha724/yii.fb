@@ -253,6 +253,18 @@ class Ddo extends CActiveRecord
 					};
 					$items[$docTypeIndexModel->$indexAttr]['filter'] = Org::getAll();
 				break;
+				case 'tddo17':
+					$items[$docTypeIndexModel->$indexAttr]['value'] ='$data->getTddo17Type()';
+					$items[$docTypeIndexModel->$indexAttr]['filter'] = Tddo::model()->getTddo17Types();
+					break;
+				case 'tddo10':
+					$items[$docTypeIndexModel->$indexAttr]['value'] ='$data->getTddo10Type()';
+					$items[$docTypeIndexModel->$indexAttr]['filter'] = Tddo::model()->getTddo10Types();
+					break;
+				case 'tddo11':
+					$items[$docTypeIndexModel->$indexAttr]['value'] ='$data->getTddo11Type()';
+					$items[$docTypeIndexModel->$indexAttr]['filter'] = Tddo::model()->getTddo11Types();
+					break;
 			}
 		}
 

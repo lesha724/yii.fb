@@ -187,4 +187,79 @@ class Tddo extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	public function getTddo17Types(){
+		return
+				array(
+						0=>tt('Другое'),
+						1=>tt('FAX'),
+						2=>tt('Почта'),
+						3=>tt('Нарочно'),
+						4=>tt('Спец.почта'),
+						5=>tt('Кур.доставка'),
+						6=>tt('ДСК'),
+				);
+	}
+
+	public function getTddo17Type(){
+		$arr=self::model()->getTddo17Types();
+
+		if(!isset($arr[$this->tddo17]))
+			return '';
+
+		return $arr[$this->tddo17];
+	}
+
+	public function getTddo10Types(){
+		return
+			array(
+					1=>tt('Сдан'),
+					2=>tt('Не сдан'),
+			);
+	}
+
+	public function getTddo10Type(){
+		$arr=self::model()->getTddo10Types();
+
+		if(!isset($arr[$this->tddo10]))
+			return '';
+
+		return $arr[$this->tddo10];
+	}
+
+	public function getTddo11Types(){
+		return
+			array(
+					2=>tt('-'),
+					1=>tt('Поставлено на контроль'),
+			);
+	}
+	/*
+	 * учитываеться ли в контрле исполнения
+	 * */
+	public function  isControl(){
+		if($this->tddo11!=1)
+			return false;
+
+		if($this->tddo22==0)
+			return true;
+
+		return false;
+	}
+
+	public function getTddo11Type(){
+		$arr=self::model()->getTddo11Types();
+
+		if(!isset($arr[$this->tddo11]))
+			return '';
+
+		if($this->tddo11!=1)
+			return $arr[$this->tddo11];
+		else{
+			if($this->tddo22==0)
+				return $arr[$this->tddo11];
+			else
+				return tt('Поставлено на контроль (неучитываеться)');
+		}
+	}
 }

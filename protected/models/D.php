@@ -394,6 +394,39 @@ SQL;
         return $disciplines;
     }
 
+    public function getDisciplinesForSstPermition($group)
+    {
+        $sql = <<<SQL
+            select d2,d1,uo1
+            from gr
+               inner join ucsn on (gr.gr1 = ucsn.ucsn3)
+               inner join ucgns on (ucsn.ucsn1 = ucgns.ucgns1)
+               inner join ucgn on (ucgns.ucgns2 = ucgn.ucgn1)
+               inner join ug on (ucgn.ucgn1 = ug.ug4)
+               inner join nr on (ug.ug3 = nr.nr1)
+               inner join us on (nr.nr2 = us.us1)
+               inner join uo on (us.us2 = uo.uo1)
+               inner join d on (uo.uo3 = d.d1)
+               inner join sem on (us.us12 = sem.sem1)
+            where UCSN3=:GR1 and sem3=:YEAR and sem5=:SEM and UCGNS5=:YEAR1 and UCGNS6=:SEM1
+            group by d2,d1,uo1
+            order by d2 collate UNICODE
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':GR1', $group);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $command->bindValue(':YEAR1', Yii::app()->session['year']);
+        $command->bindValue(':SEM1', Yii::app()->session['sem']);
+        $disciplines = $command->queryAll();
+
+        foreach($disciplines as $key => $discipline) {
+            $disciplines[$key]['discipline'] = $discipline['uo1'].'/'.$discipline['d1'];
+        }
+
+        return $disciplines;
+    }
+
     public function getDisciplinesForModulesPermition()
     {
         $sql = <<<SQL
