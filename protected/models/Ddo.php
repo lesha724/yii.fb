@@ -191,7 +191,9 @@ class Ddo extends CActiveRecord
 		return $field;
 	}
 	/*Колонки для грида для типа докумнта*/
-	public function generateColumnsGrid(){
+	/* $controller контроллеря для фильтров дат для грида*/
+	/* $model model tddo*/
+	public function generateColumnsGrid($controller, $model){
 		$docTypeIndexModel = Ddoi::model()->findByAttributes(array('ddoi2'=>$this->ddo1));
 		if(empty($docTypeIndexModel))
 			$docTypeIndexModel = new Ddoi();
@@ -222,15 +224,61 @@ class Ddo extends CActiveRecord
 					$items[$docTypeIndexModel->$indexAttr]['value'] = function($data) {
 						if(empty($data['tddo9']))
 							return '';
-						return date_format(date_create_from_format('Y-m-d H:i:s', $data['tddo9']), 'd-m-Y');
+						return date_format(date_create_from_format('Y-m-d H:i:s', $data['tddo9']), 'Y-m-d');
 					};
+					$items[$docTypeIndexModel->$indexAttr]['filter']=$controller->widget('zii.widgets.jui.CJuiDatePicker', array(
+							'model'=>$model,
+							'attribute'=>'tddo9',
+							'language' => Yii::app()->language,
+						// 'i18nScriptFile' => 'jquery.ui.datepicker-ja.js', (#2)
+							'htmlOptions' => array(
+									'id' => 'datepicker-for-tddo9',
+									'size' => '10',
+							),
+							'options' => array(
+									'dateFormat' => 'yy-mm-dd'
+							),
+							'defaultOptions' => array(  // (#3)
+									'showOn' => 'focus',
+									'dateFormat' => 'yy-mm-dd',
+									'showOtherMonths' => true,
+									'selectOtherMonths' => true,
+									'changeMonth' => true,
+									'changeYear' => true,
+									'showButtonPanel' => true,
+							)
+							),
+					true);
 				break;
 				case 'tddo4':
 					$items[$docTypeIndexModel->$indexAttr]['value'] = function($data) {
 						if(empty($data['tddo4']))
 							return '';
-						return date_format(date_create_from_format('Y-m-d H:i:s', $data['tddo4']), 'd-m-Y');
+						return date_format(date_create_from_format('Y-m-d H:i:s', $data['tddo4']), 'Y-m-d');
 					};
+					$items[$docTypeIndexModel->$indexAttr]['filter']=$controller->widget('zii.widgets.jui.CJuiDatePicker', array(
+							'model'=>$model,
+									'attribute'=>'tddo4',
+									'language' => Yii::app()->language,
+								// 'i18nScriptFile' => 'jquery.ui.datepicker-ja.js', (#2)
+									'htmlOptions' => array(
+											'id' => 'datepicker-for-tddo4',
+											'size' => '10',
+									),
+									'options' => array(
+											'dateFormat' => 'yy-mm-dd'
+									),
+									'defaultOptions' => array(  // (#3)
+											'showOn' => 'focus',
+											'dateFormat' => 'yy-mm-dd',
+											'showOtherMonths' => true,
+											'selectOtherMonths' => true,
+											'changeMonth' => true,
+											'changeYear' => true,
+											'showButtonPanel' => true,
+									)
+							),
+					true);
 				break;
 				case 'tddo18':
 					$items[$docTypeIndexModel->$indexAttr]['value'] = function($data) {
@@ -257,6 +305,17 @@ class Ddo extends CActiveRecord
 					$items[$docTypeIndexModel->$indexAttr]['value'] ='$data->getTddo17Type()';
 					$items[$docTypeIndexModel->$indexAttr]['filter'] = Tddo::model()->getTddo17Types();
 					break;
+				case 'tddo16':
+					$items[$docTypeIndexModel->$indexAttr]['type']='raw';
+					$items[$docTypeIndexModel->$indexAttr]['value'] =function($data) {
+						if($data->tddo16==0)
+							return '';
+						$tddoDoc = $data->tddo160;
+
+						return CHtml::link(sprintf('%s (%s)',$tddoDoc->tddo3, $tddoDoc->tddo24->ddo2),'/doc/'.$tddoDoc->tddo1);
+					};
+					$items[$docTypeIndexModel->$indexAttr]['filter'] = false;
+					break;
 				case 'tddo10':
 					$items[$docTypeIndexModel->$indexAttr]['value'] ='$data->getTddo10Type()';
 					$items[$docTypeIndexModel->$indexAttr]['filter'] = Tddo::model()->getTddo10Types();
@@ -264,6 +323,93 @@ class Ddo extends CActiveRecord
 				case 'tddo11':
 					$items[$docTypeIndexModel->$indexAttr]['value'] ='$data->getTddo11Type()';
 					$items[$docTypeIndexModel->$indexAttr]['filter'] = Tddo::model()->getTddo11Types();
+					break;
+			}
+		}
+
+		ksort($items);
+
+		return $items;
+	}
+	/*поля для вьюва для докумнта*/
+	public function generateAttributesView($model){
+		$docTypeIndexModel = Ddoi::model()->findByAttributes(array('ddoi2'=>$this->ddo1));
+		if(empty($docTypeIndexModel))
+			$docTypeIndexModel = new Ddoi();
+		$docTypeNameModel = Ddon::model()->findByAttributes(array('ddon2'=>$this->ddo1));
+		if(empty($docTypeNameModel))
+			$docTypeNameModel = new Ddon();
+
+		for($i=3;$i<=15; $i++){
+
+			$nameAttr = 'ddon'.$i;
+			$indexAttr = 'ddoi'.$i;
+			$ddoAttr = 'ddo'.$i;
+
+			$tddoFiled = Ddo::model()->getTddoFiledByDdo($ddoAttr);
+
+			if($tddoFiled=='')
+				continue;
+
+			$items[$docTypeIndexModel->$indexAttr] = array(
+					'name' => $tddoFiled,
+					'label'=>$docTypeNameModel->$nameAttr,
+					'value' => $model->$tddoFiled,
+					'visible'=>$this->$ddoAttr==1
+			);
+
+			switch ($tddoFiled){
+				case 'tddo9':
+					$items[$docTypeIndexModel->$indexAttr]['value'] = function($data) {
+						if(empty($data['tddo9']))
+							return '';
+						return date_format(date_create_from_format('Y-m-d H:i:s', $data['tddo9']), 'Y-m-d');
+					};
+					break;
+				case 'tddo4':
+					$items[$docTypeIndexModel->$indexAttr]['value'] = function($data) {
+						if(empty($data['tddo4']))
+							return '';
+						return date_format(date_create_from_format('Y-m-d H:i:s', $data['tddo4']), 'Y-m-d');
+					};
+					break;
+				case 'tddo18':
+					$items[$docTypeIndexModel->$indexAttr]['value'] = function($data) {
+						if($data->tddo18==0)
+							return '';
+
+						$org = $data->tddo180;
+
+						return sprintf('%s / %s / %s',$org->org2,$org->org3,$org->org4);
+					};
+					break;
+				case 'tddo20':
+					$items[$docTypeIndexModel->$indexAttr]['value'] = function($data) {
+						if($data->tddo20==0)
+							return '';
+						$tdo = $data->tddo200;
+
+						return $tdo->tdo2;
+					};
+					break;
+				case 'tddo17':
+					$items[$docTypeIndexModel->$indexAttr]['value'] =$model->getTddo17Type();
+					break;
+				case 'tddo16':
+					$items[$docTypeIndexModel->$indexAttr]['type']='raw';
+					$items[$docTypeIndexModel->$indexAttr]['value'] =function($data) {
+						if($data->tddo16==0)
+							return '';
+						$tddoDoc = $data->tddo160;
+
+						return CHtml::link(sprintf('%s (%s)',$tddoDoc->tddo3, $tddoDoc->tddo24->ddo2),'/doc/'.$tddoDoc->tddo1);
+					};
+					break;
+				case 'tddo10':
+					$items[$docTypeIndexModel->$indexAttr]['value'] =$model->getTddo10Type();
+					break;
+				case 'tddo11':
+					$items[$docTypeIndexModel->$indexAttr]['value'] =$model->getTddo11Type();
 					break;
 			}
 		}

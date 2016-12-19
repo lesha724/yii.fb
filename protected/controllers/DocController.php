@@ -12,7 +12,7 @@ class DocController extends Controller
 
         return array(
             'accessControl',
-            'checkPermission'
+            'checkPermission -index'//не выполянеться для индекса
         );
     }
 
@@ -22,6 +22,7 @@ class DocController extends Controller
             array('allow',
                 'actions' => array(
                     'index',
+                    'view'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -42,7 +43,6 @@ class DocController extends Controller
             if ($grants->grants5 != 1)
                 throw new CHttpException(404, 'Invalid request. You don\'t have access to the service.');
         }*/
-
         $filterChain->run();
     }
 
@@ -61,9 +61,23 @@ class DocController extends Controller
             unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
         }
 
-        if (isset($_REQUEST['Tddo'])) {
+        /*if (isset($_REQUEST['Tddo'])) {
             $model->scenario = 'filter';
             $model->attributes = $_REQUEST['Tddo'];
+        }*/
+        $model->scenario = 'filter';
+        if (isset($_REQUEST['Tddo']))
+        {
+            $model->attributes = $_REQUEST['Tddo'];
+            Yii::app()->user->setState('SearchParamsTddo', $_REQUEST['Tddo']);
+        }
+        else
+        {
+            $searchParams = Yii::app()->user->getState('SearchParamsTddo');
+            if ( isset($searchParams) )
+            {
+                $model->attributes = $searchParams;
+            }
         }
 
         $model->tddo2 = $docType;
@@ -73,6 +87,27 @@ class DocController extends Controller
         $this->render('index', array(
             //'docType' => $docType,
             'model'   => $model
+        ));
+    }
+
+    public function loadModel($id)
+    {
+        $model=Tddo::model()->findByPk($id);
+        if($model===null)
+            throw new CHttpException(404,'The requested page does not exist.');
+        return $model;
+    }
+
+    public function actionView($id){
+        $model = $this->loadModel($id);
+
+        if(!Yii::app()->user->isAdmin)
+        {
+            //проверка доступа
+        }
+
+        $this->render('view',array(
+            'model'=>$model
         ));
     }
 }

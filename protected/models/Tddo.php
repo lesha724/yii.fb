@@ -57,7 +57,9 @@ class Tddo extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('tddo1, tddo2, tddo3, tddo10, tddo11, tddo15, tddo16, tddo17, tddo18, tddo20, tddo22, tddo23', 'numerical', 'integerOnly'=>true),
-			array('tddo4, tddo9, tddo13, tddo21', 'length', 'max'=>8),
+			array('tddo13,tddo21,tddo4, tddo9', 'length', 'max'=>20),
+			//array('tddo21', 'type', 'type' => 'date', 'message' => '{attribute}: is not a date!', 'dateFormat' => 'dd-MM-yyyy H:i:s'),
+			//array('tddo4, tddo9', 'type', 'type' => 'date', 'message' => '{attribute}: is not a date!', 'dateFormat' => 'dd-MM-yyyy'),
 			array('tddo5, tddo19', 'length', 'max'=>400),
 			array('tddo6', 'length', 'max'=>4000),
 			array('tddo7, tddo8, tddo12', 'length', 'max'=>180),

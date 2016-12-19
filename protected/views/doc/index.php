@@ -67,16 +67,22 @@ if (! empty($model->tddo2)) {
     if(empty($docTypeModel))
         throw new Exception("docTypeModel");
 
-    $items = $docTypeModel->generateColumnsGrid();
+    $items = $docTypeModel->generateColumnsGrid($this, $model);
 
     $printUrl = Yii::app()->createUrl('doc/tddoPrint', array('docType' => $model->tddo2));
 
+    $pageTop = <<<HTML
+        <div>
+            <div class="pull-left">{summary}</div>
+            <div class="pull-right">{pager}</div>
+        </div>
+HTML;
     $pager = <<<HTML
         <div>
-            <button class="print-doc btn btn-info" data-href="{$printUrl}">
+            <!--<button class="print-doc btn btn-info" data-href="{$printUrl}">
                 %s
                 <i class="icon-print  bigger-125 icon-on-right"></i>
-            </button>
+            </button>-->
             <div class="pull-right">{pager}</div>
         </div>
 HTML;
@@ -88,9 +94,33 @@ HTML;
             'tddo21'=>array(
                 'name'=>'tddo21',
                 'header'=>$model->getAttributeLabel('tddo21'),
-                'value'=>function($data) {
+                'value'=>'$data->tddo21',
+                /*'value'=>function($data) {
                     return date_format(date_create_from_format('Y-m-d H:i:s', $data['tddo21']), 'd-m-Y H:i:s');
-                },
+                },*/
+                'filter'=>$this->widget('zii.widgets.jui.CJuiDatePicker', array(
+                    'model'=>$model,
+                    'attribute'=>'tddo21',
+                    'language' => Yii::app()->language,
+                    // 'i18nScriptFile' => 'jquery.ui.datepicker-ja.js', (#2)
+                    'htmlOptions' => array(
+                        'id' => 'datepicker-for-tddo21',
+                        'size' => '10',
+                    ),
+                    'options' => array(
+                        'dateFormat' => 'yy-mm-dd'
+                    ),
+                    'defaultOptions' => array(  // (#3)
+                        'showOn' => 'focus',
+                        'dateFormat' => 'yy-mm-dd',
+                        'showOtherMonths' => true,
+                        'selectOtherMonths' => true,
+                        'changeMonth' => true,
+                        'changeYear' => true,
+                        'showButtonPanel' => true,
+                    )
+                ),
+                    true)
             )
         )
     );
@@ -101,7 +131,8 @@ HTML;
         'id' => 'docs-list',
         'dataProvider' => $model->search(),
         'type'=>'striped hover bordered',
-        'template' => '{items} '.sprintf($pager, tt('Распечатать')),
+        'afterAjaxUpdate' => 'reinstallDatePicker',
+        'template' => $pageTop.'{items} '.sprintf($pager, tt('Распечатать')),
         'rowHtmlOptionsExpression' => 'array("data-id" => $data->tddo1, "class"=>$data->isControl()?"warning":"")',
         'filter' => $model,
         'ajaxUrl' => Yii::app()->createAbsoluteUrl('/doc/index',array('docType'=>$model->tddo2,'docYear'=>$model->tddo23)),
@@ -135,7 +166,7 @@ HTML;
                             $this->getPageSizeArray(),
                             array('class'=>'change-pageSize','style'=>'width:60px')
                         ),
-                        'buttons'=>array(
+                        /*'buttons'=>array(
                             'edit'=>array(
                                 'url'=>'Yii::app()->controller->createAbsoluteUrl("doc/tddoView", array("tddo1" => $data->tddo1))',
                                 'click' => 'function(){}',
@@ -143,7 +174,7 @@ HTML;
                                 'imageUrl' => false,
                                 'label' => '<i class="icon-eye bigger-120"></i>'
                             ),
-                        ),
+                        ),*/
                     )
                 )
             ),
@@ -153,6 +184,13 @@ HTML;
            $(document).on('change','.change-pageSize', function() {
                 $.fn.yiiGridView.update('docs-list',{ data:{ pageSize: $(this).val() }})
             });",CClientScript::POS_READY);
+
+    $language = Yii::app()->language;
+    Yii::app()->clientScript->registerScript('re-install-date-picker', "
+        function reinstallDatePicker(id, data) {
+            $('#datepicker-for-tddo21,#datepicker-for-tddo4,#datepicker-for-tddo9').datepicker(jQuery.extend({showMonthAfterYear:false},jQuery.datepicker.regional['{$language}'],{'dateFormat':'yy-mm-dd'}));
+        }
+    ");
 
 }
     ?>
