@@ -293,4 +293,36 @@ class Tddo extends CActiveRecord
 	public function getDkid(){
 		return Dkid::model()->findAllByAttributes(array('dkid1'=>$this->tddo1),array('order'=>'dkid2 DESC'));
 	}
+
+	public function getFiles(){
+		$files = array();
+
+		$string = Yii::app()->db->connectionString;
+		$parts  = explode('=', $string);
+
+		$host     = trim($parts[1].'D');
+
+		$newString = str_replace($parts[1],$host,$string);
+		//var_dump($newString);
+		$login    = Yii::app()->db->username;
+		$password = Yii::app()->db->password;
+
+		$dbh = new CDbConnection($newString, $login, $password);
+
+		try{
+			$dbh->active = true;
+		}catch(Exception $error) {
+			throw new Exception("Ошибка подключения к шрафической базе, с ошибкой: " . $error->getMessage());
+		}
+
+		$sql = <<<SQL
+			SELECT *
+			FROM fkdd
+			WHERE fkdd1 = {$this->tddo1}
+SQL;
+
+		$dbh->active = false;
+
+		return $files;
+	}
 }

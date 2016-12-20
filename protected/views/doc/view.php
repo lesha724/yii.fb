@@ -55,5 +55,9 @@ HTML;
                 $items
             )
     ));
+
+    $this->renderPartial('_attachedFiles', array(
+        'model' => $model
+    ));
 ?>
 </div>
