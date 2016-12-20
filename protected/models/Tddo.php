@@ -289,4 +289,8 @@ class Tddo extends CActiveRecord
 		}
 		return $data;
 	}
+
+	public function getDkid(){
+		return Dkid::model()->findAllByAttributes(array('dkid1'=>$this->tddo1),array('order'=>'dkid2 DESC'));
+	}
 }

@@ -436,11 +436,56 @@ class Ddo extends CActiveRecord
 				case 'tddo11':
 					$items[$docTypeIndexModel->$indexAttr]['type']='raw';
 					$items[$docTypeIndexModel->$indexAttr]['value'] =function($data) {
+						/**
+						 * @var $data Tddo
+						 */
 						$html = '';
 
 						$html.= '<div>';
 						$html.= $data->getTddo11Type();
 						$html.= '</div>';
+
+						if($data->tddo11!=1)
+							return $html;
+
+						$dkids = $data->getDkid();
+						if(!empty($dkids)) {
+							$html.= '
+								<table class="table table-condensed table-hover">
+									<thead>
+										<tr>
+											<th>'.tt('Необходимая дата').'</th>
+											<th>'.tt('Фактическая дата').'</th>
+										</tr>
+									</thead>
+									<tbody>
+							';
+							foreach ($dkids as $dkid) {
+								if(!empty($dkid->dkid3))
+									$html.= '<tr class="success">';
+								else
+								{
+									if(strtotime($dkid->dkid2)<=strtotime('NOW'))
+										$html.= '<tr class="error">';
+									else
+										$html.= '<tr class="warning">';
+								}
+
+								$html.= '<td>'.date_format(date_create_from_format('Y-m-d H:i:s', $dkid->dkid2), 'Y-m-d').'</td>';
+								if(!empty($dkid->dkid3))
+									$html.= '<td>'.date_format(date_create_from_format('Y-m-d H:i:s', $data['tddo4']), 'Y-m-d').'</td>';
+								else
+									$html.= '<td/>';
+
+								$html.= '</tr>';
+							}
+
+							$html.='
+									</tbody>
+								</table>
+							';
+						}
+
 
 						return $html;
 					};

@@ -42,6 +42,9 @@ HTML;
         )
     );
 
+    echo '<h5>',$docTypeModel->ddo2,'</h5>';
+
+
     $this->widget('bootstrap.widgets.TbDetailView',array(
         'data'=>$model,
         'attributes'=>
