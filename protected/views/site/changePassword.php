@@ -20,14 +20,14 @@
                             <fieldset>
                                 <label>
                                     <span class="block input-icon input-icon-right">
-                                        <?=$form->textFieldRow($model, 'u2', array('class' => 'span12', 'placeholder' => tt('Пароль')))?>
+                                        <?=$form->textFieldRow($model, 'u2', array('class' => 'span12', 'placeholder' => tt('Login')))?>
                                         <i class="icon-user"></i>
                                     </span>
                                 </label>
 
                                 <label>
                                     <span class="block input-icon input-icon-right">
-                                        <?=$form->textFieldRow($model, 'u4', array('class' => 'span12', 'placeholder' => tt('Пароль')))?>
+                                        <?=$form->textFieldRow($model, 'u4', array('class' => 'span12', 'placeholder' => tt('Email')))?>
                                         <i class="icon-envelope"></i>
                                     </span>
                                 </label>
@@ -41,7 +41,7 @@
 
                                 <label>
                                     <span class="block input-icon input-icon-right">
-                                        <?=$form->passwordFieldRow($model, 'password', array('class' => 'span12', 'placeholder' => tt('Пароль')))?>
+                                        <?=$form->passwordFieldRow($model, 'password', array('class' => 'span12', 'placeholder' => tt('Повторите пароль')))?>
                                         <i class="icon-lock"></i>
                                     </span>
                                 </label>

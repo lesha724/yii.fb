@@ -105,7 +105,7 @@
                             <li>
                                 <a href="<?=Yii::app()->createUrl('site/changePassword')?>" id="change-password">
                                     <i class="icon-user"></i>
-                                    <?=tt('Смена пароля')?>
+                                    <?=tt('Смена профиля')?>
                                 </a>
                                 <a href="<?=Yii::app()->createUrl('/site/logout')?>">
                                     <i class="icon-off"></i>
