@@ -164,7 +164,7 @@ class Ddo extends CActiveRecord
 				$field = 'tddo6';
 				break;
 			case 'ddo9':
-				$field = '';
+				$field = 'ddo9';
 				break;
 			case 'ddo10':
 				$field = 'tddo19';
@@ -210,6 +210,9 @@ class Ddo extends CActiveRecord
 			$tddoFiled = Ddo::model()->getTddoFiledByDdo($ddoAttr);
 
 			if($tddoFiled=='')
+				continue;
+
+			if($tddoFiled=='ddo9')
 				continue;
 
 			$items[$docTypeIndexModel->$indexAttr] = array(
@@ -332,7 +335,7 @@ class Ddo extends CActiveRecord
 		return $items;
 	}
 	/*поля для вьюва для докумнта*/
-	public function generateAttributesView($model){
+	public function generateAttributesView($controller,$model){
 		$docTypeIndexModel = Ddoi::model()->findByAttributes(array('ddoi2'=>$this->ddo1));
 		if(empty($docTypeIndexModel))
 			$docTypeIndexModel = new Ddoi();
@@ -351,14 +354,36 @@ class Ddo extends CActiveRecord
 			if($tddoFiled=='')
 				continue;
 
-			$items[$docTypeIndexModel->$indexAttr] = array(
+			if($tddoFiled!='ddo9')
+				$items[$docTypeIndexModel->$indexAttr] = array(
 					'name' => $tddoFiled,
 					'label'=>$docTypeNameModel->$nameAttr,
 					'value' => $model->$tddoFiled,
 					'visible'=>$this->$ddoAttr==1
-			);
+				);
+			else
+				$items[$docTypeIndexModel->$indexAttr] = array(
+						'name' => $tddoFiled,
+						'label'=> $docTypeNameModel->$nameAttr,
+						'value' => '',
+						'visible'=> $this->$ddoAttr==1
+				);
 
 			switch ($tddoFiled){
+				case 'ddo9':
+					$items[$docTypeIndexModel->$indexAttr]['type']='raw';
+					$items[$docTypeIndexModel->$indexAttr]['value'] =function($data) use ($controller) {
+						/**
+						 *
+						 * @var $data Tddo
+						 * @var $controller DocController
+						 */
+						$html = '';
+						$html.=$controller->widget('CTreeView', array('data' =>$data->getPerformans(),'persist'=>'cookie'), TRUE);
+
+						return $html;
+					};
+					break;
 				case 'tddo9':
 					$items[$docTypeIndexModel->$indexAttr]['value'] = function($data) {
 						if(empty($data['tddo9']))
@@ -409,7 +434,16 @@ class Ddo extends CActiveRecord
 					$items[$docTypeIndexModel->$indexAttr]['value'] =$model->getTddo10Type();
 					break;
 				case 'tddo11':
-					$items[$docTypeIndexModel->$indexAttr]['value'] =$model->getTddo11Type();
+					$items[$docTypeIndexModel->$indexAttr]['type']='raw';
+					$items[$docTypeIndexModel->$indexAttr]['value'] =function($data) {
+						$html = '';
+
+						$html.= '<div>';
+						$html.= $data->getTddo11Type();
+						$html.= '</div>';
+
+						return $html;
+					};
 					break;
 			}
 		}

@@ -217,4 +217,34 @@ SQL;
 
         return $chairs;
 	}
+
+	public function getTeacherAndChairByP1($p1){
+		$sql = <<<SQL
+            SELECT p3,p4,p5,k2,k3 FROM pd
+            INNER JOIN  P ON ( PD2 = P1)
+            INNER JOIN  K ON ( PD4 = K1)
+            WHERE p1=:p1
+            GROUP BY p3,p4,p5,k2,k3
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':p1', $p1);
+		$info = $command->queryRow();
+
+		return $info;
+	}
+
+	public function getTeacherAndChairByPd1($pd1){
+		$sql = <<<SQL
+            SELECT p3,p4,p5,k2,k3 FROM pd
+            INNER JOIN  P ON ( PD2 = P1)
+            INNER JOIN  K ON ( PD4 = K1)
+            WHERE pd1=:pd1
+            GROUP BY p3,p4,p5,k2,k3
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':pd1', $pd1);
+		$info = $command->queryRow();
+
+		return $info;
+	}
 }

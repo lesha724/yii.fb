@@ -29,7 +29,7 @@
 HTML;
 
 
-    $items = $docTypeModel->generateAttributesView($model);
+    $items = $docTypeModel->generateAttributesView($this,$model);
 
     $items = array_merge(
         $items,

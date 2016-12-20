@@ -264,4 +264,29 @@ class Tddo extends CActiveRecord
 				return tt('Поставлено на контроль (неучитываеться)');
 		}
 	}
+
+	/**
+	 * исполнителю по документу
+	 */
+	public function getPerformans(){
+		$data = array();
+
+		$models = Ido::model()->findAll('ido1=:TDDO1 AND (ido8 is null OR ido8=0)', array(
+			':TDDO1'=>$this->tddo1
+		));
+
+		foreach ($models as $per) {
+			/**
+			* @var $per Ido
+		 	*/
+			$data[$per->ido0] = array(
+					'id'   => $per->ido0,
+					'text' => $per->getFullText(),
+					'children' => $per->getChildren()
+
+			);
+
+		}
+		return $data;
+	}
 }
