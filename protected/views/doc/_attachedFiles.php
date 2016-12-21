@@ -7,31 +7,40 @@
  */
 
 $attachedFiles = $model->getFiles();
+//var_dump($attachedFiles);
+
 ?>
 
+    <ul class="thumbnails">
 
-<table class="table table-striped table-bordered table-hover">
-    <thead>
-    <tr>
-        <th><?=tt('Прикрепленные файлы')?></th>
-    </tr>
-    </thead>
-
-    <tbody>
-    <?php
+        <?php
         $html = '';
+        $pattern = <<<HTML
+            <li class="span3">
+                <a href="%s" target="_blank">
+                    <div class="thumbnail">
+                            %s
+                        <h3>%s</h3>
+                    </div>
+                </a>
+            </li>
+HTML;
+
         foreach ($attachedFiles as $file) {
-            $link = CHtml::link($file->fpdd5, Yii::app()->baseUrl.'/uploads/docs/'.$file->fpdd4, array('target' => '_blank'));
-            $html .= '<tr>
-                        <td>'.$link.'</td>
-                      </tr>';
+            $link = Yii::app()->createUrl('/doc/file/',array('id'=>$file['FPDD1']));
+
+            if(Tddo::model()->isImage($file['FPDD4'])) {
+                $file_ = '<img src="%s" alt="%s">';
+                $file_ = sprintf($file_, $link, $file['FPDD4']);
+            }else{
+                $file_ ='';
+            }
+
+            $html .= sprintf($pattern,$link, $file_, $file['FPDD4']);
         }
         echo $html;
-    ?>
-
-    </tbody>
-</table>
-
+        ?>
+    </ul>
 <?php
 /*
 

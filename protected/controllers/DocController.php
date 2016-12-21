@@ -22,7 +22,8 @@ class DocController extends Controller
             array('allow',
                 'actions' => array(
                     'index',
-                    'view'
+                    'view',
+                    'file'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -98,16 +99,63 @@ class DocController extends Controller
         return $model;
     }
 
+    /**
+     * Проверка доступа к документу
+     * @param $id tdoo1
+     * @return bool
+     */
+    private function checkAccessToDoc($id){
+        if(!Yii::app()->user->isAdmin) {
+            $result = false;
+
+            return $result;
+        }else
+            return true;
+    }
+
     public function actionView($id){
         $model = $this->loadModel($id);
 
-        if(!Yii::app()->user->isAdmin)
-        {
-            //проверка доступа
-        }
+        if(!$this->checkAccessToDoc($id))
+            throw new CHttpException(403,'Your don`t have access to this doc');
 
         $this->render('view',array(
             'model'=>$model
         ));
+    }
+
+    public function actionFile($id){
+
+        $dbh = SH::getGrafConnection();
+
+        try{
+            $dbh->active = true;
+        }catch(Exception $error) {
+            throw new Exception("Ошибка подключения к uрафической базе, с ошибкой: " . $error->getMessage());
+        }
+
+        $sql = <<<SQL
+			SELECT *
+			FROM fpdd
+			WHERE fpdd1 = {$id}
+SQL;
+        $command=$dbh->createCommand($sql);
+        $file=$command->queryRow();
+        $dbh->active = false;
+
+        if(empty($file))
+            throw new CHttpException(404,'The requested page does not exist.');
+
+        $model = $this->loadModel($file['FPDD2']);
+
+        if(!$this->checkAccessToDoc($file['FPDD2']))
+            throw new CHttpException(403,'Your don`t have access to this doc');
+
+        if(Tddo::model()->isImage($file['FPDD4'])) {
+            header("Content-type: image/jpeg");
+        }else{
+            header("Content-type: application/".Tddo::model()->getExtByName($file['FPDD4']));
+        }
+        echo $file['FPDD3'];
     }
 }

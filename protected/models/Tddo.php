@@ -297,17 +297,7 @@ class Tddo extends CActiveRecord
 	public function getFiles(){
 		$files = array();
 
-		$string = Yii::app()->db->connectionString;
-		$parts  = explode('=', $string);
-
-		$host     = trim($parts[1].'D');
-
-		$newString = str_replace($parts[1],$host,$string);
-		//var_dump($newString);
-		$login    = Yii::app()->db->username;
-		$password = Yii::app()->db->password;
-
-		$dbh = new CDbConnection($newString, $login, $password);
+		$dbh = SH::getGrafConnection();
 
 		try{
 			$dbh->active = true;
@@ -316,13 +306,48 @@ class Tddo extends CActiveRecord
 		}
 
 		$sql = <<<SQL
-			SELECT *
-			FROM fkdd
-			WHERE fkdd1 = {$this->tddo1}
+			SELECT fpdd1,fpdd4
+			FROM fpdd
+			WHERE fpdd2 = {$this->tddo1}
 SQL;
+		$command=$dbh->createCommand($sql);
+		$dataReader=$command->query();
+		$files=$dataReader->readAll();
 
 		$dbh->active = false;
 
 		return $files;
+	}
+
+	/**
+	 * Являеться ли пикрепленый файл изображением
+	 * @param $nameFile название_файла
+	 * @return bool
+	 */
+	public function isImage($nameFile){
+		$ext=$this->getExtByName($nameFile);
+
+		$result = false;
+		switch($ext){
+			case 'doc':
+			case 'docx':
+			case 'pdf':
+				$result = false;
+				break;
+			default:
+				$result = true;
+				break;
+		}
+		return $result;
+	}
+
+	/**
+	 * расширение прикрепленого файла по имени
+	 * @param $fileName
+	 * @return mixed
+	 */
+	public function getExtByName($fileName){
+		$ext = explode(".",$fileName);
+		return end($ext);
 	}
 }

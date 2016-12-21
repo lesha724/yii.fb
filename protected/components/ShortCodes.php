@@ -461,6 +461,26 @@ class SH extends ShortCodes
         if (!$browser && strpos($agent, 'Gecko')) return 'Browser based on Gecko';
         return $browser.' '.$version;
     }
+
+    /**
+     * Конект к гарфической базе
+     * @return CDbConnection
+     */
+    public static function getGrafConnection(){
+        $string = Yii::app()->db->connectionString;
+        $parts  = explode('=', $string);
+
+        $host     = trim($parts[1].'D');
+
+        $newString = str_replace($parts[1],$host,$string);
+        //var_dump($newString);
+        $login    = Yii::app()->db->username;
+        $password = Yii::app()->db->password;
+
+        $dbh = new CDbConnection($newString, $login, $password);
+
+        return $dbh;
+    }
 }
 
 
