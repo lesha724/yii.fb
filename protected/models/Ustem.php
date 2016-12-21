@@ -325,10 +325,20 @@ SQL;
 
     public function getUstem7Arr()
     {
+        /*select rz8 from rz group by rz8*/
         $sql = <<<SQL
-              select rz8 from rz group by rz8
+              select rz8
+                from sem
+                   inner join us on (sem.sem1 = us.us12)
+                   inner join nr on (us.us1 = nr.nr2)
+                   inner join r on (nr.nr1 = r.r1)
+                   inner join rz on (r.r4 = rz.rz1)
+                where sem3=:YEAR AND sem5=:SEM
+                group by rz8
 SQL;
         $command=Yii::app()->db->createCommand($sql);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
         $res = $command->queryAll();
         foreach($res as $key => $val)
         {
