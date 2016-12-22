@@ -164,6 +164,7 @@ class Tddo extends CActiveRecord
 		$criteria->compare('tddo22',$this->tddo22);
 		$criteria->compare('tddo23',$this->tddo23);
 		$criteria->addCondition("tddo3>0");
+		$criteria->addCondition("tddo24=0");
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
