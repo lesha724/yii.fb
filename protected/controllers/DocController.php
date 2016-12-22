@@ -106,7 +106,21 @@ class DocController extends Controller
      */
     private function checkAccessToDoc($id){
         if(!Yii::app()->user->isAdmin) {
-            $result = false;
+
+            if(Yii::app()->user->isStd)
+                return false;
+
+            $sql = <<<SQL
+              SELECT COUNT(*) FROM IDO
+              INNER JOIN PD on (IDO2=PD1)
+              WHERE PD2=:P1 AND IDO1=:TDDO1
+SQL;
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':TDDO1', $id);
+            $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
+            $count = $command->queryScalar();
+
+            $result = $count>0;
 
             return $result;
         }else
