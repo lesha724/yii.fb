@@ -180,6 +180,52 @@ class Tddo extends CActiveRecord
 		));
 	}
 
+	public function searchSelf()
+	{
+		// @todo Please modify the following code to remove attributes that should not be searched.
+
+		$criteria=new CDbCriteria;
+
+		$criteria->compare('tddo1',$this->tddo1);
+		$criteria->compare('tddo2',$this->tddo2);
+		$criteria->compare('tddo3',$this->tddo3);
+		$criteria->compare('tddo4',$this->tddo4,true);
+		$criteria->compare('tddo5',$this->tddo5,true);
+		$criteria->compare('tddo6',$this->tddo6,true);
+		$criteria->compare('tddo7',$this->tddo7,true);
+		$criteria->compare('tddo8',$this->tddo8,true);
+		$criteria->compare('tddo9',$this->tddo9,true);
+		$criteria->compare('tddo10',$this->tddo10);
+		$criteria->compare('tddo11',$this->tddo11);
+		$criteria->compare('tddo12',$this->tddo12,true);
+		$criteria->compare('tddo13',$this->tddo13,true);
+		$criteria->compare('tddo14',$this->tddo14,true);
+		$criteria->compare('tddo15',$this->tddo15);
+		$criteria->compare('tddo16',$this->tddo16);
+		$criteria->compare('tddo17',$this->tddo17);
+		$criteria->compare('tddo18',$this->tddo18);
+		$criteria->compare('tddo19',$this->tddo19,true);
+		$criteria->compare('tddo20',$this->tddo20);
+		$criteria->compare('tddo21',$this->tddo21,true);
+		$criteria->compare('tddo22',$this->tddo22);
+		$criteria->compare('tddo23',$this->tddo23);
+		$criteria->addCondition("tddo3>0");
+		$criteria->addCondition("tddo24=0");
+
+		return new CActiveDataProvider($this, array(
+				'criteria'=>$criteria,
+				'sort' => array(
+
+						'defaultOrder' => array(
+								'tddo3' => CSort::SORT_DESC, //default sort value
+						),
+				),
+				'pagination' => array(
+						'pageSize' => Yii::app()->user->getState('pageSize',10),
+				),
+		));
+	}
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

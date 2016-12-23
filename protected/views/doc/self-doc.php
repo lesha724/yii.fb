@@ -12,14 +12,14 @@
  * @var $docTypeModel Ddo
  * @var $this DocController
  */
-$this->pageHeader=tt('Документооборот');
+$this->pageHeader=tt('Документооборот: К исполнению');
 $this->breadcrumbs=array(
-    tt('Док.-оборот'),
+    tt('Док.-оборот: К исполнению'),
 );
 
 $this->renderPartial(
     '_list',
 array(
-    'dataProvider'=>$model->search(),
+    'dataProvider'=>$model->searchSelf(),
     'model'=>$model
 ));

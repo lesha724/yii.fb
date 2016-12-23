@@ -91,6 +91,45 @@ class DocController extends Controller
         ));
     }
 
+    public function actionSelfDoc()
+    {
+        $docType = Yii::app()->request->getParam('docType', null);
+        $docYear = Yii::app()->request->getParam('docYear', null);
+
+        $model = new Tddo();
+        $model->unsetAttributes();
+
+        //$model->tddo2 = $docType;
+
+        if (isset($_GET['pageSize'])) {
+            Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
+            unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
+        }
+
+        $model->scenario = 'filter';
+        if (isset($_REQUEST['Tddo']))
+        {
+            $model->attributes = $_REQUEST['Tddo'];
+            Yii::app()->user->setState('SearchParamsTddo', $_REQUEST['Tddo']);
+        }
+        else
+        {
+            $searchParams = Yii::app()->user->getState('SearchParamsTddo');
+            if ( isset($searchParams) )
+            {
+                $model->attributes = $searchParams;
+            }
+        }
+
+        $model->tddo2 = $docType;
+        if(!empty($docYear))
+            $model->tddo23 = $docYear;
+
+        $this->render('index', array(
+            'model'   => $model
+        ));
+    }
+
     public function loadModel($id)
     {
         $model=Tddo::model()->findByPk($id);
