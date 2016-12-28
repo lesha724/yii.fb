@@ -12,7 +12,7 @@ class DocController extends Controller
 
         return array(
             'accessControl',
-            'checkPermission -index'//не выполянеться для индекса
+            'checkPermission -index, -selfDoc'//не выполянеться для индекса
         );
     }
 
@@ -22,6 +22,7 @@ class DocController extends Controller
             array('allow',
                 'actions' => array(
                     'index',
+                    'selfDoc',
                     'view',
                     'file'
                 ),
