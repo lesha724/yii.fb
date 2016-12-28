@@ -94,9 +94,10 @@
                 ),
                 array(
                     'name'       => 'Док.-оборот',
-                    'controller' => 'docs',
+                    'controller' => 'doc',
                     'items' => array(
-                        'tddo' => 'Документооборот',
+                        'index' => 'Документооборот',
+                        'selfDoc' => 'Личные документы',
                     ),
                 ),
                 array(

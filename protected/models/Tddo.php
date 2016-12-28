@@ -212,8 +212,8 @@ class Tddo extends CActiveRecord
 		$criteria->addCondition("tddo3>0");
 		$criteria->addCondition("tddo24=0");
 
-		$criteria->join = "INNER JOIN IDO ON (IDO1 = tddo1)";
-		$criteria->join .= "INNER JOIN PD ON (IDO2 = PD1)";
+		$criteria->join = " JOIN IDO ON (IDO1 = tddo1)";
+		$criteria->join .= " JOIN PD ON (IDO2 = PD1)";
 
 		$criteria->addCondition("pd2=".Yii::app()->user->dbModel->p1);
 

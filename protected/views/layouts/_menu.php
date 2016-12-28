@@ -527,13 +527,19 @@ $this->widget('zii.widgets.CMenu', array(
             'label' => _l('Док.-оборот', 'folder-open'),
             'url' => '#',
             'linkOptions'=> $_l,
-            'itemOptions'=>_i('docs'),
+            'itemOptions'=>_i('doc'),
             'items' => array(
                 array(
                     'label'   => $_l2.tt('Документооборот'),
-                    'url'     => _u('/docs/tddo'),
-                    'visible' => _ch('docs', 'tddo') && $isTch,
-                    'active'  => $_c=='docs' && stristr($_a, 'tddo')
+                    'url'     => _u('/doc/index'),
+                    'visible' => _ch('doc', 'index') && ($isTch||$isAdmin),
+                    'active'  => $_c=='doc' && stristr($_a, 'index')
+                ),
+                array(
+                    'label'   => $_l2.tt('Личные документы'),
+                    'url'     => _u('/doc/selfDoc'),
+                    'visible' => _ch('doc', 'selfDoc') && ($isTch||$isAdmin),
+                    'active'  => $_c=='doc' && stristr($_a, 'selfDoc')
                 ),
             ),
             'visible' => _ch('docs', 'main') && $isTch,

@@ -126,7 +126,7 @@ class DocController extends Controller
         if(!empty($docYear))
             $model->tddo23 = $docYear;
 
-        $this->render('index', array(
+        $this->render('self-doc', array(
             'model'   => $model
         ));
     }
