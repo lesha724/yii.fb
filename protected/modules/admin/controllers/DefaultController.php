@@ -511,6 +511,17 @@ class DefaultController extends AdminController
             }
         }*/
 
+        if (isset($_REQUEST['P_page']))
+        {
+            Yii::app()->user->setState('CurrentPageP',$_REQUEST['P_page']-1);
+        } else
+        {
+            if (Yii::app()->user->hasState('P_page'))
+            {
+                $_REQUEST['P_page'] = Yii::app()->user->getState('CurrentPageP')+1;
+            }
+        }
+
         $this->render('teachers', array(
             'model' => $model,
             'chairId' => $chairId,
@@ -618,9 +629,31 @@ class DefaultController extends AdminController
             Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
             unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
         }
-        if (isset($_REQUEST['St']))
-            $model->attributes = $_REQUEST['St'];
 
+        if (isset($_REQUEST['St']))
+        {
+            $model->attributes = $_REQUEST['St'];
+            Yii::app()->user->setState('SearchParamsStAdmin', $_REQUEST['St']);
+        }
+        else
+        {
+            $searchParams = Yii::app()->user->getState('SearchParamsStAdmin');
+            if ( isset($searchParams) )
+            {
+                $model->attributes = $searchParams;
+            }
+        }
+
+        if (isset($_REQUEST['St_page']))
+        {
+            Yii::app()->user->setState('CurrentPageSt',$_REQUEST['St_page']-1);
+        } else
+        {
+            if (Yii::app()->user->hasState('St_page'))
+            {
+                $_REQUEST['St_page'] = Yii::app()->user->getState('CurrentPageSt')+1;
+            }
+        }
 
         $this->render('students', array(
             'model' => $model,
