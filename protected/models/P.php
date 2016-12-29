@@ -522,6 +522,7 @@ SQL;
             'criteria'=>$criteria,
 			'pagination'=>array(
                 'pageSize'=> Yii::app()->user->getState('pageSize',10),
+				//'currentPage'=> Yii::app()->user->getState('CurrentPageP',null),
             ),
             'sort' => array(
                 'defaultOrder' => 'p3 collate UNICODE',

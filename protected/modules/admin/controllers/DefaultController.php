@@ -480,34 +480,31 @@ class DefaultController extends AdminController
             Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
             unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
         }
-        if (isset($_REQUEST['P']))
-            $model->attributes = $_REQUEST['P'];
 
-        /*if (isset($_REQUEST['P']))
+        if (isset($_REQUEST['P']))
         {
             $model->attributes = $_REQUEST['P'];
-            Yii::app()->user->setState('SearchParamsP', $_REQUEST['P']);
-            Yii::app()->user->setState('CurrentPageP', null);
+            Yii::app()->user->setState('SearchParamsPAdmin', $_REQUEST['P']);
         }
         else
         {
-            $searchParams = Yii::app()->user->getState('SearchParamsP');
-            //print_r($searchParams);
+            $searchParams = Yii::app()->user->getState('SearchParamsPAdmin');
             if ( isset($searchParams) )
             {
                 $model->attributes = $searchParams;
             }
-        }*/
-        /*$page = null;
-        if (isset($_REQUEST['P_page']))
+        }
+
+        //$page = null;
+        /*if (isset($_REQUEST['P_page']))
         {
-            Yii::app()->user->setState('CurrentPageP', $_REQUEST['P_page']);
+            Yii::app()->user->setState('CurrentPageP', $_REQUEST['P_page']-1);
             $page = $_REQUEST['P_page'];
         }
         else
         {
             $page = Yii::app()->user->getState('CurrentPageP');
-            print_r($page);
+            //print_r($page);
             if ( isset($page) )
             {
                 $_REQUEST['P_page'] = $page;
