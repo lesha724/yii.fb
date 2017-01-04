@@ -744,11 +744,15 @@ SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':d1', $d1);
         $ad = $command->queryRow();
+
         if($ad==null)
             return '';
         else {
-			return CHtml::link('<i class="icon-file"></i>','#', array('data-disp'=>$ad['d2'],'data-content'=>$ad['ad4'],'class'=>'disp-ad','style'=>'margin-left:10px'));
-	
+            if(mb_detect_encoding($ad['ad4'], 'UTF-8', true))
+                $str = $ad['ad4'];
+            else
+                $str = mb_convert_encoding($ad['ad4'], "UTF-8", "CP1251");
+			return CHtml::link('<i class="icon-file"></i>','#', array('data-disp'=>$ad['d2'],'data-content'=> nl2br($str),'class'=>'disp-ad','style'=>'margin-left:10px'));
             //return '<a class="disp-ad" data-toggle="popover" data-placement="bottom" data-content="'.$ad['ad4'].'"><i class="icon-file"></i></a>';
         }
     }
