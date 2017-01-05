@@ -1,12 +1,16 @@
 
 <form class="form-inline" method="POST">
     <?php
+        $previousYear2 = date('Y', strtotime('-3 year'));
+        $previousYear1 = date('Y', strtotime('-2 year'));
         $previousYear = date('Y', strtotime('-1 year'));
         $currentYear  = date('Y');
         $nextYear     = date('Y', strtotime('+1 year'));
 		$nextYear1     = date('Y', strtotime('+2 year'));
 		
         $options = array(
+            $previousYear2 => $previousYear2.'/'.$previousYear1,
+            $previousYear1 => $previousYear1.'/'.$previousYear,
             $previousYear => $previousYear.'/'.$currentYear,
             $currentYear  => $currentYear.'/'.$nextYear,
             $nextYear     => $nextYear.'/'.$nextYear1,
