@@ -4,8 +4,9 @@ $this->breadcrumbs=array(
 tt('Настройки портала'),
 );
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/admin/journal.js');
+Yii::app()->clientScript->registerPackage('jquery.ui');
 Yii::app()->clientScript->registerPackage('datepicker');
-Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/admin/psettings.js');
+//Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/admin/psettings.js');
 
 $htmlOptions2 = array(
     'class'=>'ace',
@@ -16,6 +17,22 @@ $options = array(
     'ru'=>tt('Ru'),
     'en'=>tt('en'),
 );
+
+
+$js =<<<JS
+    $('.sem-start').datepicker({
+        format: 'mm-dd',
+        language: 'ru',
+        maxViewMode:1,
+        minViewMode:0
+    })
+    .on('changeDate', function (ev) {
+        $(this).datepicker('hide');
+    })
+    //.focus();
+JS;
+
+Yii::app()->clientScript->registerScript('sem-start', $js);
 ?>
 <div class="span6">
     <div class="widget-box">
@@ -121,7 +138,7 @@ $options = array(
 
                 <div class="control-group">
                     <span class="lbl"> <?=tt('Начало Весеннего семестра')?>:</span>
-                    <?=CHtml::textField('settings[53]', PortalSettings::model()->findByPk(53)->ps2,array('class' => 'sem-start datepicker'))?>
+                    <?=CHtml::textField('settings[53]', PortalSettings::model()->findByPk(53)->ps2,array('class' => 'sem-start datepicker','date-format'=>'mm-dd'))?>
                 </div>
 
                 <div class="control-group">
