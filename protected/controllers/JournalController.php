@@ -26,6 +26,7 @@ class JournalController extends Controller
                     'changeTheme',
                     'saveChangeTheme',
                     'recalculateVmp',
+                    'recalculateStus',
 
                     'retake',
                     'searchRetake',
@@ -216,6 +217,52 @@ SQL;
                         }
 
                     }
+                }
+            }
+        }
+
+        Yii::app()->end(CJSON::encode(array('error' => $error, 'errorType' => $errorType)));
+    }
+
+    public function actionRecalculateStus()
+    {
+        if (!Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $ps84 = PortalSettings::model()->findByPk(84)->ps2;
+        if($ps84!=1)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $error=false;
+        $errorType=0;
+
+        $gr1 = Yii::app()->request->getParam('gr1', null);
+        $uo1 = Yii::app()->request->getParam('uo1', null);
+        $sem1 = Yii::app()->request->getParam('sem1', null);
+        $type = Yii::app()->request->getParam('type', null);
+
+        if($uo1==null || $gr1==null || $sem1==null || $type==null)
+        {
+            $error = true;
+            $errorType=2;
+        }
+        else
+        {
+            $elg1=Elg::getElg1($uo1,$type,$sem1);
+            $elg = Elg::model()->findByPk($elg1);
+            if(empty($elg))
+                throw new CHttpException(404, tt('Не задана структура журнала. Обратитесь к Администратору системы').'.');
+
+            $sem7 = Gr::model()->getSem7ByGr1ByDate($gr1,date('d.m.Y'));
+            $students = St::model()->getStudentsForJournal($gr1, $uo1);
+            if(empty($students)){
+                $error = true;
+                $errorType=2;
+            }else{
+
+                foreach ($students as $student) {
+
+                        Stus::model()->recalculateStusMark($student['st1'], $gr1, $sem7, $elg);
                 }
             }
         }

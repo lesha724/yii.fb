@@ -91,6 +91,22 @@ if (!empty($model->sem1)):
         ));
     }
 
+    $ps84 = PortalSettings::model()->findByPk(84)->ps2;
+    if ($ps84 == 1) {
+        $this->widget('bootstrap.widgets.TbButton', array(
+            'buttonType' => 'button',
+            'type' => 'inverse',
+
+            'icon' => 'refresh',
+            'label' => tt('Пересчетать ведомости(и.)'),
+            'htmlOptions' => array(
+                'class' => 'btn-small',
+                'data-url' => Yii::app()->createUrl('/journal/recalculateStus', array('uo1' => $uo1, 'gr1' => $gr1, 'sem1' => $model->sem1, 'type' => $model->type_lesson)),
+                'id' => 'recalculate-stus',
+            )
+        ));
+    }
+
     ?>
         <span><label class="label label-warning">&nbsp;&nbsp;</label> - <?=tt('Информация требует обновления страницы')?></span>
     <?php

@@ -101,7 +101,7 @@ $(document).ready(function(){
         $("#filter-form").attr("action", action);
     });
 
-    $('#recalculate-vmp').click(function(){
+    $('#recalculate-vmp,#recalculate-stus').click(function(){
         var $that =$(this);
 
         var url = $that.data('url');
