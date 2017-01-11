@@ -109,6 +109,13 @@ if (!empty($model->sem1)):
 
     ?>
         <span><label class="label label-warning">&nbsp;&nbsp;</label> - <?=tt('Информация требует обновления страницы')?></span>
+        <div class="span-12">
+            <?= tt("Режим чтения")?>:
+            <label class="label label-warning">+</label> - <?= tt("Присутствовал на занятии")?>
+            <label class="label label-warning">-</label> - <?= tt("Отсутствовал на занятии")?>
+            <label class="label label-success">5</label> - <?= tt("Оценка за занятие")?>
+            <label class="label label-inverse">5</label> - <?= tt("Отработка занятия")?>
+        </div>
     <?php
     endif;
 
