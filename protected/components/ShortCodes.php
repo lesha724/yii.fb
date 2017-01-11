@@ -286,7 +286,7 @@ SQL;
                 }else
                 {
                     $sem  = 0;
-                    list($month,$day)=explode('-',$ps53);
+                    list($month,$day, $year_)=explode('/',$ps53);
                     if((int)$month>8)
                         $sem=1;
                 }

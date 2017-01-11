@@ -5,7 +5,7 @@
 $(document).ready(function() {
     $(document).on('click', '.sem-start', function (event) {
         $(this).datepicker({
-                format: 'mm-dd',
+                format: 'mm/dd/yyyy',
                 language: 'ru',
                 maxViewMode:1,
                 minViewMode:0
