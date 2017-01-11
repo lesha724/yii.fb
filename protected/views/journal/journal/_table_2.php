@@ -10,8 +10,10 @@ function getMarsForElgz3($nom,$marks){
 }
 function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps20,$ps55,$ps56,$sem7,$ps60,$min,$ps65,$show,$moduleNom,$ps88, $isStd)
 {
-    if (($st['st71']!=$sem7&&$st['st71']!=$sem7+1) &&$ps60==1)
-        return '<td colspan="2"></td>';
+    if (($st['st71']!=$sem7&&$st['st71']!=$sem7+1) &&$ps60==1) {
+        $read_only = true;
+    }
+        //return '<td colspan="2"></td>';
 
     if (stripos($date['r2'], '11.11.1111')!==false )
         return '<td colspan="2"></td>';
