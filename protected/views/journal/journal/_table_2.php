@@ -116,7 +116,7 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
                 ?
                 tt('Отработано'):
                     (
-                        $isset&&$marks[$key]['elgotr0']>0?round($marks[$key]['elgzst5'], 1):''
+                        $isset&&isset($marks[$key]['elgotr0'])&&$marks[$key]['elgotr0']>0?round($marks[$key]['elgzst5'], 1):''
                     )
             );
 
