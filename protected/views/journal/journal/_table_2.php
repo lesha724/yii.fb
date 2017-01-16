@@ -311,6 +311,7 @@ function table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$nom,$uo1,$modules,$pot
                 $mark = Vmp::model()->getMarks($modules[(int)$nom-1]['vvmp1'],$st['st1'],$gr1);
                 if(empty($mark))
                     return '<td colspan="4">'.tt('Нет ведомости, обращайтесь в деканат!').'</td>';
+
                 $ind = round($mark['vmp6'],2);
                 $pot = round($mark['vmp5'],2);
                 $itog = round($mark['vmp4'],2);
@@ -343,6 +344,21 @@ JS;
                     Yii::app()->clientScript->registerScript('module-nom'.$nom.'-'.$st['st1'], $js, CClientScript::POS_END);
 
                 }
+
+                $elgpmkst = Elgpmkst::model()->findByAttributes(
+                    array(
+                        'elgpmkst2'=> $date['elgz2'],
+                        'elgpmkst3' =>$st['st1'],
+                        'elgpmkst4' =>$vmpv1,
+                    )
+                );
+
+                if(!empty($elgpmkst)){
+                    if($elgpmkst->elgpmkst5!=$mark['vmp5']) {
+                        $pot = '<label class="label label-warning">' . $pot .' / ' .round($elgpmkst->elgpmkst5, 2) .   '</label>';
+                    }
+                }
+
                 $st1 = $st['st1'];
                 return sprintf(<<<HTML
                     <td class="module-tr module{$vmpv1}{$st1}">%s</td>

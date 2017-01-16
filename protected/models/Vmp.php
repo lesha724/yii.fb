@@ -499,6 +499,26 @@ SQL;
                         $command->bindValue(':VMP12', Yii::app()->user->dbModel->p1);
                         $command->bindValue(':VMP10', date('Y-m-d H:i:s'));
                         $command->execute();
+
+                        $elgpmkst = Elgpmkst::model()->findByAttributes(
+                            array(
+                                'elgpmkst2'=> $elgz->elgz2,
+                                'elgpmkst3' =>$st1,
+                                'elgpmkst4' =>$module['vmpv1'],
+                            )
+                        );
+
+                        if(empty($elgpmkst)){
+                            $elgpmkst = new Elgpmkst();
+                            $elgpmkst->elgpmkst1 = new CDbExpression('GEN_ID(GEN_ELGPMKST, 1)');
+                            $elgpmkst->elgpmkst2 = $elgz->elgz2;
+                            $elgpmkst->elgpmkst3 =  $st1;
+                            $elgpmkst->elgpmkst4 = $module['vmpv1'];
+                        }
+
+                        $elgpmkst->elgpmkst5 = $tek;
+                        $elgpmkst->save();
+
                     }elseif($_elgz->elgz4==3||$_elgz->elgz4==4){
                         $sql = <<<SQL
                               UPDATE vmp set vmp4=:VMP4, vmp5=:VMP5, vmp6=:VMP6, vmp7=:VMP7, vmp10=:VMP10, vmp12=:VMP12 WHERE vmp2=:ST1 AND vmp1=:VMPV1
