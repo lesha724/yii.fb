@@ -247,7 +247,7 @@ HTML;
 
 }
 
-function table2TrModule2($date,$gr1,$st,$ps56,$nom,$modules,$sem7,$ps60, $total, $count)
+function table2TrModule2($date,$gr1,$st,$ps56,$nom,$modules,$sem7,$ps60, $total, $_count)
 {
     if (($st['st71']!=$sem7&&$st['st71']!=$sem7+1) && $ps60 ==1)
         return '<td colspan="4"></td>';
@@ -273,10 +273,8 @@ function table2TrModule2($date,$gr1,$st,$ps56,$nom,$modules,$sem7,$ps60, $total,
         $vvmp1 = $modules[(int)$nom-1]['vvmp1'];
 
         if($date['elgz4']==3&&SH::getUniversityCod()==32){
-            $total = $total/$count;
-            //print_r($val);
+            $total = $total/$_count;
             $total = round($total,2);
-
             $total= ($total*200)/5;
         }
 
@@ -292,7 +290,7 @@ JS;
                     <td class="module-tr">%s</td>
                     <td class="module-tr">%s</td>
 HTML
-            ,$total,($total!=$itog)?'<label class="label label-warning">'.$itog.'</label>':$itog);
+            ,$total,(round($total,2)!=round($itog,2))?'<label class="label label-warning">'.$itog.'</label>':$itog);
     }
 }
 
@@ -625,7 +623,6 @@ HTML;
 
                 if($ps57==1)
                     $divZachTotal+=getMarkByLesson($marks,$date['elgz3']);
-                $countDivZacvmarks++;
             }
         }
         $tr .= '</tr>';
