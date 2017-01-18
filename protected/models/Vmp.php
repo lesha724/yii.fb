@@ -443,7 +443,8 @@ SQL;
                     }
                     $count+=count($dopMarks);
                 }
-
+                ///Для запрожья где диф зачет считаеться без перевода балов, а среднее делиться на 5 и умножаеться на 200
+                $_tek = $tek;
                 $ps82 = PortalSettings::model()->findByPk(82)->ps2;
                 if($ps82!=0){
                     $val = $tek/$count;
@@ -520,6 +521,15 @@ SQL;
                         $elgpmkst->save();
 
                     }elseif($_elgz->elgz4==3||$_elgz->elgz4==4){
+
+                        if($_elgz->elgz4==3&&SH::getUniversityCod()==32){
+                            $val = $_tek/$count;
+                            //print_r($val);
+                            $tek = round($val,2);
+
+                            $tek= ($tek*200)/5;
+                        }
+
                         $sql = <<<SQL
                               UPDATE vmp set vmp4=:VMP4, vmp5=:VMP5, vmp6=:VMP6, vmp7=:VMP7, vmp10=:VMP10, vmp12=:VMP12 WHERE vmp2=:ST1 AND vmp1=:VMPV1
 SQL;
