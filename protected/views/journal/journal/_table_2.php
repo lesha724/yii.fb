@@ -247,7 +247,7 @@ HTML;
 
 }
 
-function table2TrModule2($date,$gr1,$st,$ps56,$nom,$modules,$sem7,$ps60, $total)
+function table2TrModule2($date,$gr1,$st,$ps56,$nom,$modules,$sem7,$ps60, $total, $count)
 {
     if (($st['st71']!=$sem7&&$st['st71']!=$sem7+1) && $ps60 ==1)
         return '<td colspan="4"></td>';
@@ -271,6 +271,14 @@ function table2TrModule2($date,$gr1,$st,$ps56,$nom,$modules,$sem7,$ps60, $total)
         $itog = round($mark['vmp4'],2);
         $vmpv6 = $mark['vmpv6'];
         $vvmp1 = $modules[(int)$nom-1]['vvmp1'];
+
+        if($date['elgz4']==3&&SH::getUniversityCod()==32){
+            $total = $total/$count;
+            //print_r($val);
+            $total = round($total,2);
+
+            $total= ($total*200)/5;
+        }
 
         if(!empty($vmpv6)) {
             $js=<<<JS
@@ -552,6 +560,9 @@ HTML;
 
     $permLesson=Elgr::model()->getList($gr1,$elgz1_arr);
 
+    /*количество занятий для пересчета оценки дифзачета запорожье*/
+    $countDivZacvmarks =0;
+
     foreach($dates as $date) {
             $date2  = new DateTime($date['r2']);
 
@@ -567,6 +578,9 @@ HTML;
                 $elgz3Nom = $date['elgz3'];
             }
             $count_dates++;
+
+            if($date['elgz4']==0)
+                $countDivZacvmarks++;
     }
 
     foreach($students as $st) {
@@ -600,7 +614,7 @@ HTML;
                 $moduleNom++;
             }elseif(($date['elgz4']==3||$date['elgz4']==4||$date['elgz4']==5)&&$ps57==1){
                 if($date['elgz4']==3){
-                    $tr .= table2TrModule2($date,$gr1,$st,$ps56,$moduleNom,$modules,$sem7,$ps60,$divZachTotal);
+                    $tr .= table2TrModule2($date,$gr1,$st,$ps56,$moduleNom,$modules,$sem7,$ps60,$divZachTotal,$countDivZacvmarks);
                     $divZachTotal = 0;
                 }else
                     $tr.='<th></th><th></th>';
@@ -611,6 +625,7 @@ HTML;
 
                 if($ps57==1)
                     $divZachTotal+=getMarkByLesson($marks,$date['elgz3']);
+                $countDivZacvmarks++;
             }
         }
         $tr .= '</tr>';
