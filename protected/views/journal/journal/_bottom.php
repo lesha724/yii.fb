@@ -82,7 +82,7 @@ if (!empty($model->sem1)):
             'type' => 'danger',
 
             'icon' => 'refresh',
-            'label' => tt('Пересчетать ведомости'),
+            'label' => tt('Пересчитать ведомости'),
             'htmlOptions' => array(
                 'class' => 'btn-small',
                 'data-url' => Yii::app()->createUrl('/journal/recalculateVmp', array('uo1' => $uo1, 'gr1' => $gr1, 'sem1' => $model->sem1, 'type' => $model->type_lesson)),
@@ -98,7 +98,7 @@ if (!empty($model->sem1)):
             'type' => 'inverse',
 
             'icon' => 'refresh',
-            'label' => tt('Пересчетать ведомости(и.)'),
+            'label' => tt('Пересчитать ведомости(и.)'),
             'htmlOptions' => array(
                 'class' => 'btn-small',
                 'data-url' => Yii::app()->createUrl('/journal/recalculateStus', array('uo1' => $uo1, 'gr1' => $gr1, 'sem1' => $model->sem1, 'type' => $model->type_lesson)),
