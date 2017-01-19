@@ -213,9 +213,11 @@ class Tddo extends CActiveRecord
 		$criteria->addCondition("tddo24=0");
 
 		$criteria->join = " JOIN IDO ON (IDO1 = tddo1)";
-		$criteria->join .= " JOIN PD ON (IDO2 = PD1)";
+		$criteria->join .= " LEFT JOIN PD ON (IDO2 = PD1)";
+		$criteria->join .= " LEFT JOIN INNFP ON (IDO4 = INNFP2)";
 
-		$criteria->addCondition("pd2=".Yii::app()->user->dbModel->p1);
+		$p1 = Yii::app()->user->dbModel->p1;
+		$criteria->addCondition(" (pd2={$p1} OR innfp1={$p1}) ");
 
 		return new CActiveDataProvider($this, array(
 				'criteria'=>$criteria,
