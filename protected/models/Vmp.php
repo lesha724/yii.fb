@@ -400,7 +400,7 @@ SQL;
             $sql=<<<SQL
               SELECT elgzst5,elgzst4,elgzst3 FROM elgzst
               INNER JOIN elgz on (elgzst.elgzst2 = elgz.elgz1 AND elgz.elgz2=:ELGZ2 and elgz.elgz3>:MIN AND elgz.elgz3<:MAX)
-              WHERE elgzst1=:ST1 AND elgz4=0 ORDER by elgz3 asc
+              WHERE elgzst1=:ST1 AND (elgz4=0 or elgz4=1) ORDER by elgz3 asc
 SQL;
             $command = Yii::app()->db->createCommand($sql);
             $command->bindValue(':ELGZ2', $elgz->elgz2);
@@ -445,12 +445,14 @@ SQL;
                 }
                 ///Для запрожья где диф зачет считаеться без перевода балов, а среднее делиться на 5 и умножаеться на 200
                 $_tek = $tek;
+                //var_dump($tek);
+                //var_dump($count);
                 $ps82 = PortalSettings::model()->findByPk(82)->ps2;
                 if($ps82!=0){
                     $val = $tek/$count;
                     //print_r($val);
                     $tek = round($val,2);
-                   //print_r($tek);
+                    //var_dump($tek);
                     if($ps82==2){
                         //print_r('----');
                         $sql = <<<SQL
@@ -459,7 +461,7 @@ SQL;
                         $command = Yii::app()->db->createCommand($sql);
                         $command->bindValue(':BAL', $tek);
                         $mark = $command->queryScalar();
-                        //print_r($mark);
+                        //var_dump($mark);
                         if(!empty($mark)){
                             $tek = $mark;
                         }else {
