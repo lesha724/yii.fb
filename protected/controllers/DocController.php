@@ -162,6 +162,21 @@ SQL;
 
             $result = $count>0;
 
+            if($result)
+                return $result;
+
+            $sql = <<<SQL
+              SELECT COUNT(*) FROM IDO
+              INNER JOIN INNFP on (IDO4=INNFP2)
+              WHERE INNFP1=:P1 AND IDO1=:TDDO1
+SQL;
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':TDDO1', $id);
+            $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
+            $count = $command->queryScalar();
+
+            $result = $count>0;
+
             return $result;
         }else
             return true;
