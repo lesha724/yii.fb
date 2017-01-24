@@ -57,6 +57,11 @@ Yii::app()->clientScript->registerScript('sem-start', $js);
                     'class'=>'ace',
                 );
                 ?>
+                <div class="control-group">
+                    <?=CHtml::checkBox('', PortalSettings::model()->findByPk(107)->ps2, $checkboxStyle)?>
+                    <span class="lbl"> <?=tt('Карточка студента по стусв')?></span>
+                    <?=CHtml::hiddenField('settings[107]', PortalSettings::model()->findByPk(107)->ps2)?>
+                </div>
 
                 <div class="control-group">
                     <?=CHtml::checkBox('', PortalSettings::model()->findByPk(80)->ps2, $checkboxStyle)?>

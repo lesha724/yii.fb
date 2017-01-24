@@ -1168,7 +1168,7 @@ SQL;
 
         return $students;
     }
-
+	/*старая процедура времено используеться в карточке стдента, до перехода на стусв, новая в стусв*/
 	public function getDisciplineExam($st1,$gr1)
 	{
 		$sql = <<<SQL

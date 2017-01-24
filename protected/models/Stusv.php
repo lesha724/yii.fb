@@ -697,4 +697,80 @@ SQL;
 
 		return $stusvst;
 	}
+
+	public function getMarksForStudent($st1)
+	{
+		if (empty($st1))
+			return array();
+
+		$sql = <<<SQL
+          	select
+    			d2,d27,us4,us6, stusv3, stusv4, stusvst4, stusvst5, stusvst6, sem7, stusv1,stusv11
+			from stusvst
+			   inner join stusv on (stusvst.stusvst1 = stusv.stusv0)
+			   inner join us on (stusv.stusv1 = us.us1)
+			   INNER JOIN uo on (us.us2 = uo.uo1)
+			   INNER JOIN d ON (uo.uo3 = d.d1)
+			   INNER JOIN sem on (us.us3 = sem.sem1)
+			where stusvst3=:ST1 and stusv11 is not null
+			group by d2,d27,us4,us6, stusv3, stusv4, stusvst4, stusvst5, stusvst6, sem7, stusv1,stusv11
+			ORDER by sem7 ASC, d2 collate UNICODE, stusv11 desc
+SQL;
+
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':ST1', $st1);
+		$marks = $command->queryAll();
+
+		$res = array();
+
+		foreach ($marks as $mark) {
+			if(!isset($res[$mark['stusv1']])){
+				$res[$mark['stusv1']] = $mark;
+			}
+		}
+
+		return $res;
+	}
+
+	public function getDisciplineExam($st1,$gr1)
+	{
+		$sql = <<<SQL
+		select
+			d2,us4,us6, stusv3, stusv4, stusvst4, stusvst5, stusvst6,sem7, stusv1,stusv11
+		from stusvst
+			inner join stusv on (stusvst.stusvst1 = stusv.stusv0)
+		  	inner join us on (stusv.stusv1 = us.us1)
+			INNER JOIN uo on (us.us2 = uo.uo1)
+			INNER JOIN d ON (uo.uo3 = d.d1)
+			INNER JOIN sem on (us.us3 = sem.sem1)
+	  	where stusvst3=:ST1 and sem7 in
+					 (select sem7
+					 from gr
+						inner join std on (gr.gr1 = std.std3)
+						inner join st on (std.std2 = st.st1)
+						inner join sg on (gr.gr2 = sg.sg1)
+						inner join sem on (sg.sg1 = sem.sem2)
+					 where st1={$st1} and std11<>1 and std7 is null and sem3=:YEAR and sem5=:SEM
+					 group by sem7)
+			group by d2,us4,us6, stusv3, stusv4, stusvst4, stusvst5, stusvst6,sem7, stusv1,stusv11
+			order by d2 COLLATE UNICODE, stusv11 desc
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':GR1', $gr1);
+		$command->bindValue(':ST1', $st1);
+		$command->bindValue(':YEAR', Yii::app()->session['year']);
+		$command->bindValue(':SEM', Yii::app()->session['sem']);
+		$disciplines = $command->queryAll();
+
+		$res = array();
+
+		foreach ($disciplines as $discipline) {
+			if(!isset($res[$discipline['stusv1']])){
+				$res[$discipline['stusv1']] = $discipline;
+			}
+		}
+
+		return $res;
+		//return $disciplines;
+	}
 }

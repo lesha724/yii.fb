@@ -115,6 +115,11 @@ HTML;
     echo '<div class="bottom-block">';
 
     $disciplines = Elg::model()->getDispBySt($st->st1);
+    //стусв или стус (временно)
+    $ps107 = PortalSettings::model()->findByPk(107)->ps2;
+    $_pref ='';//приставка в конец дял вида со сус или стусв
+    if($ps107==1)
+        $_pref = '_new';
 
     $params = array('gr1'=>$studentInfo['gr1'],'st'=>$st);
     $ps50 = PortalSettings::model()->findByPk(50)->ps2;
@@ -126,9 +131,9 @@ HTML;
     if(PortalSettings::model()->findByPk(49)->ps2==1)
         array_push($tabs,array('label'=>tt('Модульный контроль'), 'content'=>$this->renderPartial((PortalSettings::model()->findByPk(76)->ps2==1)?'studentCard/_module':'studentCard/_module_pmk', $params,true), 'active'=>$ps50==2));
     if(PortalSettings::model()->findByPk(51)->ps2==1)
-        array_push($tabs,array('label'=>tt('Екзаменационная сессия'), 'content'=>$this->renderPartial('studentCard/_exam', $params,true), 'active'=>$ps50==3));
+        array_push($tabs,array('label'=>tt('Екзаменационная сессия'), 'content'=>$this->renderPartial('studentCard/_exam'.$_pref, $params,true), 'active'=>$ps50==3));
     if(PortalSettings::model()->findByPk(52)->ps2==1)
-        array_push($tabs,array('label'=>tt('Общая успеваемость'), 'content'=>$this->renderPartial('studentCard/_progress', $params,true), 'active'=>$ps50==4));
+        array_push($tabs,array('label'=>tt('Общая успеваемость'), 'content'=>$this->renderPartial('studentCard/_progress'.$_pref, $params,true), 'active'=>$ps50==4));
     if(PortalSettings::model()->findByPk(91)->ps2==1)
         array_push($tabs,array('label'=>tt('Общая информация'), 'content'=>$st->st165, 'active'=>$ps50==5));
 

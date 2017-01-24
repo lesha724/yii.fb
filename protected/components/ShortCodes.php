@@ -36,6 +36,45 @@ SQL;
         return ' '.mb_substr($text, 0,1).'.';
     }
 
+    /**
+     * @param $us4
+     * @param $us6
+     * @return string
+     */
+    public static  function convertUsByStudentCard($us4, $us6){
+        $type = '-';
+        if($us4!==null)
+            switch($us4){
+                case 5:	$type = tt('Экз.'); break;
+                case 6:
+                    if($us6==1)
+                        $type = tt('Зач.');
+                    elseif($us6==2)
+                        $type = tt('Диф.зач.');
+                    break;
+                case 8:	$type = tt('Курсов.'); break;
+                default: $type='';
+            }
+        return $type;
+    }
+
+    public static  function getColorUsByStudentCard($us4, $us6){
+        $color = '';
+        if($us4!==null)
+            switch($us4){
+                case 5:	$color = '#ffe1e1'; break;
+                case 6:
+                    if($us6==1)
+                        $color = '#ddffdd';
+                    elseif($us6==2)
+                        $color = '#d6d6bd';
+                    break;
+                case 8:	$color = '#d3ffff'; break;
+                default: $color='';
+            }
+        return $color;
+    }
+
     public static  function convertStus19($stus19){
         if($stus19!==null)
             switch($stus19){
