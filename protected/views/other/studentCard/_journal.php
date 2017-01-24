@@ -91,7 +91,7 @@ HTML;
 $pattern=<<<HTML
     <div class="accordion-group">
     <div class="accordion-heading">
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-journal" href="#collapse-%s">%s</a>
+      <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion-journal" href="#collapse-%s">%s</a>
     </div>
     <div id="collapse-%s" class="accordion-body collapse">
       <div class="accordion-inner">
