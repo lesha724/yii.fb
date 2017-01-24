@@ -262,7 +262,7 @@ SQL;
 
                 foreach ($students as $student) {
 
-                        Stus::model()->recalculateStusMark($student['st1'], $gr1, $sem7, $elg);
+                        Stusv::model()->recalculateStusMark($student['st1'], $gr1, $sem7, $elg);
                 }
             }
         }
@@ -861,7 +861,11 @@ SQL;
 
                             $ps84 = PortalSettings::model()->findByPk(84)->ps2;
                             if ($ps84 == 1) {
-                                Stus::model()->recalculateStusMark($st1, $gr1, $sem7, $elg);
+                                if(!Stusv::model()->recalculateStusMark($st1, $gr1, $sem7, $elg))
+                                {
+                                    $error = true;
+                                    $errorType = 101;
+                                }
                             }
                         }
 
@@ -946,7 +950,7 @@ SQL;
                         if ($ps84==1){
                             $elg = Elg::model()->findByPk($elg1);
                             $sem7 = Gr::model()->getSem7ByGr1ByDate($gr1,date('d.m.Y'));
-                            Stus::model()->recalculateStusMark($st1,$gr1,$sem7,$elg);
+                            Stusv::model()->recalculateStusMark($st1,$gr1,$sem7,$elg);
                         }
                     }
 
@@ -1286,7 +1290,7 @@ SQL;
                                     if ($ps84==1){
                                         $sem7 = Gr::model()->getSem7ByGr1ByDate($gr1,date('d.m.Y'));
                                         $elg = Elg::model()->findByPk($elg['elg1']);
-                                        Stus::model()->recalculateStusMark($elgzst->elgzst1,$gr1,$sem7,$elg);
+                                        Stusv::model()->recalculateStusMark($elgzst->elgzst1,$gr1,$sem7,$elg);
                                     }
                                 } else {
                                     $errorType = 7;

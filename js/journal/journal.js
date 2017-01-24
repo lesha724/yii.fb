@@ -661,6 +661,9 @@ function getError(data)
             case 9:
                 error = tt.notFoundVmpv;
                 break
+            case 101:
+                error = tt.stusvError;
+                break
             default:
                 error = tt.error;
         }

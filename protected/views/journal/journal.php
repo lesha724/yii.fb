@@ -25,6 +25,7 @@
     $ps88 = PortalSettings::model()->getSettingFor(88);
     $timeAccess = tt('Ошибка! Доступ на редактирование закрыт!');
     $notFoundVmpv = tt('Ошибка! Ведомость не найдена или закрыта!');
+    $stusvError = tt('Предупреждение! Оценка сохранена, но ведомость не пересчитана');
 
 //errorType=0 error
 //errorType=4 minMaxError
@@ -43,6 +44,8 @@
         tt.st = "{$st}";
         tt.error2 = "{$error2}";
         tt.notFoundVmpv = "{$notFoundVmpv}";
+        tt.stusvError = "{$stusvError}";
+
         ps44 = {$ps44};
         ps55 = {$ps55};
         ps84 = {$ps84};
