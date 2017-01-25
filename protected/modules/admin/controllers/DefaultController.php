@@ -211,7 +211,7 @@ class DefaultController extends AdminController
 
         UsersHistory::getNewLogin();
 
-        $this->redirect('/site/index');
+        $this->redirect(array('/site/index'));
     }
 
     public function actionStudentCard()
