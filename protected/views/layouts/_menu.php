@@ -542,7 +542,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'active'  => $_c=='doc' && stristr($_a, 'selfDoc')
                 ),
             ),
-            'visible' => _ch('docs', 'main') && $isTch,
+            'visible' => _ch('doc', 'main') && $isTch,
         ),
         array(
             'label' => _l('Абитуриент', 'book'),
