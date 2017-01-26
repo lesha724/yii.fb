@@ -644,10 +644,12 @@ SQL;
                 }
             }
 
-            if(empty($elgz))
+            if(empty($elgz)||$error)
             {
-                $error = true;
-                $errorType=2;
+                if(!$error) {
+                    $error = true;
+                    $errorType = 2;
+                }
             }else
             {
                 $elg = Elg::model()->findByPk($elgz->elgz2);
