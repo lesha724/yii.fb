@@ -137,7 +137,9 @@ $sem = Sem::model()->findByPk($model->sem1);
 
 $us = Us::model()->getUsByStusvFromJournal($elg);
 
-$stusv = Stusv::model()->getStusvByJournal($elg, $gr1);
+$stusv = null;
+if($ps85==0&&$ps84 != 0)
+    $stusv = Stusv::model()->getStusvByJournal($elg, $gr1);
 //var_dump($stusv);
 
 foreach ($students as $st) {
