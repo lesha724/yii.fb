@@ -593,4 +593,26 @@ HTML;
 
         return array($minMax, $fullTimeTable);
     }
+
+    /**
+     * загрузка пареметров преподователя для прямой ссылки
+     * @param $p1 int
+     */
+    public function loadByP1($p1){
+
+        if($this->scenario!='teacher')
+            return;
+
+        if(empty($p1))
+            return;
+
+        $teacherParams = P::model()->getTeacherParamsByP1(intval($p1));
+        if(empty($teacherParams))
+            return;
+
+        $this->filial = $teacherParams['ks1'];
+        $this->faculty = $teacherParams['f1'];
+        $this->chair = $teacherParams['k1'];
+        $this->teacher = $teacherParams['p1'];
+    }
 }

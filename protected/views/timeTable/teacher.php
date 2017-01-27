@@ -47,6 +47,7 @@ if(!(PortalSettings::model()->findByPk(75)->ps2&&Yii::app()->user->isGuest)) {
 
 $form=$this->beginWidget('CActiveForm', array(
     'id'=>'timeTable-form',
+	'action'=>array('teacher'),
     'htmlOptions' => array('class' => 'form-inline noprint')
 ));
 

@@ -182,6 +182,11 @@ class TimeTableController extends Controller
 
         $model = new TimeTableForm;
         $model->scenario = 'teacher';
+
+        if (isset($_GET['teacherId'])) {
+            $model->loadByP1((int)strip_tags($_GET['teacherId']));
+            unset($_GET['teacherId']);
+        }
 		
 		if (isset($_REQUEST['timeTable'])) {
             Yii::app()->user->setState('timeTable',(int)$_REQUEST['timeTable']);
