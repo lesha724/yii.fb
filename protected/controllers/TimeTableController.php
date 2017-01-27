@@ -175,6 +175,20 @@ class TimeTableController extends Controller
         ));
     }
 
+    /**
+     * Загрузка для прямой ссылки
+     * @param $model TimeTableForm
+     * @return TimeTableForm
+     */
+    private  function teacherRasp($model){
+        if (isset($_GET['teacherId'])) {
+            $model->loadByP1((int)strip_tags($_GET['teacherId']));
+            unset($_GET['teacherId']);
+        }
+
+        return $model;
+    }
+
     public function actionTeacher()
     {
         if($this->mobileCheck())
@@ -183,10 +197,7 @@ class TimeTableController extends Controller
         $model = new TimeTableForm;
         $model->scenario = 'teacher';
 
-        if (isset($_GET['teacherId'])) {
-            $model->loadByP1((int)strip_tags($_GET['teacherId']));
-            unset($_GET['teacherId']);
-        }
+        $model = $this->teacherRasp($model);
 		
 		if (isset($_REQUEST['timeTable'])) {
             Yii::app()->user->setState('timeTable',(int)$_REQUEST['timeTable']);
