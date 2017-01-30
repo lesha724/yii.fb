@@ -27,8 +27,8 @@ class TimeTableController extends Controller
 
     public  function actionSelf()
     {
-        if($this->mobileCheck())
-            $this->redirect('/mobile/timeTableSelf');
+        /*if($this->mobileCheck())
+            $this->redirect('/mobile/timeTableSelf');*/
         $model = new TimeTableForm;
         //$model->scenario = 'self';
         if (isset($_REQUEST['TimeTableForm']))
@@ -191,8 +191,8 @@ class TimeTableController extends Controller
 
     public function actionTeacher()
     {
-        if($this->mobileCheck())
-            $this->redirect('/mobile/timeTableTeacher');
+        /*if($this->mobileCheck())
+            $this->redirect('/mobile/timeTableTeacher');*/
 
         $model = new TimeTableForm;
         $model->scenario = 'teacher';
@@ -553,8 +553,8 @@ class TimeTableController extends Controller
 
     public function actionStudent()
     {
-        if($this->mobileCheck())
-            $this->redirect('/mobile/timeTableStudent');
+        /*if($this->mobileCheck())
+            $this->redirect('/mobile/timeTableStudent');*/
 
         $model = new TimeTableForm;
         $model->scenario = 'student';
