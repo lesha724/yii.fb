@@ -600,7 +600,7 @@ HTML;
      */
     public function loadByP1($p1){
 
-        if($this->scenario!='teacher')
+        if($this->scenario!='teacher'&&$this->scenario!="mobile-teacher")
             return;
 
         if(empty($p1))
