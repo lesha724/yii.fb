@@ -51,6 +51,13 @@ class TimeTableForm extends CFormModel
 		);
 	}
 
+    public function __construct($scenario='')
+    {
+        $this->r11 = PortalSettings::model()->getSettingFor(108);
+
+        parent::__construct($scenario='');
+    }
+
 	/**
 	 * Declares customized attribute labels.
 	 * If not declared here, an attribute would have a label that is
