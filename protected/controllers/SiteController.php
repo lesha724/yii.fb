@@ -357,9 +357,10 @@ class SiteController extends Controller
                 $t = $mail->deliver();*/
 
 				$user->generatePasswordResetToken();
+				$key = $user->getValidationKey();
 				if($user->saveAttributes(array('u10'=>$user->u10))) {
 
-					$url = Yii::app()->createAbsoluteUrl('site/resetPassword', array('token' => $user->u10));
+					$url = Yii::app()->createAbsoluteUrl('site/resetPassword', array('token' => $user->u10, 'key'=>$key));
 					$link = tt('Востановить пароль');
 
 					$ps86 = PortalSettings::model()->findByPk(86)->ps2;
@@ -391,7 +392,7 @@ HTML;
         $this->render('forgotPassword',array('model'=>$model));
     }
 
-	public function actionResetPassword($token){
+	public function actionResetPassword($token, $key){
 		try {
 			$model = new ResetPasswordForm($token,'reset-password');
 		} catch (Exception $e) {
@@ -400,6 +401,9 @@ HTML;
 
 		if(!$model->isValid($token))
 			throw new CHttpException(404, '2Invalid request. Please do not repeat this request again.');
+
+		if(!$model->isValidKey($key))
+			throw new CHttpException(404, '3Invalid request. Please do not repeat this request again.');
 
 		if(isset($_POST['ResetPasswordForm'])) {
 			$model->attributes = $_POST['ResetPasswordForm'];

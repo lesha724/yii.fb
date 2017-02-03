@@ -66,4 +66,8 @@ class ResetPasswordForm extends CFormModel
 	public function isValid($token){
 		return $this->_user->isPasswordResetTokenValid($token);
 	}
+
+	public function isValidKey($key){
+		return $this->_user->isValidKey($key);
+	}
 }

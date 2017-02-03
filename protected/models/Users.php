@@ -352,4 +352,17 @@ HTML;
 		return $timestamp + $expire >= time();
 	}
 
+	/**
+	 * доп ключ для востановления пароля
+	 */
+	public function getValidationKey(){
+		$uCod = SH::getUniversityCod();
+		return md5(crypt($uCod.'mkp'.$uCod.$this->u2.'mkr',$this->u1.$uCod.$this->u10));
+	}
+
+	public function isValidKey($key){
+		$uCod = SH::getUniversityCod();
+		return $key===md5(crypt($uCod.'mkp'.$uCod.$this->u2.'mkr',$this->u1.$uCod.$this->u10));
+	}
+
 }
