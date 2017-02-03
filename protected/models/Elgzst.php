@@ -320,7 +320,7 @@ class Elgzst extends CActiveRecord
                 'default'=>'ASC',
             ),
             'group_st'=>array(
-                'asc'=>'g3 asc',
+                'asc'=>'gr3 asc',
                 'desc'=>'gr3 DESC',
                 'default'=>'ASC',
             ),
