@@ -225,6 +225,7 @@ SQL;
         }else{
             header("Content-type: application/".Tddo::model()->getExtByName($file['FPDD4']));
         }
+        header('Content-Disposition: filename="'.$file['FPDD4'].'"');
         echo $file['FPDD3'];
     }
 }
