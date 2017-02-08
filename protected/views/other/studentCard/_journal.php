@@ -86,19 +86,26 @@ HTML;
 }
 
 ?>
+    <div>
+        <?php /*echo tt(":")*/?>
+        <label class="label label-warning">+</label> - <?= tt("Присутствовал на занятии")?>
+        <label class="label label-warning">-</label> - <?= tt("Отсутствовал на занятии")?>
+        <label class="label label-success">5</label> - <?= tt("Оценка за занятие")?>
+        <label class="label label-inverse">5</label> - <?= tt("Отработка занятия")?>
+    </div>
     <div class="accordion" id="accordion-journal">
 <?php
 $pattern=<<<HTML
     <div class="accordion-group">
-    <div class="accordion-heading">
-      <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion-journal" href="#collapse-%s">%s</a>
+        <div class="accordion-heading">
+          <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion-journal" href="#collapse-%s">%s</a>
+        </div>
+        <div id="collapse-%s" class="accordion-body collapse">
+            <div class="accordion-inner">
+            %s
+            </div>
+        </div>
     </div>
-    <div id="collapse-%s" class="accordion-body collapse">
-      <div class="accordion-inner">
-        %s
-      </div>
-    </div>
-  </div>
 HTML;
 
 $ps59 = PortalSettings::model()->findByPk(59)->ps2;
