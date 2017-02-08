@@ -2170,8 +2170,8 @@ SQL;
 
     public function actionSaveRetake()
     {
-        //if (! Yii::app()->request->isAjaxRequest)
-            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $elgotr1 = Yii::app()->request->getParam('elgotr1', null);
         $value = Yii::app()->request->getParam('value', null);
@@ -2179,6 +2179,7 @@ SQL;
         $p1 = Yii::app()->request->getParam('p1', null);
 
         $error=false;
+        $errorType = 0;
 
         if(empty($elgotr1)||$value===null||empty($date)||empty($p1))
             $error=true;
@@ -2208,7 +2209,7 @@ SQL;
                 //var_dump($res);
                 if (count($res) == 0 || empty($res) || $res['dostup'] == 0) {
                     $error = true;
-                    //$errorType = 3;
+                    $errorType = 3;
                 }
             }
 
@@ -2237,6 +2238,7 @@ SQL;
         }
         $res = array(
             'error' => $error,
+            'errorType'=>$errorType
         );
 
 
