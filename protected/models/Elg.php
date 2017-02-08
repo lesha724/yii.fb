@@ -233,7 +233,7 @@ SQL;
               WHERE elgzst1=:ST1 AND sem3=:YEAR AND sem5=:SEM*/
 SQL;
 		$sql=<<<SQL
-              SELECT d2,us4,us6,k2,k15,uo3,u16,u1,d1,d27,d32,d34,d36,uo1,sem1, sem7
+              SELECT d2,us4,us6,k2,k15,uo3,u16,u1,d1,d27,d32,d34,d36,uo1,sem1, sem7,ucgn2
                     from ucxg
                        inner join ucgn on (ucxg.ucxg2 = ucgn.ucgn1)
                        inner join ucx on (ucxg.ucxg1 = ucx.ucx1)
@@ -246,7 +246,7 @@ SQL;
                        inner join k on (uo.uo4 = k.k1)
                        inner join sem on (us.us3 = sem.sem1)
                     WHERE ucxg3=0 and ucsn2=:ST1 and sem3=:YEAR and sem5=:SEM and us6<>0 and us4 in (1,2,3,4)
-                    group by d2,us4,us6,k2, k15,uo3,u16,u1,d1,d27,d32,d34,d36,uo1,sem1, sem7
+                    group by d2,us4,us6,k2, k15,uo3,u16,u1,d1,d27,d32,d34,d36,uo1,sem1, sem7,ucgn2
                     ORDER BY d2,us4,uo3
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
@@ -316,6 +316,96 @@ SQL;
 		return $res;
 	}
 
+	/**
+	 * Карточка тудента Итоговая успеваемость
+	 * @param $uo1
+	 * @param $sem1
+	 * @param $elg4
+	 * @param $st1
+	 */
+	public function getItogProgressInfo($uo1,$sem1,$elg4,$st1, $gr1)
+	{
+		$elgz4Filter = '';
+		/*просталять ли 0*/
+		$ps55 = PortalSettings::model()->getSettingFor(55);
+		/*обьединять ли с модулями*/
+		$ps57 = PortalSettings::model()->getSettingFor(57);
+		if($ps57){
+			$elgz4Filter = 'AND elgz4 in (0,1)';
+		}
+		$sql = <<<SQL
+			SELECT elgzst3,elgzst4,elgzst5,elgz5, elgz6,r2 FROM elgzst
+				INNER JOIN elgz on (elgzst2 = elgz1)
+				INNER JOIN elg on (elgz2 = elg1 and elg2={$uo1} and elg4=:TYPE_LESSON and elg3={$sem1})
+				inner join EL_GURNAL_ZAN({$uo1},:GR1,:SEM1, 1) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
+			WHERE elg2=:UO1 AND elg3={$sem1} AND elg4=:ELG4 AND elgzst1=:ST1 AND r2<=:DATE $elgz4Filter
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':ST1', $st1);
+		$command->bindValue(':UO1', $uo1);
+		$command->bindValue(':GR1', $gr1);
+		$command->bindValue(':SEM1', $sem1);
+		$command->bindValue(':TYPE_LESSON', 1);
+		$command->bindValue(':DATE', date('Y-m-d H:i:s'));
+		$command->bindValue(':ELG4', $elg4);
+		$marks = $command->queryAll();
+
+		$min = $max = $bal = $countLesson = $countOmissions = $countOmissions1 =0;// $countOmissions1 по уваж причине
+
+		foreach($marks as $mark){
+
+			$min+=$mark['elgz5'];
+			$max+=$mark['elgz6'];
+
+			if(!empty($mark['elgzst5'])&&$mark['elgzst5']!=0){
+				$bal+=$mark['elgzst5'];
+			}else{
+				$bal+=$mark['elgzst4'];
+			}
+
+			if($mark['elgzst3']>0){
+				$countOmissions++;
+				if($mark['elgzst3']==2)
+					$countOmissions1++;
+			}
+
+			//$countLesson++;
+		}
+
+		$sql=<<<SQL
+              SELECT count(*) from elgz
+              	inner join elg on (elgz.elgz2 = elg.elg1 and elg2={$uo1} and elg4=:TYPE_LESSON and elg3={$sem1})
+				inner join EL_GURNAL_ZAN({$uo1},:GR1,:SEM1, 1) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
+			  WHERE elg4!=0 $elgz4Filter
+
+SQL;
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':UO1', $uo1);
+		$command->bindValue(':ST1', $st1);
+		$command->bindValue(':SEM1', $sem1);
+		$command->bindValue(':GR1', $gr1);
+		$command->bindValue(':TYPE_LESSON', 1);
+		$countLesson = $command->queryScalar();
+
+		return array(
+				'min'=>$min,
+				'max'=>$max,
+				'bal'=>$bal,
+				'countLesson'=>$countLesson,
+				'countOmissions'=>$countOmissions,
+				'countOmissions1'=>$countOmissions1
+		);
+	}
+
+	/**
+	 * Карточка тудента текущая задолженость
+	 * @param $uo1
+	 * @param $sem1
+	 * @param $elg4
+	 * @param $st1
+	 * @param $ps55
+	 * @return array
+	 */
 	public function getRetakeInfo($uo1,$sem1,$elg4,$st1,$ps55)
 	{
 		$elgzst4_str = " elgzst4>0 ";

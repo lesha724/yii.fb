@@ -125,9 +125,9 @@ HTML;
     $ps50 = PortalSettings::model()->findByPk(50)->ps2;
     $tabs = array();
     if(PortalSettings::model()->findByPk(47)->ps2==1)
-        array_push($tabs,array('label'=>tt('Успеваемость'), 'content'=>$this->renderPartial('studentCard/_journal', $params+array('disciplines'=>$disciplines),true), 'active'=>$ps50==0));
+        array_push($tabs,array('label'=>tt('Успеваемость (журнал)'), 'content'=>$this->renderPartial('studentCard/_journal', $params+array('disciplines'=>$disciplines),true), 'active'=>$ps50==0));
     if(PortalSettings::model()->findByPk(48)->ps2==1)
-        array_push($tabs,array('label'=>tt('Текущая задолженость'), 'content'=>$this->renderPartial('studentCard/_retake', $params+array('disciplines'=>$disciplines),true), 'active'=>$ps50==1));
+        array_push($tabs,array('label'=>tt('Текущая задолженость (журнал)'), 'content'=>$this->renderPartial('studentCard/_retake', $params+array('disciplines'=>$disciplines),true), 'active'=>$ps50==1));
     if(PortalSettings::model()->findByPk(49)->ps2==1)
         array_push($tabs,array('label'=>tt('Модульный контроль'), 'content'=>$this->renderPartial((PortalSettings::model()->findByPk(76)->ps2==1)?'studentCard/_module':'studentCard/_module_pmk', $params,true), 'active'=>$ps50==2));
     if(PortalSettings::model()->findByPk(51)->ps2==1)
@@ -136,6 +136,8 @@ HTML;
         array_push($tabs,array('label'=>tt('Общая успеваемость'), 'content'=>$this->renderPartial('studentCard/_progress'.$_pref, $params,true), 'active'=>$ps50==4));
     if(PortalSettings::model()->findByPk(91)->ps2==1)
         array_push($tabs,array('label'=>tt('Общая информация'), 'content'=>$st->st165, 'active'=>$ps50==5));
+    if(PortalSettings::model()->findByPk(109)->ps2==1)
+        array_push($tabs,array('label'=>tt('Итоговая успеваемость (журнал)'), 'content'=>$this->renderPartial('studentCard/_itog_progress', $params+array('disciplines'=>$disciplines),true), 'active'=>$ps50==6));
 
     /*array('label'=>Yii::t('main', 'Текущая задолженость'), 'content'=>$this->renderPartial('studentCard/_retake',$params,true), 'active'=>$ps50==1,'visible'=>PortalSettings::model()->findByPk(48)->ps2==1);
     array('label'=>Yii::t('main', 'Модульный контроль'), 'content'=>$this->renderPartial('studentCard/_module', $params,true), 'active'=>$ps50==2,'visible'=>PortalSettings::model()->findByPk(49)->ps2==1);
