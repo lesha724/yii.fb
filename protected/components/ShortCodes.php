@@ -149,6 +149,24 @@ SQL;
             $type = '-';
         return $type;
     }*/
+    public static function convertTypeJournal($_type)
+    {
+        if($_type!==null) {
+
+            $arr = FilterForm::getTypesForJournal();
+            switch ($_type) {
+                case 0:
+                case 1:
+                    $type = $arr[$_type];
+                    break;
+
+                default:
+                    $type = '';
+            }
+        }else
+            $type = '-';
+        return $type;
+    }
 
     public static function convertUS4($us4)
     {

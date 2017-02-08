@@ -60,7 +60,7 @@ $th.='</tr>';
 $i=1;
 foreach($disciplines as $discipline)
 {
-    if($discipline['us4']==1)
+    if($discipline['type_journal']==0)
         continue;
 
     $type=1;

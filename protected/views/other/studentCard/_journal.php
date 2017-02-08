@@ -114,8 +114,9 @@ $ps60 = PortalSettings::model()->findByPk(60)->ps2;
 $ps55 = PortalSettings::model()->findByPk(55)->ps2;
 
 foreach ($disciplines as $discipline) {
-    $id=$discipline['uo1'].'-'.$discipline['us4'];
-    $name=$discipline['d2'].' ('.SH::convertUS4($discipline['us4']).') | '.tt("Семестр").' №'.$discipline['sem7'];
+    $id=$discipline['uo1'].'-'.$discipline['type_journal'];
+    $typeStr = SH::convertTypeJournal($discipline['type_journal']);
+    $name=$discipline['d2'].' ('.$typeStr.') | '.tt("Семестр").' №'.$discipline['sem7'];
     $html = $this->renderPartial('studentCard/_show_journal', array(
         'discipline'=>$discipline,
         'gr1'=>$gr1,

@@ -233,7 +233,12 @@ SQL;
               WHERE elgzst1=:ST1 AND sem3=:YEAR AND sem5=:SEM*/
 SQL;
 		$sql=<<<SQL
-              SELECT d2,us4,us6,k2,k15,uo3,u16,u1,d1,d27,d32,d34,d36,uo1,sem1, sem7,ucgn2
+              SELECT d2,
+					(CASE us4
+					  WHEN 1 THEN 0
+					  ELSE 1
+					END) as type_journal,
+					us6,k2,k15,uo3,u16,u1,d1,d27,d32,d34,d36,uo1,sem1, sem7,ucgn2
                     from ucxg
                        inner join ucgn on (ucxg.ucxg2 = ucgn.ucgn1)
                        inner join ucx on (ucxg.ucxg1 = ucx.ucx1)
@@ -246,8 +251,8 @@ SQL;
                        inner join k on (uo.uo4 = k.k1)
                        inner join sem on (us.us3 = sem.sem1)
                     WHERE ucxg3=0 and ucsn2=:ST1 and sem3=:YEAR and sem5=:SEM and us6<>0 and us4 in (1,2,3,4)
-                    group by d2,us4,us6,k2, k15,uo3,u16,u1,d1,d27,d32,d34,d36,uo1,sem1, sem7,ucgn2
-                    ORDER BY d2,us4,uo3
+                    group by d2,type_journal,us6,k2, k15,uo3,u16,u1,d1,d27,d32,d34,d36,uo1,sem1, sem7,ucgn2
+                    ORDER BY d2,type_journal,uo3
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':ST1', $st1);

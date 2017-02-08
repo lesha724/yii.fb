@@ -1,7 +1,7 @@
 <?php
 $uo1= $discipline['uo1'];
 $sem1=$discipline['sem1'];
-$type = $discipline['us4']==1?0:1;
+$type = $discipline['type_journal'];
 $elg1=Elg::getElg1($uo1,$type,$sem1);
 $elg = Elg::model()->findByPk($elg1);
 if(empty($elg))
