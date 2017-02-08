@@ -343,7 +343,7 @@ SQL;
 				INNER JOIN elgz on (elgzst2 = elgz1)
 				INNER JOIN elg on (elgz2 = elg1 and elg2={$uo1} and elg4=:TYPE_LESSON and elg3={$sem1})
 				inner join EL_GURNAL_ZAN({$uo1},:GR1,:SEM1, 1) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
-			WHERE elg2=:UO1 AND elg3={$sem1} AND elg4=:ELG4 AND elgzst1=:ST1 AND r2<=:DATE $elgz4Filter
+			WHERE elg2=:UO1 AND elg4=:ELG4 AND elgzst1=:ST1 AND r2<=:DATE $elgz4Filter
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':ST1', $st1);
@@ -381,7 +381,7 @@ SQL;
               SELECT count(*) from elgz
               	inner join elg on (elgz.elgz2 = elg.elg1 and elg2={$uo1} and elg4=:TYPE_LESSON and elg3={$sem1})
 				inner join EL_GURNAL_ZAN({$uo1},:GR1,:SEM1, 1) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
-			  WHERE elg4!=0 $elgz4Filter
+			  WHERE elg4!=0 AND r2<=:DATE $elgz4Filter
 
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
@@ -389,6 +389,7 @@ SQL;
 		$command->bindValue(':ST1', $st1);
 		$command->bindValue(':SEM1', $sem1);
 		$command->bindValue(':GR1', $gr1);
+		$command->bindValue(':DATE', date('Y-m-d H:i:s'));
 		$command->bindValue(':TYPE_LESSON', 1);
 		$countLesson = $command->queryScalar();
 
