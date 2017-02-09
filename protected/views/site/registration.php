@@ -22,7 +22,7 @@
                             'action' => Yii::app()->createUrl("site/registration")
                         ));
 
-                        $template = '<div class="radio span6">{input}{labelTitle}</div>';
+                        $template = '<div class="radio span4">{input}{labelTitle}</div>';
 
                         ?>
                             <fieldset>
@@ -70,6 +70,17 @@
                                         <i class="icon-retweet"></i>
                                     </span>
                                 </label>
+
+                                <?php /*if(CCaptcha::checkRequirements()): ?>
+                                    <div class="form-group">
+                                        <?php $form->labelEx($model,'verifyCode'); ?>
+                                        <div>
+                                            <?php $this->widget('CCaptcha'); ?>
+                                            <?php echo $form->textField($model,'verifyCode'); ?>
+                                        </div>
+                                        <?php echo $form->error($model,'verifyCode'); ?>
+                                    </div>
+                                <?php endif;*/ ?>
 
                                 <div class="clearfix">
                                     <button class="width-30 pull-left btn btn-small" type="reset">

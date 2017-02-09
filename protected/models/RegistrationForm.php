@@ -2,14 +2,17 @@
 
 class RegistrationForm extends CFormModel
 {
-	const TYPE_STUDENT = 1;
-    const TYPE_TEACHER = 0;
+	const TYPE_STUDENT = 0;
+    const TYPE_TEACHER = 1;
+    const TYPE_PARENT = 2;
 
     public $identityCode;
 	public $email;
 	public $username;
 	public $password;
 	public $password2;
+
+    //public $verifyCode;
 
     public $type = self::TYPE_TEACHER;
 
@@ -23,7 +26,7 @@ class RegistrationForm extends CFormModel
 		return array(
 			array('identityCode, email, username, password, password2,type', 'required'),
             array('type', 'default', 'value'=>self::TYPE_TEACHER, 'setOnEmpty'=>TRUE),
-            array('type', 'in', 'range' => array(self::TYPE_STUDENT, self::TYPE_TEACHER)),
+            array('type', 'in', 'range' => array(self::TYPE_STUDENT, self::TYPE_TEACHER, self::TYPE_PARENT)),
             array('identityCode', 'checkExistence'),
             array('email', 'email'),
             array('email', 'unique', 'className'=>'Users', 'attributeName'=>'u4'),
@@ -35,7 +38,7 @@ class RegistrationForm extends CFormModel
             //array('password', 'match', 'pattern'=>'/^[A-z][\w]+$/','message'=>tt('В password могут быть только латинские символы')),
             //array('username, password', 'length', 'min' => 6,'max'=>50),
             array('email', 'length', 'max'=>100),
-
+            //array('verifyCode', 'captcha', 'allowEmpty'=>!CCaptcha::checkRequirements()),
 		);
 	}
 
@@ -51,6 +54,7 @@ class RegistrationForm extends CFormModel
             'username' => tt('Логин (регистрозависимый)'),
             'password' => tt('Пароль'),
             'password2' => tt('Повторите пароль'),
+            'verifyCode'=>'Verification Code',
 		);
 	}
 
@@ -65,7 +69,7 @@ class RegistrationForm extends CFormModel
 
         $st = $p = array();
 
-        if($this->type==self::TYPE_STUDENT) {
+        if($this->type==self::TYPE_STUDENT||$this->type==self::TYPE_PARENT) {
             $st = St::model()->findAllBySql(<<<SQL
           SELECT st.* FROM st
             inner join std on (st1 = std2)
@@ -89,7 +93,7 @@ SQL
             $isTeacher = $this->type==self::TYPE_TEACHER;
             //$this->_u5 = $st ? 0 : 1;
             //$this->_u6 = $st ? $st[0]->st1 : $p[0]->p1;
-            $this->_u5 = $isTeacher ? 1 : 0;
+            $this->_u5 = $isTeacher ? 1 : $this->type;
             $this->_u6 = $isTeacher ? $p[0]->p1 : $st[0]->st1;
 
             $this->_fio = $isTeacher ? $p[0]->p3.' '.$p[0]->p4.' '.$p[0]->p5 : $st[0]->st2.' '.$st[0]->st3.' '.$st[0]->st4;
@@ -130,7 +134,8 @@ SQL
     public function getTypes(){
         return array(
             self::TYPE_TEACHER => tt('Работник'),
-            self::TYPE_STUDENT => tt('Студент')
+            self::TYPE_STUDENT => tt('Студент'),
+            self::TYPE_PARENT => tt('Родитель')
         );
     }
 }
