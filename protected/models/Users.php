@@ -14,6 +14,7 @@
  * @property integer $u8
  * @property string $u9
  * @property string $u10
+ * @property string $u11
  */
 class Users extends CActiveRecord
 {
@@ -365,4 +366,35 @@ HTML;
 		return $key===md5(crypt($uCod.'mkp'.$uCod.$this->u2.'mkr',$this->u1.$uCod.$this->u10));
 	}
 
+	/**
+	 * Количество неудачных попыток авторизаций за последнии $countMin минут
+	 * @param $countMin int количетво минут
+	 * @return int
+	 */
+	public function getCountFail($countMin){
+		//getAttribute('loginAttempt')
+
+		$date = new DateTime();
+		$date->modify("-{$countMin} minutes");
+
+		/*var_dump($date);
+
+		var_dump($date->format('d.m.Y H:i:s'));
+
+		var_dump(date('Y-m-d H:i:s', strtotime("-{$countMin} minute")));*/
+		$count = Yii::app()->db->createCommand()
+				->select('count(*)')
+				->from('users_auth_fail')
+				->where('user_id=:id and date_fail>=:date', array(':id'=>$this->u1, ':date'=>$date->format('d.m.Y H:i:s')))
+				->queryScalar();
+		return $count;
+	}
+
+	public function saveNewFail(){
+		$command = Yii::app()->db->createCommand();
+		$command->insert('users_auth_fail', array(
+				'user_id'=>$this->u1,
+				'date_fail'=>date('Y-m-d H:i:s')
+		));
+	}
 }

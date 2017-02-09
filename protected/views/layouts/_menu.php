@@ -277,6 +277,11 @@ $this->widget('zii.widgets.CMenu', array(
                     'url'    => _u('/admin/default/userHistory'),
                     'active' => $_a=='admin'
                 ),
+                array(
+                    'label'  => $_l2.tt('Безопасность'),
+                    'url'    => _u('/admin/default/security'),
+                    'active' => $_a=='security' && $_m=='admin'
+                ),
 
             ),
             'visible' => $isAdmin,
