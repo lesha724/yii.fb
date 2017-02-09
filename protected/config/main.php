@@ -38,10 +38,10 @@ $config = array(
 				'enableCookieValidation'=>true,
 				//'enableCsrfValidation'=>true,
 		),
-		'user'=>array(
+		/*'user'=>array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
-		),
+		),*/
 		'session'=>array(
 			'timeout' => 1440,
 		),

@@ -46,7 +46,8 @@ class AdminController extends Controller
                     'generateUser',
                     'generateUserExcel',
                     'deleteUser',
-                    'st165'
+                    'st165',
+                    'security'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin',
             ),
