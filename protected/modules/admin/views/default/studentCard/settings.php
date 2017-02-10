@@ -78,7 +78,7 @@ $htmlOptions = array(
     <div class="control-group">
         <?=CHtml::checkBox('settings[109]', PortalSettings::model()->findByPk(109)->ps2, $htmlOptions2)?>
         <span class="lbl"> <?=tt('Показывать таб "Итоговая успеваемость (журнал)"')?></span>
-        <?=CHtml::hiddenField('settings[91]', PortalSettings::model()->findByPk(109)->ps2)?>
+        <?=CHtml::hiddenField('settings[109]', PortalSettings::model()->findByPk(109)->ps2)?>
     </div>
 
     <div class="form-actions">

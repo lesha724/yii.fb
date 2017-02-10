@@ -133,7 +133,7 @@ SQL
 
     public function getTypes(){
         return array(
-            self::TYPE_TEACHER => tt('Работник'),
+            self::TYPE_TEACHER => tt('Сотрудник'),
             self::TYPE_STUDENT => tt('Студент'),
             self::TYPE_PARENT => tt('Родитель')
         );

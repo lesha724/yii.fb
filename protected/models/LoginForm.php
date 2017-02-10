@@ -63,7 +63,7 @@ class LoginForm extends FormValidation
 			var_dump($this->_identity);*/
 
 			if($errorCode === 3) {
-				$this->addError('password', tt('Ваш уч. запись заблокирована на {min_count} минут из-за неудачных {count} попыток авторизации',array(
+				$this->addError('password', tt('Ваша учетная запись заблокирована на {min_count} минут, так как вы {count} раз неправильно ввели свой пароль',array(
 					'{min_count}'=>$this->_identity->_lockout_min,
 					'{count}'=>$this->_identity->_lockout_attempts
 				)));
