@@ -403,28 +403,57 @@ HTML;
 
 	const COOKIE_NAME_AUTH_KEY = 'akc';
 
+	const COOKIE_NAME_AUTH_KEY1 = 'akc1';
+
 	const SESSION_NAME_AUTH_KEY = 'aks';
 
+	const SESSION_NAME_AUTH_KEY1 = 'aks1';
+
 	public function afterLogin(){
+		$key = '';
+		if(isset(Yii::app()->params['login-key']))
+			$key = Yii::app()->params['login-key'];
+
 		$nameCookie = self::COOKIE_NAME_AUTH_KEY;
-		$cookie=new CHttpCookie($nameCookie,$this->_getCookieKey());
+		$cookie=new CHttpCookie($nameCookie,$this->_getCookieKey($key));
 		//$cookie->httpOnly = true;
 		Yii::app()->request->cookies[$nameCookie]=$cookie;
 
 		//записіваем в сессию
-		Yii::app()->session[self::SESSION_NAME_AUTH_KEY] = $this->_getSessionKey();
+		Yii::app()->session[self::SESSION_NAME_AUTH_KEY] = $this->_getSessionKey($key);
+
+		$nameCookie = self::COOKIE_NAME_AUTH_KEY1;
+		$cookie=new CHttpCookie($nameCookie,$this->_getCookieKey1($key));
+		//$cookie->httpOnly = true;
+		Yii::app()->request->cookies[$nameCookie]=$cookie;
+
+		//записіваем в сессию
+		Yii::app()->session[self::SESSION_NAME_AUTH_KEY1] = $this->_getSessionKey1($key) ;
 	}
 
 	public function validateLogin(){
+		$key = '';
+		if(isset(Yii::app()->params['login-key']))
+			$key = Yii::app()->params['login-key'];
 		//проверка на совпадении спец ключа в куки
 		$cookie=Yii::app()->request->cookies[self::COOKIE_NAME_AUTH_KEY];
 		if($cookie==null)
 			return false;
-		if($cookie->value !== $this->_getCookieKey())
+		if($cookie->value !== $this->_getCookieKey($key))
 			return false;
 
-		if(Yii::app()->session[self::SESSION_NAME_AUTH_KEY]!==$this->_getSessionKey())
+		//проверка на совпадении спец ключа в куки
+		$cookie=Yii::app()->request->cookies[self::COOKIE_NAME_AUTH_KEY1];
+		if($cookie==null)
+			return false;
+		if($cookie->value !== $this->_getCookieKey1($key))
+			return false;
+
+		if(Yii::app()->session[self::SESSION_NAME_AUTH_KEY]!==$this->_getSessionKey($key))
             return false;
+
+		if(Yii::app()->session[self::SESSION_NAME_AUTH_KEY1]!==$this->_getSessionKey1($key))
+			return false;
 
 		return true;
 	}
@@ -435,14 +464,29 @@ HTML;
 	 * шифровка названиии ключа для сессии
 	 * @return string
 	 */
-	protected function _getSessionKey(){
-		return crypt($this->u12, 'mkp'.self::CRYPT_KEY_COOKIE.'portal');
+	protected function _getSessionKey($key = ''){
+		return crypt($this->u12, 'mkp'.self::CRYPT_KEY_COOKIE.'portal'.$key);
 	}
 	/**
 	 * шифровка названиии ключа для куки
 	 * @return string
 	 */
-	protected function _getCookieKey(){
-		return crypt($this->u12,self::CRYPT_KEY_COOKIE.$this->u12);
+	protected function _getCookieKey($key = ''){
+		return crypt($this->u12,self::CRYPT_KEY_COOKIE.$this->u12.$key);
 	}
+	/**
+	 * шифровка названиии ключа для куки1
+	 * @return string
+	 */
+	protected function _getCookieKey1($key = ''){
+		return md5($key.$this->u2.$key);
+	}
+	/**
+	 * шифровка названиии ключа для сессии1
+	 * @return string
+	 */
+	protected function _getSessionKey1($key = ''){
+		return md5($key.$this->u2.$key);
+	}
+
 }

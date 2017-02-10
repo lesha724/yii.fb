@@ -725,6 +725,7 @@ class DefaultController extends AdminController
 				'top2'=>$_POST['ConfigForm']['top2'],
                 'banner'=>$_POST['ConfigForm']['banner'],
                 'month'=>$_POST['ConfigForm']['month'],
+                'login-key'=>$_POST['ConfigForm']['loginKey'],
 			);
 			$str = base64_encode(serialize($config));
 			$errors=!file_put_contents($file, $str);
