@@ -483,7 +483,7 @@ HTML;
 	 * @return string
 	 */
 	protected function _getCookieKey($key){
-		return crypt(self::CRYPT_KEY_COOKIE.$this->u12.$_SERVER['REMOTE_ADDR'],$key);
+		return crypt($key.$this->u12.$_SERVER['REMOTE_ADDR'],self::CRYPT_KEY_COOKIE);
 	}
 	/**
 	 * шифровка названиии ключа для куки1
