@@ -403,16 +403,14 @@ HTML;
 
 	const COOKIE_NAME_AUTH_KEY = 'akc';
 
-	const COOKIE_NAME_AUTH_KEY1 = 'akc1';
+	//const COOKIE_NAME_AUTH_KEY1 = 'akc1';
 
 	const SESSION_NAME_AUTH_KEY = 'aks';
 
 	const SESSION_NAME_AUTH_KEY1 = 'aks1';
 
 	public function afterLogin(){
-		$key = '';
-		if(isset(Yii::app()->params['login-key']))
-			$key = Yii::app()->params['login-key'];
+		$key = $this->_getKey();
 
 		$nameCookie = self::COOKIE_NAME_AUTH_KEY;
 		$cookie=new CHttpCookie($nameCookie,$this->_getCookieKey($key));
@@ -422,19 +420,17 @@ HTML;
 		//записіваем в сессию
 		Yii::app()->session[self::SESSION_NAME_AUTH_KEY] = $this->_getSessionKey($key);
 
-		$nameCookie = self::COOKIE_NAME_AUTH_KEY1;
+		/*$nameCookie = self::COOKIE_NAME_AUTH_KEY1;
 		$cookie=new CHttpCookie($nameCookie,$this->_getCookieKey1($key));
 		//$cookie->httpOnly = true;
-		Yii::app()->request->cookies[$nameCookie]=$cookie;
+		Yii::app()->request->cookies[$nameCookie]=$cookie;*/
 
 		//записіваем в сессию
 		Yii::app()->session[self::SESSION_NAME_AUTH_KEY1] = $this->_getSessionKey1($key) ;
 	}
 
 	public function validateLogin(){
-		$key = '';
-		if(isset(Yii::app()->params['login-key']))
-			$key = Yii::app()->params['login-key'];
+		$key = $this->_getKey();
 		//проверка на совпадении спец ключа в куки
 		$cookie=Yii::app()->request->cookies[self::COOKIE_NAME_AUTH_KEY];
 		if($cookie==null)
@@ -443,11 +439,11 @@ HTML;
 			return false;
 
 		//проверка на совпадении спец ключа в куки
-		$cookie=Yii::app()->request->cookies[self::COOKIE_NAME_AUTH_KEY1];
+		/*$cookie=Yii::app()->request->cookies[self::COOKIE_NAME_AUTH_KEY1];
 		if($cookie==null)
 			return false;
 		if($cookie->value !== $this->_getCookieKey1($key))
-			return false;
+			return false;*/
 
 		if(Yii::app()->session[self::SESSION_NAME_AUTH_KEY]!==$this->_getSessionKey($key))
             return false;
@@ -458,36 +454,50 @@ HTML;
 		return true;
 	}
 
-	const CRYPT_KEY_COOKIE = 'fsdfsd12312dsaasdd';
-	const CRYPT_KEY_SESSION = 'sada324345aas123dd';
+	/**
+	 * доб ключ для сессии и кук
+	 * @return string
+	 */
+	protected function _getKey(){
+		$key = '';
+		if(isset(Yii::app()->params['login-key']))
+			$key .= Yii::app()->params['login-key'];
+		$key.=Yii::app()->request->userAgent;
+		$key.=Yii::app()->request->userHostAddress;
+
+		return $key;
+	}
+
+	const CRYPT_KEY_COOKIE = 'fsdfsd1';
+	const CRYPT_KEY_SESSION = 'sada32';
 	/**
 	 * шифровка названиии ключа для сессии
 	 * @return string
 	 */
-	protected function _getSessionKey($key = ''){
+	protected function _getSessionKey($key){
 
-		return crypt($this->u12, self::CRYPT_KEY_SESSION.$key);
+		return md5($this->u12.self::CRYPT_KEY_SESSION.$_SERVER['REMOTE_ADDR'].$key);
 	}
 	/**
 	 * шифровка названиии ключа для куки
 	 * @return string
 	 */
-	protected function _getCookieKey($key = ''){
-		return crypt($this->u12,self::CRYPT_KEY_COOKIE.$key);
+	protected function _getCookieKey($key){
+		return crypt(self::CRYPT_KEY_COOKIE.$this->u12.$_SERVER['REMOTE_ADDR'],$key);
 	}
 	/**
 	 * шифровка названиии ключа для куки1
 	 * @return string
 	 */
-	protected function _getCookieKey1($key = ''){
-		return md5('mkp'.$this->u2.$_SERVER['REMOTE_ADDR'].$key);
-	}
+	/*protected function _getCookieKey1($key = ''){
+		return md5('mkp'.$this->u2..$key);
+	}*/
 	/**
 	 * шифровка названиии ключа для сессии1
 	 * @return string
 	 */
 	protected function _getSessionKey1($key = ''){
-		return md5($this->u2.$_SERVER['REMOTE_ADDR'].$key);
+		return crypt($this->u1.$_SERVER['REMOTE_ADDR'],$key);
 	}
 
 }
