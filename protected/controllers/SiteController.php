@@ -116,6 +116,7 @@ class SiteController extends Controller
 			if($model->validate()&&$model->login()) {
 				$message = '';
 				$user = Users::model()->findByPk(Yii::app()->user->id);
+				$user->afterLogin();
 				switch($user->u5){
 					case 0:
 						$message = PortalSettings::model()->findByPk(92)->ps2;

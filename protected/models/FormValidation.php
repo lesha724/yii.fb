@@ -59,6 +59,7 @@ class FormValidation extends CFormModel
         //записываем куки
         $nameCookie = $this->_getCookieFiledName();
         $cookie=new CHttpCookie($nameCookie,$this->_getCookieKey());
+        //$cookie->httpOnly = true;
         Yii::app()->request->cookies[$nameCookie]=$cookie;
         //записіваем в сессию
         Yii::app()->session[$this->_getSessionFiledName()] = CPasswordHelper::hashPassword($this->_validationKey);

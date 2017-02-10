@@ -57,11 +57,14 @@ class Users extends CActiveRecord
             array('u4', 'email'),
             array('u2, u3, u4, password', 'required', 'on'=>'admin-create,admin-update'),
 			array('u2,u4 ,u3, password', 'safe', 'on'=>'change-password'),
+			array('u8', 'unsafe', 'on'=>'change-password'),
 			array('u2,u4 ,u3, password', 'required', 'on'=>'change-password'),
 			array('u3', 'compare', 'compareAttribute'=>'password', 'on'=>'change-password,admin-create,admin-update'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('u1, u2, u3, u4, u5, u6, u7,u8', 'safe', 'on'=>'search'),
+			array('u5,u6,u7,u9,u10,u11,u12','unsafe')
+
 		);
 	}
 
@@ -396,5 +399,50 @@ HTML;
 				'user_id'=>$this->u1,
 				'date_fail'=>date('Y-m-d H:i:s')
 		));
+	}
+
+	const COOKIE_NAME_AUTH_KEY = 'akc';
+
+	const SESSION_NAME_AUTH_KEY = 'aks';
+
+	public function afterLogin(){
+		$nameCookie = self::COOKIE_NAME_AUTH_KEY;
+		$cookie=new CHttpCookie($nameCookie,$this->_getCookieKey());
+		//$cookie->httpOnly = true;
+		Yii::app()->request->cookies[$nameCookie]=$cookie;
+
+		//записіваем в сессию
+		Yii::app()->session[self::SESSION_NAME_AUTH_KEY] = $this->_getSessionKey();
+	}
+
+	public function validateLogin(){
+		//проверка на совпадении спец ключа в куки
+		$cookie=Yii::app()->request->cookies[self::COOKIE_NAME_AUTH_KEY];
+		if($cookie==null)
+			return false;
+		if($cookie->value !== $this->_getCookieKey())
+			return false;
+
+		if(Yii::app()->session[self::SESSION_NAME_AUTH_KEY]!==$this->_getSessionKey())
+            return false;
+
+		return true;
+	}
+
+	const CRYPT_KEY_COOKIE = 'fsdfsd12312dsaasdd';
+	const CRYPT_KEY_SESSION = 'sada324345aas123dd';
+	/**
+	 * шифровка названиии ключа для сессии
+	 * @return string
+	 */
+	protected function _getSessionKey(){
+		return crypt($this->u12, 'mkp'.self::CRYPT_KEY_COOKIE.'portal');
+	}
+	/**
+	 * шифровка названиии ключа для куки
+	 * @return string
+	 */
+	protected function _getCookieKey(){
+		return crypt($this->u12,self::CRYPT_KEY_COOKIE.$this->u12);
 	}
 }

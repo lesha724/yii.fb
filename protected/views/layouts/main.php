@@ -81,14 +81,11 @@
 
         <div class="main-content">
 
-
-
             <?php require_once('_breadcrumbs.php')?>
 
             <div class="page-content">
 
-                <?php require_once('_flashes.php')?>
-
+                <?php //require_once('_flashes.php')?>
                 <!-- PAGE CONTENT BEGINS -->
                 <?php echo $content; ?>
                 <!-- PAGE CONTENT ENDS -->
