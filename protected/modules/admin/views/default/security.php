@@ -37,3 +37,7 @@ HTML;
 $title = tt('Блокировка уч. записей');
 $html  = $this->renderPartial('security/_accounts', array(), true);
 echo sprintf($widget, $title, $html);
+
+$title = tt('Остальные настройки');
+$html  = $this->renderPartial('security/_settings', array(), true);
+echo sprintf($widget, $title, $html);

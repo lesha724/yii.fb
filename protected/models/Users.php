@@ -410,6 +410,10 @@ HTML;
 	const SESSION_NAME_AUTH_KEY1 = 'aks1';
 
 	public function afterLogin(){
+		$ps114 = PortalSettings::model()->getSettingFor(114);
+		if($ps114==1){
+			$this->_generateU12();
+		}
 		$key = $this->_getKey();
 
 		$nameCookie = self::COOKIE_NAME_AUTH_KEY;
@@ -498,6 +502,13 @@ HTML;
 	 */
 	protected function _getSessionKey1($key = ''){
 		return crypt($this->u1.$_SERVER['REMOTE_ADDR'],$key);
+	}
+
+	protected function _generateU12(){
+		$token = openssl_random_pseudo_bytes(10);
+		$key   = bin2hex($token);
+
+		$this->saveAttributes(array('u12'=>$key));
 	}
 
 }
