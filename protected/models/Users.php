@@ -465,28 +465,29 @@ HTML;
 	 * @return string
 	 */
 	protected function _getSessionKey($key = ''){
-		return crypt($this->u12, 'mkp'.self::CRYPT_KEY_COOKIE.'portal'.$key);
+
+		return crypt($this->u12, self::CRYPT_KEY_SESSION.$key);
 	}
 	/**
 	 * шифровка названиии ключа для куки
 	 * @return string
 	 */
 	protected function _getCookieKey($key = ''){
-		return crypt($this->u12,self::CRYPT_KEY_COOKIE.$this->u12.$key);
+		return crypt($this->u12,self::CRYPT_KEY_COOKIE.$key);
 	}
 	/**
 	 * шифровка названиии ключа для куки1
 	 * @return string
 	 */
 	protected function _getCookieKey1($key = ''){
-		return md5($key.$this->u2.$key);
+		return md5('mkp'.$this->u2.$_SERVER['REMOTE_ADDR'].$key);
 	}
 	/**
 	 * шифровка названиии ключа для сессии1
 	 * @return string
 	 */
 	protected function _getSessionKey1($key = ''){
-		return md5($key.$this->u2.$key);
+		return md5($this->u2.$_SERVER['REMOTE_ADDR'].$key);
 	}
 
 }

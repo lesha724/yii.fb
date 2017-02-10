@@ -37,6 +37,7 @@ $config = array(
 		'request'=>array(
 				'enableCookieValidation'=>true,
 				//'enableCsrfValidation'=>true,
+				//'csrfTokenName'=>'csrf-mkr'
 		),
 		/*'user'=>array(
 			// enable cookie-based authentication
