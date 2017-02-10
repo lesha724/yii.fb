@@ -223,6 +223,7 @@ class DefaultController extends AdminController
         $identity = new CUserIdentity($user->u2, 'passwords are broken');
         Yii::app()->user->login($identity);
         Yii::app()->user->id = $user->u1;
+        $user->afterLogin();
 
         UsersHistory::getNewLogin();
 
