@@ -327,6 +327,9 @@ function table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$nom,$uo1,$modules,$pot
                     case '-4':
                         $pmk = tt('н/я');
                         break;
+                    case '-3':
+                        $pmk = '0';
+                        break;
                     case '-2':
                         $pmk = tt('неув');
                         break;

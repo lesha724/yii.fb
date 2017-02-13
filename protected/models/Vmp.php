@@ -489,7 +489,9 @@ SQL;
                         return;
 
                     if($_elgz->elgz4==2) {
-                        $itog = $tek + $vmp['vmp6'] + $vmp['vmp7'];
+                        $itog = $tek + $vmp['vmp6'];
+                        if($vmp['vmp7']>0)
+                            $itog+=$vmp['vmp7'];
 
                         $sql = <<<SQL
                               UPDATE vmp set vmp4=:VMP4, vmp5=:VMP5, vmp10=:VMP10, vmp12=:VMP12 WHERE vmp2=:ST1 AND vmp1=:VMPV1
