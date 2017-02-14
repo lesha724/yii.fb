@@ -380,20 +380,23 @@ SQL;
                     $pmkLessonNomPrevSem = $command->queryScalar();
 
                     //var_dump($pmkLessonNomPrevSem);
-                    if(!empty($pmkLessonNomPrevSem)){
-                        $sql=<<<SQL
-                          SELECT elgzst5,elgzst4,elgzst3 FROM elg
-                              INNER JOIN elgz on (elg.elg1 = elgz.elgz2 AND  elgz4=0  AND elgz.elgz3>:NOM)
-                              INNER JOIN elgzst on (elgzst.elgzst2 = elgz.elgz1  AND elgzst1=:ST1 )
-                          WHERE  elg3=:SEM1 AND elg2=:UO1 ORDER by elgz3 asc
-SQL;
-                        $command = Yii::app()->db->createCommand($sql);
-                        $command->bindValue(':ST1', $st1);
-                        $command->bindValue(':NOM', $pmkLessonNomPrevSem);
-                        $command->bindValue(':SEM1', $sem1);
-                        $command->bindValue(':UO1', $uo1);
-                        $dopMarks = $command->queryAll();
+                    if(empty($pmkLessonNomPrevSem)){
+                        $pmkLessonNomPrevSem =0;
                     }
+
+                    $sql=<<<SQL
+                      SELECT elgzst5,elgzst4,elgzst3 FROM elg
+                          INNER JOIN elgz on (elg.elg1 = elgz.elgz2 AND  elgz4=0  AND elgz.elgz3>:NOM)
+                          INNER JOIN elgzst on (elgzst.elgzst2 = elgz.elgz1  AND elgzst1=:ST1 )
+                      WHERE  elg3=:SEM1 AND elg2=:UO1 ORDER by elgz3 asc
+SQL;
+                    $command = Yii::app()->db->createCommand($sql);
+                    $command->bindValue(':ST1', $st1);
+                    $command->bindValue(':NOM', $pmkLessonNomPrevSem);
+                    $command->bindValue(':SEM1', $sem1);
+                    $command->bindValue(':UO1', $uo1);
+                    $dopMarks = $command->queryAll();
+
                 }
             }
 
