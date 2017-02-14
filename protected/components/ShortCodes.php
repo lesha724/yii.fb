@@ -343,9 +343,12 @@ SQL;
                 }else
                 {
                     $sem  = 0;
-                    list($month,$day)=explode('-',$ps53);
-                    if((int)$month>8)
-                        $sem=1;
+                    $arr=explode('-',$ps53);
+                    if(count($arr)==2) {
+                        list($month,$day)=$arr;
+                        if ((int)$month > 8)
+                            $sem = 1;
+                    }
                 }
                 $year = date('Y', strtotime('-1 year'));
             }else {
