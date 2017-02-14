@@ -89,7 +89,7 @@ HTML;
     echo sprintf($infoHtml,
         tt('ФИО'),$name,
         tt('Гражданство'),$studentInfo['sgr2'],
-        tt('Дата рождения'),date("m.d.y",strtotime($st->st7)),
+        tt('Дата рождения'),date("d.m.y",strtotime($st->st7)),
         tt('Факультет'), $studentInfo['f3'],
         tt('Специальность'), $studentInfo['sp2'],
         tt('Форма обучения'),SH::convertEducationType($studentInfo['sg4']),
