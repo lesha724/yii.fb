@@ -516,6 +516,7 @@ HTML;
                 $res[$r2]['timeTable'][$r3]['printText']  = $this->cellPrintTextFor($day, $type);
                 //$res[$r2]['timeTable'][$r3]['printText']  = '=СЦЕПИТЬ("'.$this->cellPrintTextFor($day, $type).'";СИМВОЛ(10))';
 
+                $res[$r2]['timeTable'][$r3][] = $day;
                 $res[$r2]['timeTable'][$r3]['day'] = $day;
                 $res[$r2]['timeTable'][$r3]['gr3'] = $day['gr3'];
 
@@ -525,6 +526,7 @@ HTML;
                     $res[$r2]['timeTable'][$r3]['fullText'] .= $this->cellFullTextFor($day, $type);
                     $res[$r2]['timeTable'][$r3]['printText'] .= ' ' . $this->cellPrintTextFor($day, $type);
 
+                    $res[$r2]['timeTable'][$r3][] = $day;
                     $res[$r2]['timeTable'][$r3]['day'] = $day;
                 }else
                 {
@@ -545,7 +547,7 @@ HTML;
 
             foreach ($params['timeTable'] as $lessonNum => $data) {
 
-                unset($data['gr3'],$data['shortText'], $data['fullText'], $data['printText'], $data['color']);
+                unset($data['day'],$data['gr3'],$data['shortText'], $data['fullText'], $data['printText'], $data['color']);
 
                 $lessonAmount = count($data);
 
