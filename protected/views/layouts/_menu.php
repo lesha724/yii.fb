@@ -618,17 +618,29 @@ $this->widget('zii.widgets.CMenu', array(
                 array(
                     'label'   => $_l2.tt('Общежитие'),
                     'url'     => _u('/payment/hostel'),
-                    'visible' => _ch('payment', 'hostel'),
+                    'visible' => _ch('payment', 'hostel')&&$isStd,
                     'active'  => $_c=='payment' && $_a=='hostel'
                 ),
                 array(
                     'label'   => $_l2.tt('Обучение'),
                     'url'     => _u('/payment/education'),
-                    'visible' => _ch('payment', 'education'),
+                    'visible' => _ch('payment', 'education')&&$isStd,
                     'active'  => $_c=='payment' && $_a=='education',
                 ),
+                array(
+                    'label'   => $_l2.tt('Общежитие (кур.)'),
+                    'url'     => _u('/payment/hostelCurator'),
+                    'visible' => _ch('payment', 'hostelCurator')&&$isTch,
+                    'active'  => $_c=='payment' && $_a=='hostelCurator'
+                ),
+                array(
+                    'label'   => $_l2.tt('Обучение (кур.)'),
+                    'url'     => _u('/payment/educationCurator'),
+                    'visible' => _ch('payment', 'educationCurator')&&$isTch,
+                    'active'  => $_c=='payment' && $_a=='educationCurator',
+                ),
             ),getDopItem('payment',0)),
-            'visible' => _ch('payment', 'main') && $isStd
+            'visible' => _ch('payment', 'main') && ($isStd || $isTch)
         ),
         array(
             'label' => _l('Другое', 'globe'),

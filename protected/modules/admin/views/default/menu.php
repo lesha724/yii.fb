@@ -115,6 +115,8 @@
                     'items' => array(
                         'hostel'    => 'Общежитие',
                         'education' => 'Обучение',
+                        'hostelCurator'    => 'Общежитие (кур.)',
+                        'educationCurator' => 'Обучение (кур.)',
                     ),
                 ),
                 array(

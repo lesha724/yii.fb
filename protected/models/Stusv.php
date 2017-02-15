@@ -383,6 +383,85 @@ SQL;
 		//}
 		return false;
 	}
+
+	/**
+	 * расчет зачет оценок Сумской аграный
+	 * @param $st1 int Код студента
+	 * @param $gr1 int Код группа
+	 * @param $sem7 int номер семестра
+	 * @param $elg Elg
+	 * @param $idUniversity int код вуза
+	 * @param $stusv Stusv ведомость
+	 * @param $marks mixed оценки
+	 * @return bool
+	 */
+	private function calculateSymAgr($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks)
+	{
+		$sym = 0;
+
+		$count=0;
+		foreach ($marks as $mark) {
+			$bal = 0;
+			if ($mark['elgzst3'] > 0) {
+				$bal = $mark['elgzst5'];
+			} else {
+				$bal = ($mark['elgzst5'] > 0) ? $mark['elgzst5'] : $mark['elgzst4'];
+			}
+			$sym += $bal;
+			//$count++;
+		}
+
+		$elgsdInd = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::IND_TYPE));
+		//$elgsdExam = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::EXAM_TYPE));
+
+		$elgsdSumm = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::SUM_TYPE));
+
+		$elgdInd = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdInd->elgsd1));
+
+		$elgdSumm=null;
+		if($elgsdSumm!=null)
+			$elgdSumm= Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdSumm->elgsd1));
+
+		if($elgdInd==null/*||$elgdExam==null*/)
+			return false;
+
+		$balInd = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdInd->elgd0));
+		//$balExam = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdExam->elgd0));
+
+		if($balInd==null)
+		{
+			$balInd = new Elgdst();
+			$balInd->elgdst3 = 0;
+		}
+
+
+		if($elgsdSumm!=null) {
+			if ($elgdSumm != null) {
+				$balSumm = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdSumm->elgd0));
+				if (empty($balSumm)) {
+					$balSumm = new Elgdst();
+					$balSumm->elgdst0 = new CDbExpression('GEN_ID(GEN_elgdst, 1)');
+					$balSumm->elgdst1 = $st1;
+					$balSumm->elgdst2 = $elgdSumm->elgd0;
+				}
+
+				$balSumm->elgdst3 = $sym;
+				$balSumm->elgdst5 = Yii::app()->user->dbModel->p1;
+				$balSumm->elgdst4 = date('Y-m-d H:i:s');
+				$balSumm->save();
+			}
+		}
+
+		$bal_itog = $sym+$balInd->elgdst3;
+
+		list($cxmb3, $cxmb2) = Cxmb::model()->getMark($bal_itog);
+
+		if($stusv->saveNewStusMark($st1, $bal_itog,$cxmb3 ,$cxmb2)){
+			return true;
+		}
+		//}
+		return false;
+	}
 	/*функция для переводов балов */
 	private function getBalMarkb($bal,$type){
 		$sql = <<<SQL
@@ -639,6 +718,40 @@ SQL;
 	}
 
 	/**
+	* Пересчет для харьковского меда
+	* @param $st1 int Код студента
+	* @param $gr1 int Код группы
+	* @param $sem7 int номер семстра
+	* @param $elg Elg
+	* @param $idUniversity int еод университета
+	* @param $stusv Stusv
+	* @param $marks mixed оценки
+	* @return bool
+	*/
+	private function recalculateSymAgr($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks){
+		$us = Us::model()->getUsByStusvFromJournal($elg);
+		//var_dump($us);
+		if(empty($us))
+			return false;
+		switch($us->us4){
+			/*эКЗАМЕН*/
+			case 5:
+				return $this->calculateSymAgr($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
+				break;
+			/*ЗАЧЕТ ИЛИ ДИФЗАЧЕТ*/
+			case 6:
+				if($us->us6==1)//ЗАЧЕТ
+				{
+
+				}	//return $this->calculateZachXarkovMed($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
+				elseif($us->us6==2)//ДИФЗАЧЕТ
+					return $this->calculateSymAgr($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
+				break;
+		}
+		return false;
+	}
+
+	/**
 	 * пересчет итоговой оценки
 	 * @param $st1 int код студента
 	 * @param $gr1 int код группы
@@ -677,6 +790,9 @@ SQL;
 			switch($idUniversity){
 				case 40:
 					return $this->recalculateXarcovMed($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
+					break;
+				case 1:
+					return $this->recalculateSymAgr($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
 					break;
 			}
 		}
