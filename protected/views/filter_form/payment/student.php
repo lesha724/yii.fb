@@ -22,7 +22,7 @@ $form=$this->beginWidget('CActiveForm', array(
     $html .= '</div>';
 
 
-    $students = CHtml::listData(St::model()->getStudentsOfGroup($model->group), 'st1', 'name');
+    $students = CHtml::listData(St::model()->getStudentsOfGroupForPayment($model->group, $type), 'st1', 'name');
     $html .= '<div class="span2 ace-select">';
     $html .= $form->label($model, 'student');
     $html .= $form->dropDownList($model, 'student', $students, $options);

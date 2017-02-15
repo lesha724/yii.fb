@@ -841,6 +841,41 @@ SQL;
 
         return $students;
     }
+
+	public function getStudentsOfGroupForPayment($gr1, $type)
+	{
+		if (empty($gr1))
+			return array();
+		if($type==0) { //общежите
+			$sql = <<<SQL
+            SELECT ST1,ST2,ST3,ST4
+				FROM st
+				INNER JOIN std on (st.st1 = std.std2)
+				WHERE st101<>7 and STD3=:GR1 and STD11 in (0,5,6,8) and (STD7 is null) and st66=1
+				ORDER BY ST2 collate UNICODE
+SQL;
+		}else{//оючучение
+			$sql = <<<SQL
+				SELECT ST1,ST2,ST3,ST4
+				FROM st
+				INNER JOIN std on (st.st1 = std.std2)
+				LEFT JOIN SK ON (SK.SK2 = ST.ST1)
+				WHERE st101<>7 and STD3=:GR1 and STD11 in (0,5,6,8) and (STD7 is null) and sk5 is null and sk3=1
+				ORDER BY ST2 collate UNICODE
+SQL;
+
+		}
+
+		$command = Yii::app()->db->createCommand($sql);
+		$command->bindValue(':GR1', $gr1);
+		$students = $command->queryAll();
+
+		foreach($students as $key => $student) {
+			$students[$key]['name'] = SH::getShortName($student['st2'], $student['st3'], $student['st4']);
+		}
+
+		return $students;
+	}
 	
 	public function getListGroup($gr1)
     {

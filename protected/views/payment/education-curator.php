@@ -12,6 +12,7 @@ $this->breadcrumbs=array(
 
 $this->renderPartial('/filter_form/payment/student', array(
     'model' => $model,
+	'type'=>1
 ));
 
 $js = '
