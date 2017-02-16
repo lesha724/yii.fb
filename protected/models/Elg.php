@@ -263,6 +263,11 @@ SQL;
 	}
 
 	public function getOmissions($st1,$uo1,$sem1,$type,$gr1){
+		$ps57 = PortalSettings::model()->getSettingFor(57);
+		$elgz4_str = '';
+		if($ps57==1)
+			$elgz4_str = ' AND elgz4<2 ';
+
 		$sql=<<<SQL
               SELECT r2,us4,elgz3,ustem5, elgzst3,elgzst4,elgzst5, elgp.*,rz8, rz2, rz3,elgz1 from elgzst
               	inner join elgz on (elgzst.elgzst2 = elgz.elgz1)
@@ -271,7 +276,7 @@ SQL;
 				inner join ustem on (elgz.elgz7 = ustem.ustem1)
 				inner join EL_GURNAL_ZAN({$uo1},:GR1,:SEM1, {$type}) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
 				inner join rz on (EL_GURNAL_ZAN.r4 = rz1)
-			  WHERE elgzst1=:ST1 AND elgzst3 > 0
+			  WHERE elgzst1=:ST1 AND elgzst3 > 0 {$elgz4_str}
 SQL;
 
 		$command = Yii::app()->db->createCommand($sql);
@@ -298,6 +303,10 @@ SQL;
 		if($ps55==1){
 			$elgzst4_str = " elgzst4>=0 ";
 		}
+		$ps57 = PortalSettings::model()->getSettingFor(57);
+		$elgz4_str = '';
+		if($ps57==1)
+			$elgz4_str = ' AND elgz4<2 ';
 		$min = Elgzst::model()->getMin();
 
 		$sql=<<<SQL
@@ -307,7 +316,7 @@ SQL;
 				inner join ustem on (elgz.elgz7 = ustem.ustem1)
 				inner join EL_GURNAL_ZAN({$uo1},:GR1,:SEM1, {$type}) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
 				inner join rz on (EL_GURNAL_ZAN.r4 = rz1)
-			  WHERE elgzst1=:ST1 AND elg4!=0 AND elgzst3=0 AND {$elgzst4_str} AND elgzst4<=:MIN
+			  WHERE elgzst1=:ST1 AND elg4!=0 AND elgzst3=0 AND {$elgzst4_str} AND elgzst4<=:MIN {$elgz4_str}
 
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
@@ -414,6 +423,10 @@ SQL;
 	 */
 	public function getRetakeInfo($uo1,$sem1,$elg4,$st1,$ps55)
 	{
+		$ps57 = PortalSettings::model()->getSettingFor(57);
+		$elgz4_str='';
+		if($ps57==1)
+			$elgz4_str = ' AND elgz4<2 ';
 		$elgzst4_str = " elgzst4>0 ";
 		if($ps55==1){
 			$elgzst4_str = " elgzst4>=0 ";
@@ -422,7 +435,7 @@ SQL;
 			SELECT COUNT(*) FROM elgzst
 				INNER JOIN elgz on (elgzst2 = elgz1)
 				INNER JOIN elg on (elgz2 = elg1)
-			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4 AND elgzst1=:ST1 AND elgzst3=2
+			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4 AND elgzst1=:ST1 AND elgzst3=2 {$elgz4_str}
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':ST1', $st1);
@@ -435,7 +448,7 @@ SQL;
 			SELECT COUNT(*) FROM elgzst
 				INNER JOIN elgz on (elgzst2 = elgz1)
 				INNER JOIN elg on (elgz2 = elg1)
-			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4 AND elgzst1=:ST1 AND elgzst3=1
+			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4 AND elgzst1=:ST1 AND elgzst3=1 {$elgz4_str}
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':ST1', $st1);
@@ -462,7 +475,7 @@ SQL;
 			SELECT COUNT(*) FROM elgzst
 				INNER JOIN elgz on (elgzst2 = elgz1)
 				INNER JOIN elg on (elgz2 = elg1)
-			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4 AND elgzst1=:ST1 AND elgzst3>0 AND (elgzst5>:MIN OR elgzst5=-1)
+			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4 AND elgzst1=:ST1 AND elgzst3>0 AND (elgzst5>:MIN OR elgzst5=-1) {$elgz4_str}
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':ST1', $st1);
@@ -476,7 +489,7 @@ SQL;
 			SELECT COUNT(*) FROM elgzst
 				INNER JOIN elgz on (elgzst2 = elgz1)
 				INNER JOIN elg on (elgz2 = elg1)
-			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4 AND elg4!=0 AND elgzst1=:ST1 AND elgzst3=0 AND {$elgzst4_str} AND elgzst4<=:MIN1 AND (elgzst5>:MIN2  OR elgzst5=-1)
+			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4 AND elg4!=0 AND elgzst1=:ST1 AND elgzst3=0 AND {$elgzst4_str} AND elgzst4<=:MIN1 AND (elgzst5>:MIN2  OR elgzst5=-1) {$elgz4_str}
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':ST1', $st1);
