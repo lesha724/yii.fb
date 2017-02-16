@@ -775,6 +775,15 @@ SQL;
                     $errorType=5;
                 }
 
+                $stusv = Stusv::model()->getStusvByJournal($elg, $gr1);
+                if(!empty($stusv)) {
+                    if (!empty($stusv->getMarkForStudent($st1)))
+                    {
+                        $error=true;
+                        $errorType=5;
+                    }
+                }
+
                 if(!$error)
                 {
                     $arr=array();
