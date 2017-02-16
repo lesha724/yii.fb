@@ -530,6 +530,12 @@ function getMarkByLesson($marks, $nom){
 </div>
 HTML;
 
+/**
+ * @var $elg Elg
+ * @var $stusv Stusv
+ */
+    $stusv = Stusv::model()->getStusvByJournal($elg, $gr1);
+
     $sem7 = Gr::model()->getSem7ByGr1ByDate($gr1,date('d.m.Y'));
     $ps59 = PortalSettings::model()->getSettingFor(59);
     $ps60 = PortalSettings::model()->getSettingFor(60);
@@ -593,6 +599,13 @@ HTML;
         $marks = $elg->getMarksForStudent($st1);
         $tr .= '<tr data-st1="'.$st1.'">';
         list($total_1[$st1], $total_count_1[$st1]) = countMarkTotal($marks);
+        //проверка есть ли итоговая оценка, тогда бдлокируем ввод оценко
+        $readOnlySt = false;
+        if(!empty($stusv)) {
+            if (!empty($stusv->getMarkForStudent($st1)))
+                $readOnlySt = true;
+        }
+
         foreach($dates as $key => $date) {
             $_nom=$date['elgz3'];
             $date2 = new DateTime($date['r2']);
@@ -621,7 +634,7 @@ HTML;
                     $tr.='<th></th><th></th>';
                 $moduleNom++;
             }else {
-                $tr .= table2Tr($date, $gr1, $st, $marks, $permLesson, $read_only, $model->type_lesson, $ps20, $ps55, $ps56,$sem7,$ps60,$min,$ps65,$ps66,$moduleNom, $ps88, $isStd);
+                $tr .= table2Tr($date, $gr1, $st, $marks, $permLesson, ($readOnlySt)?$readOnlySt:$read_only, $model->type_lesson, $ps20, $ps55, $ps56,$sem7,$ps60,$min,$ps65,$ps66,$moduleNom, $ps88, $isStd);
                 $potoch+=getMarsForElgz3($date['elgz3'],$marks);
 
                 if($ps57==1)
