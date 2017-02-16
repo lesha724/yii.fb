@@ -59,7 +59,7 @@ Yii::app()->clientScript->registerScript('sem-start', $js);
                 ?>
                 <div class="control-group">
                     <?=CHtml::checkBox('', PortalSettings::model()->findByPk(107)->ps2, $checkboxStyle)?>
-                    <span class="lbl"> <?=tt('Карточка студента по стусв')?></span>
+                    <span class="lbl"> <?=tt('Использовать стусв')?></span>
                     <?=CHtml::hiddenField('settings[107]', PortalSettings::model()->findByPk(107)->ps2)?>
                 </div>
 

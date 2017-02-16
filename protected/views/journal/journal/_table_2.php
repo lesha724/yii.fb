@@ -534,7 +534,12 @@ HTML;
  * @var $elg Elg
  * @var $stusv Stusv
  */
-    $stusv = Stusv::model()->getStusvByJournal($elg, $gr1);
+    $ps107 = PortalSettings::model()->getSettingFor(107);
+    if($ps107==1)
+        $stusv = Stusv::model()->getStusvByJournal($elg, $gr1);
+    else
+        $stusv=null;
+
 
     $sem7 = Gr::model()->getSem7ByGr1ByDate($gr1,date('d.m.Y'));
     $ps59 = PortalSettings::model()->getSettingFor(59);
@@ -601,9 +606,14 @@ HTML;
         list($total_1[$st1], $total_count_1[$st1]) = countMarkTotal($marks);
         //проверка есть ли итоговая оценка, тогда бдлокируем ввод оценко
         $readOnlySt = false;
-        if(!empty($stusv)) {
-            if (!empty($stusv->getMarkForStudent($st1)))
-                $readOnlySt = true;
+        if($ps107==1) {
+            if (!empty($stusv)) {
+                $stusvst = $stusv->getMarkForStudent($st1);
+                if (!empty($stusvst)) {
+                    if ($stusvst->stusvst4 > 0 || $stusvst->stusvst6 > 0)
+                        $readOnlySt = true;
+                }
+            }
         }
 
         foreach($dates as $key => $date) {
