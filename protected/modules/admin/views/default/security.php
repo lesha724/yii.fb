@@ -41,3 +41,7 @@ echo sprintf($widget, $title, $html);
 $title = tt('Остальные настройки');
 $html  = $this->renderPartial('security/_settings', array(), true);
 echo sprintf($widget, $title, $html);
+
+$title = tt('Защита авторизационной сессии');
+$html  = $this->renderPartial('security/_auth', array(), true);
+echo sprintf($widget, $title, $html);

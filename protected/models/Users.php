@@ -414,26 +414,32 @@ HTML;
 		if($ps114==1){
 			$this->_generateU12();
 		}
-		$key = $this->_getKey();
+		$ps115 = PortalSettings::model()->getSettingFor(115);
+		if($ps115==1) {
+			$key = $this->_getKey();
 
-		$nameCookie = self::COOKIE_NAME_AUTH_KEY;
-		$cookie=new CHttpCookie($nameCookie,$this->_getCookieKey($key));
-		//$cookie->httpOnly = true;
-		Yii::app()->request->cookies[$nameCookie]=$cookie;
+			$nameCookie = self::COOKIE_NAME_AUTH_KEY;
+			$cookie = new CHttpCookie($nameCookie, $this->_getCookieKey($key));
+			//$cookie->httpOnly = true;
+			Yii::app()->request->cookies[$nameCookie] = $cookie;
 
-		//записіваем в сессию
-		Yii::app()->session[self::SESSION_NAME_AUTH_KEY] = $this->_getSessionKey($key);
+			//записіваем в сессию
+			Yii::app()->session[self::SESSION_NAME_AUTH_KEY] = $this->_getSessionKey($key);
 
-		/*$nameCookie = self::COOKIE_NAME_AUTH_KEY1;
-		$cookie=new CHttpCookie($nameCookie,$this->_getCookieKey1($key));
-		//$cookie->httpOnly = true;
-		Yii::app()->request->cookies[$nameCookie]=$cookie;*/
+			/*$nameCookie = self::COOKIE_NAME_AUTH_KEY1;
+            $cookie=new CHttpCookie($nameCookie,$this->_getCookieKey1($key));
+            //$cookie->httpOnly = true;
+            Yii::app()->request->cookies[$nameCookie]=$cookie;*/
 
-		//записіваем в сессию
-		Yii::app()->session[self::SESSION_NAME_AUTH_KEY1] = $this->_getSessionKey1($key) ;
+			//записіваем в сессию
+			Yii::app()->session[self::SESSION_NAME_AUTH_KEY1] = $this->_getSessionKey1($key);
+		}
 	}
 
 	public function validateLogin(){
+		$ps115 = PortalSettings::model()->getSettingFor(115);
+		if($ps115==0)
+			return true;
 		$key = $this->_getKey();
 		//проверка на совпадении спец ключа в куки
 		$cookie=Yii::app()->request->cookies[self::COOKIE_NAME_AUTH_KEY];
@@ -466,8 +472,13 @@ HTML;
 		$key = '';
 		if(isset(Yii::app()->params['login-key']))
 			$key .= Yii::app()->params['login-key'];
-		$key.=Yii::app()->request->userAgent;
-		$key.=Yii::app()->request->userHostAddress;
+		$ps117 = PortalSettings::model()->getSettingFor(117);
+		if($ps117==1)
+			$key.=Yii::app()->request->userAgent;
+
+		$ps116 = PortalSettings::model()->getSettingFor(116);
+		if($ps116==1)
+			$key.=Yii::app()->request->userHostAddress;
 
 		return $key;
 	}
@@ -480,14 +491,14 @@ HTML;
 	 */
 	protected function _getSessionKey($key){
 
-		return md5($this->u12.self::CRYPT_KEY_SESSION.$_SERVER['REMOTE_ADDR'].$key);
+		return md5($this->u12.self::CRYPT_KEY_SESSION.$key);
 	}
 	/**
 	 * шифровка названиии ключа для куки
 	 * @return string
 	 */
 	protected function _getCookieKey($key){
-		return crypt($key.$this->u12.$_SERVER['REMOTE_ADDR'],self::CRYPT_KEY_COOKIE);
+		return crypt($key.$this->u12,self::CRYPT_KEY_COOKIE);
 	}
 	/**
 	 * шифровка названиии ключа для куки1
@@ -501,7 +512,7 @@ HTML;
 	 * @return string
 	 */
 	protected function _getSessionKey1($key = ''){
-		return crypt($this->u1.$_SERVER['REMOTE_ADDR'],$key);
+		return crypt($this->u1,$key.'mkp');
 	}
 
 	protected function _generateU12(){
