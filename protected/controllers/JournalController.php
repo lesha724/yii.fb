@@ -777,10 +777,13 @@ SQL;
                 $ps107 = PortalSettings::model()->getSettingFor(107);
                 if($ps107==1) {
                     $stusv = Stusv::model()->getStusvByJournal($elg, $gr1);
-                    if (!empty($stusv)) {
-                        if (!empty($stusv->getMarkForStudent($st1))) {
-                            $error = true;
-                            $errorType = 5;
+                    if ($stusv!=null) {
+                        $stusvst = $stusv->getMarkForStudent($st1);
+                        if ($stusvst!=null) {
+                            if ($stusvst->stusvst4 > 0 || $stusvst->stusvst6 > 0) {
+                                $error = true;
+                                $errorType = 5;
+                            }
                         }
                     }
                 }
