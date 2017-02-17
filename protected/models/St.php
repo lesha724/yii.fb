@@ -752,6 +752,12 @@ SQL;
 		return $info;
 	}
 
+	/**
+	 * Список студентов по группе дял журнала
+	 * @param $gr1
+	 * @param $uo1
+	 * @return mixed
+	 */
     public function getStudentsForJournal($gr1, $uo1)
     {
         $sql = <<<SQL

@@ -1,4 +1,7 @@
 <?php
+/**
+ * @var $retake Elgzst
+ */
 $this->pageHeader=tt('Отработка');
     $this->breadcrumbs=array(
         tt('Электронный журнал'),
