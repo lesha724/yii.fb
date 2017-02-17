@@ -461,7 +461,7 @@ SQL;
 			SELECT COUNT(*) FROM elgzst
 				INNER JOIN elgz on (elgzst2 = elgz1)
 				INNER JOIN elg on (elgz2 = elg1)
-			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4 AND elg4!=0 AND elgzst1=:ST1 AND elgzst3=0 AND {$elgzst4_str} AND elgzst4<=:MIN
+			WHERE elg2=:UO1 AND elg3=:SEM1 AND elg4=:ELG4 AND elg4!=0 AND elgzst1=:ST1 AND elgzst3=0 AND {$elgzst4_str} AND elgzst4<=:MIN {$elgz4_str}
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':ST1', $st1);
