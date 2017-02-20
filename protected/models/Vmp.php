@@ -416,7 +416,7 @@ SQL;
 
             //var_dump($command);
 
-            if(!empty($marks)){
+            //if(!empty($marks)){
                 $tek =0;
 
                 foreach($marks as $mark){
@@ -552,7 +552,7 @@ SQL;
                         $command->execute();
                     }
                 }
-            }
+            //}
         }
     }
 }
