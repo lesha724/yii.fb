@@ -250,23 +250,23 @@ HTML;
 function table2TrModule2($date,$gr1,$st,$ps56,$nom,$modules,$sem7,$ps60, $total, $_count)
 {
     if (($st['st71']!=$sem7&&$st['st71']!=$sem7+1) && $ps60 ==1)
-        return '<td colspan="4"></td>';
+        return '<td colspan="2"></td>';
 
     if (stripos($date['r2'], '11.11.1111')!==false )
-        return '<td colspan="4"></td>';
+        return '<td colspan="2"></td>';
 
     /*if (strtotime($date['r2']) > strtotime('now'))
         return '<td colspan="4"></td>';*/
 
     if ($ps56 == 1 && $date['elgz4']>0)
-        return '<td colspan="4"></td>';
+        return '<td colspan="2"></td>';
 
     if(!isset($modules[(int)$nom-1]))
-        return '<td colspan="4">'.tt('Нет ведомости, обращайтесь в деканат!').'</td>';
+        return '<td colspan="2">'.tt('Нет ведомости, обращайтесь в деканат!').'</td>';
     else{
         $mark = Vmp::model()->getMarks($modules[(int)$nom-1]['vvmp1'],$st['st1'],$gr1);
         if(empty($mark))
-            return '<td colspan="4">'.tt('Нет ведомости, обращайтесь в деканат!').'</td>';
+            return '<td colspan="2">'.tt('Нет ведомости, обращайтесь в деканат!').'</td>';
         $_itog = round($mark['vmp7'],2);
         $itog = round($mark['vmp4'],2);
         $vmpv6 = $mark['vmpv6'];
