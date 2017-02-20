@@ -2023,10 +2023,26 @@ SQL;
             Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
             unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
         }
+
         if (isset($_REQUEST['FilterForm']))
-            $model->attributes=$_REQUEST['FilterForm'];
+        {
+            $model->attributes = $_REQUEST['FilterForm'];
+            Yii::app()->user->setState('SearchParamsFilterFormRetake', $_REQUEST['FilterForm']);
+        }
+        else
+        {
+            $searchParams = Yii::app()->user->getState('SearchParamsFilterFormRetake');
+            if ( isset($searchParams) )
+            {
+                $model->attributes = $searchParams;
+            }
+        }
+
         $retake = new Elgzst();
         $retake->unsetAttributes();
+
+        /**/
+
         $this->render('retake', array(
             'model'      => $model,
             'retake'      => $retake,
@@ -2035,8 +2051,8 @@ SQL;
 
     public function actionSearchRetake($uo1,$us1)
     {
-        //if (! Yii::app()->request->isAjaxRequest)
-            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
         $model = new Elgzst('search');
         $model->unsetAttributes();
         if (isset($_GET['pageSize'])) {
@@ -2046,8 +2062,20 @@ SQL;
         $model->uo1=$uo1;
         $us=Us::model()->findByPk($us1);
         $model->type_lesson=$us->us4;
+
         if (isset($_REQUEST['Elgzst']))
+        {
             $model->attributes = $_REQUEST['Elgzst'];
+            Yii::app()->user->setState('SearchParamsElgzstRetake', $_REQUEST['Elgzst']);
+        }
+        else
+        {
+            $searchParams = Yii::app()->user->getState('SearchParamsElgzstRetake');
+            if ( isset($searchParams) )
+            {
+                $model->attributes = $searchParams;
+            }
+        }
 
 
         $this->render('retake/_grid', array(
