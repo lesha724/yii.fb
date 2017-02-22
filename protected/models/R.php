@@ -261,7 +261,16 @@ SQL;
 		if(empty($elg))
 			return null;
 
-		$gr1 = St::model()->getGr1BySt1($st1);
+		$sem = $elg->elg30;
+		if(empty($sem))
+			return null;
+
+		$uo = $elg->elg20;
+		if(empty($uo))
+			return null;
+
+		//$gr1 = St::model()->getGr1BySt1($st1);
+		$gr1 = St::model()->getGroupByStudent($st1, $uo->uo19, $sem->sem3, $sem->sem5);
 		if(empty($gr1))
 			return null;
 

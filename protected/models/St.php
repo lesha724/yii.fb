@@ -1136,6 +1136,32 @@ SQL;
         return $info;
     }
 
+	/**
+	 * Получение кода группы(возможно вирутальной) по студенту по году сметсру и дисциплине
+	 * @param $st1 {int} код студента
+	 * @param $uo19 {int}
+	 * @param $year {int} год
+	 * @param $sem {int} семестр
+	 */
+	public function getGroupByStudent($st1,$uo19,$year,$sem){
+		$sql = <<<SQL
+			select first 1 ucgn2, gr3
+			  from ucsn
+				 inner join ucgns on (ucsn.ucsn1 = ucgns.ucgns1)
+				 inner join ucgn on (ucgns.ucgns2 = ucgn.ucgn1)
+				 inner join ucxg on (ucgn.ucgn1 = ucxg.ucxg2)
+				 inner join gr on (ucgn.ucgn2=gr.gr1)
+			  where ucxg3=0 and ucxg1=:UO19 and ucsn2=:ST1 and ucgns5=:YEAR and ucgns6=:SEM
+SQL;
+		$command= Yii::app()->db->createCommand($sql);
+		$command->bindValue(':ST1', $st1);
+		$command->bindValue(':UO19', $uo19);
+		$command->bindValue(':YEAR', $year);
+		$command->bindValue(':SEM', $sem);
+		$gr1 = $command->queryScalar();
+		return $gr1;
+	}
+
 	public function getGr1BySt1($st1)
 	{
 		$sql=<<<SQL
