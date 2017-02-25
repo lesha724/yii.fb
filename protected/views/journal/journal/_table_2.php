@@ -370,7 +370,7 @@ JS;
 
                 $st1 = $st['st1'];
                 return sprintf(<<<HTML
-                    <td class="module-tr module{$vmpv1}{$st1}">%s</td>
+                    <td class="module-tr module{$vmpv1}{$st1}">%s <a class="btn btn-info btn-mini btn-show-marks" data-vmpv1="{$vmpv1}"><i class="icon-eye-open"></i></a></td>
                     <td class="module-tr module{$vmpv1}{$st1}" data-nom-module="{$nom}" data-nom="{$nom_}" {$disabled} data-elgz1="{$elgz1}" data-r1="{$r1}" data-date="{$date_lesson}" data-gr1="{$gr1}"><input value="%s" class="module-ind"  maxlength="5" data-vmpv1="{$vmpv1}"/></td>
                     <td class="module-tr module{$vmpv1}{$st1}">%s</td>
                     <td class="module-tr module{$vmpv1}{$st1}">%s</td>
@@ -509,11 +509,12 @@ function getMarkByLesson($marks, $nom){
     $minMaxUrl = Yii::app()->createUrl('/journal/insertMinMaxMark');
     $urlRetake = Yii::app()->createUrl('/journal/journalRetake');
     $urlModule= Yii::app()->createUrl('/journal/updateVmp');
+    $urlShowMarks= Yii::app()->createUrl('/journal/ShowMarksForRecalculate');
 
     $changeTheme= Yii::app()->createUrl('/journal/changeTheme');
 
     $table = <<<HTML
-<div class="{$classTable2}" data-ps33="{$ps33}" data-gr1="{$gr1}" data-url-module="{$urlModule}" data-url="{$url}" data-url-change-theme="{$changeTheme}" data-url-retake="{$urlRetake}" data-url-check="{$url_check}">
+<div class="{$classTable2}" data-ps33="{$ps33}" data-gr1="{$gr1}" data-url-show-marks="{$urlShowMarks}" data-url-module="{$urlModule}" data-url="{$url}" data-url-change-theme="{$changeTheme}" data-url-retake="{$urlRetake}" data-url-check="{$url_check}">
     <table class="table table-striped table-bordered table-hover journal_table">
         <thead>
             <tr>

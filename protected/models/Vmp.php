@@ -305,8 +305,148 @@ SQL;
         return $res;
     }
 
+    /**
+     * Оцнеки с журнала для пмк
+     * @param $st1 int студент
+     * @param $elgz Elgz Занятие
+     * @param $gr1 int группа
+     * @params $showInfo bool вовпращать ли оценки с доп инофрмацией (дата, номер занятия тема)
+     * @return array оценки
+     */
+    public function getMarksFromJournal($st1,$elgz,$gr1, $showInfo = false){
+        /** @var $elg Elg */
+        $dopColumn = '';
+        $dopJoin = '';
+        $elg = null;
+
+        if($showInfo)
+        {
+            $elg = Elg::model()->findByPk($elgz->elgz2);
+            if($elg==null)
+                return array();
+            $dopColumn=',r2,elgz3, elgz4, us4';
+            $dopJoin = "inner join EL_GURNAL_ZAN({$elg->elg2},:GR1,:SEM, {$elg->elg3}) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)";
+        }
+        $sql=<<<SQL
+            SELECT elgz3 FROM elgz WHERE elgz2=:ELGZ2 AND elgz4 in (2,3,4) AND elgz3>=:ELGZ3 ORDER by elgz3 asc
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ELGZ2', $elgz->elgz2);
+        $command->bindValue(':ELGZ3', $elgz->elgz3);
+        $pmkLessonNom = $command->queryScalar();
+
+        if(empty($pmkLessonNom))
+            return array();
+
+        $sql=<<<SQL
+            SELECT elgz3 FROM elgz WHERE elgz2=:ELGZ2 AND elgz4 in (2,3,4) AND elgz3<:ELGZ3 ORDER by elgz3 asc
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ELGZ2', $elgz->elgz2);
+        $command->bindValue(':ELGZ3', $elgz->elgz3);
+        $pmkPrevLessonNom = $command->queryScalar();
+
+        $dopMarks = array();
+        $prevSem = 0;
+
+        $currentYear = $currentSem = $year = $sem = 0;
+        if(empty($pmkPrevLessonNom)) {
+            $pmkPrevLessonNom = 0;
+
+            list($year,$sem) = Elgz::model()->getSemYearAndSem($elgz->elgz1);
+            $currentYear =$year;
+            $currentSem =$sem;
+
+            if($sem==1){
+                $sem=0;
+            }else{
+                $year--;
+            }
+            $sem1 = Sem::model()->getSemestrForGroupByYearAndSem($gr1,$year,$sem);
+
+            $uo1 = Elgz::model()->getUo1($elgz->elgz1);
+
+            if($sem1!=0){
+
+                $sql=<<<SQL
+                      SELECT MAX(elgz3) as nom FROM elgz
+                        INNER JOIN elg on (elgz2 = elg1)
+                     WHERE elg3=:SEM1 AND elgz4 in (2,3,4) AND elg2=:UO1 ORDER by nom asc
+SQL;
+                $command = Yii::app()->db->createCommand($sql);
+                $command->bindValue(':SEM1', $sem1);
+                $command->bindValue(':UO1', $uo1);
+                $pmkLessonNomPrevSem = $command->queryScalar();
+
+                if(empty($pmkLessonNomPrevSem)){
+                    $pmkLessonNomPrevSem =0;
+                }
+
+                $sql=<<<SQL
+                      SELECT elgzst5,elgzst4,elgzst3 $dopColumn FROM elg
+                          INNER JOIN elgz on (elg.elg1 = elgz.elgz2 AND  elgz4=0  AND elgz.elgz3>:NOM)
+                          INNER JOIN elgzst on (elgzst.elgzst2 = elgz.elgz1  AND elgzst1=:ST1 )
+                          $dopJoin
+                      WHERE  elg3=:SEM1 AND elg2=:UO1 ORDER by elgz3 asc
+SQL;
+                $command = Yii::app()->db->createCommand($sql);
+                if($showInfo){
+                    $command->bindValue(':GR1', $gr1);
+                    $command->bindValue(':SEM', $sem1);
+                }
+                $command->bindValue(':ST1', $st1);
+                $command->bindValue(':NOM', $pmkLessonNomPrevSem);
+                $command->bindValue(':SEM1', $sem1);
+                $command->bindValue(':UO1', $uo1);
+                $dopMarks = $command->queryAll();
+
+            }
+        }
+
+        $sql=<<<SQL
+              SELECT elgzst5,elgzst4,elgzst3 $dopColumn FROM elgzst
+              INNER JOIN elgz on (elgzst.elgzst2 = elgz.elgz1 AND elgz.elgz2=:ELGZ2 and elgz.elgz3>:MIN AND elgz.elgz3<:MAX)
+              $dopJoin
+              WHERE elgzst1=:ST1 AND (elgz4=0 or elgz4=1) ORDER by elgz3 asc
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ELGZ2', $elgz->elgz2);
+        $command->bindValue(':ST1', $st1);
+        $command->bindValue(':MIN', $pmkPrevLessonNom);
+        $command->bindValue(':MAX', $pmkLessonNom);
+        if($showInfo){
+            $command->bindValue(':GR1', $gr1);
+            $command->bindValue(':SEM', $elg->elg3);
+        }
+        $marks= $command->queryAll();
+
+        $returnArray = array(
+            'current'=>array(
+                'year'=>$currentYear,
+                'sem'=>$currentSem,
+                'marks'=>$marks
+            )
+        );
+
+        if(!empty($dopMarks)){
+            $returnArray['prev']=array(
+                'year'=>$year,
+                'sem'=>$sem,
+                'marks'=>$dopMarks
+            );
+        }
+
+        return $returnArray;
+    }
+
+    /**
+     * Пересчет оценко пмк в журнале по студенту
+     * @param $st1
+     * @param $elgz
+     * @param $gr1
+     */
     public function recalculate($st1,$elgz,$gr1){
-        $ps57 = PortalSettings::model()->findByPk(57)->ps2;
+        $ps57 = PortalSettings::model()->getSettingFor(57);
         if($ps57!=1)
             return;
 
@@ -341,7 +481,7 @@ SQL;
             return;
         else
         {
-            $sql=<<<SQL
+            /*$sql=<<<SQL
             SELECT elgz3 FROM elgz WHERE elgz2=:ELGZ2 AND elgz4 in (2,3,4) AND elgz3<:ELGZ3 ORDER by elgz3 asc
 SQL;
             $command = Yii::app()->db->createCommand($sql);
@@ -410,16 +550,38 @@ SQL;
             $command->bindValue(':ST1', $st1);
             $command->bindValue(':MIN', $pmkPrevLessonNom);
             $command->bindValue(':MAX', $pmkLessonNom);
-            $marks= $command->queryAll();
+            $marks= $command->queryAll();*/
 
             //var_dump($marks);
 
             //var_dump($dopMarks);
 
             //if(!empty($marks)){
-                $tek =0;
 
-                foreach($marks as $mark){
+            $marksArray = $this->getMarksFromJournal($st1,$elgz,$gr1);
+            $marks = $marksArray['current']['marks'];
+            $dopMarks = array();
+            if(isset($marksArray['prev']))
+                $dopMarks = $marksArray['prev']['marks'];
+
+            $tek =0;
+
+            foreach($marks as $mark){
+                $bal=0;
+                if($mark['elgzst3']>0){
+                    $bal=$mark['elgzst5'];
+                }else
+                {
+                    $bal=($mark['elgzst5']>0)?$mark['elgzst5']:$mark['elgzst4'];
+                }
+                $tek+=$bal;
+            }
+
+            $count = count($marks);
+
+            if(!empty($dopMarks)){
+
+                foreach($dopMarks as $mark){
                     $bal=0;
                     if($mark['elgzst3']>0){
                         $bal=$mark['elgzst5'];
@@ -429,52 +591,37 @@ SQL;
                     }
                     $tek+=$bal;
                 }
-
-                $count = count($marks);
-
-                if(!empty($dopMarks)){
-
-                    foreach($dopMarks as $mark){
-                        $bal=0;
-                        if($mark['elgzst3']>0){
-                            $bal=$mark['elgzst5'];
-                        }else
-                        {
-                            $bal=($mark['elgzst5']>0)?$mark['elgzst5']:$mark['elgzst4'];
-                        }
-                        $tek+=$bal;
-                    }
-                    $count+=count($dopMarks);
-                }
-                ///Для запрожья где диф зачет считаеться без перевода балов, а среднее делиться на 5 и умножаеться на 200
-                $_tek = $tek;
+                $count+=count($dopMarks);
+            }
+            ///Для запрожья где диф зачет считаеться без перевода балов, а среднее делиться на 5 и умножаеться на 200
+            $_tek = $tek;
+            //var_dump($tek);
+            //var_dump($count);
+            $ps82 = PortalSettings::model()->findByPk(82)->ps2;
+            if($ps82!=0){
+                $val = $tek/$count;
+                //print_r($val);
+                $tek = round($val,2);
                 //var_dump($tek);
-                //var_dump($count);
-                $ps82 = PortalSettings::model()->findByPk(82)->ps2;
-                if($ps82!=0){
-                    $val = $tek/$count;
-                    //print_r($val);
-                    $tek = round($val,2);
-                    //var_dump($tek);
-                    if($ps82==2){
-                        //print_r('----');
-                        $sql = <<<SQL
-                              SELECT max(markb3) FROM markb WHERE markb2<=:BAL AND markb4=0
+                if($ps82==2){
+                    //print_r('----');
+                    $sql = <<<SQL
+                          SELECT max(markb3) FROM markb WHERE markb2<=:BAL AND markb4=0
 SQL;
-                        $command = Yii::app()->db->createCommand($sql);
-                        $command->bindValue(':BAL', $tek);
-                        $mark = $command->queryScalar();
-                        //var_dump($mark);
-                        if(!empty($mark)){
-                            $tek = $mark;
-                        }else {
-                            $tek = 0;
-                            //print_r($tek);
-                        }
+                    $command = Yii::app()->db->createCommand($sql);
+                    $command->bindValue(':BAL', $tek);
+                    $mark = $command->queryScalar();
+                    //var_dump($mark);
+                    if(!empty($mark)){
+                        $tek = $mark;
+                    }else {
+                        $tek = 0;
+                        //print_r($tek);
                     }
-
-                    //print_r($tek);
                 }
+
+                //print_r($tek);
+            }
 
                 /*$sql = <<<SQL
                               SELECT * FROM vmp WHERE vmp2=:ST1 AND vmp1=:VMPV1

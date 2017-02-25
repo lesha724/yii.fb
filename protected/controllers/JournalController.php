@@ -27,6 +27,7 @@ class JournalController extends Controller
                     'saveChangeTheme',
                     'recalculateVmp',
                     'recalculateStus',
+                    'showMarksForRecalculate',
 
                     'retake',
                     'searchRetake',
@@ -316,6 +317,14 @@ SQL;
                 $errorType=2;
             }
 
+            $_r1 = R::model()->getR1ByLesson($elgz1, $st1);
+
+            if($_r1!=$r1)
+            {
+                $error = true;
+                $errorType = 2;
+            }
+
             $elgz = Elgz::model()->findByPk($elgz1);
             if(!$error) {
                 if (empty($elgz)) {
@@ -551,6 +560,103 @@ SQL;
         Yii::app()->end(CJSON::encode(array('error' => $error, 'errorType' => $errorType)));
     }
 
+    public function actionShowMarksForRecalculate()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $ps57 = PortalSettings::model()->getSettingFor(57);
+        if($ps57!=1)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $error=false;
+        $errorType=0;
+        $html = '';
+        $title = '';
+
+        $st1 = Yii::app()->request->getParam('st1', null);
+        $elgz1 = Yii::app()->request->getParam('elgz1', null);
+        $vmpv1 = Yii::app()->request->getParam('vmpv1', null);
+        $nomModule = Yii::app()->request->getParam('nomModule', null);
+        $r1 = Yii::app()->request->getParam('r1', null);
+        $nom = Yii::app()->request->getParam('nom', null);
+        $date = Yii::app()->request->getParam('date', null);
+        $gr1 = Yii::app()->request->getParam('gr1', null);
+
+        if($vmpv1==null ||$st1==null || $elgz1==null || $r1==null || $nomModule==null || $nom==null || $date==null || $gr1==null)
+        {
+            $error = true;
+            $errorType=2;
+        }
+        else
+        {
+            $sql = <<<SQL
+            SELECT * FROM  EL_GURNAL(:P1,0,0,0,2,0,:R1,0,0);
+SQL;
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
+            $command->bindValue(':R1', $r1);
+            $res = $command->queryRow();
+            if(count($res)==0 || empty($res)||$res['dostup']==0)
+            {
+                $error=true;
+                $errorType=3;
+            }
+
+            $_r1 = R::model()->getR1ByLesson($elgz1, $st1);
+
+            if($_r1!=$r1)
+            {
+                $error = true;
+                $errorType = 2;
+            }
+
+            $elgz = Elgz::model()->findByPk($elgz1);
+            if(!$error) {
+                if (empty($elgz)) {
+                    $error = true;
+                    $errorType = 2;
+                } else {
+                    if ($elgz->elgz4 != 2) {
+                        $error = true;
+                        $errorType = 2;
+                    } else {
+                        $elg = Elg::model()->findByPk($elgz->elgz2);
+                        $module = Vvmp::model()->getModul($elg->elg2, $gr1,$elgz->elgz3,$elg->elg1,$st1);
+                        //var_dump($module);
+                        if ($module['vmpv1'] != $vmpv1 ) {
+                            $error = true;
+                            $errorType = 9;
+                        } else {
+                            $sql = <<<SQL
+                              SELECT * FROM vmp WHERE vmp2=:ST1 AND vmp1=:VMPV1
+SQL;
+                            $command = Yii::app()->db->createCommand($sql);
+                            $command->bindValue(':ST1', $st1);
+                            $command->bindValue(':VMPV1', $vmpv1);
+                            $vmp = $command->queryRow();
+
+
+                            $marksArray = Vmp::model()->getMarksFromJournal($st1,$elgz, $gr1, true);
+                            /** @var $st St  */
+                            $st = St::model()->findByPk($st1);
+
+                            $title = '№'.$module['vmpv3']. ' '. date('Y-m-d',strtotime( $module['vmpv4'])). ', '. $st->getShortName() .':'.tt('просмотр оценок для расчета');
+
+                            $html = $this->renderPartial('journal/_show_marks_for_vmp', array(
+                                'marksArray'=>$marksArray,
+                                'vmp'=>$vmp,
+                                'module'=>$module
+                            ), true);
+                        }
+                    }
+                }
+            }
+        }
+
+        Yii::app()->end(CJSON::encode(array('title'=>$title,'html'=>$html, 'error' => $error, 'errorType' => $errorType)));
+    }
+
     public function actionInsertStMark()
     {
         if (! Yii::app()->request->isAjaxRequest)
@@ -642,6 +748,14 @@ SQL;
                     }else
                         $value=0;
                 }
+            }
+
+            $_r1 = R::model()->getR1ByLesson($elgz1, $st1);
+
+            if($_r1!=$r1)
+            {
+                $error = true;
+                $errorType = 2;
             }
 
             if(empty($elgz)||$error)

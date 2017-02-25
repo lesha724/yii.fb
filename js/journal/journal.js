@@ -205,6 +205,62 @@ $(document).ready(function(){
 
             $spinner1.hide();
         }, 'json')
+    })
+
+    $('.journal_div_table2 .btn-show-marks').click(function(event ) {
+        //alert(1)
+        var st1  = $(this).parents('[data-st1]').data('st1');
+        var gr1  = $(this).parents('[data-gr1]').data('gr1');
+
+        var stName = $('table.journal_table_1 tr[data-st1='+st1+'] td:eq(1)').text();
+        var index  = $(this).parent().index();
+        var nom   = $(this).parents('table').find('th:eq('+index+')').html();
+        var title  = stName+'<br>'+nom+'<br>';
+
+
+
+        var vmpv1 = $(this).data('vmpv1');
+
+        var className = '.module'+vmpv1+st1;
+
+        ///alert(className);
+
+        var elem = $(className+' input[data-vmpv1="'+vmpv1+'"]');
+
+        var params = {
+            nom  : elem.parent().data('nom'),
+            nomModule  : elem.parent().data('nom-module'),
+            elgz1   : elem.parent().data('elgz1'),
+            r1   : elem.parent().data('r1'),
+            st1   : st1,
+            gr1   : gr1,
+            date:elem.parent().data('date'),
+            vmpv1:vmpv1
+        }
+
+        var url = $(this).parents('[data-url-show-marks]').data('url-show-marks');
+
+        $spinner1.show();
+
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            data:params,
+            success: function( data ) {
+                if (data.error) {
+                    addGritter(title, getError(data), 'error')
+                } else {
+                    $('#modalBlock .modal-header h4').html(data.title);
+                    $('#modalBlock #modal-content').html(data.html);
+                    $('#modalBlock').modal('show');
+                }
+                $spinner1.hide();
+            },
+            error: function( data ) {
+                addGritter(title, tt.error, 'error');
+                $spinner1.hide();
+            }
+        });
     });
 
     $('div .journal_div_table2 .module-ind').change(function(event ){
