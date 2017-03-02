@@ -1315,7 +1315,7 @@ SQL;
                     $error = true;
                 else {
                     $sql = <<<SQL
-            SELECT * FROM  EL_GURNAL(:P1,0,0,0,2,0,:R1,0,0);
+            SELECT * FROM  EL_GURNAL(:P1,0,0,0,2,0,:R1,2,0);
 SQL;
                     $command = Yii::app()->db->createCommand($sql);
                     $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
@@ -2355,7 +2355,7 @@ SQL;
                 $error = true;
             else {
                 $sql = <<<SQL
-            SELECT * FROM  EL_GURNAL(:P1,0,0,0,2,0,:R1,0,0);
+            SELECT * FROM  EL_GURNAL(:P1,0,0,0,2,0,:R1,2,0);
 SQL;
                 $command = Yii::app()->db->createCommand($sql);
                 $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
