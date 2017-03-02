@@ -718,7 +718,7 @@ SQL;
 	}
 
 	/**
-	* Пересчет для харьковского меда
+	* Пересчет для Сумм и ирпеня
 	* @param $st1 int Код студента
 	* @param $gr1 int Код группы
 	* @param $sem7 int номер семстра
@@ -791,6 +791,7 @@ SQL;
 				case 40:
 					return $this->recalculateXarcovMed($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
 					break;
+                case 24://Ирпень
 				case 1:
 					return $this->recalculateSymAgr($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
 					break;
