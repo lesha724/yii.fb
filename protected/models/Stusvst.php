@@ -5,7 +5,6 @@
  *
  * The followings are the available columns in table 'stusvst':
  * @property integer $stusvst1
- * @property integer $stusvst2
  * @property integer $stusvst3
  * @property integer $stusvst4
  * @property string $stusvst5
@@ -31,11 +30,11 @@ class Stusvst extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('stusvst1, stusvst2, stusvst3, stusvst4, stusvst6, stusvst8', 'numerical', 'integerOnly'=>true),
+			array('stusvst1, stusvst3, stusvst4, stusvst6, stusvst8', 'numerical', 'integerOnly'=>true),
 			array('stusvst5, stusvst7', 'length', 'max'=>30),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('stusvst1, stusvst2, stusvst3, stusvst4, stusvst5, stusvst6, stusvst7, stusvst8', 'safe', 'on'=>'search'),
+			array('stusvst1, stusvst3, stusvst4, stusvst5, stusvst6, stusvst7, stusvst8', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -57,7 +56,6 @@ class Stusvst extends CActiveRecord
 	{
 		return array(
 			'stusvst1' => 'Stusvst1',
-			'stusvst2' => 'Stusvst2',
 			'stusvst3' => 'Stusvst3',
 			'stusvst4' => 'Stusvst4',
 			'stusvst5' => 'Stusvst5',
@@ -86,7 +84,6 @@ class Stusvst extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('stusvst1',$this->stusvst1);
-		$criteria->compare('stusvst2',$this->stusvst2);
 		$criteria->compare('stusvst3',$this->stusvst3);
 		$criteria->compare('stusvst4',$this->stusvst4);
 		$criteria->compare('stusvst5',$this->stusvst5,true);
