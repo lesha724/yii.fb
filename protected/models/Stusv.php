@@ -454,7 +454,9 @@ SQL;
 
 		$bal_itog = $sym+$balInd->elgdst3;
 
-		list($cxmb3, $cxmb2) = Cxmb::model()->getMark($bal_itog);
+        $arr = Cxmb::model()->getMark($bal_itog);
+        $cxmb3 = $arr['cxmb3'];
+        $cxmb2= $arr['cxmb2'];
 
 		if($stusv->saveNewStusMark($st1, $bal_itog,$cxmb3 ,$cxmb2)){
 			return true;
@@ -462,6 +464,68 @@ SQL;
 		//}
 		return false;
 	}
+    /**
+     * расчет зачет оценок ирпени
+     * @param $st1 int Код студента
+     * @param $gr1 int Код группа
+     * @param $sem7 int номер семестра
+     * @param $elg Elg
+     * @param $idUniversity int код вуза
+     * @param $stusv Stusv ведомость
+     * @param $marks mixed оценки
+     * @return bool
+     */
+    private function calculateIrpen($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks)
+    {
+        $sym = 0;
+
+        $count=0;
+        foreach ($marks as $mark) {
+            $bal = 0;
+            if ($mark['elgzst3'] > 0) {
+                $bal = $mark['elgzst5'];
+            } else {
+                $bal = ($mark['elgzst5'] > 0) ? $mark['elgzst5'] : $mark['elgzst4'];
+            }
+            $sym += $bal;
+            //$count++;
+        }
+
+        $elgsdSumm = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::SUM_TYPE));
+
+        $elgdSumm=null;
+        if($elgsdSumm!=null)
+            $elgdSumm= Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdSumm->elgsd1));
+
+        if($elgsdSumm!=null) {
+            if ($elgdSumm != null) {
+                $balSumm = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdSumm->elgd0));
+                if (empty($balSumm)) {
+                    $balSumm = new Elgdst();
+                    $balSumm->elgdst0 = new CDbExpression('GEN_ID(GEN_elgdst, 1)');
+                    $balSumm->elgdst1 = $st1;
+                    $balSumm->elgdst2 = $elgdSumm->elgd0;
+                }
+
+                $balSumm->elgdst3 = $sym;
+                $balSumm->elgdst5 = Yii::app()->user->dbModel->p1;
+                $balSumm->elgdst4 = date('Y-m-d H:i:s');
+                $balSumm->save();
+            }
+        }
+
+        $bal_itog = $sym;
+
+        $arr = Cxmb::model()->getMark($bal_itog);
+        $cxmb3 = $arr['cxmb3'];
+        $cxmb2= $arr['cxmb2'];
+
+        if($stusv->saveNewStusMark($st1, $bal_itog,$cxmb3 ,$cxmb2)){
+            return true;
+        }
+        //}
+        return false;
+    }
 	/*функция для переводов балов */
 	private function getBalMarkb($bal,$type){
 		$sql = <<<SQL
@@ -716,9 +780,41 @@ SQL;
 		}
 		return false;
 	}
+    /**
+     * Пересчет для ирпеня
+     * @param $st1 int Код студента
+     * @param $gr1 int Код группы
+     * @param $sem7 int номер семстра
+     * @param $elg Elg
+     * @param $idUniversity int еод университета
+     * @param $stusv Stusv
+     * @param $marks mixed оценки
+     * @return bool
+     */
+    private function recalculateIrpen($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks){
+        $us = Us::model()->getUsByStusvFromJournal($elg);
+        //var_dump($us);
+        if(empty($us))
+            return false;
+        switch($us->us4){
+            /*эКЗАМЕН*/
+            case 5:
+                return $this->calculateIrpen($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
+                break;
+            /*ЗАЧЕТ ИЛИ ДИФЗАЧЕТ*/
+            case 6:
+                if($us->us6==1)//ЗАЧЕТ
+                {
 
+                }	//return $this->calculateZachXarkovMed($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
+                elseif($us->us6==2)//ДИФЗАЧЕТ
+                    return $this->calculateIrpen($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
+                break;
+        }
+        return false;
+    }
 	/**
-	* Пересчет для Сумм и ирпеня
+	* Пересчет для Сумм
 	* @param $st1 int Код студента
 	* @param $gr1 int Код группы
 	* @param $sem7 int номер семстра
@@ -792,6 +888,8 @@ SQL;
 					return $this->recalculateXarcovMed($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
 					break;
                 case 24://Ирпень
+                    return $this->recalculateIrpen($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
+                    break;
 				case 1:
 					return $this->recalculateSymAgr($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
 					break;
