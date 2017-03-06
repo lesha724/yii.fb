@@ -514,7 +514,7 @@ SQL;
             }
         }
 
-        $bal_itog = $sym;
+        $bal_itog = round($sym);
 
         $arr = Cxmb::model()->getMark($bal_itog);
         $cxmb3 = $arr['cxmb3'];
