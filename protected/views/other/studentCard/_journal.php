@@ -211,6 +211,11 @@ $ps55 = PortalSettings::model()->findByPk(55)->ps2;
 
 foreach ($disciplines as $discipline) {
     $id=$discipline['uo1'].'-'.$discipline['type_journal'];
+
+    $gr1 = $discipline['ucgn2'];
+    if(empty($gr1))
+        continue;
+
     $typeStr = SH::convertTypeJournal($discipline['type_journal']);
     $name=$discipline['d2'].' ('.$typeStr.') | '.tt("Семестр").' №'.$discipline['sem7'];
     $html = $this->renderPartial('studentCard/_show_journal', array(
