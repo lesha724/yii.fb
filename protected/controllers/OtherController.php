@@ -82,7 +82,7 @@ class OtherController extends Controller
         $st1 = Yii::app()->request->getParam('st1', null);
         $gr1 = Yii::app()->request->getParam('gr1', null);
 
-        if (empty($uo1) || empty($sem1) || empty($st1) || $type === null || empty($gr1))
+        if (empty($uo1) || empty($sem1) || empty($st1) || $type === null)
             throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
 
         if (Yii::app()->user->isAdmin) {
@@ -97,7 +97,11 @@ class OtherController extends Controller
         } else
             throw new CHttpException(403, 'You don\'t have an access to this service');
 
+        $uo = Uo::model()->findByPk($uo1);
+        $sem = Sem::model()->findByPk($sem1);
 
+        $gr1 = St::model()->getGroupByStudent($st1, $uo->uo19, $sem->sem3, $sem->sem5);
+        
         $info = Elg::model()->getDispByStSemUoType($st1,$uo1,$sem1,$type);
         $error = false;
 
