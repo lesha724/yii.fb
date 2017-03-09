@@ -244,9 +244,14 @@ class Elgzst extends CActiveRecord
             $operation = '>';
         else
             $operation = '>=';
+
+        $dopCondition = ' OR (elgzst4<='.Elgzst::model()->getMin().' and elgzst4 '.$operation.' 0)';
+        if($type_lesson==0)
+            $dopCondition = '';
+        
         $where = '
                 WHERE   elg4='.$type_lesson.' AND
-                        ((elgzst3 > 0) OR (elgzst4<='.Elgzst::model()->getMin().' and elgzst4 '.$operation.' 0))
+                        ((elgzst3 > 0) '.$dopCondition.' )
         ';
         //$where = '';
         /*$params = array(
