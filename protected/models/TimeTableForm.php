@@ -523,11 +523,16 @@ HTML;
             } else {
                 if($day['fio']!=$res[$r2]['timeTable'][$r3]['day']['fio']) {
                     $res[$r2]['timeTable'][$r3]['shortText'] .= $this->cellShortTextFor($day, $type);
+
+                    $res[$r2]['timeTable'][$r3]['fullText'] = str_replace('{$gr3}',$res[$r2]['timeTable'][$r3]['gr3'],$res[$r2]['timeTable'][$r3]['fullText']);
+                    $res[$r2]['timeTable'][$r3]['printText'] = str_replace('{$gr3}',$res[$r2]['timeTable'][$r3]['gr3'],$res[$r2]['timeTable'][$r3]['printText']);
+
                     $res[$r2]['timeTable'][$r3]['fullText'] .= $this->cellFullTextFor($day, $type);
                     $res[$r2]['timeTable'][$r3]['printText'] .= ' ' . $this->cellPrintTextFor($day, $type);
 
                     $res[$r2]['timeTable'][$r3][] = $day;
                     $res[$r2]['timeTable'][$r3]['day'] = $day;
+                    $res[$r2]['timeTable'][$r3]['gr3'] = $day['gr3'];
                 }else
                 {
                     $res[$r2]['timeTable'][$r3]['gr3'] .= ','.$day['gr3'];

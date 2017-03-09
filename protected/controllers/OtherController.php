@@ -101,7 +101,7 @@ class OtherController extends Controller
         $sem = Sem::model()->findByPk($sem1);
 
         $gr1 = St::model()->getGroupByStudent($st1, $uo->uo19, $sem->sem3, $sem->sem5);
-        
+
         $info = Elg::model()->getDispByStSemUoType($st1,$uo1,$sem1,$type);
         $error = false;
 
