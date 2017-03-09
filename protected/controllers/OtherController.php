@@ -1347,7 +1347,7 @@ HTML;
         // Цикл ожидания окончания проверки
         while ($status->GetCheckStatusResult->Status === "InProgress")
         {
-            sleep($status->GetCheckStatusResult->EstimatedWaitTime * 0.1);
+            sleep($status->GetCheckStatusResult->EstimatedWaitTime * 0.2);
             $status = $client->GetCheckStatus(array("docId" => $id));
         }
 
@@ -1441,36 +1441,66 @@ HTML;
         Yii::app()->end(CJSON::encode(array('res' => $res)));
     }
 
+    /**
+     * @param $st1 int student id
+     * @param $p1 int teacher id (nkrs6)
+     * @param $url string url antiplagiat report
+     */
     public function sendEmails($st1, $p1, $url)
     {
         $student = Users::model()->find('u5 = 0 and u6 = '.$st1);
 
+        $st = St::model()->findByPk($st1);
+        $studentName = $st->getShortName();
+
+        $ps118 = PortalSettings::model()->getSettingFor(118);
+        $body = '{student} You can find you antiplagiat results here: {link}';
+        if(!empty($ps118))
+            $body = $ps118;
+
+        $link = tt('Отчет');
+        $body = str_replace('{student}',$studentName,$body);
+        $body = str_replace('{link}','<a href="'.$url.'">'.$link.'</a>',$body);
+
         if (! empty($student)) {
 
             if ($student->u4) {
-                $st = St::model()->findByPk($st1);
-
-                Apostle::setup("a596c9f9cb4066dd716911ef92be9bd040b0664d");
+                /*Apostle::setup("a596c9f9cb4066dd716911ef92be9bd040b0664d");
                 $mail = new Mail( "antiplagiat-notification", array( "email" => $student->u4 ) );
                 $mail->url  = $url;
                 $mail->textFrom = implode(' ', array($st->st2, $st->st3, $st->st4));
-                $mail->deliver();
+                $mail->deliver();*/
+                $message = str_replace('{username}',$student->u2,$body);
+                $message = str_replace('{name}',$studentName,$message);
+
+                list($status, $message)  = $this->mailsend($student->u4, 'Antiplagiat results', $message);
+
+                if(!$status)
+                    Yii::app()->user->setFlash('error', tt('Ошибка отправки email. Текст ошибки: ').$message);
             }
 
         }
 
         if ($p1) {
             $teacher = Users::model()->find('u5 = 1 and u6 = '.$p1);
+            if(empty($teacher))
+                return;
 
             if ($teacher->u4) {
 
-                $st = St::model()->findByPk($st1);
-
-                Apostle::setup("a596c9f9cb4066dd716911ef92be9bd040b0664d");
+                $p = P::model()->findByPk($p1);
+                /*Apostle::setup("a596c9f9cb4066dd716911ef92be9bd040b0664d");
                 $mail = new Mail( "antiplagiat-notification", array( "email" => $teacher->u4 ) );
                 $mail->url  = $url;
                 $mail->textFrom = implode(' ', array($st->st2, $st->st3, $st->st4));
-                $mail->deliver();
+                $mail->deliver();*/
+
+                $message = str_replace('{username}',$teacher->u2,$body);
+                $message = str_replace('{name}',$p->getShortName(),$message);
+
+                list($status, $message) =  $this->mailsend($student->u4, 'Antiplagiat results '.$studentName, $message);
+                if(!$status)
+                    Yii::app()->user->setFlash('error', tt('Ошибка отправки email для преподователя. Текст ошибки: ').$message);
             }
         }
 

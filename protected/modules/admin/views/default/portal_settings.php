@@ -296,6 +296,20 @@ Yii::app()->clientScript->registerScript('sem-start', $js);
                     <?=CHtml::textField('settings[71]', PortalSettings::model()->findByPk(71)->ps2)?>
                 </div>
 
+
+                <span class="lbl"> <?=tt('Шаблон письма с отчетом')?>:</span><br>
+                <span class="blue">{username}-логин, {name}- имя, {student}-имя студента, {link}-ссылка на отчет</span>
+                <?php $this->widget('application.extensions.elFinderTinyMce.TinyMce',
+                    array(
+                        'name'=>'settings[118]',
+                        'value'=>PortalSettings::model()->findByPk(118)->ps2,
+                        'htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'tinymce'),
+                        'fileManager' => array(
+                            'class' => 'ext.elFinder.TinyMceElFinder',
+                            'connectorRoute'=>'/site/connector',
+                        ),
+                    )); ?>
+
                 <div class="form-actions">
                     <button type="submit" class="btn btn-info btn-small">
                         <i class="icon-ok bigger-110"></i>
