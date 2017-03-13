@@ -375,7 +375,7 @@ SQL;
 
 	/**
 	 * Являеться ли пикрепленый файл изображением
-	 * @param $nameFile название_файла
+	 * @param $nameFile string название_файла
 	 * @return bool
 	 */
 	public function isImage($nameFile){
@@ -385,6 +385,8 @@ SQL;
 		switch($ext){
 			case 'doc':
 			case 'docx':
+            case 'xls':
+            case 'xlsx':
 			case 'pdf':
 				$result = false;
 				break;
