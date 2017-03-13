@@ -951,7 +951,7 @@ SQL;
 	{
 		$sql = <<<SQL
 		select
-			d2,us4,us6, stusv3, stusv4, stusvst4, stusvst5, stusvst6,sem7, stusv1,stusv11
+			d2,us4,us6, stusv3, stusv4, stusvst4, stusvst5, stusvst6,sem7, stusv1,stusv11, stusv9
 		from stusvst
 			inner join stusv on (stusvst.stusvst1 = stusv.stusv0)
 		  	inner join us on (stusv.stusv1 = us.us1)
@@ -967,8 +967,8 @@ SQL;
 						inner join sem on (sg.sg1 = sem.sem2)
 					 where st1={$st1} and std11<>1 and std7 is null and sem3=:YEAR and sem5=:SEM
 					 group by sem7)
-			group by d2,us4,us6, stusv3, stusv4, stusvst4, stusvst5, stusvst6,sem7, stusv1,stusv11
-			order by d2 COLLATE UNICODE, stusv11 desc
+			group by d2,us4,us6, stusv3, stusv4, stusvst4, stusvst5, stusvst6,sem7, stusv1,stusv11, stusv9
+			order by d2 COLLATE UNICODE, stusv11 desc, stusv9 desc
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':GR1', $gr1);
