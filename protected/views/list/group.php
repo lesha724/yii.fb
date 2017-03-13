@@ -11,7 +11,7 @@ $this->breadcrumbs=array(
 );
 
 Yii::app()->clientScript->registerPackage('dataTables');
-Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/workPlan/main.js', CClientScript::POS_HEAD);
+Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/list/group.js', CClientScript::POS_HEAD);
 
 $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id'=>'search-form',
