@@ -1265,6 +1265,33 @@ SQL;
 
 		return $disciplines;
 	}
+
+    /**
+     * получить код потока по студенту
+     * @param $st1
+     * @return int
+     */
+    public function getSg1BySt1($st1){
+        if (empty($st1))
+            return array();
+        list($sg40, $sg41) =D::model()->getSg40Sg41($st1);
+
+        $sql = <<<SQL
+        SELECT sg1 FROM std
+			inner join gr on (std.std3 = gr.gr1)
+			inner join sg on (gr.gr2 = sg.sg1)
+			inner join sem on (sg.sg1 = sem.sem2)
+		where std7 is null and std11 in (0, 5, 6, 8) and sem3=:YEAR1 and sem5=:SEM1 and std2=:st1
+		GROUP BY sg1
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':st1', $st1);
+        $command->bindValue(':YEAR1', $sg40);
+        $command->bindValue(':SEM1', $sg41);
+        $res= $command->queryScalar();
+        return $res;
+    }
+
 	public function enableSubcription($st1){
 		$sql = <<<SQL
 		select count(sg1)

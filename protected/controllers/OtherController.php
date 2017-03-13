@@ -1409,6 +1409,11 @@ HTML;
         $st1 = Yii::app()->request->getParam('st1', null);
         $us1 = Yii::app()->request->getParam('us1', null);
 
+        $sg1=St::model()->getSg1BySt1($st1);
+
+        if(Cwb::model()->findByPk($sg1)!==null)
+            throw new CHttpException(403, 'Редактирование тем закрыто.');
+
         if (! in_array($field, array('nkrs6', 'nkrs7')))
             throw new CHttpException(404, '1Invalid request. Please do not repeat this request again.');
 

@@ -200,7 +200,12 @@ $this->widget('zii.widgets.CMenu', array(
                 array(
                     'label'  => $_l2.tt('Карточка студента'),
                     'url'    => _u('/admin/default/studentCard'),
-                    'active' => $_c=='default' && $_m=='studentCard'
+                    'active' => $_c=='default' && $_a=='studentCard'&& $_m=='admin'
+                ),
+                array(
+                    'label'  => $_l2.tt('Блокировка смены тем курсовых'),
+                    'url'    => _u('/admin/courseWorkBlocker/index'),
+                    'active' => $_c=='courseWorkBlocker' && $_m=='admin'
                 ),
                 array(
                     'label'  => $_l2.tt('Расписание'),
