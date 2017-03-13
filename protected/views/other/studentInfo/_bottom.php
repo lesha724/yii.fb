@@ -82,14 +82,15 @@ $form=$this->beginWidget('CActiveForm', array(
     <?php $url2 = $this->createUrl('/other/updateNkrs') ?>
 
     <?php
-    $blockTheme = false;
+    /*$blockTheme = false;
     if(PortalSettings::model()->getSettingFor(72)==1)
         $blockTheme = true;
 
     $sg1 = St::model()->getSg1BySt1($model->student);
     if(Cwb::model()->findByPk($sg1)!==null)
-        $blockTheme = true;
+        $blockTheme = true;*/
 
+    $blockTheme = false;
     if(!$blockTheme):
         $cod = SH::getUniversityCod();
         if($cod==7){
