@@ -42,8 +42,9 @@ class CourseWorkBlockerController extends Controller
 		  SELECT sg1, cwb1, sp2, sg3, sg4 from sg
 		    LEFT JOIN cwb on (sg1 = cwb1)
 		    INNER JOIN sp ON (sg2=sp1)
+		    INNER JOIN f ON (sp5 = f1)
 		    INNER JOIN sem ON (sg1=sem2)
-		WHERE sp7 is null and sg1>0 and sg8 is null and (sem3 = $year or sem3 = $prevYear )
+		WHERE sp7 is null and sg1>0 and sg8 is null and (sem3 = $year or sem3 = $prevYear ) and f14=0
         GROUP BY sg1, cwb1, sp2, sg3, sg4 
         ORDER BY sg3 DESC, sp2 COLLATE UNICODE
 SQL;
