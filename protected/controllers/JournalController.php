@@ -659,8 +659,8 @@ SQL;
 
     public function actionInsertStMark()
     {
-        if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        //if (! Yii::app()->request->isAjaxRequest)
+            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $error=false;
         $errorType=0;
@@ -950,7 +950,7 @@ SQL;
                             if (!$error) {
                                 $attr = array_merge(array(
                                     $field => $value,
-                                    'elgzst7' => Yii::app()->user->dbModel->p1,
+                                    'elgzst7' => Yii::app()->user->isTch?Yii::app()->user->dbModel->p1:0,
                                     'elgzst6' => date('Y-m-d H:i:s'),
                                 ), $arr);
                                 $error = !$elgzst->saveAttributes($attr);

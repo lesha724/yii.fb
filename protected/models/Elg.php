@@ -131,13 +131,15 @@ SQL;
 
 	public function addRowMark($st1, $elgz1)
 	{
-		$elgzst = new Elgzst();
+	    $ps119 = PortalSettings::model()->getSettingFor(119);
+
+	    $elgzst = new Elgzst();
 		$elgzst->elgzst0 = new CDbExpression('GEN_ID(GEN_ELGZST, 1)');
 		$elgzst->elgzst1 = $st1;
 		$elgzst->elgzst2 = $elgz1;
-		$elgzst->elgzst7 = Yii::app()->user->dbModel->p1;
+		$elgzst->elgzst7 = Yii::app()->user->isTch?Yii::app()->user->dbModel->p1:0;
 		$elgzst->elgzst6 = date('Y-m-d H:i:s');
-		$elgzst->elgzst3 = 0;
+		$elgzst->elgzst3 = $ps119==1?1:0;
 		$elgzst->elgzst4 = 0;
 		$elgzst->elgzst5 = 0;
 		$error = !$elgzst->save();
