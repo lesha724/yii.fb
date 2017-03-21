@@ -317,11 +317,11 @@ SQL;
         /** @var $elg Elg */
         $dopColumn = '';
         $dopJoin = '';
-        $elg = null;
+        $elg =  Elg::model()->findByPk($elgz->elgz2);
 
         if($showInfo)
         {
-            $elg = Elg::model()->findByPk($elgz->elgz2);
+            //$elg = Elg::model()->findByPk($elgz->elgz2);
             if($elg==null)
                 return array();
             $dopColumn=',r2,elgz3, elgz4, us4';
@@ -387,7 +387,7 @@ SQL;
                           INNER JOIN elgz on (elg.elg1 = elgz.elgz2 AND  elgz4=0  AND elgz.elgz3>:NOM)
                           INNER JOIN elgzst on (elgzst.elgzst2 = elgz.elgz1  AND elgzst1=:ST1 )
                           $dopJoin
-                      WHERE  elg3=:SEM1 AND elg2=:UO1 ORDER by elgz3 asc
+                      WHERE  elg4=:ELG4 and elg3=:SEM1 AND elg2=:UO1 ORDER by elgz3 asc
 SQL;
                 $command = Yii::app()->db->createCommand($sql);
                 if($showInfo){
@@ -398,6 +398,7 @@ SQL;
                 $command->bindValue(':NOM', $pmkLessonNomPrevSem);
                 $command->bindValue(':SEM1', $sem1);
                 $command->bindValue(':UO1', $uo1);
+                $command->bindValue(':ELG4', $elg->elg4);
                 $dopMarks = $command->queryAll();
 
             }
@@ -407,7 +408,7 @@ SQL;
               SELECT elgzst5,elgzst4,elgzst3 $dopColumn FROM elgzst
               INNER JOIN elgz on (elgzst.elgzst2 = elgz.elgz1 AND elgz.elgz2=:ELGZ2 and elgz.elgz3>:MIN AND elgz.elgz3<:MAX)
               $dopJoin
-              WHERE elgzst1=:ST1 AND (elgz4=0 or elgz4=1) ORDER by elgz3 asc
+              WHERE  elgzst1=:ST1 AND (elgz4=0 or elgz4=1) ORDER by elgz3 asc
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':ELGZ2', $elgz->elgz2);
