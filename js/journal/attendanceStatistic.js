@@ -24,7 +24,7 @@ $(document).ready(function(){
             if (value.length == 0)
                 continue;
 
-            $select.find('option[value='+$that.val()+']').attr('selected', 'selected');
+            $select.find('option[value="'+$that.val()+'"]').attr('selected', 'selected');
 
             $form.append($select);
         }
