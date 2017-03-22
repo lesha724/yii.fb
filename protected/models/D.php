@@ -1282,4 +1282,34 @@ SQL;
 
         return array($params['sg40'], $params['sg41']);
     }
+
+    /**
+     * список дисциплин для статистики посещаемости погруппе
+     * @param $gr1 int
+     * @param $sem1 int
+     * @return mixed
+     */
+    public function getDisciplinesForAttendanceStatistic($gr1, $sem1){
+        $sql = <<<SQL
+        SELECT d1,d2 from ucsn
+            inner join ucgns on (ucsn.ucsn1 = ucgns.ucgns1)
+            inner join ucgn on (ucgns.ucgns2 = ucgn.ucgn1)
+            inner join st on (ucsn.ucsn2 = st.st1)
+            INNER JOIN std on (st.st1 = std.std2)
+            inner join ucxg on (ucgn.ucgn1 = ucxg.ucxg2)
+            inner join ucx on (ucxg.ucxg1 = ucx.ucx1)
+            inner join uo on (ucx.ucx1 = uo.uo19)
+            inner join elg on (uo.uo1 = elg.elg2)
+            inner join d on (uo.uo3 = d.d1)
+        WHERE std3 = :GR1 and elg3 = :SEM1 and STD11 in (0,5,6,8) and (STD7 is null)
+        GROUP BY d1,d2 order by d2 collate UNICODE
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':GR1', $gr1);
+        $command->bindValue(':SEM1', $sem1);
+        $disciplines = $command->queryAll();
+
+        return $disciplines;
+    }
 }

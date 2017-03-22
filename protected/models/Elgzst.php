@@ -547,20 +547,29 @@ SQL;
         return $res;
     }
 
-    public function getAttendanceStatisticFor($st1, $start, $end, $monthStatistic)
+    public function getAttendanceStatisticFor($st1, $start, $end, $monthStatistic, $d2='')
     {
         if (empty($st1) || empty($start) || empty($end))
             return array();
 
-        $sql=<<<SQL
+        if(empty($d2))
+            $sql=<<<SQL
                 SELECT *
                 FROM STAT_PROP(:ST1,:DATE1, :DATE2)
+SQL;
+        else
+            $sql=<<<SQL
+                SELECT *
+                FROM STAT_PROP(:ST1,:DATE1, :DATE2) WHERE d2 = :D2
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':ST1', $st1);
         $command->bindValue(':DATE1', $start);
         $command->bindValue(':DATE2', $end);
+        if(!empty($d2)){
+            $command->bindValue(':D2', $d2);
+        }
         $rows = $command->queryAll();
 
         $statistic = array();
