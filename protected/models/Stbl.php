@@ -4,7 +4,6 @@
  * This is the model class for table "stbl".
  *
  * The followings are the available columns in table 'stbl':
- * @property integer $stbl1
  * @property integer $stbl2
  * @property string $stbl3
  * @property integer $stbl4
@@ -34,7 +33,7 @@ class Stbl extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('stbl1, stbl2, stbl4, stbl6', 'numerical', 'integerOnly'=>true),
+			array('stbl2, stbl4, stbl6', 'numerical', 'integerOnly'=>true),
 			array('stbl3, stbl5', 'length', 'max'=>30),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -62,7 +61,7 @@ class Stbl extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'stbl1' => 'Stbl1',
+			//'stbl1' => 'Stbl1',
 			'stbl2' => 'Stbl2',
 			'stbl3' => 'Stbl3',
 			'stbl4' => 'Stbl4',
@@ -89,7 +88,7 @@ class Stbl extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('stbl1',$this->stbl1);
+		//$criteria->compare('stbl1',$this->stbl1);
 		$criteria->compare('stbl2',$this->stbl2);
 		$criteria->compare('stbl3',$this->stbl3,true);
 		$criteria->compare('stbl4',$this->stbl4);

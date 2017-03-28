@@ -8,6 +8,8 @@ $(document).ready(function(){
         //alert(1)
         var st1  = $(this).parents('[data-st1]').data('st1');
 
+        var $that = $(this);
+
         var stName = $('table.journal_table_1 tr[data-st1='+st1+'] td:eq(1)').text();
 
         var params = {
@@ -39,7 +41,7 @@ $(document).ready(function(){
                                     addGritter(stName, getError(data), 'error')
                                 } else {
                                     addGritter(stName, tt.success, 'success')
-                                    $(this).remove();
+                                    $that.hide();
                                 }
                                 $spinner1.hide();
                             },

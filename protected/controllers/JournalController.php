@@ -679,7 +679,7 @@ SQL;
                 $errorType=2;
             }else{
 
-                $stbl = Stbl::model()->findByAttributes(array('stbl2'=>$st1),array('order'=>'stbl3 DESC'));
+                $stbl = Stbl::model()->findByAttributes(array('stbl2'=>$st1,'stbl5'=>null),array('order'=>'stbl3 DESC'));
                 if(empty($stbl))
                 {
                     $error = true;
