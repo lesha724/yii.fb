@@ -16,6 +16,7 @@ class JournalController extends Controller
                 'actions' => array(
                     'journal',
                     'insertStMark',
+                    'insertStFinPriznak',///проставление оповещение по фин признаку
                     'insertDopMark',
                     'insertMinMaxMark',
                     'journalRetake',
@@ -657,10 +658,47 @@ SQL;
         Yii::app()->end(CJSON::encode(array('title'=>$title,'html'=>$html, 'error' => $error, 'errorType' => $errorType)));
     }
 
+    public function actionInsertStFinPriznak()
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $error=false;
+        $errorType=0;
+        $st1 = Yii::app()->request->getParam('st1', null);
+
+        if($st1==null)
+        {
+            $error = true;
+            $errorType=2;
+        }else{
+            $st=St::model()->findByPk($st1);
+            if(empty($st)||$st->st167!=1)
+            {
+                $error = true;
+                $errorType=2;
+            }else{
+
+                $stbl = Stbl::model()->findByAttributes(array('stbl2'=>$st1),array('order'=>'stbl3 DESC'));
+                if(empty($stbl))
+                {
+                    $error = true;
+                    $errorType=2;
+                }else{
+                    $stbl->stbl5 = date('Y-m-d H:i:s');
+                    $stbl->stbl6= Yii::app()->user->dbModel->p1;
+                    $error = !$stbl->save();
+                }
+            }
+        }
+
+        Yii::app()->end(CJSON::encode(array('error' => $error, 'errorType' => $errorType)));
+    }
+
     public function actionInsertStMark()
     {
-        //if (! Yii::app()->request->isAjaxRequest)
-            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $error=false;
         $errorType=0;
@@ -877,6 +915,11 @@ SQL;
 
                 $st=St::model()->findByPk($st1);
                 if($st->st45==1)
+                {
+                    $error=true;
+                    $errorType=5;
+                }
+                if($st->st167==1)
                 {
                     $error=true;
                     $errorType=5;

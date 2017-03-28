@@ -4,6 +4,68 @@ $(document).ready(function(){
 
     $spinner1 = $('#spinner1');
 
+    $('.journal_table_1 .btn-fin-block').click(function(event ) {
+        //alert(1)
+        var st1  = $(this).parents('[data-st1]').data('st1');
+
+        var stName = $('table.journal_table_1 tr[data-st1='+st1+'] td:eq(1)').text();
+
+        var params = {
+            st1  : st1
+        }
+
+        var url = $('.journal_div_table2').data('url-st-fin-block');
+
+        $("#dialog-confirm-fin-block").dialog({
+            resizable: false,
+            modal: true,
+            title: "<div class='widget-header'><h4 class='smaller'><i class='icon-warning-sign red'></i>Проставить?</h4></div>",
+            title_html: true,
+            buttons: [
+                {
+                    html: "<i class='icon-trash bigger-110'></i>&nbsp; Проставить",
+                    "class": "btn btn-danger btn-mini",
+                    click: function () {
+                        $(this).dialog("close");
+
+                        $spinner1.show();
+
+                        $.ajax({
+                            url: url,
+                            dataType: 'json',
+                            data:params,
+                            success: function( data ) {
+                                if (data.error) {
+                                    addGritter(stName, getError(data), 'error')
+                                } else {
+                                    addGritter(stName, tt.success, 'success')
+                                    $(this).remove();
+                                }
+                                $spinner1.hide();
+                            },
+                            error: function( data ) {
+                                addGritter(stName, tt.error, 'error');
+                                $spinner1.hide();
+                            }
+                        });
+                    }
+                }
+                ,
+                {
+                    html: "<i class='icon-remove bigger-110'></i>&nbsp; Отмена",
+                    "class": "btn btn-mini",
+                    click: function () {
+                        $(this).dialog("close");
+                    }
+                }
+            ]
+        });
+
+
+
+
+    });
+
     $('div .journal_div_table2 .change-theme').click(function(event ){
         event.preventDefault();
 

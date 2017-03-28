@@ -213,6 +213,19 @@ JS
     </p>
 </div><!-- #dialog-confirm -->
 
+    <div id="dialog-confirm-fin-block" class="hide" title="Empty the recycle bin?">
+        <div class="alert alert-info bigger-110">
+            <?=tt('Проставление отметки о извещении студента о задолжености по оплате!')?>
+        </div>
+
+        <div class="space-6"></div>
+
+        <p class="bigger-110 bolder center grey">
+            <i class="icon-hand-right blue bigger-120"></i>
+            <?=tt('Вы уверены?')?>
+        </p>
+    </div><!-- #dialog-confirm -->
+
 <?php  $this->beginWidget(
         'bootstrap.widgets.TbModal',
         array(

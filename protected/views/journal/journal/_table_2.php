@@ -13,6 +13,10 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
     if (($st['st71']!=$sem7&&$st['st71']!=$sem7+1) &&$ps60==1) {
         $read_only = true;
     }
+
+    if ($st['st167']==1) {
+        $read_only = true;
+    }
         //return '<td colspan="2"></td>';
 
     if (stripos($date['r2'], '11.11.1111')!==false )
@@ -513,8 +517,10 @@ function getMarkByLesson($marks, $nom){
 
     $changeTheme= Yii::app()->createUrl('/journal/changeTheme');
 
+    $urlStFinBlock= Yii::app()->createUrl('/journal/insertStFinPriznak');
+
     $table = <<<HTML
-<div class="{$classTable2}" data-ps33="{$ps33}" data-gr1="{$gr1}" data-url-show-marks="{$urlShowMarks}" data-url-module="{$urlModule}" data-url="{$url}" data-url-change-theme="{$changeTheme}" data-url-retake="{$urlRetake}" data-url-check="{$url_check}">
+<div class="{$classTable2}" data-ps33="{$ps33}" data-gr1="{$gr1}" data-url-st-fin-block="{$urlStFinBlock}" data-url-show-marks="{$urlShowMarks}" data-url-module="{$urlModule}" data-url="{$url}" data-url-change-theme="{$changeTheme}" data-url-retake="{$urlRetake}" data-url-check="{$url_check}">
     <table class="table table-striped table-bordered table-hover journal_table">
         <thead>
             <tr>
@@ -602,8 +608,11 @@ HTML;
         $potoch = 0;
         $moduleNom=1;
         $st1 = $st['st1'];
+        $class= '';
+        if( $st['st167']==1)//заблокирвоан по фин признакку
+            $class = 'error';
         $marks = $elg->getMarksForStudent($st1);
-        $tr .= '<tr data-st1="'.$st1.'">';
+        $tr .= '<tr data-st1="'.$st1.'" class="'.$class.'">';
         list($total_1[$st1], $total_count_1[$st1]) = countMarkTotal($marks);
         //проверка есть ли итоговая оценка, тогда бдлокируем ввод оценко
         $readOnlySt = false;

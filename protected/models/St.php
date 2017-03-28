@@ -113,6 +113,7 @@
  * @property string $st146
  * @property string $st147
  * @property string $st148
+ * @property string $st167
  *
  * From ShortNameBehaviour:
  * @method string getShortName() Returns default truncated name.
@@ -137,7 +138,7 @@ class St extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('st1', 'required'),
-			array('st1, st9, st29, st32, st33, st34, st35, st45, st56, st57, st63, st64, st65, st71, st78, st101, st103, st104, st114, st115, st116, st100, st99, st133, st139, st144', 'numerical', 'integerOnly'=>true),
+			array('st1,st167, st9, st29, st32, st33, st34, st35, st45, st56, st57, st63, st64, st65, st71, st78, st101, st103, st104, st114, st115, st116, st100, st99, st133, st139, st144', 'numerical', 'integerOnly'=>true),
 			array('st2, st28, st74, st117, st120, st123', 'length', 'max'=>140),
 			array('st3, st4, st75, st76, st118, st119, st121, st122, st124, st125, st131, st132', 'length', 'max'=>80),
 			array('st5, st12, st15, st38, st108, st135, st148', 'length', 'max'=>60),
@@ -417,6 +418,7 @@ class St extends CActiveRecord
 		$criteria->compare('st146',$this->st146,true);
 		$criteria->compare('st147',$this->st147,true);
 		$criteria->compare('st148',$this->st148,true);
+        $criteria->compare('st167',$this->st148,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -761,7 +763,7 @@ SQL;
     public function getStudentsForJournal($gr1, $uo1)
     {
         $sql = <<<SQL
-       select st1,st2,st3,st4,st45,st71,st163
+       select st1,st2,st3,st4,st45,st71,st163,st167
         from st
            inner join ucsn on (st.st1 = ucsn.ucsn2)
            inner join ucgns on (ucsn.ucsn1 = ucgns.ucgns1)
@@ -771,7 +773,7 @@ SQL;
            inner join us on (nr.nr2 = us.us1)
            inner join std on (st1 = std2) /*Єто бі закомнтировано (Раскометировали ИС, изза виртуальніх групп)*/
         where UCGNS5=:YEAR and UCGNS6=:SEM and us2=:UO1 and ug2=:GR1 and std11 in (0,6,8) and (std7 is null) and st101!=7
-        group by st1,st2,st3,st4,st45,st71,st163
+        group by st1,st2,st3,st4,st45,st71,st163,st167
         order by st2 collate UNICODE
 SQL;
 

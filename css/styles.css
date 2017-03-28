@@ -1,6 +1,14 @@
 /*.modules_div_table_2 th{
     width: 90px!important;
 }*/
+
+.journal_table_1 .btn-fin-block{
+    display: none;
+}
+
+.journal_table_1 tr:hover .btn-fin-block{
+    display: block;
+}
 footer .user-block{
     float: left;
     text-align: left;
