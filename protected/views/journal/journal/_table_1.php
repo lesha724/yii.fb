@@ -31,7 +31,7 @@ HTML;
         $button = '';
         if($st['st167']==1) {
             $name .= ' (' . tt('неоп.') . ')';
-            $class = 'error';
+            $class = 'error-tr';
             $stbl = Stbl::model()->findByAttributes(array('stbl2'=>$st['st1'], 'stbl5'=>null),array('order'=>'stbl3 DESC'));
             if(!empty($stbl)) {
                 $button = CHtml::link('<i class="icon-info-sign"></i>', '#', array('class' => 'btn-fin-block btn btn-mini btn-warning'));

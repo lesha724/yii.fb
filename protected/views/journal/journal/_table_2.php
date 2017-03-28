@@ -610,7 +610,7 @@ HTML;
         $st1 = $st['st1'];
         $class= '';
         if( $st['st167']==1)//заблокирвоан по фин признакку
-            $class = 'error';
+            $class = 'error-tr';
         $marks = $elg->getMarksForStudent($st1);
         $tr .= '<tr data-st1="'.$st1.'" class="'.$class.'">';
         list($total_1[$st1], $total_count_1[$st1]) = countMarkTotal($marks);
