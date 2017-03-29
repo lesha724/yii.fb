@@ -17,6 +17,7 @@
  * @property integer $stusv10
  * @property string $stusv11
  * @property integer $stusv12
+ * @property string $stusv15
  *
  * The followings are the available model relations:
  * @property Us $stusv13
@@ -45,12 +46,12 @@ class Stusv extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('stusv0, stusv1, stusv2, stusv5, stusv6, stusv7, stusv8, stusv10, stusv12', 'numerical', 'integerOnly'=>true),
-			array('stusv3, stusv9, stusv11', 'length', 'max'=>8),
+			array('stusv0, stusv1, stusv2, stusv6, stusv7, stusv8, stusv10, stusv12', 'numerical', 'integerOnly'=>true),
+			array('stusv3, stusv9, stusv11, stusv15', 'length', 'max'=>30),
 			array('stusv4', 'length', 'max'=>60),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('stusv0, stusv1, stusv2, stusv3, stusv4, stusv5, stusv6, stusv7, stusv8, stusv9, stusv10, stusv11, stusv12', 'safe', 'on'=>'search'),
+			array('stusv0, stusv1, stusv2, stusv3, stusv4, stusv5, stusv6, stusv7, stusv8, stusv9, stusv10, stusv11, stusv12, stusv15', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -83,7 +84,7 @@ class Stusv extends CActiveRecord
 			'stusv2' => 'Stusv2',
 			'stusv3' => 'Stusv3',
 			'stusv4' => 'Stusv4',
-			'stusv5' => 'Stusv5',
+			//'stusv5' => 'Stusv5',
 			'stusv6' => 'Stusv6',
 			'stusv7' => 'Stusv7',
 			'stusv8' => 'Stusv8',
@@ -91,6 +92,7 @@ class Stusv extends CActiveRecord
 			'stusv10' => 'Stusv10',
 			'stusv11' => 'Stusv11',
 			'stusv12' => 'Stusv12',
+            'stusv15' => 'Stusv15',
 		);
 	}
 
@@ -117,7 +119,7 @@ class Stusv extends CActiveRecord
 		$criteria->compare('stusv2',$this->stusv2);
 		$criteria->compare('stusv3',$this->stusv3,true);
 		$criteria->compare('stusv4',$this->stusv4,true);
-		$criteria->compare('stusv5',$this->stusv5);
+		//$criteria->compare('stusv5',$this->stusv5);
 		$criteria->compare('stusv6',$this->stusv6);
 		$criteria->compare('stusv7',$this->stusv7);
 		$criteria->compare('stusv8',$this->stusv8);
@@ -125,6 +127,7 @@ class Stusv extends CActiveRecord
 		$criteria->compare('stusv10',$this->stusv10);
 		$criteria->compare('stusv11',$this->stusv11,true);
 		$criteria->compare('stusv12',$this->stusv12);
+        $criteria->compare('stusv15',$this->stusv15);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -862,7 +865,7 @@ SQL;
 			return false;
 
 		$stusv = Stusv::model()->getStusvByJournal($elg, $gr1);
-		if($stusv->stusv5==1)
+		if(!empty($stusv->stusv15))
 			return false;
 
 		if($stusv!=null){
