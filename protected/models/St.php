@@ -1325,4 +1325,30 @@ SQL;
 
 		return $row;
 	}
+
+
+    /**
+     * являеться ли текущий студент старостой для группы(возможн овиртуальной)
+     * @param $gr1 int код группы
+     * @return bool
+     */
+    public function isSstByGroup($gr1){
+        $sql = <<<SQL
+		select st1
+        from sst
+           inner join gr on (sst.sst3 = gr.gr1)
+           inner join std on (gr.gr1 = std.std3)
+           inner join st on (std.std2 = st.st1)
+           inner join ucsn on (st.st1 = ucsn.ucsn2)
+           inner join ucgns on (ucsn.ucsn1 = ucgns.ucgns1)
+           inner join ucgn on (ucgns.ucgns2 = ucgn.ucgn1)
+        where std11 in (0,5,6,8) and std7 is null and sst2=:ST1 and ucgn2=:GR1 and sst6 is null
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ST1', $this->st1);
+        $command->bindValue(':GR1', $gr1);
+        $row = $command->queryRow();
+
+        return !empty($row);
+    }
 }

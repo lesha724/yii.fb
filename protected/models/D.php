@@ -394,8 +394,16 @@ SQL;
         return $disciplines;
     }
 
+    /**
+     * списоу дисциплин для журнала для старосты по гурппе
+     * @param $group int группа возможно виртуальная
+     * @return array
+     */
     public function getDisciplinesForSstPermition($group)
     {
+        if(empty($group))
+            return array();
+
         $sql = <<<SQL
             select d2,d1,uo1
             from gr
@@ -408,7 +416,7 @@ SQL;
                inner join uo on (us.us2 = uo.uo1)
                inner join d on (uo.uo3 = d.d1)
                inner join sem on (us.us12 = sem.sem1)
-            where UCSN3=:GR1 and sem3=:YEAR and sem5=:SEM and UCGNS5=:YEAR1 and UCGNS6=:SEM1
+            where ucgn2=:GR1 and sem3=:YEAR and sem5=:SEM and UCGNS5=:YEAR1 and UCGNS6=:SEM1
             group by d2,d1,uo1
             order by d2 collate UNICODE
 SQL;

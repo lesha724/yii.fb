@@ -94,7 +94,7 @@ class JournalController extends Controller
         if (isset($_REQUEST['FilterForm']))
             $model->attributes=$_REQUEST['FilterForm'];
 
-        $model->group = $sstRow['sst3'];
+        //$model->group = $sstRow['sst3'];
 
         $this->render('stJournal', array(
             'model' => $model,
@@ -726,12 +726,9 @@ SQL;
                 $ps106 = PortalSettings::model()->getSettingFor(106);
                 if($ps106!=1)
                     throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
-                $sstRow = Yii::app()->user->dbModel->isSst();
+                $isSst = Yii::app()->user->dbModel->isSstByGroup($gr1);
 
-                if(empty($sstRow)||!isset($sstRow['sst3']))
-                    throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
-
-                if($sstRow['sst3']!=$gr1)
+                if(!$isSst)
                     throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
             }elseif(Yii::app()->user->isTch) {

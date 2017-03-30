@@ -270,6 +270,43 @@ SQL;
         return $groups;
     }
 
+    /**
+     * Список дисциплин для старосты для кориктеровки (с вирутальными группами)
+     * @param $st1 int код старросты
+     * @return array
+     */
+    public function getGroupsForJournalPermitionSst($st1)
+    {
+        if (empty($st1))
+            return array();
+        $sql = <<<SQL
+             select st56, gr13,gr1, gr3, gr7,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28
+                from std
+                   inner join sst on (std.std3 = sst.sst3)
+                   inner join st on (std.std2 = st.st1)
+                   inner join ucsn on (st.st1 = ucsn.ucsn2)
+                   inner join ucgns on (ucsn.ucsn1 = ucgns.ucgns1)
+                   inner join ucgn on (ucgns.ucgns2 = ucgn.ucgn1)
+                   inner join gr on (ucgn.ucgn2 = gr.gr1)
+                where std11 in (0,5,6,8) and std7 is null and sst2=:ST1 and sst6 is null and ucgns5=:YEAR and ucgns6=:SEM
+                group by st56, gr13, gr1, gr3, gr7,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28
+                ORDER by gr13, gr7 DESC, gr3 ASC;
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ST1', $st1);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $groups = $command->queryAll();
+
+        foreach($groups as $key => $group) {
+            $groups[$key]['name'] = $this->getGroupName($group['st56'], $group);
+            $groups[$key]['group'] = $group['gr1'];
+        }
+
+        return $groups;
+    }
+
     public function getGroupsForJournalPermition($discipline,$type_lesson)
     {
         if (empty($discipline))
