@@ -64,6 +64,14 @@ class JournalController extends Controller
             array(
                 'allow',
                 'actions'=>array(
+                    'stFinBlockStatistic',
+                    'stFinBlockStatisticExcel',
+                ),
+                'expression' => 'Yii::app()->user->isAdmin',
+            ),
+            array(
+                'allow',
+                'actions'=>array(
                     'insertStMark',
                     'checkCountRetake',
                 ),
@@ -76,6 +84,100 @@ class JournalController extends Controller
                 'users' => array('*'),
             ),
         );
+    }
+
+    public function actionStFinBlockStatistic()
+    {
+        $model = new StFinBlockSearch();
+        $model->scenario = 'search';
+        $model->unsetAttributes();
+        if (isset($_GET['pageSize'])) {
+            Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
+            unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
+        }
+        if (isset($_REQUEST['StFinBlockSearch']))
+            $model->attributes=$_REQUEST['StFinBlockSearch'];
+
+        $this->render('stFinBlockSearch', array(
+            'model' => $model,
+        ));
+    }
+
+    public function actionStFinBlockStatisticExcel()
+    {
+        $model = new StFinBlockSearch();
+        $model->scenario = 'search';
+        $model->unsetAttributes();
+        /*if (isset($_GET['pageSize'])) {
+            Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
+            unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
+        }*/
+        if (isset($_REQUEST['StFinBlockSearch']))
+            $model->attributes=$_REQUEST['StFinBlockSearch'];
+
+        $dataProvider = $model->search();
+
+        Yii::import('ext.phpexcel.XPHPExcel');
+        $objPHPExcel= XPHPExcel::createPHPExcel();
+        $objPHPExcel->getProperties()->setCreator("ACY")
+            ->setLastModifiedBy("ACY ".date('Y-m-d H-i'))
+            ->setTitle("ST_FIN_BLOCK ".date('Y-m-d H-i'))
+            ->setSubject("ST_FIN_BLOCK ".date('Y-m-d H-i'))
+            ->setDescription("ST_FIN_BLOCK document, generated using ACY Portal. ".date('Y-m-d H:i:'))
+            ->setKeywords("")
+            ->setCategory("Result file");
+        $objPHPExcel->setActiveSheetIndex(0);
+        $sheet=$objPHPExcel->getActiveSheet();
+
+        $sheet->setCellValue('A1', '#');
+        $sheet->setCellValue('B1', $model->getAttributeLabel('st'));
+        $sheet->setCellValue('C1', $model->getAttributeLabel('gr_name'));
+        $sheet->setCellValue('D1', $model->getAttributeLabel('course'));
+        $sheet->setCellValue('E1', $model->getAttributeLabel('stbl3'));
+        $sheet->setCellValue('F1', $model->getAttributeLabel('stbl5'));
+        $sheet->setCellValue('G1', $model->getAttributeLabel('tch'));
+
+        $sheet->getColumnDimension('A')->setWidth(4);
+        $sheet->getColumnDimension('B')->setWidth(25);
+        $sheet->getColumnDimension('C')->setWidth(12);
+        $sheet->getColumnDimension('D')->setWidth(5);
+        $sheet->getColumnDimension('E')->setWidth(19);
+        $sheet->getColumnDimension('F')->setWidth(19);
+        $sheet->getColumnDimension('G')->setWidth(25);
+
+        $i = 2;
+        $dataProvider->pagination=false;
+        foreach($dataProvider->getData(true) as $data){
+            $sheet->setCellValueByColumnAndRow(0,$i,$i-1);
+            $sheet->setCellValueByColumnAndRow(1,$i,SH::getShortName($data->st_lname, $data->st_fname, $data->st_sname));
+            $sheet->setCellValueByColumnAndRow(2,$i,$data->gr_name);
+            $sheet->setCellValueByColumnAndRow(3,$i,$data->course);
+            $sheet->setCellValueByColumnAndRow(4,$i,$data->stbl3);
+            $sheet->setCellValueByColumnAndRow(5,$i,$data->stbl5);
+            $sheet->setCellValueByColumnAndRow(6,$i,SH::getShortName($data->tch_lname, $data->tch_fname, $data->tch_sname));
+            $i++;
+        }
+
+        $sheet->getStyleByColumnAndRow(0,1,6,$i-1)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
+
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        // Redirect output to a clientâ€™s web browser (Excel5)
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="ACY_ST_FIN_BLOCK_'.date('Y-m-d H-i').'.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
     }
 //---------------------Journal---------------------------------------------------------------
     public function actionStJournal()

@@ -456,6 +456,12 @@ $this->widget('zii.widgets.CMenu', array(
             'itemOptions'=>_i('journal'),
             'items' => array_merge(array(
                 array(
+                    'label'   => $_l2.tt('Статистика блокировки неоплативших студентов'),
+                    'url'     => _u('/journal/stFinBlockStatisticExcel'),
+                    'visible' => _ch('journal', 'stFinBlockStatisticExcel') && $isAdmin,
+                    'active'  => $_c=='journal' && $_a=='stFinBlockStatisticExcel'
+                ),
+                array(
                     'label'   => $_l2.tt('Тематический план'),
                     'url'     => _u('/journal/thematicPlan'),
                     'visible' => _ch('journal', 'thematicPlan') && $isTch,
