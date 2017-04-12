@@ -1108,17 +1108,21 @@ SQL;
                         {
                             $error=true;
                         }else {
-                            $elgzst = new Elgzst();
-                            $elgzst->elgzst0 = new CDbExpression('GEN_ID(GEN_ELGZST, 1)');
-                            $elgzst->elgzst1 = $st1;
-                            $elgzst->elgzst2 = $elgz1;
-                            $elgzst->elgzst7 = Yii::app()->user->isTch?Yii::app()->user->dbModel->p1:0;
-                            $elgzst->elgzst6 = date('Y-m-d H:i:s');
-                            $elgzst->elgzst3 = 0;
-                            $elgzst->elgzst4 = 0;
-                            $elgzst->elgzst5 = 0;
-                            $elgzst->$field = $value;
-                            $error = !$elgzst->save();
+                            if($value==-2&&$field == 'elgzst4'){
+
+                            }else {
+                                $elgzst = new Elgzst();
+                                $elgzst->elgzst0 = new CDbExpression('GEN_ID(GEN_ELGZST, 1)');
+                                $elgzst->elgzst1 = $st1;
+                                $elgzst->elgzst2 = $elgz1;
+                                $elgzst->elgzst7 = Yii::app()->user->isTch ? Yii::app()->user->dbModel->p1 : 0;
+                                $elgzst->elgzst6 = date('Y-m-d H:i:s');
+                                $elgzst->elgzst3 = 0;
+                                $elgzst->elgzst4 = 0;
+                                $elgzst->elgzst5 = 0;
+                                $elgzst->$field = $value;
+                                $error = !$elgzst->save();
+                            }
 
                             if (!$error) {
                                 $elgzst = Elgzst::model()->findByAttributes(array('elgzst1' => $st1, 'elgzst2' => $elgz1));
