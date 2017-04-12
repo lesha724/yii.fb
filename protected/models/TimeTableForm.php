@@ -12,6 +12,8 @@ class TimeTableForm extends CFormModel
 	public $classroom;
 	public $housing = 0;
 
+	public $speciality;
+
 	public $lessonStart = 1;
 	public $lessonEnd   = 1;
 
@@ -48,6 +50,8 @@ class TimeTableForm extends CFormModel
 
             array('filial, faculty, course, group', 'required', 'on' => 'list-group'),
             array('filial, chair', 'required', 'on' => 'list-chair'),
+
+            array('filial, faculty, speciality, course', 'required', 'on' => 'attendanceStatisticPrint'),
 		);
 	}
 
@@ -93,6 +97,7 @@ SQL;
                     //'filial'=> tt('Филиал'),
                     'chair'=> tt('Кафедра'),
                     //'faculty'=> tt('Факультет'),
+                    'speciality'=> tt('Специальность'),
                     'course'=> tt('Курс'),
                     'printAttr'=>tt('Печать расписания с аббревиатурой дисциплин'),
                     'group'=> tt('Группа'),
@@ -102,6 +107,7 @@ SQL;
                     'housing'=> tt('Корпус'),
                     'r11' => tt('Индикация изменений в расписании'),
                     'date1' => tt('Дата'),
+                    'date2' => tt('Дата 2'),
                     'lessonStart' => tt('Начало'),
                     'lessonEnd' => tt('Окончание'),
                         )+$arr;

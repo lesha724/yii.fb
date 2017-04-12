@@ -3150,6 +3150,7 @@ SQL;
 
         if (isset($_REQUEST['FilterForm']))
             $model->attributes=$_REQUEST['FilterForm'];
+
         $this->render('attendanceStatistic', array(
             'model' => $model,
             'type_statistic'=>PortalSettings::model()->findByPk(41)->ps2
@@ -3158,11 +3159,17 @@ SQL;
 
     public function actionAttendanceStatisticPrint()
     {
-        $model = new FilterForm();
+        $model = new TimeTableForm();
         $model->scenario = 'attendanceStatisticPrint';
 
-        if (isset($_REQUEST['FilterForm']))
-            $model->attributes=$_REQUEST['FilterForm'];
+        if (isset($_REQUEST['TimeTableForm']))
+            $model->attributes=$_REQUEST['TimeTableForm'];
+
+        if(empty($model->date2)) {
+            $model->date2 = date('d.m.Y');
+            $model->date1  = date('d.m.Y', strtotime("-1 months", strtotime( $model->date2)));
+        }
+        
         $this->render('attendanceStatisticPrint', array(
             'model' => $model,
             'type_statistic'=>PortalSettings::model()->findByPk(41)->ps2
@@ -3171,12 +3178,14 @@ SQL;
 
     public function actionAttendanceStatisticPrintExcel()
     {
-        $model = new FilterForm();
+        $model = new TimeTableForm();
         $model->scenario = 'attendanceStatisticPrint';
 
-        if (isset($_REQUEST['FilterForm']))
-            $model->attributes=$_REQUEST['FilterForm'];
+        if (isset($_REQUEST['TimeTableForm']))
+            $model->attributes=$_REQUEST['TimeTableForm'];
 
+        if(empty($model->date1)||empty($model->date2))
+            throw new Exception(tt('Введите даты'),400);
 
         Yii::import('ext.phpexcel.XPHPExcel');
         $objPHPExcel= XPHPExcel::createPHPExcel();
@@ -3199,37 +3208,45 @@ SQL;
         $sheet->setCellValue('C2', $speciality->sp2);
         $sheet->setCellValue('B3', tt("Курс"));
         $sheet->setCellValue('C3', $model->course);
+        $sheet->setCellValue('B4', tt("С"));
+        $sheet->setCellValue('C4', $model->date1);
+        $sheet->setCellValue('B5', tt("По"));
+        $sheet->setCellValue('C5', $model->date2);
 
         $sheet->getColumnDimension('A')->setWidth(4);
         $sheet->getColumnDimension('B')->setWidth(25);
         $sheet->getColumnDimension('C')->setWidth(6);
 
-        $i = 6;
+        $i = 7;
 
-        $sheet->setCellValue('A5', "#");
-        $sheet->setCellValue('B5', tt("Студент"));
-        $sheet->setCellValue('C5', tt("Группа"));
-        $sheet->setCellValue('D5', tt("занятий"));
-        $sheet->setCellValue('E5', tt("уваж."));
-        $sheet->setCellValue('F5', tt("неув."));
+        $sheet->setCellValue('A6', "#");
+        $sheet->setCellValue('B6', tt("Студент"));
+        $sheet->setCellValue('C6', tt("Группа"));
+        $sheet->setCellValue('D6', tt("занятий"));
+        $sheet->setCellValue('E6', tt("уваж."));
+        $sheet->setCellValue('F6', tt("неув."));
 
         list($year, $sem) = SH::getCurrentYearAndSem();
 
+        /*var_dump($year);
+        var_dump($sem);
+        var_dump($speciality->sp1);
+        var_dump($model->course);*/
         $students = St::model()->getStudentsBySpeciality($speciality->sp1, $model->course,$year, $sem);
 
         foreach ($students as $student){
 
-            $sheet->setCellValueByColumnAndRow(0,$i,$i-5);
+            $sheet->setCellValueByColumnAndRow(0,$i,$i-6);
             $sheet->setCellValueByColumnAndRow(1,$i,SH::getShortName($student['st2'],$student['st3'],$student['st4']));
             $sheet->setCellValueByColumnAndRow(2,$i,Gr::model()->getGroupName( $model->course,$student));
-            list($respectful,$disrespectful,$count) = Elg::model()->getAttendanceStatiscticInfo($year, $sem, $student['st1']);
+            list($respectful,$disrespectful,$count) = Elg::model()->getAttendanceStatisticInfoByDate($model->date1, $model->date2, $student['st1']);
             $sheet->setCellValueByColumnAndRow(3,$i, $count);
             $sheet->setCellValueByColumnAndRow(4,$i,$respectful);
             $sheet->setCellValueByColumnAndRow(5,$i,$disrespectful);
             $i++;
         }
 
-        $sheet->getStyleByColumnAndRow(0,5,5,$i-1)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
+        $sheet->getStyleByColumnAndRow(0,6,5,$i-1)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
 
         $objPHPExcel->setActiveSheetIndex(0);
 
@@ -3243,7 +3260,7 @@ SQL;
         header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
         header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
         header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-        header ('Pragma: public'); // HTTP/1.0
+        header ('Pragma: public'); // HTTP/1.0*/
 
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');

@@ -34,16 +34,30 @@ $html .= $form->label($model, 'faculty');
 $html .= $form->dropDownList($model, 'faculty', $faculties, $options);
 $html .= '</div>';
 
-$specialities = CHtml::listData(Pnsp::model()->getSpecialitiesFor($model->faculty), 'pnsp1', 'name');
+$specialities = CHtml::listData(Pnsp::model()->getSpFor($model->faculty), 'sp1', 'name');
 $html .= '<div class="span2 ace-select">';
 $html .= $form->label($model, 'speciality');
 $html .= $form->dropDownList($model, 'speciality', $specialities, $options);
 $html .= '</div>';
 
-$courses = Sp::model()->getCoursesFor($model->faculty, $model->speciality);
+$courses = Sp::model()->getCoursesForSp($model->faculty, $model->speciality);
 $html .= '<div class="span2 ace-select">';
 $html .= $form->label($model, 'course');
 $html .= $form->dropDownList($model, 'course', $courses, $options);
+$html .= '</div>';
+
+$html .= '</fieldset>';
+
+$html .= '<fieldset>';
+
+$html .= '<div class="span2  ace-select">';
+$html .= $form->label($model, 'date1');
+$html .= $form->textField($model, 'date1',array('class' => 'datepicker form-control'));
+$html .= '</div>';
+
+$html .= '<div class="span2  ace-select">';
+$html .= $form->label($model, 'date2');
+$html .= $form->textField($model, 'date2',array('class' => 'datepicker form-control'));
 $html .= '</div>';
 
 $html .= '</fieldset>';

@@ -413,15 +413,46 @@ SQL;
 				'countOmissions1'=>$countOmissions1
 		);
 	}
-
     /**
-     * Статистика посещаемости по студенту
+     * Статистика посещаемости по студенту с и по
+     * @param $date1
+     * @param $date2
+     * @param $st1
+     * @return array
+     */
+    public function getAttendanceStatisticInfoByDate($date1,$date2,$st1)
+    {
+        $sql=<<<SQL
+                SELECT *
+                FROM STAT_PROP(:ST1,:DATE1, :DATE2)
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ST1', $st1);
+        $command->bindValue(':DATE1', $date1);
+        $command->bindValue(':DATE2', $date2);
+        $rows = $command->queryAll();
+
+        $respectful = 0;
+        $disrespectful = 0;
+        $count = 0;
+
+        foreach ($rows as $row){
+            $elgzst3 = $row['prop'];
+            if ($elgzst3 == 1) $disrespectful++;
+            if ($elgzst3 == 2) $respectful++;
+            $count++;
+        }
+
+        return array($respectful,$disrespectful,$count);
+    }
+    /**
+     * Статистика посещаемости по студенту за семестр
      * @param $year
      * @param $sem
      * @param $st1
      * @return array
      */
-    public function getAttendanceStatiscticInfo($year,$sem,$st1)
+    public function getAttendanceStatisticInfo($year,$sem,$st1)
     {
         $ps57 = PortalSettings::model()->getSettingFor(57);
         $elgz4_str='';
