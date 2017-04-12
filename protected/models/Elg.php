@@ -414,6 +414,62 @@ SQL;
 		);
 	}
 
+    /**
+     * Статистика посещаемости по студенту
+     * @param $year
+     * @param $sem
+     * @param $st1
+     * @return array
+     */
+    public function getAttendanceStatiscticInfo($year,$sem,$st1)
+    {
+        $ps57 = PortalSettings::model()->getSettingFor(57);
+        $elgz4_str='';
+        if($ps57==1)
+            $elgz4_str = ' AND elgz4<2 ';
+
+        $sql = <<<SQL
+			SELECT COUNT(*) FROM elgzst
+				INNER JOIN elgz on (elgzst2 = elgz1)
+				INNER JOIN elg on (elgz2 = elg1)
+				INNER JOIN sem on (elg3 = sem1)
+			WHERE sem3=:YEAR AND sem5=:SEM AND elgzst1=:ST1 AND elgzst3=2 {$elgz4_str}
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ST1', $st1);
+        $command->bindValue(':YEAR', $year);
+        $command->bindValue(':SEM', $sem);
+        $respectful = $command->queryScalar();
+
+        $sql = <<<SQL
+			SELECT COUNT(*) FROM elgzst
+				INNER JOIN elgz on (elgzst2 = elgz1)
+				INNER JOIN elg on (elgz2 = elg1)
+				INNER JOIN sem on (elg3 = sem1)
+			WHERE sem3=:YEAR AND sem5=:SEM AND elgzst1=:ST1 AND elgzst3=1 {$elgz4_str}
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ST1', $st1);
+        $command->bindValue(':YEAR', $year);
+        $command->bindValue(':SEM', $sem);
+        $disrespectful = $command->queryScalar();
+
+        $sql = <<<SQL
+			SELECT COUNT(*) FROM elgzst
+			  INNER JOIN elgz on (elgzst2 = elgz1)
+				INNER JOIN elg on (elgz2 = elg1)
+				INNER JOIN sem on (elg3 = sem1)
+			WHERE  sem3=:YEAR AND sem5=:SEM  AND elgzst1=:ST1
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ST1', $st1);
+        $command->bindValue(':YEAR', $year);
+        $command->bindValue(':SEM', $sem);
+        $count = $command->queryScalar();
+
+        return array($respectful,$disrespectful,$count);
+    }
+
 	/**
 	 * Карточка тудента текущая задолженость
 	 * @param $uo1

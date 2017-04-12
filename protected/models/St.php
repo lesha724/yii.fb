@@ -1351,4 +1351,26 @@ SQL;
 
         return !empty($row);
     }
+
+    public function getStudentsBySpeciality($sp1,$course,$year, $sem){
+        $sql=<<<SQL
+            SELECT st1,st2,st3,st4,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28
+			 FROM ST
+			   INNER JOIN STD ON (ST.ST1 = STD.STD2)
+			   INNER JOIN gr on (std.std3 = gr.gr1)
+			   INNER JOIN sg on (gr.gr2 = sg.sg1)  
+               inner join sem on (sg.sg1 = sem.sem2)
+			 WHERE sg2=:sp1 and sem4=:sem4 and sem3=:YEAR and sem5=:SEM and std7 is null and std11 in (0,5,6,8) and st101!=7
+			 ORDER BY gr3 ASC,st2 collate UNICODE
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':sp1', $sp1);
+        $command->bindValue(':sem4', $course);
+        $command->bindValue(':YEAR', $year);
+        $command->bindValue(':SEM', $sem);
+        $students = $command->queryAll();
+
+        return $students;
+    }
 }

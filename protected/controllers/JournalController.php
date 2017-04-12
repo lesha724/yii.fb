@@ -50,7 +50,10 @@ class JournalController extends Controller
                     'updateOmissionsStMark',
                     'insertOmissionsStMark',
 
-                    'searchStudent'
+                    'searchStudent',
+
+                    'attendanceStatisticPrint',
+                    'attendanceStatisticPrintExcel'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -2738,8 +2741,8 @@ SQL;
 
     public function actionRenderUstemTheme()
     {
-       //if (! Yii::app()->request->isAjaxRequest)
-            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+       if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $ustem1 = Yii::app()->request->getParam('ustem1', null);
         $d1     = Yii::app()->request->getParam('d1', null);
@@ -3151,6 +3154,99 @@ SQL;
             'model' => $model,
             'type_statistic'=>PortalSettings::model()->findByPk(41)->ps2
         ));
+    }
+
+    public function actionAttendanceStatisticPrint()
+    {
+        $model = new FilterForm();
+        $model->scenario = 'attendanceStatisticPrint';
+
+        if (isset($_REQUEST['FilterForm']))
+            $model->attributes=$_REQUEST['FilterForm'];
+        $this->render('attendanceStatisticPrint', array(
+            'model' => $model,
+            'type_statistic'=>PortalSettings::model()->findByPk(41)->ps2
+        ));
+    }
+
+    public function actionAttendanceStatisticPrintExcel()
+    {
+        $model = new FilterForm();
+        $model->scenario = 'attendanceStatisticPrint';
+
+        if (isset($_REQUEST['FilterForm']))
+            $model->attributes=$_REQUEST['FilterForm'];
+
+
+        Yii::import('ext.phpexcel.XPHPExcel');
+        $objPHPExcel= XPHPExcel::createPHPExcel();
+        $objPHPExcel->getProperties()->setCreator("ACY")
+            ->setLastModifiedBy("ACY ".date('Y-m-d H-i'))
+            ->setTitle("Jornal Statistic ".date('Y-m-d H-i'))
+            ->setSubject("Jornal Statistic".date('Y-m-d H-i'))
+            ->setDescription("Jornal Statistic document, generated using ACY Portal. ".date('Y-m-d H:i:'))
+            ->setKeywords("")
+            ->setCategory("Result file");
+        $objPHPExcel->setActiveSheetIndex(0);
+        $sheet=$objPHPExcel->getActiveSheet();
+
+        $faculty = F::model()->findByPk($model->faculty);
+        $speciality = Sp::model()->findByPk($model->speciality);
+
+        $sheet->setCellValue('B1', tt("Факультет"));
+        $sheet->setCellValue('C1', $faculty->f3);
+        $sheet->setCellValue('B2', tt("Специальность"));
+        $sheet->setCellValue('C2', $speciality->sp2);
+        $sheet->setCellValue('B3', tt("Курс"));
+        $sheet->setCellValue('C3', $model->course);
+
+        $sheet->getColumnDimension('A')->setWidth(4);
+        $sheet->getColumnDimension('B')->setWidth(25);
+        $sheet->getColumnDimension('C')->setWidth(6);
+
+        $i = 6;
+
+        $sheet->setCellValue('A5', "#");
+        $sheet->setCellValue('B5', tt("Студент"));
+        $sheet->setCellValue('C5', tt("Группа"));
+        $sheet->setCellValue('D5', tt("занятий"));
+        $sheet->setCellValue('E5', tt("уваж."));
+        $sheet->setCellValue('F5', tt("неув."));
+
+        list($year, $sem) = SH::getCurrentYearAndSem();
+
+        $students = St::model()->getStudentsBySpeciality($speciality->sp1, $model->course,$year, $sem);
+
+        foreach ($students as $student){
+
+            $sheet->setCellValueByColumnAndRow(0,$i,$i-5);
+            $sheet->setCellValueByColumnAndRow(1,$i,SH::getShortName($student['st2'],$student['st3'],$student['st4']));
+            $sheet->setCellValueByColumnAndRow(2,$i,Gr::model()->getGroupName( $model->course,$student));
+            list($respectful,$disrespectful,$count) = Elg::model()->getAttendanceStatiscticInfo($year, $sem, $student['st1']);
+            $sheet->setCellValueByColumnAndRow(3,$i, $count);
+            $sheet->setCellValueByColumnAndRow(4,$i,$respectful);
+            $sheet->setCellValueByColumnAndRow(5,$i,$disrespectful);
+            $i++;
+        }
+
+        $sheet->getStyleByColumnAndRow(0,5,5,$i-1)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
+
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        // Redirect output to a clientâ€™s web browser (Excel5)
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="ACY_Statistic_'.date('Y-m-d H-i').'.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
     }
 //----------------------------------------------------------------------------------------------
     public function actionSearchStudent()
