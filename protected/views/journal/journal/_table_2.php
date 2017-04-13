@@ -22,8 +22,18 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
     if (stripos($date['r2'], '11.11.1111')!==false )
         return '<td colspan="2"></td>';
 
-    if (strtotime($date['r2']) > strtotime('now'))
-        return '<td colspan="2"></td>';
+    $dateCurrLesson = strtotime($date['r2']);
+    if ($dateCurrLesson > strtotime('now')) {
+        if(!empty($st['elgvst2'])&&!empty($st['elgvst3']))
+        {
+            if(!($st['elgvst2']<=$dateCurrLesson&&$st['elgvst3']>=$dateCurrLesson)){
+                return '<td colspan="2"></td>';
+            }
+        }
+        else
+            return '<td colspan="2"></td>';
+    }
+
     if ($ps56 == 1 && $date['elgz4']>0)
         return '<td colspan="2"></td>';
 
@@ -603,6 +613,10 @@ HTML;
     }
 
     foreach($students as $st) {
+        if(!empty( $st['elgvst2']))
+            $st['elgvst2']=strtotime($st['elgvst2']);
+        if(!empty( $st['elgvst3']))
+            $st['elgvst3']=strtotime($st['elgvst3']);
         //для дивзачета сумарная
         $divZachTotal = 0;
         $potoch = 0;

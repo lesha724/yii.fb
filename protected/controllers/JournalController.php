@@ -849,6 +849,28 @@ SQL;
                     $errorType = 3;
                 }
             }
+            //проверка да дату занятия
+            $dateCurrLesson = strtotime($date);
+            if(strtotime($date)>strtotime('now')){
+                $elgvst = Elgvst::model()->findByPk($st1);
+                if(empty($elgvst))
+                {
+                    $error = true;
+                    $errorType = 3;
+                }else{
+                    if(empty($elgvst->elgvst2)||empty($elgvst->elgvst3)){
+                        $error = true;
+                        $errorType = 3;
+                    }else{
+                        if(!(strtotime($elgvst->elgvst2)<=$dateCurrLesson&&strtotime($elgvst->elgvst3)>=$dateCurrLesson))
+                        {
+                            $error = true;
+                            $errorType = 3;
+                        }
+                    }
+                }
+            }
+
             try {
                 $sql = <<<SQL
                     select elgz3,r2,r1,elgz1
