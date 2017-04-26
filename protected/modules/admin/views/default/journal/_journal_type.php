@@ -204,8 +204,14 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 
     <div class="control-group">
         <?=CHtml::checkBox('', PortalSettings::model()->findByPk(119)->ps2, $htmlOptions2)?>
-        <span class="lbl"> <?=tt('Проставлять в не проставленые занятия пропуски')?></span>
+        <span class="lbl"> <?=tt('Проставлять в не проставленые занятия(пз) пропуски ')?></span>
         <?=CHtml::hiddenField('settings[119]', PortalSettings::model()->findByPk(119)->ps2)?>
+    </div>
+
+    <div class="control-group">
+        <?=CHtml::checkBox('', PortalSettings::model()->findByPk(120)->ps2, $htmlOptions2)?>
+        <span class="lbl"> <?=tt('Проставлять в не проставленые занятия(лк) пропуски ')?></span>
+        <?=CHtml::hiddenField('settings[120]', PortalSettings::model()->findByPk(120)->ps2)?>
     </div>
 
     <div class="control-group">

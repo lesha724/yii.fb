@@ -129,9 +129,11 @@ SQL;
         return $res;
     }
 
-	public function addRowMark($st1, $elgz1)
+	public function addRowMark($st1, $elgz1, $type)
 	{
-	    $ps119 = PortalSettings::model()->getSettingFor(119);
+	    $id = $type==1?119:120;
+
+	    $ps = PortalSettings::model()->getSettingFor($id);
 
 	    $elgzst = new Elgzst();
 		$elgzst->elgzst0 = new CDbExpression('GEN_ID(GEN_ELGZST, 1)');
@@ -139,7 +141,7 @@ SQL;
 		$elgzst->elgzst2 = $elgz1;
 		$elgzst->elgzst7 = Yii::app()->user->isTch?Yii::app()->user->dbModel->p1:0;
 		$elgzst->elgzst6 = date('Y-m-d H:i:s');
-		$elgzst->elgzst3 = $ps119==1?1:0;
+		$elgzst->elgzst3 = $ps==1?1:0;
 		$elgzst->elgzst4 = 0;
 		$elgzst->elgzst5 = 0;
 		$error = !$elgzst->save();
