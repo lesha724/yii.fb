@@ -90,6 +90,12 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
             Elgzst::model()->nbSt45($st,$elgz1);
     }
 
+    /*if($st['st167']==1)
+    {
+        if($ps65==1&&$date2<=$date1&&!isset($marks[$nom]))
+            Elgzst::model()->nbSt45($st,$elgz1);
+    }*/
+
     $key = $nom; // 0 - r3
 
 
