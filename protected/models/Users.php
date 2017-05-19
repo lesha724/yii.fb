@@ -15,6 +15,7 @@
  * @property string $u9
  * @property string $u10
  * @property string $u11
+ * @property string $u12
  */
 class Users extends CActiveRecord
 {
@@ -49,7 +50,7 @@ class Users extends CActiveRecord
 			//array('u2, u3','length',  'min' => 8,'max'=>30),
 			array('u3', 'match', 'pattern'=>'/^[a-zA-Z0-9-_\.,\/$|]{7,}$/','message'=>tt('В password могут быть только строчные и прописные латинские буквы, цифры, спецсимволы. Минимум 8 символов')),
 			array('u4', 'length', 'max'=>400),
-			array('u9, u10', 'length', 'max'=>45),
+			array('u9, u10, u12', 'length', 'max'=>45),
             array('u2, u4', 'checkIfUnique'),
             //array('u2', 'length', 'min'=>5, 'max'=>30),
             // Логин должен соответствовать шаблону
@@ -314,9 +315,17 @@ HTML;
 		Controller::mail($this->u4, tt('Пароль изменен'), $message);
 	}
 
+	private function genAuthKey(){
+        $token = openssl_random_pseudo_bytes(12);
+        $key   = bin2hex($token);
+
+        $this->u12 = $key;
+    }
+
 	public function beforeSave(){
 		if($this->isNewRecord){
 			$this->setPassword();
+			$this->genAuthKey();
 		}
 		else{
 			$model=self::model()->findByPk($this->u1);
