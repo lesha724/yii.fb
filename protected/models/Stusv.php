@@ -496,6 +496,37 @@ SQL;
 
         $elgsdSumm = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::SUM_TYPE));
 
+        $elgsdInd = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::IND_TYPE));
+        $elgsdExam = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::EXAM_TYPE));
+
+        $balInd = $balExam = null;
+
+        if($elgsdInd!=null) {
+            $elgdInd = Elgd::model()->findByAttributes(array('elgd1' => $elg->elg1, 'elgd2' => $elgsdInd->elgsd1));
+            if($elgdInd!=null)
+                $balInd = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdInd->elgd0));
+        }
+
+        if($elgsdExam!=null) {
+            $elgdExam = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdExam->elgsd1));
+            if($elgdExam!=null)
+                $balExam = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdExam->elgd0));
+        }
+
+
+        if($balInd==null)
+        {
+            $balInd = new Elgdst();
+            $balInd->elgdst3 = 0;
+        }
+
+        if($balExam==null)
+        {
+            $balExam = new Elgdst();
+            $balExam->elgdst3 = 0;
+        }
+
+
         $elgdSumm=null;
         if($elgsdSumm!=null)
             $elgdSumm= Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdSumm->elgsd1));
@@ -516,6 +547,8 @@ SQL;
                 $balSumm->save();
             }
         }
+
+        $sym=$sym+$balInd->elgdst3+$balExam->elgdst3;
 
         $bal_itog = round($sym);
 
