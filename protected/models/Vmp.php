@@ -316,16 +316,18 @@ SQL;
     public function getMarksFromJournal($st1,$elgz,$gr1, $showInfo = false){
         /** @var $elg Elg */
         $dopColumn = '';
-        $dopJoin = '';
+
         $elg =  Elg::model()->findByPk($elgz->elgz2);
+        if($elg==null)
+            return array();
+
+        $dopJoin = "inner join EL_GURNAL_ZAN({$elg->elg2},:GR1,:SEM, {$elg->elg3}) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)";
 
         if($showInfo)
         {
             //$elg = Elg::model()->findByPk($elgz->elgz2);
-            if($elg==null)
-                return array();
             $dopColumn=',r2,elgz3, elgz4, us4';
-            $dopJoin = "inner join EL_GURNAL_ZAN({$elg->elg2},:GR1,:SEM, {$elg->elg3}) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)";
+            //$dopJoin = "inner join EL_GURNAL_ZAN({$elg->elg2},:GR1,:SEM, {$elg->elg3}) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)";
         }
         $sql=<<<SQL
             SELECT elgz3 FROM elgz WHERE elgz2=:ELGZ2 AND elgz4 in (2,3,4) AND elgz3>=:ELGZ3 ORDER by elgz3 asc
@@ -384,23 +386,27 @@ SQL;
 
                 $sql=<<<SQL
                       SELECT elgzst5,elgzst4,elgzst3 $dopColumn FROM elg
-                          INNER JOIN elgz on (elg.elg1 = elgz.elgz2 AND  elgz4=0  AND elgz.elgz3>:NOM)
+                          INNER JOIN elgz on (elg.elg1 = elgz.elgz2 AND  (elgz4=0 or elgz4=1)  AND elgz.elgz3>:NOM)
                           INNER JOIN elgzst on (elgzst.elgzst2 = elgz.elgz1  AND elgzst1=:ST1 )
                           $dopJoin
                       WHERE  elg4=:ELG4 and elg3=:SEM1 AND elg2=:UO1 ORDER by elgz3 asc
 SQL;
                 $command = Yii::app()->db->createCommand($sql);
-                if($showInfo){
+                /*if($showInfo){*/
                     $command->bindValue(':GR1', $gr1);
                     $command->bindValue(':SEM', $sem1);
-                }
+                //}
                 $command->bindValue(':ST1', $st1);
                 $command->bindValue(':NOM', $pmkLessonNomPrevSem);
                 $command->bindValue(':SEM1', $sem1);
                 $command->bindValue(':UO1', $uo1);
                 $command->bindValue(':ELG4', $elg->elg4);
+
+                //var_dump($command);
+
                 $dopMarks = $command->queryAll();
 
+                //var_dump($dopMarks);
             }
         }
 
@@ -415,11 +421,13 @@ SQL;
         $command->bindValue(':ST1', $st1);
         $command->bindValue(':MIN', $pmkPrevLessonNom);
         $command->bindValue(':MAX', $pmkLessonNom);
-        if($showInfo){
+        /*if($showInfo){*/
             $command->bindValue(':GR1', $gr1);
             $command->bindValue(':SEM', $elg->elg3);
-        }
+        //}
         $marks= $command->queryAll();
+
+        //var_dump($marks);
 
         $returnArray = array(
             'current'=>array(
