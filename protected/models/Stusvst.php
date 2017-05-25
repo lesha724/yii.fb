@@ -32,6 +32,7 @@ class Stusvst extends CActiveRecord
 		return array(
 			array('stusvst1, stusvst3, stusvst4, stusvst6, stusvst8', 'numerical', 'integerOnly'=>true),
 			array('stusvst5, stusvst7', 'length', 'max'=>30),
+            array('stusvst5', 'default', 'value'=>'', 'setOnEmpty'=>TRUE),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('stusvst1, stusvst3, stusvst4, stusvst5, stusvst6, stusvst7, stusvst8', 'safe', 'on'=>'search'),
