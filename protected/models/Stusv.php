@@ -651,7 +651,7 @@ SQL;
         $cxmb3 = $arr['cxmb3'];
         $cxmb2= $arr['cxmb2'];
 
-        $cxmb2 = $bal_itog>50?-1:0;
+        $cxmb2 = $bal_itog>=50?-1:0;
 
         if($stusv->saveNewStusMark($st1, $bal_itog,$cxmb3 ,$cxmb2)){
             return true;
