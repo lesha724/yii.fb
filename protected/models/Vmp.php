@@ -691,6 +691,8 @@ SQL;
                             $tek = round($val,2);
 
                             $tek= ($tek*200)/5;
+
+                            $tek = round($tek);
                         }
 
                         $sql = <<<SQL
