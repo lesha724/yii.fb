@@ -156,7 +156,7 @@ class Stusv extends CActiveRecord
 				<<<SQL
         			 SELECT * FROM STUSV
 			 INNER JOIN us on (stusv1 = us1)
-			 WHERE us2=:UO1 and us3=:SEM1 AND stusv2=:GR1
+			 WHERE us2=:UO1 and us3=:SEM1 AND stusv2=:GR1 and us4 in (5,6)
 			 ORDER BY stusv3 DESC
 SQL
 				,array(
@@ -994,7 +994,11 @@ SQL;
 		if($idUniversity===null)
 			return false;
 
+
 		$stusv = Stusv::model()->getStusvByJournal($elg, $gr1);
+		if($stusv == null)
+		    return false;
+
 		if(!empty($stusv->stusv15))
 			return false;
 
