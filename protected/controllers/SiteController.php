@@ -12,16 +12,6 @@ class SiteController extends Controller
 	public function actions()
     {
         return array(
-            // captcha action renders the CAPTCHA image displayed on the contact page
-            'connector' => array(
-                'class' => 'ext.elFinder.ElFinderConnectorAction',
-                'settings' => array(
-                    'root' => Yii::getPathOfAlias('webroot') . '/images/uploads/',
-                    'URL' => Yii::app()->request->baseUrl . '/images/uploads/',
-                    'rootAlias' => 'Home',
-                    'mimeDetect' => 'none',
-                )
-            ),
 			'captcha'=>array(
 					'class'=>'CCaptchaAction',
 					'backColor'=>0xFFFFFF,

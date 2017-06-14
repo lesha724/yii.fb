@@ -70,7 +70,7 @@
                                 'htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'tinymce'),
                                 'fileManager' => array(
                                     'class' => 'ext.elFinder.TinyMceElFinder',
-                                    'connectorRoute'=>'/site/connector',
+                                    'connectorRoute'=>'/admin/default/connector',
                                 ),
                                 /*'settings'=>array(
                                     'theme' => "advanced",
@@ -89,7 +89,7 @@
                                 'htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'tinymce'),
                                 'fileManager' => array(
                                     'class' => 'ext.elFinder.TinyMceElFinder',
-                                    'connectorRoute'=>'/site/connector',
+                                    'connectorRoute'=>'/admin/default/connector',
                                 ),
                                 /*'settings'=>array(
                                     'theme' => "advanced",
@@ -108,7 +108,7 @@
                                 'htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'tinymce'),
                                 'fileManager' => array(
                                     'class' => 'ext.elFinder.TinyMceElFinder',
-                                    'connectorRoute'=>'/site/connector',
+                                    'connectorRoute'=>'/admin/default/connector',
                                 ),
                                 /*'settings'=>array(
                                     'theme' => "advanced",

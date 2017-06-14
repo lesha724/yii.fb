@@ -2,6 +2,28 @@
 
 class DefaultController extends AdminController
 {
+    public function actions()
+    {
+        return array(
+            // captcha action renders the CAPTCHA image displayed on the contact page
+            'connector' => array(
+                'class' => 'ext.elFinder.ElFinderConnectorAction',
+                'settings' => array(
+                    'root' => Yii::getPathOfAlias('webroot') . '/images/uploads/',
+                    'URL' => Yii::app()->request->baseUrl . '/images/uploads/',
+                    'rootAlias' => 'Home',
+                    'mimeDetect' => 'none',
+                    'uploadAllow'=>array('doc', 'xls', 'ppt', 'pps', 'pdf', 'bmp','jpg','jpeg','gif','png'),
+                    'uploadDeny'=>array('php', 'exe', 'js', 'sh', 'pdf', 'pl','rb','java','py','sql')
+                )
+            ),
+            'captcha'=>array(
+                'class'=>'CCaptchaAction',
+                'backColor'=>0xFFFFFF,
+            ),
+        );
+    }
+
     public function actionSecurity()
     {
         $settings = Yii::app()->request->getParam('settings', array());
