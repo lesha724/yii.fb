@@ -167,6 +167,29 @@ SQL
 		return $stusv;
 	}
 
+    /**
+     * Получить ведомость по журналу и студенту
+     * @param $elg Elg
+     * @param $st1 int студент
+     * @return static
+     */
+    public function getStusvByJournalAndStudent($elg, $st1){
+        $stusv = Stusv::model()->findBySql(
+            <<<SQL
+            select first 1 STUSV.*
+                from stusvst
+                   inner join stusv on (stusvst.stusvst1 = stusv.stusv0)
+                   inner join us on (stusv.stusv1 = us.us1)
+                where stusvst3=:ST1 and us2=:UO1 and us3=:SEM1 and us4 in (5,6) order by stusv11 DESC
+SQL
+            ,array(
+            ':UO1'=> $elg->elg2,
+            ':SEM1'=> $elg->elg3,
+            ':ST1'=> $st1
+        ));
+        return $stusv;
+    }
+
 	/**
 	 * Сохранние в stusv
 	 * @param $st1 int код студента
@@ -995,7 +1018,8 @@ SQL;
 			return false;
 
 
-		$stusv = Stusv::model()->getStusvByJournal($elg, $gr1);
+		//$stusv = Stusv::model()->getStusvByJournal($elg, $gr1);
+        $stusv = Stusv::model()->getStusvByJournalAndStudent($elg, $st1);
 		if($stusv == null)
 		    return false;
 

@@ -557,11 +557,11 @@ HTML;
  * @var $elg Elg
  * @var $stusv Stusv
  */
-    $ps107 = PortalSettings::model()->getSettingFor(107);
+    /*$ps107 = PortalSettings::model()->getSettingFor(107);
     if($ps107==1)
         $stusv = Stusv::model()->getStusvByJournal($elg, $gr1);
     else
-        $stusv=null;
+        $stusv=null;*/
 
 
     $sem7 = Gr::model()->getSem7ByGr1ByDate($gr1,date('d.m.Y'));
@@ -569,6 +569,8 @@ HTML;
     $ps60 = PortalSettings::model()->getSettingFor(60);
     $ps65 = PortalSettings::model()->getSettingFor(65);
     $ps66 = PortalSettings::model()->getSettingFor(66);
+
+    $ps107 = PortalSettings::model()->getSettingFor(107);
 
     $min = Elgzst::model()->getMin();
     $elgz1_arr=array();
@@ -637,6 +639,8 @@ HTML;
         //проверка есть ли итоговая оценка, тогда бдлокируем ввод оценко
         $readOnlySt = false;
         if($ps107==1) {
+
+            $stusv = Stusv::model()->getStusvByJournalAndStudent($elg, $st1);
             if (!empty($stusv)) {
                 $stusvst = $stusv->getMarkForStudent($st1);
                 if (!empty($stusvst)) {

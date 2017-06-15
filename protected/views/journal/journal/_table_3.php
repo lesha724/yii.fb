@@ -137,9 +137,9 @@ $sem = Sem::model()->findByPk($model->sem1);
 
 $us = Us::model()->getUsByStusvFromJournal($elg);
 
-$stusv = null;
+/*$stusv = null;
 if($ps85==0&&$ps84 != 0)
-    $stusv = Stusv::model()->getStusvByJournal($elg, $gr1);
+    $stusv = Stusv::model()->getStusvByJournal($elg, $gr1);*/
 //var_dump($stusv);
 
 foreach ($students as $st) {
@@ -173,6 +173,7 @@ foreach ($students as $st) {
         if ($ps84 == 0)
             $tr .= '<td data-total=2>' . $total_2[$st1] . '</td>'; // total 2
         else {
+            $stusv = Stusv::model()->getStusvByJournalAndStudent($elg, $st1);
             if(!empty($stusv)) {
                 $mark = $stusv->getMarkForStudent($st1);
                 if (!empty($mark))

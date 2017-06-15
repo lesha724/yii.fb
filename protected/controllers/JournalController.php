@@ -1057,7 +1057,7 @@ SQL;
                 }
                 $ps107 = PortalSettings::model()->getSettingFor(107);
                 if($ps107==1) {
-                    $stusv = Stusv::model()->getStusvByJournal($elg, $gr1);
+                    $stusv = Stusv::model()->getStusvByJournalAndStudent($elg, $st1);
                     if ($stusv!=null) {
                         $stusvst = $stusv->getMarkForStudent($st1);
                         if ($stusvst!=null) {
