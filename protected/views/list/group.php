@@ -36,6 +36,7 @@ $this->endWidget();
 
 $this->renderPartial('/filter_form/timeTable/group', array(
     'model' => $model,
+    'type'=>1,//тип для юрки показывать или нет факультет 5
     'showDateRangePicker' => false
 ));
 
