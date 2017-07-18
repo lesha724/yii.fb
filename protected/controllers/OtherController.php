@@ -55,7 +55,8 @@ class OtherController extends Controller
                     'searchStudent',
                     'studentCard',
                     'studentCardExcel',
-                    'showRetake'
+                    'showRetake',
+                    'orderAbiturient'
                 ),
             ),
             /*array('allow',
@@ -69,6 +70,39 @@ class OtherController extends Controller
                 'users' => array('*'),
             ),
         );
+    }
+
+    public function actionOrderAbiturient()
+    {
+        $model = new Abtmpi('search');
+        $model->unsetAttributes();
+
+        $this->layout = 'clear1';
+
+        if (isset($_REQUEST['Abtmpi']))
+        {
+            $model->attributes = $_REQUEST['Abtmpi'];
+            //throw new Exception('1');
+            Yii::app()->user->setState('SearchParamsAbtmpi', $_REQUEST['Abtmpi']);
+        }
+        else
+        {
+            $searchParams = Yii::app()->user->getState('SearchParamsAbtmpi');
+            if ( isset($searchParams) )
+            {
+                $model->attributes = $searchParams;
+            }
+        }
+        //var_dump($model);
+
+        if(empty($model->abtmpi7))
+            $model->abtmpi7 = date('d.m.Y');
+
+        $model->abtmpi10 = date('Y');
+
+        $this->render('ochered',array(
+            'model'=>$model,
+        ));
     }
 
     public function actionShowRetake()
