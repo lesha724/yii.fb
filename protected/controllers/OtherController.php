@@ -79,11 +79,14 @@ class OtherController extends Controller
 
         $this->layout = 'clear1';
 
-        if (isset($_REQUEST['Abtmpi']))
+        if (isset($_POST['Abtmpi']))
         {
-            $model->attributes = $_REQUEST['Abtmpi'];
-            //throw new Exception('1');
-            Yii::app()->user->setState('SearchParamsAbtmpi', $_REQUEST['Abtmpi']);
+            $model->attributes = $_POST['Abtmpi'];
+            //throw  new Exception(1);
+            Yii::app()->user->setState('SearchParamsAbtmpi', $_POST['Abtmpi']);
+
+            //var_dump($_REQUEST['Abtmpi']);
+            //var_dump(Yii::app()->user->getState('SearchParamsAbtmpi'));
         }
         else
         {
