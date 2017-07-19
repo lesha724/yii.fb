@@ -90,10 +90,10 @@ var timerId = setInterval(function(){
             },
             'filter'=>false
         ),
-        'i2'=>array(
+        /*'i2'=>array(
             'name'=>'i2',
             'filter'=>false
-        ),
+        ),*/
         'abtmpi7'=>array(
             'name'=>'abtmpi7',
             'value'=>'date("d.m.Y", strtotime($data->abtmpi7))',

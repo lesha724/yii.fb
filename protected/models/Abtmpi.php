@@ -108,8 +108,8 @@ class Abtmpi extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-        $criteria->select = 'i2, abtmpi1, abtmpi2, abtmpi3, abtmpi4, abtmpi5, abtmpi6, abtmpi7, abtmpi8, abtmpi9, abtmpi10, abtmpi11, abtmpi12';
-        $criteria->join = 'JOIN i ON (t.abtmpi6=i.i1) ';
+        $criteria->select = ' abtmpi1, abtmpi2, abtmpi3, abtmpi4, abtmpi5, abtmpi6, abtmpi7, abtmpi8, abtmpi9, abtmpi10, abtmpi11, abtmpi12';
+        //$criteria->join = 'JOIN i ON (t.abtmpi6=i.i1) ';
 
 		$criteria->compare('abtmpi1',$this->abtmpi1);
 		$criteria->compare('abtmpi2',$this->abtmpi2,true);
