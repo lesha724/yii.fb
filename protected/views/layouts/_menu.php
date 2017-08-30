@@ -707,6 +707,12 @@ $this->widget('zii.widgets.CMenu', array(
                     'active'  => $_c=='other' && $_a=='studentCard',
                     'visible' => _ch('other', 'studentCard') && ($isPrnt || $isStd|| $isAdmin),
                 ),
+                array(
+                    'label'   => $_l2.tt('Антиплагиат'),
+                    'url'     => _u('/other/antiplagiat'),
+                    'active'  => $_c=='other' && $_a=='antiplagiat',
+                    'visible' => _ch('other', 'antiplagiat') && ($isStd) && SH::getUniversityCod()==U_URFAK,
+                ),
             ),getDopItem('other',0)),
             'visible' => _ch('other', 'main')
         ),

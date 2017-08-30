@@ -1387,4 +1387,37 @@ SQL;
 
         return $students;
     }
+
+    /**
+     * Историй записи на курсовые
+     * @return mixed
+     */
+    public function getNkrsList(){
+        $sql=<<<SQL
+            select
+                nkrs1,
+                nkrs6,
+                sem4,
+                p.p3,
+                p.p4,
+                p.p5,
+                spkr.spkr2,
+                k.k2
+                from uo
+                inner join k on (uo.uo4 = k.k1)
+                inner join us on (uo.uo1 = us.us2)
+                inner join nkrs on (us.us1 = nkrs.nkrs3)
+                inner join spkr on (nkrs.nkrs7 = spkr.spkr1)
+                inner join p on (nkrs.nkrs6 = p.p1)
+                inner join sem on (us.us3 = sem.sem1)
+                where nkrs2=:ST1
+                order by sem3,sem5
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ST1', $this->st1);
+        $students = $command->queryAll();
+
+        return $students;
+    }
 }

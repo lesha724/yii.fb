@@ -296,6 +296,11 @@ Yii::app()->clientScript->registerScript('sem-start', $js);
                     <?=CHtml::textField('settings[71]', PortalSettings::model()->findByPk(71)->ps2)?>
                 </div>
 
+                <div class="control-group">
+                    <?=CHtml::checkBox('', PortalSettings::model()->findByPk(121)->ps2, $checkboxStyle)?>
+                    <span class="lbl"> <?=tt('Отправлять отчет руководителю на почту')?></span>
+                    <?=CHtml::hiddenField('settings[121]', PortalSettings::model()->findByPk(121)->ps2)?>
+                </div>
 
                 <span class="lbl"> <?=tt('Шаблон письма с отчетом')?>:</span><br>
                 <span class="blue">{username}-логин, {name}- имя, {student}-имя студента, {link}-ссылка на отчет</span>
