@@ -995,29 +995,12 @@ SQL;
         } else
             throw new CHttpException(404, 'You don\'t have an access to this service');
 
-        if (! empty($_FILES)) {
+        /*if (! empty($_FILES)) {
             $nkrs1 = Yii::app()->request->getParam('nkrs1', null);
             $nkrs6 = Yii::app()->request->getParam('nkrs6', null);
 
-            /*if (! empty($_FILES)) {
-
-                $document = CUploadedFile::getInstanceByName('document');
-                $tmpName = tempnam(sys_get_temp_dir(), '_');
-                $saved = $document->saveAs($tmpName);
-
-
-                if ($saved) {
-                    list($id, $url) = $this->sendToAntiPlagiarism($document, $tmpName);
-                    if ($nkrs1)
-                        D::model()->updateNkrs($nkrs1, 'nkrs8', $id);
-                    Yii::app()->user->setFlash('success', tt('Документ был отправлен на проверку в Антиплагиат'));
-                    Yii::app()->user->setFlash('info', tt('Результат можно посмотреть здесь:') .' '. CHtml::link(tt('Отчет'), $url, array('target' => '_blank')));
-                    $this->sendEmails($model->student, $nkrs6, $url);
-                }
-            }*/
-
             $this->proccessAntiplagiat($model->student, $nkrs1, $nkrs6);
-        }
+        }*/
 
         $stInfoForm = new StInfoForm();
         $stInfoForm->fillData($model);
@@ -1439,7 +1422,7 @@ HTML;
         $id = $uploadResult->UploadDocumentResult->Uploaded[0]->Id;
 
         // Иницировать проверку с использованием собственного модуля поиска и модуля поиска "wikipedia"
-        $client->CheckDocument(array("docId" => $id, "checkServicesList" => array($COMPANY_NAME)));
+        $client->CheckDocument(array("docId" => $id, "checkServicesList" => array($COMPANY_NAME, "internet")));
 
         // Получить текущий статус последней проверки
         $status = $client->GetCheckStatus(array("docId" => $id));
@@ -1590,7 +1573,6 @@ HTML;
             $teacher = Users::model()->find('u5 = 1 and u6 = '.$p1);
             if(empty($teacher))
                 return;
-            //throw  new Exception('1111');
 
             if ($teacher->u4) {
 
