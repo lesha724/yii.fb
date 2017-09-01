@@ -527,7 +527,7 @@ HTML;
                 $res[$r2]['timeTable'][$r3]['gr3'] = $day['gr3'];
 
             } else {
-                if($day['fio']!=$res[$r2]['timeTable'][$r3]['day']['fio']) {
+                if($day['fio']!=$res[$r2]['timeTable'][$r3]['day']['fio'] || $day['rz2']!=$res[$r2]['timeTable'][$r3]['day']['rz2']) {
                     $res[$r2]['timeTable'][$r3]['shortText'] .= $this->cellShortTextFor($day, $type);
 
                     $res[$r2]['timeTable'][$r3]['fullText'] = str_replace('{$gr3}',$res[$r2]['timeTable'][$r3]['gr3'],$res[$r2]['timeTable'][$r3]['fullText']);
