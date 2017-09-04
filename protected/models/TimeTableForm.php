@@ -534,6 +534,18 @@ HTML;
         return array($timeTable, $maxLessons);
     }
 
+    public function fillTameTableForStudent($timeTable)
+    {
+        $timeTable = $this->joinLessons($timeTable, 2);
+
+        $timeTable = $this->fillMissingCells($timeTable);
+
+        $maxLessons = $this->countMaxSubjects($timeTable);
+
+        return array($timeTable, $maxLessons);
+    }
+
+
     private function joinLessons($timeTable, $type = 2)
     {
         $res  = array();
@@ -624,9 +636,10 @@ HTML;
         $timeTable = St::getTimeTable($this->student, $this->date1, $this->date2);
         $minMax    = $this->getMinMaxLessons($timeTable);
 
-        $fullTimeTable = $this->fillTameTable($timeTable, 2);
+        //$fullTimeTable = $this->fillTameTable($timeTable, 2);
+        list($fullTimeTable, $maxLessons) = $this->fillTameTableForClassroom($timeTable);
 
-        return array($minMax, $fullTimeTable);
+        return array($minMax, $fullTimeTable,$maxLessons);
     }
 
     public function generateClassroomTimeTable()
