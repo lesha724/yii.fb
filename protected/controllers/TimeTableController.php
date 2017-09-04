@@ -604,13 +604,14 @@ class TimeTableController extends Controller
 
         $timeTable = $minMax = $maxLessons = array();
         if ($model->validate())
-            list($minMax, $timeTable) = $model->generateClassroomTimeTable();
+            list($minMax, $timeTable, $maxLessons) = $model->generateClassroomTimeTable();
 
 
         $this->render('classroom', array(
             'model'      => $model,
             'timeTable'  => $timeTable,
             'minMax'     => $minMax,
+            'maxLessons' => $maxLessons,
             'rz'         => Rz::model()->getRzArray($model->filial),
         ));
     }

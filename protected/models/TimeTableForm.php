@@ -472,6 +472,7 @@ HTML;
             if (! isset($res[$r2]['timeTable'][$r3])) {
 
                 $res[$r2]['timeTable'][$r3] = $day;
+                $res[$r2]['timeTable'][$r3]['day'] = $day;
                 $res[$r2]['timeTable'][$r3]['gr3'] = $day['gr3'];
                 $res[$r2]['timeTable'][$r3]['shortText'] = $this->cellShortTextFor($day, $type);
                 $res[$r2]['timeTable'][$r3]['fullText']  = $this->cellFullTextFor($day, $type);
@@ -480,8 +481,28 @@ HTML;
                 $res[$r2]['timeTable'][$r3]['printText']  = $this->cellPrintTextFor($day, $type);
                 //$res[$r2]['timeTable'][$r3]['printText']  = '=СЦЕПИТЬ("'.$this->cellPrintTextFor($day, $type).'";СИМВОЛ(10))';
 
-            } else
-                $res[$r2]['timeTable'][$r3]['gr3'] .= ','.$day['gr3'];
+            } else {
+                if($type!=3) {
+                    $res[$r2]['timeTable'][$r3]['gr3'] .= ',' . $day['gr3'];
+                }else{
+                    if($day['fio']!=$res[$r2]['timeTable'][$r3]['day']['fio'] || $day['rz2']!=$res[$r2]['timeTable'][$r3]['day']['rz2']) {
+                        $res[$r2]['timeTable'][$r3]['shortText'] .= $this->cellShortTextFor($day, $type);
+
+                        $res[$r2]['timeTable'][$r3]['fullText'] = str_replace('{$gr3}',$res[$r2]['timeTable'][$r3]['gr3'],$res[$r2]['timeTable'][$r3]['fullText']);
+                        $res[$r2]['timeTable'][$r3]['printText'] = str_replace('{$gr3}',$res[$r2]['timeTable'][$r3]['gr3'],$res[$r2]['timeTable'][$r3]['printText']);
+
+                        $res[$r2]['timeTable'][$r3]['fullText'] .= $this->cellFullTextFor($day, $type);
+                        $res[$r2]['timeTable'][$r3]['printText'] .= ' ' . $this->cellPrintTextFor($day, $type);
+
+                        $res[$r2]['timeTable'][$r3][] = $day;
+                        $res[$r2]['timeTable'][$r3]['day'] = $day;
+                        $res[$r2]['timeTable'][$r3]['gr3'] = $day['gr3'];
+                    }else
+                    {
+                        $res[$r2]['timeTable'][$r3]['gr3'] .= ','.$day['gr3'];
+                    }
+                }
+            }
 
         }
         //die(var_dump($res));
@@ -502,10 +523,19 @@ HTML;
         return array($timeTable, $maxLessons);
     }
 
-    private function joinLessons($timeTable)
+    public function fillTameTableForClassroom($timeTable)
     {
-        $type = 2;
+        $timeTable = $this->joinLessons($timeTable, 3);
 
+        $timeTable = $this->fillMissingCells($timeTable);
+
+        $maxLessons = $this->countMaxSubjects($timeTable);
+
+        return array($timeTable, $maxLessons);
+    }
+
+    private function joinLessons($timeTable, $type = 2)
+    {
         $res  = array();
 
         foreach($timeTable as $day) {
@@ -604,9 +634,11 @@ HTML;
         $timeTable = A::getTimeTable($this->classroom, $this->date1, $this->date2);
         $minMax    = $this->getMinMaxLessons($timeTable);
 
-        $fullTimeTable = $this->fillTameTable($timeTable, 3);
+        //$fullTimeTable = $this->fillTameTable($timeTable, 3);
+        list($fullTimeTable, $maxLessons) = $this->fillTameTableForClassroom($timeTable);
+        //$maxLessons = $this->countMaxSubjects($timeTable);
 
-        return array($minMax, $fullTimeTable);
+        return array($minMax, $fullTimeTable,$maxLessons);
     }
 
     public function generateTeacherTimeTable()
