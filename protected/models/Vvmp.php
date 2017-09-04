@@ -226,15 +226,15 @@ SQL;
 	public function getModuleBySt($st1)
 	{
 		$sql = <<<SQL
-			select d1,d2,vvmp6,vvmp4,sem1,k2,vmp4,vmp5,vmp6,vmp7,vmp1
-			from (select vmp1,vmp4,vmp5,vmp6,vmp7 from vmp where vmp2 = :ST1)
+			select d1,d2,vvmp6,vvmp4,sem1,k2,vmp4,vmp5,vmp6,vmp7,vmp1, vvmp8, vvmp10, vmp9
+			from (select vmp1,vmp4,vmp5,vmp6,vmp7,vmp9 from vmp where vmp2 = :ST1)
 			   inner join vmpv on (vmp1 = vmpv.vmpv1)
 			   inner join vvmp on (vmpv.vmpv2 = vvmp.vvmp1)
 			   inner join d on (vvmp.vvmp3 = d.d1)
 			   inner join k on (vvmp.vvmp5 = k.k1)
 			   inner join sem on (vvmp.vvmp4 = sem.sem7) and (vvmp.vvmp25 = sem.sem2)
 			where sem3=:YEAR AND sem5=:SEM
-			GROUP BY d2,vvmp6,vvmp4,d1,sem1,k2,vmp4,vmp5,vmp6,vmp7,vmp1
+			GROUP BY d2,vvmp6,vvmp4,d1,sem1,k2,vmp4,vmp5,vmp6,vmp7,vmp1, vvmp8, vvmp10, vmp9
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':ST1', $st1);
