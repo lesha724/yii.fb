@@ -220,7 +220,8 @@ SQL;
             where (u38<=current_timestamp and u39>=current_timestamp) and (sem3 = {$uch_god}) and (sem5 = {$semester}) and (
                 (u1 in ({$subSql})) or
                 (u1 in (select u1 from u where u17 in ({$subSql}))) or
-                (u1 in (select u1 from u where u17 in (select u1 from u where u17 in ({$subSql}))))
+                (u1 in (select u1 from u where u17 in (select u1 from u where u17 in ({$subSql})))) or 
+                (u1 in (select u1 from u where u17 in (select u1 from u where u17 in (select u1 from u where u17 in ({$subSql})))))
             )
 SQL;
 
@@ -246,10 +247,12 @@ SQL;
             INNER JOIN ucgns on (ucgn1 = ucgns2)
             INNER JOIN (select ucsn1,ucsn2 from ucsn where ucsn2={$st1}) on (ucgns1 = ucsn1)
             WHERE
-                ucsn2 is not null and
+                ucsn2 is not null and (
                 (u1 in ({$subSql}))or
                 (u1 in (select u1 from u where u17 in ({$subSql})))or
-                (u1 in (select u1 from u where u17 in (select u1 from u where u17 in ({$subSql}))))
+                (u1 in (select u1 from u where u17 in (select u1 from u where u17 in ({$subSql})))) or 
+                (u1 in (select u1 from u where u17 in (select u1 from u where u17 in (select u1 from u where u17 in ({$subSql}))))) 
+            )
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);

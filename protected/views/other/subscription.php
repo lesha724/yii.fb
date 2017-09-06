@@ -91,7 +91,7 @@ function PROCEDURA_CIKL_PO_BLOKAM($params)
             if (empty($_SESSION['u1_vib']))
                 $_SESSION['u1_vib'] = $u1_root;
             else
-                if($u1_root!=null)
+                if($u1_root!=null && !empty($u1_root))
                     $_SESSION['u1_vib'] .= ','.$u1_root;
         }
 
