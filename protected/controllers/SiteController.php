@@ -122,6 +122,11 @@ class SiteController extends Controller
 				if(!empty($message))
 					Yii::app()->user->setState('info_message', $message);
 
+                if(empty($user->u4))
+                    Yii::app()->user->setFlash(
+                        'warning',
+                        '<strong>'.tt('Внимание!').'</strong> '.tt('Заполните Email!')
+                    );
 
 				if($this->universityCode==U_ZSMU){
 					//$sKeySettings = PortalSettings::model()->findByPk(PortalSettings::ZAP_SUPPORT_SECRET_KEY_ID);
