@@ -775,7 +775,7 @@ SQL;
            inner join ucgns on (ucsn.ucsn1 = ucgns.ucgns1)
            inner join ucgn on (ucgns.ucgns2 = ucgn.ucgn1)
            inner join ug on (ucgn.ucgn1 = ug.ug4)
-           inner join nr on (ug.ug3 = nr.nr1)
+           inner join nr on (ug.ug1 = nr.nr1) /*было ug3 =nr1 12.09.2017*/
            inner join us on (nr.nr2 = us.us1)
            inner join std on (st1 = std2) /*Єто бі закомнтировано (Раскометировали ИС, изза виртуальніх групп)*/
         where UCGNS5=:YEAR and UCGNS6=:SEM and us2=:UO1 and ug2=:GR1 and std11 in (0,6,8) and (std7 is null) and st101!=7
