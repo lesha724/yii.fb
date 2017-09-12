@@ -615,11 +615,8 @@ SQL;
         }
     }
 
-    public function getSubscribedDisciplines()
+    public function getSubscribedDisciplines($st1,$data_nachala)
     {
-        $st1          = $_SESSION['st1'];
-        $data_nachala = $_SESSION['data_nachala'];
-
         $sql = <<<SQL
             select d2
             from d
