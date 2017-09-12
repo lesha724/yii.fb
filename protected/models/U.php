@@ -626,7 +626,7 @@ SQL;
             inner join ucgn on (ucxg.ucxg2 = ucgn.ucgn1)
             inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
             inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
-            where ucsn2=:ST1 and ucsn4>=:DATA_NACHALA and ucsn5=0
+            where ucsn2=:ST1 and ucsn4>=:DATA_NACHALA and ucx5=2
             group by d2
             order by d2 collate UNICODE
 SQL;
