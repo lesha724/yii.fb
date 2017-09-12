@@ -230,6 +230,30 @@ SQL;
         return $specialities;
     }
 
+    /**
+     * Все специальности
+     * @return array
+     */
+    public function getAllSpecialities()
+    {
+        $sql=<<<SQL
+            SELECT pnsp2,sp2,sp1
+            FROM sp
+            INNER JOIN pnsp on (sp.sp11 = pnsp.pnsp1)
+            WHERE sp7 is null and pnsp9 is null
+            ORDER BY pnsp2
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $specialities = $command->queryAll();
+
+        foreach ($specialities as $key => $speciality) {
+            $specialities[$key]['name'] = $speciality['pnsp2'].' ('.$speciality['sp2'].')';
+        }
+
+        return $specialities;
+    }
+
     public function getSpecializations($speciality)
     {
         if (empty($speciality))

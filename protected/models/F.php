@@ -240,4 +240,23 @@ SQL;
 		return CHtml::listData($res, 'f1', 'name');
         //return $faculties;
     }
+
+    /**
+     * Все факультеты
+     * @return array
+     */
+    public function getAllFaculties()
+    {
+        $sql=<<<SQL
+            SELECT f1, f3
+            FROM f
+            WHERE f1>0 and f12<>0 and f17=0 and (f19 is null) and f32 = 0
+            ORDER BY f15,f3 collate UNICODE
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $faculties = $command->queryAll();
+
+        return $faculties;
+    }
 }
