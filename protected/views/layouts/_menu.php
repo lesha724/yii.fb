@@ -213,6 +213,11 @@ $this->widget('zii.widgets.CMenu', array(
                     'active' => $_a=='timeTable' && $_m=='admin'
                 ),
                 array(
+                    'label'  => $_l2.tt('Social Auth'),
+                    'url'    => _u('/admin/eauth/'),
+                    'active' => $_c=='eauth' && $_m=='admin'
+                ),
+                array(
                     'label'  => $_l2.tt('Эл. журнал'),
                     'url'    => _u('/admin/default/journal'),
                     'active' => $_a=='journal' && $_m=='admin'
