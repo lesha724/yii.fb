@@ -54,6 +54,7 @@ class AsuEAuthUserIdentity extends CBaseUserIdentity
                 $this->id = $user->u1;
                 $this->name = $user->u2;
 
+                $this->setState('id', $user->u1);
                 $this->setState('service-id', $this->service->id);
                 $this->setState('name', $this->service->getAttribute('name'));
                 $this->setState('service', $this->service->serviceName);

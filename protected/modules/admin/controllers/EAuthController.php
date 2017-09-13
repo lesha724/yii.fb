@@ -51,7 +51,7 @@ class EAuthController extends Controller
 
                 $config = array(
                     'enable' => $model->enable == 1,
-                    'popup' => $model->popup == 1,
+                    'popup' => false,//$model->popup == 1,
                     'services' => $services
                 );
 

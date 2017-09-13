@@ -29,7 +29,7 @@
 
         <?= $form->checkBoxRow($model,'enable')?>
 
-        <?= $form->radioButtonListInlineRow($model, 'popup', $model->getAuthPopupType())?>
+        <?php /*$form->radioButtonListInlineRow($model, 'popup', $model->getAuthPopupType())*/?>
 
         <div class="row-fluid">
             <?= $this->renderPartial('_panel',array(

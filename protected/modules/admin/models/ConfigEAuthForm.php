@@ -59,7 +59,7 @@ class ConfigEAuthForm extends CFormModel
 
     public function rules()
     {
-        $boolProps = 'enable, popup, enableGithub, enableTwitter, enableYahoo, enableVkontakte, '.
+        $boolProps = 'enable, enableGithub, enableTwitter, enableYahoo, enableVkontakte, '.
             'enableMailru, enableOdnoklassniki, enableDropbox, enableFacebook, enableGoogle, enableYandex, enableLinkedin';
 
         $keys = 'keyTwitter, secretTwitter, clientIdFacebook, clientSecretFacebook, clientIdGithub, clientSecretGithub, '.
