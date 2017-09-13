@@ -443,6 +443,22 @@ HTML;
 			//записіваем в сессию
 			Yii::app()->session[self::SESSION_NAME_AUTH_KEY1] = $this->_getSessionKey1($key);
 		}
+
+
+        switch($this->u5){
+            case 0:
+                $message = PortalSettings::model()->findByPk(92)->ps2;
+                break;
+            case 1:
+                $message = PortalSettings::model()->findByPk(93)->ps2;
+                break;
+            case 2:
+                $message = PortalSettings::model()->findByPk(94)->ps2;
+                break;
+        }
+
+        if(!empty($message))
+            Yii::app()->user->setState('info_message', $message);
 	}
 
 	public function validateLogin(){

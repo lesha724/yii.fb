@@ -8,7 +8,7 @@
 class ConfigEAuthForm extends CFormModel
 {
     public $enable;
-	public $popup;
+	public $popup = 0;
 
 	/*public $enableWargaming;*/
 
@@ -142,14 +142,14 @@ class ConfigEAuthForm extends CFormModel
 
         if($this->enableGithub== 1)
             $services['github'] = array(
-                'class' => 'GitHubOAuthService',
+                'class' => 'AsuGitHubOAuthService',
                 'client_id' => $this->clientIdGithub,
                 'client_secret' => $this->clientSecretGithub,
             );
 
         if($this->enableGoogle== 1)
             $services['google_oauth'] = array(
-                'class' => 'GoogleOAuthService',
+                'class' => 'AsuGoogleOAuthService',
                 'client_id' => $this->clientIdGoogle,
                 'client_secret' => $this->clientSecretGoogle,
                 'title' => 'Google (OAuth)',

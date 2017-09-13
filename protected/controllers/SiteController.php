@@ -99,19 +99,18 @@ class SiteController extends Controller
 
                     // successful authentication
                     if ($identity->authenticate()) {
-                        Yii::app()->user->login($identity);
-                        $user = Users::model()->findByAttributes(array('u4'=>$identity->attributes['email']));
-                        if ($user==null)
-                            $eauth->cancel();
 
+                        Yii::app()->user->login($identity);
+                        $user = Users::model()->findByPk(Yii::app()->user->id);
                         $user->afterLogin();
                         UsersHistory::getNewLogin();
-                        //var_dump($identity->id, $identity->name, Yii::app()->user->id);exit;
 
-                        // special redirect with closing popup window
-                        $eauth->redirect('index');
+                        $eauth->redirect();
                     }
                     else {
+                        // save authentication error to session
+                        Yii::app()->user->setFlash('error', 'Exception: error authenticate '. $identity->errorCode );
+
                         // close popup window and redirect to cancelUrl
                         $eauth->cancel();
                     }
@@ -159,21 +158,6 @@ class SiteController extends Controller
 				$message = '';
 				$user = Users::model()->findByPk(Yii::app()->user->id);
 				$user->afterLogin();
-				switch($user->u5){
-					case 0:
-						$message = PortalSettings::model()->findByPk(92)->ps2;
-						break;
-					case 1:
-						$message = PortalSettings::model()->findByPk(93)->ps2;
-						break;
-					case 2:
-						$message = PortalSettings::model()->findByPk(94)->ps2;
-						break;
-				}
-
-				if(!empty($message))
-					Yii::app()->user->setState('info_message', $message);
-
 
 				if($this->universityCode==U_ZSMU){
 					//$sKeySettings = PortalSettings::model()->findByPk(PortalSettings::ZAP_SUPPORT_SECRET_KEY_ID);
