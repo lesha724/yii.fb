@@ -11,6 +11,13 @@ define('MENU_ELEMENT_NEED_AUTH', 'need_auth');
 
 Yii::setPathOfAlias('bootstrap', dirname(__FILE__).'/../extensions/bootstrap');
 
+$params = require(dirname(__FILE__).'/params.php');
+//разрешена ли у нас авторизация через соцсети
+$params['enableEAuth'] = false;
+$paramsEAuth = require(dirname(__FILE__) . '/paramsEAuth.php');
+if (isset($paramsEAuth['enable']))
+    $params['enableEAuth'] = $paramsEAuth['enable'];
+
 $config = array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'АСУ',
@@ -279,8 +286,30 @@ $config = array(
             'apicorp_address' => null,
             'antiplagiat_uri' => null,
         )
-    )+require(dirname(__FILE__).'/params.php'),
+    )+$params,
 );
+//eauth
+if($params['enableEAuth']===true){
+    $config['import'] = array_merge($config['import'], array(
+        'ext.eoauth.*',
+        'ext.eoauth.lib.*',
+        'ext.lightopenid.*',
+        'ext.eauth.*',
+        'ext.eauth.services.*'
+    ));
+
+    $config['components']['loid'] = array(
+        'class' => 'ext.lightopenid.loid'
+    );
+
+    $config['components']['eauth'] = array(
+        'class' => 'ext.eauth.EAuth',
+        'popup' => isset($paramsEAuth['popup']) ? $paramsEAuth['popup'] : true, // Use the popup window instead of redirecting.
+        'cache' => false, // Cache component name or false to disable cache. Defaults to 'cache'.
+        'cacheExpire' => 0, // Cache lifetime. Defaults to 0 - means unlimited.
+        'services' => isset($paramsEAuth['services']) ? $paramsEAuth['services'] : array()
+    );
+}
 
 // Apply local config modifications
 @include dirname(__FILE__) . '/main-local.php';

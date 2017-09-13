@@ -64,7 +64,7 @@
                     <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
                         <?php if (Yii::app()->user->isGuest) : ?>
                             <li>
-                                <a href="<?=Yii::app()->createUrl('site/login')?>" id="sign-in">
+                                <a href="<?=Yii::app()->createUrl('site/login')?>" id="sign-in-new">
                                     <i class="icon-signin"></i><?=tt('Авторизация')?>
                                 </a>
                             </li>

@@ -3,6 +3,8 @@
 /* @var $model LoginForm */
 /* @var $form TbActiveForm  */
 
+$this->pageTitle = 'Авторизация';
+$this->pageHeader=$this->pageTitle;
 ?>
 
 <div class="login-container ">
@@ -19,7 +21,7 @@
                         <div class="space-6"></div>
                         <div id="replace-there">
                         <?php $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-                            'id'=>'login-form',
+                            'id'=>'login-form-new',
                             'type' => 'horizontal',
                             'action' => Yii::app()->createUrl("site/login")
                         )); ?>
@@ -82,6 +84,10 @@
                                 <div class="space-4"></div>
                             </fieldset>
                         <?php $this->endWidget(); ?>
+                        <?php
+                        if(Yii::app()->params['enableEAuth']===true)
+                            $this->widget('ext.eauth.EAuthWidget', array('action' => 'site/login'));
+                        ?>
                         </div>
                     </div><!-- /widget-main -->
 

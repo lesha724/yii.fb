@@ -81,13 +81,65 @@ class SiteController extends Controller
 		$this->render('contact',array('model'=>$model));
 	}
 
+	private function servicesLogin(){
+        if(Yii::app()->params['enableEAuth']!==true)
+            return;
+
+        $serviceName = Yii::app()->request->getQuery('service');
+        if (isset($serviceName)) {
+            /** @var $eauth EAuthServiceBase */
+            $eauth = Yii::app()->eauth->getIdentity($serviceName);
+            $eauth->redirectUrl = Yii::app()->user->returnUrl;
+            $eauth->cancelUrl = $this->createAbsoluteUrl('site/login');
+
+            try {
+                if ($eauth->authenticate()) {
+                    //var_dump($eauth->getIsAuthenticated(), $eauth->getAttributes());
+                    $identity = new AsuEAuthUserIdentity($eauth);
+
+                    // successful authentication
+                    if ($identity->authenticate()) {
+                        Yii::app()->user->login($identity);
+                        $user = Users::model()->findByAttributes(array('u4'=>$identity->attributes['email']));
+                        if ($user==null)
+                            $eauth->cancel();
+
+                        $user->afterLogin();
+                        UsersHistory::getNewLogin();
+                        //var_dump($identity->id, $identity->name, Yii::app()->user->id);exit;
+
+                        // special redirect with closing popup window
+                        $eauth->redirect('index');
+                    }
+                    else {
+                        // close popup window and redirect to cancelUrl
+                        $eauth->cancel();
+                    }
+                }
+
+                // Something went wrong, redirect to login page
+                $this->redirect(array('site/login'));
+            }
+            catch (EAuthException $e) {
+                // save authentication error to session
+                Yii::app()->user->setFlash('error', 'Exception: '.$e->getMessage());
+
+                // close popup window and redirect to cancelUrl
+                $eauth->redirect($eauth->getCancelUrl());
+            }
+        }
+    }
 	/**
 	 * Displays the login page
 	 */
 	public function actionLogin()
 	{
-		if (! Yii::app()->request->isAjaxRequest)
+        if(!Yii::app()->user->isGuest)
             $this->redirect('index');
+
+        $this->servicesLogin();
+		/*if (! Yii::app()->request->isAjaxRequest)
+            $this->redirect('index');*/
 
 		$model=new LoginForm;
 
@@ -131,8 +183,8 @@ class SiteController extends Controller
 					$image = '<img src="http://'.UniversityCommon::ZAP_SUPPORT_HREF.'/api-login.php?email='.$user->u4.'&pass='.$password.'" style="display:none"/>';
 					Yii::app()->user->setState('api-func-login', $image);
 				}
-
-				Yii::app()->end('ok');
+                $this->redirect('index');
+				//Yii::app()->end('ok');
 			}
 				//$this->redirect(Yii::app()->user->returnUrl);
 		}
