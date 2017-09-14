@@ -220,7 +220,8 @@ SQL;
             where (u38<=current_timestamp and u39>=current_timestamp) and (sem3 = {$uch_god}) and (sem5 = {$semester}) and (
                 (u1 in ({$subSql})) or
                 (u1 in (select u1 from u where u17 in ({$subSql}))) or
-                (u1 in (select u1 from u where u17 in (select u1 from u where u17 in ({$subSql}))))
+                (u1 in (select u1 from u where u17 in (select u1 from u where u17 in ({$subSql})))) or 
+                (u1 in (select u1 from u where u17 in (select u1 from u where u17 in (select u1 from u where u17 in ({$subSql})))))
             )
 SQL;
 
@@ -246,10 +247,12 @@ SQL;
             INNER JOIN ucgns on (ucgn1 = ucgns2)
             INNER JOIN (select ucsn1,ucsn2 from ucsn where ucsn2={$st1}) on (ucgns1 = ucsn1)
             WHERE
-                ucsn2 is not null and
+                ucsn2 is not null and (
                 (u1 in ({$subSql}))or
                 (u1 in (select u1 from u where u17 in ({$subSql})))or
-                (u1 in (select u1 from u where u17 in (select u1 from u where u17 in ({$subSql}))))
+                (u1 in (select u1 from u where u17 in (select u1 from u where u17 in ({$subSql})))) or 
+                (u1 in (select u1 from u where u17 in (select u1 from u where u17 in (select u1 from u where u17 in ({$subSql}))))) 
+            )
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
@@ -612,11 +615,8 @@ SQL;
         }
     }
 
-    public function getSubscribedDisciplines()
+    public function getSubscribedDisciplines($st1,$data_nachala)
     {
-        $st1          = $_SESSION['st1'];
-        $data_nachala = $_SESSION['data_nachala'];
-
         $sql = <<<SQL
             select d2
             from d
@@ -626,7 +626,7 @@ SQL;
             inner join ucgn on (ucxg.ucxg2 = ucgn.ucgn1)
             inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
             inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
-            where ucsn2=:ST1 and ucsn4>=:DATA_NACHALA and ucsn5=0
+            where ucsn2=:ST1 and ucsn4>=:DATA_NACHALA and ucx5=2
             group by d2
             order by d2 collate UNICODE
 SQL;

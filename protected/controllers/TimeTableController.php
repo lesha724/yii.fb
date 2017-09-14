@@ -574,7 +574,7 @@ class TimeTableController extends Controller
         $timeTable = $minMax = $maxLessons = array();
         if (! empty($model->student))
 			if($type==0)
-				list($minMax, $timeTable) = $model->generateStudentTimeTable();
+				list($minMax, $timeTable, $maxLessons) = $model->generateStudentTimeTable();
 			else
 				$timeTable=Gr::getTimeTable($model->student, $model->date1, $model->date2, 1);
 
@@ -584,6 +584,7 @@ class TimeTableController extends Controller
         $this->render('student', array(
             'model'      => $model,
             'timeTable'  => $timeTable,
+            'maxLessons' => $maxLessons,
             'minMax'     => $minMax,
             'rz'         => Rz::model()->getRzArray($model->filial),
 			'type'=>$type,
@@ -604,13 +605,14 @@ class TimeTableController extends Controller
 
         $timeTable = $minMax = $maxLessons = array();
         if ($model->validate())
-            list($minMax, $timeTable) = $model->generateClassroomTimeTable();
+            list($minMax, $timeTable, $maxLessons) = $model->generateClassroomTimeTable();
 
 
         $this->render('classroom', array(
             'model'      => $model,
             'timeTable'  => $timeTable,
             'minMax'     => $minMax,
+            'maxLessons' => $maxLessons,
             'rz'         => Rz::model()->getRzArray($model->filial),
         ));
     }

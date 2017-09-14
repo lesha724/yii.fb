@@ -621,7 +621,7 @@ SQL;
         SELECT st1,st2,st3,st4,gr1,gr3,f1,f2,ks1,ks3,sem4,sg1,sp1,pnsp1, gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26 FROM ks
 			inner join f on (ks.ks1 = f.f14)
 			inner join sp on (f.f1 = sp.sp5)
-                        inner join pnsp on (sp.sp11 = pnsp.pnsp1)
+            inner join pnsp on (sp.sp11 = pnsp.pnsp1)
 			inner join sg on (sp.sp1 = sg.sg2)
 			inner join gr on (sg.sg1 = gr.gr2)
 			inner join std on (gr.gr1 = std.std3)
@@ -775,7 +775,7 @@ SQL;
            inner join ucgns on (ucsn.ucsn1 = ucgns.ucgns1)
            inner join ucgn on (ucgns.ucgns2 = ucgn.ucgn1)
            inner join ug on (ucgn.ucgn1 = ug.ug4)
-           inner join nr on (ug.ug3 = nr.nr1)
+           inner join nr on (ug.ug1 = nr.nr1) /*было ug3 =nr1 12.09.2017*/
            inner join us on (nr.nr2 = us.us1)
            inner join std on (st1 = std2) /*Єто бі закомнтировано (Раскометировали ИС, изза виртуальніх групп)*/
         where UCGNS5=:YEAR and UCGNS6=:SEM and us2=:UO1 and ug2=:GR1 and std11 in (0,6,8) and (std7 is null) and st101!=7
@@ -1383,6 +1383,39 @@ SQL;
         $command->bindValue(':sem4', $course);
         $command->bindValue(':YEAR', $year);
         $command->bindValue(':SEM', $sem);
+        $students = $command->queryAll();
+
+        return $students;
+    }
+
+    /**
+     * Историй записи на курсовые
+     * @return mixed
+     */
+    public function getNkrsList(){
+        $sql=<<<SQL
+            select
+                nkrs1,
+                nkrs6,
+                sem4,
+                p.p3,
+                p.p4,
+                p.p5,
+                spkr.spkr2,
+                k.k2
+                from uo
+                inner join k on (uo.uo4 = k.k1)
+                inner join us on (uo.uo1 = us.us2)
+                inner join nkrs on (us.us1 = nkrs.nkrs3)
+                inner join spkr on (nkrs.nkrs7 = spkr.spkr1)
+                inner join p on (nkrs.nkrs6 = p.p1)
+                inner join sem on (us.us3 = sem.sem1)
+                where nkrs2=:ST1
+                order by sem3,sem5
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ST1', $this->st1);
         $students = $command->queryAll();
 
         return $students;

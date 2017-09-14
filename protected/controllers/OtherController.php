@@ -34,7 +34,8 @@ class OtherController extends Controller
                     'saveDisciplines',
                     'cancelSubscription',
                     'renderAddSpkr',
-                    'addSpkr'
+                    'addSpkr',
+                    'antiplagiat'
                 ),
                 'expression' => 'Yii::app()->user->isStd',
             ),
@@ -55,7 +56,8 @@ class OtherController extends Controller
                     'searchStudent',
                     'studentCard',
                     'studentCardExcel',
-                    'showRetake'
+                    'showRetake',
+                    'orderAbiturient'
                 ),
             ),
             /*array('allow',
@@ -69,6 +71,42 @@ class OtherController extends Controller
                 'users' => array('*'),
             ),
         );
+    }
+
+    public function actionOrderAbiturient()
+    {
+        $model = new Abtmpi('search');
+        $model->unsetAttributes();
+
+        $this->layout = 'clear1';
+
+        if (isset($_POST['Abtmpi']))
+        {
+            $model->attributes = $_POST['Abtmpi'];
+            //throw  new Exception(1);
+            Yii::app()->user->setState('SearchParamsAbtmpi', $_POST['Abtmpi']);
+
+            //var_dump($_REQUEST['Abtmpi']);
+            //var_dump(Yii::app()->user->getState('SearchParamsAbtmpi'));
+        }
+        else
+        {
+            $searchParams = Yii::app()->user->getState('SearchParamsAbtmpi');
+            if ( isset($searchParams) )
+            {
+                $model->attributes = $searchParams;
+            }
+        }
+        //var_dump($model);
+
+        if(empty($model->abtmpi7))
+            $model->abtmpi7 = date('d.m.Y');
+
+        $model->abtmpi10 = date('Y');
+
+        $this->render('ochered',array(
+            'model'=>$model,
+        ));
     }
 
     public function actionShowRetake()
@@ -287,7 +325,7 @@ class OtherController extends Controller
                     $type=0;
                     if($discipline['us4']>1)
                         $type=1;
-                    list($respectful,$disrespectful,$f,$nbretake,$fretake,$count) = Elg::model()->getRetakeInfo($discipline['uo1'],$discipline['sem1'],$type,$st->st1);
+                    list($respectful,$disrespectful,$f,$nbretake,$fretake,$count) = Elg::model()->getRetakeInfo($discipline['uo1'],$discipline['sem1'],$type,$st->st1, PortalSettings::model()->getSettingFor(55));
                     $sheet->setCellValueByColumnAndRow(0,$i+$k, $i);
                     $sheet->setCellValueByColumnAndRow(1,$i+$k, $discipline['k2']);
                     if(!empty($discipline['d27'])&&Yii::app()->language=="en")
@@ -957,26 +995,12 @@ SQL;
         } else
             throw new CHttpException(404, 'You don\'t have an access to this service');
 
-
-        if (! empty($_FILES)) {
-
+        /*if (! empty($_FILES)) {
             $nkrs1 = Yii::app()->request->getParam('nkrs1', null);
             $nkrs6 = Yii::app()->request->getParam('nkrs6', null);
 
-            $document = CUploadedFile::getInstanceByName('document');
-            $tmpName = tempnam(sys_get_temp_dir(), '_');
-            $saved = $document->saveAs($tmpName);
-
-
-            if ($saved) {
-                list($id, $url) = $this->sendToAntiPlagiarism($document, $tmpName);
-                if ($nkrs1)
-                    D::model()->updateNkrs($nkrs1, 'nkrs8', $id);
-                Yii::app()->user->setFlash('success', tt('Документ был отправлен на проверку в Антиплагиат'));
-                Yii::app()->user->setFlash('info', tt('Результат можно посмотреть здесь:') .' '. CHtml::link(tt('Отчет'), $url, array('target' => '_blank')));
-                $this->sendEmails($model->student, $nkrs6, $url);
-            }
-        }
+            $this->proccessAntiplagiat($model->student, $nkrs1, $nkrs6);
+        }*/
 
         $stInfoForm = new StInfoForm();
         $stInfoForm->fillData($model);
@@ -996,6 +1020,61 @@ SQL;
         ));
     }
 
+    public  function actionAntiplagiat(){
+
+        $student = St::model()->findByPk(Yii::app()->user->dbModel->st1);
+
+        if(empty($student))
+            throw new Exception("Error load student!", 400);
+
+        $nkrsList = $student->getNkrsList();
+
+        if (! empty($_FILES) && !empty($nkrsList)) {
+
+            $last = $nkrsList[count($nkrsList)-1];
+            $nkrs1 = $last['nkrs1'];
+            $nkrs6 = $last['nkrs6'];
+
+            $this->proccessAntiplagiat($student->st1, $nkrs1, $nkrs6);
+        }
+
+        $this->render('antiplagiat', array(
+            'student'=>$student,
+            'nkrsList'=>$nkrsList
+        ));
+    }
+
+    /**
+     * Обработка докумнента для отправки и отправка в антиплагиат
+     * @param $student int студент
+     * @param $nkrs1 int
+     * @param $nkrs6 mixed
+     */
+    private function proccessAntiplagiat($student, $nkrs1, $nkrs6){
+        if (! empty($_FILES)) {
+
+            $document = CUploadedFile::getInstanceByName('document');
+            $tmpName = tempnam(sys_get_temp_dir(), '_');
+            $saved = $document->saveAs($tmpName);
+
+
+            if ($saved) {
+                list($id, $url) = $this->sendToAntiPlagiarism($document, $tmpName);
+                if ($nkrs1)
+                    D::model()->updateNkrs($nkrs1, 'nkrs8', $id);
+                Yii::app()->user->setFlash('success', tt('Документ был отправлен на проверку в Антиплагиат'));
+                Yii::app()->user->setFlash('info', tt('Результат можно посмотреть здесь:') .' '. CHtml::link(tt('Отчет'), $url, array('target' => '_blank')));
+                $this->sendEmails($student, $nkrs6, $url);
+            }
+
+            unset($_FILES);
+        }
+    }
+
+    /**
+     * Печать заявления на утверждения курсовой в пдф
+     * @throws CHttpException
+     */
     public function actionStudentInfoPdf()
     {
         $model = new TimeTableForm;
@@ -1125,6 +1204,10 @@ HTML;
 
     }
 
+    /**
+     * печать заявления на утверждение курсовой в ексель
+     * @throws CHttpException
+     */
     public function actionStudentInfoExcel()
     {
         $model = new TimeTableForm;
@@ -1311,15 +1394,15 @@ HTML;
                 "features" => SOAP_SINGLE_ELEMENT_ARRAYS,
                 //"timeout" => 300,
                 # PHP 5.6
-                /*"stream_context"=>stream_context_create(
+                "stream_context"=>stream_context_create(
                     array(
                         "ssl"=>array(
-                            "verify_peer"=>false
-                        ,"allow_self_signed"=>true
-                        ,"verify_peer_name"=>false
+                            "verify_peer"=>false,
+                            "allow_self_signed"=>true,
+                            "verify_peer_name"=>false
                         )
                     )
-                )*/));
+                )));
 
 
 // Используется для получения ссылок на отчеты
@@ -1354,7 +1437,7 @@ HTML;
         // Проверка закончилась неудачно.
         if ($status->GetCheckStatusResult->Status === "Failed")
         {
-            echo("При проверке документа произошла ошибка:" + $status->GetCheckStatusResult->FailDetails);
+            echo("При проверке документа произошла ошибка:" . $status->GetCheckStatusResult->FailDetails);
             return;
         }
 
@@ -1486,7 +1569,7 @@ HTML;
 
         }
 
-        if ($p1) {
+        if ($p1 && PortalSettings::model()->getSettingFor(121)==1 ) {
             $teacher = Users::model()->find('u5 = 1 and u6 = '.$p1);
             if(empty($teacher))
                 return;

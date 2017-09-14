@@ -91,7 +91,7 @@ function PROCEDURA_CIKL_PO_BLOKAM($params)
             if (empty($_SESSION['u1_vib']))
                 $_SESSION['u1_vib'] = $u1_root;
             else
-                if($u1_root!=null)
+                if($u1_root!=null && !empty($u1_root))
                     $_SESSION['u1_vib'] .= ','.$u1_root;
         }
 
@@ -311,7 +311,10 @@ echo $html;
 if(St::model()->enableSubcription($model->st1))
     echo CHtml::button(tt('Отмена'), array('id' => 'cancelSubscription', 'class' => 'btn btn-small btn-danger'));
 
-$disciplines = U::model()->getSubscribedDisciplines();
+$st1          = $_SESSION['st1'];
+$data_nachala = $_SESSION['data_nachala'];
+
+$disciplines = U::model()->getSubscribedDisciplines($st1, $data_nachala);
 if (! empty($disciplines)) : ?>
     <table class="table table-striped table-bordered subscription">
         <caption><?=tt('Дисциплины, на которые Вы уже записались')?></caption>

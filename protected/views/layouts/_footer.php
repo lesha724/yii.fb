@@ -19,3 +19,5 @@ if(!empty($textFooter))
     }else{
         echo 'www.mkr.org.ua';
     }
+
+    echo ' (ver '. ASU_PORTAL_VERSION.') ';

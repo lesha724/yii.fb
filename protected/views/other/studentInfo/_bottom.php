@@ -314,7 +314,7 @@ $this->beginWidget(
 
 <div class="hr hr-18 dotted hr-double"></div>
 
-<?php if (isset($nkrs1)) : ?>
+<?php /*if (isset($nkrs1)) : ?>
 <div class="span4">
         <div class="widget-box">
             <div class="widget-header">
@@ -333,7 +333,7 @@ $this->beginWidget(
                     ?>
 
                     <fieldset>
-                        <?= CHtml::fileField('document', ''/*, array('id' => 'id-input-file-3')*/) ?>
+                        <?= CHtml::fileField('document', '') ?>
                         <?= CHtml::hiddenField('nkrs1', $nkrs1) ?>
                         <?= CHtml::hiddenField('nkrs6', isset($p1)?$p1:null) ?>
                     </fieldset>
@@ -349,4 +349,4 @@ $this->beginWidget(
             </div>
         </div>
 </div>
-<?php endif ?>
+<?php endif*/ ?>

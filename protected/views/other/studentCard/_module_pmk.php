@@ -40,7 +40,13 @@ foreach ($modules as $module)
             $tr.='<td class="not-module"></td>';
         else {
             if(isset($module[$i])&&!empty($module[$i]['vmp1'])){
-                $tr .= '<td>'.round($module[$i]['vmp4'],2).'</td>';
+                $zdal = $module[$i]['vmp9'] == 0 && $module[$i]['vvmp8'] <= $module[$i]['vmp5'] && $module[$i]['vvmp10'] <= $module[$i]['vmp7'];
+                if($zdal)
+                    $tr .= '<td>';
+                else
+                    $tr .= '<td class="error-td">';
+                $tr .= round($module[$i]['vmp4'],2);
+                $tr .= '</td>';
             }else{
                 $tr .= '<td>-</td>';
             }

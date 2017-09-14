@@ -83,6 +83,6 @@ if (! empty($model->classroom))
         'timeTable'  => $timeTable,
         'minMax'     => $minMax,
         'rz'         => $rz,
-        'maxLessons' => array(),
+        'maxLessons' => $maxLessons,
         'action' =>'classroomExcel'
     ));

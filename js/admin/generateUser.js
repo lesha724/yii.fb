@@ -6,15 +6,13 @@ $(document).ready(function(){
 
     $(document).on('click','.btn-check-user',function(event){
         event.preventDefault();
+
         var $type = $(this).data('type');
         var $id = $(this).data('id');
         var $name = $(this).data('name');
         var $typeName = $(this).data('type-name');
-        if(!$("li").is('[data-id="'+$id+'"][data-type="'+$type+'"]')) {
-            addItem($id, $type, $name, $typeName);
-        }else{
-            alert('alredy exist');
-        }
+
+        checkAddUser($id, $type, $name, $typeName);
     });
 
     $(document).on('click','.btn-generate-user',function(event){
@@ -37,8 +35,15 @@ $(document).ready(function(){
         var $item = $(this).parent();
         removeItem($item);
     });
-
 });
+
+function checkAddUser($id, $type, $name, $typeName){
+    if(!$("li").is('[data-id="'+$id+'"][data-type="'+$type+'"]')) {
+        addItem($id, $type, $name, $typeName);
+    }else{
+        alert('alredy exist');
+    }
+}
 
 function checkCount(){
     var $count = $('.user-list .li-user').length;
