@@ -105,7 +105,7 @@ class SiteController extends Controller
                         $user->afterLogin();
                         UsersHistory::getNewLogin();
 
-                        $this->redirect('index');
+                        $this->redirect(array('site/index'));
                     }
                     else {
                         // save authentication error to session

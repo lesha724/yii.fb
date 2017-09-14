@@ -135,7 +135,7 @@ class ConfigEAuthForm extends CFormModel
 
         if($this->enableFacebook == 1)
             $services['facebook'] = array(
-                'class' => 'FacebookOAuthService',
+                'class' => 'AsuFacebookOAuthService',
                 'client_id' => $this->clientIdFacebook,
                 'client_secret' => $this->clientSecretFacebook,
             );
