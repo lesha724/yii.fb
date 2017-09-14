@@ -583,22 +583,29 @@ SQL;
         $start = strtotime($start);
         $end   = strtotime($end);
 
+        $now = strtotime('now');
+
         while($start <= $end) {
 
             $td1 = $td2 = $td3 = 0;
             foreach ($rows as $row) {
 
                 $r2 = $row['r2'];
+                $timeR2 = strtotime($r2);
                 $elgzst3 = $row['prop'];
 
                 $condition = $monthStatistic
-                    ? date('Y-m-d', $start) == date('Y-m-d', strtotime($r2))
-                    : date('Y-m', $start) == date('Y-m', strtotime($r2));
+                    ? date('Y-m-d', $start) == date('Y-m-d', $timeR2)
+                    : date('Y-m', $start) == date('Y-m', $timeR2);
 
                 if ($condition) {
-                    $td1++;                  // whole
+                    $td1++;
+
                     if ($elgzst3 == 1) $td2++; // with reason
-                    if ($elgzst3 == 2) $td3++; // without reason
+                    else
+                        if ($elgzst3 == 2) $td3++; // without reason
+                        else
+                            if ($elgzst3 == null&&$timeR2<$now) $td2++; // without reason
                 }
             }
 
