@@ -459,6 +459,9 @@ HTML;
 
         if(!empty($message))
             Yii::app()->user->setState('info_message', $message);
+
+        if(empty($this->u4))
+            Yii::app()->user->setFlash('warning', '<strong>'.tt('Внимание!').'</strong> '.tt('Заполните Email!'));
 	}
 
 	public function validateLogin(){
