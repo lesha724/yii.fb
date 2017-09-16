@@ -11,6 +11,7 @@
  * @property integer $grants5
  * @property integer $grants6
  * @property integer $grants7
+ * @property integer $grants8
  *
  * The followings are the available model relations:
  * @property P $p
@@ -22,6 +23,7 @@ class Grants extends CActiveRecord
     const DOCS = 'grant5';
     const EXAM_SESSION = 'grant6';
     const STUDENT_INFO = 'grant7';
+    const WORKLOAD = 'grant8';
 	/**
 	 * @return string the associated database table name
 	 */
@@ -39,7 +41,7 @@ class Grants extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('grants7', 'required', 'on' => 'admin-teachers'),
-			array('grants1, grants2, grants3, grants4, grants5, grants6, grants7', 'numerical', 'integerOnly'=>true),
+			array('grants1, grants2, grants3, grants4, grants5, grants6, grants7, grants8', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('grants1, grants2, grants3', 'safe', 'on'=>'search'),
@@ -71,6 +73,7 @@ class Grants extends CActiveRecord
 			'grants5' => tt('Документооборот'),
 			'grants6' => tt('Экз. сессия'),
 			'grants7' => tt('Данные студента'),
+            'grants8' => tt('Нагрузка'),
 		);
 	}
 
@@ -130,6 +133,9 @@ class Grants extends CActiveRecord
                 break;
             case self::STUDENT_INFO:
                 $grants = $this->grants7;
+                break;
+            case self::WORKLOAD:
+                $grants = $this->grants8;
                 break;
             default:
                 $grants = null;

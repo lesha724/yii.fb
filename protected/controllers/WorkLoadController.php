@@ -8,7 +8,8 @@ class WorkLoadController extends Controller
     public function filters() {
 
         return array(
-            //'accessControl',
+            'accessControl',
+            'checkPermission -self, -getGroups, -printGroups'//не выполянеться для екшенов
         );
     }
 
@@ -17,7 +18,11 @@ class WorkLoadController extends Controller
         return array(
             array('allow',
                 'actions' => array(
-                    'self'
+                    'self',
+                    'teacher',
+                    'amount',
+                    'getGroups',
+                    'printGroups'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -27,7 +32,24 @@ class WorkLoadController extends Controller
         );
     }
 
+    public function filterCheckPermission($filterChain)
+    {
+        if(!Yii::app()->user->isAdmin) {
+            /**
+             * @var $grants Grants
+             */
+            $grants = Yii::app()->user->dbModel->grants;
 
+            if (empty($grants))
+                throw new CHttpException(403, 'Invalid request. You don\'t have access to the service.');
+
+            $type = $grants->getGrantsFor(Grants::WORKLOAD);
+
+            if ($type == 0)
+                throw new CHttpException(403, 'You don\'t have an access to this service');
+        }
+        $filterChain->run();
+    }
 
     public function actionTeacher()
     {

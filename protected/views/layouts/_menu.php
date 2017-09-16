@@ -619,13 +619,13 @@ $this->widget('zii.widgets.CMenu', array(
                 array(
                     'label'   => $_l2.tt('Преподавателя'),
                     'url'     => _u('/workLoad/teacher'),
-                    'visible' => _ch('workLoad', 'teacher'),
+                    'visible' => _ch('workLoad', 'teacher') && ($isTch || $isAdmin),
                     'active'  => $_c=='workLoad' && $_a=='teacher'
                 ),
                 array(
                     'label'   => $_l2.tt('Объем учебной нагрузки'),
                     'url'     => _u('/workLoad/amount'),
-                    'visible' => _ch('workLoad', 'amount'),
+                    'visible' => _ch('workLoad', 'amount')&& ($isTch || $isAdmin),
                     'active'  => $_c=='workLoad' && $_a=='amount'
                 ),
             ),getDopItem('workLoad',0)),
