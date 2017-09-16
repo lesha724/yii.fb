@@ -214,8 +214,8 @@ $this->widget('zii.widgets.CMenu', array(
                 ),
                 array(
                     'label'  => $_l2.tt('Social Auth'),
-                    'url'    => _u('/admin/eauth/'),
-                    'active' => $_c=='eauth' && $_m=='admin'
+                    'url'    => _u('/admin/eAuth/'),
+                    'active' => $_c=='eAuth' && $_m=='admin'
                 ),
                 array(
                     'label'  => $_l2.tt('Эл. журнал'),
