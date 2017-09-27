@@ -1394,28 +1394,38 @@ SQL;
      */
     public function getNkrsList(){
         $sql=<<<SQL
-            select
+            select 
                 nkrs1,
                 nkrs6,
                 sem4,
-                p.p3,
-                p.p4,
-                p.p5,
-                spkr.spkr2,
-                k.k2
-                from uo
-                inner join k on (uo.uo4 = k.k1)
-                inner join us on (uo.uo1 = us.us2)
-                inner join nkrs on (us.us1 = nkrs.nkrs3)
-                inner join spkr on (nkrs.nkrs7 = spkr.spkr1)
-                inner join p on (nkrs.nkrs6 = p.p1)
-                inner join sem on (us.us3 = sem.sem1)
-                where nkrs2=:ST1
-                order by sem3,sem5
+                p3,
+                p4,
+                p5,
+                spkr2,
+                k2,sp14
+            from (
+                  select first 1 sp14,sp1
+                  from sp
+                     inner join sg on (sp.sp1 = sg.sg2)
+                     inner join gr on (sg.sg1 = gr.gr2)
+                     inner join std on (gr.gr1 = std.std3)
+                  where std2=:ST1 and std7 is null and std11 in (0,5,6,8)
+                  )
+               inner join sg on (sp1 = sg.sg2)
+               inner join sem on (sg.sg1 = sem.sem2)
+               inner join us on (sem.sem1 = us.us3)
+               inner join uo on (us.us2 = uo.uo1)
+               inner join k on (uo.uo4 = k.k1)
+               inner join nkrs on (us.us1 = nkrs.nkrs3)
+               inner join spkr on (nkrs.nkrs7 = spkr.spkr1)
+               inner join p on (nkrs.nkrs6 = p.p1)
+            where nkrs2=:ST1_1
+            order by sem3,sem5
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':ST1', $this->st1);
+        $command->bindValue(':ST1_1', $this->st1);
         $students = $command->queryAll();
 
         return $students;
