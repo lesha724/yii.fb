@@ -2032,12 +2032,12 @@ SQL;
             $sheet->mergeCells('B9:C9');
             $sheet->setCellValue('B9', sprintf('%s - %s н. рік',$year,$year+1));
             $sheet->mergeCells('A11:J13');
-            $sheet->setCellValue('A11', tt("ВЕДОМОСТЬ {br} учета поточной успеваимости",array('{br}'=>'\n')))->getStyle('A11')->getAlignment()->setWrapText(true)-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $sheet->setCellValue('A11', tt("ВЕДОМОСТЬ {br} учета поточной успеваимости",array('{br}'=>"\n")))->getStyle('A11')->getAlignment()->setWrapText(true)-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
             $sheet->mergeCells('A14:J14');
             $disp = D::model()->getDisciplineForUo1($elg->elg2);
             if(!empty($disp))
             {
-                $sheet->setCellValue('A14',tt('с дисцилины ').$disp->d2)->getStyle('A14')->getAlignment()->setWrapText(true)-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                $sheet->setCellValue('A14',tt('с дисцилины ').' '.$disp->d2)->getStyle('A14')->getAlignment()->setWrapText(true)-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
             }
             $sheet->mergeCells('A15:J15');
             $sheet->setCellValue('A15', tt('За {sem} учебный семестр', array('{sem}'=>SH::convertSem5(Yii::app()->session['sem']))))
