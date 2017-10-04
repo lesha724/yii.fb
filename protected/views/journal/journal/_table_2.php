@@ -123,13 +123,13 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps2
 
 
     $elgzst4 = isset($marks[$key]) && $marks[$key]['elgzst4'] != 0
-        ? round($marks[$key]['elgzst4'], 1)
+        ? round($marks[$key]['elgzst4'], 2)
         : '';
 
     $isset = isset($marks[$key]);
     $elgzst5 = $isset && $marks[$key]['elgzst5'] != 0 && $marks[$key]['elgzst5']!=-1
         ?
-            round($marks[$key]['elgzst5'], 1)
+            round($marks[$key]['elgzst5'], 2)
         :
             (
                 $isset && $marks[$key]['elgzst5']==-1

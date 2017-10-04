@@ -28,7 +28,7 @@ function fillMarks($marks, $year, $sem){
                     ? 'checked'
                     : '';
 
-                $elgzst4 = round($mark['elgzst4'], 1);
+                $elgzst4 = round($mark['elgzst4'], 2);
 
                 $ps55 = PortalSettings::model()->getSettingFor(55);
 
@@ -36,7 +36,7 @@ function fillMarks($marks, $year, $sem){
                     $elgzst4='';
                 }
                 $elgzst5 = $mark['elgzst5'] != 0 && $mark['elgzst5']!=-1
-                    ? round($mark['elgzst5'], 1)
+                    ? round($mark['elgzst5'], 2)
                     :($mark['elgzst5']==-1?tt('Отработано'):'');
 
                 if($elgzst3=='checked')
