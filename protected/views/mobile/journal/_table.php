@@ -169,8 +169,8 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$sem
                 } else
                     $disabled_input_1 = 'disabled="disabled"';
             }
-            $elgzst4_input = '<input value="' . $elgzst4 . '" maxlength="3" type="number" data-name="elgzst4" ' . $disabled_input . '>';
-            $elgzst5_input = '<input value="' . $elgzst5 . '" maxlength="3" type="number" data-name="elgzst5" ' . $disabled_input_1 . '>';
+            $elgzst4_input = '<input value="' . $elgzst4 . '" maxlength="3" type="number" data-name="elgzst4" ' . $disabled_input . '><button class="btn btn-mini btn-warning form-control-clear hidden"><i class="glyphicon glyphicon-remove"></i> </button>';
+            $elgzst5_input = '<input value="' . $elgzst5 . '" maxlength="3" type="number" data-name="elgzst5" ' . $disabled_input_1 . '><button class="btn btn-mini btn-warning form-control-clear hidden"><i class="glyphicon glyphicon-remove"></i> </button>';
         }else
         {
             $elgzst4_input='<label class="label label-success">'.$elgzst4.'</label>';
@@ -251,7 +251,7 @@ function table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$moduleNom,$uo1,$module
             if(!isset($modules[(int)$moduleNom-1]))
                 return '<td colspan="4">'.tt('Модуль не найден!').'</td>';
             else{
-                $mark = Vmp::model()->getMarks($modules[(int)$nom-1]['vvmp1'],$st['st1'],$gr1);
+                $mark = Vmp::model()->getMarks($modules[(int)$moduleNom-1]['vvmp1'],$st['st1'],$gr1);
                 if(empty($mark))
                     return '<td colspan="4">'.tt('Модуль не найден!').'</td>';
                 $ind = !empty($mark)?$mark['vmp6']:'';
@@ -405,3 +405,14 @@ foreach($students as $st) {
 }
 
 echo sprintf($table, $th, $th2, $tr); // 2 table
+
+Yii::app()->clientScript->registerScript('clear-input', <<<JS
+    
+    $('.input-td input[type="number"]').on('input propertychange', function() {
+        //alert(1);
+        var _this = $(this);
+        var visible = Boolean(_this.val());
+        _this.siblings('.form-control-clear').toggleClass('hidden', !visible);
+    }).trigger('propertychange');
+JS
+    , CClientScript::POS_READY);

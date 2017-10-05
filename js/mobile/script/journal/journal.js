@@ -1,7 +1,48 @@
 /**
  * Created by Neff on 10.02.2016.
  */
+
 $(document).ready(function(){
+
+
+    $('.form-control-clear').click(function() {
+            var $that = $(this).siblings('input[type="number"]');
+
+            var st1  = $that.parents('[data-st1]').data('st1');
+
+            var gr1  = $that.parents('[data-gr1]').data('gr1');
+            var field = $that.data('name');
+
+            var params = {
+                field : field,
+                nom  : $that.parent().data('number'),
+                elgz1   : $that.parent().data('elgz1'),
+                type_lesson   : $that.parent().data('type_lesson'),
+                r1   : $that.parent().data('r1'),
+                st1   : st1,
+                gr1   : gr1,
+                date:$that.parent().data('date'),
+                value : '0'
+            }
+
+            var stName = $('.journal-table tr[data-st1='+st1+'] td:eq(0)').text();
+            var index  = $that.parent().index();
+            var nom   = $that.parents('table').find('th:eq('+index+')').html();
+            var title  = stName+'<br>'+nom+'<br>';
+
+            var $trElem    = $that.parents('tr');
+            var $td    = $that.parent();
+
+            var url = $that.parents('[data-url]').data('url');
+
+            $spinner1.show();
+            send(url,params,title,$trElem,$td,$that,$spinner1,st1,index,ps84,ps88);
+            $that.val('');
+            $that.addClass('not-value');
+            $trElem.find(':checkbox').attr('disabled','disabled');
+
+            $that.trigger('propertychange').focus();
+    });
 
     $('[data-toggle="popover"]').popover();
 

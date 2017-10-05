@@ -230,7 +230,7 @@ body{
 .journal-bottom .table .checkbox-td,.journal-bottom .table .action-td{
   width:30px!important;
 }
-.action-td .btn {
+.action-td .btn, .input-td .form-control-clear {
   font-size: 8px;
 }
 .journal-bottom .table>tbody>tr>td, .journal-bottom .table>tbody>tr>th, .journal-bottom .table>tfoot>tr>td,
@@ -245,7 +245,7 @@ body{
   background-color: @tableColor2;
 }
 .journal-bottom .table .input-td input{
-  width: 100%;
+  width: 80%;
   background-color: @tableColor2;
   text-align: center;
   border: none;
@@ -470,4 +470,8 @@ body{
 footer .user-block{
   float: left;
   text-align: left;
+}
+
+.form-control-clear{
+  width: 20%;
 }
