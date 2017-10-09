@@ -253,6 +253,11 @@ $this->widget('zii.widgets.CMenu', array(
                     'active' => $_a=='menu' && $_m=='admin'
                 ),
                 array(
+                    'label'  => $_l2.tt('Seo'),
+                    'url'    => _u('/admin/default/seo'),
+                    'active' => $_a=='seo' && $_m=='admin'
+                ),
+                array(
                     'label'  => $_l2.tt('Настройки'),
                     'url'    => _u('/admin/default/settings'),
                     'active' => $_a=='settings' && $_m=='admin'
