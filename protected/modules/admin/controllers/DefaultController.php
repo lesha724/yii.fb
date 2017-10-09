@@ -994,6 +994,28 @@ class DefaultController extends AdminController
         ));
     }
 
+    public function actionSeo()
+    {
+        $webroot = Yii::getPathOfAlias('application');
+        $file = $webroot . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'seo.txt';
+
+        //var_dump($_REQUEST);
+
+        if (isset($_REQUEST['seo']))
+            file_put_contents($file, $_REQUEST['seo']);
+
+        if(file_exists($file))
+            $settings = file_get_contents($file);
+        else
+            $settings = '';
+
+        //var_dump($settings);
+
+        $this->render('seo', array(
+            'settings' => $settings
+        ));
+    }
+
     public function actionEmployment()
     {
         $settings = Yii::app()->request->getParam('settings', array());

@@ -6,6 +6,7 @@
 class ShortCodes extends CApplicationComponent
 {
     protected $_menuSettings;
+    protected $_seoSettings;
 
     public static function getShortName($surname, $name, $patronymic)
     {
@@ -404,6 +405,27 @@ SQL;
         return Yii::app()->params['code'] == $code;
     }
 
+    public static function getServiceSeoSettings($controller, $action, $language)
+    {
+        $controller = mb_strtolower($controller);
+        $action     = mb_strtolower($action);
+
+        $settings = SH::getInstance()->getSeoSettings();
+
+        parse_str(urldecode($settings), $menu);
+
+        $title = isset($menu[$controller][$action]['title'.$language])
+            ? $menu[$controller][$action]['title'.$language]
+            : '';
+
+        $description = isset($menu[$controller][$action]['description'.$language])
+            ? $menu[$controller][$action]['description'.$language]
+            : '';
+
+
+        return array($title, $description);
+    }
+
     public static function checkServiceFor($type, $controller, $action, $showAlert = false)
     {
         $controller = mb_strtolower($controller);
@@ -438,6 +460,20 @@ SQL;
         }
 
         return $this->_menuSettings;
+    }
+
+    public function getSeoSettings()
+    {
+        if (empty($this->_seoSettings)) {
+            $file     = Yii::getPathOfAlias('application') . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'seo.txt';
+            if(file_exists($file)) {
+                $settings = file_get_contents($file);
+                $this->_seoSettings = $settings;
+            }else
+                return '';
+        }
+
+        return $this->_seoSettings;
     }
 
     /*public static function getBal()

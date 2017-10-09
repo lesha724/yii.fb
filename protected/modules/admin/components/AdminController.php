@@ -29,6 +29,7 @@ class AdminController extends Controller
                     'modules',
                     'entrance',
                     'menu',
+                    'seo',
                     'employment',
 					'settings',
                     'settingsPortal',

@@ -9,6 +9,17 @@
 	{
 		return 'theme/ace/assets/css/'.$name;
 	}*/
+	$langs = array(
+	        'uk'=> 'Ua',
+            'ru' => 'Ru',
+            'en' => 'En'
+    );
+
+    $language = $langs[Yii::app()->language];
+
+	list($title, $description) = SH::getServiceSeoSettings(Yii::app()->controller->id, Yii::app()->controller->action->id, $language);
+    if(!empty($description))
+        Yii::app()->clientScript->registerMetaTag($description, 'description');
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
@@ -21,7 +32,11 @@
     <link rel="stylesheet" type="text/css" href="<?=Yii::app()->baseUrl?>/css/styles.css" />
 
 
-    <title><?php echo CHtml::encode($this->pageTitle); ?></title>
+    <title>
+        <?php echo CHtml::encode(
+            !empty($title)? $title :$this->pageTitle
+        ); ?>
+    </title>
 
     <?php Yii::app()->bootstrap->register(); ?>
     <?php
