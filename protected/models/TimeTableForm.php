@@ -74,24 +74,24 @@ class TimeTableForm extends CFormModel
 			'faculty'=> tt('Факультет'),
 		);
 
-		$sql=<<<SQL
-			select b15 from b where b1=0
-SQL;
-		$command = Yii::app()->db->createCommand($sql);
-		$id=$command->queryRow();
-		if(!empty($id['b15'])) {
-            if($id['b15']==7)
-                $arr = array(
-                    'filial' => tt('Факультет'),
-                    'faculty' => tt('Вид подготовки'),
-                );
-            elseif($id['b15']==15){
-                $arr = array(
-                    'filial' => tt('Факультет'),
-                    'faculty' => tt('Направление подготовки'),
-                );
-            }
-        }
+		$universityCode = Yii::app()->controller->universityCode;
+
+        if($universityCode==7)
+            $arr = array(
+                'filial' => tt('Факультет'),
+                'faculty' => tt('Вид подготовки'),
+            );
+        elseif($universityCode==15)
+            $arr = array(
+                'filial' => tt('Факультет'),
+                'faculty' => tt('Направление подготовки'),
+            );
+        elseif ($universityCode==42)
+            $arr = array(
+                'filial' => tt('Факультет'),
+                'faculty' => tt('Направление'),
+            );
+
 
 		return array(
                     //'filial'=> tt('Филиал'),

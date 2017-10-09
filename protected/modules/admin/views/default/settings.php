@@ -5,7 +5,7 @@
 	);
 ?>
 <div class="form">
- <?php if(Yii::app()->user->hasFlash('config'))
+ <?php /*if(Yii::app()->user->hasFlash('config'))
 		{ ?>
         <div class="alert in fade alert-success">
             <?php echo Yii::app()->user->getFlash('config'); ?>
@@ -19,7 +19,10 @@
         </div>
     <?php
 	}else
-	{ 
+	{*/
+        /**
+         * @var $form TbActiveForm
+         */
 		$form=$this->beginWidget('bootstrap.widgets.TbActiveForm',array(
 			'id'=>'config-form',
 			'enableAjaxValidation'=>false,
@@ -119,7 +122,9 @@
                         <?php echo $form->error($model,'top2'); ?>
                         </br>
 
-            <?php echo $form->textField($model, 'loginKey'); ?>
+            <?php echo $form->textFieldRow($model, 'loginKey'); ?>
+
+            <?php echo $form->fileFieldRow($model, 'favicon'); ?>
 
 			<div class="form-actions">
 				<?php $this->widget('bootstrap.widgets.TbButton', array(
@@ -130,7 +135,7 @@
 			</div>
 
 		<?php $this->endWidget(); 
-	}
+	//}
 ?>
 </div>
 

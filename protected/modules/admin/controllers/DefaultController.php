@@ -737,26 +737,42 @@ class DefaultController extends AdminController
         $model->setAttributes($arr);
 		if (isset($_POST['ConfigForm']))
 		{
-			$config = array(
-				//'attendanceStatistic'=>$_POST['ConfigForm']['attendanceStatistic'],
-				'timeTable'=>$_POST['ConfigForm']['timeTable'],
-				'fixedCountLesson'=>$_POST['ConfigForm']['fixedCountLesson'],
-				'countLesson'=>$_POST['ConfigForm']['countLesson'],
-				'analytics'=>$_POST['ConfigForm']['analytics'],
-                'analyticsYandex'=>$_POST['ConfigForm']['analyticsYandex'],
-				'top1'=>$_POST['ConfigForm']['top1'],
-				'top2'=>$_POST['ConfigForm']['top2'],
-                'banner'=>$_POST['ConfigForm']['banner'],
-                'month'=>$_POST['ConfigForm']['month'],
-                'login-key'=>$_POST['ConfigForm']['loginKey'],
-			);
-			$str = base64_encode(serialize($config));
-			$errors=!file_put_contents($file, $str);
-			if(!$errors)
-				Yii::app()->user->setFlash('config', tt('Новые настройки сохранены!'));
-			else
-				Yii::app()->user->setFlash('config_error', tt('Ошибка! Новые настройки не сохранены!'));
-			$model->setAttributes($config);
+		    $model->attributes = $_POST['ConfigForm'];
+		    if($model->validate()) {
+                $config = array(
+                    //'attendanceStatistic'=>$_POST['ConfigForm']['attendanceStatistic'],
+                    'timeTable' => $_POST['ConfigForm']['timeTable'],
+                    'fixedCountLesson' => $_POST['ConfigForm']['fixedCountLesson'],
+                    'countLesson' => $_POST['ConfigForm']['countLesson'],
+                    'analytics' => $_POST['ConfigForm']['analytics'],
+                    'analyticsYandex' => $_POST['ConfigForm']['analyticsYandex'],
+                    'top1' => $_POST['ConfigForm']['top1'],
+                    'top2' => $_POST['ConfigForm']['top2'],
+                    'banner' => $_POST['ConfigForm']['banner'],
+                    'month' => $_POST['ConfigForm']['month'],
+                    'login-key' => $_POST['ConfigForm']['loginKey'],
+                );
+                //var_dump($_POST);
+                //var_dump($_FILES);
+                //var_dump($_POST['ConfigForm']['favicon']);
+
+                if (!empty($_FILES['ConfigForm'])) {
+                    $model->favicon = $_FILES['ConfigForm'];
+                    $path = Yii::getPathOfAlias('webroot').'/favicon.ico';
+                    $model->favicon=CUploadedFile::getInstance($model, 'favicon');
+                    if(!$model->favicon->saveAs($path)){
+                        throw new CException('Ошибка сохранениея '. $path);
+                    }
+                }
+
+                $str = base64_encode(serialize($config));
+                $errors = !file_put_contents($file, $str);
+                if (!$errors)
+                    Yii::app()->user->setFlash('success', tt('Новые настройки сохранены!'));
+                else
+                    Yii::app()->user->setFlash('error', tt('Ошибка! Новые настройки не сохранены!'));
+            }
+
 		}
         $this->render('settings',array('model'=>$model));
     }

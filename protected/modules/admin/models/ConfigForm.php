@@ -17,6 +17,7 @@ class ConfigForm extends CFormModel
     public $banner;
     public $month;
     public $loginKey;
+    public $favicon;
 	
     public function rules()
     {
@@ -25,6 +26,7 @@ class ConfigForm extends CFormModel
 			array('attendanceStatistic,timeTable,fixedCountLesson,countLesson,month', 'numerical', 'integerOnly'=>true),
 			array('analytics,analyticsYandex,banner,top1,top2', 'length', 'max'=>100000),
             array('loginKey', 'length', 'max'=>30),
+            array('favicon', 'file', 'types'=>'ico'),
 		);
     }
 
