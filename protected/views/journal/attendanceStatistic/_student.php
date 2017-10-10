@@ -17,8 +17,15 @@
 				</thread>
 				<tbody>';
 		$i=1;
+
+        $now = strtotime('now');
 		foreach($statistic as $key)
 		{
+            $r2 = $key['r2'];
+            $timeR2 = strtotime($r2);
+		    if($timeR2>$now)
+		        continue;
+
 			if($key['prop']==2){
 				$table.= '<tr class="success">';
 			}
