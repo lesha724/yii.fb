@@ -597,15 +597,16 @@ SQL;
                 $condition = $monthStatistic
                     ? date('Y-m-d', $start) == date('Y-m-d', $timeR2)
                     : date('Y-m', $start) == date('Y-m', $timeR2);
+                if($timeR2<$now) {
+                    if ($condition) {
+                        $td1++;
 
-                if ($condition) {
-                    $td1++;
-
-                    if ($elgzst3 == 1) $td2++; // with reason
-                    else
-                        if ($elgzst3 == 2) $td3++; // without reason
+                        if ($elgzst3 == 1) $td2++; // with reason
                         else
-                            if ($elgzst3 == null&&$timeR2<$now) $td2++; // without reason
+                            if ($elgzst3 == 2) $td3++; // without reason
+                            else
+                                if ($elgzst3 == null) $td2++; // without reason
+                    }
                 }
             }
 
