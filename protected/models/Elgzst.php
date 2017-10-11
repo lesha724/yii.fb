@@ -597,7 +597,7 @@ SQL;
                 $condition = $monthStatistic
                     ? date('Y-m-d', $start) == date('Y-m-d', $timeR2)
                     : date('Y-m', $start) == date('Y-m', $timeR2);
-                if($timeR2<$now) {
+                if($timeR2<=$now) {
                     if ($condition) {
                         $td1++;
 
