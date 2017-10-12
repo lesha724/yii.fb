@@ -825,16 +825,16 @@ SQL;
         else {
             if(Yii::app()->user->isStd){
                 if($field!='elgzst3'){
-                    throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+                    throw new CHttpException(404, '1Invalid request. Please do not repeat this request again.');
                 }
 
                 $ps106 = PortalSettings::model()->getSettingFor(106);
                 if($ps106!=1)
-                    throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+                    throw new CHttpException(404, '2Invalid request. Please do not repeat this request again.');
                 $isSst = Yii::app()->user->dbModel->isSstByGroup($gr1);
 
                 if(!$isSst)
-                    throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+                    throw new CHttpException(404, '3Invalid request. Please do not repeat this request again.');
 
             }elseif(Yii::app()->user->isTch) {
                 $sql = <<<SQL
@@ -876,7 +876,7 @@ SQL;
                     select elgz3,r2,r1,elgz1
                     from elgz
                     inner join elg on (elgz.elgz2 = elg.elg1)
-                    inner join EL_GURNAL_ZAN(elg.elg2,:GR1,elg.elg3, elg.elg4) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
+                    left join EL_GURNAL_ZAN(elg.elg2,:GR1,elg.elg3, elg.elg4) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
                     WHERE r1=:R1 and elgz.elgz1=:ELGZ1 and elgz.elgz3=:NOM
                     order by elgz3
 SQL;
@@ -892,14 +892,14 @@ SQL;
             }
 
             if(empty($res)){
-                throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+                throw new CHttpException(404, '4Invalid request. Please do not repeat this request again.');
             }
 
             $whiteList = array(
                 'elgzst3', 'elgzst4','elgzst5',
             );
             if (!in_array($field, $whiteList))
-                throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+                throw new CHttpException(404, '5Invalid request. Please do not repeat this request again.');
 
             $elgz = Elgz::model()->findByPk($elgz1);
 
@@ -936,7 +936,7 @@ SQL;
                 if(!empty($elgr))
                 {
                     if(strtotime($elgr->elgr3)<=strtotime('yesterday'))
-                        throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+                        throw new CHttpException(404, '6Invalid request. Please do not repeat this request again.');
                     else
                         $perm_enable=true;
                 }
