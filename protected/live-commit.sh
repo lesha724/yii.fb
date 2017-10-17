@@ -1,1 +1,0 @@
-git commit -am"Live site updates (till `date +%Y-%m-%d\ %H:%M`)"
