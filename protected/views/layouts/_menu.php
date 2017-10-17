@@ -406,7 +406,7 @@ $this->widget('zii.widgets.CMenu', array(
             'visible' => _ch('timeTable', 'main')
         ),
         array(
-            'label' => _l('Рабочий план', 'edit'),
+            'label' => _l('Рабочий уч. план', 'edit'),
             'url' => '#',
             'linkOptions'=> $_l,
             'itemOptions'=>_i('workPlan'),

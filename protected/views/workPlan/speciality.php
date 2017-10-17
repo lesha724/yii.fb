@@ -5,9 +5,9 @@
  * @var FilterForm $model
  */
 
-$this->pageHeader=tt('Рабочий план специальности');
+$this->pageHeader=tt('Рабочий учебный план специальности');
 $this->breadcrumbs=array(
-    tt('Рабочий план'),
+    tt('Рабочий учебный план'),
 );
 
 Yii::app()->clientScript->registerPackage('dataTables');
