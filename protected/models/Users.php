@@ -186,10 +186,10 @@ class Users extends CActiveRecord
     {
         $id = $this->u6;
 
-        if ($this->u5 === '0' || $this->u5 === '2') { // student or parent
+        if ($this->getIsStudent() || $this->getIsParent()) { // student or parent
             $model = St::model()->findByPk($id);
             $name  = $model->getShortName();
-        } elseif ($this->u5 === '1') {                // teacher
+        } elseif ($this->getIsTeacher()) {                // teacher
             $model = P::model()->findByPk($id);
             $name  = $model->getShortName();
         } elseif (empty($this->u5) && empty($this->u6))
