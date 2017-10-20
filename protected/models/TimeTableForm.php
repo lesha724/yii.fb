@@ -43,6 +43,7 @@ class TimeTableForm extends CFormModel
             array('dateLesson', 'required','on' => 'mobile-group,mobile-student,mobile-teacher,mobile-self,mobile-chair'),
             array('student', 'required', 'on' => 'student,omissions,mobile-student'),
 
+            array('housing', 'numerical', 'on' => 'classroom, free-classroom'),
             array('classroom', 'required', 'on' => 'classroom'),
 
             array('lessonStart, lessonEnd', 'required', 'on' => 'free-classroom'),
