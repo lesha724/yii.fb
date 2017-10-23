@@ -293,7 +293,7 @@ TEXT;
 
     private function cellShortTextFor($day, $type)
     {
-        $maxLength = 17;
+        $maxLength = 15;
 
         $d3    = $day['d3'];
         $tip   = $day['tip'];
@@ -423,7 +423,9 @@ SQL;
         $class = tt('ауд');
         $text  = tt('Добавлено');
         $added = date('d.m.Y H:i', strtotime($day['r11']));
-        if (isset($day['fio']))
+        if (isset($day['fio_full']))
+            $fio = $day['fio_full'];
+        else if($type == 3 && isset($day['fio']))
             $fio = $day['fio'];
         $link = "<a href='#'>Доп. материалы</a>";
 
