@@ -588,7 +588,8 @@ SQL;
         $teachers = Yii::app()->db->createCommand($sql)->queryAll();
         $res = array();
         foreach ($teachers as $tch) {
-            $res[ $tch[$keyFieldName] ] = SH::getShortName($tch['p3'], $tch['p4'], $tch['p5']).' '.$tch['dol2'];
+            //$res[ $tch[$keyFieldName] ] = SH::getShortName($tch['p3'], $tch['p4'], $tch['p5']).' '.$tch['dol2'];
+            $res[ $tch[$keyFieldName] ] = sprintf('%s %s %s, %s',$tch['p3'], $tch['p4'], $tch['p5'], $tch['dol2']);
         }
         return $res;
     }
