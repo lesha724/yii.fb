@@ -758,10 +758,13 @@ class DefaultController extends AdminController
 
                 if (!empty($_FILES['ConfigForm'])) {
                     $model->favicon = $_FILES['ConfigForm'];
-                    $path = Yii::getPathOfAlias('webroot').'/favicon.ico';
-                    $model->favicon=CUploadedFile::getInstance($model, 'favicon');
-                    if(!$model->favicon->saveAs($path)){
-                        throw new CException('Ошибка сохранениея '. $path);
+                    //var_dump($model->favicon);
+                    if($model->favicon!=null && !empty($model->favicon['name']['favicon'])) {
+                        $path = Yii::getPathOfAlias('webroot') . '/favicon.ico';
+                        $model->favicon = CUploadedFile::getInstance($model, 'favicon');
+                        if (!$model->favicon->saveAs($path)) {
+                            throw new CException('Ошибка сохранениея ' . $path);
+                        }
                     }
                 }
 
