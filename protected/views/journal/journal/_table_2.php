@@ -642,10 +642,12 @@ HTML;
 
             $stusv = Stusv::model()->getStusvByJournalAndStudent($elg, $st1);
             if (!empty($stusv)) {
+
                 $stusvst = $stusv->getMarkForStudent($st1);
                 if (!empty($stusvst)) {
-                    if ($stusvst->stusvst4 > 0 || $stusvst->stusvst6 > 0)
-                        $readOnlySt = true;
+                    $readOnlySt = !empty($stusv['stusv15']);
+                    /*if ($stusvst->stusvst4 > 0 || $stusvst->stusvst6 > 0)
+                        $readOnlySt = true;*/
                 }
             }
         }

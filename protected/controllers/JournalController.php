@@ -1061,9 +1061,11 @@ SQL;
                     if ($stusv!=null) {
                         $stusvst = $stusv->getMarkForStudent($st1);
                         if ($stusvst!=null) {
-                            if ($stusvst->stusvst4 > 0 || $stusvst->stusvst6 > 0) {
-                                $error = true;
-                                $errorType = 5;
+                            if(!empty($stusv['stusv15'])) {
+                                //if ($stusvst->stusvst4 > 0 || $stusvst->stusvst6 > 0) {
+                                    $error = true;
+                                    $errorType = 5;
+                                //}
                             }
                         }
                     }

@@ -1012,7 +1012,10 @@ SQL;
 	 * @return bool
 	 */
 	public function recalculateStusMark($st1,$gr1,$sem7,$elg){
-		$idUniversity = SH::getUniversityCod();
+
+	    return true;
+
+		/*$idUniversity = SH::getUniversityCod();
 		//var_dump($idUniversity);
 		if($idUniversity===null)
 			return false;
@@ -1068,7 +1071,7 @@ SQL;
 			}
 		}
 
-		return false;
+		return false;*/
 	}
 
 	/**
