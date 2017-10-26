@@ -574,7 +574,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'active'  => $_c=='doc' && stristr($_a, 'selfDoc')
                 ),
             ),
-            'visible' => _ch('doc', 'main') && $isTch,
+            'visible' => _ch('doc', 'main') && ($isTch||$isAdmin),
         ),
         array(
             'label' => _l('Абитуриент', 'book'),

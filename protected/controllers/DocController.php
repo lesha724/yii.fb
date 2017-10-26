@@ -141,7 +141,7 @@ class DocController extends Controller
 
     /**
      * Проверка доступа к документу
-     * @param $id tdoo1
+     * @param $id int tdoo1
      * @return bool
      */
     private function checkAccessToDoc($id){
