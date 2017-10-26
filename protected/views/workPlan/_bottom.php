@@ -1,9 +1,34 @@
 <?php
+
 /**
  * @var WorkPlanController $this
  * @var FilterForm $model
  */
 
+
+function getHoursByUs6($us4, $us6){
+    switch ($us4){
+        case 5:
+            return D::model()->getConvertByUs6('e', $us6);
+            break;
+        case 6:
+            if($us6 == 1)
+                return tt('Зач.');
+            else if($us6 == 2)
+                return tt('Диф.зач.');
+            else
+                return '';
+            break;
+        case 7:
+            return D::model()->getConvertByUs6('w', $us6);
+            break;
+        case 8:
+            return D::model()->getConvertByUs6('y', $us6);
+            break;
+        default:
+            return '';
+    }
+}
 $options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;', 'style' => 'width:200px');
 
 $data = CHtml::listData(Sem::model()->getSemestersForWorkPlan($model->group, $type), 'us3', 'sem7', 'name');
@@ -92,8 +117,10 @@ HTML;
                     if(!empty($hours))
                         $hours = round($hours);
                 }
-                if (in_array($type, array(5,6,7,8)) && !is_null($hours))
-                    $hours = '<span class="label label-warning">+</span>';
+                if (in_array($type, array(5,6,7,8)) && !is_null($hours)) {
+                    $hours = '<span class="label label-warning">'.getHoursByUs6($type, $discipline['hours'][$type]).'</span>';
+                    //$hours = '<span class="label label-warning">+</span>';
+                }
 
                 $html .= '<td>'.$hours.'</td>';
             }

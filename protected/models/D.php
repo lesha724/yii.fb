@@ -1320,4 +1320,21 @@ SQL;
 
         return $disciplines;
     }
+
+    /**
+     * для типов uc4 us6
+     * @param $table
+     * @param $us6
+     */
+    public function getConvertByUs6($table, $us6){
+        $sql = <<<SQL
+            select {$table}2 from {$table}
+              where {$table}1 = $us6
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $str = $command->queryScalar();
+
+        return $str;
+    }
 }
