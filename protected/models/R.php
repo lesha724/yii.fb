@@ -119,7 +119,7 @@ class R extends CActiveRecord
 		if(empty($sem1))
 			return array();*/
 
-		$sql = <<<SQL
+		/*$sql = <<<SQL
 			select elgz2,elgz3,r2,r1,ustem5,us4,ustem7,ustem6,elgz4,elgz1,elgz5,elgz6,nr30,k2,k3,rz9,rz10, rz11,rz12
 			from elgz
 			inner join elg on (elgz.elgz2 = elg.elg1 and elg2=:UO1 and elg4=:TYPE_LESSON and elg3={$sem1})
@@ -129,6 +129,20 @@ class R extends CActiveRecord
 			inner join nr on (r1 = nr1)
 			inner join k on (nr30 = k1)
 			order by elgz3
+SQL;*/
+
+        $sql = <<<SQL
+			select elgz2,elgz3,r2,r1,ustem5,us4,ustem7,ustem6,elgz4,elgz1,elgz5,elgz6,nr30,k2,k3,rz9,rz10, rz11,rz12
+               from elgz
+               inner join elg on (elgz.elgz2 = elg.elg1 and elg2=:UO1 and elg4=:TYPE_LESSON and elg3={$sem1})
+               inner join ustem on (elgz.elgz7 = ustem.ustem1)
+               inner join EL_GURNAL_ZAN({$uo1},:GR1,:SEM1, {$type_lesson}) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
+               inner join rz on (EL_GURNAL_ZAN.r4 = rz1)
+               inner join ug on (r1 = ug3)
+               inner join nr on (ug1 = nr1)
+               inner join k on (nr30 = k1)
+            group by elgz2,elgz3,r2,r1,ustem5,us4,ustem7,ustem6,elgz4,elgz1,elgz5,elgz6,nr30,k2,k3,rz9,rz10, rz11,rz12
+               order by elgz3
 SQL;
 		/*select elgz3,r2,r1,ustem5,us4,ustem7,ustem6,elgz4,elgz1,elgz5,elgz6
 from elgz
