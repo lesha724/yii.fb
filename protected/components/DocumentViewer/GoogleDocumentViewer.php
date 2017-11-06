@@ -29,7 +29,6 @@ class GoogleDocumentViewer extends ADocumentViewer
 
     protected function _getIframeUrl()
     {
-        // TODO: Implement _getIframeUrl() method.
         $url = str_replace('{url}',$this->url, $this->_urlViewer);
         if($this->embedded)
             $url.='&embedded=true';

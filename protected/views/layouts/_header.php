@@ -101,12 +101,43 @@
                                     </a>
                                 </li>
                              <?php }?>
+
                         <?php else: ?>
+
+                            <?php if(Yii::app()->user->isStd){
+                                    $ps122 = PortalSettings::model()->getSettingFor(122);
+                                    if($ps122==1){
+                                        if(Yii::app()->user->dbModel->st168>0) {
+                                            ?>
+                                            <li>
+                                                <a href="<?= Yii::app()->createUrl('site/loginDistEducation') ?>"
+                                                   id="login-dist-education">
+                                                    <i class="icon-hand-right"></i>
+                                                    <?= tt('Перейти в дист. образование') ?>
+                                                </a>
+                                            </li>
+                                            <?php
+                                        }else{
+                                            ?>
+                                            <li>
+                                                <a href="<?= Yii::app()->createUrl('site/signUpDistEducation') ?>"
+                                                   id="sign-up-dist-education">
+                                                    <i class="icon-thumbs-up"></i>
+                                                    <?= tt('Зарегистрироваться в дист. образовании') ?>
+                                                </a>
+                                            </li>
+                                            <?php
+                                        }
+                                    }
+                            }?>
+
                             <li>
                                 <a href="<?=Yii::app()->createUrl('site/changePassword')?>" id="change-password">
                                     <i class="icon-user"></i>
                                     <?=tt('Смена профиля')?>
                                 </a>
+                            </li>
+                            <li>
                                 <a href="<?=Yii::app()->createUrl('/site/logout')?>">
                                     <i class="icon-off"></i>
                                     <?=tt('Выйти')?>

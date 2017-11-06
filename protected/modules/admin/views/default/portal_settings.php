@@ -57,6 +57,13 @@ Yii::app()->clientScript->registerScript('sem-start', $js);
                     'class'=>'ace',
                 );
                 ?>
+
+                <div class="control-group">
+                    <?=CHtml::checkBox('', PortalSettings::model()->findByPk(122)->ps2, $checkboxStyle)?>
+                    <span class="lbl"> <?=tt('Синхронизация с дист. образованием')?></span>
+                    <?=CHtml::hiddenField('settings[122]', PortalSettings::model()->findByPk(122)->ps2)?>
+                </div>
+
                 <div class="control-group">
                     <?=CHtml::checkBox('', PortalSettings::model()->findByPk(107)->ps2, $checkboxStyle)?>
                     <span class="lbl"> <?=tt('Использовать стусв')?></span>
