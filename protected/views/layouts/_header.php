@@ -104,19 +104,23 @@
 
                         <?php else: ?>
 
-                            <?php if(Yii::app()->user->isStd){
-                                    $ps122 = PortalSettings::model()->getSettingFor(122);
+                            <?php /*if(Yii::app()->user->isStd){
+                                    $ps122 = PortalSettings::model()->getSettingFor(PortalSettings::ENABLE_DIST_EDUCATION);
                                     if($ps122==1){
                                         if(Yii::app()->user->dbModel->st168>0) {
-                                            ?>
-                                            <li>
-                                                <a href="<?= Yii::app()->createUrl('site/loginDistEducation') ?>"
-                                                   id="login-dist-education">
-                                                    <i class="icon-hand-right"></i>
-                                                    <?= tt('Перейти в дист. образование') ?>
-                                                </a>
-                                            </li>
-                                            <?php
+                                            $ps123 = PortalSettings::model()->getSettingFor(PortalSettings::HOST_DIST_EDUCATION);
+
+                                            if(!empty($ps123)) {
+                                                ?>
+                                                    <li>
+                                                        <a href="<?= $ps123 ?>"
+                                                           id="login-dist-education">
+                                                            <i class="icon-hand-right"></i>
+                                                            <?= tt('Перейти в дист. образование') ?>
+                                                        </a>
+                                                    </li>
+                                                <?php
+                                            }
                                         }else{
                                             ?>
                                             <li>
@@ -129,7 +133,7 @@
                                             <?php
                                         }
                                     }
-                            }?>
+                            }*/ ?>
 
                             <li>
                                 <a href="<?=Yii::app()->createUrl('site/changePassword')?>" id="change-password">

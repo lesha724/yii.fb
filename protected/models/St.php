@@ -114,7 +114,6 @@
  * @property string $st147
  * @property string $st148
  * @property string $st167
- * @property integer $st168
  *
  * From ShortNameBehaviour:
  * @method string getShortName() Returns default truncated name.
@@ -139,7 +138,7 @@ class St extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('st1', 'required'),
-			array('st1,st167, st9, st29, st32, st33, st34, st35, st45, st56, st57, st63, st64, st65, st71, st78, st101, st103, st104, st114, st115, st116, st100, st99, st133, st139, st144, st167', 'numerical', 'integerOnly'=>true),
+			array('st1,st9, st29, st32, st33, st34, st35, st45, st56, st57, st63, st64, st65, st71, st78, st101, st103, st104, st114, st115, st116, st100, st99, st133, st139, st144, st167', 'numerical', 'integerOnly'=>true),
 			array('st2, st28, st74, st117, st120, st123', 'length', 'max'=>140),
 			array('st3, st4, st75, st76, st118, st119, st121, st122, st124, st125, st131, st132', 'length', 'max'=>80),
 			array('st5, st12, st15, st38, st108, st135, st148', 'length', 'max'=>60),
@@ -421,7 +420,6 @@ class St extends CActiveRecord
 		$criteria->compare('st147',$this->st147,true);
 		$criteria->compare('st148',$this->st148,true);
         $criteria->compare('st167',$this->st148,true);
-        $criteria->compare('st168',$this->st168);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
