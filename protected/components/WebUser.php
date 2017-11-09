@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Class WebUser
+ * @property bool $isStd  Являеться ли студентом
+ * @property bool $isAdmin  Являеться ли администратором
+ * @property bool $isTch  Являеться ли преподователем
+ * @property bool $isPrnt  Являеться ли родителем
+ * @property P|St $dbModel  модель персоні
+ * @property Users|null $model модель побзователя
+ */
 class WebUser extends CWebUser
 {
     private $_model = null;

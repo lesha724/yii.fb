@@ -32,16 +32,30 @@ abstract class DistEducation implements IDistEducation
      * @param string $host
      * @return void
      */
-    public function setHost($host)
+    /*public function setHost($host)
     {
         $this->_host = $host;
-    }
+    }*/
 
     /**
      * Отправка запроса для регистрации
      * @return array
      */
     abstract protected function sendSignUp($name, $username, $password, $email);
+
+    /**
+     * DistEducation constructor.
+     * @param string $host
+     * @throws Exception empty host
+     */
+    public function __construct($host)
+    {
+        if(empty($host))
+            throw  new Exception('DistEducation: Host empty');
+
+        $this->host = $host;
+        //parent::__construct($host);
+    }
 
     /**
      * Регистрация в системе дистанционого обучения

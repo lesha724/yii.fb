@@ -20,17 +20,17 @@ interface IDistEducation
 
     /**
      * Сеттер для хоста
-     * @param $value
+     * @param string $value
      * @return mixed
      */
-    public function setHost($value);
+    //public function setHost($value);
 
     /**
      * Регистрация в системе дистанционого обучения
-     * @param $name string Имя
-     * @param $username string Логин
-     * @param $password string Пароль
-     * @param $email string Email
+     * @param string $name  Имя
+     * @param string $username  Логин
+     * @param string $password  Пароль
+     * @param string $email  Email
      * @return mixed
      */
     public function signUp($name, $username, $password, $email);
@@ -41,4 +41,10 @@ interface IDistEducation
      * @return mixed
      */
     public function login($username);
+
+    /**
+     * IDistEducation constructor.
+     * @param string $host Хост
+     */
+    public function __construct($host);
 }

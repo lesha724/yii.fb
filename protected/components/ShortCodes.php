@@ -577,6 +577,24 @@ class SH extends ShortCodes
 
         return $dbh;
     }
+
+    /**
+     * Создать конектор к для подключения к дист образованию
+     * @param int $universityCode
+     * @param string $url
+     * @return DistEducation|null
+     */
+    public static function getDiscEducation($universityCode, $url){
+        switch ($universityCode){
+            case U_ZSMU:
+                return new EdxDistEducation($url);
+                break;
+
+            case U_NMU:
+                return new MoodleDistEducation($url);
+                break;
+        }
+    }
 }
 
 

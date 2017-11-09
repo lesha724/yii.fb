@@ -44,9 +44,12 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
      * @param $password string
      * @param $email string
      * @return array
+     * @throws Exception empty apikey
      */
     protected function sendSignUp($name, $username, $password, $email)
     {
+        throw  new Exception('Not implimented!');
+
         $body = json_encode(array(
             'username'=>$username,
             'name'=> $name,
@@ -75,8 +78,12 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
     /**
      * Заголовки
      * @return array
+     * @throws Exception empty apikey
      */
     private function _getHeaders(){
+
+        if(empty($this->apiKey))
+            throw new Exception('EdxDistEducation: apikey empty');
 
         return array(
             'Content-Type' => 'application/json',

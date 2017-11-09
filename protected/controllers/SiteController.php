@@ -18,7 +18,39 @@ class SiteController extends Controller
 			),
         );
     }
-	
+
+    /**
+     * Регитсрация в дистанционом образовании
+     */
+    public function actionSignUpDistEducation(){
+        //негость
+        if(Yii::app()->user->isGuest){
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again. 1');
+        }
+        // студент
+        if(!Yii::app()->user->isStd){
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again. 2');
+        }
+        //включена ли синхронизация с дист образованием
+        $ps122 = PortalSettings::model()->getSettingFor(PortalSettings::ENABLE_DIST_EDUCATION);
+        if($ps122==0){
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again. 3');
+        }
+        //не зарегисророван в дистанцооном образовании
+        if(Yii::app()->user->dbModel->st168>0) {
+            throw new CHttpException(400, tt('Пользователь уже зарегистрирован в дистанционном образовании'));
+        }
+
+        $connector = SH::getDiscEducation($this->universityCode, PortalSettings::model()->getSettingFor(PortalSettings::HOST_DIST_EDUCATION));
+
+        if($connector==null)
+            throw new CHttpException(400, tt('Ошибка создания конектора к дистанционному образованию'));
+
+        $user = Yii::app()->user->model;
+
+        list($result, $message) = $connector->signUp(Yii::app()->user->dbModel->getFullName(), $user->u2, '', $user->u4);
+    }
+
 	public function actionIndex()
 	{
 		// renders the view file 'protected/views/site/index.php'

@@ -6,6 +6,7 @@ define(U_NULAU, 3);
 define(U_NUSTA, 4);
 define(U_BSAA,  5);
 define(U_OSEU,  6);*/
-define('U_URFAK',  7);
-define('U_ZSMU',  32);
-define('U_NULAU', 14);
+define('U_URFAK',  7); //юрфак мгу
+define('U_ZSMU',  32); //запорожский мед
+define('U_NULAU', 14); //харьковская юр академия
+define('U_NMU',  38); //киевский мед
