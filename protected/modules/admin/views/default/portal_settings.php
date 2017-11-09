@@ -470,6 +470,12 @@ Yii::app()->clientScript->registerScript('sem-start', $js);
                 ?>
 
                 <div class="control-group">
+                    <?=CHtml::checkBox('', PortalSettings::model()->findByPk(125)->ps2, $checkboxStyle)?>
+                    <span class="lbl"> <?=tt('Включено')?></span>
+                    <?=CHtml::hiddenField('settings[125]', PortalSettings::model()->findByPk(125)->ps2)?>
+                </div>
+
+                <div class="control-group">
                     <span class="lbl"> <?=tt('Login')?>:</span>
                     <?=CHtml::textField('settings[95]', PortalSettings::model()->findByPk(95)->ps2)?>
                 </div>

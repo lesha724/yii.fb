@@ -115,6 +115,11 @@ class XmlController extends Controller
 
     public function filterCheckQueryType($filter)
     {
+        $ps125 = PortalSettings::model()->getSettingFor(125);
+
+        if($ps125!=1)
+            throw new CHttpException('error');
+
         $this->clearScriptFiles();
 
         if (! Yii::app()->request->isPostRequest){
