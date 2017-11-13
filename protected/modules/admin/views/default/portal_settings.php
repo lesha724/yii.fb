@@ -64,6 +64,14 @@ Yii::app()->clientScript->registerScript('sem-start', $js);
                     <?=CHtml::hiddenField('settings[122]', PortalSettings::model()->findByPk(122)->ps2)?>
                 </div>*/ ?>
 
+                <?php
+                    $errorSubcriptionMessage = PortalSettings::ERROR_SUBCRIPTION_MESSAGE;
+                ?>
+                <div class="control-group">
+                    <span class="lbl"> <?=tt('Сообщение при ошибке записи на дисциплины')?>:</span>
+                    <?=CHtml::textField('settings['.$errorSubcriptionMessage.']', PortalSettings::model()->findByPk($errorSubcriptionMessage)->ps2)?>
+                </div>
+
                 <div class="control-group">
                     <?=CHtml::checkBox('', PortalSettings::model()->findByPk(107)->ps2, $checkboxStyle)?>
                     <span class="lbl"> <?=tt('Использовать стусв')?></span>
