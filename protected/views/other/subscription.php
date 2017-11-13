@@ -29,8 +29,15 @@ JS
     , CClientScript::POS_HEAD);
 
 $params = $model->subscriptionParams;
-if(empty($params))
-    throw new CHttpException(400, tt('Ошибка, возможно запись на дисциплины закрыта! Обратитесь к администратору!'));
+if(empty($params)) {
+    $message = tt('Ошибка, возможно запись на дисциплины закрыта! Обратитесь к администратору!');
+
+    $errorMessage = PortalSettings::model()->getSettingFor(PortalSettings::ERROR_SUBCRIPTION_MESSAGE);
+    if(!empty($errorMessage))
+        $message = $errorMessage;
+
+    throw new CHttpException(400, $errorMessage);
+}
 $params['st1'] = $model->st1;
 $params['semester'] =0;
 
