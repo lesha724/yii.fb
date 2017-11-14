@@ -57,12 +57,6 @@ Yii::app()->clientScript->registerScript('sem-start', $js);
                     'class'=>'ace',
                 );
                 ?>
-                <?php /*
-                <div class="control-group">
-                    <?=CHtml::checkBox('', PortalSettings::model()->findByPk(122)->ps2, $checkboxStyle)?>
-                    <span class="lbl"> <?=tt('Синхронизация с дист. образованием')?></span>
-                    <?=CHtml::hiddenField('settings[122]', PortalSettings::model()->findByPk(122)->ps2)?>
-                </div>*/ ?>
 
                 <?php
                     $errorSubcriptionMessage = PortalSettings::ERROR_SUBCRIPTION_MESSAGE;
@@ -491,6 +485,59 @@ Yii::app()->clientScript->registerScript('sem-start', $js);
                 <div class="control-group">
                     <span class="lbl"> <?=tt('Password')?>:</span>
                     <?=CHtml::passwordField('settings[96]', PortalSettings::model()->findByPk(96)->ps2)?>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-info btn-small">
+                        <i class="icon-ok bigger-110"></i>
+                        <?=tt('Сохранить')?>
+                    </button>
+                </div>
+
+                <?php $this->endWidget();?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="span6">
+    <div class="widget-box">
+        <div class="widget-header">
+            <h4><?=tt('Дистанционное образование')?></h4>
+            <span class="widget-toolbar">
+                <a data-action="collapse" href="#">
+                    <i class="icon-chevron-up"></i>
+                </a>
+            </span>
+        </div>
+        <div class="widget-body">
+            <div class="widget-main">
+                <?php
+                $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+                    'id'=>'ps-dist-education',
+                    'htmlOptions' => array('class' => 'form-horizontal'),
+                    'action' => '#'
+                ));
+                ?>
+                <?php
+                    $enableDistEducation = PortalSettings::ENABLE_DIST_EDUCATION;
+                    $hostDistEducation = PortalSettings::HOST_DIST_EDUCATION;
+                    $apikeyDistEducation = PortalSettings::APIKEY_DIST_EDUCATION;
+                ?>
+                <div class="control-group">
+                    <?=CHtml::checkBox('', PortalSettings::model()->findByPk($enableDistEducation)->ps2, $checkboxStyle)?>
+                    <span class="lbl"> <?=tt('Включено')?></span>
+                    <?=CHtml::hiddenField('settings['.$enableDistEducation.']', PortalSettings::model()->findByPk($enableDistEducation)->ps2)?>
+                </div>
+
+                <div class="control-group">
+                    <span class="lbl"> <?=tt('Host')?>:</span>
+                    <?=CHtml::textField('settings['.$hostDistEducation.']', PortalSettings::model()->findByPk($hostDistEducation)->ps2)?>
+                </div>
+
+                <div class="control-group">
+                    <span class="lbl"> <?=tt('ApiKey')?>:</span>
+                    <?=CHtml::textField('settings['.$apikeyDistEducation.']', PortalSettings::model()->findByPk($apikeyDistEducation)->ps2)?>
                 </div>
 
                 <div class="form-actions">

@@ -104,7 +104,7 @@
 
                         <?php else: ?>
 
-                            <?php /*if(Yii::app()->user->isStd){
+                            <?php if(Yii::app()->user->isStd){
                                     $ps122 = PortalSettings::model()->getSettingFor(PortalSettings::ENABLE_DIST_EDUCATION);
                                     if($ps122==1){
                                         if(Yii::app()->user->dbModel->st168>0) {
@@ -133,7 +133,7 @@
                                             <?php
                                         }
                                     }
-                            }*/ ?>
+                            } ?>
 
                             <li>
                                 <a href="<?=Yii::app()->createUrl('site/changePassword')?>" id="change-password">
