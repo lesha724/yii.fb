@@ -148,7 +148,7 @@ class Us extends CActiveRecord
                 INNER JOIN uo on (us.us2 = uo.uo1)
                 INNER JOIN u on (uo.uo22 = u.u1)
                 INNER JOIN c on (u.u15 = c.c1)
-                INNER JOIN pd ON (nr.nr6 = pd.pd1) OR (nr.nr7 = pd.pd1) OR (nr.nr8 = pd.pd1)
+                INNER JOIN pd ON (nr.nr6 = pd.pd1) OR (nr.nr7 = pd.pd1) OR (nr.nr8 = pd.pd1) OR (nr.nr9 = pd.pd1)
                        WHERE pd1=:PD1 AND sem3=:SEM3 AND c8 != 3
                        GROUP BY sem5, us4, nr6, nr7, nr8, nr9
                        ORDER BY sem5, us4
@@ -172,12 +172,16 @@ SQL;
             10 => 2, // УПз
             11 => 3, // УСем
             12 => 4, // УЛб
+            //0 => 17
         );
 
         foreach ($res as $arr) {
 
             $sem5 = $arr['sem5'];
             $us4  = $arr['us4'];
+
+            if(empty($us4))
+                $us4 =17;
 
             // sub groups {{{
             $subGroups = array($arr['nr6'], $arr['nr7'], $arr['nr8'], $arr['nr9']);
@@ -190,7 +194,7 @@ SQL;
             else
                 $data[$sem5][$us4]= $arr;
 
-            if (in_array($us4, array(9, 10, 11, 12))) {
+            if (in_array($us4, array(9, 10, 11, 12/*, 0*/))) {
 
                 $_us4 = $map[$us4];
 

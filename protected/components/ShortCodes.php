@@ -267,7 +267,7 @@ SQL;
             case 'улб4':
                 $color = '#c4e5ff'; break;
             case 'экз':	$color = '#ffe1e1'; break;
-            case 'зач':	$color = '#ddffdd'; break;
+            case 'зач':	$color = '#a7f1a7'; break;
             case 'кр':	$color = '#d6d6bd'; break;
             case 'кп':	$color = '#d4d4b9'; break;
             case 'доп': $color = '#e3ebe4'; break;

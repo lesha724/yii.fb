@@ -412,11 +412,11 @@ SQL;
 
     public function getMin()
     {
-        $bal = PortalSettings::model()->findByPk(37)->ps2;
+        $bal = PortalSettings::model()->getSettingFor(37);
         if($bal>0)
             return $bal;
         else {
-            if(PortalSettings::model()->findByPk(55)->ps2==1&&$bal==0){
+            if(PortalSettings::model()->getSettingFor(55)==1&&$bal==0){
                 return 0;
             }else
                 return 2;
