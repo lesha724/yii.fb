@@ -36,15 +36,24 @@ interface IDistEducation
     public function signUp($name, $username, $password, $email);
 
     /**
-     * Авторизация в системе дистанционого обучения
-     * @param $username string Логин
+     * Привязать к уже существующей
+     * @param $user Users
+     * @param $params array
      * @return mixed
      */
-    public function login($username);
+    public function signUpOld($user, $params);
+
+    /**
+     * Авторизация в системе дистанционого обучения
+     * @param $user Users
+     * @return mixed
+     */
+    public function login($user);
 
     /**
      * IDistEducation constructor.
      * @param string $host Хост
+     * @param string $appKey Апкей
      */
-    public function __construct($host);
+    public function __construct($host, $appKey);
 }

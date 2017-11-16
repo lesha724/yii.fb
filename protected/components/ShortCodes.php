@@ -578,22 +578,67 @@ class SH extends ShortCodes
         return $dbh;
     }
 
+
+
     /**
-     * Создать конектор к для подключения к дист образованию
-     * @param int $universityCode
-     * @param string $url
-     * @return DistEducation|null
-     */
-    public static function getDiscEducation($universityCode, $url){
+ * Создать конектор к для подключения к дист образованию
+ * @param int $universityCode
+ * @param string $url
+ * @param string $apiKey
+ * @return DistEducation|null
+ */
+    private static function _getDiscEducation($universityCode, $url, $apiKey){
         switch ($universityCode){
             case U_ZSMU:
-                return new EdxDistEducation($url);
+                return new EdxDistEducation($url, $apiKey);
                 break;
 
             case U_NMU:
-                return new MoodleDistEducation($url);
+                return new MoodleDistEducation($url, $apiKey);
                 break;
+
+            default:
+                return null;
         }
+    }
+
+    /**
+     * Создать форму к привязки к существующей учетке
+     * @param int $universityCode
+     * @return SingUpOldDistEducationForm|null
+     */
+    public static function getSingUpOldDistEducationForm($universityCode){
+        switch ($universityCode){
+            case U_ZSMU:
+                return new EdxSignUpOldForm($universityCode);
+                break;
+
+            case U_NMU:
+                return new MoodleSignUpOldForm($universityCode);
+                break;
+
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Создать конектор к для подключения к дист образованию
+     * @param $universityCode int
+     * @return DistEducation|null
+     * @throws CHttpException if connector == null
+     */
+    public static function getDistEducationConnector($universityCode){
+        $connector = SH::_getDiscEducation(
+            $universityCode,
+            PortalSettings::model()->getSettingFor(PortalSettings::HOST_DIST_EDUCATION),
+            PortalSettings::model()->getSettingFor(PortalSettings::APIKEY_DIST_EDUCATION)
+        );
+
+        if(empty($connector))
+            throw new CHttpException(400,'error create distEducation connector');
+
+        return $connector;
     }
 }
 

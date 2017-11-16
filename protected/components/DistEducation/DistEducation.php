@@ -10,9 +10,34 @@
  * Class DistEducation
  * Класс для дистанционого обучения
  * @property string $host
+ * @property string $apiKey
  */
 abstract class DistEducation implements IDistEducation
 {
+    /**
+     * @var string АпиКей
+     */
+    private $_apiKey;
+
+    /**
+     * apiKey
+     * @return string
+     */
+    public function getApiKey()
+    {
+        return $this->_apiKey;
+    }
+
+    /**
+     * задать apiKey
+     * @param string $apiKey
+     * @return void
+     */
+    /*public function setApiKey($apiKey)
+    {
+        $this->_apiKey = $apiKey;
+    }*/
+
     /**
      * @var string Хост
      */
@@ -44,16 +69,33 @@ abstract class DistEducation implements IDistEducation
     abstract protected function sendSignUp($name, $username, $password, $email);
 
     /**
+     * Привязка к уже существующей учетек
+     * @param $user Users
+     * @param $params array
+     * @return array
+     */
+    abstract protected function saveSignUpOld($user, $params);
+
+    /**
+     * @param $user Users
+     * @return mixed
+     */
+    abstract protected function runLogin($user);
+
+    /**
      * DistEducation constructor.
      * @param string $host
      * @throws Exception empty host
      */
-    public function __construct($host)
+    public function __construct($host, $apiKey)
     {
         if(empty($host))
-            throw  new Exception('DistEducation: Host empty');
+            throw  new CHttpException(500,'DistEducation: Host empty');
+        if(empty($apiKey))
+            throw  new CHttpException(500,'DistEducation: ApiKey empty');
 
         $this->host = $host;
+        $this->apiKey = $apiKey;
         //parent::__construct($host);
     }
 
@@ -71,13 +113,24 @@ abstract class DistEducation implements IDistEducation
     }
 
     /**
+     * Регистрация в системе дистанционого обучения
+     * @param $user Users
+     * @param $params array
+     * @return array
+     */
+    public function signUpOld($user, $params)
+    {
+        return $this->saveSignUpOld($user, $params);
+    }
+
+    /**
      * Авторизация в системе дистанционого обучения
-     * @param $username string Логин
+     * @param $user Users Логин
      * @return bool
      */
-    public function login($username)
+    public function login($user)
     {
-        // TODO: Implement login() method.
+        return $this->runLogin($user);
     }
 
     /**
@@ -86,7 +139,7 @@ abstract class DistEducation implements IDistEducation
      * @param array|null $headers
      * @return mixed
      */
-    protected function _sendQuery($body, $headers = null)
+    /*protected function _sendQuery($body, $headers = null)
     {
         $myCurl = curl_init();
 
@@ -107,11 +160,8 @@ abstract class DistEducation implements IDistEducation
             $http_code = curl_getinfo($myCurl, CURLINFO_HTTP_CODE);
         }
 
-        /*if($http_code!=200)
-            throw new Exception($http_code. ' '. $response);*/
-
         curl_close($myCurl);
 
         return array($http_code, $response);
-    }
+    }*/
 }

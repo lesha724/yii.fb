@@ -14,30 +14,6 @@
 class EdxDistEducation extends DistEducation implements IEdxDistEducation
 {
     /**
-     * @var string АпиКей
-     */
-    private $_apiKey;
-
-    /**
-     * apiKey
-     * @return string
-     */
-    public function getApiKey()
-    {
-        return $this->_apiKey;
-    }
-
-    /**
-     * задать apiKey
-     * @param string $apiKey
-     * @return void
-     */
-    public function setApiKey($apiKey)
-    {
-        $this->_apiKey = $apiKey;
-    }
-
-    /**
      * отправка запроса для регистрации
      * @param $name string
      * @param $username string
@@ -48,9 +24,9 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
      */
     protected function sendSignUp($name, $username, $password, $email)
     {
-        throw  new Exception('Not implimented!');
+        throw  new CHttpException(400,'Not implimented!');
 
-        $body = json_encode(array(
+        /*$body = json_encode(array(
             'username'=>$username,
             'name'=> $name,
             'password'=> $password,
@@ -71,8 +47,28 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
         }catch (Exception $error){
 
             return array(false, $error->getMessage());
-        }
+        }*/
         //return array(false, '');
+    }
+
+    /**
+     * @param Users $user
+     * @return bool
+     */
+    protected function runLogin($user)
+    {
+        Yii::app()->request->redirect($this->host);
+        return true;
+    }
+
+    /**
+     * @param Users $user
+     * @param array $params
+     * @return array
+     */
+    protected function saveSignUpOld($user, $params)
+    {
+
     }
 
     /**
@@ -80,7 +76,7 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
      * @return array
      * @throws Exception empty apikey
      */
-    private function _getHeaders(){
+    /*private function _getHeaders(){
 
         if(empty($this->apiKey))
             throw new Exception('EdxDistEducation: apikey empty');
@@ -89,5 +85,5 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
             'Content-Type' => 'application/json',
             'X-Edx-Api-Key' => $this->apiKey
         );
-    }
+    }*/
 }
