@@ -27,7 +27,7 @@ class JournalController extends Controller
                     'changeTheme',
                     'saveChangeTheme',
                     'recalculateVmp',
-                    'recalculateStus',
+                    //'recalculateStus',
                     'showMarksForRecalculate',
 
                     'retake',
@@ -331,7 +331,7 @@ SQL;
         Yii::app()->end(CJSON::encode(array('error' => $error, 'errorType' => $errorType)));
     }
 
-    public function actionRecalculateStus()
+    /*public function actionRecalculateStus()
     {
         if (!Yii::app()->request->isAjaxRequest)
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
@@ -375,7 +375,7 @@ SQL;
         }
 
         Yii::app()->end(CJSON::encode(array('error' => $error, 'errorType' => $errorType)));
-    }
+    }*/
 
     public function actionUpdateVmp()
     {

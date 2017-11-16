@@ -91,7 +91,7 @@ if (!empty($model->sem1)):
         ));
     }
 
-    $ps84 = PortalSettings::model()->findByPk(84)->ps2;
+    /*$ps84 = PortalSettings::model()->findByPk(84)->ps2;
     if ($ps84 == 1) {
         $this->widget('bootstrap.widgets.TbButton', array(
             'buttonType' => 'button',
@@ -105,7 +105,7 @@ if (!empty($model->sem1)):
                 'id' => 'recalculate-stus',
             )
         ));
-    }
+    }*/
 
     ?>
         <span><label class="label label-warning">&nbsp;&nbsp;</label> - <?=tt('Информация требует обновления страницы')?></span>
