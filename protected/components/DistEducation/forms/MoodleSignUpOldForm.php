@@ -16,6 +16,14 @@ class MoodleSignUpOldForm extends SingUpOldDistEducationForm
     /**
      * @return array
      */
+    public function rules()
+    {
+        return parent::rules();
+    }
+
+    /**
+     * @return array
+     */
     protected function _getParams()
     {
         return array();
@@ -31,5 +39,13 @@ class MoodleSignUpOldForm extends SingUpOldDistEducationForm
         if($universityId==U_NMU)
             throw new CHttpException(400, 'Не доступно');
         parent::__construct($universityId);
+    }
+
+    /**
+     * @return array
+     */
+    public function attributeLabels()
+    {
+        return parent::attributeLabels();
     }
 }
