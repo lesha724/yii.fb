@@ -18,6 +18,8 @@ abstract class SingUpOldDistEducationForm extends CFormModel implements ISingUpO
      */
     public $email;
 
+    public $verifyCode;
+
     /**
      * Declares the validation rules.
      */
@@ -28,6 +30,9 @@ abstract class SingUpOldDistEducationForm extends CFormModel implements ISingUpO
             array('email', 'required'),
             // email has to be a valid email address
             array('email', 'email'),
+
+            // verifyCode needs to be entered correctly
+            array('verifyCode', 'captcha', 'allowEmpty'=>!CCaptcha::checkRequirements()),
         );
     }
 
@@ -39,7 +44,8 @@ abstract class SingUpOldDistEducationForm extends CFormModel implements ISingUpO
     public function attributeLabels()
     {
         return array(
-            'email'=>tt('Email'),
+            'email'=>tt('Email (существующей учетной записи дистанционого образования)'),
+            'verifyCode'=>'Verification Code',
         );
     }
 
@@ -80,5 +86,33 @@ abstract class SingUpOldDistEducationForm extends CFormModel implements ISingUpO
     {
         $this->_universityId = $universityId;
         parent::__construct($universityId);
+    }
+
+    /**
+     * Полядля формі ввода
+     * @param $form TbActiveForm
+     * @return string
+     */
+    public function getFormHtml($form){
+        return $this->_getFormHtml($form);
+    }
+
+    /**
+     * Полядля формі ввода
+     * @param $form TbActiveForm
+     * @return string
+     */
+    protected function _getFormHtml($form){
+        $html = '';
+
+        $html.=<<<HTML
+                <label>
+                <span class="block input-icon input-icon-right">
+                    {$form->textFieldRow($this, 'email', array('class' => 'span12', 'placeholder' => tt('Email')))}
+                    <i class="icon-envelope"></i>
+                </span>
+        </label>
+HTML;
+        return $html;
     }
 }

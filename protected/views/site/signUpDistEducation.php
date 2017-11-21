@@ -6,6 +6,9 @@
  * Time: 13:33
  */
 
+$this->pageTitle=tt('Регистрация в системе дистанционого обучения');
+$this->pageHeader=tt('Регистрация в системе дистанционого обучения');
+
 echo '<h3>'.tt('Выберите один и предложеных вариантов:').'</h3>';
 $this->widget('bootstrap.widgets.TbButtonGroup', array(
     'size' => 'large',

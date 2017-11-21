@@ -36,8 +36,8 @@ class MoodleSignUpOldForm extends SingUpOldDistEducationForm
      */
     public function __construct($universityId)
     {
-        if($universityId==U_NMU)
-            throw new CHttpException(400, 'Не доступно');
+        /*if($universityId==U_NMU)
+            throw new CHttpException(400, 'Не доступно');*/
         parent::__construct($universityId);
     }
 
