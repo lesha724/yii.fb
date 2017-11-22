@@ -1018,7 +1018,6 @@ SQL;
 		if($idUniversity===null)
 			return false;
 
-
 		//$stusv = Stusv::model()->getStusvByJournal($elg, $gr1);
         $stusv = Stusv::model()->getStusvByJournalAndStudent($elg, $st1);
 		if($stusv == null)
@@ -1027,10 +1026,7 @@ SQL;
 		if(!empty($stusv->stusv15))
 			return false;
 
-        if(!empty($stusv->stusv11))
-            return false;
-
-		/*if($stusv->stusv12!=0&&!empty($stusv->stusv11)){
+		if($stusv->stusv12!=0&&!empty($stusv->stusv11)){
 		    $date = date('Y-m-d H:i:s');
             $date2 = new DateTime($stusv->stusv11);
             $date1 = new DateTime($date);
@@ -1039,7 +1035,7 @@ SQL;
 
             if($date1>$date2)
                 return false;
-        }*/
+        }
 
 		if($stusv!=null){
 			$sql=<<<SQL
