@@ -1013,9 +1013,7 @@ SQL;
 	 */
 	public function recalculateStusMark($st1,$gr1,$sem7,$elg){
 
-	    return true;
-
-		/*$idUniversity = SH::getUniversityCod();
+		$idUniversity = SH::getUniversityCod();
 		//var_dump($idUniversity);
 		if($idUniversity===null)
 			return false;
@@ -1029,7 +1027,10 @@ SQL;
 		if(!empty($stusv->stusv15))
 			return false;
 
-		if($stusv->stusv12!=0&&!empty($stusv->stusv11)){
+        if(!empty($stusv->stusv11))
+            return false;
+
+		/*if($stusv->stusv12!=0&&!empty($stusv->stusv11)){
 		    $date = date('Y-m-d H:i:s');
             $date2 = new DateTime($stusv->stusv11);
             $date1 = new DateTime($date);
@@ -1038,7 +1039,7 @@ SQL;
 
             if($date1>$date2)
                 return false;
-        }
+        }*/
 
 		if($stusv!=null){
 			$sql=<<<SQL
@@ -1071,7 +1072,7 @@ SQL;
 			}
 		}
 
-		return false;*/
+		return false;
 	}
 
 	/**
