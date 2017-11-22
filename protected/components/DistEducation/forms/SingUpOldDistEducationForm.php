@@ -76,7 +76,11 @@ abstract class SingUpOldDistEducationForm extends CFormModel implements ISingUpO
      * Массив параметров для привязки к сущетвующей учетке
      * @return array
      */
-    abstract protected function _getParams();
+    protected function _getParams(){
+        return array(
+            'email' => $this->email
+        );
+    }
 
     /**
      * SingUpOldDistEducationForm constructor.

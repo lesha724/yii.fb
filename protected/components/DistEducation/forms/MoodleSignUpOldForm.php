@@ -26,7 +26,7 @@ class MoodleSignUpOldForm extends SingUpOldDistEducationForm
      */
     protected function _getParams()
     {
-        return array();
+        return parent::_getParams();
     }
 
     /**
