@@ -124,6 +124,23 @@ abstract class DistEducation implements IDistEducation
     }
 
     /**
+     * Сохранить метку по студенту что регистрация в дист образовании прошла
+     * @param $st1 int
+     * @return bool
+     */
+    protected function _setStudentSignUp($st1){
+        $st = St::model()->findByPk($st1);
+
+        if($st == null)
+            return false;
+
+        if(!$st->saveAttributes(array('st168'=>1)))
+            return false;
+
+        return true;
+    }
+
+    /**
      * Авторизация в системе дистанционого обучения
      * @param $user Users Логин
      * @return bool

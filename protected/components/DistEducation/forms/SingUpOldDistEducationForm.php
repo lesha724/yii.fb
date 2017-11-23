@@ -31,6 +31,8 @@ abstract class SingUpOldDistEducationForm extends CFormModel implements ISingUpO
             // email has to be a valid email address
             array('email', 'email'),
 
+            //array('email', 'unique', 'className'=>'Stdist', 'attributeName'=>'stdist2'),
+
             // verifyCode needs to be entered correctly
             array('verifyCode', 'captcha', 'allowEmpty'=>!CCaptcha::checkRequirements()),
         );

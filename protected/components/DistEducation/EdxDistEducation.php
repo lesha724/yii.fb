@@ -68,6 +68,48 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
      */
     protected function saveSignUpOld($user, $params)
     {
+        if(!$user->isStudent)
+            return array(false, 'EdxDistEducation:'.tt('Пользователь не студент'));
+
+        if(!isset($params['email']))
+            return array(false, 'EdxDistEducation: params don`t contains email');
+
+        $transaction = Yii::app()->db->beginTransaction();
+        try {
+            //Сохраняем приязку студента к акунту дистанционого образлвания
+            $stDist = Stdist::model()->findByPk($user->u6);
+            if($stDist==null) {
+                $stDist = new Stdist();
+                $stDist->stdist1 = $user->u6;
+            }
+            $stDist->stdist2 = $params['email'];
+
+            if(!$stDist->save()){
+                $transaction->rollback();
+
+                $text = 'Ошибка сохранения!';
+
+                $errors = $stDist->getErrors('stdist2');
+                if(is_array($errors))
+                    $text = implode('; ',$errors);
+
+                if(is_string($errors))
+                    $text = $errors;
+
+                return array(false, $text);
+            }
+            //ставим метку студенту что он имеет привязку
+            if(!$this->_setStudentSignUp($user->u6))
+                $transaction->rollback();
+
+            $transaction->commit();
+
+            return array(true, '');
+
+        } catch (Exception $e) {
+            $transaction->rollback();
+            return array(false, $e->getMessage());
+        }
 
     }
 
