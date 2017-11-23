@@ -1013,13 +1013,10 @@ SQL;
 	 */
 	public function recalculateStusMark($st1,$gr1,$sem7,$elg){
 
-	    return true;
-
-		/*$idUniversity = SH::getUniversityCod();
+		$idUniversity = SH::getUniversityCod();
 		//var_dump($idUniversity);
 		if($idUniversity===null)
 			return false;
-
 
 		//$stusv = Stusv::model()->getStusvByJournal($elg, $gr1);
         $stusv = Stusv::model()->getStusvByJournalAndStudent($elg, $st1);
@@ -1071,7 +1068,7 @@ SQL;
 			}
 		}
 
-		return false;*/
+		return false;
 	}
 
 	/**
