@@ -16,6 +16,7 @@ class DistEducationController extends Controller
             array('allow',
                 'actions' => array(
                     'index',
+                    'addLink'
                 ),
                 'expression' => 'Yii::app()->user->isTch',
             ),
@@ -76,4 +77,12 @@ class DistEducationController extends Controller
             'model' => $model
         ));
 	}
+
+    /**
+     * Рендер формы для привязки дисциплины к дист образованию
+     * @param $uo1
+     */
+	public function actionAddLink($uo1){
+        $model = new DistEducationFilterForm(Yii::app()->user);
+    }
 }

@@ -31,7 +31,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         ),
         array(
             'class'=>'bootstrap.widgets.TbButtonColumn',
-            'template'=>'',
+            'template'=>'{update}',
             'header'=>CHtml::dropDownList(
                 'pageSize',
                 $pageSize,
@@ -40,13 +40,12 @@ $this->widget('bootstrap.widgets.TbGridView', array(
             ),
             'buttons'=>array
             (
-                /*'update' => array(
-                    'label'=>tt('Добавить отработку'),
+                'update' => array(
+                    'label'=>tt('Добавить привязку'),
                     'icon'=>'icon-plus bigger-120',
-                    'url'=>'array("addRetake","elgzst0"=>$data["elgzst0"],"sem1"=>$data["sem1"],"gr1"=>$data["gr1"],"r1"=>$data["r1"])',
-                    'options' => array('class' => 'btn btn-mini btn-warning btn-add-retake'),
-                    'visible'=>'Elgzst::checkMinRetakeForGridRetake($data["elgzst5"])'
-                )*/
+                    'url'=>'array("addLink","uo1"=>$data["uo1"])',
+                    'options' => array('class' => 'btn btn-mini btn-warning btn-add-link'),
+                )
             ),
         ),
     ),
