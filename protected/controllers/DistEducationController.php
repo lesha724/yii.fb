@@ -17,7 +17,7 @@ class DistEducationController extends Controller
                 'actions' => array(
                     'index',
                 ),
-                'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
+                'expression' => 'Yii::app()->user->isTch',
             ),
             array('deny',
                 'users' => array('*'),
@@ -25,6 +25,10 @@ class DistEducationController extends Controller
         );
     }
 
+    /**
+     * @param $filterChain
+     * @throws CHttpException
+     */
     public function filterCheckPermission($filterChain)
     {
         if(!Yii::app()->user->isAdmin) {
@@ -43,8 +47,24 @@ class DistEducationController extends Controller
         $filterChain->run();
     }
 
+    /**
+     *
+     */
 	public function actionIndex()
 	{
-		$this->render('index');
+	    $user = Yii::app()->user;
+
+        $chair = $user->dbModel->chair;
+
+	    if($user->isAdmin){
+            $chairId = Yii::app()->request->getParam('chairId', null);
+
+            $chair = K::model()->findByPk($chairId);
+        }
+
+		$this->render('index', array(
+		    'user' => $user,
+            'chair' => $chair
+        ));
 	}
 }

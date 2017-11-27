@@ -101,6 +101,8 @@
  * @property string $p109
  * @property string $p110
  *
+ * @property K $chair
+ *
  * @property Grants $grants
  *
  * From ShortNameBehaviour:
@@ -918,4 +920,26 @@ SQL;
 
 		return $result;
 	}
+
+    /**
+     * Получить кафедру
+     * @return K
+     */
+	public function getChair(){
+	    if(empty($this->p1))
+	        return null;
+
+        $today = date('Y-m-d 00:00');
+
+        return K::model()->findBySql(<<<SQL
+            SELECT k.* FROM P 
+              INNER JOIN PD ON (P1=PD2)
+              INNER JOIN K ON (PD4 = k1)
+            WHERE pd3=0 and pd28 in (0,2,5,9) and pd11<='{$today}' and (pd13 is null or pd13>'{$today}') AND p1=:P1
+SQL
+            , array(
+                ':P1' => $this->p1
+            )
+        );
+    }
 }
