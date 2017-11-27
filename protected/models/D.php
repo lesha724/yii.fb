@@ -1325,6 +1325,7 @@ SQL;
      * для типов uc4 us6
      * @param $table
      * @param $us6
+     * @return string
      */
     public function getConvertByUs6($table, $us6){
         $sql = <<<SQL

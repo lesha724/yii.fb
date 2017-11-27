@@ -179,6 +179,23 @@ $this->breadcrumbs=array(
                     </label>
                 </div>
             </div>
+
+            <div class="control-group">
+                <?=$form->label($model, 'grants6', array('class' => 'control-label'))?>
+                <div class="controls">
+                    <label>
+                        <?php
+                        echo CHtml::checkBox('Grants[grants6]', $model->grants6,
+                            array(
+                                'class' => 'ace ace-switch',
+                                'uncheckValue' => '0'
+                            )
+                        )
+                        ?>
+                        <span class="lbl"></span>
+                    </label>
+                </div>
+            </div>
         <?php endif;
     ?>
 

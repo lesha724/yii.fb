@@ -40,8 +40,10 @@ class DistEducationController extends Controller
             if (empty($grants))
                 throw new CHttpException(404, 'Invalid request. You don\'t have access to the service.');
 
-            if ($grants->getGrantsFor(Grants::DIST_EDUCATION) != 1)
-                throw new CHttpException(404, 'Invalid request. You don\'t have access to the service.');
+            if ($grants->getGrantsFor(Grants::DIST_EDUCATION_ADMIN) != 1) {
+                if ($grants->getGrantsFor(Grants::DIST_EDUCATION) != 1)
+                    throw new CHttpException(404, 'Invalid request. You don\'t have access to the service.');
+            }
         }
 
         $filterChain->run();
@@ -52,19 +54,26 @@ class DistEducationController extends Controller
      */
 	public function actionIndex()
 	{
-	    $user = Yii::app()->user;
+	    $model = new DistEducationFilterForm(Yii::app()->user);
+        $model->unsetAttributes();
 
-        $chair = $user->dbModel->chair;
+        if (isset($_GET['pageSize'])) {
+            Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
+            unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
+        }
 
-	    if($user->isAdmin){
+	    if(isset($_REQUEST['DistEducationFilterForm'])){
+            $model->attributes = $_REQUEST['DistEducationFilterForm'];
+        }
+
+	    if($model->isAdminDistEducation){
             $chairId = Yii::app()->request->getParam('chairId', null);
 
-            $chair = K::model()->findByPk($chairId);
+            $model->setChairId($chairId);
         }
 
 		$this->render('index', array(
-		    'user' => $user,
-            'chair' => $chair
+            'model' => $model
         ));
 	}
 }
