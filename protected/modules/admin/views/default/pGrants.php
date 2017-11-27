@@ -159,6 +159,29 @@ $this->breadcrumbs=array(
         </div>
     </div>
 
+    <?php
+        $enableDistEducation = PortalSettings::model()->getSettingFor(PortalSettings::ENABLE_DIST_EDUCATION);
+
+        if($enableDistEducation): ?>
+            <div class="control-group">
+                <?=$form->label($model, 'grants3', array('class' => 'control-label'))?>
+                <div class="controls">
+                    <label>
+                        <?php
+                        echo CHtml::checkBox('Grants[grants3]', $model->grants3,
+                            array(
+                                'class' => 'ace ace-switch',
+                                'uncheckValue' => '0'
+                            )
+                        )
+                        ?>
+                        <span class="lbl"></span>
+                    </label>
+                </div>
+            </div>
+        <?php endif;
+    ?>
+
     <div class="form-actions">
         <button type="submit" class="btn btn-info">
             <i class="icon-ok bigger-110"></i>

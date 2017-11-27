@@ -101,6 +101,8 @@
  * @property string $p109
  * @property string $p110
  *
+ * @property Grants $grants
+ *
  * From ShortNameBehaviour:
  * @method string getShortName() Returns default truncated name.
  *
