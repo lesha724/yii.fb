@@ -1111,15 +1111,15 @@ SQL;
                     $k2=$kav['k3'];
                     $st_info=St::model()->getInfoForStudentInfoExcel($model->student);
                     $zav_name=Sh::getShortName($zav['p3'],$zav['p4'],$zav['p5']);
-                    if(empty($nkrs4))
-                    {
+                    /*if(empty($nkrs4))
+                    {*/
                         $spkr=Spkr::model()->findByPk($nkrs7);
                         if(!empty($spkr))
                         {
                             $nkrs4=$spkr->spkr2;
                             $nkrs5=$spkr->spkr3;
                         }
-                    }
+                    //}
                     /* @var $mPDF1 mPDF*/
                     $mPDF1 = Yii::app()->ePdf->mpdf();
 
