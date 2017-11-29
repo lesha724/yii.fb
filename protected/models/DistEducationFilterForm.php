@@ -84,7 +84,8 @@ class DistEducationFilterForm extends CFormModel
             return;
 
         if(!empty($chairId))
-            $this->_chair = K::model()->findByPk($chairId);
+            if($chairId!=$this->chairId)
+                $this->_chair = K::model()->findByPk($chairId);
     }
 
     /**
@@ -142,7 +143,7 @@ class DistEducationFilterForm extends CFormModel
         $where = '';
 
         $sql = <<<SQL
-          SELECT d2,d1,uo1,sem4,sp2
+          SELECT d2,d1,uo1,sem4,sp2, dispdist2, dispdist3, uo4
             FROM us
             INNER JOIN uo ON (US.US2 = UO.UO1)
             inner join u on (uo.uo22 = u.u1)
@@ -151,8 +152,9 @@ class DistEducationFilterForm extends CFormModel
             INNER JOIN d ON (UO.uo3 = D.D1)
             INNER JOIN k ON (UO.uo4 = K.K1)
             INNER JOIN sem ON (Us.us3 = sem.sem1)
+            LEFT JOIN dispdist on (uo.uo1 = dispdist1)
         WHERE uo4 =:K1 and sem3=:YEAR and sem5=:SEM {$where}
-            group BY d2,d1,uo1,sem4,sp2
+            group BY d2,d1,uo1,sem4,sp2, dispdist2, dispdist3, uo4
 SQL;
 
         $countSQL =
@@ -188,5 +190,54 @@ SQL;
                 'pageSize'=> $pageSize,
             ),
         ));
+    }
+
+    /**
+     * Поучить инфо по дисциплине с проверкой доступа $uo1
+     * @param $uo1
+     * @return array|null
+     */
+    public function getDispInfo($uo1){
+        if(empty($uo1))
+            return null;
+
+        $where = '' ;
+        $params = array(
+            ':UO1' => $uo1,
+            ':YEAR' =>  Yii::app()->session['year'],
+            ':SEM' =>  Yii::app()->session['sem']
+        );
+
+        if(!$this->isAdminDistEducation){
+            $where = 'and uo4 =:K1';
+            $params[':K1']= $this->chairId;
+        }
+
+        $sql = <<<SQL
+          SELECT d2,d1,uo1,sem4,sp2, dispdist2, dispdist3, uo4
+            FROM us
+            INNER JOIN uo ON (US.US2 = UO.UO1)
+            inner join u on (uo.uo22 = u.u1)
+            inner join sg on (u.u2 = sg.sg1)
+            inner join sp on (sg2 = sp1)
+            INNER JOIN d ON (UO.uo3 = D.D1)
+            INNER JOIN k ON (UO.uo4 = K.K1)
+            INNER JOIN sem ON (Us.us3 = sem.sem1)
+            LEFT JOIN dispdist on (uo.uo1 = dispdist1)
+        WHERE sem3=:YEAR and sem5=:SEM and uo1=:UO1 {$where}
+            group BY d2,d1,uo1,sem4,sp2, dispdist2, dispdist3, uo4
+SQL;
+
+        $params = array(
+            ':UO1' => $uo1,
+            ':YEAR' =>  Yii::app()->session['year'],
+            ':SEM' =>  Yii::app()->session['sem']
+        );
+
+        $command=Yii::app()->db->createCommand($sql);
+        $command->params = $params;
+        $disp = $command->queryRow();
+
+        return empty($disp)? null : $disp;
     }
 }

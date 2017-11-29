@@ -80,9 +80,62 @@ class DistEducationController extends Controller
 
     /**
      * Рендер формы для привязки дисциплины к дист образованию
-     * @param $uo1
      */
-	public function actionAddLink($uo1){
+	public function actionAddLink(){
+        //if (! Yii::app()->request->isAjaxRequest)
+            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
         $model = new DistEducationFilterForm(Yii::app()->user);
+
+        $uo1 = Yii::app()->request->getParam('uo1', null);
+        $k1 = Yii::app()->request->getParam('k1', null);
+
+        $model->setChairId($k1);
+
+        $error=false;
+        $html='';
+        $title=tt('Закрепление дисциплины');
+
+        if(empty($uo1))
+            $error=true;
+
+        $connector = SH::getDistEducationConnector(
+            $this->universityCode
+        );
+
+        if(empty($connector))
+            $error = true;
+
+        if(!$error)
+        {
+            $disp = $model->getDispInfo($uo1);
+
+            //var_dump($disp);
+
+            if(empty($disp)) {
+                $error = true;
+            }
+            else{
+                $list = $connector->getCoursesList();
+
+                //var_dump($list);
+
+                $html = $this->renderPartial('_add_link_form', array(
+                    'disp' => $disp,
+                    'model'=>$model,
+                    'coursesList' => CHtml::listData($connector->getCoursesList(),'course_id', function ($data){
+                        return $data->name. ' / '. $data->course_id;
+                    })
+                ), true);
+            }
+        }
+
+        $res = array(
+            'title'=>$title,
+            'html' => $html,
+            'error' => $error
+        );
+
+        Yii::app()->end(CJSON::encode($res));
     }
 }

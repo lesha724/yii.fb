@@ -2,6 +2,7 @@
 /* @var $this DistEducationController */
 /* @var $model DistEducationFilterForm */
 
+Yii::app()->clientScript->registerPackage('gritter');
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/distEducation/index.js', CClientScript::POS_HEAD);
 
 

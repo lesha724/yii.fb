@@ -14,6 +14,7 @@
  */
 abstract class DistEducation implements IDistEducation
 {
+    const KEY_CACHE_COURS_LIST = 'de_courses_list';
     /**
      * @var string АпиКей
      */
@@ -181,4 +182,31 @@ abstract class DistEducation implements IDistEducation
 
         return array($http_code, $response);
     }*/
+
+    /**
+     * Список курсов
+     * @return mixed
+     */
+    public function getCoursesList()
+    {
+        $id = self::KEY_CACHE_COURS_LIST;
+
+        $value=Yii::app()->cache->get($id);
+        if($value===false)
+        {
+            // устанавливаем значение $value заново, т.к. оно не найдено в кэше,
+            // и сохраняем его в кэше для дальнейшего использования:
+            $list = $this->_getCoursesList();
+            Yii::app()->cache->set($id,$list,600);
+            return $list;
+        }
+
+        return $value;
+    }
+
+    /**
+     * Список курсов
+     * @return mixed
+     */
+    abstract protected function _getCoursesList();
 }

@@ -432,6 +432,21 @@ $this->widget('zii.widgets.CMenu', array(
             ),getDopItem('workPlan',0)),
             'visible' => _ch('workPlan', 'main')
         ),
+        array(
+            'label' => _l('Дист. образование', 'facetime-video'),
+            'url' => '#',
+            'linkOptions'=> $_l,
+            'itemOptions'=>_i('distEducation'),
+            'items' => array_merge(array(
+                array(
+                    'label'   => $_l2.tt('Закрепление'),
+                    'url'     => _u('/distEducation/index'),
+                    'active'  => $_c=='distEducation' && $_a=='index',
+                    'visible' => _ch('distEducation', 'index')&& ($isTch||$isAdmin)
+                ),
+            ),getDopItem('distEducation',0)),
+            'visible' => _ch('distEducation', 'main')&& ($isTch||$isAdmin) && (PortalSettings::model()->getSettingFor(PortalSettings::ENABLE_DIST_EDUCATION)==1)
+        ),
 	array(
             'label' => _l('Список', 'user'),
             'url' => '#',

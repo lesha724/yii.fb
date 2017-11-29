@@ -44,6 +44,12 @@ interface IDistEducation
     public function signUpOld($user, $params);
 
     /**
+     * Список курсов
+     * @return mixed
+     */
+    public function getCoursesList();
+
+    /**
      * Авторизация в системе дистанционого обучения
      * @param $user Users
      * @return mixed

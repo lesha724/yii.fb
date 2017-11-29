@@ -113,6 +113,30 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
 
     }
 
+    protected function _getCoursesList()
+    {
+        Yii::import('ext.EHttpClient.*');
+
+        $client = new EHttpClient( $this->host.'/api/courses/v1/courses/?page_size=999', array(
+            'maxredirects' => 0,
+            'timeout'      => 30));
+
+        $response = $client->request();
+
+        if($response->isSuccessful())
+        {
+            $array = json_decode($response->getBody());
+
+            //var_dump($array);
+
+            if(!isset($array->results))
+                throw new CHttpException(500, 'EdxDistEducation: Ошибка загрузки курсов. Неверный формат ответа');
+            else
+                return $array->results;
+        }
+        else
+            throw new CHttpException(500, 'EdxDistEducation: Ошибка загрузки курсов. '.$response->getRawBody());
+    }
     /**
      * Заголовки
      * @return array
