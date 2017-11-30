@@ -109,7 +109,7 @@
  * @method string getShortName() Returns default truncated name.
  *
  */
-class P extends CActiveRecord
+class P extends CActiveRecord implements IPerson
 {
 	/**
 	 * @return string the associated database table name
@@ -925,9 +925,10 @@ SQL;
      * Получить кафедру
      * @return K
      */
-	public function getChair(){
-	    if(empty($this->p1))
-	        return null;
+	public function getChair()
+    {
+        if (empty($this->p1))
+            return null;
 
         $today = date('Y-m-d 00:00');
 
@@ -941,5 +942,25 @@ SQL
                 ':P1' => $this->p1
             )
         );
+    }
+    /*
+     * Проверка заблокирован ли преподователь
+     * @return bool
+     */
+	public function checkBlocked()
+    {
+        if($this->isNewRecord)
+            return true;
+
+        $sql = <<<SQL
+              SELECT COUNT(*) FROM PD 
+              WHERE pd28 in (0,2,5,9) and pd13 is null and pd2=:P1
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', $this->p1);
+        $count = $command->queryScalar();
+
+        return empty($count) || $count==0;
     }
 }
