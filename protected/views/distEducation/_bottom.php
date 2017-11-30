@@ -37,7 +37,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         ),
         'distDisp'=>array(
             'header'=>tt('Курс'),
-            'value'=>'$data["dispdist2"]."".$data["dispdist3"]',
+            'value'=>'$data["dispdist2"]." ".$data["dispdist3"]',
         ),
         array(
             'class'=>'bootstrap.widgets.TbButtonColumn',
@@ -93,7 +93,7 @@ $this->beginWidget(
                 'label' => tt('Сохранить'),
                 'type'=>'info',
                 'url' => '#',
-                'htmlOptions' => array('id' => 'save-stego'),
+                'htmlOptions' => array('id' => 'save-link'),
             )
         ); ?>
         <?php $this->widget(

@@ -34,7 +34,8 @@ $options = array(
  */
 $form=$this->beginWidget('CActiveForm', array(
     'id'=>'retake-form',
-    'htmlOptions' => array('class' => 'form-inline')
+    'htmlOptions' => array('class' => 'form-inline'),
+    'action' => false
 ));
 
 $html = '<div>';

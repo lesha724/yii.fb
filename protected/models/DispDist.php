@@ -36,7 +36,7 @@ class DispDist extends CActiveRecord
 		return array(
 			array('dispdist1, dispdist4', 'numerical', 'integerOnly'=>true),
 			array('dispdist2, dispdist3', 'length', 'max'=>200),
-			array('dispdist5', 'length', 'max'=>8),
+			array('dispdist5', 'length', 'max'=>25),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('dispdist1, dispdist2, dispdist3, dispdist4, dispdist5', 'safe', 'on'=>'search'),

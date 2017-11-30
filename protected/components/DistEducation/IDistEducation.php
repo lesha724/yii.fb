@@ -19,13 +19,6 @@ interface IDistEducation
     public function getHost();
 
     /**
-     * Сеттер для хоста
-     * @param string $value
-     * @return mixed
-     */
-    //public function setHost($value);
-
-    /**
      * Регистрация в системе дистанционого обучения
      * @param string $name  Имя
      * @param string $username  Логин
@@ -50,6 +43,13 @@ interface IDistEducation
     public function getCoursesList();
 
     /**
+     * Инфо по курсу по id
+     * @param string|int id
+     * @return object|null|array
+     */
+    public function getCourse($id);
+
+    /**
      * Авторизация в системе дистанционого обучения
      * @param $user Users
      * @return mixed
@@ -62,4 +62,18 @@ interface IDistEducation
      * @param string $appKey Апкей
      */
     public function __construct($host, $appKey);
+
+    /**
+     * Список курсов для combobox @see CHtml::listData()
+     * @return mixed
+     */
+    public function getCoursesListForLisData();
+
+    /**
+     * Сохранения привязки
+     * @param $uo1 int
+     * @param $course object|array
+     * @return bool
+     */
+    public function saveLinkCourse($uo1, $course);
 }

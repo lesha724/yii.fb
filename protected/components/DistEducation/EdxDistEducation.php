@@ -137,6 +137,57 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
         else
             throw new CHttpException(500, 'EdxDistEducation: Ошибка загрузки курсов. '.$response->getRawBody());
     }
+
+    /**
+     * Инфо по курсу по id
+     * Сейчас береться из @see getCoursesList
+     * @param string $id
+     * @return object|null|array
+     * @throws CHttpException
+     */
+    protected function _getCourse($id)
+    {
+        $course = array_filter(
+            $this->getCoursesList(),
+            function ($e) use (&$id) {
+                return $e->course_id == $id;
+            }
+        );
+
+        if(empty($course))
+            return null;
+
+        if(count($course)>1)
+            throw  new CHttpException(500, 'EdxDistEducation:Несколько курсов с id');
+
+        return current($course);
+    }
+
+    /**
+     * Список курсов для combobox @see CHtml::listData()
+     * @return mixed
+     */
+    protected function _getCoursesListForLisData()
+    {
+        $list = $this->getCoursesList();
+
+        return CHtml::listData($list,'course_id', function ($data){
+            return $data->name. ' / '. $data->course_id;
+        });
+    }
+
+    /**
+     * Массив параметров для привязки
+     * @param $course object|array
+     * @return array
+     */
+    protected function _getParamsLink($course)
+    {
+        return array(
+            'dispdist3'=> $course->course_id,
+            'dispdist2' => $course->name
+        );
+    }
     /**
      * Заголовки
      * @return array

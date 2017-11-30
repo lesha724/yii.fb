@@ -30,16 +30,6 @@ abstract class DistEducation implements IDistEducation
     }
 
     /**
-     * задать apiKey
-     * @param string $apiKey
-     * @return void
-     */
-    /*public function setApiKey($apiKey)
-    {
-        $this->_apiKey = $apiKey;
-    }*/
-
-    /**
      * @var string Хост
      */
     private $_host;
@@ -52,16 +42,6 @@ abstract class DistEducation implements IDistEducation
     {
         return $this->_host;
     }
-
-    /**
-     * задать host
-     * @param string $host
-     * @return void
-     */
-    /*public function setHost($host)
-    {
-        $this->_host = $host;
-    }*/
 
     /**
      * Отправка запроса для регистрации
@@ -152,38 +132,6 @@ abstract class DistEducation implements IDistEducation
     }
 
     /**
-     * Отправка запроса
-     * @param $body
-     * @param array|null $headers
-     * @return mixed
-     */
-    /*protected function _sendQuery($body, $headers = null)
-    {
-        $myCurl = curl_init();
-
-        curl_setopt_array($myCurl, array(
-            CURLOPT_URL => $this->host,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => http_build_query($body),
-            CURLOPT_HTTPHEADER => $headers
-        ));
-
-        $response = curl_exec($myCurl);
-
-        $http_code = null;
-        // Проверяем наличие ошибок
-        if (!curl_errno($myCurl)) {
-
-            $http_code = curl_getinfo($myCurl, CURLINFO_HTTP_CODE);
-        }
-
-        curl_close($myCurl);
-
-        return array($http_code, $response);
-    }*/
-
-    /**
      * Список курсов
      * @return mixed
      */
@@ -209,4 +157,70 @@ abstract class DistEducation implements IDistEducation
      * @return mixed
      */
     abstract protected function _getCoursesList();
+
+    /**
+     * Инфо по курсу по $id
+     * @param string|int $id
+     * @return mixed
+     */
+    public function getCourse($id)
+    {
+        if(empty($id))
+            return null;
+
+        return $this->_getCourse($id);
+    }
+
+    /**
+     * Список курсов
+     * @return mixed
+     */
+    abstract protected function _getCourse($id);
+
+    /**
+     * Список курсов для combobox @see CHtml::listData()
+     * @return mixed
+     */
+    public function getCoursesListForLisData()
+    {
+        return $this->_getCoursesListForLisData();
+    }
+
+    /**
+     * Список курсов для combobox @see CHtml::listData()
+     * @return mixed
+     */
+    abstract protected function _getCoursesListForLisData();
+
+    /**
+     * Сохранения привязки
+     * @param $uo1 int
+     * @param $course object|array
+     * @return bool
+     */
+    public function saveLinkCourse($uo1, $course)
+    {
+        $model = DispDist::model()->findByPk($uo1);
+
+        if($model==null)
+        {
+            $model = new DispDist();
+            $model->dispdist1 = $uo1;
+        }
+
+        $model->setAttributes($this->_getParamsLink($course));
+
+        $model->dispdist4 = Yii::app()->user->dbModel->p1;
+        $model->dispdist5 = date('Y-m-d H:i:s');
+
+        return $model->save();
+
+    }
+
+    /**
+     * Сохранения привязки
+     * @param $course object|array
+     * @return array
+     */
+    abstract protected function _getParamsLink($course);
 }
