@@ -75,7 +75,7 @@ $this->pageHeader=$this->pageTitle;
                                         <input type="checkbox" class="ace" />
                                         <span class="lbl"> Remember Me</span>
                                     </label>-->
-                                    <button  data-loading-text="Loading..." class="width-35 pull-right btn btn-small btn-primary" type="submit">
+                                    <button id="login-button"  data-loading-text="Loading..." class="width-35 pull-right btn btn-small btn-primary" type="submit">
                                         <i class="icon-key"></i>
                                         <?=tt('Войти')?>
                                     </button>
@@ -96,3 +96,13 @@ $this->pageHeader=$this->pageTitle;
         </div><!-- /position-relative -->
     </div>
 </div>
+
+<?php
+
+Yii::app()->clientScript->registerScript('loginbutton click', <<<JS
+     $("#login-button").on('click', function() {
+            $(this).button('loading');
+     });
+
+JS
+    , CClientScript::POS_READY);
