@@ -15,6 +15,10 @@ $this->renderPartial('/filter_form/default/year_sem');
 
 $chairId = $model->chairId;
 
+echo <<<HTML
+    <span id="spinner1"></span>
+HTML;
+
 if($model->isAdminDistEducation){
     echo '<form class="form-inline" id="filter-year-sem-form" method="POST">';
     $chairs = CHtml::listData(K::model()->getAllChairs(), 'k1', 'k3');

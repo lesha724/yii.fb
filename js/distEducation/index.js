@@ -1,5 +1,7 @@
 $(document).ready(function(){
 
+    $spinner1 = $('#spinner1');
+
     $select = $('.chosen-chairId');
 
     $select.chosen();
@@ -11,6 +13,7 @@ $(document).ready(function(){
 
 $(document).on('click','.btn-add-link', function(e) {
     e.preventDefault();
+    $spinner1.show();
     $('#myModal #modal-content').html('');
     var url = $(this).attr('href');
     $.ajax({
@@ -29,9 +32,11 @@ $(document).on('click','.btn-add-link', function(e) {
             } else {
                 addGritter(data.title, 'Ошибка', 'error');
             }
+            $spinner1.hide();
         },
         error: function( data ) {
             addGritter('', 'Ошибка', 'error');
+            $spinner1.hide();
         }
     });
 });

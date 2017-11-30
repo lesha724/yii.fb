@@ -123,7 +123,7 @@ class DistEducationController extends Controller
                 $html = $this->renderPartial('_add_link_form', array(
                     'disp' => $disp,
                     'model'=>$model,
-                    'coursesList' => CHtml::listData($connector->getCoursesList(),'course_id', function ($data){
+                    'coursesList' => CHtml::listData($list,'course_id', function ($data){
                         return $data->name. ' / '. $data->course_id;
                     })
                 ), true);
