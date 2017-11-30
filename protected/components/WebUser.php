@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Class WebUser
+ *
+ * @property bool $isBlock
+ * @property bool $isAdmin
+ */
 class WebUser extends CWebUser
 {
     private $_model = null;

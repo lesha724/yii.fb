@@ -119,7 +119,7 @@
  * @method string getShortName() Returns default truncated name.
  *
  */
-class St extends CActiveRecord
+class St extends CActiveRecord implements IPerson
 {
 	/**
 	 * @return string the associated database table name
@@ -1430,5 +1430,26 @@ SQL;
         $students = $command->queryAll();
 
         return $students;
+    }
+
+    /**
+     * Проверка заблокирован ли преподователь
+     * @return bool
+     */
+    public function checkBlocked()
+    {
+        if($this->isNewRecord)
+            return true;
+
+        $sql = <<<SQL
+              SELECT COUNT(*) FROM STD 
+              WHERE std11 in (0,3,5,6,8) and std7 is null and STD2=:ST1
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ST1', $this->st1);
+        $count = $command->queryScalar();
+
+        return empty($count) || $count==0;
     }
 }

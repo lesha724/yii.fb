@@ -6,7 +6,7 @@
 /**
  * CWebApplication modules:
  * @property CClientScript $clientScript
- * @property CWebUser $user
+ * @property WebUser $user
  * @property CHttpSession $session
  * @property CFormatter $format
  */
