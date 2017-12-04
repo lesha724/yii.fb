@@ -44,7 +44,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         ),
         array(
             'class'=>'bootstrap.widgets.TbButtonColumn',
-            'template'=>'{update}',
+            'template'=>'{update} {reset}',
             'header'=>CHtml::dropDownList(
                 'pageSize',
                 $pageSize,
@@ -53,6 +53,13 @@ $this->widget('bootstrap.widgets.TbGridView', array(
             ),
             'buttons'=>array
             (
+                'reset' => array(
+                    'label'=>tt('Отменить привязку'),
+                    'icon'=>'icon-remove bigger-120',
+                    'url'=>'array("addLink","uo1"=>$data["uo1"],"k1"=>$data["uo4"])',
+                    'options' => array('class' => 'btn btn-mini btn-danger btn-remove-link'),
+                    'visible'=>'!empty($data["dispdist3"])'
+                ),
                 'update' => array(
                     'label'=>tt('Добавить привязку'),
                     'icon'=>'icon-plus bigger-120',
