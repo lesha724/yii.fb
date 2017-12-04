@@ -254,28 +254,40 @@ class Elgzst extends CActiveRecord
                         ((elgzst3 > 0) '.$dopCondition.' )
         ';
         //$where = '';
-        /*$params = array(
-            ':ELG4' => $type_lesson,
-            ':MIN' => ,
-        );*/
+        $params = array(
+        );
 
 
-        if(!empty($this->st2))
-            $where .=" AND st2 CONTAINING '".$this->st2."' ";
+        if(!empty($this->st2)) {
+            $where .= ' AND st2 CONTAINING :ST2 ';
+            $params[':ST2'] = $this->st2;
+        }
         /*if(!empty($this->r2))
             $where .=" AND r2 ='".date_format(date_create_from_format("d.m.Y", $this->r2), "Y-m-d")."'";*/
-        if(!empty($this->tema))
-            $where .=" AND ustem5 CONTAINING '".$this->tema."' ";
-        if(!empty($this->nom))
-            $where .=" AND nom=".$this->nom;
-        if(!empty($this->elgp3))
-            $where .=" AND elgp3 CONTAINING '".$this->elgp3."' ";
-        if(!empty($this->elgp2))
-            $where .=" AND elgp2=".$this->elgp2;
-        if($this->elgzst3!=null)
-            $where .=" AND elgzst3=".$this->elgzst3;
-        if(!empty($this->group_st))
-            $where .=" AND gr3 CONTAINING '".$this->group_st."' ";
+        if(!empty($this->tema)) {
+            $where .= ' AND ustem5 CONTAINING :TEMA ';
+            $params[':TEMA'] = $this->tema;
+        }
+        if(!empty($this->nom)) {
+            $where .= ' AND nom=:NOM';
+            $params[':NOM'] = $this->nom;
+        }
+        if(!empty($this->elgp3)) {
+            $where .= ' AND elgp3 CONTAINING :ELGP3 ';
+            $params[':ELGP3'] = $this->elgp3;
+        }
+        if(!empty($this->elgp2)) {
+            $where .= ' AND elgp2=:ELGP2';
+            $params[':ELGP2'] = $this->elgp2;
+        }
+        if($this->elgzst3!=null) {
+            $where .= ' AND elgzst3=:ELGZST3';
+            $params[':ELGZST3'] = $this->elgzst3;
+        }
+        if(!empty($this->group_st)) {
+            $where .= ' AND gr3 CONTAINING :GR3';
+            $params[':GR3'] = $this->group_st;
+        }
         if(!empty($this->status))
             if($this->status==1)
                 $where .=" AND (elgzst5>'".$this->getMin()."' or elgzst5=-1) ";
@@ -294,6 +306,7 @@ class Elgzst extends CActiveRecord
             $where;
 
         $command=Yii::app()->db->createCommand($countSQL);
+        $command->params = $params;
         /*foreach ($params as $key => $val)
         {
             $command->bindParam($key, $val, PDO::PARAM_STR);
@@ -320,8 +333,8 @@ class Elgzst extends CActiveRecord
                 'default'=>'ASC',
             ),
             'tema'=>array(
-                'asc'=>'tema asc',
-                'desc'=>'tema DESC',
+                'asc'=>'ustem5 asc',
+                'desc'=>'ustem5 DESC',
                 'default'=>'ASC',
             ),
             'group_st'=>array(
@@ -353,7 +366,7 @@ class Elgzst extends CActiveRecord
         return new CSqlDataProvider($selectSQL, array(
             'keyField' => 'elgzst0',
             'totalItemCount'=>$count,
-            //'params'=>$params,
+            'params'=>$params,
             'sort'=>$sort,
             'pagination'=>array(
                 'pageSize'=> $pageSize,
