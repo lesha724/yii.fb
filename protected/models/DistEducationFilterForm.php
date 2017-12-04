@@ -19,6 +19,30 @@
 class DistEducationFilterForm extends CFormModel
 {
     /**
+     * @var string для фильтра по названию дисциплины
+     */
+    public $d2;
+
+    /**
+     * @var int для фильтра по курсу
+     */
+    public $course;
+
+    /**
+     * @var string для фильтра по названию специальности
+     */
+    public $sp2;
+
+    public function rules()
+    {
+        // NOTE: you should only define rules for those attributes that
+        // will receive user inputs.
+        return array(
+            array('d2, sp2', 'length', 'max'=>255),
+            array('course', 'numerical', 'max'=>6, 'min'=> 1),
+        );
+    }
+    /**
      * Прльзователь
      * @var null|WebUser
      */
@@ -70,9 +94,13 @@ class DistEducationFilterForm extends CFormModel
      * @return bool
      */
     public function getIsAdminDistEducation(){
+
+        if($this->_user->isAdmin)
+            return true;
+
         if(empty($this->_user) || empty($this->_grants))
             return false;
-        return $this->_user->isAdmin || ($this->_grants->getGrantsFor(Grants::DIST_EDUCATION_ADMIN) == 1);
+        return ($this->_grants->getGrantsFor(Grants::DIST_EDUCATION_ADMIN) == 1);
     }
 
     /**
@@ -110,6 +138,18 @@ class DistEducationFilterForm extends CFormModel
     }
 
     /**
+     * @return array customized attribute labels (name=>label)
+     */
+    public function attributeLabels()
+    {
+        return array(
+            'd2' => tt('Дисциплина'),
+            'sp2' => tt('Специальность'),
+            'course'=>tt('Курс потока'),
+        );
+    }
+
+    /**
      * @param $user WebUser
      */
     private function _setUser($user){
@@ -142,6 +182,21 @@ class DistEducationFilterForm extends CFormModel
 
         $where = '';
 
+        if(!empty($this->d2)) {
+            $where .= " AND d2 CONTAINING :D2 ";
+            $params[':D2'] = $this->d2;
+        }
+
+        if(!empty($this->sp2)) {
+            $where .= " AND sp2 CONTAINING :SP2 ";
+            $params[':SP2'] = $this->sp2;
+        }
+
+        if(!empty($this->course)) {
+            $where .= " AND sem4 = :COURSE ";
+            $params[':COURSE'] = $this->course;
+        }
+
         $sql = <<<SQL
           SELECT d2,d1,uo1,sem4,sp2, dispdist2, dispdist3, uo4
             FROM us
@@ -173,6 +228,16 @@ SQL;
             'd2'=>array(
                 'asc'=>'d2 ASC',
                 'desc'=>'d2 DESC',
+                'default'=>'ASC',
+            ),
+            'sp2'=>array(
+                'asc'=>'sp2 ASC',
+                'desc'=>'sp2 DESC',
+                'default'=>'ASC',
+            ),
+            'course'=>array(
+                'asc'=>'sem4 ASC',
+                'desc'=>'sem4 DESC',
                 'default'=>'ASC',
             ),
         );

@@ -24,15 +24,18 @@ $this->widget('bootstrap.widgets.TbGridView', array(
     'ajaxUrl' => Yii::app()->createAbsoluteUrl('/distEducation/index', $params),
     'columns' => array(
         'd2'=>array(
-            'header'=>tt('Дисциплина'),
+            'name'=>'d2',
+            'header'=>$model->getAttributeLabel('d2'),
             'value'=>'$data["d2"]',
         ),
-        'sem4'=>array(
-            'header'=>tt('Курс потока'),
+        'course'=>array(
+            'name'=>'course',
+            'header'=>$model->getAttributeLabel('course'),
             'value'=>'$data["sem4"]',
         ),
         'sp2'=>array(
-            'header'=>tt('Специальность'),
+            'name'=>'sp2',
+            'header'=>$model->getAttributeLabel('sp2'),
             'value'=>'$data["sp2"]',
         ),
         'distDisp'=>array(

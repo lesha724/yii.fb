@@ -66,7 +66,13 @@ class DistEducationController extends Controller
 
 	    if(isset($_REQUEST['DistEducationFilterForm'])){
             $model->attributes = $_REQUEST['DistEducationFilterForm'];
+
+            if(!$model->validate()){
+                throw new CHttpException(400, tt('Неверные параметры'));
+            }
         }
+
+
 
 	    if($model->isAdminDistEducation){
             $chairId = Yii::app()->request->getParam('chairId', null);
