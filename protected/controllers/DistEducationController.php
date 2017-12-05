@@ -17,7 +17,8 @@ class DistEducationController extends Controller
                 'actions' => array(
                     'index',
                     'addLink',
-                    'saveLink'
+                    'saveLink',
+                    'removeLink'
                 ),
                 'expression' => 'Yii::app()->user->isTch',
             ),
@@ -191,6 +192,62 @@ class DistEducationController extends Controller
                         if(!$connector->saveLinkCourse($uo1, $course)){
                             $error = true;
                             $message = tt('Ошибка сохранения привязки');
+                        }
+                    }
+                }
+            }
+        }
+
+        $res = array(
+            'title' => $title,
+            'message' => $message,
+            'error' => $error
+        );
+
+        Yii::app()->end(CJSON::encode($res));
+    }
+
+    /**
+     * Сохранение привязки дисциплины к дист образованию
+     */
+    public function actionRemoveLink(){
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $model = new DistEducationFilterForm(Yii::app()->user);
+
+        $uo1 = Yii::app()->request->getParam('uo1', null);
+        $k1 = Yii::app()->request->getParam('k1', null);
+
+        $title = tt('Открепление дисциплины');
+        $message = '';
+        $error = false;
+
+        if($uo1==null  || $k1==null)
+            $error = true;
+        else {
+            $model->setChairId($k1);
+
+            if (empty($uo1))
+                $error = true;
+
+            if (!$error) {
+                $disp = $model->getDispInfo($uo1);
+
+                if (empty($disp)) {
+                    $error = true;
+                    $message = tt('Не найдена дисциплина');
+                } else {
+                    $link = DispDist::model()->findByPk($uo1);
+
+                    if($link==null)
+                    {
+                        $error = true;
+                        $message = tt('Ссылка не найдена');
+                    }else{
+                        $error = !$link->delete();
+                        if($error){
+                            $message = tt('Ошибка удаления');
                         }
                     }
                 }

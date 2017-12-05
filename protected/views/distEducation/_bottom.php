@@ -56,7 +56,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                 'reset' => array(
                     'label'=>tt('Отменить привязку'),
                     'icon'=>'icon-remove bigger-120',
-                    'url'=>'array("addLink","uo1"=>$data["uo1"],"k1"=>$data["uo4"])',
+                    'url'=>'array("removeLink","uo1"=>$data["uo1"],"k1"=>$data["uo4"])',
                     'options' => array('class' => 'btn btn-mini btn-danger btn-remove-link'),
                     'visible'=>'!empty($data["dispdist3"])'
                 ),

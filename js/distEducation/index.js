@@ -48,6 +48,40 @@ $(document).on('click','.btn-add-link', function(e) {
             $spinner1.hide();
         }
     });
+
+
+});
+
+$(document).on('click','.btn-remove-link', function(e) {
+    e.preventDefault();
+    $spinner1.show();
+    var url = $(this).attr('href');
+    $.ajax({
+        url: url,
+        dataType: 'json',
+        success: function (data) {
+            if (!data.error) {
+                addGritter('Успешно', data.title, 'success');
+                $.fn.yiiGridView.update('disp-list')
+            } else {
+                addGritter(data.title, 'Ошибка', 'error');
+            }
+            $spinner1.hide();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status == 500) {
+                addGritter('Ошибка', 'Internal error: ' + jqXHR.responseText, 'error')
+            } else {
+                if (jqXHR.status == 403) {
+                    addGritter('Ошибка', 'Access error: ' + jqXHR.responseText, 'error')
+                } else {
+                    addGritter('Ошибка', 'Ошибка', 'error');
+                }
+            }
+
+            $spinner1.hide();
+        }
+    });
 });
 
 $(document).on('click','#save-link', function(e) {
