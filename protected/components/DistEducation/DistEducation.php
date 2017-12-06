@@ -45,9 +45,10 @@ abstract class DistEducation implements IDistEducation
 
     /**
      * Отправка запроса для регистрации
+     * @param Users $user
      * @return array
      */
-    abstract protected function sendSignUp($name, $username, $password, $email);
+    abstract protected function sendSignUp($user);
 
     /**
      * Привязка к уже существующей учетек
@@ -55,7 +56,50 @@ abstract class DistEducation implements IDistEducation
      * @param $params array
      * @return array
      */
-    abstract protected function saveSignUpOld($user, $params);
+    protected function saveSignUpOld($user, $params){
+        if(!$user->isStudent)
+            return array(false, 'EdxDistEducation:'.tt('Пользователь не студент'));
+
+        if(!isset($params['email']))
+            return array(false, 'EdxDistEducation: params don`t contains email');
+
+        $transaction = Yii::app()->db->beginTransaction();
+        try {
+            //Сохраняем приязку студента к акунту дистанционого образлвания
+            $stDist = Stdist::model()->findByPk($user->u6);
+            if($stDist==null) {
+                $stDist = new Stdist();
+                $stDist->stdist1 = $user->u6;
+            }
+            $stDist->stdist2 = $params['email'];
+
+            if(!$stDist->save()){
+                $transaction->rollback();
+
+                $text = 'Ошибка сохранения!';
+
+                $errors = $stDist->getErrors('stdist2');
+                if(is_array($errors))
+                    $text = implode('; ',$errors);
+
+                if(is_string($errors))
+                    $text = $errors;
+
+                return array(false, $text);
+            }
+            //ставим метку студенту что он имеет привязку
+            if(!$this->_setStudentSignUp($user->u6))
+                $transaction->rollback();
+
+            $transaction->commit();
+
+            return array(true, '');
+
+        } catch (Exception $e) {
+            $transaction->rollback();
+            return array(false, $e->getMessage());
+        }
+    }
 
     /**
      * @param $user Users
@@ -82,15 +126,21 @@ abstract class DistEducation implements IDistEducation
 
     /**
      * Регистрация в системе дистанционого обучения
-     * @param $name string Имя
-     * @param $username string Логин
-     * @param $password string Пароль
-     * @param $email string Email
+     * @param $user Users
      * @return array
      */
-    public function signUp($name, $username, $password, $email)
+    public function signUp($user)
     {
-        return $this->sendSignUp($name, $username, $password, $email);
+        $res = $this->sendSignUp($user);
+
+        if($res[0])
+        {
+            $this->saveSignUpOld($user, array(
+                'email'=>$user->u4
+            ));
+        }
+
+        return $res;
     }
 
     /**
@@ -223,4 +273,21 @@ abstract class DistEducation implements IDistEducation
      * @return array
      */
     abstract protected function _getParamsLink($course);
+
+    /**
+     * Валидировать email (есть ли пользователь стаким email)
+     * @param string $email
+     * @return bool
+     */
+    public function validateEmail($email)
+    {
+        return $this->_validateEmail($email);
+    }
+
+    /**
+     * Валидировать email
+     * @param string $email
+     * @return bool
+     */
+    abstract protected function _validateEmail($email);
 }

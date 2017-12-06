@@ -15,14 +15,11 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
 {
     /**
      * отправка запроса для регистрации
-     * @param $name string
-     * @param $username string
-     * @param $password string
-     * @param $email string
+     * @param $user Users
      * @return array
      * @throws Exception empty apikey
      */
-    protected function sendSignUp($name, $username, $password, $email)
+    protected function sendSignUp($user)
     {
         throw  new CHttpException(400,'Not implimented!');
 
@@ -66,76 +63,27 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
      * @param array $params
      * @return array
      */
-    protected function saveSignUpOld($user, $params)
+    /*protected function saveSignUpOld($user, $params)
     {
-        if(!$user->isStudent)
-            return array(false, 'EdxDistEducation:'.tt('Пользователь не студент'));
 
-        if(!isset($params['email']))
-            return array(false, 'EdxDistEducation: params don`t contains email');
+    }*/
 
-        $transaction = Yii::app()->db->beginTransaction();
-        try {
-            //Сохраняем приязку студента к акунту дистанционого образлвания
-            $stDist = Stdist::model()->findByPk($user->u6);
-            if($stDist==null) {
-                $stDist = new Stdist();
-                $stDist->stdist1 = $user->u6;
-            }
-            $stDist->stdist2 = $params['email'];
-
-            if(!$stDist->save()){
-                $transaction->rollback();
-
-                $text = 'Ошибка сохранения!';
-
-                $errors = $stDist->getErrors('stdist2');
-                if(is_array($errors))
-                    $text = implode('; ',$errors);
-
-                if(is_string($errors))
-                    $text = $errors;
-
-                return array(false, $text);
-            }
-            //ставим метку студенту что он имеет привязку
-            if(!$this->_setStudentSignUp($user->u6))
-                $transaction->rollback();
-
-            $transaction->commit();
-
-            return array(true, '');
-
-        } catch (Exception $e) {
-            $transaction->rollback();
-            return array(false, $e->getMessage());
-        }
-
-    }
-
+    /**
+     * @return mixed
+     * @throws CHttpException
+     */
     protected function _getCoursesList()
     {
-        Yii::import('ext.EHttpClient.*');
+        $body = $this->_sendQuery('/api/courses/v1/courses/?page_size=999');
 
-        $client = new EHttpClient( $this->host.'/api/courses/v1/courses/?page_size=999', array(
-            'maxredirects' => 0,
-            'timeout'      => 30));
+        $array = json_decode($body);
 
-        $response = $client->request();
+        //var_dump($array);
 
-        if($response->isSuccessful())
-        {
-            $array = json_decode($response->getBody());
-
-            //var_dump($array);
-
-            if(!isset($array->results))
-                throw new CHttpException(500, 'EdxDistEducation: Ошибка загрузки курсов. Неверный формат ответа');
-            else
-                return $array->results;
-        }
+        if(!isset($array->results))
+            throw new CHttpException(500, 'EdxDistEducation: Ошибка загрузки курсов. Неверный формат ответа');
         else
-            throw new CHttpException(500, 'EdxDistEducation: Ошибка загрузки курсов. '.$response->getRawBody());
+            return $array->results;
     }
 
     /**
@@ -203,4 +151,49 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
             'X-Edx-Api-Key' => $this->apiKey
         );
     }*/
+
+    /**
+     * Валидация email
+     * @param string $email
+     * @return bool
+     */
+    protected function _validateEmail($email)
+    {
+        return true;
+    }
+
+    /**
+     * @param $method
+     * @param null|string $type @see EHttpClient::POST
+     * @param null|array $params парметры для запроса зависит отметода $type
+     * @return string
+     * @throws CHttpException
+     */
+    private function _sendQuery($method, $type = null, $params = null){
+        Yii::import('ext.EHttpClient.*');
+
+        $client = new EHttpClient( $this->host.$method, array(
+            'maxredirects' => 0,
+            'timeout'      => 30));
+
+        $response = $client->request($type);
+
+        if($type = EHttpClient::GET){
+            if(!empty($params)) {
+                $client->setParameterGet($params);
+            }
+        }else{
+            if(!empty($params)) {
+                $client->setParameterPost($params);
+            }
+        }
+
+
+        if($response->isSuccessful())
+        {
+            return $response->getBody();
+        }
+        else
+            throw new CHttpException(500, 'EdxDistEducation: Ошибка отправки запроса. '.$response->getRawBody());
+    }
 }

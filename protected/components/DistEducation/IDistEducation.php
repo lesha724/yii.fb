@@ -20,13 +20,10 @@ interface IDistEducation
 
     /**
      * Регистрация в системе дистанционого обучения
-     * @param string $name  Имя
-     * @param string $username  Логин
-     * @param string $password  Пароль
-     * @param string $email  Email
+     * @param Users $user
      * @return mixed
      */
-    public function signUp($name, $username, $password, $email);
+    public function signUp($user);
 
     /**
      * Привязать к уже существующей
@@ -76,4 +73,11 @@ interface IDistEducation
      * @return bool
      */
     public function saveLinkCourse($uo1, $course);
+
+    /**
+    * Список курсов
+     * @param string $email
+    * @return bool
+    */
+    public function validateEmail($email);
 }

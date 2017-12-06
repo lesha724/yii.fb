@@ -108,6 +108,8 @@ class SiteController extends Controller
 
         $model->unsetAttributes();
 
+        $model->email = Yii::app()->user->model->u4;
+
         if(isset($_POST[$className])) {
 
             $model->attributes=$_POST[$className];
@@ -147,7 +149,7 @@ class SiteController extends Controller
 
         $user = Yii::app()->user->model;
 
-        list($result, $message) = $connector->signUp(Yii::app()->user->dbModel->getFullName(), $user->u2, '', $user->u4);
+        list($result, $message) = $connector->signUp(Yii::app()->user->model);
 
         if(!$result){
             Yii::app()->user->setFlash('error', '<strong>'.tt('Внимание!').'</strong> '. $message);
