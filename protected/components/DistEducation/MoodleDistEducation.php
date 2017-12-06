@@ -101,14 +101,14 @@ class MoodleDistEducation extends DistEducation
      */
     protected function _getCoursesList()
     {
-        $body = $this->_sendQuery('','');
+        $body = $this->_sendQuery('core_course_get_courses','GET');
 
         $array = json_decode($body);
 
-        if(!isset($array->results))
+        if(!is_array($array))
             throw new CHttpException(500, 'EdxDistEducation: Ошибка загрузки курсов. Неверный формат ответа');
         else
-            return $array->results;
+            return $array;
     }
 
     /**
@@ -123,7 +123,7 @@ class MoodleDistEducation extends DistEducation
         $course = array_filter(
             $this->getCoursesList(),
             function ($e) use (&$id) {
-                return $e->course_id == $id;
+                return $e->id == $id;
             }
         );
 
@@ -144,8 +144,8 @@ class MoodleDistEducation extends DistEducation
     {
         $list = $this->getCoursesList();
 
-        return CHtml::listData($list,'course_id', function ($data){
-            return $data->name. ' / '. $data->course_id;
+        return CHtml::listData($list,'id', function ($data){
+            return $data->displayname. ' / '. $data->id;
         });
     }
 
@@ -157,8 +157,8 @@ class MoodleDistEducation extends DistEducation
     protected function _getParamsLink($course)
     {
         return array(
-            'dispdist3'=> $course->course_id,
-            'dispdist2' => $course->name
+            'dispdist3'=> $course->id,
+            'dispdist2' => $course->displayname
         );
     }
 

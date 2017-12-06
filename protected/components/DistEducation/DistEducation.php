@@ -189,17 +189,17 @@ abstract class DistEducation implements IDistEducation
     {
         $id = self::KEY_CACHE_COURS_LIST;
 
-        $value=Yii::app()->cache->get($id);
+        /*$value=Yii::app()->cache->get($id);
         if($value===false)
-        {
+        {*/
             // устанавливаем значение $value заново, т.к. оно не найдено в кэше,
             // и сохраняем его в кэше для дальнейшего использования:
             $list = $this->_getCoursesList();
             Yii::app()->cache->set($id,$list,600);
             return $list;
-        }
+        /*}
 
-        return $value;
+        return $value;*/
     }
 
     /**
