@@ -24,9 +24,29 @@ $(document).on('click','.btn-add-link', function(e) {
                 $('#myModal .modal-header h4').html(data.title);
                 $('#myModal #modal-content').html(data.html);
 
-                $_select = $('#chosen-dispdist3');
-
-                $_select.chosen();
+                initDataTableOprions('courses-list',{
+                    aaSorting: [],
+                    "iDisplayLength": 50,
+                    "aLengthMenu": [[25, 50, 100, 200, -1], [25, 50, 100,200, "Все"]],
+                    bPaginate: true,
+                    "bFilter": true,
+                    oLanguage: {
+                        sSearch: 'Поиск',
+                        oPaginate: {
+                            sNext: 'След',
+                            sPrevious: 'Пред'
+                        },
+                        sLengthMenu: 'Показать _MENU_ записей',
+                        sInfo: 'Общее кол-во записей _TOTAL_ отображено (_START_ - _END_)',
+                        sInfoEmpty: 'Ничего не найдено',
+                        sInfoFiltered: ' - отсортировано _MAX_ записей',
+                        sZeroRecords: 'Ничего не найдено',
+                        responsive: true,
+                        columnDefs: [
+                            { targets: [-1, -3], className: 'dt-body-right' }
+                        ]
+                    }
+                });
 
                 $('#myModal').modal('show');
             } else {
@@ -84,7 +104,7 @@ $(document).on('click','.btn-remove-link', function(e) {
     });
 });
 
-$(document).on('click','#save-link', function(e) {
+$(document).on('click','.btn-save-link', function(e) {
     e.preventDefault();
 
     var uo1 = $('#filed_uo1').val();
@@ -97,7 +117,7 @@ $(document).on('click','#save-link', function(e) {
         addGritter('Ошибка', 'Ошибка', 'error')
         return false;
     }
-    var id = $('#chosen-dispdist3').val();
+    var id = $(this).data('id');
     if ( !id) {
         addGritter('Ошибка', 'Выберите курс', 'error')
         return false;

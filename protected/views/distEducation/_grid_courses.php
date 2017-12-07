@@ -11,21 +11,51 @@
  */
 /** @var $this DistEducationController */
 /** @var array $disp */
-/** @var DistEducationFilterModel $searchModel */
-/** @var CArrayDataProvider $dataProvider */
+/** @var array $coursesList*/
 /**
  * @var DistEducation $connector
  */
 
-$params = array(
-    'uo1'=>$disp['uo1'],
-    'k1'=>$model->chairId
-);
+$thead = $tbody = '';
 
-$this->widget('bootstrap.widgets.TbGridView', array(
-    'ajaxUrl' => Yii::app()->createAbsoluteUrl('/distEducation/searchCourse', $params),
-    'id'=>'courses-grid-disteducation',
-    'dataProvider'=>$dataProvider,
-    'columns'=>$connector->getColumnsForGridView(),
-    'filter'=>$searchModel,
-));
+$columns = $connector->getColumnsForGridView();
+
+$idName = $connector->getNameIdFiled();
+
+foreach ($columns as $key=>$column){
+    $thead.=<<<HTML
+        <th>{$column['header']}</th>
+HTML;
+}
+
+$thead= '<tr>'.$thead.'<th></th></tr>';
+
+foreach ($coursesList as $course) {
+    $tbody .= '<tr>';
+    foreach ($columns as $key => $column) {
+        $tbody .= <<<HTML
+            <td>{$course->$key}</td>
+HTML;
+    }
+
+    $tbody.=<<<HTML
+        <td>
+            <button class="btn btn-small btn-success btn-save-link" data-id="{$course->$idName}"><i class="icon-ok"></i></button>
+        </td>
+HTML;
+
+    $tbody.='</tr>';
+}
+
+?>
+
+<table id="courses-list" class="table table-striped table-bordered table-hover">
+    <thead>
+        <?=$thead?>
+    </thead>
+    <tbody>
+        <?=$tbody?>
+    </tbody>
+</table>
+
+

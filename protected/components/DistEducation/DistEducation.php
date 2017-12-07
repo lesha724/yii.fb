@@ -14,6 +14,11 @@
  */
 abstract class DistEducation implements IDistEducation
 {
+    /*
+     *
+     */
+    const ID_FIELD_NAME = 'id';
+
     const KEY_CACHE_COURS_LIST = 'de_courses_list';
     /**
      * @var string АпиКей
@@ -304,4 +309,11 @@ abstract class DistEducation implements IDistEducation
      * @return bool
      */
     abstract protected function _validateEmail($email);
+
+    /**
+     * @return string
+     */
+    public function getNameIdFiled(){
+        return self::ID_FIELD_NAME;
+    }
 }

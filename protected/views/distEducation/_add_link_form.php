@@ -10,8 +10,7 @@
  */
 /** @var $this DistEducationController */
 /** @var array $disp */
-/** @var DistEducationFilterModel $searchModel */
-/** @var CArrayDataProvider $dataProvider */
+/** @var array $coursesList */
 /**
  * @var DistEducation $connector
  */
@@ -60,10 +59,9 @@ echo $html;
 
 $this->endWidget();
 
-echo $this->render('_grid_courses', array(
-    'searchModel' => $searchModel,
+$this->renderPartial('_grid_courses', array(
     'disp' => $disp,
     'model'=>$model,
     'connector'=>$connector,
-    'dataProvider' => $dataProvider
+    'coursesList' => $connector->getCoursesList()
 ));

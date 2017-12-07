@@ -13,6 +13,11 @@
  */
 class EdxDistEducation extends DistEducation implements IEdxDistEducation
 {
+    /*
+     *
+     */
+    const ID_FIELD_NAME = 'course_id';
+
     /**
      * отправка запроса для регистрации
      * @param $user Users

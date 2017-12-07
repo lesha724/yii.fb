@@ -96,24 +96,4 @@ $this->beginWidget(
         </div>
     </div>
 
-    <div class="modal-footer">
-        <?php $this->widget(
-            'bootstrap.widgets.TbButton',
-            array(
-                'label' => tt('Сохранить'),
-                'type'=>'info',
-                'url' => '#',
-                'htmlOptions' => array('id' => 'save-link'),
-            )
-        ); ?>
-        <?php $this->widget(
-            'bootstrap.widgets.TbButton',
-            array(
-                'label' => tt('Отмена'),
-                'url' => '#',
-                'htmlOptions' => array('data-dismiss' => 'modal'),
-            )
-        ); ?>
-    </div>
-
 <?php $this->endWidget();
