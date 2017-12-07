@@ -115,13 +115,27 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
      * Список курсов для combobox @see CHtml::listData()
      * @return mixed
      */
-    protected function _getCoursesListForLisData()
+    /*protected function _getCoursesListForLisData()
     {
         $list = $this->getCoursesList();
 
         return CHtml::listData($list,'course_id', function ($data){
             return $data->name. ' / '. $data->course_id;
         });
+    }*/
+
+    protected function _getColumnsForGridView()
+    {
+        return array(
+            'course_id' => array(
+                'header'=>tt('Course_id'),
+                'name'=>'course_id',
+            ),
+            'name'=>array(
+                'header'=>tt('Название'),
+                'name'=>'name',
+            )
+        );
     }
 
     /**

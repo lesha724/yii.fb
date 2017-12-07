@@ -140,13 +140,30 @@ class MoodleDistEducation extends DistEducation
      * Список курсов для combobox @see CHtml::listData()
      * @return mixed
      */
-    protected function _getCoursesListForLisData()
+    /*protected function _getCoursesListForLisData()
     {
         $list = $this->getCoursesList();
 
         return CHtml::listData($list,'id', function ($data){
             return $data->displayname. ' / '. $data->id;
         });
+    }*/
+
+    protected function _getColumnsForGridView()
+    {
+        return array(
+            'id'=>array(
+                'header'=>tt('Id'),
+                'name'=>'id'/*,
+                'value'=>'$data->id',*/
+            ),
+            'displayname'=>array(
+                'header'=>tt('Название'),
+                'name'=>'displayname'/*,
+                'value'=>'$data->displayname',*/
+
+            )
+        );
     }
 
     /**

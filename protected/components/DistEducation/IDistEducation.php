@@ -64,7 +64,13 @@ interface IDistEducation
      * Список курсов для combobox @see CHtml::listData()
      * @return mixed
      */
-    public function getCoursesListForLisData();
+    //public function getCoursesListForLisData();
+
+    /**
+     * Колонки для грид вьюва
+     * @return array
+     */
+    public function getColumnsForGridView();
 
     /**
      * Сохранения привязки

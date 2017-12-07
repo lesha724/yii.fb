@@ -8,8 +8,13 @@
 /**
  * @var $model DistEducationFilterForm
  */
+/** @var $this DistEducationController */
 /** @var array $disp */
-/** @var array $coursesList */
+/** @var DistEducationFilterModel $searchModel */
+/** @var CArrayDataProvider $dataProvider */
+/**
+ * @var DistEducation $connector
+ */
 
 $pattern = <<<HTML
 <div class="">
@@ -46,11 +51,19 @@ $html .= $input;
 $input = CHtml::hiddenField('filed_k1',  $disp['uo4']);
 $html .= $input;
 
-$label = CHtml::label(tt('Курс'), 'dispdist3', $options);
+/*$label = CHtml::label(tt('Курс'), 'dispdist3', $options);
 $input = CHtml::dropDownList('filed_dispdist3', $disp['dispdist3'], $coursesList ,array('id'=>'chosen-dispdist3','class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => ''));
-$html .= sprintf($pattern, $label, $input);
+$html .= sprintf($pattern, $label, $input);*/
 
 $html .= '</div>';
 echo $html;
 
 $this->endWidget();
+
+echo $this->render('_grid_courses', array(
+    'searchModel' => $searchModel,
+    'disp' => $disp,
+    'model'=>$model,
+    'connector'=>$connector,
+    'dataProvider' => $dataProvider
+));

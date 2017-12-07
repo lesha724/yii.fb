@@ -189,17 +189,17 @@ abstract class DistEducation implements IDistEducation
     {
         $id = self::KEY_CACHE_COURS_LIST;
 
-        /*$value=Yii::app()->cache->get($id);
+        $value=Yii::app()->cache->get($id);
         if($value===false)
-        {*/
+        {
             // устанавливаем значение $value заново, т.к. оно не найдено в кэше,
             // и сохраняем его в кэше для дальнейшего использования:
             $list = $this->_getCoursesList();
             Yii::app()->cache->set($id,$list,600);
             return $list;
-        /*}
+        }
 
-        return $value;*/
+        return $value;
     }
 
     /**
@@ -228,19 +228,33 @@ abstract class DistEducation implements IDistEducation
     abstract protected function _getCourse($id);
 
     /**
+     * Колокнки для ГридВьюв
+     * @return array
+     */
+    public function getColumnsForGridView()
+    {
+        return $this->_getColumnsForGridView();
+    }
+
+    /**
+     * Колокнки для ГридВьюв
+     * @return array
+     */
+    abstract protected function _getColumnsForGridView();
+    /**
      * Список курсов для combobox @see CHtml::listData()
      * @return mixed
      */
-    public function getCoursesListForLisData()
+    /*public function getCoursesListForLisData()
     {
         return $this->_getCoursesListForLisData();
-    }
+    }*/
 
     /**
      * Список курсов для combobox @see CHtml::listData()
      * @return mixed
      */
-    abstract protected function _getCoursesListForLisData();
+    //abstract protected function _getCoursesListForLisData();
 
     /**
      * Сохранения привязки

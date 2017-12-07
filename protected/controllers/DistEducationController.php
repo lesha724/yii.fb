@@ -18,7 +18,8 @@ class DistEducationController extends Controller
                     'index',
                     'addLink',
                     'saveLink',
-                    'removeLink'
+                    'removeLink',
+                    'searchCourse'
                 ),
                 'expression' => 'Yii::app()->user->isTch',
             ),
@@ -86,6 +87,52 @@ class DistEducationController extends Controller
         ));
 	}
 
+    public function actionSearchCourse($uo1, $k1)
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $model = new DistEducationFilterForm(Yii::app()->user);
+
+        $model->setChairId($k1);
+
+        $connector = SH::getDistEducationConnector(
+            $this->universityCode
+        );
+
+        if(empty($connector))
+            throw new CHttpException(400, tt('Ошибка создания конектора'));
+
+
+        $disp = $model->getDispInfo($uo1);
+
+        if(empty($disp)) {
+            throw new CHttpException(400, tt('Не найдена дисциплина'));
+        }
+
+        $searchModel = new DistEducationFilterModel();
+        //$searchModel->unsetAttributes();
+        $searchModel->setFilters(array_keys($connector->getColumnsForGridView()));
+
+        if (isset($_GET['pageSize'])) {
+            Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
+            unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
+        }
+
+        if (isset($_REQUEST['DistEducationFilterModel']))
+        {
+            $searchModel->filters=$_REQUEST['DistEducationFilterModel'];
+        }
+
+
+        $this->renderPartial('_grid_courses', array(
+            'searchModel' => $searchModel,
+            'disp' => $disp,
+            'model'=>$model,
+            'connector'=>$connector,
+            'dataProvider' => $searchModel->getDataProvider($connector->getCoursesList()),
+        ), true);
+    }
     /**
      * Рендер формы для привязки дисциплины к дист образованию
      */
@@ -122,10 +169,24 @@ class DistEducationController extends Controller
                 $error = true;
             }
             else{
-                $html = $this->renderPartial('_add_link_form', array(
+                /*$html = $this->renderPartial('_add_link_form', array(
                     'disp' => $disp,
                     'model'=>$model,
                     'coursesList' => $connector->getCoursesListForLisData()
+                ), true);*/
+
+                $searchModel = new DistEducationFilterModel();
+                $searchModel->unsetAttributes();
+
+                $searchModel->setFilters(array_keys($connector->getColumnsForGridView()));
+                //var_dump($connector->getCoursesList());
+
+                $html = $this->renderPartial('_add_link_form', array(
+                    'searchModel' => $searchModel,
+                    'disp' => $disp,
+                    'model'=>$model,
+                    'connector'=>$connector,
+                    'dataProvider' => $searchModel->getDataProvider($connector->getCoursesList()),
                 ), true);
             }
         }
