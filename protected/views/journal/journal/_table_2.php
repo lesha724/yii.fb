@@ -646,6 +646,22 @@ HTML;
                 $stusvst = $stusv->getMarkForStudent($st1);
                 if (!empty($stusvst)) {
                     $readOnlySt = !empty($stusv['stusv15']);
+
+                    if(!$readOnlySt){
+                        $stusv12 = $stusv['stusv12'];
+                        $stusv11 = $stusv['stusv11'];
+                        if($stusv12!=0&&!empty($stusv11)){
+                            $date = date('Y-m-d H:i:s');
+                            $date2 = new DateTime($stusv11);
+                            $date1 = new DateTime($date);
+
+                            $date2->modify('+'.$stusv12.' days');
+
+                            if($date1>$date2) {
+                                $readOnlySt=true;
+                            }
+                        }
+                    }
                     /*if ($stusvst->stusvst4 > 0 || $stusvst->stusvst6 > 0)
                         $readOnlySt = true;*/
                 }
