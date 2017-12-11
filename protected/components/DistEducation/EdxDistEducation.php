@@ -170,10 +170,22 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
             'start'=>array(
                 'header'=>tt('Дата начала'),
                 'name'=>'start',
+                'value' => function($course){
+                    if(empty($course->start))
+                        return '';
+
+                    return date('d.m.Y', strtotime($course->start));
+                },
             ),
             'end'=>array(
                 'header'=>tt('Дата окончания'),
                 'name'=>'end',
+                'value' => function($course){
+                    if(empty($course->end))
+                        return '';
+
+                    return date('d.m.Y', strtotime($course->end));
+                },
             )
 
         );
