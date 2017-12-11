@@ -132,6 +132,28 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
     protected function _getColumnsForGridView()
     {
         return array(
+            'image' => array(
+                'header'=>tt('Изображение'),
+                'name'=>'image',
+                'value'=>function($course){
+                    /*if(!isset($course->media))
+                        return '';*/
+
+                    /*if(empty($course->media))
+                        return '';*/
+
+                    if(!isset($course->media->course_image))
+                        return '';
+
+                    if(empty($course->media->course_image))
+                        return '';
+
+                    if(!isset($course->media->course_image->uri))
+                        return '';
+
+                    return CHtml::image($this->host. $course->media->course_image->uri);
+                },
+            ),
             'course_id' => array(
                 'header'=>tt('Course_id'),
                 'name'=>'course_id',
@@ -139,7 +161,21 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
             'name'=>array(
                 'header'=>tt('Название'),
                 'name'=>'name',
+            ),
+            'short_description'=>array(
+                'header'=>tt('Описание'),
+                'name'=>'short_description',
+            ),
+
+            'start'=>array(
+                'header'=>tt('Дата начала'),
+                'name'=>'start',
+            ),
+            'end'=>array(
+                'header'=>tt('Дата окончания'),
+                'name'=>'end',
             )
+
         );
     }
 
@@ -214,5 +250,10 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
         }
         else
             throw new CHttpException(500, 'EdxDistEducation: Ошибка отправки запроса. '.$response->getRawBody());
+    }
+
+    public function getNameIdFiled()
+    {
+        return self::ID_FIELD_NAME;
     }
 }

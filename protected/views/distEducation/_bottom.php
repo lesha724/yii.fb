@@ -80,7 +80,7 @@ Yii::app()->clientScript->registerScript('initPageSize',"
 $this->beginWidget(
     'bootstrap.widgets.TbModal',
     array(
-        'id' => 'myModal',
+        'id' => 'modalBlock',
         'htmlOptions'=>array(
             'data-url'=>Yii::app()->createUrl('/distEducation/saveLink'),
             'class'=>'full-modal'
@@ -97,6 +97,17 @@ $this->beginWidget(
         <div id="modal-content" >
 
         </div>
+    </div>
+
+    <div class="modal-footer">
+        <?php $this->widget(
+            'bootstrap.widgets.TbButton',
+            array(
+                'label' => tt('Закрыть'),
+                'url' => '#',
+                'htmlOptions' => array('data-dismiss' => 'modal'),
+            )
+        ); ?>
     </div>
 
 <?php $this->endWidget();

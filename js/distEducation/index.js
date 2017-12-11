@@ -14,15 +14,15 @@ $(document).ready(function(){
 $(document).on('click','.btn-add-link', function(e) {
     e.preventDefault();
     $spinner1.show();
-    $('#myModal #modal-content').html('');
+    $('#modalBlock #modal-content').html('');
     var url = $(this).attr('href');
     $.ajax({
         url: url,
         dataType: 'json',
         success: function( data ) {
             if (!data.error) {
-                $('#myModal .modal-header h4').html(data.title);
-                $('#myModal #modal-content').html(data.html);
+                $('#modalBlock .modal-header h4').html(data.title);
+                $('#modalBlock #modal-content').html(data.html);
 
                 initDataTableOprions('courses-list',{
                     aaSorting: [],
@@ -48,7 +48,7 @@ $(document).on('click','.btn-add-link', function(e) {
                     }
                 });
 
-                $('#myModal').modal('show');
+                $('#modalBlock').modal('show');
             } else {
                 addGritter(data.title, 'Ошибка', 'error');
             }
@@ -129,7 +129,7 @@ $(document).on('click','.btn-save-link', function(e) {
         id : id
     }
 
-    var $modal = $('#myModal');
+    var $modal = $('#modalBlock');
     $modal.modal('hide');
     var url = $modal.data('url');
 

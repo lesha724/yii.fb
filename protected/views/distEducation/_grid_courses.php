@@ -23,7 +23,6 @@ function evaluateExpression($_expression_,$_data_=array())
     }
     else
     {
-        $_data_[]=$this;
         return call_user_func_array($_expression_, $_data_);
     }
 }
