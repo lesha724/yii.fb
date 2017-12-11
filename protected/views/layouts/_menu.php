@@ -436,7 +436,9 @@ $this->widget('zii.widgets.CMenu', array(
             'label' => _l('Дист. образование', 'facetime-video'),
             'url' => '#',
             'linkOptions'=> $_l,
-            'itemOptions'=>_i('distEducation'),
+            'itemOptions'=>array(
+                'class'=>Yii::app()->controller->id=='distEducation' && empty($_m) ? 'active open' : ''
+            ),
             'items' => array_merge(array(
                 array(
                     'label'   => $_l2.tt('Закрепление'),

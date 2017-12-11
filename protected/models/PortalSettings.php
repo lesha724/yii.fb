@@ -11,7 +11,7 @@ class PortalSettings extends CActiveRecord
 {
     const ENABLE_DIST_EDUCATION = 122;
     const HOST_DIST_EDUCATION = 123;
-    const APIKEY_DIST_EDUCATION = 124; ///Для запорожья
+    const APIKEY_DIST_EDUCATION = 124;
 
     const ZAP_SUPPORT_API_KEY_ID = 38999999;//запорожье
 	//const ZAP_SUPPORT_SECRET_KEY_ID = 38999998;//запорожье
@@ -19,6 +19,8 @@ class PortalSettings extends CActiveRecord
      * @var int ошибка записи на дисциплины сообщение
      */
     const ERROR_SUBCRIPTION_MESSAGE = 126;
+
+    const REGISTRATION_EMAIL_DIST_EDUCATION = 127;
 
 	private  $settings = array();
 	/**

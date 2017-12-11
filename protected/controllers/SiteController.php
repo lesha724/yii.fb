@@ -33,7 +33,6 @@ class SiteController extends Controller
      */
     public function filterExistDist($filterChain)
     {
-        //не зарегисророван в дистанцооном образовании
         if(Yii::app()->user->dbModel->st168>0) {
             throw new CHttpException(400, tt('Пользователь уже зарегистрирован в дистанционном образовании'));
         }
@@ -155,6 +154,23 @@ class SiteController extends Controller
             Yii::app()->user->setFlash('error', '<strong>'.tt('Внимание!').'</strong> '. $message);
         }else{
             Yii::app()->user->setFlash('success', '<strong>'.tt('Внимание!').'</strong> '. tt('Регистрация прошла успешно!'));
+
+            $message = PortalSettings::model()->getSettingFor(PortalSettings::REGISTRATION_EMAIL_DIST_EDUCATION);
+
+            if(empty($message)) {
+                $message = '';
+            }
+
+            list($status, $message) = $this->sendMailByTemplate($user->u4, tt('Регистрация дист. образование'), $message, array(
+                'username'=> $user->u2,
+                'email'=>$user->u4,
+                'fio' => $user->name,
+                'password' => $user->password
+            ));
+
+            if (!$status) {
+                Yii::app()->user->setFlash('error', $message);
+            }
         }
 
         $this->redirect('index');

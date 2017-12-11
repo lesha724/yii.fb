@@ -273,6 +273,27 @@ SQL;
         }
     }*/
 
+    /**
+     * @param $to
+     * @param $subject
+     * @param $template
+     * @param array $params
+     * @param null $file
+     * @return array
+     */
+    public function sendMailByTemplate($to,$subject,$template, $params = array(),$file = null){
+
+        $message = $template;
+
+        if(!empty($params)){
+            foreach ($params as $key=>$param){
+                $message = str_replace('{'.$key.'}', $param, $message);
+            }
+        }
+
+        return self::mail($to,$subject,$message,$file);
+    }
+
     public function mailsend($to,$subject,$message,$file = null){
         return self::mail($to,$subject,$message,$file);
     }
