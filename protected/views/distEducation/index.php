@@ -7,9 +7,9 @@ Yii::app()->clientScript->registerPackage('dataTables');
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/distEducation/index.js', CClientScript::POS_HEAD);
 
 
-$this->pageHeader=tt('Дистанционое образование: закрепление дисциплин');
+$this->pageHeader=tt('Дистанционное образование: закрепление дисциплин');
 $this->breadcrumbs=array(
-    tt('Дистанционое образование'),
+    tt('Дистанционное образование'),
 );
 
 $this->renderPartial('/filter_form/default/year_sem');
