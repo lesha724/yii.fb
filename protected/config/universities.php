@@ -9,3 +9,4 @@ define(U_OSEU,  6);*/
 define('U_URFAK',  7);
 define('U_ZSMU',  32);
 define('U_NULAU', 14);
+define('U_XNMU', 40);//харьков мед

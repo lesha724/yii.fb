@@ -8,10 +8,14 @@ class TimeTableController extends Controller
             if(in_array($action->id, array(
                 'group', 'student', 'teacher'
             ))) {
-                $message = tt(' Новое мобильное приложение для Android : <strong><a href="{url}" style="font-size: 18px">здесь</a></strong>!', array(
-                    '{url}' => SH::MOBILE_URL
-                ));
-                Yii::app()->user->setFlash('info', '<strong>' . tt('Внимание!') . '</strong>' . $message);
+                if (in_array($this->universityCode, array(
+                    U_XNMU
+                ))){
+                        $message = tt(' Новое мобильное приложение для Android : <strong><a href="{url}" style="font-size: 18px">здесь</a></strong>!', array(
+                            '{url}' => SH::MOBILE_URL
+                        ));
+                    Yii::app()->user->setFlash('info', '<strong>' . tt('Внимание!') . '</strong>' . $message);
+                }
             }
 
         return parent::beforeAction($action);
