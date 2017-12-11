@@ -363,7 +363,9 @@ SQL;
                 $sem=0;
             }else{
                 $year--;
+                $sem=1;
             }
+
             $sem1 = Sem::model()->getSemestrForGroupByYearAndSem($gr1,$year,$sem);
 
             $uo1 = Elgz::model()->getUo1($elgz->elgz1);
