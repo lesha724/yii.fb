@@ -81,7 +81,10 @@ $this->beginWidget(
     'bootstrap.widgets.TbModal',
     array(
         'id' => 'myModal',
-        'htmlOptions'=>array('data-url'=>Yii::app()->createUrl('/distEducation/saveLink'))
+        'htmlOptions'=>array(
+            'data-url'=>Yii::app()->createUrl('/distEducation/saveLink'),
+            'class'=>'full-modal'
+        )
     )
 ); ?>
 

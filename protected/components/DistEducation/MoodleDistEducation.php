@@ -157,12 +157,25 @@ class MoodleDistEducation extends DistEducation
                 'name'=>'id'/*,
                 'value'=>'$data->id',*/
             ),
+            'shortname'=>array(
+                'header'=>tt('Сокр. название'),
+                'name'=>'shortname'
+            ),
             'displayname'=>array(
                 'header'=>tt('Название'),
-                'name'=>'displayname'/*,
-                'value'=>'$data->displayname',*/
-
+                'name'=>'displayname'
+            ),
+            'startdate'=>array(
+                'header'=>tt('Дата начала'),
+                'name'=>'startdate',
+                'value'=>'date("d.m.Y",$course->startdate)'
+            ),
+            'enddate'=>array(
+                'header'=>tt('Дата окончания'),
+                'name'=>'enddate',
+                'value'=>'date("d.m.Y",$course->enddate)'
             )
+
         );
     }
 

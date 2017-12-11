@@ -6,6 +6,27 @@
  * Time: 22:33
  */
 
+
+function evaluateExpression($_expression_,$_data_=array())
+{
+    if(is_string($_expression_))
+    {
+        extract($_data_);
+        try
+        {
+            return eval('return ' . $_expression_ . ';');
+        }
+        catch (ParseError $e)
+        {
+            return false;
+        }
+    }
+    else
+    {
+        $_data_[]=$this;
+        return call_user_func_array($_expression_, $_data_);
+    }
+}
 /**
  * @var $model DistEducationFilterForm
  */
@@ -33,8 +54,17 @@ $thead= '<tr>'.$thead.'<th></th></tr>';
 foreach ($coursesList as $course) {
     $tbody .= '<tr>';
     foreach ($columns as $key => $column) {
+        $value = '';
+
+        if(isset($column['value'])){
+            $value = evaluateExpression($column['value'], array(
+                'course'=>$course
+            ));
+        }else
+            $value = $course->$key;
+
         $tbody .= <<<HTML
-            <td>{$course->$key}</td>
+                <td>{$value}</td>
 HTML;
     }
 
