@@ -4,6 +4,7 @@ class TimeTableController extends Controller
 {
     public function beforeAction($action){
 
+        $result = parent::beforeAction($action);
         if($this->mobileCheck())
             if(in_array($action->id, array(
                 'group', 'student', 'teacher'
@@ -18,7 +19,7 @@ class TimeTableController extends Controller
                 }
             }
 
-        return parent::beforeAction($action);
+        return $result;
     }
 
     public function filters() {
