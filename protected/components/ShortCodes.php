@@ -524,6 +524,8 @@ SQL;
 
 class SH extends ShortCodes
 {
+    const MOBILE_URL = 'https://play.google.com/store/apps/details?id=com.mkr.shedule_app';
+
     protected static $_instance;
 
     private function __construct(){}
