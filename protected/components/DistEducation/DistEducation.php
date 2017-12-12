@@ -161,7 +161,7 @@ abstract class DistEducation implements IDistEducation
 
             else
             {
-                /*$message = PortalSettings::model()->getSettingFor(PortalSettings::REGISTRATION_EMAIL_DIST_EDUCATION);
+                $message = PortalSettings::model()->getSettingFor(PortalSettings::REGISTRATION_EMAIL_DIST_EDUCATION);
 
                 if(empty($message)) {
                     $message = '';
@@ -176,7 +176,7 @@ abstract class DistEducation implements IDistEducation
 
                 if (!$status) {
                     return array(false, tt('Регистрация прошла успешно, но ошибка отправки извещения на почту. Обратитесь в тех.поддержку.'));
-                }*/
+                }
             }
         }
 
