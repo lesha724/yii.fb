@@ -13,6 +13,16 @@
  */
 class EdxDistEducation extends DistEducation implements IEdxDistEducation
 {
+    /**
+     * @param Users $user
+     * @return array
+     */
+    protected function getParamsForSignUp($user)
+    {
+        // TODO: Implement getParamsForSignUp() method.
+        return array();
+    }
+
     /*
      *
      */
@@ -24,33 +34,9 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
      * @return array
      * @throws Exception empty apikey
      */
-    protected function sendSignUp($user)
+    protected function sendSignUp($user, $params)
     {
         throw  new CHttpException(400,'Not implimented!');
-
-        /*$body = json_encode(array(
-            'username'=>$username,
-            'name'=> $name,
-            'password'=> $password,
-            'email'=> $email
-        ));
-
-        $headers = $this->_getHeaders();
-
-        try{
-            list($code, $result) = $this->_sendQuery($body, $headers);
-
-            if($code!=200) {
-                return array(false, $result);
-            }
-
-            return array(true, null);
-
-        }catch (Exception $error){
-
-            return array(false, $error->getMessage());
-        }*/
-        //return array(false, '');
     }
 
     /**
@@ -64,16 +50,6 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
     }
 
     /**
-     * @param Users $user
-     * @param array $params
-     * @return array
-     */
-    /*protected function saveSignUpOld($user, $params)
-    {
-
-    }*/
-
-    /**
      * @return mixed
      * @throws CHttpException
      */
@@ -82,8 +58,6 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
         $body = $this->_sendQuery('/api/courses/v1/courses/?page_size=999');
 
         $array = json_decode($body);
-
-        //var_dump($array);
 
         if(!isset($array->results))
             throw new CHttpException(500, 'EdxDistEducation: Ошибка загрузки курсов. Неверный формат ответа');
@@ -115,19 +89,6 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
 
         return current($course);
     }
-
-    /**
-     * Список курсов для combobox @see CHtml::listData()
-     * @return mixed
-     */
-    /*protected function _getCoursesListForLisData()
-    {
-        $list = $this->getCoursesList();
-
-        return CHtml::listData($list,'course_id', function ($data){
-            return $data->name. ' / '. $data->course_id;
-        });
-    }*/
 
     protected function _getColumnsForGridView()
     {
@@ -203,21 +164,6 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
             'dispdist2' => $course->name
         );
     }
-    /**
-     * Заголовки
-     * @return array
-     * @throws Exception empty apikey
-     */
-    /*private function _getHeaders(){
-
-        if(empty($this->apiKey))
-            throw new Exception('EdxDistEducation: apikey empty');
-
-        return array(
-            'Content-Type' => 'application/json',
-            'X-Edx-Api-Key' => $this->apiKey
-        );
-    }*/
 
     /**
      * Валидация email
@@ -226,7 +172,7 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
      */
     protected function _validateEmail($email)
     {
-        return true;
+        return false;
     }
 
     /**

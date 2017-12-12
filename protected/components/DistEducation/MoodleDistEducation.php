@@ -13,30 +13,36 @@
 class MoodleDistEducation extends DistEducation
 {
     /**
+     * @param Users $user
+     * @return array
+     * @throws CHttpException
+     */
+    protected function getParamsForSignUp($user)
+    {
+        $model = St::model()->findByPk($user->u6);
+        if($model==null)
+            throw new CHttpException(400, tt('Студент не найден'));
+
+        return array(
+            'username'=>$user->u2,
+            'firstname'=>CHtml::encode($model->st3),
+            'lastname'=>CHtml::encode($model->st2),
+            'email'=>$user->u4,
+            'idnumber'=>'student'.$user->u6,
+            'password'=>'St_password'.$user->u6,
+        );
+    }
+
+    /**
      * отправка запроса для регистрации
      * @param Users $user
      * @return array
      */
-    protected function sendSignUp($user)
+    protected function sendSignUp($user, $params)
     {
-        if($this->validateEmail($user->u4)){
-            return array(false, tt('Уже есть пользователь в дистанционом образовании с таким email!'));
-        }
-
-        $model = St::model()->findByPk($user->u6);
-        if($model==null)
-            return array(false, tt('Не найден студент!'));
-
         $body = $this->_sendQuery('core_user_create_users','GET', array(
             'users'=>array(
-                array(
-                    'username'=>$user->u2,
-                    'firstname'=>CHtml::encode($model->st3),
-                    'lastname'=>CHtml::encode($model->st2),
-                    'email'=>$user->u4,
-                    'idnumber'=>'student'.$user->u6,
-                    'password'=>'St_password'.$user->u6,
-                )
+                $params
             )
         ));
 

@@ -282,7 +282,17 @@ SQL;
      * @return array
      */
     public function sendMailByTemplate($to,$subject,$template, $params = array(),$file = null){
-
+        return self::mailByTemplate($to,$subject,$template, $params,$file);
+    }
+    /**
+     * @param $to
+     * @param $subject
+     * @param $template
+     * @param array $params
+     * @param null $file
+     * @return array
+     */
+    public static function mailByTemplate($to,$subject,$template, $params = array(),$file = null){
         $message = $template;
 
         if(!empty($params)){

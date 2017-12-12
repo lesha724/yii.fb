@@ -20,6 +20,7 @@ abstract class DistEducation implements IDistEducation
     const ID_FIELD_NAME = 'id';
 
     const KEY_CACHE_COURS_LIST = 'de_courses_list';
+
     /**
      * @var string АпиКей
      */
@@ -51,9 +52,17 @@ abstract class DistEducation implements IDistEducation
     /**
      * Отправка запроса для регистрации
      * @param Users $user
+     * @param $params array
      * @return array
      */
-    abstract protected function sendSignUp($user);
+    abstract protected function sendSignUp($user, $params);
+
+    /**
+     * параметры для запроса регистрации
+     * @param Users $user
+     * @return array
+     */
+    abstract protected function getParamsForSignUp($user);
 
     /**
      * Привязка к уже существующей учетек
@@ -136,13 +145,39 @@ abstract class DistEducation implements IDistEducation
      */
     public function signUp($user)
     {
-        $res = $this->sendSignUp($user);
+        if($this->validateEmail($user->u4)){
+            return array(false, tt('Уже есть пользователь в дистанционом образовании с таким email!'));
+        }
+        $params = $this->getParamsForSignUp($user);
+
+        $res = $this->sendSignUp($user, $params);
 
         if($res[0])
         {
-            $this->saveSignUpOld($user, array(
-                'email'=>$user->u4
-            ));
+            $res2 = $this->saveSignUpOld($user, $params);
+
+            if(!$res2[0])
+                return $res2;
+
+            else
+            {
+                /*$message = PortalSettings::model()->getSettingFor(PortalSettings::REGISTRATION_EMAIL_DIST_EDUCATION);
+
+                if(empty($message)) {
+                    $message = '';
+                }
+
+                list($status, $message) = Controller::mailByTemplate($user->u4, tt('Регистрация дист. образование'), $message, array(
+                    'username'=> $params['username'],
+                    'email'=>$params['email'],
+                    'fio' => $user->name,
+                    'password' => $params['password']
+                ));
+
+                if (!$status) {
+                    return array(false, tt('Регистрация прошла успешно, но ошибка отправки извещения на почту. Обратитесь в тех.поддержку.'));
+                }*/
+            }
         }
 
         return $res;
@@ -246,20 +281,6 @@ abstract class DistEducation implements IDistEducation
      * @return array
      */
     abstract protected function _getColumnsForGridView();
-    /**
-     * Список курсов для combobox @see CHtml::listData()
-     * @return mixed
-     */
-    /*public function getCoursesListForLisData()
-    {
-        return $this->_getCoursesListForLisData();
-    }*/
-
-    /**
-     * Список курсов для combobox @see CHtml::listData()
-     * @return mixed
-     */
-    //abstract protected function _getCoursesListForLisData();
 
     /**
      * Сохранения привязки
