@@ -570,7 +570,7 @@ HTML;
     $ps65 = PortalSettings::model()->getSettingFor(65);
     $ps66 = PortalSettings::model()->getSettingFor(66);
 
-    $ps107 = PortalSettings::model()->getSettingFor(107);
+    //$ps107 = PortalSettings::model()->getSettingFor(107);
 
     $min = Elgzst::model()->getMin();
     $elgz1_arr=array();
@@ -578,6 +578,9 @@ HTML;
 
     global $total_1, $total_count_1;
     global $count_dates;
+    global $readOnlyByStudents;
+
+    $readOnlyByStudents = array();
     $count_dates=0;
     //$column = 1;
     $elgz3Nom = 1;
@@ -638,35 +641,37 @@ HTML;
         list($total_1[$st1], $total_count_1[$st1]) = countMarkTotal($marks);
         //проверка есть ли итоговая оценка, тогда бдлокируем ввод оценко
         $readOnlySt = false;
-        if($ps107==1) {
+        //if($ps107==1) {
+        $readOnlyByStudents[$st1] = false;
+        $stusv = Stusv::model()->getStusvByJournalAndStudent($elg, $st1);
+        if (!empty($stusv)) {
 
-            $stusv = Stusv::model()->getStusvByJournalAndStudent($elg, $st1);
-            if (!empty($stusv)) {
+            $stusvst = $stusv->getMarkForStudent($st1);
+            if (!empty($stusvst)) {
+                $readOnlySt = !empty($stusv['stusv15']);
 
-                $stusvst = $stusv->getMarkForStudent($st1);
-                if (!empty($stusvst)) {
-                    $readOnlySt = !empty($stusv['stusv15']);
+                if(!$readOnlySt){
+                    $stusv12 = $stusv['stusv12'];
+                    $stusv11 = $stusv['stusv11'];
+                    if($stusv12!=0&&!empty($stusv11)){
+                        $date = date('Y-m-d H:i:s');
+                        $date2 = new DateTime($stusv11);
+                        $date1 = new DateTime($date);
 
-                    if(!$readOnlySt){
-                        $stusv12 = $stusv['stusv12'];
-                        $stusv11 = $stusv['stusv11'];
-                        if($stusv12!=0&&!empty($stusv11)){
-                            $date = date('Y-m-d H:i:s');
-                            $date2 = new DateTime($stusv11);
-                            $date1 = new DateTime($date);
+                        $date2->modify('+'.$stusv12.' days');
 
-                            $date2->modify('+'.$stusv12.' days');
-
-                            if($date1>$date2) {
-                                $readOnlySt=true;
-                            }
+                        if($date1>$date2) {
+                            $readOnlySt=true;
                         }
                     }
-                    /*if ($stusvst->stusvst4 > 0 || $stusvst->stusvst6 > 0)
-                        $readOnlySt = true;*/
                 }
+
+                $readOnlyByStudents[$st1] = $readOnlySt;
+                /*if ($stusvst->stusvst4 > 0 || $stusvst->stusvst6 > 0)
+                    $readOnlySt = true;*/
             }
         }
+        //}
 
         foreach($dates as $key => $date) {
             $_nom=$date['elgz3'];
