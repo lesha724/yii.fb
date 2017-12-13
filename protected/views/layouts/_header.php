@@ -55,7 +55,7 @@
                             <img alt="photo" src="<?=$url?>" class="nav-user-photo">
                             <span class="user-info">
                                 <small>Welcome,</small>
-                                <?=Yii::app()->user->model->name?>
+                                <?=Yii::app()->user->name?>
                             </span>
                         <?php endif; ?>
                         <i class="icon-caret-down"></i>
