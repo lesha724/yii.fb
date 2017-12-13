@@ -69,6 +69,16 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                                 ? $data->account->u4
                                 : ""',
         ),
+        'st_status'=>array(
+            'name'=>'st_status',
+            'header' => 'Статус обучения',
+            'type'=>'raw',
+            'filter' => array(
+                '1'=>tt("Активный"),
+                '2'=>tt("Выпущен")
+            ),
+            'value'=>' $data["st_status"]!=4 ? "<label class=\'label label-success\'>".tt("Активный")."</label>" : "<label class=\'label\'>".tt("Выпущен")."</label>"'
+        ),
         array(
             'class'=>'CButtonColumn',
             'template'=>'{st165} {grants} {enter} {delete} ',

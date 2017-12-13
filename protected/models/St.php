@@ -124,6 +124,11 @@
  */
 class St extends CActiveRecord implements IPerson
 {
+    /**
+     * for @see getStudentsForAdmin
+     * @var int
+     */
+    public $st_status;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -141,7 +146,7 @@ class St extends CActiveRecord implements IPerson
 		// will receive user inputs.
 		return array(
 			array('st1', 'required'),
-			array('st1,st9, st29, st32, st33, st34, st35, st45, st56, st57, st63, st64, st65, st71, st78, st101, st103, st104, st114, st115, st116, st100, st99, st133, st139, st144, st167, 168', 'numerical', 'integerOnly'=>true),
+			array('st_status, st1,st9, st29, st32, st33, st34, st35, st45, st56, st57, st63, st64, st65, st71, st78, st101, st103, st104, st114, st115, st116, st100, st99, st133, st139, st144, st167, 168', 'numerical', 'integerOnly'=>true),
 			array('st2, st28, st74, st117, st120, st123', 'length', 'max'=>140),
 			array('st3, st4, st75, st76, st118, st119, st121, st122, st124, st125, st131, st132', 'length', 'max'=>80),
 			array('st5, st12, st15, st38, st108, st135, st148', 'length', 'max'=>60),
@@ -652,7 +657,9 @@ SQL;
     {
         $criteria=new CDbCriteria;
 
-        $criteria->select = 't.st2, t.st3, t.st4, t.st15';
+        $criteria->join = 'INNER JOIN std ON st1=std2 and std7 is null';
+
+        $criteria->select = array( 't.st2', 't.st3', 't.st4', 't.st15','std11 as st_status');
         $with = array(
             'account' => array(
                 'select' => 'u2, u3, u4'
@@ -662,9 +669,9 @@ SQL;
         $criteria->addCondition("st1 > 0");
         $criteria->addCondition("st2 <> ''");
 		$criteria->addCondition("st101 != 7");
-		$criteria->join = 'INNER JOIN std ON st1=std2 and std7 is null';
+
         //$criteria->join = 'INNER JOIN std ON st1=std2';
-		$criteria->addCondition("std11 in (0,3,5,6,8)");
+		$criteria->addCondition("std11 != 1"); //std11 = 4 закончил
         //$criteria->addSearchCondition('st2', $this->st2);
         //$criteria->addSearchCondition('st3', $this->st3);
         //$criteria->addSearchCondition('st4', $this->st4);
@@ -675,6 +682,13 @@ SQL;
         if(!empty($this->st4))
 		    $criteria->addCondition('st4 CONTAINING :ST4');
         $criteria->addSearchCondition('st15', $this->st15);
+
+        if($this->st_status>0) {
+            if($this->st_status==1)
+                $criteria->addCondition('std11!=4');
+            if($this->st_status==2)
+                $criteria->addCondition('std11=4');
+        }
 		
         $login = Yii::app()->request->getParam('login');
         $email = Yii::app()->request->getParam('email');
