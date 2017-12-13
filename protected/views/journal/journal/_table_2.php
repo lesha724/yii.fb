@@ -578,6 +578,9 @@ HTML;
 
     global $total_1, $total_count_1;
     global $count_dates;
+    global $readOnlyByStudents;
+
+    $readOnlyByStudents = array();
     $count_dates=0;
     //$column = 1;
     $elgz3Nom = 1;
@@ -639,7 +642,7 @@ HTML;
         //проверка есть ли итоговая оценка, тогда бдлокируем ввод оценко
         $readOnlySt = false;
         if($ps107==1) {
-
+            $readOnlyByStudents[$st1] = false;
             $stusv = Stusv::model()->getStusvByJournalAndStudent($elg, $st1);
             if (!empty($stusv)) {
 
@@ -662,6 +665,8 @@ HTML;
                             }
                         }
                     }
+
+                    $readOnlyByStudents[$st1] = $readOnlySt;
                     /*if ($stusvst->stusvst4 > 0 || $stusvst->stusvst6 > 0)
                         $readOnlySt = true;*/
                 }

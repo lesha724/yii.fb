@@ -21,10 +21,12 @@ function getTotal1($total_1,$count_dates,$ps44){
     return $value;
 }
 
-function table3Tr($column, $marks,$st1,$elg1,$gr1)
+function table3Tr($column, $marks,$st1,$elg1,$gr1, $readOnly)
 {
+
+    $disabled = ($readOnly) ? 'disabled="disabled"':'';
     $tr= <<<HTML
-<td><input class="elgdst-input" value="%s" data-name="%s" data-gr1="%s" maxlength="3"></td>
+<td><input class="elgdst-input" value="%s" data-name="%s" data-gr1="%s" maxlength="3" $disabled></td>
 HTML;
 
     $tr1 = <<<HTML
@@ -37,6 +39,8 @@ HTML;
         ? round($marks[$key], 2)
         : '';
     $edit = true;
+
+
 
     switch($column['elgsd4']){
         case 3:case 4:case 5:
@@ -137,6 +141,8 @@ $sem = Sem::model()->findByPk($model->sem1);
 
 $us = Us::model()->getUsByStusvFromJournal($elg);
 
+$ps107 = PortalSettings::model()->getSettingFor(107);
+
 /*$stusv = null;
 if($ps85==0&&$ps84 != 0)
     $stusv = Stusv::model()->getStusvByJournal($elg, $gr1);*/
@@ -167,7 +173,7 @@ foreach ($students as $st) {
     }
     foreach($elgd as $key)
     {
-        $tr .= table3Tr($key, $marks, $st1,$elg1,$gr1);
+        $tr .= table3Tr($key, $marks, $st1,$elg1,$gr1,($ps107==1) ? $readOnlyByStudents[$st1] : false);
     }
     if($ps85==0) {
         if ($ps84 == 0)
