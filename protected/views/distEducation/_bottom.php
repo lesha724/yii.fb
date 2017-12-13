@@ -1,12 +1,27 @@
 <?php
 /* @var $this DistEducationController */
 /* @var $model DistEducationFilterForm */
+
+$kdist = $model->getKdist();
 ?>
-    <style>
-        #chosen_dispdist3_chosen{
-            width: 100%!important;
-        }
-    </style>
+    <div class="row>">
+        <div class="pull-left">
+            <?=CHtml::button('Подтвердить',array(
+                'id' => 'kdist-accept-btn',
+                'class' => 'btn btn-small btn-warning',
+                'data-k1'=> $model->chairId,
+                'data-url'=> Yii::app()->createAbsoluteUrl('/distEducation/acceptDisp'),
+                'style' => empty($kdist) ? '' : 'display:none'
+            ))?>
+            <?=CHtml::button('Скинуть',array(
+                'id' => 'kdist-disaccept-btn',
+                'class' => 'btn btn-small btn-danger',
+                'data-k1'=> $model->chairId,
+                'data-url'=> Yii::app()->createAbsoluteUrl('/distEducation/disacceptDisp'),
+                'style' => !empty($kdist) ? '' : 'display:none'
+            ))?>
+        </div>
+    </div>
 <?php
 $pageSize=Yii::app()->user->getState('pageSize',10);
 if($pageSize==0)

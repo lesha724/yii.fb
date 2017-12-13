@@ -305,4 +305,15 @@ SQL;
 
         return empty($disp)? null : $disp;
     }
+
+    /**
+     * @return Kdist|null
+     */
+    public function getKdist(){
+        return Kdist::model()->findByAttributes(array(
+            'kdist1'=>$this->chairId,
+            'kdist2'=>Yii::app()->session['year'],
+            'kdist3'=>Yii::app()->session['sem']
+        ));
+    }
 }

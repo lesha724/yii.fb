@@ -104,6 +104,57 @@ $(document).on('click','.btn-remove-link', function(e) {
     });
 });
 
+$(document).on('click','#kdist-accept-btn, #kdist-disaccept-btn', function(e) {
+    e.preventDefault();
+    var $that = $(this);
+
+    var k1 = $that.data('k1');
+
+    var params = {
+        k1   : k1
+    }
+
+    var url = $that.data('url');
+
+    $spinner1.show();
+
+    $.ajax({
+        url: url,
+        data:params,
+        dataType: 'json',
+        success: function( data ) {
+            if (!data.error) {
+                addGritter( data.title, data.message, 'success');
+
+                $that.hide();
+
+                if($that.attr('id')=='kdist-accept-btn'){
+                    $('#kdist-disaccept-btn').show();
+                }else{
+                    $('#kdist-accept-btn').show();
+                }
+
+            } else {
+                addGritter( data.title, data.message, 'error');
+            }
+            $spinner1.hide();
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            if (jqXHR.status == 500) {
+                addGritter('Ошибка', 'Internal error: ' + jqXHR.responseText, 'error')
+            } else {
+                if (jqXHR.status == 403) {
+                    addGritter('Ошибка', 'Access error: ' + jqXHR.responseText, 'error')
+                } else {
+                    addGritter('Ошибка', 'Ошибка', 'error');
+                }
+            }
+
+            $spinner1.hide();
+        }
+    });
+});
+
 $(document).on('click','.btn-save-link', function(e) {
     e.preventDefault();
 

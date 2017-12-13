@@ -21,7 +21,7 @@ echo <<<HTML
 HTML;
 
 if($model->isAdminDistEducation){
-    echo '<form class="form-inline" id="filter-year-sem-form" method="POST">';
+    echo '<form class="form-inline" id="filter-form" method="POST">';
     $chairs = CHtml::listData(K::model()->getAllChairs(), 'k1', 'k3');
     //echo CHtml::label(tt('Кафедра'), 'chairs');
     echo CHtml::dropDownList('chairId', $chairId, $chairs, array('class'=>'chosen-select chosen-chairId', 'autocomplete' => 'off', 'empty' => ''));

@@ -19,7 +19,9 @@ class DistEducationController extends Controller
                     'addLink',
                     'saveLink',
                     'removeLink',
-                    'searchCourse'
+                    'searchCourse',
+                    'acceptDisp',
+                    'disacceptDisp'
                 ),
                 'expression' => 'Yii::app()->user->isTch',
             ),
@@ -86,6 +88,99 @@ class DistEducationController extends Controller
             'model' => $model
         ));
 	}
+
+    /**
+     * Потвердить закрпеление дисциплин
+     */
+    public function actionAcceptDisp(){
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $model = new DistEducationFilterForm(Yii::app()->user);
+
+        $k1 = Yii::app()->request->getParam('k1', null);
+
+        $model->setChairId($k1);
+
+        $error=false;
+        $message = '';
+        $title=tt('Подтверждение закрепления по кафедре'). ' '. $model->chair->k2;
+
+        $kdist = $model->getKdist();
+
+        if($kdist!=null) {
+            $error = true;
+            $message = tt('Уже подтверждено!');
+        }
+        else{
+            $kdist = new Kdist();
+            $kdist->kdist1=$model->chairId;
+            $kdist->kdist2=Yii::app()->session['year'];
+            $kdist->kdist3=Yii::app()->session['sem'];
+            $kdist->kdist4=Yii::app()->user->dbModel->p1;
+            $kdist->kdist5 = date('Y-m-d H:i:s');
+
+            if($kdist->save())
+            {
+                $message = tt('Успешно сохранено');
+            }else{
+                $message = tt('Ошибка сохранния');
+                $error = true;
+            }
+        }
+
+        $res = array(
+            'title'=>$title,
+            'message'=> $message,
+            'error' => $error
+        );
+
+        Yii::app()->end(CJSON::encode($res));
+    }
+
+    /**
+     * Удалить закрпеление дисциплин
+     */
+    public function actionDisacceptDisp(){
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        if (! Yii::app()->user->isAdmin)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $model = new DistEducationFilterForm(Yii::app()->user);
+
+        $k1 = Yii::app()->request->getParam('k1', null);
+
+        $model->setChairId($k1);
+
+        $error=false;
+        $message = '';
+        $title=tt('Подтверждение закрепления по кафедре'). ' '. $model->chair->k2;
+
+        $kdist = $model->getKdist();
+
+        if($kdist==null) {
+            $error = true;
+            $message = tt('Ошибка удаления!');
+        }
+        else{
+            if($kdist->delete())
+            {
+                $message = tt('Успешно удалено');
+            }else{
+                $message = tt('Ошибка удаления!');
+                $error = true;
+            }
+        }
+
+        $res = array(
+            'title'=>$title,
+            'message'=> $message,
+            'error' => $error
+        );
+
+        Yii::app()->end(CJSON::encode($res));
+    }
 
     /**
      * Рендер формы для привязки дисциплины к дист образованию
