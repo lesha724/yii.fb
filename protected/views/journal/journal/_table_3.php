@@ -116,6 +116,7 @@ $th=$th2=$tr='';
 
 global $total_1, $total_count_1;// calculating in journal/table_2
 global $count_dates;
+global $readOnlyByStudents;
 
 $total_2 =array();
 
@@ -141,8 +142,9 @@ $sem = Sem::model()->findByPk($model->sem1);
 
 $us = Us::model()->getUsByStusvFromJournal($elg);
 
-$ps107 = PortalSettings::model()->getSettingFor(107);
+//$ps107 = PortalSettings::model()->getSettingFor(107);
 
+//var_dump($ps107);
 /*$stusv = null;
 if($ps85==0&&$ps84 != 0)
     $stusv = Stusv::model()->getStusvByJournal($elg, $gr1);*/
@@ -173,7 +175,7 @@ foreach ($students as $st) {
     }
     foreach($elgd as $key)
     {
-        $tr .= table3Tr($key, $marks, $st1,$elg1,$gr1,($ps107==1) ? $readOnlyByStudents[$st1] : false);
+        $tr .= table3Tr($key, $marks, $st1,$elg1,$gr1,/*($ps107==1) ? */$readOnlyByStudents[$st1]/* : false*/);
     }
     if($ps85==0) {
         if ($ps84 == 0)
