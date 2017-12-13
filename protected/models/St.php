@@ -656,28 +656,45 @@ SQL;
         $with = array(
             'account' => array(
                 'select' => 'u2, u3, u4'
-            )
+            ),
         );
 
         $criteria->addCondition("st1 > 0");
         $criteria->addCondition("st2 <> ''");
 		$criteria->addCondition("st101 != 7");
 		$criteria->join = 'INNER JOIN std ON st1=std2 and std7 is null';
+        //$criteria->join = 'INNER JOIN std ON st1=std2';
 		$criteria->addCondition("std11 in (0,3,5,6,8)");
         //$criteria->addSearchCondition('st2', $this->st2);
         //$criteria->addSearchCondition('st3', $this->st3);
         //$criteria->addSearchCondition('st4', $this->st4);
-		$criteria->addCondition("st2 CONTAINING '".$this->st2."'");
-		$criteria->addCondition("st3 CONTAINING '".$this->st3."'");
-		$criteria->addCondition("st4 CONTAINING '".$this->st4."'");
+        if(!empty($this->st2))
+		    $criteria->addCondition('st2 CONTAINING :ST2');
+        if(!empty($this->st3))
+		    $criteria->addCondition('st3 CONTAINING :ST3');
+        if(!empty($this->st4))
+		    $criteria->addCondition('st4 CONTAINING :ST4');
         $criteria->addSearchCondition('st15', $this->st15);
 		
+        $login = Yii::app()->request->getParam('login');
+        $email = Yii::app()->request->getParam('email');
 
-        $criteria->addSearchCondition('account.u2', Yii::app()->request->getParam('login'));
-        $criteria->addSearchCondition('account.u3', Yii::app()->request->getParam('password'));
-        $criteria->addSearchCondition('account.u4', Yii::app()->request->getParam('email'));
+        if(!empty($login))
+            $criteria->addCondition('account.u2 CONTAINING :LOGIN');
+        if(!empty($email))
+            $criteria->addCondition('account.u4 CONTAINING :EMAIL');
+        //$criteria->addSearchCondition('account.u2', );
+        //$criteria->addSearchCondition('account.u4', );
 
         $criteria->with = $with;
+
+        $criteria->params = array(
+            ':ST2'=>$this->st2,
+            ':ST3'=>$this->st3,
+            ':ST4'=>$this->st4,
+            ':LOGIN' => $login,
+            ':EMAIL' => $email
+        );
 
         return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
