@@ -16,6 +16,7 @@
  * @property string $u10
  * @property string $u11
  * @property string $u12
+ * @property string $u13
  *
  * @property bool isStudent
  * @property bool isAdmin
@@ -59,6 +60,7 @@ class Users extends CActiveRecord
 			array('u3', 'match', 'pattern'=>'/^[a-zA-Z0-9-_\.,\/$|]{7,}$/','message'=>tt('В password могут быть только строчные и прописные латинские буквы, цифры, спецсимволы. Минимум 8 символов')),
 			array('u4', 'length', 'max'=>400),
 			array('u9, u10, u12', 'length', 'max'=>45),
+            array('u13', 'length', 'max'=>20),
             array('u2, u4', 'checkIfUnique'),
             //array('u2', 'length', 'min'=>5, 'max'=>30),
             // Логин должен соответствовать шаблону
@@ -72,7 +74,7 @@ class Users extends CActiveRecord
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('u1, u2, u3, u4, u5, u6, u7,u8', 'safe', 'on'=>'search'),
-			array('u5,u6,u7,u9,u10,u11,u12','unsafe')
+			array('u5,u6,u7,u9,u10,u11,u12, u13','unsafe')
 
 		);
 	}
