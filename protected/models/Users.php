@@ -560,4 +560,14 @@ HTML;
 		$this->saveAttributes(array('u12'=>$key));
 	}
 
+    /**
+     * Генерация ключа для мобильного приложения
+     * @return bool
+     */
+	public function generateMobileKey(){
+        $token = openssl_random_pseudo_bytes(3);
+        $key   = bin2hex($token);
+
+        return $this->saveAttributes(array('u13'=>$key.'_'.date('md')));
+    }
 }

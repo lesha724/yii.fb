@@ -19,6 +19,10 @@ class PortalSettings extends CActiveRecord
      * @var int ошибка записи на дисциплины сообщение
      */
     const ERROR_SUBCRIPTION_MESSAGE = 126;
+    /**
+     * @var int мобильное приложение через авторизацию
+     */
+    const MOBILE_APP_NEED_AUTH = 128;
 
     const REGISTRATION_EMAIL_DIST_EDUCATION = 127;
 
