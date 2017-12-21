@@ -491,4 +491,17 @@ HTML;
 
 		$this->render('iframe',array('model'=>$model));
 	}
+
+	public function actionGetMobileKey(){
+        if(Yii::app()->user->isGuest)
+            throw new CHttpException(403, 'Invalid request. Please do not repeat this request again.');
+
+        if(Yii::app()->user->model->generateMobileKey()){
+            Yii::app()->user->setFlash('info', 'Код для мобильного приложения: <i>'.Yii::app()->user->model->u13.'</i>');
+        }else{
+            Yii::app()->user->setFlash('error', 'Ошибка генерации ключа для мобильного приложения');
+        }
+
+        $this->redirect('index');
+    }
 }
