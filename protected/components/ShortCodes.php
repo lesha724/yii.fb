@@ -579,6 +579,25 @@ class SH extends ShortCodes
 
         return $dbh;
     }
+
+    /**
+     * Поучить предедущий семестр
+     *
+     * @param $year int
+     * @param $sem int
+     * @return array
+     */
+    public static function getPrevSem($year, $sem){
+
+        if($sem==1)
+            $sem = 0;
+        else {
+            $year--;
+            $sem=1;
+        }
+
+        return array($year, $sem);
+    }
 }
 
 

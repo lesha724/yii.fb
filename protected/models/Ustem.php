@@ -264,16 +264,36 @@ SQL;
         }
     }
 
-    public function getUstem6Arr()
+    public function getUstem6Arr($us1 = null)
     {
-        return array(
-            '0'=>tt('Занятие'),
-            '1'=>tt('Субмодуль'),
-            '2'=>tt('ПМК'),
-            '3'=>tt('Диф. Зачет'),
-            '4'=>tt('Зачет'),
-            '5'=>tt('Экзамен'),
-        );
+        /**
+         * @var $uo Uo
+         */
+        $uo = null;
+
+        $us = Us::model()->findByPk($us1);
+
+        if(!empty($us))
+            $uo = Uo::model()->findByPk($us->us2);
+
+        if(!empty($uo)&&$uo->uo6==3){
+            return array(
+                '0'=>tt('Занятие'),
+                '1'=>tt('Субмодуль'),
+                //'2'=>tt('ПМК'),
+                '3'=>tt('Диф. Зачет')
+                //'4'=>tt('Зачет'),
+                //'5'=>tt('Экзамен'),
+            );
+        }else
+            return array(
+                '0'=>tt('Занятие'),
+                '1'=>tt('Субмодуль'),
+                '2'=>tt('ПМК'),
+                '3'=>tt('Диф. Зачет'),
+                '4'=>tt('Зачет'),
+                '5'=>tt('Экзамен'),
+            );
     }
 
     public function getUstem6Value($key)

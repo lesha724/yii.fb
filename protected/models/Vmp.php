@@ -306,6 +306,58 @@ SQL;
     }
 
     /**
+     * @param $uo1
+     * @return mixed
+     */
+    public function getStartYearSem($uo1){
+        $sql = <<<SQL
+            select first 1 sem3,sem5
+            from sem
+               inner join us on (sem.sem1 = us.us3)
+            where us2=:UO1
+            order by sem7
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+
+        $command->bindValue(':UO1', $uo1);
+        $row = $command->queryRow();
+
+        return $row;
+    }
+
+    /**
+     * Оценки за семестр
+     * @param $elg Elg
+     * @param $sem1 int
+     * @param $gr1 int
+     * @param $st1 int
+     * @param $dopJoin string
+     * @param $dopColumns string
+     * @return array
+     */
+    private function getMarksBySem($elg, $sem1, $gr1, $st1, $dopJoin, $dopColumns = ''){
+        $sql = <<<SQL
+                      SELECT elgzst5,elgzst4,elgzst3 $dopColumns FROM elg
+                          INNER JOIN elgz on (elg.elg1 = elgz.elgz2 AND  (elgz4=0 or elgz4=1) )
+                          INNER JOIN elgzst on (elgzst.elgzst2 = elgz.elgz1  AND elgzst1=:ST1 )
+                          $dopJoin
+                      WHERE  elg4=:ELG4 and elg3=:SEM1 AND elg2=:UO1 ORDER by elgz3 asc
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+
+        $command->bindValue(':GR1', $gr1);
+        $command->bindValue(':SEM', $sem1);
+
+        $command->bindValue(':ST1', $st1);
+        $command->bindValue(':SEM1', $sem1);
+        $command->bindValue(':UO1', $elg->elg2);
+        $command->bindValue(':ELG4', $elg->elg4);
+
+        return $command->queryAll();
+    }
+
+    /**
      * Оцнеки с журнала для пмк
      * @param $st1 int студент
      * @param $elgz Elgz Занятие
@@ -321,15 +373,21 @@ SQL;
         if($elg==null)
             return array();
 
-        $dopJoin = "inner join EL_GURNAL_ZAN({$elg->elg2},:GR1,:SEM, {$elg->elg3}) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)";
+        $dopJoin = "inner join EL_GURNAL_ZAN({$elg->elg2},:GR1,:SEM, {$elg->elg4}) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)";
 
-        if($showInfo)
-        {
-            //$elg = Elg::model()->findByPk($elgz->elgz2);
-            $dopColumn=',r2,elgz3, elgz4, us4';
-            //$dopJoin = "inner join EL_GURNAL_ZAN({$elg->elg2},:GR1,:SEM, {$elg->elg3}) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)";
+        $dopMarks = array();
+
+        if ($showInfo) {
+            $dopColumn = ',r2,elgz3, elgz4, us4';
         }
-        $sql=<<<SQL
+
+        list($year, $sem) = Elgz::model()->getSemYearAndSem($elgz->elgz1);
+        $currentYear = $year;
+        $currentSem = $sem;
+
+        $pmkPrevLessonNom = 0;
+
+        $sql = <<<SQL
             SELECT elgz3 FROM elgz WHERE elgz2=:ELGZ2 AND elgz4 in (2,3,4) AND elgz3>=:ELGZ3 ORDER by elgz3 asc
 SQL;
         $command = Yii::app()->db->createCommand($sql);
@@ -337,78 +395,99 @@ SQL;
         $command->bindValue(':ELGZ3', $elgz->elgz3);
         $pmkLessonNom = $command->queryScalar();
 
-        if(empty($pmkLessonNom))
+        if (empty($pmkLessonNom))
             return array();
 
-        $sql=<<<SQL
+
+        if($elg->elg20->uo6!=3) {
+
+            $sql = <<<SQL
             SELECT elgz3 FROM elgz WHERE elgz2=:ELGZ2 AND elgz4 in (2,3,4) AND elgz3<:ELGZ3 ORDER by elgz3 asc
 SQL;
-        $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':ELGZ2', $elgz->elgz2);
-        $command->bindValue(':ELGZ3', $elgz->elgz3);
-        $pmkPrevLessonNom = $command->queryScalar();
+            $command = Yii::app()->db->createCommand($sql);
+            $command->bindValue(':ELGZ2', $elgz->elgz2);
+            $command->bindValue(':ELGZ3', $elgz->elgz3);
+            $pmkPrevLessonNom = $command->queryScalar();
 
-        $dopMarks = array();
-        $prevSem = 0;
 
-        $currentYear = $currentSem = $year = $sem = 0;
-        if(empty($pmkPrevLessonNom)) {
-            $pmkPrevLessonNom = 0;
+            if (empty($pmkPrevLessonNom)) {
+                $pmkPrevLessonNom = 0;
 
-            list($year,$sem) = Elgz::model()->getSemYearAndSem($elgz->elgz1);
-            $currentYear =$year;
-            $currentSem =$sem;
+                list($year, $sem) = SH::getPrevSem($year, $sem);
 
-            if($sem==1){
-                $sem=0;
-            }else{
-                $year--;
-                $sem=1;
-            }
+                $sem1 = Sem::model()->getSemestrForGroupByYearAndSem($gr1, $year, $sem);
 
-            $sem1 = Sem::model()->getSemestrForGroupByYearAndSem($gr1,$year,$sem);
+                $uo1 = Elgz::model()->getUo1($elgz->elgz1);
 
-            $uo1 = Elgz::model()->getUo1($elgz->elgz1);
+                if ($sem1 != 0) {
 
-            if($sem1!=0){
-
-                $sql=<<<SQL
+                    $sql = <<<SQL
                       SELECT MAX(elgz3) as nom FROM elgz
                         INNER JOIN elg on (elgz2 = elg1)
                      WHERE elg3=:SEM1 AND elgz4 in (2,3,4) AND elg2=:UO1 ORDER by nom asc
 SQL;
-                $command = Yii::app()->db->createCommand($sql);
-                $command->bindValue(':SEM1', $sem1);
-                $command->bindValue(':UO1', $uo1);
-                $pmkLessonNomPrevSem = $command->queryScalar();
+                    $command = Yii::app()->db->createCommand($sql);
+                    $command->bindValue(':SEM1', $sem1);
+                    $command->bindValue(':UO1', $uo1);
+                    $pmkLessonNomPrevSem = $command->queryScalar();
 
-                if(empty($pmkLessonNomPrevSem)){
-                    $pmkLessonNomPrevSem =0;
-                }
+                    if (empty($pmkLessonNomPrevSem)) {
+                        $pmkLessonNomPrevSem = 0;
+                    }
 
-                $sql=<<<SQL
+                    $sql = <<<SQL
                       SELECT elgzst5,elgzst4,elgzst3 $dopColumn FROM elg
                           INNER JOIN elgz on (elg.elg1 = elgz.elgz2 AND  (elgz4=0 or elgz4=1)  AND elgz.elgz3>:NOM)
                           INNER JOIN elgzst on (elgzst.elgzst2 = elgz.elgz1  AND elgzst1=:ST1 )
                           $dopJoin
                       WHERE  elg4=:ELG4 and elg3=:SEM1 AND elg2=:UO1 ORDER by elgz3 asc
 SQL;
-                $command = Yii::app()->db->createCommand($sql);
-                /*if($showInfo){*/
+                    $command = Yii::app()->db->createCommand($sql);
+
                     $command->bindValue(':GR1', $gr1);
                     $command->bindValue(':SEM', $sem1);
-                //}
-                $command->bindValue(':ST1', $st1);
-                $command->bindValue(':NOM', $pmkLessonNomPrevSem);
-                $command->bindValue(':SEM1', $sem1);
-                $command->bindValue(':UO1', $uo1);
-                $command->bindValue(':ELG4', $elg->elg4);
 
-                //var_dump($command);
+                    $command->bindValue(':ST1', $st1);
+                    $command->bindValue(':NOM', $pmkLessonNomPrevSem);
+                    $command->bindValue(':SEM1', $sem1);
+                    $command->bindValue(':UO1', $uo1);
+                    $command->bindValue(':ELG4', $elg->elg4);
 
-                $dopMarks = $command->queryAll();
+                    $dopMarks = $command->queryAll();
 
-                //var_dump($dopMarks);
+                    $dopMarks = array(
+                        'year'=>$year,
+                        'sem'=>$sem,
+                        'marks'=>$dopMarks
+                    );
+                }
+            }
+        }else{
+            //Накопительная система
+            list($year, $sem) = SH::getPrevSem($year, $sem);
+
+            $row = $this->getStartYearSem($elg->elg2);
+
+            if(empty($row)){
+                return array();
+            }
+
+            $startYear = $row['sem3'];
+            $startSem = $row['sem5'];
+
+            while ($startYear!= $year && $startSem!=$sem){
+
+                $sem1 = Sem::model()->getSemestrForGroupByYearAndSem($gr1, $year, $sem);
+
+                $marksBySem = array(
+                    'year'=>$year,
+                    'sem'=>$sem,
+                    'marks'=>$this->getMarksBySem($elg, $sem1, $gr1, $st1, $dopJoin, $dopColumn)
+                );
+
+                $dopMarks = array_merge($dopMarks, $marksBySem);
+
+                list($year, $sem) = SH::getPrevSem($year, $sem);
             }
         }
 
@@ -423,13 +502,11 @@ SQL;
         $command->bindValue(':ST1', $st1);
         $command->bindValue(':MIN', $pmkPrevLessonNom);
         $command->bindValue(':MAX', $pmkLessonNom);
-        /*if($showInfo){*/
-            $command->bindValue(':GR1', $gr1);
-            $command->bindValue(':SEM', $elg->elg3);
-        //}
-        $marks= $command->queryAll();
 
-        //var_dump($marks);
+        $command->bindValue(':GR1', $gr1);
+        $command->bindValue(':SEM', $elg->elg3);
+
+        $marks= $command->queryAll();
 
         $returnArray = array(
             'current'=>array(
@@ -440,15 +517,17 @@ SQL;
         );
 
         if(!empty($dopMarks)){
-            $returnArray['prev']=array(
-                'year'=>$year,
-                'sem'=>$sem,
-                'marks'=>$dopMarks
-            );
+            foreach ($dopMarks as $dopMark) {
+
+                $key = $dopMark['year'].'-'.$dopMark['sem'];
+
+                $returnArray[$key] = $dopMark;
+            }
         }
 
         return $returnArray;
     }
+
 
     /**
      * Пересчет оценко пмк в журнале по студенту
@@ -492,117 +571,48 @@ SQL;
             return;
         else
         {
-            /*$sql=<<<SQL
-            SELECT elgz3 FROM elgz WHERE elgz2=:ELGZ2 AND elgz4 in (2,3,4) AND elgz3<:ELGZ3 ORDER by elgz3 asc
-SQL;
-            $command = Yii::app()->db->createCommand($sql);
-            $command->bindValue(':ELGZ2', $elgz->elgz2);
-            $command->bindValue(':ELGZ3', $elgz->elgz3);
-            $pmkPrevLessonNom = $command->queryScalar();
 
-            $dopMarks = array();
-            $prevSem = 0;
-            if(empty($pmkPrevLessonNom)) {
-                $pmkPrevLessonNom = 0;
+            $startYear = null;
+            $startSem = null;
 
-                list($year,$sem) = Elgz::model()->getSemYearAndSem($elgz->elgz1);
-                if($sem==1){
-                    $sem=0;
-                }else{
-                    $year--;
+            if($elg->elg20->uo6==3){
+                $row = $this->getStartYearSem($elg->elg2);
+
+                if(empty($row)){
+                    return array();
                 }
-                $sem1 = Sem::model()->getSemestrForGroupByYearAndSem($gr1,$year,$sem);
-                //$prevSem = $sem1;
-                $uo1 = Elgz::model()->getUo1($elgz->elgz1);
 
-                //print_r($sem1.'<br>');
-                //print_r($uo1.'<br>');
-                if($sem1!=0){
-
-                    $sql=<<<SQL
-                      SELECT MAX(elgz3) as nom FROM elgz
-                        INNER JOIN elg on (elgz2 = elg1)
-                     WHERE elg3=:SEM1 AND elgz4 in (2,3,4) AND elg2=:UO1 ORDER by nom asc
-SQL;
-                    $command = Yii::app()->db->createCommand($sql);
-                    $command->bindValue(':SEM1', $sem1);
-                    //$command->bindValue(':NOM', $elgz->elgz3);
-                    $command->bindValue(':UO1', $uo1);
-                    $pmkLessonNomPrevSem = $command->queryScalar();
-
-                    //var_dump($pmkLessonNomPrevSem);
-                    if(empty($pmkLessonNomPrevSem)){
-                        $pmkLessonNomPrevSem =0;
-                    }
-
-                    $sql=<<<SQL
-                      SELECT elgzst5,elgzst4,elgzst3 FROM elg
-                          INNER JOIN elgz on (elg.elg1 = elgz.elgz2 AND  elgz4=0  AND elgz.elgz3>:NOM)
-                          INNER JOIN elgzst on (elgzst.elgzst2 = elgz.elgz1  AND elgzst1=:ST1 )
-                      WHERE  elg3=:SEM1 AND elg2=:UO1 ORDER by elgz3 asc
-SQL;
-                    $command = Yii::app()->db->createCommand($sql);
-                    $command->bindValue(':ST1', $st1);
-                    $command->bindValue(':NOM', $pmkLessonNomPrevSem);
-                    $command->bindValue(':SEM1', $sem1);
-                    $command->bindValue(':UO1', $uo1);
-                    $dopMarks = $command->queryAll();
-
-                }
+                $startYear = $row['sem3'];
+                $startSem = $row['sem5'];
             }
-
-            $sql=<<<SQL
-              SELECT elgzst5,elgzst4,elgzst3 FROM elgzst
-              INNER JOIN elgz on (elgzst.elgzst2 = elgz.elgz1 AND elgz.elgz2=:ELGZ2 and elgz.elgz3>:MIN AND elgz.elgz3<:MAX)
-              WHERE elgzst1=:ST1 AND (elgz4=0 or elgz4=1) ORDER by elgz3 asc
-SQL;
-            $command = Yii::app()->db->createCommand($sql);
-            $command->bindValue(':ELGZ2', $elgz->elgz2);
-            $command->bindValue(':ST1', $st1);
-            $command->bindValue(':MIN', $pmkPrevLessonNom);
-            $command->bindValue(':MAX', $pmkLessonNom);
-            $marks= $command->queryAll();*/
-
-            //var_dump($marks);
-
-            //var_dump($dopMarks);
-
-            //if(!empty($marks)){
 
             $marksArray = $this->getMarksFromJournal($st1,$elgz,$gr1);
-            $marks = $marksArray['current']['marks'];
-            $dopMarks = array();
-            if(isset($marksArray['prev']))
-                $dopMarks = $marksArray['prev']['marks'];
 
+            $min = Elgzst::model()->getMin();
             $tek =0;
+            $count =0;
+            $countNb = $countDv = 0;
 
-            foreach($marks as $mark){
-                $bal=0;
-                if($mark['elgzst3']>0){
-                    $bal=$mark['elgzst5'];
-                }else
-                {
-                    $bal=($mark['elgzst5']>0)?$mark['elgzst5']:$mark['elgzst4'];
-                }
-                $tek+=$bal;
-            }
+            foreach ($marksArray as $key => $marks){
 
-            $count = count($marks);
-
-            if(!empty($dopMarks)){
-
-                foreach($dopMarks as $mark){
+                foreach($marks as $mark){
                     $bal=0;
                     if($mark['elgzst3']>0){
                         $bal=$mark['elgzst5'];
+                        //Счиатть не отработаные
+                        if($mark['elgzst5']<=$min)
+                            $countNb++;
                     }else
                     {
                         $bal=($mark['elgzst5']>0)?$mark['elgzst5']:$mark['elgzst4'];
+
+                        if($mark['elgzst4']<=$min&&$mark['elgzst5']<=$min)
+                            $countDv++;
                     }
                     $tek+=$bal;
                 }
-                $count+=count($dopMarks);
+
+                $count+= count($marks);
             }
             ///Для запрожья где диф зачет считаеться без перевода балов, а среднее делиться на 5 и умножаеться на 200
             $_tek = $tek;
@@ -634,85 +644,88 @@ SQL;
                 //print_r($tek);
             }
 
-                /*$sql = <<<SQL
-                              SELECT * FROM vmp WHERE vmp2=:ST1 AND vmp1=:VMPV1
+            if(!empty($vmp)){
+
+                $_elgz = Elgz::model()->findByAttributes(array('elgz2'=>$elg->elg1,'elgz3'=>$pmkLessonNom));
+                //var_dump($_elgz->elgz4);
+                if(empty($_elgz))
+                    return;
+
+                /*$dopColumns = '';
+                if($elg->elg20->uo6 == 2 || $elg->elg20->uo6 == 3)*/
+                $dopColumns = ', vmp13=:VMP13, vmp14=:VMP14 ';
+
+                if($_elgz->elgz4==2) {
+                    $itog = $tek + $vmp['vmp6'];
+                    if($vmp['vmp7']>0)
+                        $itog+=$vmp['vmp7'];
+
+                    $sql = <<<SQL
+                          UPDATE vmp set vmp4=:VMP4, vmp5=:VMP5, vmp10=:VMP10, vmp12=:VMP12 $dopColumns WHERE vmp2=:ST1 AND vmp1=:VMPV1
 SQL;
-                $command = Yii::app()->db->createCommand($sql);
-                $command->bindValue(':ST1', $st1);
-                $command->bindValue(':VMPV1', $module['vmpv1']);
-                $vmp = $command->queryRow();*/
+                    $command = Yii::app()->db->createCommand($sql);
+                    $command->bindValue(':VMP5', $tek);
+                    $command->bindValue(':VMP4', $itog);
+                    $command->bindValue(':ST1', $st1);
+                    $command->bindValue(':VMPV1', $module['vmpv1']);
+                    $command->bindValue(':VMP12', Yii::app()->user->dbModel->p1);
+                    $command->bindValue(':VMP10', date('Y-m-d H:i:s'));
+                    $command->bindValue(':VMP13', $countNb);
+                    $command->bindValue(':VMP14', $countDv);
+                    $command->execute();
 
-                //var_dump($vmp);
-                if(!empty($vmp)){
-                    $_elgz = Elgz::model()->findByAttributes(array('elgz2'=>$elg->elg1,'elgz3'=>$pmkLessonNom));
-                    //var_dump($_elgz->elgz4);
-                    if(empty($_elgz))
-                        return;
+                }elseif($_elgz->elgz4==3||$_elgz->elgz4==4){
 
-                    if($_elgz->elgz4==2) {
-                        $itog = $tek + $vmp['vmp6'];
-                        if($vmp['vmp7']>0)
-                            $itog+=$vmp['vmp7'];
+                    if($_elgz->elgz4==3&&SH::getUniversityCod()==32){
+                        $val = $_tek/$count;
+                        //print_r($val);
+                        $tek = round($val,2);
 
-                        $sql = <<<SQL
-                              UPDATE vmp set vmp4=:VMP4, vmp5=:VMP5, vmp10=:VMP10, vmp12=:VMP12 WHERE vmp2=:ST1 AND vmp1=:VMPV1
-SQL;
-                        $command = Yii::app()->db->createCommand($sql);
-                        $command->bindValue(':VMP5', $tek);
-                        $command->bindValue(':VMP4', $itog);
-                        $command->bindValue(':ST1', $st1);
-                        $command->bindValue(':VMPV1', $module['vmpv1']);
-                        $command->bindValue(':VMP12', Yii::app()->user->dbModel->p1);
-                        $command->bindValue(':VMP10', date('Y-m-d H:i:s'));
-                        $command->execute();
+                        $tek= ($tek*200)/5;
 
-                        $elgpmkst = Elgpmkst::model()->findByAttributes(
-                            array(
-                                'elgpmkst2'=> $elgz->elgz2,
-                                'elgpmkst3' =>$st1,
-                                'elgpmkst4' =>$module['vmpv1'],
-                            )
-                        );
-
-                        if(empty($elgpmkst)){
-                            $elgpmkst = new Elgpmkst();
-                            $elgpmkst->elgpmkst1 = new CDbExpression('GEN_ID(GEN_ELGPMKST, 1)');
-                            $elgpmkst->elgpmkst2 = $elgz->elgz2;
-                            $elgpmkst->elgpmkst3 =  $st1;
-                            $elgpmkst->elgpmkst4 = $module['vmpv1'];
-                        }
-
-                        $elgpmkst->elgpmkst5 = $tek;
-                        $elgpmkst->save();
-
-                    }elseif($_elgz->elgz4==3||$_elgz->elgz4==4){
-
-                        if($_elgz->elgz4==3&&SH::getUniversityCod()==32){
-                            $val = $_tek/$count;
-                            //print_r($val);
-                            $tek = round($val,2);
-
-                            $tek= ($tek*200)/5;
-
-                            $tek = round($tek);
-                        }
-
-                        $sql = <<<SQL
-                              UPDATE vmp set vmp4=:VMP4, vmp5=:VMP5, vmp6=:VMP6, vmp7=:VMP7, vmp10=:VMP10, vmp12=:VMP12 WHERE vmp2=:ST1 AND vmp1=:VMPV1
-SQL;
-                        $command = Yii::app()->db->createCommand($sql);
-                        $command->bindValue(':VMP5', 0);
-                        $command->bindValue(':VMP4', $tek);
-                        $command->bindValue(':VMP6', 0);
-                        $command->bindValue(':VMP7', $tek);
-                        $command->bindValue(':ST1', $st1);
-                        $command->bindValue(':VMPV1', $module['vmpv1']);
-                        $command->bindValue(':VMP12', Yii::app()->user->dbModel->p1);
-                        $command->bindValue(':VMP10', date('Y-m-d H:i:s'));
-                        $command->execute();
+                        $tek = round($tek);
                     }
+
+                    $sql = <<<SQL
+                          UPDATE vmp set vmp4=:VMP4, vmp5=:VMP5, vmp6=:VMP6, vmp7=:VMP7, vmp10=:VMP10, vmp12=:VMP12 $dopColumns WHERE vmp2=:ST1 AND vmp1=:VMPV1
+SQL;
+                    $command = Yii::app()->db->createCommand($sql);
+                    $command->bindValue(':VMP5', 0);
+                    $command->bindValue(':VMP4', $tek);
+                    $command->bindValue(':VMP6', 0);
+                    $command->bindValue(':VMP7', $tek);
+                    $command->bindValue(':ST1', $st1);
+                    $command->bindValue(':VMPV1', $module['vmpv1']);
+                    $command->bindValue(':VMP12', Yii::app()->user->dbModel->p1);
+                    $command->bindValue(':VMP10', date('Y-m-d H:i:s'));
+                    $command->bindValue(':VMP13', $countNb);
+                    $command->bindValue(':VMP14', $countDv);
+                    $command->execute();
                 }
-            //}
+
+                $elgpmkst = Elgpmkst::model()->findByAttributes(
+                    array(
+                        'elgpmkst2'=> $elgz->elgz2,
+                        'elgpmkst3' =>$st1,
+                        'elgpmkst4' =>$module['vmpv1'],
+                    )
+                );
+
+                if(empty($elgpmkst)){
+                    $elgpmkst = new Elgpmkst();
+                    $elgpmkst->elgpmkst1 = new CDbExpression('GEN_ID(GEN_ELGPMKST, 1)');
+                    $elgpmkst->elgpmkst2 = $elgz->elgz2;
+                    $elgpmkst->elgpmkst3 =  $st1;
+                    $elgpmkst->elgpmkst4 = $module['vmpv1'];
+                }
+
+                $elgpmkst->elgpmkst5 = $tek;
+                $elgpmkst->save();
+
+                if($elg->elg20->uo6==3){
+
+                }
+            }
         }
     }
 }
