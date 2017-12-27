@@ -685,12 +685,13 @@ HTML;
 
         if($date['elgz4']==0)
             $countDivZacvmarks++;
+    }
 
-        if($elg->elg20->uo6==3){
-            if($elg->elg3==$sem1End){
-                $th2.=sprintf('<th>%s</th><th>%s</th><th>%s</th><th>%s</th>',tt('Тек.'),tt('Инд.р.'),tt('ПМК'),tt('Итог.'));
-                $th.= tt('Итоговая накопительная ведомость');
-            }
+
+    if($elg->elg20->uo6==3){
+        if($elg->elg3==$sem1End){
+            $th2.=sprintf('<th>%s</th><th>%s</th><th>%s</th><th>%s</th>',tt('Тек.'),tt('Инд.р.'),tt('ПМК'),tt('Итог.'));
+            $th.= tt('Итоговая накопительная ведомость');
         }
     }
 
