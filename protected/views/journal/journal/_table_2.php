@@ -1,4 +1,36 @@
 <?php
+
+function table2TrItog($uo1, $gr1, $st1){
+    $vmp = $this->getVedItog($uo1, $gr1, 99, $st1);
+
+    if(!empty($vmp)){
+        $ind = round($vmp['vmp6'],2);
+        $pot = round($vmp['vmp5'],2);
+        $itog = round($vmp['vmp4'],2);
+        $pmk = round($vmp['vmp7'],2);
+
+        switch($pmk){
+            case '-4':
+                $pmk = tt('н/я');
+                break;
+            case '-3':
+                $pmk = '0';
+                break;
+            case '-2':
+                $pmk = tt('неув');
+                break;
+            case '-1':
+                $pmk = tt('уваж');
+                break;
+        }
+
+        return sprintf('<td>%s</td><td>%s</td><td>%s</td><td>%s</td>',$pot,$ind,$pmk,$itog);
+
+    }else{
+        return '<td colspan="4"></td>';
+    }
+}
+
 function getMarsForElgz3($nom,$marks){
     if(isset($marks[$nom])) {
         $m = $marks[$nom]['elgzst5'] != 0
@@ -292,11 +324,11 @@ function table2TrModule2($date,$gr1,$st,$ps56,$nom,$modules,$sem7,$ps60, $total,
         $vmpv6 = $mark['vmpv6'];
         $vvmp1 = $modules[(int)$nom-1]['vvmp1'];
 
-        if($date['elgz4']==3&&SH::getUniversityCod()==32){
+        /*if($date['elgz4']==3&&SH::getUniversityCod()==32){
             $total = $total/$_count;
             $total = round($total,2);
             $total= ($total*200)/5;
-        }
+        }*/
 
         if(!empty($vmpv6)) {
             $js=<<<JS
@@ -306,11 +338,38 @@ JS;
 
         }
 
+        $vmpv1 = $mark['vmpv1'];
+        $nom_=$date['elgz3'];
+        $elgz1=$date['elgz1'];
+        $date_lesson=$date['r2'];
+        $r1=$date['r1'];
+
+        $vmpv6 = $mark['vmpv6'];
+        if(!empty($vmpv6)) {
+            $js=<<<JS
+                        $('*[data-module-nom="{$nom}-{$st['st1']}"]').prop('disabled',true);
+JS;
+            Yii::app()->clientScript->registerScript('module-nom'.$nom.'-'.$st['st1'], $js, CClientScript::POS_END);
+        }
+
+        $elgpmkst = Elgpmkst::model()->findByAttributes(
+            array(
+                'elgpmkst2'=> $date['elgz2'],
+                'elgpmkst3' =>$st['st1'],
+                'elgpmkst4' =>$vmpv1,
+            )
+        );
+
+        $total=0;
+
+        if($elgpmkst!=null)
+            $total = round($elgpmkst->elgpmkst5,2);
+
         return sprintf(<<<HTML
-                    <td class="module-tr">%s</td>
+                    <td class="module-tr">%s  <a class="btn btn-info btn-mini btn-show-marks" data-vmpv1="{$vmpv1}" data-nom-module="{$nom}" data-nom="{$nom_}" data-elgz1="{$elgz1}" data-r1="{$r1}" data-date="{$date_lesson}" data-gr1="{$gr1}"><i class="icon-eye-open"></i></a></td>
                     <td class="module-tr">%s</td>
 HTML
-            ,$total,(round($total,2)!=round($itog,2))?'<label class="label label-warning">'.$itog.'</label>':$itog);
+            ,$total,($total!=round($itog,2))?'<label class="label label-warning">'.$itog.'</label>':$itog);
     }
 }
 
@@ -390,7 +449,7 @@ JS;
 
                 $st1 = $st['st1'];
                 return sprintf(<<<HTML
-                    <td class="module-tr module{$vmpv1}{$st1}">%s <a class="btn btn-info btn-mini btn-show-marks" data-vmpv1="{$vmpv1}"><i class="icon-eye-open"></i></a></td>
+                    <td class="module-tr module{$vmpv1}{$st1}">%s <a class="btn btn-info btn-mini btn-show-marks" data-vmpv1="{$vmpv1}" data-nom-module="{$nom}" data-nom="{$nom_}" data-elgz1="{$elgz1}" data-r1="{$r1}" data-date="{$date_lesson}" data-gr1="{$gr1}"><i class="icon-eye-open"></i></a></td>
                     <td class="module-tr module{$vmpv1}{$st1}" data-nom-module="{$nom}" data-nom="{$nom_}" {$disabled} data-elgz1="{$elgz1}" data-r1="{$r1}" data-date="{$date_lesson}" data-gr1="{$gr1}"><input value="%s" class="module-ind"  maxlength="5" data-vmpv1="{$vmpv1}"/></td>
                     <td class="module-tr module{$vmpv1}{$st1}">%s</td>
                     <td class="module-tr module{$vmpv1}{$st1}">%s</td>
@@ -603,24 +662,36 @@ HTML;
     /*количество занятий для пересчета оценки дифзачета запорожье*/
     $countDivZacvmarks =0;
 
+    $sem1End = null;
+    if($elg->elg20->uo6==3) {
+        $sem1End = Vmp::model()->getEndSem1($elg->elg2);
+    }
+
     foreach($dates as $date) {
-            $date2  = new DateTime($date['r2']);
+        $date2  = new DateTime($date['r2']);
 
-            $th .= generateColumnName($date, $model->type_lesson,$ps57,$ps59, $ps90, $permLesson,$date1, $ps78,$ps27);
-            $th2 .= generateTh2($ps9, $date, $model->type_lesson,$ps57);
-            //$column++;
+        $th .= generateColumnName($date, $model->type_lesson,$ps57,$ps59, $ps90, $permLesson,$date1, $ps78,$ps27);
+        $th2 .= generateTh2($ps9, $date, $model->type_lesson,$ps57);
+        //$column++;
 
-            $date2  = new DateTime($date['r2']);
-            $diff = $date1->diff($date2)->days;
-            if ($diff <= $dateDiff || $dateDiff==-1)
-            {
-                $dateDiff = $diff;
-                $elgz3Nom = $date['elgz3'];
+        $date2  = new DateTime($date['r2']);
+        $diff = $date1->diff($date2)->days;
+        if ($diff <= $dateDiff || $dateDiff==-1)
+        {
+            $dateDiff = $diff;
+            $elgz3Nom = $date['elgz3'];
+        }
+        $count_dates++;
+
+        if($date['elgz4']==0)
+            $countDivZacvmarks++;
+
+        if($elg->elg20->uo6==3){
+            if($elg->elg3==$sem1End){
+                $th2.=sprintf('<th>%s</th><th>%s</th><th>%s</th><th>%s</th>',tt('Тек.'),tt('Инд.р.'),tt('ПМК'),tt('Итог.'));
+                $th.= tt('Итоговая накопительная ведомость');
             }
-            $count_dates++;
-
-            if($date['elgz4']==0)
-                $countDivZacvmarks++;
+        }
     }
 
     foreach($students as $st) {
@@ -708,6 +779,13 @@ HTML;
                     $divZachTotal+=getMarkByLesson($marks,$date['elgz3']);
             }
         }
+
+        if($elg->elg20->uo6==3){
+            if($elg->elg3==$sem1End){
+                $tr .= table2TrItog($elg->elg2, $gr1, $st1 );
+            }
+        }
+
         $tr .= '</tr>';
     }
 

@@ -306,6 +306,7 @@ SQL;
     }
 
     /**
+     * год и семстр начала дисциплині
      * @param $uo1
      * @return mixed
      */
@@ -322,6 +323,28 @@ SQL;
 
         $command->bindValue(':UO1', $uo1);
         $row = $command->queryRow();
+
+        return $row;
+    }
+
+    /**
+     * Sem1 псоледнего семестра дисциплині
+     * @param $uo1
+     * @return mixed
+     */
+    public function getEndSem1($uo1){
+        $sql = <<<SQL
+            select first 1 sem1
+            from sem
+               inner join us on (sem.sem1 = us.us3)
+            where us2=:UO1
+            order by sem7 DESC
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+
+        $command->bindValue(':UO1', $uo1);
+        $row = $command->queryScalar();
 
         return $row;
     }
@@ -456,9 +479,11 @@ SQL;
                     $dopMarks = $command->queryAll();
 
                     $dopMarks = array(
-                        'year'=>$year,
-                        'sem'=>$sem,
-                        'marks'=>$dopMarks
+                        $year.'-'.$sem=>array(
+                            'year'=>$year,
+                            'sem'=>$sem,
+                            'marks'=>$dopMarks
+                        )
                     );
                 }
             }
@@ -480,9 +505,11 @@ SQL;
                 $sem1 = Sem::model()->getSemestrForGroupByYearAndSem($gr1, $year, $sem);
 
                 $marksBySem = array(
-                    'year'=>$year,
-                    'sem'=>$sem,
-                    'marks'=>$this->getMarksBySem($elg, $sem1, $gr1, $st1, $dopJoin, $dopColumn)
+                    $year.'-'.$sem=>array(
+                        'year'=>$year,
+                        'sem'=>$sem,
+                        'marks'=>$this->getMarksBySem($elg, $sem1, $gr1, $st1, $dopJoin, $dopColumn)
+                    )
                 );
 
                 $dopMarks = array_merge($dopMarks, $marksBySem);
@@ -588,6 +615,8 @@ SQL;
 
             $marksArray = $this->getMarksFromJournal($st1,$elgz,$gr1);
 
+            //var_dump($marksArray);
+
             $min = Elgzst::model()->getMin();
             $tek =0;
             $count =0;
@@ -595,24 +624,25 @@ SQL;
 
             foreach ($marksArray as $key => $marks){
 
-                foreach($marks as $mark){
-                    $bal=0;
-                    if($mark['elgzst3']>0){
-                        $bal=$mark['elgzst5'];
-                        //Счиатть не отработаные
-                        if($mark['elgzst5']<=$min)
-                            $countNb++;
-                    }else
-                    {
-                        $bal=($mark['elgzst5']>0)?$mark['elgzst5']:$mark['elgzst4'];
+                if(!empty($marks)) {
+                    foreach ($marks['marks'] as $mark) {
+                        $bal = 0;
+                        if ($mark['elgzst3'] > 0) {
+                            $bal = $mark['elgzst5'];
+                            //Счиатть не отработаные
+                            if ($mark['elgzst5'] <= $min)
+                                $countNb++;
+                        } else {
+                            $bal = ($mark['elgzst5'] > 0) ? $mark['elgzst5'] : $mark['elgzst4'];
 
-                        if($mark['elgzst4']<=$min&&$mark['elgzst5']<=$min)
-                            $countDv++;
+                            if ($mark['elgzst4'] <= $min && $mark['elgzst5'] <= $min)
+                                $countDv++;
+                        }
+                        $tek += $bal;
                     }
-                    $tek+=$bal;
-                }
 
-                $count+= count($marks);
+                    $count += count($marks);
+                }
             }
             ///Для запрожья где диф зачет считаеться без перевода балов, а среднее делиться на 5 и умножаеться на 200
             $_tek = $tek;
@@ -679,11 +709,13 @@ SQL;
                     if($_elgz->elgz4==3&&SH::getUniversityCod()==32){
                         $val = $_tek/$count;
                         //print_r($val);
-                        $tek = round($val,2);
+                        $_tek = round($val,2);
 
-                        $tek= ($tek*200)/5;
+                        $_tek= ($_tek*200)/5;
 
-                        $tek = round($tek);
+                        $_tek = round($_tek);
+
+                        //var_dump($_tek);
                     }
 
                     $sql = <<<SQL
@@ -691,9 +723,9 @@ SQL;
 SQL;
                     $command = Yii::app()->db->createCommand($sql);
                     $command->bindValue(':VMP5', 0);
-                    $command->bindValue(':VMP4', $tek);
+                    $command->bindValue(':VMP4', $_tek);
                     $command->bindValue(':VMP6', 0);
-                    $command->bindValue(':VMP7', $tek);
+                    $command->bindValue(':VMP7', $_tek);
                     $command->bindValue(':ST1', $st1);
                     $command->bindValue(':VMPV1', $module['vmpv1']);
                     $command->bindValue(':VMP12', Yii::app()->user->dbModel->p1);
@@ -718,14 +750,74 @@ SQL;
                     $elgpmkst->elgpmkst3 =  $st1;
                     $elgpmkst->elgpmkst4 = $module['vmpv1'];
                 }
-
-                $elgpmkst->elgpmkst5 = $tek;
+                //var_dump($_tek);
+                $elgpmkst->elgpmkst5 = ($_elgz->elgz4==3 && SH::getUniversityCod()==32) ? $_tek : $tek;
                 $elgpmkst->save();
 
                 if($elg->elg20->uo6==3){
+                    $sem1 = $this->getEndSem1($elg->elg2);
+                    if($sem1==$elg->elg3){
+                        $vmp = $this->getVedItog($elg->elg2, $gr1, 99, $st1);
 
+                        if(!empty($vmp)){
+                            $sql = <<<SQL
+                              UPDATE vmp set vmp5=:VMP5, vmp10=:VMP10, vmp12=:VMP12 WHERE vmp2=:ST1 AND vmp1=:VMPV1
+SQL;
+
+                            $command = Yii::app()->db->createCommand($sql);
+                            $command->bindValue(':VMP5', $_tek);
+                            $command->bindValue(':ST1', $st1);
+                            $command->bindValue(':VMPV1', $vmp['vmp1']);
+                            $command->bindValue(':VMP12', Yii::app()->user->dbModel->p1);
+                            $command->bindValue(':VMP10', date('Y-m-d H:i:s'));
+                            $command->execute();
+                        }
+                    }
                 }
             }
         }
+    }
+
+    /**
+     * Получить итоговую ведомость дял uo6=3
+     * @param $uo1
+     * @param $gr1
+     * @param $nom
+     * @param $st1
+     * @return array
+     */
+    private function getVedItog($uo1,$gr1,$nom,$st1)
+    {
+        $sql = <<<SQL
+			SELECT vmp.* from vvmp
+			INNER JOIN vmpv on (vvmp1=vmpv2)
+			INNER JOIN vmp on (vmpv1=vmp1 and vmp2=:ST1)
+			WHERE vvmp3=(
+			SELECT  uo3 from uo where uo1=:UO1
+			)
+			/*and vmpv6 is null*/
+			and VVMP6=:NOM
+			and vmpv7=:GR1 and vvmp4 = (
+			select
+			   first 1 sem7
+				from sem
+				   inner join sg on (sem.sem2 = sg.sg1)
+				   inner join gr on (sg.sg1 = gr.gr2)
+				WHERE gr1={$gr1} and sem3=:YEAR and sem5=:SEM
+			) and vvmp25=(
+			SELECT  gr2 from gr where gr1={$gr1}
+			) ORDER by vvmp6 ASC
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':GR1', $gr1);
+        $command->bindValue(':UO1', $uo1);
+        $command->bindValue(':ST1', $st1);
+        $command->bindValue(':NOM', $nom);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
+
+        $row = $command->queryAll();
+
+        return $row;
     }
 }

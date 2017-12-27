@@ -111,7 +111,8 @@ unset($marksArray['current']);
 $array = array_reverse($marksArray);
 
 foreach ($array as $key=>$marks){
-    $tbody.= fillMarks($current['marks'],$current['year'],$current['sem']);
+    if(!empty($marks['marks']))
+        $tbody.= fillMarks($marks['marks'],$marks['year'],$marks['sem']);
 }
 
 $title = tt('Просмотр оценок для расчета ПМК');

@@ -723,7 +723,7 @@ SQL;
                     $error = true;
                     $errorType = 2;
                 } else {
-                    if ($elgz->elgz4 != 2) {
+                    if ($elgz->elgz4 != 2 && $elgz->elgz4 != 3) {
                         $error = true;
                         $errorType = 2;
                     } else {
