@@ -757,7 +757,7 @@ SQL;
                 if($elg->elg20->uo6==3){
                     $sem1 = $this->getEndSem1($elg->elg2);
                     if($sem1==$elg->elg3){
-                        $vmp = $this->getVedItog($elg->elg2, $gr1, 99, $st1);
+                        $vmp = $this->getVedItog($elg->elg2, $gr1, 98, $st1);
 
                         if(!empty($vmp)){
                             $sql = <<<SQL
