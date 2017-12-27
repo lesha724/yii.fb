@@ -765,7 +765,7 @@ SQL;
 SQL;
 
                             $command = Yii::app()->db->createCommand($sql);
-                            $command->bindValue(':VMP5', $_tek);
+                            $command->bindValue(':VMP5', $tek);
                             $command->bindValue(':ST1', $st1);
                             $command->bindValue(':VMPV1', $vmp['vmp1']);
                             $command->bindValue(':VMP12', Yii::app()->user->dbModel->p1);
