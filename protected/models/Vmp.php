@@ -786,7 +786,7 @@ SQL;
      * @param $st1
      * @return array
      */
-    private function getVedItog($uo1,$gr1,$nom,$st1)
+    public function getVedItog($uo1,$gr1,$nom,$st1)
     {
         $sql = <<<SQL
 			SELECT vmp.* from vvmp
