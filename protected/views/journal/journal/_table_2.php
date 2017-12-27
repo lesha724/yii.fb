@@ -1,7 +1,7 @@
 <?php
 
 function table2TrItog($uo1, $gr1, $st1){
-    $vmp = Vmp::model()->getVedItog($uo1, $gr1, 99, $st1);
+    $vmp = Vmp::model()->getVedItog($uo1, $gr1, 98, $st1);
 
     if(!empty($vmp)){
         $ind = round($vmp['vmp6'],2);
