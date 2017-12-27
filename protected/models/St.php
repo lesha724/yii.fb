@@ -676,7 +676,8 @@ SQL;
 		    $criteria->addCondition('st3 CONTAINING :ST3');
         if(!empty($this->st4))
 		    $criteria->addCondition('st4 CONTAINING :ST4');
-        $criteria->addSearchCondition('st15', $this->st15);
+        if(!empty($this->st15))
+            $criteria->addCondition('st15 = :ST15');
 
         if($this->st_status>0) {
             if($this->st_status==1)
@@ -701,6 +702,7 @@ SQL;
             ':ST2'=>$this->st2,
             ':ST3'=>$this->st3,
             ':ST4'=>$this->st4,
+            ':ST15'=>$this->st15,
             ':LOGIN' => $login,
             ':EMAIL' => $email
         );
