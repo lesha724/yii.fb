@@ -816,7 +816,7 @@ SQL;
         $command->bindValue(':YEAR', Yii::app()->session['year']);
         $command->bindValue(':SEM', Yii::app()->session['sem']);
 
-        $row = $command->queryAll();
+        $row = $command->queryRow();
 
         return $row;
     }
