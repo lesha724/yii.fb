@@ -650,7 +650,7 @@ SQL;
             //var_dump($count);
             $ps82 = PortalSettings::model()->findByPk(82)->ps2;
             if($ps82!=0){
-                $val = $tek/$count;
+                $val = $count>0 ? $tek/$count : 0;
                 //print_r($val);
                 $tek = round($val,2);
                 //var_dump($tek);
@@ -707,7 +707,7 @@ SQL;
                 }elseif($_elgz->elgz4==3||$_elgz->elgz4==4){
 
                     if($_elgz->elgz4==3&&SH::getUniversityCod()==32){
-                        $val = $_tek/$count;
+                        $val = $count>0 ? $_tek/$count : 0;
                         //print_r($val);
                         $_tek = round($val,2);
 
