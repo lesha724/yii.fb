@@ -722,10 +722,18 @@ SQL;
                           UPDATE vmp set vmp4=:VMP4, vmp5=:VMP5, vmp6=:VMP6, vmp7=:VMP7, vmp10=:VMP10, vmp12=:VMP12 $dopColumns WHERE vmp2=:ST1 AND vmp1=:VMPV1
 SQL;
                     $command = Yii::app()->db->createCommand($sql);
-                    $command->bindValue(':VMP5', 0);
-                    $command->bindValue(':VMP4', $_tek);
-                    $command->bindValue(':VMP6', 0);
-                    $command->bindValue(':VMP7', $_tek);
+                    if($elg->elg20->uo6==3){
+                        $command->bindValue(':VMP5', $_tek);
+                        $command->bindValue(':VMP4', $_tek);
+                        $command->bindValue(':VMP6', 0);
+                        $command->bindValue(':VMP7', 0);
+                    }
+                    else {
+                        $command->bindValue(':VMP5', 0);
+                        $command->bindValue(':VMP4', $_tek);
+                        $command->bindValue(':VMP6', 0);
+                        $command->bindValue(':VMP7', $_tek);
+                    }
                     $command->bindValue(':ST1', $st1);
                     $command->bindValue(':VMPV1', $module['vmpv1']);
                     $command->bindValue(':VMP12', Yii::app()->user->dbModel->p1);
