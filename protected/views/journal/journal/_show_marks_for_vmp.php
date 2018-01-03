@@ -97,13 +97,23 @@ $thead = <<<HTML
     </tr>
 HTML;
 
-if(isset($marksArray['prev']))
+/*if(isset($marksArray['prev']))
 {
     $prev = $marksArray['prev'];
     $tbody.= fillMarks($prev['marks'],$prev['year'],$prev['sem']);
-}
+}*/
 
 $current = $marksArray['current'];
 $tbody.= fillMarks($current['marks'],$current['year'],$current['sem']);
+
+unset($marksArray['current']);
+
+$array = array_reverse($marksArray);
+
+foreach ($array as $key=>$marks){
+    if(!empty($marks['marks']))
+        $tbody.= fillMarks($marks['marks'],$marks['year'],$marks['sem']);
+}
+
 $title = tt('Просмотр оценок для расчета ПМК');
 echo sprintf($table, $thead, $tbody);

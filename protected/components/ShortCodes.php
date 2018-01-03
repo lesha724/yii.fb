@@ -580,15 +580,13 @@ class SH extends ShortCodes
         return $dbh;
     }
 
-
-
     /**
- * Создать конектор к для подключения к дист образованию
- * @param int $universityCode
- * @param string $url
- * @param string $apiKey
- * @return DistEducation|null
- */
+     * Создать конектор к для подключения к дист образованию
+     * @param int $universityCode
+     * @param string $url
+     * @param string $apiKey
+     * @return DistEducation|null
+     */
     private static function _getDiscEducation($universityCode, $url, $apiKey){
         switch ($universityCode){
             case U_ZSMU:
@@ -630,17 +628,37 @@ class SH extends ShortCodes
      * @return DistEducation|null
      * @throws CHttpException if connector == null
      */
-    public static function getDistEducationConnector($universityCode){
+    public static function getDistEducationConnector($universityCode)
+    {
         $connector = SH::_getDiscEducation(
             $universityCode,
             PortalSettings::model()->getSettingFor(PortalSettings::HOST_DIST_EDUCATION),
             PortalSettings::model()->getSettingFor(PortalSettings::APIKEY_DIST_EDUCATION)
         );
 
-        if(empty($connector))
-            throw new CHttpException(400,'error create distEducation connector');
+        if (empty($connector))
+            throw new CHttpException(400, 'error create distEducation connector');
 
         return $connector;
+    }
+
+    /**
+     * Поучить предедущий семестр
+     *
+     * @param $year int
+     * @param $sem int
+     * @return array
+     */
+    public static function getPrevSem($year, $sem){
+
+        if($sem==1)
+            $sem = 0;
+        else {
+            $year--;
+            $sem=1;
+        }
+
+        return array($year, $sem);
     }
 }
 
