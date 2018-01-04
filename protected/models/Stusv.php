@@ -1017,6 +1017,9 @@ SQL;
 	 */
 	public function recalculateStusMark($st1,$gr1,$sem7,$elg){
 
+	    if($elg->elg4!=1)
+	        return false;
+
 		$idUniversity = SH::getUniversityCod();
 		//var_dump($idUniversity);
 		if($idUniversity===null)

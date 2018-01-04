@@ -137,8 +137,11 @@ if (!empty($model->sem1)):
         'students' => $students
     ));
 
-    //доп колонки
-    Elgd::checkEmptyElgd($elg1);
+    if($model->type_lesson!=0) {
+        //доп колонки
+        Elgd::checkEmptyElgd($elg1);
+    }
+
     $elgd = array();
     $ps97 = PortalSettings::model()->findByPk(97)->ps2;
     $ps85 = PortalSettings::model()->findByPk(85)->ps2;
