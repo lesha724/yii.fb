@@ -517,6 +517,15 @@ SQL;
         $codes  = $command->queryAll();
 
         $start = false;
+
+        $enableDistEducation = PortalSettings::model()->getSettingFor(PortalSettings::ENABLE_DIST_EDUCATION);
+
+        $connector = null;
+        if($enableDistEducation==1)
+            $connector = SH::getDistEducationConnector(
+                SH::getUniversityCod()
+            );
+
         foreach ($codes as $code) {
 
             if (! $start)
@@ -558,6 +567,11 @@ SQL;
                 ':UCGNS1_VIB3' => $code['ucgns1_vib'],
             );
             Yii::app()->db->createCommand($sql)->execute($params);
+
+
+            if($enableDistEducation==1){
+                list($result, $error) = $connector->subscribeToCourse(Yii::app()->user->model, $code['ucgns1_vib']);
+            }
         }
 
     }
@@ -587,7 +601,13 @@ SQL;
         );
         Yii::app()->db->createCommand($sql)->execute($params);
 
+        $enableDistEducation = PortalSettings::model()->getSettingFor(PortalSettings::ENABLE_DIST_EDUCATION);
 
+        $connector = null;
+        if($enableDistEducation==1)
+            $connector = SH::getDistEducationConnector(
+                SH::getUniversityCod()
+            );
 
         foreach ($codes as $code) {
 
@@ -612,6 +632,10 @@ SQL;
                 ':UCGNS1_VIB3' => $code,
             );
             Yii::app()->db->createCommand($sql)->execute($params);
+
+            if($enableDistEducation==1){
+                list($result, $error) = $connector->unsubscribeToCourse(Yii::app()->user->model, $code);
+            }
         }
     }
 

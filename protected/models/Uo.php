@@ -224,4 +224,14 @@ class Uo extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+    /**
+     * Список uo1 по
+     * @param $ucgns1 int
+     * @return array
+     */
+	public function getListByUcgns1($ucgns1)
+    {
+
+    }
 }

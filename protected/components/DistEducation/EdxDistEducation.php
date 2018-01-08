@@ -214,4 +214,24 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
     {
         return self::ID_FIELD_NAME;
     }
+
+    /**
+     * Записать студента на курс
+     * @param St $st
+     * @param string $courseId
+     * @return array
+     */
+    protected function _unsubscribeToCourse($st, $courseId){
+
+    }
+
+    /**
+     * Записать студента на курс
+     * @param St $st
+     * @param string $courseId
+     * @return array
+     */
+    protected function _subscribeToCourse($st, $courseId){
+
+    }
 }

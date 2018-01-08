@@ -86,4 +86,20 @@ interface IDistEducation
     * @return bool
     */
     public function validateEmail($email);
+
+    /**
+     * Записать студента на курс
+     * @param $st St
+     * @param $ucgns1
+     * @return mixed
+     */
+    public function subscribeToCourse($st, $ucgns1);
+
+    /**
+     * Отписаит студента с курса
+     * @param $st St
+     * @param $ucgns1
+     * @return mixed
+     */
+    public function unsubscribeToCourse($st, $ucgns1);
 }

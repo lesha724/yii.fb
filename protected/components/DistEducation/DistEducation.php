@@ -72,7 +72,7 @@ abstract class DistEducation implements IDistEducation
      */
     protected function saveSignUpOld($user, $params){
         if(!$user->isStudent)
-            return array(false, 'EdxDistEducation:'.tt('Пользователь не студент'));
+            return array(false, 'DistEducation:'.tt('Пользователь не студент'));
 
         if(!isset($params['email']))
             return array(false, 'EdxDistEducation: params don`t contains email');
@@ -336,5 +336,91 @@ abstract class DistEducation implements IDistEducation
      */
     public function getNameIdFiled(){
         return self::ID_FIELD_NAME;
+    }
+
+    /**
+     * Записать студента на курс
+     * @param Users $st
+     * @param int $ucgns1
+     * @return array
+     */
+    public function subscribeToCourse($st, $ucgns1)
+    {
+        return $this->_studentToCourse($st, $ucgns1);
+    }
+
+    /**
+     * Записать студента на курс
+     * @param Users $st
+     * @param string $courseId
+     * @return array
+     */
+    abstract protected function _subscribeToCourse($st, $courseId);
+
+    /**
+     * Записать студента на курс
+     * @param Users $st
+     * @param int $ucgns1
+     * @return array
+     */
+    public function unsubscribeToCourse($st, $ucgns1)
+    {
+        return $this->_studentToCourse($st, $ucgns1, false);
+    }
+
+    /**
+     * Записать студента на курс
+     * @param Users $st
+     * @param string $courseId
+     * @return array
+     */
+    abstract protected function _unsubscribeToCourse($st, $courseId);
+
+    /**
+     * @param $st Users
+     * @return array
+     */
+    private function _studentToCourse($st, $ucgns1, $subscribe = true){
+        if(!$st->isStudent)
+            return array(false, 'DistEducation:'.tt('Пользователь не студент'));
+
+        $stDist = Stdist::model()->findByPk($st->u6);
+        if($stDist==null) {
+            return array(false, 'DistEducation:'.tt('Студент не зарегестрирован в дистанционом обучении'));
+        }
+
+        $uo1List = Uo::model()->getListByUcgns1($ucgns1);
+
+        $log = '';
+        $globalResult = true;
+
+        foreach ($uo1List as $uo1) {
+            $model = DispDist::model()->findByPk($uo1);
+
+            if($model==null)
+            {
+                $log .= '<br>' . $model->dispdist2 . ' : Дисциплина не привязана';
+                continue;
+            }
+
+            $id = $model->dispdist3;
+
+            $result = true;
+            $error = '';
+
+            if($subscribe)
+                list ($result, $error) = $this->subscribeToCourse($st, $id);
+            else
+                list ($result, $error) = $this->_unsubscribeToCourse($st, $id);
+            $log .= '<br>' . $model->dispdist2 . ' :';
+            if(!$result) {
+                $globalResult = false;
+                $log .= $error;
+            }else{
+                $log .= 'Ок';
+            }
+        }
+
+        return array($globalResult, $log);
     }
 }

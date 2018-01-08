@@ -224,4 +224,24 @@ class MoodleDistEducation extends DistEducation
         else
             throw new CHttpException(500, 'MOODLEDistEducation: Ошибка отправки запроса. '.$resp);
     }
+
+    /**
+     * Записать студента на курс
+     * @param St $st
+     * @param string $courseId
+     * @return array
+     */
+    protected function _unsubscribeToCourse($st, $courseId){
+
+    }
+
+    /**
+     * Записать студента на курс
+     * @param St $st
+     * @param string $courseId
+     * @return array
+     */
+    protected function _subscribeToCourse($st, $courseId){
+
+    }
 }
