@@ -260,7 +260,7 @@ $this->widget('zii.widgets.CMenu', array(
                 array(
                     'label'  => $_l2.tt('Настройки'),
                     'url'    => _u('/admin/default/settings'),
-                    'active' => $_a=='settings' && $_m=='admin'
+                    'active' => $_a=='settings' && $_m=='admin' && $_c == 'default'
                 ),
                 array(
                     'label'  => $_l2.tt('Настройки Портала'),
@@ -296,6 +296,11 @@ $this->widget('zii.widgets.CMenu', array(
                     'label'  => $_l2.tt('Безопасность'),
                     'url'    => _u('/admin/default/security'),
                     'active' => $_a=='security' && $_m=='admin'
+                ),
+                array(
+                    'label'  => $_l2.tt('Дистанционое образование'),
+                    'url'    => _u('/admin/distEducation/settings'),
+                    'active' => $_c=='distEducation' && $_m=='admin'
                 ),
 
             ),
