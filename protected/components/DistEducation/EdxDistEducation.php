@@ -192,8 +192,6 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
      */
     private function _sendQuery($method, $type = null, $params = null, $token = null, $rawData = null){
         $header = array(
-            'maxredirects' => 0,
-            'timeout'      => 30,
             'Content-Type'=>'application/json'
         );
 
@@ -207,7 +205,7 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
         if($rawData!=null)
             $client->setRawData($rawData);
 
-        $response = $client->request($type);
+        var_dump($rawData);
 
         if($type = EHttpClient::GET){
             if(!empty($params)) {
@@ -219,6 +217,7 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
             }
         }
 
+        $response = $client->request($type);
 
         if($response->isSuccessful())
         {
