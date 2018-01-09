@@ -239,7 +239,7 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
     protected function _unsubscribeToCourse($st, $courseId){
         try {
             $this->_sendQuery(
-                'api/enrollment/v1/extension/enrollment',
+                '/api/enrollment/v1/extension/enrollment',
                 EHttpClient::DELETE,
                 json_encode(
                     array(
@@ -267,7 +267,7 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
     protected function _subscribeToCourse($st, $courseId){
         try {
             $this->_sendQuery(
-                'api/enrollment/v1/extension/enrollment',
+                '/api/enrollment/v1/extension/enrollment',
                 EHttpClient::POST,
                 json_encode(
                     array(
