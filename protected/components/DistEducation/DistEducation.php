@@ -391,8 +391,6 @@ abstract class DistEducation implements IDistEducation
 
         $uo1List = Uo::model()->getListByUcgns1($ucgns1);
 
-        var_dump($uo1List);
-
         $log = '';
         $globalResult = true;
 

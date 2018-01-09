@@ -232,7 +232,7 @@ class Uo extends CActiveRecord
      */
 	public function getListByUcgns1($ucgns1)
     {
-        $sql = <<<SQL
+        /*$sql = <<<SQL
           select 
             uo1
             from uo
@@ -242,11 +242,23 @@ class Uo extends CActiveRecord
                inner join ucgn on (ug.ug4 = ucgn.ucgn1)
                inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
             WHERE ucgns1=:UCGNS1
+SQL;*/
+
+        $sql = <<<SQL
+          select 
+            uo1
+            from ucxg
+               inner join ucx on (ucxg.ucxg1 = ucx.ucx1)
+               inner join uo on (ucx.ucx1 = uo.uo19)
+               inner join ucgn on (ucxg.ucxg2 = ucgn.ucgn1)
+               inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
+            WHERE ucgns1=:UCGNS1
 SQL;
+
+
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':UCGNS1', $ucgns1);
 
-        var_dump($ucgns1);
         return $command->queryColumn();
     }
 }
