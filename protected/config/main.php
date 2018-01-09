@@ -234,6 +234,7 @@ $config = array(
         ),
 		'user'=>array(
 				'class' => 'WebUser',
+            'allowAutoLogin'=>true
 		),
 		'ePdf' => array(
 			'class'         => 'ext.yii-pdf.EYiiPdf',
