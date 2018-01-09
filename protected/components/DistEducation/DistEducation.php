@@ -351,11 +351,11 @@ abstract class DistEducation implements IDistEducation
 
     /**
      * Записать студента на курс
-     * @param Users $st
+     * @param Stdist $stDist
      * @param string $courseId
      * @return array
      */
-    abstract protected function _subscribeToCourse($st, $courseId);
+    abstract protected function _subscribeToCourse($stDist, $courseId);
 
     /**
      * Записать студента на курс
@@ -370,11 +370,11 @@ abstract class DistEducation implements IDistEducation
 
     /**
      * Записать студента на курс
-     * @param Users $st
+     * @param Stdist $stDist
      * @param string $courseId
      * @return array
      */
-    abstract protected function _unsubscribeToCourse($st, $courseId);
+    abstract protected function _unsubscribeToCourse($stDist, $courseId);
 
     /**
      * @param $st Users
@@ -405,13 +405,10 @@ abstract class DistEducation implements IDistEducation
 
             $id = $model->dispdist3;
 
-            $result = true;
-            $error = '';
-
             if($subscribe)
-                list ($result, $error) = $this->subscribeToCourse($st, $id);
+                list ($result, $error) = $this->_subscribeToCourse($stDist, $id);
             else
-                list ($result, $error) = $this->_unsubscribeToCourse($st, $id);
+                list ($result, $error) = $this->_unsubscribeToCourse($stDist, $id);
             $log .= '<br>' . $model->dispdist2 . ' :';
             if(!$result) {
                 $globalResult = false;

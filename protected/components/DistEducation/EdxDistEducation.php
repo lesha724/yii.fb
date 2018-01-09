@@ -182,12 +182,21 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
      * @return string
      * @throws CHttpException
      */
-    private function _sendQuery($method, $type = null, $params = null){
+    private function _sendQuery($method, $type = null, $params = null, $token = null){
         Yii::import('ext.EHttpClient.*');
 
-        $client = new EHttpClient( $this->host.$method, array(
+        $header = array(
             'maxredirects' => 0,
-            'timeout'      => 30));
+            'timeout'      => 30,
+            'Content-Type'=>'application/json'
+        );
+
+        if($token!=null)
+        {
+            $header['X-Edx-Api-Key'] = $token;
+        }
+
+        $client = new EHttpClient( $this->host.$method, $header);
 
         $response = $client->request($type);
 
@@ -217,21 +226,57 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
 
     /**
      * Записать студента на курс
-     * @param St $st
+     * @param Stdist $st
      * @param string $courseId
      * @return array
      */
     protected function _unsubscribeToCourse($st, $courseId){
+        try {
+            $this->_sendQuery(
+                'api/enrollment/v1/extension/enrollment',
+                EHttpClient::DELETE,
+                json_encode(
+                    array(
+                        'email'=> $st->stdist2,
+                        'course_details'=>array(
+                            'course_id'=>$courseId
+                        )
+                    )
+                ),
+                $this->apiKey
+            );
 
+            return array(true, '');
+        }catch (Exception $error){
+            return array(false, $error->getMessage());
+        }
     }
 
     /**
      * Записать студента на курс
-     * @param St $st
+     * @param Stdist $st
      * @param string $courseId
      * @return array
      */
     protected function _subscribeToCourse($st, $courseId){
+        try {
+            $this->_sendQuery(
+                'api/enrollment/v1/extension/enrollment',
+                EHttpClient::POST,
+                json_encode(
+                    array(
+                        'email'=> $st->stdist2,
+                        'course_details'=>array(
+                            'course_id'=>$courseId
+                        )
+                    )
+                ),
+                $this->apiKey
+            );
 
+            return array(true, '');
+        }catch (Exception $error){
+            return array(false, $error->getMessage());
+        }
     }
 }
