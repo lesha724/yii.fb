@@ -293,12 +293,6 @@ SQL;
             group BY d2,d1,uo1,sem4,sp2, dispdist2, dispdist3, uo4
 SQL;
 
-        $params = array(
-            ':UO1' => $uo1,
-            ':YEAR' =>  Yii::app()->session['year'],
-            ':SEM' =>  Yii::app()->session['sem']
-        );
-
         $command=Yii::app()->db->createCommand($sql);
         $command->params = $params;
         $disp = $command->queryRow();
