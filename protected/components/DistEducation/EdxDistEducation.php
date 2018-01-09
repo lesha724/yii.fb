@@ -172,7 +172,7 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
      */
     protected function _validateEmail($email)
     {
-        return false;
+        return true;
     }
 
     /**
