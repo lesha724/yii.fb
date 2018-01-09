@@ -86,7 +86,10 @@ class LoginForm extends FormValidation
 		}
 		if($this->_identity->errorCode===UserIdentity::ERROR_NONE)
 		{
-			$duration=$this->rememberMe ? 3600*24*30 : 0; // 30 days
+		    if(SH::getUniversityCod()==U_NULAU)
+                $duration = 3600*8;
+            else
+			    $duration=$this->rememberMe ? 3600*24*30 : 0; // 30 days
 			Yii::app()->user->login($this->_identity,$duration);
 			UsersHistory::getNewLogin();
 			return true;
