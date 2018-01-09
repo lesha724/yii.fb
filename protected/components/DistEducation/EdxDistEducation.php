@@ -13,6 +13,12 @@
  */
 class EdxDistEducation extends DistEducation implements IEdxDistEducation
 {
+    public function __construct($host, $apiKey)
+    {
+        Yii::import('ext.EHttpClient.*');
+        parent::__construct($host, $apiKey);
+    }
+
     /**
      * @param Users $user
      * @return array
@@ -185,8 +191,6 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
      * @throws CHttpException
      */
     private function _sendQuery($method, $type = null, $params = null, $token = null){
-        Yii::import('ext.EHttpClient.*');
-
         $header = array(
             'maxredirects' => 0,
             'timeout'      => 30,
