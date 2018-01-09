@@ -245,6 +245,6 @@ class Uo extends CActiveRecord
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':UCGNS1', $ucgns1);
-        return $command->queryAll();
+        return $command->queryColumn();
     }
 }
