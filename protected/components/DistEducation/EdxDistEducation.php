@@ -190,7 +190,7 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
      * @return string
      * @throws CHttpException
      */
-    private function _sendQuery($method, $type = null, $params = null, $token = null){
+    private function _sendQuery($method, $type = null, $params = null, $token = null, $rawData = null){
         $header = array(
             'maxredirects' => 0,
             'timeout'      => 30,
@@ -203,6 +203,9 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
         }
 
         $client = new EHttpClient( $this->host.$method, $header);
+
+        if($rawData!=null)
+            $client->setRawData($rawData);
 
         $response = $client->request($type);
 
@@ -241,6 +244,8 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
             $this->_sendQuery(
                 '/api/enrollment/v1/extension/enrollment',
                 EHttpClient::DELETE,
+                null,
+                $this->apiKey,
                 json_encode(
                     array(
                         'email'=> $st->stdist2,
@@ -248,8 +253,7 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
                             'course_id'=>$courseId
                         )
                     )
-                ),
-                $this->apiKey
+                )
             );
 
             return array(true, '');
@@ -269,6 +273,8 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
             $this->_sendQuery(
                 '/api/enrollment/v1/extension/enrollment',
                 EHttpClient::POST,
+                null,
+                $this->apiKey,
                 json_encode(
                     array(
                         'email'=> $st->stdist2,
@@ -276,8 +282,7 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
                             'course_id'=>$courseId
                         )
                     )
-                ),
-                $this->apiKey
+                )
             );
 
             return array(true, '');
