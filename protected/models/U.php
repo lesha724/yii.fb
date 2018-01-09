@@ -572,6 +572,7 @@ SQL;
 
             if($enableDistEducation==1&&$enableInSubscriptionDistEducation==1){
                 list($result, $error) = $connector->subscribeToCourse(Yii::app()->user->model, $code['ucgns1_vib']);
+                Yii::app()->user->setFlash($result ? 'success' : 'error' , $error);
             }
         }
 
@@ -637,6 +638,7 @@ SQL;
 
             if($enableDistEducation==1&&$enableInSubscriptionDistEducation==1){
                 list($result, $error) = $connector->unsubscribeToCourse(Yii::app()->user->model, $code);
+                Yii::app()->user->setFlash($result ? 'success' : 'error' , $error);
             }
         }
     }
