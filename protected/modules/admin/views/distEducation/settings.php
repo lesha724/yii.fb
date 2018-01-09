@@ -34,6 +34,8 @@ $checkboxStyle = array('class' => 'ace ace-switch ace-switch-4');
                 $hostDistEducation = PortalSettings::HOST_DIST_EDUCATION;
                 $apikeyDistEducation = PortalSettings::APIKEY_DIST_EDUCATION;
 
+                $enableInSubscriptionDistEducation = PortalSettings::ENABLE_IN_SUBSCRIPTION_DIST_EDUCATION;
+
                 $registrationEmailDistEducation = PortalSettings::REGISTRATION_EMAIL_DIST_EDUCATION;
                 ?>
 
@@ -52,6 +54,12 @@ $checkboxStyle = array('class' => 'ace ace-switch ace-switch-4');
                     <div class="control-group">
                         <span class="lbl"> <?=tt('ApiKey')?>:</span>
                         <?=CHtml::textField('settings['.$apikeyDistEducation.']', PortalSettings::model()->findByPk($apikeyDistEducation)->ps2)?>
+                    </div>
+
+                    <div class="control-group">
+                        <?=CHtml::checkBox('', PortalSettings::model()->findByPk($enableInSubscriptionDistEducation)->ps2, $checkboxStyle)?>
+                        <span class="lbl"> <?=tt('Записывать на курсы при записи на дисциплину')?></span>
+                        <?=CHtml::hiddenField('settings['.$enableInSubscriptionDistEducation.']', PortalSettings::model()->findByPk($enableInSubscriptionDistEducation)->ps2)?>
                     </div>
                 </div>
 

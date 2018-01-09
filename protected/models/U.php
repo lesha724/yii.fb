@@ -519,9 +519,10 @@ SQL;
         $start = false;
 
         $enableDistEducation = PortalSettings::model()->getSettingFor(PortalSettings::ENABLE_DIST_EDUCATION);
+        $enableInSubscriptionDistEducation = PortalSettings::model()->getSettingFor(PortalSettings::ENABLE_IN_SUBSCRIPTION_DIST_EDUCATION);
 
         $connector = null;
-        if($enableDistEducation==1)
+        if($enableDistEducation==1&&$enableInSubscriptionDistEducation==1)
             $connector = SH::getDistEducationConnector(
                 SH::getUniversityCod()
             );
@@ -569,7 +570,7 @@ SQL;
             Yii::app()->db->createCommand($sql)->execute($params);
 
 
-            if($enableDistEducation==1){
+            if($enableDistEducation==1&&$enableInSubscriptionDistEducation==1){
                 list($result, $error) = $connector->subscribeToCourse(Yii::app()->user->model, $code['ucgns1_vib']);
             }
         }
@@ -602,9 +603,10 @@ SQL;
         Yii::app()->db->createCommand($sql)->execute($params);
 
         $enableDistEducation = PortalSettings::model()->getSettingFor(PortalSettings::ENABLE_DIST_EDUCATION);
+        $enableInSubscriptionDistEducation = PortalSettings::model()->getSettingFor(PortalSettings::ENABLE_IN_SUBSCRIPTION_DIST_EDUCATION);
 
         $connector = null;
-        if($enableDistEducation==1)
+        if($enableDistEducation==1&&$enableInSubscriptionDistEducation==1)
             $connector = SH::getDistEducationConnector(
                 SH::getUniversityCod()
             );
@@ -633,7 +635,7 @@ SQL;
             );
             Yii::app()->db->createCommand($sql)->execute($params);
 
-            if($enableDistEducation==1){
+            if($enableDistEducation==1&&$enableInSubscriptionDistEducation==1){
                 list($result, $error) = $connector->unsubscribeToCourse(Yii::app()->user->model, $code);
             }
         }
