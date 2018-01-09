@@ -92,11 +92,13 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
 
     protected function _getColumnsForGridView()
     {
+        $url = $this->host;
+
         return array(
             'image' => array(
                 'header'=>tt('Изображение'),
                 'name'=>'image',
-                'value'=>function($course){
+                'value'=>function($course) use (&$url){
                     /*if(!isset($course->media))
                         return '';*/
 
@@ -112,7 +114,7 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
                     if(!isset($course->media->course_image->uri))
                         return '';
 
-                    return CHtml::image($this->host. $course->media->course_image->uri);
+                    return CHtml::image($url. $course->media->course_image->uri);
                 },
             ),
             'course_id' => array(
