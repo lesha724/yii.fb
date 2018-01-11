@@ -236,12 +236,16 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
 
         var_dump($response);
 
+        var_dump($response->getRawBody());
+
+        var_dump($response->getBody());
+
         if($response->isSuccessful())
         {
             return $response->getBody();
         }
         else
-            throw new CHttpException(500, 'EdxDistEducation: Ошибка отправки запроса. '.$response->getRawBody());
+            throw new CHttpException(500, 'EdxDistEducation: Ошибка отправки запроса. '.$response->getRawBody().' - '. $response->getBody());
     }
 
     public function getNameIdFiled()
