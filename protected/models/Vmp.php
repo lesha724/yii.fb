@@ -769,11 +769,12 @@ SQL;
 
                         if(!empty($vmp)){
                             $sql = <<<SQL
-                              UPDATE vmp set vmp5=:VMP5, vmp10=:VMP10, vmp12=:VMP12 WHERE vmp2=:ST1 AND vmp1=:VMPV1
+                              UPDATE vmp set vmp5=:VMP5, vmp4=:VMP4, vmp10=:VMP10, vmp12=:VMP12 WHERE vmp2=:ST1 AND vmp1=:VMPV1
 SQL;
 
                             $command = Yii::app()->db->createCommand($sql);
                             $command->bindValue(':VMP5', $tek);
+                            $command->bindValue(':VMP4', $tek);
                             $command->bindValue(':ST1', $st1);
                             $command->bindValue(':VMPV1', $vmp['vmp1']);
                             $command->bindValue(':VMP12', Yii::app()->user->dbModel->p1);
