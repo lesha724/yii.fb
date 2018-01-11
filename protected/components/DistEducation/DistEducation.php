@@ -414,6 +414,7 @@ abstract class DistEducation implements IDistEducation
                 $globalResult = false;
                 $log .= $error;
             }else{
+                $log.= $subscribe ? 'Запись ' : 'Отмена';
                 $log .= 'Ок';
             }
         }
