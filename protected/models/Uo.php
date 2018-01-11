@@ -246,7 +246,7 @@ SQL;*/
 
         $sql = <<<SQL
           select 
-            uo1
+            uo1, d2
             from ucxg
                inner join ucx on (ucxg.ucxg1 = ucx.ucx1)
                inner join uo on (ucx.ucx1 = uo.uo19)
@@ -259,6 +259,6 @@ SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':UCGNS1', $ucgns1);
 
-        return $command->queryColumn();
+        return $command->queryAll();
     }
 }

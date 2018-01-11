@@ -395,11 +395,11 @@ abstract class DistEducation implements IDistEducation
         $globalResult = true;
 
         foreach ($uo1List as $uo1) {
-            $model = DispDist::model()->findByPk($uo1);
+            $model = DispDist::model()->findByPk($uo1['uo1']);
 
             if($model==null)
             {
-                $log .= '<br>' . $model->dispdist2 . ' : Дисциплина не привязана';
+                $log .= '<br>' . $uo1['d2']. ' : Дисциплина не привязана';
                 continue;
             }
 
