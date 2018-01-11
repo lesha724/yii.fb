@@ -207,18 +207,18 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
 
         $client = new EHttpClient( $this->host.$method, array());
 
-        var_dump($this->host.$method);
+        //var_dump($this->host.$method);
 
         $client->setHeaders($header);
 
-        var_dump($header);
+        //var_dump($header);
 
         if($rawData!=null)
             $client->setRawData($rawData);
 
-        var_dump($rawData);
+        //var_dump($rawData);
 
-        var_dump($type);
+        //var_dump($type);
 
 
 
@@ -234,9 +234,15 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
 
         $response = $client->request($type);
 
+        var_dump($client);
+
+        echo '<br>';
+
         var_dump($response);
 
-        var_dump($response->getRawBody());
+        echo '<br>';
+
+        //var_dump($response->getRawBody());
 
         var_dump($response->getBody());
 
