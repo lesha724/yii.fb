@@ -202,15 +202,23 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
 
         if($token!=null)
         {
-            $header['x-edx-api-key'] = $token;
+            $header['X-Edx-Api-Key'] = $token;
         }
 
-        $client = new EHttpClient( $this->host.$method, $config);
+        $client = new EHttpClient( $this->host.$method, array());
+
+        var_dump($this->host.$method);
 
         $client->setHeaders($header);
 
+        var_dump($header);
+
         if($rawData!=null)
             $client->setRawData($rawData);
+
+        var_dump($rawData);
+
+        var_dump($type);
 
         if($type = EHttpClient::GET){
             if(!empty($params)) {
