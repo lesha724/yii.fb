@@ -10,3 +10,4 @@ define('U_URFAK',  7);
 define('U_ZSMU',  32);
 define('U_NULAU', 14);
 define('U_XNMU', 40);//харьков мед
+define('U_KNAME', 6);//Бекетова
