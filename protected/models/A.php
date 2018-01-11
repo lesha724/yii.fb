@@ -135,7 +135,7 @@ class A extends CActiveRecord
         $sql = <<<SQL
         SELECT t.*, '' as a2
         FROM RAA(:LANG, :A1, :DATE_1, :DATE_2) t
-        ORDER BY r2,r3
+        ORDER BY r2,r3,rz2
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
