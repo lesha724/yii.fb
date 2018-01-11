@@ -283,6 +283,7 @@ TEXT;
 TEXT;
         elseif($type == 3) // classroom
             $pattern = <<<TEXT
+{$time}
 {$d2}[{$tip}]
 {$gr3}
 {$fio}
@@ -454,6 +455,7 @@ HTML;
 HTML;
         elseif($type == 3) // classroom
             $pattern = <<<HTML
+{$time}
 <br>{$d2}[{$tip}]<br>
 {$gr3}<br>
 {$fio}<br>
