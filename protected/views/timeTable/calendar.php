@@ -33,6 +33,7 @@
             //$r1=$timeTable[0]['R1'];
             $r2=$timeTable[0]['r2'];
             $r3=$timeTable[0]['r3'];
+            $rz2=$timeTable[0]['rz2'];
             foreach($timeTable as $event)
             {
                     
@@ -53,7 +54,7 @@
                             $fio=$event['fio'];
                     else
                             $fio='';
-                    if(($r2!=$event['r2'])||($r3!=$event['r3']))
+                    if(($r2!=$event['r2'])||($r3!=$event['r3'])||($rz2!=$event['rz2']))
                     {		
                             if($arr=='[')
                                     $arr.=$fullText;
@@ -120,6 +121,8 @@ Yii::app()->clientScript->registerScript('calendar', "
 	$(document).ready(function() {
 	var arr=".$arr.";
 		$('#calendar').fullCalendar({
+		    minTime: '07:00:00',
+            maxTime: '22:00:00',
 			header: {
 				left: 'prev,next today',
 				center: 'title',

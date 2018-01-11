@@ -665,7 +665,7 @@ SQL;
         $sql = <<<SQL
         SELECT *
         FROM RAPR(:P1, :DATE_1, :DATE_2)
-        ORDER BY r2,r3
+        ORDER BY r2,r3,rz2
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
