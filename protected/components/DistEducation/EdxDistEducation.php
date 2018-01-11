@@ -220,6 +220,8 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
 
         var_dump($type);
 
+
+
         if($type = EHttpClient::GET){
             if(!empty($params)) {
                 $client->setParameterGet($params);
@@ -231,6 +233,8 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
         }
 
         $response = $client->request($type);
+
+        var_dump($response);
 
         if($response->isSuccessful())
         {
