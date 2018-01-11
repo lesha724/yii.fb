@@ -409,14 +409,15 @@ abstract class DistEducation implements IDistEducation
                 list ($result, $error) = $this->_subscribeToCourse($stDist, $id);
             else
                 list ($result, $error) = $this->_unsubscribeToCourse($stDist, $id);
-            $log .= '<br>' . $model->dispdist2 . ' :';
+            $log .= '<br>';
             if(!$result) {
                 $globalResult = false;
                 $log .= $error;
             }else{
-                $log.= $subscribe ? 'Запись ' : 'Отмена';
-                $log .= 'Ок';
+                $log.= $subscribe ? 'Вы успешно записались на курс: ' : 'Вы успешно выписались с курса:  ';
+                //$log .= 'Ок';
             }
+            $log .= $model->dispdist2;
         }
 
         return array($globalResult, $log);

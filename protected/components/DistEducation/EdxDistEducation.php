@@ -284,7 +284,7 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
 
             return array(true, '');
         }catch (Exception $error){
-            return array(false, 'Ошибка отвязки от курса: '.$error->getMessage());
+            return array(false, 'Не удалось выписаться с курса:'.$error->getMessage());
         }
     }
 
@@ -313,7 +313,7 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
 
             return array(true, '');
         }catch (Exception $error){
-            return array(false, 'Ошибка записи на курс: '.$error->getMessage());
+            return array(false, 'Не удалось записать на курс:'/*.$error->getMessage()*/);
         }
     }
 }
