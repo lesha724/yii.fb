@@ -205,7 +205,7 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
             $header['X-Edx-Api-Key'] = $token;
         }
 
-        $client = new EHttpClient( $this->host.$method, array());
+        $client = new EHttpClient( $this->host.$method, $config);
 
         //var_dump($this->host.$method);
 
@@ -222,7 +222,7 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
 
 
 
-        if($type = EHttpClient::GET){
+        if($type == EHttpClient::GET){
             if(!empty($params)) {
                 $client->setParameterGet($params);
             }
@@ -234,7 +234,7 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
 
         $response = $client->request($type);
 
-        var_dump($client);
+        /*var_dump($client);
 
         echo '<br>';
 
@@ -244,7 +244,7 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
 
         //var_dump($response->getRawBody());
 
-        var_dump($response->getBody());
+        var_dump($response->getBody());*/
 
         if($response->isSuccessful())
         {
