@@ -250,9 +250,11 @@ SQL;*/
             from ucxg
                inner join ucx on (ucxg.ucxg1 = ucx.ucx1)
                inner join uo on (ucx.ucx1 = uo.uo19)
+               inner join d on (uo.uo3 = d.d1)
                inner join ucgn on (ucxg.ucxg2 = ucgn.ucgn1)
                inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
             WHERE ucgns1=:UCGNS1
+            GROUP BY uo1, d2
 SQL;
 
 
