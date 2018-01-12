@@ -43,6 +43,7 @@ class DistEducationFilterForm extends CFormModel
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
+            array('discipline', 'numerical'),
             array('d2, sp2', 'length', 'max'=>255),
             array('course', 'numerical', 'max'=>6, 'min'=> 1),
         );
@@ -314,5 +315,37 @@ SQL;
             'kdist2'=>Yii::app()->session['year'],
             'kdist3'=>Yii::app()->session['sem']
         ));
+    }
+
+    /**
+     * Список Групп по дисциплине учебного плана
+     * @param $uo1
+     */
+    public function getGroupsByUo1($uo1){
+        $sql = <<<SQL
+          select 
+            gr1, gr3, sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28
+          from gr
+            inner join ucgn on (gr.gr1 = ucgn.ucgn2)
+            inner join ucxg on (ucgn.ucgn1 = ucxg.ucxg2)
+            inner join ucx on (ucxg.ucxg1 = ucx.ucx1)
+            inner join uo on (ucx.ucx1 = uo.uo19)
+            inner join us on (UO.UO1 = US.US2)
+            INNER JOIN sem ON (Us.us3 = sem.sem1)
+          WHERE uo1=:UO1 and gr13=0 and sem3=:YEAR and sem5=:SEM
+          GROUP BY gr1, gr3, sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28
+SQL;
+
+        $params = array(
+            ':UO1' => $uo1,
+            ':YEAR'=>Yii::app()->session['year'],
+            ':SEM'=>Yii::app()->session['sem']
+        );
+
+        $command=Yii::app()->db->createCommand($sql);
+        $command->params = $params;
+        $rows = $command->queryAll();
+
+        return $rows;
     }
 }

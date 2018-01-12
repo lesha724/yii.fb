@@ -27,20 +27,19 @@ HTML;
 /**
  * @var $form CActiveForm
  */
+$form=$this->beginWidget('CActiveForm', array(
+    'id'=>'filter-form',
+    'htmlOptions' => array('class' => 'form-inline')
+));
 
-echo '<form class="form-inline" method="POST">';
 $chairs = CHtml::listData(K::model()->getAllChairs(), 'k1', 'k3');
 echo CHtml::dropDownList('chairId', $model->chairId, $chairs, array('class'=>'chosen-select chosen-chairId', 'autocomplete' => 'off', 'empty' => ''));
-echo '</form>';
 
 
 
 if(!empty($model->chairId)) {
 
-    $form=$this->beginWidget('CActiveForm', array(
-        'id'=>'filter-form',
-        'htmlOptions' => array('class' => 'form-inline')
-    ));
+
 
     echo '<div>';
 
@@ -48,20 +47,25 @@ if(!empty($model->chairId)) {
         return $data['d2'] . ' / ' . $data['sp2'] . '-'.$data['sem4'].' курс';
     });
 
-    echo '<div class="span2 ace-select">' .
-        $form->label($model, 'discipline') .
-        $form->dropDownList($model, 'discipline', $disciplines, array('class' => 'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;')) .
+    echo '<fieldset>'.
+        '<div class="span2 ace-select">' .
+            $form->label($model, 'discipline') .
+            $form->dropDownList($model, 'discipline', $disciplines, array('class' => 'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;')) .
         '</div>';
-
+    echo '</fieldset>';
     echo '</div>';
 
-    $this->endWidget();
 }
+
+$this->endWidget();
 
 
 
 
 if(!empty($discipline)):
 
+    echo $this->renderPartial('subscription/_bottom', array(
+        'model'=>$model
+    ));
 
 endif;
