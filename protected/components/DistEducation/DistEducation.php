@@ -400,7 +400,8 @@ abstract class DistEducation implements IDistEducation
             if($model==null)
             {
                 $log .= '<br>' . $uo1['d2']. ' : Дисциплина не привязана';
-                continue;
+                $globalResult = false;
+                return array($globalResult, $log);
             }
 
             $id = $model->dispdist3;
@@ -413,6 +414,7 @@ abstract class DistEducation implements IDistEducation
             if(!$result) {
                 $globalResult = false;
                 $log .= $error;
+                return array($globalResult, $log);
             }else{
                 $log.= $subscribe ? 'Вы успешно записались на курс: ' : 'Вы успешно выписались с курса:  ';
                 //$log .= 'Ок';
