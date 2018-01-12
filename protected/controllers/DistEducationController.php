@@ -21,7 +21,8 @@ class DistEducationController extends Controller
                     'removeLink',
                     'searchCourse',
                     'acceptDisp',
-                    'disacceptDisp'
+                    'disacceptDisp',
+                    'subscription'
                 ),
                 'expression' => 'Yii::app()->user->isTch',
             ),
@@ -372,5 +373,36 @@ class DistEducationController extends Controller
         );
 
         Yii::app()->end(CJSON::encode($res));
+    }
+
+    /**
+     * метод для записи
+     */
+    public function actionSubscription(){
+
+        $model = new DistEducationFilterForm(Yii::app()->user);
+        $model->unsetAttributes();
+
+        if(!$model->isAdminDistEducation){
+            throw new CHttpException(400, tt('Нет доступа'));
+        }
+
+        if (isset($_GET['pageSize'])) {
+            Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
+            unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
+        }
+
+        if(isset($_REQUEST['DistEducationFilterForm'])){
+            $model->attributes = $_REQUEST['DistEducationFilterForm'];
+        }
+
+        $chairId = Yii::app()->request->getParam('chairId', null);
+
+        $model->setChairId($chairId);
+
+
+        $this->render('subscription', array(
+            'model' => $model
+        ));
     }
 }

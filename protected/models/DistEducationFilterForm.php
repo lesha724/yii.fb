@@ -29,6 +29,11 @@ class DistEducationFilterForm extends CFormModel
     public $course;
 
     /**
+     * @var int code дисциплины
+     */
+    public $discipline;
+
+    /**
      * @var string для фильтра по названию специальности
      */
     public $sp2;
