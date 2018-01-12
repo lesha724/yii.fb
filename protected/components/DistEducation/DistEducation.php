@@ -399,7 +399,7 @@ abstract class DistEducation implements IDistEducation
 
             if($model==null)
             {
-                $log .= '<br>' . $uo1['d2']. ' : Дисциплина не привязана';
+                $log .= '<br>' . $uo1['d2']. ' : Дисциплина не привязана ';
                 $globalResult = false;
                 return array($globalResult, $log);
             }
