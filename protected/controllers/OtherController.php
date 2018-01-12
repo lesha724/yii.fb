@@ -654,15 +654,18 @@ SQL;
 
         $res = false;
         if (! empty($disciplines)) {
+            try {
+                foreach ($disciplines as $ucg1_kod) {
+                    U::model()->doUpdates($ucg1_kod);
+                }
 
-            foreach ($disciplines as $ucg1_kod) {
-                U::model()->doUpdates($ucg1_kod);
+                $_SESSION['min_block']++;
+                $_SESSION['func'] = 'PROCEDURA_CIKL_PO_BLOKAM';
+
+                $res = true;
+            }catch (Exception $error){
+                $res = false;
             }
-
-            $_SESSION['min_block']++;
-            $_SESSION['func'] = 'PROCEDURA_CIKL_PO_BLOKAM';
-
-            $res = true;
         }
 
         Yii::app()->end(CJSON::encode(array('res' => $res)));
