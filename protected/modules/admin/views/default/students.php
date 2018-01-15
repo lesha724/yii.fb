@@ -77,7 +77,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                 '1'=>tt("Активный"),
                 '2'=>tt("Выпущен")
             ),
-            'value'=>' $data["st_status"]!=4 ? "<label class=\'label label-success\'>".tt("Активный")."</label>" : "<label class=\'label\'>".tt("Выпущен")."</label>"'
+            'value'=>' !in_array($data["st_status"],array(4,2)) ? "<label class=\'label label-success\'>".tt("Активный")."</label>" : "<label class=\'label\'>".tt("Выпущен")."</label>"'
         ),
         array(
             'class'=>'CButtonColumn',

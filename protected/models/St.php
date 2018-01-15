@@ -666,7 +666,7 @@ SQL;
 		$criteria->addCondition("st101 != 7");
 
         //$criteria->join = 'INNER JOIN std ON st1=std2';
-		$criteria->addCondition("std11 != 1"); //std11 = 4 закончил
+		$criteria->addCondition("std11 != 1"); //std11 = 4,2 закончил
         //$criteria->addSearchCondition('st2', $this->st2);
         //$criteria->addSearchCondition('st3', $this->st3);
         //$criteria->addSearchCondition('st4', $this->st4);
@@ -681,9 +681,9 @@ SQL;
 
         if($this->st_status>0) {
             if($this->st_status==1)
-                $criteria->addCondition('std11!=4');
+                $criteria->addCondition('std11!=4 and std11!=2');
             if($this->st_status==2)
-                $criteria->addCondition('std11=4');
+                $criteria->addCondition(' ( std11=4 or std11=2)');
         }
 		
         $login = Yii::app()->request->getParam('login');
