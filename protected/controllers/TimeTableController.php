@@ -7,7 +7,7 @@ class TimeTableController extends Controller
         $result = parent::beforeAction($action);
         if($this->mobileCheck())
             if(in_array($action->id, array(
-                'group', 'student', 'teacher'
+                'group', 'student', 'teacher', 'self'
             ))) {
                 if (in_array($this->universityCode, array(
                     U_XNMU,
