@@ -408,7 +408,7 @@ class DistEducationController extends Controller
     }
 
     /**
-     * метод для записи
+     * метод просмтра групп по записи
      */
     public function actionShowGroup(){
 
@@ -434,6 +434,10 @@ class DistEducationController extends Controller
             throw new CHttpException(400, tt('Нет доступа'));
         }
 
+        if (empty($disp['dispdist2'])) {
+            throw new CHttpException(400, tt('Нет доступа'));
+        }
+
         $group = $model->getGroupsByUo1($uo1, $gr1);
         if (empty($group)) {
             throw new CHttpException(400, tt('Нет доступа'));
@@ -443,6 +447,52 @@ class DistEducationController extends Controller
             'model' => $model,
             'group' => $group
         ), true);
+
+        $res = array(
+            'html' => $html,
+            'title' => Gr::model()->getGroupName($group['sem4'], $group)
+        );
+
+        Yii::app()->end(CJSON::encode($res));
+    }
+
+
+    /**
+     * метод записи группы
+     */
+    public function actionSubcriptionGroup(){
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+
+        $model = new DistEducationFilterForm(Yii::app()->user);
+
+        if(!$model->isAdminDistEducation){
+            throw new CHttpException(400, tt('Нет доступа'));
+        }
+
+        $chairId = Yii::app()->request->getParam('chairId', null);
+        $gr1 = Yii::app()->request->getParam('gr1', null);
+        $uo1 = Yii::app()->request->getParam('uo1', null);
+
+        $model->setChairId($chairId);
+
+        $disp = $model->getDispInfo($uo1);
+
+        if (empty($disp)) {
+            throw new CHttpException(400, tt('Нет доступа'));
+        }
+
+        if (empty($disp['dispdist2'])) {
+            throw new CHttpException(400, tt('Нет доступа'));
+        }
+
+        $group = $model->getGroupsByUo1($uo1, $gr1);
+        if (empty($group)) {
+            throw new CHttpException(400, tt('Нет доступа'));
+        }
+
+        $html = '';
 
         $res = array(
             'html' => $html,

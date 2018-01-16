@@ -36,7 +36,7 @@ $i=1;
 foreach ($groups as $group){
     $name = Gr::model()->getGroupName($group['sem4'], $group);
 
-    $button = CHtml::link('<i class="icon-ok"></i>', array('showGroup', 'gr1'=>$group['gr1'], 'uo1'=> $model->discipline, 'chairId'=> $model->chairId), array(
+    $button = CHtml::link('<i class="icon-ok"></i>', array('subscriptionGroup', 'gr1'=>$group['gr1'], 'uo1'=> $model->discipline, 'chairId'=> $model->chairId), array(
         'class'=>'btn btn-warning btn-mini'
     ));
 

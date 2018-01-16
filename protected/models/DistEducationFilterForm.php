@@ -171,9 +171,10 @@ class DistEducationFilterForm extends CFormModel
 
     /**
      * Список дисциплин для зарупеления с дист образование для кафедры
+     * @param $subscription bool true если нужні уже привязаніе дсициплині
      * @return CSqlDataProvider|null
      */
-    public function getDispListForDistEducation(){
+    public function getDispListForDistEducation($subscription = false){
 
         $k1 = $this->chairId;
 
@@ -201,6 +202,10 @@ class DistEducationFilterForm extends CFormModel
         if(!empty($this->course)) {
             $where .= " AND sem4 = :COURSE ";
             $params[':COURSE'] = $this->course;
+        }
+
+        if($subscription){
+            $where .= " AND dispdist2 not null ";
         }
 
         $sql = <<<SQL
