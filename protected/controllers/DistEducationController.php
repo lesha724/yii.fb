@@ -460,7 +460,7 @@ class DistEducationController extends Controller
     /**
      * метод записи группы
      */
-    public function actionSubcriptionGroup(){
+    public function actionSubscriptionGroup(){
         if (! Yii::app()->request->isAjaxRequest)
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
@@ -497,6 +497,51 @@ class DistEducationController extends Controller
         $res = array(
             'html' => $html,
             'title' => Gr::model()->getGroupName($group['sem4'], $group)
+        );
+
+        Yii::app()->end(CJSON::encode($res));
+    }
+
+    /**
+     * метод записи группы
+     */
+    public function actionSubscriptionStudent(){
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+
+        $model = new DistEducationFilterForm(Yii::app()->user);
+
+        if(!$model->isAdminDistEducation){
+            throw new CHttpException(400, tt('Нет доступа'));
+        }
+
+        $chairId = Yii::app()->request->getParam('chairId', null);
+        $st1 = Yii::app()->request->getParam('st1', null);
+        $uo1 = Yii::app()->request->getParam('uo1', null);
+
+        $model->setChairId($chairId);
+
+        $disp = $model->getDispInfo($uo1);
+
+        if (empty($disp)) {
+            throw new CHttpException(400, tt('Нет доступа'));
+        }
+
+        if (empty($disp['dispdist2'])) {
+            throw new CHttpException(400, tt('Нет доступа'));
+        }
+
+        $st = St::model()->findByPk($st1);
+        if (empty($st)) {
+            throw new CHttpException(400, tt('Нет доступа'));
+        }
+
+        $html = '';
+
+        $res = array(
+            'html' => $html,
+            'title' => $st->getShortName()
         );
 
         Yii::app()->end(CJSON::encode($res));
