@@ -9,10 +9,43 @@
 /* @var $this DistEducationController */
 /* @var $model DistEducationFilterForm */
 
+$table = <<<HTML
+        <table class="table table-bordered table-condensed table-hover">
+            <thead>
+               %s     
+            </thead>
+            <tbody>
+                %s
+            </tbody>
+        </table> 
+HTML;
+
+$thead = <<<HTML
+    <tr>
+        <th>№</th>
+        <th>Группа</th>
+        <th>Запись группы</th>
+        <th>Просмотр группы</th>
+    </tr>
+HTML;
+
+$tbody = '';
+
 $groups = $model->getGroupsByUo1($model->discipline);
-
+$i=1;
 foreach ($groups as $group){
+    $name = Gr::model()->getGroupName($group['sem4'], $group);
 
+    $button = CHtml::link('<i class="icon-ok"></i>', '#', array(
+        'class'=>'btn btn-warning btn-mini'
+    ));
+
+    $buttonGroups = CHtml::link('<i class="icon-eye-open"></i>', '#', array(
+        'class'=>'btn btn-primary btn-mini'
+    ));
+
+    $tbody.=sprintf('<tr><td>%d</td><td>%s</td><td>%s</td><td>%s</td></tr>', $i, $name, $button, $buttonGroups);
+    $i++;
 }
 
-echo sprintf($table, $tbody);
+echo sprintf($table,$thead, $tbody);
