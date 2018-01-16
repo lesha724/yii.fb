@@ -22,7 +22,8 @@ class DistEducationController extends Controller
                     'searchCourse',
                     'acceptDisp',
                     'disacceptDisp',
-                    'subscription'
+                    'subscription',
+                    'showGroup'
                 ),
                 'expression' => 'Yii::app()->user->isTch',
             ),
@@ -404,5 +405,50 @@ class DistEducationController extends Controller
         $this->render('subscription', array(
             'model' => $model
         ));
+    }
+
+    /**
+     * метод для записи
+     */
+    public function actionShowGroup(){
+
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+
+        $model = new DistEducationFilterForm(Yii::app()->user);
+
+        if(!$model->isAdminDistEducation){
+            throw new CHttpException(400, tt('Нет доступа'));
+        }
+
+        $chairId = Yii::app()->request->getParam('chairId', null);
+        $gr1 = Yii::app()->request->getParam('gr1', null);
+        $uo1 = Yii::app()->request->getParam('uo1', null);
+
+        $model->setChairId($chairId);
+
+        $disp = $model->getDispInfo($uo1);
+
+        if (empty($disp)) {
+            throw new CHttpException(400, tt('Нет доступа'));
+        }
+
+        $group = $model->getGroupsByUo1($uo1, $gr1);
+        if (empty($group)) {
+            throw new CHttpException(400, tt('Нет доступа'));
+        }
+
+        $html = $this->renderPartial('subscription/_group', array(
+            'model' => $model,
+            'group' => $group
+        ), true);
+
+        $res = array(
+            'html' => $html,
+            'title' => Gr::model()->getGroupName($group['sem4'], $group)
+        );
+
+        Yii::app()->end(CJSON::encode($res));
     }
 }

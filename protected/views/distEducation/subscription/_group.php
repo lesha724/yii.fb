@@ -37,6 +37,4 @@ foreach ($students as $student) {
     )));
     $i++;
 }
-echo '<div class="table-responsive">';
 echo sprintf($table, $tbody);
-echo '</div>';

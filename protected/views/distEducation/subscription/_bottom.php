@@ -36,12 +36,12 @@ $i=1;
 foreach ($groups as $group){
     $name = Gr::model()->getGroupName($group['sem4'], $group);
 
-    $button = CHtml::link('<i class="icon-ok"></i>', '#', array(
+    $button = CHtml::link('<i class="icon-ok"></i>', array('showGroup', 'gr1'=>$group['gr1'], 'uo1'=> $model->discipline, 'chairId'=> $model->chairId), array(
         'class'=>'btn btn-warning btn-mini'
     ));
 
-    $buttonGroups = CHtml::link('<i class="icon-eye-open"></i>', '#', array(
-        'class'=>'btn btn-primary btn-mini'
+    $buttonGroups = CHtml::link('<i class="icon-eye-open"></i>', array('showGroup', 'gr1'=>$group['gr1'], 'uo1'=> $model->discipline, 'chairId'=> $model->chairId), array(
+        'class'=>'btn btn-primary btn-mini btn-show-group'
     ));
 
     $tbody.=sprintf('<tr><td>%d</td><td>%s</td><td>%s</td><td>%s</td></tr>', $i, $name, $button, $buttonGroups);

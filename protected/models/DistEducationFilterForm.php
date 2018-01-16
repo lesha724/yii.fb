@@ -320,8 +320,14 @@ SQL;
     /**
      * Список Групп по дисциплине учебного плана
      * @param $uo1
+     * @param $gr1 int|null
+     * @return array|null
      */
-    public function getGroupsByUo1($uo1){
+    public function getGroupsByUo1($uo1, $gr1 = null){
+        $where = '';
+        if(!empty($gr1))
+            $where = ' AND gr1=:GR1';
+
         $sql = <<<SQL
           select 
             gr1, gr3, sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28
@@ -332,7 +338,7 @@ SQL;
             inner join uo on (ucx.ucx1 = uo.uo19)
             inner join us on (UO.UO1 = US.US2)
             INNER JOIN sem ON (Us.us3 = sem.sem1)
-          WHERE uo1=:UO1 and gr13=0 and sem3=:YEAR and sem5=:SEM
+          WHERE uo1=:UO1 and gr13=0 and sem3=:YEAR and sem5=:SEM $where
           GROUP BY gr1, gr3, sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28
 SQL;
 
@@ -342,9 +348,12 @@ SQL;
             ':SEM'=>Yii::app()->session['sem']
         );
 
+        if(!empty($gr1))
+            $params[':GR1'] = $gr1;
+
         $command=Yii::app()->db->createCommand($sql);
         $command->params = $params;
-        $rows = $command->queryAll();
+        $rows = (!empty($gr1))? $command->queryRow() : $command->queryAll();
 
         return $rows;
     }
