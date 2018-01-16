@@ -12,7 +12,8 @@ class TimeTableController extends Controller
                 if (in_array($this->universityCode, array(
                     U_XNMU,
                     //38,
-                    U_KNAME
+                    U_KNAME,
+                    U_NULAU
                 ))){
                         $message = tt(' Новое мобильное приложение для Android : <strong><a href="{url}" style="font-size: 18px">здесь</a></strong>!', array(
                             '{url}' => SH::MOBILE_URL
