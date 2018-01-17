@@ -876,7 +876,7 @@ SQL;
         //$date2 = date('d.m.Y 00:00:00');
 
         $sql=<<<SQL
-            SELECT ST1,ST2,ST3,ST4,sgr2, ST117, ST118, ST119, ST120, ST121, ST122, ST123, ST124,ST125,ST139
+            SELECT ST1,ST2,ST3,ST4,sgr2, ST117, ST118, ST119, ST120, ST121, ST122, ST123, ST124,ST125,ST139, st74, st75, st76
             FROM st
             INNER JOIN std on (st.st1 = std.std2)
             INNER JOIN sgr on (st.st32 = sgr.sgr1)
@@ -889,7 +889,10 @@ SQL;
         $students = $command->queryAll();
 
         foreach($students as $key => $student) {
-            $students[$key]['name'] = SH::getShortName($student['st2'], $student['st3'], $student['st4']);
+            if(Yii::app()->language=='en'&&!empty($student['st74']))
+                $students[$key]['name'] = SH::getShortName($student['st74'], $student['st75'], $student['st76']);
+            else
+                $students[$key]['name'] = SH::getShortName($student['st2'], $student['st3'], $student['st4']);
         }
 
         return $students;

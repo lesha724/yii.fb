@@ -580,20 +580,22 @@ SQL;
 
         $today = date('d.m.Y 00:00');
         $sql = <<<SQL
-            SELECT P1,P3,P4,P5,pd7,DOL2,PD1
+            SELECT P1,P3,P4,P5,pd7,DOL2,PD1, p76, p77, p78, dol13
             FROM P
                 INNER JOIN PD ON (P1=PD2)
                 INNER JOIN DOL ON (PD45 = DOL1)
             WHERE PD4 = {$chairId} and PD28 in (0,2,5,9) and PD3=0 and (PD13 IS NULL or PD13>'{$today}')
-            group by P1,P3,P4,P5,pd7,DOL2,PD1
+            group by P1,P3,P4,P5,pd7,DOL2,PD1, p76, p77, p78, dol13
             ORDER BY P3 collate UNICODE, pd7 desc
 SQL;
 
         $teachers = Yii::app()->db->createCommand($sql)->queryAll();
         $res = array();
         foreach ($teachers as $tch) {
-            //$res[ $tch[$keyFieldName] ] = SH::getShortName($tch['p3'], $tch['p4'], $tch['p5']).' '.$tch['dol2'];
-            $res[ $tch[$keyFieldName] ] = sprintf('%s %s %s, %s',$tch['p3'], $tch['p4'], $tch['p5'], $tch['dol2']);
+            if(Yii::app()->language=='en'&&!empty($tch['p76']))
+                $res[ $tch[$keyFieldName] ] = sprintf('%s %s %s, %s',$tch['p76'], $tch['p77'], $tch['p78'], $tch['dol13']);
+            else
+                $res[ $tch[$keyFieldName] ] = sprintf('%s %s %s, %s',$tch['p3'], $tch['p4'], $tch['p5'], $tch['dol2']);
         }
         return $res;
     }

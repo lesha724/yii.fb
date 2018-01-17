@@ -7,16 +7,19 @@ class TimeTableController extends Controller
         $result = parent::beforeAction($action);
         if($this->mobileCheck())
             if(in_array($action->id, array(
-                'group', 'student', 'teacher'
+                'group', 'student', 'teacher', 'self'
             ))) {
                 if (in_array($this->universityCode, array(
                     U_XNMU,
                     //38,
+                    U_KRNU,
                     U_KNAME,
-                    U_NULAU
+                    U_NULAU,
+                    U_KHADI
                 ))){
-                        $message = tt(' Новое мобильное приложение для Android : <strong><a href="{url}" style="font-size: 18px">здесь</a></strong>!', array(
-                            '{url}' => SH::MOBILE_URL
+                        $message = tt(' Новое мобильное приложение для Android : <strong><a href="{url}" target="_blank" style="font-size: 18px">здесь</a></strong>! Также читайте инструкцию к мобильному приложению: <strong><a href="{url-instruction}" target="_blank" style="font-size: 18px">здесь</a></strong>!', array(
+                            '{url}' => SH::MOBILE_URL,
+                            '{url-instruction}' => SH::MOBILE_URL_INSTRUCTION
                         ));
                     Yii::app()->user->setFlash('info', '<strong>' . tt('Внимание!') . '</strong>' . $message);
                 }

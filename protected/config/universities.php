@@ -13,3 +13,5 @@ define('U_NULAU', 14); //харьковская юр академия
 define('U_NMU',  38); //киевский мед
 define('U_XNMU', 40);//харьков мед
 define('U_KNAME', 6);//Бекетова
+define('U_KRNU',  58);
+define('U_KHADI',  55);

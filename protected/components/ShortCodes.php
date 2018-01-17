@@ -526,6 +526,8 @@ class SH extends ShortCodes
 {
     const MOBILE_URL = 'https://play.google.com/store/apps/details?id=com.mkr.shedule_app';
 
+    const MOBILE_URL_INSTRUCTION = 'https://new.mkr.org.ua/mobile-instruction.html';
+
     protected static $_instance;
 
     private function __construct(){}
