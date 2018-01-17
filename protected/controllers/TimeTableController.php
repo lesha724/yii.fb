@@ -15,8 +15,9 @@ class TimeTableController extends Controller
                     U_KNAME,
                     U_NULAU
                 ))){
-                        $message = tt(' Новое мобильное приложение для Android : <strong><a href="{url}" style="font-size: 18px">здесь</a></strong>!', array(
-                            '{url}' => SH::MOBILE_URL
+                        $message = tt(' Новое мобильное приложение для Android : <strong><a href="{url}" target="_blank" style="font-size: 18px">здесь</a></strong>! Также читайте инструкцию к мобильному приложению: <strong><a href="{url-instruction}" target="_blank" style="font-size: 18px">здесь</a></strong>!', array(
+                            '{url}' => SH::MOBILE_URL,
+                            '{url-instruction}' => SH::MOBILE_URL_INSTRUCTION
                         ));
                     Yii::app()->user->setFlash('info', '<strong>' . tt('Внимание!') . '</strong>' . $message);
                 }
