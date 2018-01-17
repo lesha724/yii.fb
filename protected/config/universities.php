@@ -12,3 +12,4 @@ define('U_NULAU', 14);
 define('U_XNMU', 40);//харьков мед
 define('U_KNAME', 6);//Бекетова
 define('U_KRNU',  58);
+define('U_KHADI',  55);

@@ -35,7 +35,17 @@
 
     <?php if(PortalSettings::model()->findByPk(80)->ps2!=1):?>
         <label id="app-title"><?=tt('Расписание занятий для мобильных устройств')?></label>
-        <a href="https://play.google.com/store/apps/details?id=scheduleMKP.scheduleMKP" target="_blank">
+        <?php
+            $newMobile = in_array($this->universityCode, array(
+                U_XNMU,
+                //38,
+                U_KRNU,
+                U_KNAME,
+                U_NULAU,
+                U_KHADI
+            ));
+        ?>
+        <a href="<?= $newMobile ? SH::MOBILE_URL : 'https://play.google.com/store/apps/details?id=scheduleMKP.scheduleMKP'?>" target="_blank">
             <img src="<?php echo Yii::app()->request->baseUrl ?>/images/googleplay.png" style="max-width:90%;padding:5%"/>
         </a>
     <?php endif; ?>
