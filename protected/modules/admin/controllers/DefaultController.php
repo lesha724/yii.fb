@@ -598,6 +598,8 @@ class DefaultController extends AdminController
             $model->u7=1;
             //$model->u6=0;
             $model->u5=1;
+            $model->u13 = '';
+            $model->u10 = '';
             if($model->validate())
             {
                 $model->u1=new CDbExpression('GEN_ID(GEN_USERS, 1)');
