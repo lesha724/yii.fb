@@ -170,20 +170,42 @@ class RatingForm extends CFormModel
      * @return array
      */
     public function getRating($type){
+
+        $params = array(
+            ':GR1' => 0,
+            ':ST1' => 0,
+            ':SG1' => 0,
+            ':SEM_START' => $this->semStart,
+            ':SEM_END' => $this->semEnd
+        );
+
         switch ($type){
             case self::GROUP:
-                return array();
+                $params[':GR1']= $this->group;
                 break;
             case self::STUDENT:
-                return array();
+                $params[':ST1']= $this->student;
                 break;
             case self::COURSE:
                 $sg1 = $this->getSg1ByGroup();
-
-                return array();
+                $params[':SG1']= $sg1;
                 break;
             default:
                 return array();
         }
+
+        $sql = <<<SQL
+            SELECT * FROM IZ_OC(:ST1, :SG1, :GR1, 0, 0, CURRENT_TIMESTAMP) WHERE sem7 BETWEEN :SEM_START and :SEM_END
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValues($params);
+        $rows = $command->queryAll();
+
+        if($type == self::STUDENT)
+            return $rows;
+
+        $rating = array();
+
+        return $rating;
     }
 }
