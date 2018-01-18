@@ -244,4 +244,91 @@ class MoodleDistEducation extends DistEducation
     protected function _subscribeToCourse($st, $courseId){
 
     }
+
+    /**
+     * Записать студента на курс по дисциплине
+     * @param St $st
+     * @param int $uo1
+     * @return array
+     */
+    public function unsubscribeToCourse($st, $uo1)
+    {
+        $globalResult = true;
+        $log = '';
+
+        $model = DispDist::model()->findByPk($uo1['uo1']);
+
+        if($model==null)
+        {
+            $log .= '<br>' . $uo1['d2']. ' : Дисциплина не привязана ';
+            $globalResult = false;
+            return array($globalResult, $log);
+        }
+
+        $id = $model->dispdist3;
+
+        return $this->_unsubscribeToCourse($st, $id);
+    }
+
+    /**
+     * Записать студента на курс
+     * @param St $st
+     * @param int $uo1
+     * @return array
+     */
+    public function subscribeToCourse($st, $uo1)
+    {
+        $globalResult = true;
+        $log = '';
+
+        $model = DispDist::model()->findByPk($uo1['uo1']);
+
+        if($model==null)
+        {
+            $log .= '<br>' . $uo1['d2']. ' : Дисциплина не привязана ';
+            $globalResult = false;
+            return array($globalResult, $log);
+        }
+
+        $id = $model->dispdist3;
+
+        return $this->_subscribeToCourse($st, $id);
+    }
+
+    /**
+     * Записать студентов на курс по дсициплине
+     * @param St[] $students
+     * @param int $uo1
+     * @return array
+     */
+    public function subscribeStudentsToCourse($students, $uo1)
+    {
+        $globalResult = true;
+        $log = '';
+
+        $model = DispDist::model()->findByPk($uo1['uo1']);
+
+        if($model==null)
+        {
+            $log .= '<br>' . $uo1['d2']. ' : Дисциплина не привязана ';
+            $globalResult = false;
+            return array($globalResult, $log);
+        }
+
+        $id = $model->dispdist3;
+
+        foreach ($students as $student) {
+            list($result, $message) = $this->_subscribeToCourse($student, $id);
+
+            if(!$result) {
+                $globalResult = false;
+                $log .= $student->getShortName(). ' Ошибка записи: '. $message;
+            }else{
+                $log .= $student->getShortName(). ' Запись удачна. '. $message;
+            }
+
+        }
+
+        return array($globalResult, $log);
+    }
 }

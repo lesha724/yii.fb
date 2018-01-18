@@ -316,4 +316,76 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
             return array(false, 'Не удалось записать на курс:'/*.$error->getMessage()*/);
         }
     }
+
+
+    /**
+     * @param $st Users
+     * @return array
+     */
+    private function _studentToCourse($st, $ucgns1, $subscribe = true){
+        if(!$st->isStudent)
+            return array(false, 'DistEducation:'.tt('Пользователь не студент'));
+
+        $stDist = Stdist::model()->findByPk($st->u6);
+        if($stDist==null) {
+            return array(false, 'DistEducation:'.tt('Студент не зарегестрирован в дистанционом обучении'));
+        }
+
+        $uo1List = Uo::model()->getListByUcgns1($ucgns1);
+
+        $log = '';
+        $globalResult = true;
+
+        foreach ($uo1List as $uo1) {
+            $model = DispDist::model()->findByPk($uo1['uo1']);
+
+            if($model==null)
+            {
+                $log .= '<br>' . $uo1['d2']. ' : Дисциплина не привязана ';
+                $globalResult = false;
+                return array($globalResult, $log);
+            }
+
+            $id = $model->dispdist3;
+
+            if($subscribe)
+                list ($result, $error) = $this->_subscribeToCourse($stDist, $id);
+            else
+                list ($result, $error) = $this->_unsubscribeToCourse($stDist, $id);
+            $log .= '<br>';
+            if(!$result) {
+                $globalResult = false;
+                $log .= $error;
+                return array($globalResult, $log);
+            }else{
+                $log.= $subscribe ? 'Вы успешно записались на курс: ' : 'Вы успешно выписались с курса:  ';
+                //$log .= 'Ок';
+            }
+            $log .= $model->dispdist2;
+        }
+
+        return array($globalResult, $log);
+    }
+
+    /**
+     * Записать студента на курс по дисциплине
+     * @param Users $st
+     * @param int $ucgns1
+     * @return array
+     */
+    public function unsubscribeToCourse($st, $ucgns1)
+    {
+        return $this->_studentToCourse($st, $ucgns1, false);
+    }
+
+    /**
+     * Записать студента на курс
+     * @param Users $st
+     * @param int $ucgns1
+     * @return array
+     */
+    public function subscribeToCourse($st, $ucgns1)
+    {
+        return $this->_studentToCourse($st, $ucgns1);
+    }
 }

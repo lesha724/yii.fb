@@ -177,7 +177,7 @@ class St extends CActiveRecord implements IPerson
 		// class name for the relations automatically generated below.
 		return array(
             'account' => array(self::HAS_ONE, 'Users', 'u6', 'on' => 'u6=st1 AND u5=0'),
-            'parentsAccount' => array(self::HAS_ONE, 'Users', 'u6', 'on' => 'u6=st1 AND u5=2'),
+            'parentsAccount' => array(self::HAS_ONE, 'Users', 'u6', 'on' => 'u6=st1 AND u5=2')
 		);
 	}
 
@@ -894,6 +894,31 @@ SQL;
             else
                 $students[$key]['name'] = SH::getShortName($student['st2'], $student['st3'], $student['st4']);
         }
+
+        return $students;
+    }
+
+    /**
+     * @param $gr1
+     * @return array|St[]
+     */
+    public function getStudentsOfGroupForDistEducation($gr1)
+    {
+        if (empty($gr1))
+            return array();
+
+        $sql=<<<SQL
+            SELECT ST1,ST2,ST3,ST4, STDIST.*
+            FROM st
+            INNER JOIN std on (st.st1 = std.std2)
+            LEFT JOIN stdist on (st1 = STDIST1)
+            WHERE st101<>7 and STD3=:GR1 and STD11 in (0,5,6,8) and (STD7 is null)
+            ORDER BY ST2 collate UNICODE
+SQL;
+
+        $students = self::findAllBySql($sql, array(
+           ':GR1' => $gr1
+        ));
 
         return $students;
     }

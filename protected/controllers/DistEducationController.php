@@ -23,7 +23,9 @@ class DistEducationController extends Controller
                     'acceptDisp',
                     'disacceptDisp',
                     'subscription',
-                    'showGroup'
+                    'showGroup',
+                    'subscriptionGroup',
+                    'subscriptionStudent'
                 ),
                 'expression' => 'Yii::app()->user->isTch',
             ),
@@ -492,7 +494,22 @@ class DistEducationController extends Controller
             throw new CHttpException(400, tt('Нет доступа'));
         }
 
+        $connector = SH::getDistEducationConnector(
+            $this->universityCode
+        );
+
+        if (empty($connector)) {
+            $error = true;
+            $message = tt('Ошибка создания конектора');
+        }
+
+        $students = St::model()->getStudentsOfGroupForDistEducation($group['gr1']);
+
         $html = '';
+
+        foreach ($students as $student){
+
+        }
 
         $res = array(
             'html' => $html,

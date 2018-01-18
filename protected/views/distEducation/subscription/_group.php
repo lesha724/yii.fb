@@ -30,11 +30,15 @@ $tbody.=$thead;
 
 $i=1;
 
-$students = St::model()->getStudentsOfGroup($group['gr1']);
+$students = St::model()->getStudentsOfGroupForDistEducation($group['gr1']);
 foreach ($students as $student) {
-    $tbody.=sprintf('<tr class="tr-students-list-%d"><td>%d</td><td>%s</td><td>%s</td></tr>', $group['gr1'], $i, $student['name'], CHtml::link('<i class="icon-ok"></i>', '#', array(
+
+    $stDist = Stdist::model()->findByPk($student->st1);
+
+    $button = empty($stDist) ? '' : CHtml::link('<i class="icon-ok"></i>', '#', array(
         'class'=>'btn btn-success btn-mini'
-    )));
+    ));
+    $tbody.=sprintf('<tr class="tr-students-list-%d"><td>%d</td><td>%s</td><td>%s</td></tr>', $group['gr1'], $i, $student['name'], $button);
     $i++;
 }
 echo sprintf($table, $tbody);
