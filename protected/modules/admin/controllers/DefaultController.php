@@ -2,6 +2,14 @@
 
 class DefaultController extends AdminController
 {
+    public function beforeAction($action)
+    {
+        if(!Yii::app()->user->isAdmin)
+            throw new CHttpException(403, 'Forbidden');
+
+        return parent::beforeAction($action);
+    }
+
     public function actions()
     {
         return array(
