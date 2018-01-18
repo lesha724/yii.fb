@@ -17,19 +17,14 @@ $group = array_merge($group, array(
     'password' => '',
 ));
 
-// yiidebugtb
-/*$config['components']['log']['routes'][] = array(
-	'class'=>'ext.yiidebugtb.XWebDebugRouter',
-	'config'=>'alignLeft, opaque, runInDebug, fixedPos, collapsed, yamlStyle',
-	'levels'=>'error, warning, trace, profile, info',
-	'allowedIPs'=>array('127.0.0.1','::1'),
-);*/
-$config['components']['log']['routes'][] = array(
-    'class'=>'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
-    'levels'=>'error, warning, trace, profile, info',
-    'enabled' => YII_DEBUG,
-    'ipFilters'=>array('*'),
-);
+if (YII_DEBUG)
+    $config['components']['log']['routes'][] = array(
+        'class'=>'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
+        'levels'=>'error, warning, trace, profile, info',
+        'enabled' => YII_DEBUG,
+        'ipFilters'=>array('*'),
+    );
+
 $config['components']['log']['routes'][] = array(
     'class'=>'CWebLogRoute',
     'categories'=>'system.db.CDbCommand',
