@@ -13,7 +13,10 @@
 class RatingForm extends CFormModel
 {
     const SPECIALITY = 1;
+
     const GROUP = 2;
+    const STUDENT = 3;
+    const COURSE = 4;
 
     /**
      * @var int филиал
@@ -35,6 +38,12 @@ class RatingForm extends CFormModel
      * @var int| null
      */
     public $group;
+
+    /**
+     * Код студента
+     * @var int| null
+     */
+    public $student;
 
     /**
      * Тип студентов
@@ -66,14 +75,14 @@ class RatingForm extends CFormModel
     public function rules()
     {
         return array(
-            array('filial, faculty, course, group, semStart, semEnd, ratingType, stType', 'numerical'),
+            array('filial, faculty, course, group, semStart, semEnd, ratingType, stType, student', 'numerical'),
             array('stType, ratingType', 'default', 'value'=>0, 'setOnEmpty'=>TRUE),
             array('filial, faculty, course, group, semStart, semEnd, ratingType, stType', 'required'),
         );
     }
 
     /**
-     * atrribute labels
+     * attribute labels
      * @return array
      */
     public function attributeLabels()
@@ -128,10 +137,53 @@ class RatingForm extends CFormModel
 
     /**
      * Спиок
+     * @see group
      * @return array
      */
     public function getSemestersForFilter(){
+        if(empty($this->group))
+            return array();
+
          return CHtml::listData(Sem::model()->getSemestersForRating($this->group, self::GROUP ), 'sem7', 'sem7', 'name');
     }
 
+    /**
+     * Код потока по группе
+     * @see group
+     * @return int
+     */
+    private function getSg1ByGroup(){
+        if(empty($this->group))
+            return 0;
+
+        $gr = Gr::model()->findByPk($this->group);
+
+        if(empty($gr))
+            return 0;
+
+        return $gr->gr2;
+    }
+
+    /**
+     * Получить таблицу для рейтинга
+     * @param $type int
+     * @return array
+     */
+    public function getRating($type){
+        switch ($type){
+            case self::GROUP:
+                return array();
+                break;
+            case self::STUDENT:
+                return array();
+                break;
+            case self::COURSE:
+                $sg1 = $this->getSg1ByGroup();
+
+                return array();
+                break;
+            default:
+                return array();
+        }
+    }
 }

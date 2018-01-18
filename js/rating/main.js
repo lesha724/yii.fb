@@ -1,11 +1,10 @@
 $(document).ready(function(){
 
-
     $spinner1 = $('#spinner1');
 
     initFilterForm($spinner1);
 
-    $('#RatingForm_semStart,#RatingForm_semEnd ,#RatingForm_ratingType,#RatingForm_stType').change(function(){
+    $('#RatingForm_semStart ,#RatingForm_semEnd ,#RatingForm_ratingType,#RatingForm_stType').change(function(){
 
         var $that   = $('#RatingForm_semStart');
         var $select = $that.clone();
