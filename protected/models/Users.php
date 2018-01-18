@@ -472,6 +472,10 @@ HTML;
 
         if(empty($this->u4))
             Yii::app()->user->setFlash('warning', '<strong>'.tt('Внимание!').'</strong> '.tt('Заполните Email!'));
+
+        if(SH::getUniversityCod()==U_NULAU){
+            Yii::app()->session['timeUserLogin'] = time();
+        }
 	}
 
 	public function validateLogin(){
@@ -498,6 +502,16 @@ HTML;
 
 		if(Yii::app()->session[self::SESSION_NAME_AUTH_KEY1]!==$this->_getSessionKey1($key))
 			return false;
+
+        if(SH::getUniversityCod()==U_NULAU){
+            if(!isset(Yii::app()->session['timeUserLogin']))
+                return false;
+
+            $timeLogin = Yii::app()->session['timeUserLogin'];
+            if(time() - $timeLogin > 3600*8){
+                return false;
+            }
+        }
 
 		return true;
 	}

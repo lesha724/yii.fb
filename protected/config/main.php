@@ -233,7 +233,7 @@ $config = array(
             'class'=>'ShortCodes',
         ),
 		'user'=>array(
-				'class' => 'WebUser',
+            'class' => 'WebUser',
             'allowAutoLogin'=>true
 		),
 		'ePdf' => array(
