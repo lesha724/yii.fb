@@ -1,42 +1,36 @@
 $(document).ready(function(){
 
-    /*$(document).on('click','#rating-print',
-        function(){
-            var action=$("#timeTable-form").attr("action");
-            $("#timeTable-form").attr("action", $(this).data('url'));
-            $("#timeTable-form").submit();
-            $("#timeTable-form").attr("action", action);
-
-        }
-    );*/
 
     $spinner1 = $('#spinner1');
 
     initFilterForm($spinner1);
 
-    $('#FilterForm_sel_1,#FilterForm_sel_2 ,#FilterForm_type_rating,#FilterForm_st_rating').change(function(){
+    $('#RatingForm_semStart,#RatingForm_semEnd ,#RatingForm_ratingType,#RatingForm_stType').change(function(){
 
-        var $that   = $('#FilterForm_sel_1');
+        var $that   = $('#RatingForm_semStart');
         var $select = $that.clone();
         var value   = $that.val();
 
-        var $that1   = $('#FilterForm_sel_2');
+        var $that1   = $('#RatingForm_semEnd');
         var $select1 = $that1.clone();
         var value1   = $that1.val();
 
-		var $checkbox=$('#FilterForm_type_rating').clone();
+		var $checkbox=$('#RatingForm_ratingType').clone();
 		$checkbox.hide();
 
-		var $select2 = $('#FilterForm_st_rating').clone();
+        var $that2   = $('#RatingForm_stType');
+		var $select2 = $that2.clone();
+        var value2   = $that2.val();
+
         var $form   = $('#filter-form');
 
-        if (value.length != 0 && $(this).attr('id')=="FilterForm_sel_1")
+        if (value.length != 0 && $(this).attr('id')=="RatingForm_semStart")
             value1 = value;
 
-        $select.find('option[value='+$that.val()+']').attr('selected', 'selected');
+        $select.find('option[value='+value+']').attr('selected', 'selected');
         $select1.find('option[value='+value1+']').attr('selected', 'selected');
 
-		$select2.find('option[value='+$('#FilterForm_st_rating').val()+']').attr('selected', 'selected');
+		$select2.find('option[value='+value2+']').attr('selected', 'selected');
 
         $form.append($select);
         $form.append($select1);

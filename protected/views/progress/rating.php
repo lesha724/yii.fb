@@ -13,10 +13,8 @@ $this->breadcrumbs=array(
 Yii::app()->clientScript->registerPackage('dataTables');
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/rating/main.js', CClientScript::POS_HEAD);
 
-$this->renderPartial('/filter_form/timeTable/group', array(
-    'model' => $model,
-    'showDateRangePicker' => false,
-	'showCheckBoxCalendar'=>false,
+$this->renderPartial('rating/_group', array(
+    'model' => $model
 ));
 
 
@@ -27,6 +25,5 @@ HTML;
 
 if (! empty($model->group))
     $this->renderPartial('rating/_bottom', array(
-        'model' => $model,
-        'type'  => ProgressController::GROUP
+        'model' => $model
     ));

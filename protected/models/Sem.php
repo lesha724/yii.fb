@@ -299,7 +299,7 @@ SQL;
 	
 	public function getSemestersForRating($gr1, $type)
     {
-        if ($type == ProgressController::SPECIALITY)
+        if ($type == RatingForm::SPECIALITY)
             $sql = <<<SQL
                 SELECT sem3,sem4,sem5,sem7,us3
                 FROM us

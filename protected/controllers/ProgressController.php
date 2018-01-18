@@ -2,9 +2,6 @@
 
 class ProgressController extends Controller
 {
-    const SPECIALITY = 1;
-    const GROUP = 2;
-	
 	public function filters() {
 
         return array(
@@ -63,10 +60,10 @@ class ProgressController extends Controller
     
     public function actionRating()
     {
-        $model = new FilterForm();
+        $model = new RatingForm();
         $model->scenario = 'rating-group';
-        if (isset($_REQUEST['FilterForm']))
-            $model->attributes=$_REQUEST['FilterForm'];
+        if (isset($_REQUEST['RatingForm']))
+            $model->attributes=$_REQUEST['RatingForm'];
         $this->render('rating', array(
             'model' => $model,
         ));
