@@ -60,6 +60,7 @@ class ProgressController extends Controller
     
     public function actionRating()
     {
+        throw new CHttpException(400, 'Сервис времено недоступен по техническим причинам. В близжайшее время работа возобновиться.');
         $model = new RatingForm();
         $model->scenario = 'rating-group';
         if (isset($_REQUEST['RatingForm']))
