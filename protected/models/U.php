@@ -221,7 +221,8 @@ SQL;
                 (u1 in ({$subSql})) or
                 (u1 in (select u1 from u where u17 in ({$subSql}))) or
                 (u1 in (select u1 from u where u17 in (select u1 from u where u17 in ({$subSql})))) or 
-                (u1 in (select u1 from u where u17 in (select u1 from u where u17 in (select u1 from u where u17 in ({$subSql})))))
+                (u1 in (select u1 from u where u17 in (select u1 from u where u17 in (select u1 from u where u17 in ({$subSql}))))) or
+                (u1 in (select u1 from u where u17 in (select u1 from u where u17 in (select u1 from u where u17 in (select u1 from u where u17 in ({$subSql}))))))
             )
 SQL;
 
@@ -234,7 +235,7 @@ SQL;
     public function getU1_VIBRAL($st1, $u1_kod, $block, $sg1_kod)
     {
         $subSql = <<<SQL
-        select u1 from u where u1={$u1_kod} and u2={$sg1_kod} and u9={$block}
+        select u1 from u where u1={$u1_kod}
 SQL;
 
         $sql = <<<SQL
@@ -245,13 +246,14 @@ SQL;
             INNER JOIN ucxg on (ucx1 = ucxg1)
             INNER JOIN ucgn on (ucxg2 = ucgn1)
             INNER JOIN ucgns on (ucgn1 = ucgns2)
-            INNER JOIN (select ucsn1,ucsn2 from ucsn where ucsn2={$st1}) on (ucgns1 = ucsn1)
+            INNER JOIN (select ucsn1,ucsn2 from ucsn where ucsn2={$st1} and ucsn6=0) on (ucgns1 = ucsn1)
             WHERE
                 ucsn2 is not null and (
                 (u1 in ({$subSql}))or
                 (u1 in (select u1 from u where u17 in ({$subSql})))or
                 (u1 in (select u1 from u where u17 in (select u1 from u where u17 in ({$subSql})))) or 
-                (u1 in (select u1 from u where u17 in (select u1 from u where u17 in (select u1 from u where u17 in ({$subSql}))))) 
+                (u1 in (select u1 from u where u17 in (select u1 from u where u17 in (select u1 from u where u17 in ({$subSql}))))) or
+                (u1 in (select u1 from u where u17 in (select u1 from u where u17 in (select u1 from u where u17 in (select u1 from u where u17 in ({$subSql}))))))
             )
 SQL;
 
