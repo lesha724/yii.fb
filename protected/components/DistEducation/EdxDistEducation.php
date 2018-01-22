@@ -397,6 +397,40 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
      */
     public function subscribeStudentsToCourse($students, $uo1)
     {
+        $globalResult = true;
+        $log = '';
 
+        $model = DispDist::model()->findByPk($uo1['uo1']);
+
+        if($model==null)
+        {
+            $log .= '<br>' . $uo1['d2']. ' : Дисциплина не привязана ';
+            $globalResult = false;
+            return array($globalResult, $log);
+        }
+
+        $id = $model->dispdist3;
+
+        foreach ($students as $student) {
+
+            $stDist = Stdist::model()->findByPk($student->st1);
+            if($stDist==null) {
+                $globalResult = false;
+                $log .= $student->getShortName(). ' Ошибка записи: Студент не зарегестрирован в дистанционом обучении';
+                continue;
+            }
+
+            list($result, $message) = $this->_subscribeToCourse($stDist, $id);
+
+            if(!$result) {
+                $globalResult = false;
+                $log .= $student->getShortName(). ' Ошибка записи: '. $message;
+            }else{
+                $log .= $student->getShortName(). ' Запись удачна. '. $message;
+            }
+
+        }
+
+        return array($globalResult, $log);
     }
 }
