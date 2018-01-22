@@ -11,7 +11,7 @@ class TimeTableController extends Controller
             ))) {
                 if (in_array($this->universityCode, array(
                     U_XNMU,
-                    //38,
+                    38,
                     U_KRNU,
                     U_KNAME,
                     U_NULAU,

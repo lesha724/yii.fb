@@ -29,7 +29,9 @@ $html .= '</div>';
 
 echo $html;
 
+
 if (!empty($model->semStart)&&!empty($model->semEnd))
     $this->renderPartial('rating/_table', array(
         'model' => $model
     ));
+

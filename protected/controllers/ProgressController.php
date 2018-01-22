@@ -130,7 +130,7 @@ class ProgressController extends Controller
             PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
         $sheet->setCellValue('D3', tt('Курс'))->getStyle('D3')->getAlignment()->setHorizontal(
             PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-        $sheet->setCellValue('E3', tt('5'))->getStyle('E3')->getAlignment()->setHorizontal(
+        $sheet->setCellValue('E3', 5)->getStyle('E3')->getAlignment()->setHorizontal(
             PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
         $sheet->setCellValue('F3', tt('Не сдано'))->getStyle('F3')->getAlignment()->setHorizontal(
             PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
