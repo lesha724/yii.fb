@@ -550,7 +550,19 @@ class DistEducationController extends Controller
             throw new CHttpException(400, tt('Нет доступа'));
         }
 
-        $html = '';
+        $connector = SH::getDistEducationConnector(
+            $this->universityCode
+        );
+
+        if (empty($connector)) {
+            $error = true;
+            $message = tt('Ошибка создания конектора');
+        }
+
+        $html = $connector->subscribeStudentsToCourse(
+            array($st),
+            $uo1
+        );
 
         $res = array(
             'html' => $html,
