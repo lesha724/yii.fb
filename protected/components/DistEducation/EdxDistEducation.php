@@ -388,4 +388,15 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
     {
         return $this->_studentToCourse($st, $ucgns1);
     }
+
+    /**
+     * Записать студентов на курс по дсициплине
+     * @param St[] $students
+     * @param int $uo1
+     * @return array
+     */
+    public function subscribeStudentsToCourse($students, $uo1)
+    {
+
+    }
 }

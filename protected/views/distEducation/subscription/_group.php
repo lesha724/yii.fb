@@ -38,7 +38,7 @@ foreach ($students as $student) {
     $button = empty($stDist) ? '' : CHtml::link('<i class="icon-ok"></i>', '#', array(
         'class'=>'btn btn-success btn-mini'
     ));
-    $tbody.=sprintf('<tr class="tr-students-list-%d"><td>%d</td><td>%s</td><td>%s</td></tr>', $group['gr1'], $i, $student['name'], $button);
+    $tbody.=sprintf('<tr class="tr-students-list-%d"><td>%d</td><td>%s</td><td>%s</td></tr>', $group['gr1'], $i, $student->getFullName(), $button);
     $i++;
 }
 echo sprintf($table, $tbody);

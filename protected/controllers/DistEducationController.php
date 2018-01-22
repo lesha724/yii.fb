@@ -190,8 +190,8 @@ class DistEducationController extends Controller
      * Рендер формы для привязки дисциплины к дист образованию
      */
 	public function actionAddLink(){
-        if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        //if (! Yii::app()->request->isAjaxRequest)
+            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $model = new DistEducationFilterForm(Yii::app()->user);
 
@@ -433,16 +433,16 @@ class DistEducationController extends Controller
         $disp = $model->getDispInfo($uo1);
 
         if (empty($disp)) {
-            throw new CHttpException(400, tt('Нет доступа'));
+            throw new CHttpException(400, tt('Нет доступа1'));
         }
 
         if (empty($disp['dispdist2'])) {
-            throw new CHttpException(400, tt('Нет доступа'));
+            throw new CHttpException(400, tt('Нет доступа2'));
         }
 
         $group = $model->getGroupsByUo1($uo1, $gr1);
         if (empty($group)) {
-            throw new CHttpException(400, tt('Нет доступа'));
+            throw new CHttpException(400, tt('Нет доступа3'));
         }
 
         $html = $this->renderPartial('subscription/_group', array(
@@ -558,16 +558,5 @@ class DistEducationController extends Controller
         );
 
         Yii::app()->end(CJSON::encode($res));
-    }
-
-    /**
-     * Записать студентов на курс по дсициплине
-     * @param St[] $students
-     * @param int $uo1
-     * @return array
-     */
-    public function subscribeStudentsToCourse($students, $uo1)
-    {
-
     }
 }

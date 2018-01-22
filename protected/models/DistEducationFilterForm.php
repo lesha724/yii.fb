@@ -205,7 +205,7 @@ class DistEducationFilterForm extends CFormModel
         }
 
         if($subscription){
-            $where .= " AND dispdist2 not null ";
+            $where .= " AND dispdist2 is not null ";
         }
 
         $sql = <<<SQL
