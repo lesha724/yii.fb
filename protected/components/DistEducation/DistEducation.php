@@ -347,6 +347,14 @@ abstract class DistEducation implements IDistEducation
     abstract public function subscribeToCourse($st, $dispId);
 
     /**
+     * Записать студентов на курс по дисциплине
+     * @param St[] $students
+     * @param int $dispId
+     * @return array
+     */
+    abstract public function subscribeStudentsToCourse($students, $dispId);
+
+    /**
      * Записать студента на курс
      * @param Stdist $stDist
      * @param string $courseId

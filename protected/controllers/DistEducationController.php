@@ -505,11 +505,7 @@ class DistEducationController extends Controller
 
         $students = St::model()->getStudentsOfGroupForDistEducation($group['gr1']);
 
-        $html = '';
-
-        foreach ($students as $student){
-
-        }
+        $html = $connector->subscribeStudentsToCourse($students, $uo1);
 
         $res = array(
             'html' => $html,
@@ -562,5 +558,16 @@ class DistEducationController extends Controller
         );
 
         Yii::app()->end(CJSON::encode($res));
+    }
+
+    /**
+     * Записать студентов на курс по дсициплине
+     * @param St[] $students
+     * @param int $uo1
+     * @return array
+     */
+    public function subscribeStudentsToCourse($students, $uo1)
+    {
+
     }
 }
