@@ -93,8 +93,8 @@ if (!empty($model->sel_1)&&!empty($model->sel_2))
 			<th><?=tt('Ф.И.О.')?></th>
 			<th><?=$model->getAttributeLabel('group')?></th>
 			<th><?=$model->getAttributeLabel('course')?></th>
-			<th><?=($ps81==0)?tt('5'):tt('Многобальная')?></th>
-			<?php /*<th><?=tt('100')?></th>*/ ?>
+			<th><?=($ps81==0)?5:tt('Многобальная')?></th>
+			<?php /*<th><?=100?></th>*/ ?>
 			<th><?=tt('Не сдано')?></th>
 		</tr>
 	</thead>
