@@ -2,6 +2,7 @@
 return array (
   ' обязательны.' => '',
   '"2"' => '',
+    ' Новое мобильное приложение для Android : <strong><a href="{url}" target="_blank" style="font-size: 18px">здесь</a></strong>! Также читайте инструкцию к мобильному приложению: <strong><a href="{url-instruction}" target="_blank" style="font-size: 18px">здесь</a></strong>!' => ' New mobile app for Android : <strong><a href="{url}" target="_blank" style="font-size: 18px">here</a></strong>! Also read the instruction to the mobile app: <strong><a href="{url-instruction}" target="_blank" style="font-size: 18px">here</a></strong>!',
   '(Тип 1)' => '',
   '(Тип 2)' => '',
   '-(інше)' => '',

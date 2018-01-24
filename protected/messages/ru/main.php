@@ -20,6 +20,7 @@ return array (
   ' Контролер: ' => '',
   ' обязательны.' => '',
   '"2"' => '',
+  ' Новое мобильное приложение для Android : <strong><a href="{url}" target="_blank" style="font-size: 18px">здесь</a></strong>! Также читайте инструкцию к мобильному приложению: <strong><a href="{url-instruction}" target="_blank" style="font-size: 18px">здесь</a></strong>!' => '',
   '"нб"' => '',
   '% задолжености' => '',
   '(Тип 1)' => '',
