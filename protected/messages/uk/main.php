@@ -18,6 +18,7 @@
  */
 return array (
   '' => '',
+  ' Новое мобильное приложение для Android : <strong><a href="{url}" target="_blank" style="font-size: 18px">здесь</a></strong>! Также читайте инструкцию к мобильному приложению: <strong><a href="{url-instruction}" target="_blank" style="font-size: 18px">здесь</a></strong>!' => 'Новий мобільний додаток для Android : <strong><a href="{url}" target="_blank" style="font-size: 18px">тут</a></strong>! Також читайте інструкцію до мобільного додатку: <strong><a href="{url-instruction}" target="_blank" style="font-size: 18px">тут</a></strong>!',
   '"2"' => '',
   '"нб"' => '',
   '% задолжености' => '',
@@ -954,6 +955,6 @@ return array (
   '№ семестра' => '№ семестра',
   '№ справки' => '№ довідки',
   '№ темы' => '№ теми',
-    'с дисцилины '=>'з дисципліни',
+  'с дисцилины '=>'з дисципліни',
   6 => '@@@@',
 );
