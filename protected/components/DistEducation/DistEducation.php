@@ -347,18 +347,26 @@ abstract class DistEducation implements IDistEducation
     /**
      * Записать студента на курс по дисциплине
      * @param St $st
-     * @param int $dispId
+     * @param array $dispInfo
      * @return array
      */
-    abstract public function subscribeToCourse($st, $dispId);
+    abstract public function subscribeToCourse($st, $dispInfo);
 
     /**
      * Записать студентов на курс по дисциплине
      * @param St[] $students
-     * @param int $dispId
+     * @param array $dispInfo
      * @return array
      */
-    abstract public function subscribeStudentsToCourse($students, $dispId);
+    abstract public function subscribeStudentsToCourse($students, $dispInfo);
+
+    /**
+     * Записать студентов на курс по дисциплине
+     * @param St[] $students
+     * @param array $dispInfo
+     * @return array
+     */
+    abstract public function unsubscribeStudentsToCourse($students, $dispInfo);
 
     /**
      * Записать студента на курс
@@ -371,10 +379,10 @@ abstract class DistEducation implements IDistEducation
     /**
      * Записать студента на курс по дисциплине
      * @param St $st
-     * @param int $dispId
+     * @param array $dispInfo
      * @return array
      */
-    abstract public function unsubscribeToCourse($st, $dispId);
+    abstract public function unsubscribeToCourse($st, $dispInfo);
 
     /**
      * Записать студента на курс

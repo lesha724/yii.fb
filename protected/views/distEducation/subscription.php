@@ -13,8 +13,8 @@ $this->pageHeader=tt('Дистанционное образование: зап�
 $this->breadcrumbs=array(
     tt('Дистанционное образование'),
 );
-
-Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/distEducation/subscription.js', CClientScript::POS_HEAD);
+Yii::app()->clientScript->registerPackage('gritter');
+Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/distEducation/subscription.js?time='.time(), CClientScript::POS_HEAD);
 
 $this->renderPartial('/filter_form/default/year_sem');
 

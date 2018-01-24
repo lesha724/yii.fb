@@ -303,76 +303,41 @@ class MoodleDistEducation extends DistEducation
     /**
      * Записать студента на курс по дисциплине
      * @param St $st
-     * @param int $uo1
+     * @param array $dispInfo
      * @return array
      */
-    public function unsubscribeToCourse($st, $uo1)
+    public function unsubscribeToCourse($st, $dispInfo)
     {
-        $globalResult = true;
-        $log = '';
-
-        $model = DispDist::model()->findByPk($uo1['uo1']);
-
-        if($model==null)
-        {
-            $log .= '<br>' . $uo1['d2']. ' : Дисциплина не привязана ';
-            $globalResult = false;
-            return array($globalResult, $log);
-        }
-
-        $id = $model->dispdist3;
-
-        $model = Stdist::model()->findByPk($st->st1);
-        if($model==null){
-            $globalResult = false;
-            $log .= $st->getShortName(). ' Ошибка записи: Студент не зарегистрирован в Дист.образовании';
-            return array($globalResult, $log);
-        }
-
-        return $this->_unsubscribeToCourse($model, $id);
+        return $this->unsubscribeStudentsToCourse(array($st), $dispInfo);
     }
 
     /**
      * Записать студента на курс
      * @param St $st
-     * @param int $uo1
+     * @param array $uo1
      * @return array
      */
-    public function subscribeToCourse($st, $uo1)
+    public function subscribeToCourse($st, $dispInfo)
     {
-        $globalResult = true;
-        $log = '';
-
-        $model = DispDist::model()->findByPk($uo1['uo1']);
-
-        if($model==null)
-        {
-            $log .= '<br>' . $uo1['d2']. ' : Дисциплина не привязана ';
-            $globalResult = false;
-            return array($globalResult, $log);
-        }
-
-        $id = $model->dispdist3;
-
-        return $this->_subscribeToCourse($st, $id);
+        return $this->subscribeStudentsToCourse(array($st), $dispInfo);
     }
 
     /**
      * Записать студентов на курс по дсициплине
      * @param St[] $students
-     * @param int $uo1
+     * @param array $dispInfo
      * @return array
      */
-    public function subscribeStudentsToCourse($students, $uo1)
+    public function subscribeStudentsToCourse($students, $dispInfo)
     {
         $globalResult = true;
         $log = '';
 
-        $model = DispDist::model()->findByPk($uo1['uo1']);
+        $model = DispDist::model()->findByPk($dispInfo['uo1']);
 
         if($model==null)
         {
-            $log .= '<br>' . $uo1['d2']. ' : Дисциплина не привязана ';
+            $log .= '<br>' . $dispInfo['d2']. ' : Дисциплина не привязана ';
             $globalResult = false;
             return array($globalResult, $log);
         }
@@ -380,7 +345,7 @@ class MoodleDistEducation extends DistEducation
         $id = $model->dispdist3;
 
         foreach ($students as $student) {
-
+            $log .='<br>';
             $model = Stdist::model()->findByPk($student->st1);
             if($model==null){
                 $globalResult = false;
@@ -395,6 +360,50 @@ class MoodleDistEducation extends DistEducation
                 $log .= $student->getShortName(). ' Ошибка записи: '. $message;
             }else{
                 $log .= $student->getShortName(). ' Запись удачна. '. $message;
+            }
+        }
+
+        return array($globalResult, $log);
+    }
+
+    /**
+     * Выписать студентов с курса по дсициплине
+     * @param St[] $students
+     * @param array $dispInfo
+     * @return array
+     */
+    public function unsubscribeStudentsToCourse($students, $dispInfo)
+    {
+        $globalResult = true;
+        $log = '';
+
+        $model = DispDist::model()->findByPk($dispInfo['uo1']);
+
+        if($model==null)
+        {
+            $log .= '<br>' . $dispInfo['d2']. ' : Дисциплина не привязана ';
+            $globalResult = false;
+            return array($globalResult, $log);
+        }
+
+        $id = $model->dispdist3;
+
+        foreach ($students as $student) {
+            $log .='<br>';
+            $model = Stdist::model()->findByPk($student->st1);
+            if($model==null){
+                $globalResult = false;
+                $log .= $student->getShortName(). ' Ошибка записи: Студент не зарегистрирован в Дист.образовании';
+                continue;
+            }
+
+            list($result, $message) = $this->_unsubscribeToCourse($model, $id);
+
+            if(!$result) {
+                $globalResult = false;
+                $log .= $student->getShortName(). ' Ошибка записи: '. $message;
+            }else{
+                $log .= $student->getShortName(). ' успешно выписан. '. $message;
             }
 
         }

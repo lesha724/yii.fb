@@ -477,6 +477,10 @@ class DistEducationController extends Controller
         $chairId = Yii::app()->request->getParam('chairId', null);
         $gr1 = Yii::app()->request->getParam('gr1', null);
         $uo1 = Yii::app()->request->getParam('uo1', null);
+        $subscription = Yii::app()->request->getParam('subscription', null);
+
+        if($subscription==null)
+            throw new CHttpException(400, tt('Неверный параметры'));
 
         $model->setChairId($chairId);
 
@@ -506,12 +510,20 @@ class DistEducationController extends Controller
 
         $students = St::model()->getStudentsOfGroupForDistEducation($group['gr1']);
 
-        $html = $connector->subscribeStudentsToCourse($students, $uo1);
+        if($subscription==1) {
+            list($success, $html) = $connector->subscribeStudentsToCourse($students, $disp);
+        }else{
+            list($success, $html) = $connector->unsubscribeStudentsToCourse($students, $disp);
+        }
 
+        $title = Gr::model()->getGroupName($group['sem4'], $group);
         $res = array(
+            'error'=>!$success,
             'html' => $html,
-            'title' => Gr::model()->getGroupName($group['sem4'], $group)
+            'title' => $title
         );
+
+        Yii::app()->user->setFlash($success ? 'success' : 'error', '<h4>'.$title.'</h4>'.$html);
 
         Yii::app()->end(CJSON::encode($res));
     }
@@ -534,6 +546,9 @@ class DistEducationController extends Controller
         $st1 = Yii::app()->request->getParam('st1', null);
         $uo1 = Yii::app()->request->getParam('uo1', null);
         $subscription = Yii::app()->request->getParam('subscription', null);
+
+        if($subscription==null)
+            throw new CHttpException(400, tt('Неверный параметры'));
 
         $model->setChairId($chairId);
 
@@ -562,8 +577,8 @@ class DistEducationController extends Controller
         }
 
         if($subscription==1) {
-            list($success, $html) = $connector->subscribeStudentsToCourse(
-                array($st),
+            list($success, $html) = $connector->subscribeToCourse(
+                $st,
                 $disp
             );
         }else{
