@@ -576,6 +576,13 @@ SQL;
         if(empty($vmp))
             return;
 
+        if(!empty($vmp['vmpv6']))
+            return;
+
+        //var_dump($st1);
+
+        //var_dump($vmp);
+
         $startYear = null;
         $startSem = null;
 
@@ -620,9 +627,15 @@ SQL;
             }
         }
 
+        //var_dump($tek);
+
+        //var_dump($count);
+
         $val = $count>0 ? $tek/$count : 0;
 
         $tek = round($val,2);
+
+        //ar_dump($tek);
 
         $sql = <<<SQL
                       SELECT max(markb3) FROM markb WHERE markb2<=:BAL AND markb4=0
@@ -636,6 +649,7 @@ SQL;
         }else {
             $tek = 0;
         }
+        //var_dump($tek);
 
         $sql = <<<SQL
                           UPDATE vmp set vmp5=:VMP5, vmp4=:VMP4, vmp10=:VMP10, vmp12=:VMP12 WHERE vmp2=:ST1 AND vmp1=:VMPV1
@@ -643,7 +657,7 @@ SQL;
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':VMP5', $tek);
-        $command->bindValue(':VMP4', $tek);
+        $command->bindValue(':VMP4', 0);
         $command->bindValue(':ST1', $st1);
         $command->bindValue(':VMPV1', $vmp['vmp1']);
         $command->bindValue(':VMP12', Yii::app()->user->dbModel->p1);
@@ -869,7 +883,7 @@ SQL;
 
                             $command = Yii::app()->db->createCommand($sql);
                             $command->bindValue(':VMP5', $tek);
-                            $command->bindValue(':VMP4', $tek);
+                            $command->bindValue(':VMP4', 0);
                             $command->bindValue(':ST1', $st1);
                             $command->bindValue(':VMPV1', $vmp['vmp1']);
                             $command->bindValue(':VMP12', Yii::app()->user->dbModel->p1);
@@ -893,7 +907,7 @@ SQL;
     public function getVedItog($uo1,$gr1,$nom,$st1)
     {
         $sql = <<<SQL
-			SELECT vmp.* from vvmp
+			SELECT vmp.*, vmpv.* from vvmp
 			INNER JOIN vmpv on (vvmp1=vmpv2)
 			INNER JOIN vmp on (vmpv1=vmp1 and vmp2=:ST1)
 			WHERE vvmp3=(
@@ -910,7 +924,7 @@ SQL;
 				WHERE gr1={$gr1} and sem3=:YEAR and sem5=:SEM
 			) and vvmp25=(
 			SELECT  gr2 from gr where gr1={$gr1}
-			) ORDER by vvmp6 ASC
+			) ORDER by vvmp6 ASC, vmpv4 DESC
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':GR1', $gr1);

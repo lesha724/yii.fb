@@ -337,8 +337,8 @@ SQL;
         if (!Yii::app()->request->isAjaxRequest)
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
-        $ps84 = PortalSettings::model()->findByPk(84)->ps2;
-        if($ps84!=1)
+        $ps57 = PortalSettings::model()->getSettingFor(57);
+        if($ps57!=1)
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $error=false;
