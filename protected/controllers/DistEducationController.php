@@ -447,6 +447,7 @@ class DistEducationController extends Controller
 
         $html = $this->renderPartial('subscription/_group', array(
             'model' => $model,
+            'uo1'=>$uo1,
             'group' => $group
         ), true);
 
@@ -532,22 +533,23 @@ class DistEducationController extends Controller
         $chairId = Yii::app()->request->getParam('chairId', null);
         $st1 = Yii::app()->request->getParam('st1', null);
         $uo1 = Yii::app()->request->getParam('uo1', null);
+        $subscription = Yii::app()->request->getParam('subscription', null);
 
         $model->setChairId($chairId);
 
         $disp = $model->getDispInfo($uo1);
 
         if (empty($disp)) {
-            throw new CHttpException(400, tt('Нет доступа'));
+            throw new CHttpException(400, tt('Нет доступа1'));
         }
 
         if (empty($disp['dispdist2'])) {
-            throw new CHttpException(400, tt('Нет доступа'));
+            throw new CHttpException(400, tt('Нет доступа2'));
         }
 
         $st = St::model()->findByPk($st1);
         if (empty($st)) {
-            throw new CHttpException(400, tt('Нет доступа'));
+            throw new CHttpException(400, tt('Нет доступа3'));
         }
 
         $connector = SH::getDistEducationConnector(
@@ -559,12 +561,20 @@ class DistEducationController extends Controller
             $message = tt('Ошибка создания конектора');
         }
 
-        $html = $connector->subscribeStudentsToCourse(
-            array($st),
-            $uo1
-        );
+        if($subscription==1) {
+            list($success, $html) = $connector->subscribeStudentsToCourse(
+                array($st),
+                $disp
+            );
+        }else{
+            list($success, $html) = $connector->unsubscribeToCourse(
+                $st,
+                $disp
+            );
+        }
 
         $res = array(
+            'error'=>!$success,
             'html' => $html,
             'title' => $st->getShortName()
         );

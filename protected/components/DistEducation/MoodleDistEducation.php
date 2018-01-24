@@ -12,6 +12,15 @@
  */
 class MoodleDistEducation extends DistEducation
 {
+    protected $roleId;
+
+    public function __construct($host, $apiKey)
+    {
+        parent::__construct($host, $apiKey);
+
+        $this->roleId = PortalSettings::model()->getSettingFor(PortalSettings::ROLE_ID_FOR_MOODLE_STUDENTS);
+    }
+
     /**
      * @param Users $user
      * @return array
@@ -209,13 +218,26 @@ class MoodleDistEducation extends DistEducation
 
         $uri = sprintf('%s/webservice/rest/server.php',$this->host);
 
-        $params['wstoken']=$this->apiKey;
-        $params['wsfunction']=$method;
-        $params['moodlewsrestformat']='json';
+        $params1['wstoken']=$this->apiKey;
+        $params1['wsfunction']=$method;
+        $params1['moodlewsrestformat']='json';
 
         $curl = new MoodleCurl();
 
-        $resp = $curl->get($uri,$params);
+        switch ($type) {
+            case 'GET':
+                $params = array_merge($params, $params1);
+                $resp = $curl->get($uri, $params);
+            break;
+            case 'POST':
+                $uri .= (stripos($uri, '?') !== false) ? '&' : '?';
+                $uri .= http_build_query($params1, '', '&');
+
+                $resp = $curl->post($uri, $params);
+                break;
+            default:
+                $resp = $curl->get($uri, $params);
+        }
 
         if($resp)
         {
@@ -227,22 +249,55 @@ class MoodleDistEducation extends DistEducation
 
     /**
      * Записать студента на курс
-     * @param St $st
+     * @param Stdist $st
      * @param string $courseId
      * @return array
      */
     protected function _unsubscribeToCourse($st, $courseId){
+        $body = $this->_sendQuery('enrol_manual_unenrol_users','POST', array(
+            'enrolments'=>array(
+                '0'=>array(
+                    'roleid' => $this->roleId,
+                    'courseid' => $courseId,
+                    'userid'=> $st->stdist3
+                )
+            )
+        ));
 
+        $array = json_decode($body);
+
+        if(isset($array->errorcode)){
+            return array(false, 'Ошибка '.$array->message);
+        }else {
+            return array(true, '');
+        }
     }
 
     /**
      * Записать студента на курс
-     * @param St $st
+     * @param Stdist $st
      * @param string $courseId
      * @return array
      */
     protected function _subscribeToCourse($st, $courseId){
 
+        $body = $this->_sendQuery('enrol_manual_enrol_users','POST', array(
+            'enrolments'=>array(
+                '0'=>array(
+                    'roleid' => $this->roleId,
+                    'courseid' => $courseId,
+                    'userid'=> $st->stdist3
+                )
+            )
+        ));
+
+        $array = json_decode($body);
+
+        if(isset($array->errorcode)){
+            return array(false, 'Ошибка '.$array->message);
+        }else {
+            return array(true, '');
+        }
     }
 
     /**
@@ -267,7 +322,14 @@ class MoodleDistEducation extends DistEducation
 
         $id = $model->dispdist3;
 
-        return $this->_unsubscribeToCourse($st, $id);
+        $model = Stdist::model()->findByPk($st->st1);
+        if($model==null){
+            $globalResult = false;
+            $log .= $st->getShortName(). ' Ошибка записи: Студент не зарегистрирован в Дист.образовании';
+            return array($globalResult, $log);
+        }
+
+        return $this->_unsubscribeToCourse($model, $id);
     }
 
     /**
@@ -318,7 +380,15 @@ class MoodleDistEducation extends DistEducation
         $id = $model->dispdist3;
 
         foreach ($students as $student) {
-            list($result, $message) = $this->_subscribeToCourse($student, $id);
+
+            $model = Stdist::model()->findByPk($student->st1);
+            if($model==null){
+                $globalResult = false;
+                $log .= $student->getShortName(). ' Ошибка записи: Студент не зарегистрирован в Дист.образовании';
+                continue;
+            }
+
+            list($result, $message) = $this->_subscribeToCourse($model, $id);
 
             if(!$result) {
                 $globalResult = false;
