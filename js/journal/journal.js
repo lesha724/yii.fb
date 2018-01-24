@@ -165,7 +165,7 @@ $(document).ready(function(){
         $("#filter-form").attr("action", action);
     });
 
-    $('#recalculate-vmp,#recalculate-stus').click(function(){
+    $('#recalculate-vmp-itog, #recalculate-vmp,#recalculate-stus').click(function(){
         var $that =$(this);
 
         var url = $that.data('url');
