@@ -365,7 +365,14 @@ SQL;
                 throw new CHttpException(404, tt('Тип Лк').'.');
             }
 
-            $sem7 = Gr::model()->getSem7ByGr1ByDate($gr1,date('d.m.Y'));
+            if($elg->elg20->uo6!=3)
+                throw new CHttpException(404, tt('Не накопительная система').'.');
+
+            $elgz = Elgz::model()->findByAttributes(array('elgz2'=>$elg->elg1, 'elgz4'=>3), array('order'=>'elgz3 DESC'));
+            if(empty($elgz))
+                throw new CHttpException(404, tt('Не найдено занятие диф.зачет').'.');
+
+
             $students = St::model()->getStudentsForJournal($gr1, $uo1);
             if(empty($students)){
                 $error = true;
@@ -374,6 +381,7 @@ SQL;
 
                 foreach ($students as $student) {
                     //пересчет ведомости итоговой накопительной
+                    Vmp::model()->recalculateItogVmp($student['st1'], $elg, $elgz, $gr1);
                 }
             }
         }
