@@ -37,6 +37,8 @@ $checkboxStyle = array('class' => 'ace ace-switch ace-switch-4');
                 $enableInSubscriptionDistEducation = PortalSettings::ENABLE_IN_SUBSCRIPTION_DIST_EDUCATION;
 
                 $registrationEmailDistEducation = PortalSettings::REGISTRATION_EMAIL_DIST_EDUCATION;
+
+                $roleId = PortalSettings::ROLE_ID_FOR_MOODLE_STUDENTS;
                 ?>
 
                 <div class="">
@@ -54,6 +56,11 @@ $checkboxStyle = array('class' => 'ace ace-switch ace-switch-4');
                     <div class="control-group">
                         <span class="lbl"> <?=tt('ApiKey')?>:</span>
                         <?=CHtml::textField('settings['.$apikeyDistEducation.']', PortalSettings::model()->findByPk($apikeyDistEducation)->ps2)?>
+                    </div>
+
+                    <div class="control-group">
+                        <span class="lbl"> <?=tt('RoleId for Moodle students')?>:</span>
+                        <?=CHtml::textField('settings['.$roleId.']', PortalSettings::model()->findByPk($roleId)->ps2)?>
                     </div>
 
                     <div class="control-group">
