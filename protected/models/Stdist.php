@@ -7,6 +7,7 @@
  * The followings are the available columns in table 'stdist':
  * @property integer $stdist1 st1
  * @property string $stdist2 email учетки дистанционого образования
+ * @property int $stdist3 id учетки дистанционого образования (moodle)
  *
  * The followings are the available model relations:
  * @property St $stdist10
@@ -29,12 +30,12 @@ class Stdist extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('stdist1', 'numerical', 'integerOnly'=>true),
+			array('stdist1, stdist3', 'numerical', 'integerOnly'=>true),
 			array('stdist2', 'length', 'max'=>200),
 			array('stdist2', 'unique'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('stdist1, stdist2', 'safe', 'on'=>'search'),
+			array('stdist1, stdist2, stdist3', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,6 +59,7 @@ class Stdist extends CActiveRecord
 		return array(
 			'stdist1' => tt('Код студента'),
 			'stdist2' => tt('Email dist. education'),
+            'stdist3' => tt('Id dist. education'),
 		);
 	}
 
@@ -81,6 +83,7 @@ class Stdist extends CActiveRecord
 
 		$criteria->compare('stdist1',$this->stdist1);
 		$criteria->compare('stdist2',$this->stdist2,true);
+        $criteria->compare('stdist3',$this->stdist3);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

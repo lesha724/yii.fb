@@ -87,6 +87,8 @@ abstract class DistEducation implements IDistEducation
             }
             $stDist->stdist2 = $params['email'];
 
+            $stDist->stdist3 = isset($params['id'])? $params['id'] : 0;
+
             if(!$stDist->save()){
                 $transaction->rollback();
 
@@ -154,6 +156,10 @@ abstract class DistEducation implements IDistEducation
 
         if($res[0])
         {
+            if(isset($res[2]))
+            {
+                $params['id'] = $res[2];
+            }
             $res2 = $this->saveSignUpOld($user, $params);
 
             if(!$res2[0])
