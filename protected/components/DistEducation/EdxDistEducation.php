@@ -359,6 +359,11 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
                 return array($globalResult, $log);
             }else{
                 $log.= $subscribe ? 'Вы успешно записались на курс: ' : 'Вы успешно выписались с курса:  ';
+
+                if(!$this->stDistSub($uo1['uo1'], $st->u6, $subscribe)){
+                    $log .= ' Ошибка создания записи-лога';
+                    $globalResult = false;
+                }
                 //$log .= 'Ок';
             }
             $log .= $model->dispdist2;
@@ -427,6 +432,51 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
                 $log .= $student->getShortName(). ' Ошибка записи: '. $message;
             }else{
                 $log .= $student->getShortName(). ' Запись удачна. '. $message;
+            }
+
+        }
+
+        return array($globalResult, $log);
+    }
+
+    /**
+     * Описать студентов с курса по дсициплине
+     * @param St[] $students
+     * @param int $uo1
+     * @return array
+     */
+    public function unsubscribeStudentsToCourse($students, $uo1)
+    {
+        $globalResult = true;
+        $log = '';
+
+        $model = DispDist::model()->findByPk($uo1['uo1']);
+
+        if($model==null)
+        {
+            $log .= '<br>' . $uo1['d2']. ' : Дисциплина не привязана ';
+            $globalResult = false;
+            return array($globalResult, $log);
+        }
+
+        $id = $model->dispdist3;
+
+        foreach ($students as $student) {
+
+            $stDist = Stdist::model()->findByPk($student->st1);
+            if($stDist==null) {
+                $globalResult = false;
+                $log .= $student->getShortName(). ' Ошибка записи: Студент не зарегестрирован в дистанционом обучении';
+                continue;
+            }
+
+            list($result, $message) = $this->_unsubscribeToCourse($stDist, $id);
+
+            if(!$result) {
+                $globalResult = false;
+                $log .= $student->getShortName(). ' Ошибка записи: '. $message;
+            }else{
+                $log .= $student->getShortName(). ' Выписка удачна. '. $message;
             }
 
         }

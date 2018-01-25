@@ -404,4 +404,26 @@ abstract class DistEducation implements IDistEducation
         return Controller::mailByTemplate($email, $subject, $pattern, $mailParams);
     }
 
+    /**
+     * Создать или удалить запись-лог о записи на дисциплину
+     * @param $uo1 int
+     * @param $st1 int
+     * @param bool $isSub запись или выписка
+     * @return bool
+     */
+    public function stDistSub($uo1, $st1, $isSub = true){
+        if($isSub){
+            $model = new Stdistsub();
+            $model->stdistsub1 = $st1;
+            $model->stdistsub2 = $uo1;
+            return $model->save();
+        }else{
+            Stdistsub::model()->deleteAll(array(
+                'stdistsub1'=>$st1,
+                'stdistsub2'=>$uo1
+            ));
+            return true;
+        }
+    }
+
 }

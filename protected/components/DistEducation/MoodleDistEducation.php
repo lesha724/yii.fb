@@ -364,6 +364,11 @@ class MoodleDistEducation extends DistEducation
             }else{
                 $log .= $student->getShortName(). ' Запись удачна. '. $message;
 
+                if(!$this->stDistSub($dispInfo['uo1'], $student->st1, true)){
+                    $log .= ' Ошибка создания записи-лога';
+                    $globalResult = false;
+                }
+
                 $successLog[] = array(
                     'fio' => $student->getShortName(),
                     'email' => $stModel->stdist2,
@@ -425,6 +430,11 @@ class MoodleDistEducation extends DistEducation
                 $log .= $student->getShortName(). ' Ошибка записи: '. $message;
             }else{
                 $log .= $student->getShortName(). ' успешно выписан. '. $message;
+
+                if(!$this->stDistSub($dispInfo['uo1'], $student->st1, false)){
+                    $log .= ' Ошибка создания записи-лога';
+                    $globalResult = false;
+                }
 
                 $successLog[] = array(
                     'fio' => $student->getShortName(),
