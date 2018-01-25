@@ -32,8 +32,18 @@ class PortalSettings extends CActiveRecord
      * @var int мобильное приложение через авторизацию
      */
     const MOBILE_APP_NEED_AUTH = 128;
-
+    /**
+     * @var int Письмо о ригитсрации в дист. образовании
+     */
     const REGISTRATION_EMAIL_DIST_EDUCATION = 127;
+    /**
+     * @var int Письмо о ригитсрации на курс
+     */
+    const SUBSCRIPTION_EMAIL_DIST_EDUCATION = 131;
+    /**
+     * @var int Письмо о выпеске с курса
+     */
+    const UNSUBSCRIPTION_EMAIL_DIST_EDUCATION = 132;
 
 	private  $settings = array();
 	/**

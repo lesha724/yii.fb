@@ -38,6 +38,9 @@ $checkboxStyle = array('class' => 'ace ace-switch ace-switch-4');
 
                 $registrationEmailDistEducation = PortalSettings::REGISTRATION_EMAIL_DIST_EDUCATION;
 
+                $subscriptionEmailDistEducation = PortalSettings::SUBSCRIPTION_EMAIL_DIST_EDUCATION;
+                $unsubscriptionEmailDistEducation = PortalSettings::UNSUBSCRIPTION_EMAIL_DIST_EDUCATION;
+
                 $roleId = PortalSettings::ROLE_ID_FOR_MOODLE_STUDENTS;
                 ?>
 
@@ -72,12 +75,56 @@ $checkboxStyle = array('class' => 'ace ace-switch ace-switch-4');
 
                 <div class="">
                     <div class="control-group">
-                        <span class="lbl"> <?=tt('Письмо о регистрации на Дист. Образовании')?>:</span><br>
+                        <span class="lbl"> <?=tt('Письмо о регистрации на дист. образовании')?>:</span><br>
                         <span class="blue">{username}-логин, {password}-пароль, {email}-почта, {fio}-фио</span>
                         <?php $this->widget('application.extensions.elFinderTinyMce.TinyMce',
                             array(
                                 'name'=>'settings['.$registrationEmailDistEducation.']',
                                 'value'=>PortalSettings::model()->findByPk($registrationEmailDistEducation)->ps2,
+                                'htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'tinymce'),
+                                'fileManager' => array(
+                                    'class' => 'ext.elFinder.TinyMceElFinder',
+                                    'connectorRoute'=>'/admin/default/connector',
+                                ),
+                                /*'settings'=>array(
+                                    'theme' => "advanced",
+                                    'skin' => 'default',
+                                    'language' => Yii::app()->language,
+                                ),*/
+                            )); ?>
+                    </div>
+                </div>
+
+                <div class="">
+                    <div class="control-group">
+                        <span class="lbl"> <?=tt('Письмо о регистрации на курс дист. образования')?>:</span><br>
+                        <span class="blue">{course}-название курса, {discipline}-название дисциплины, {email}-почта, {fio}-фио</span>
+                        <?php $this->widget('application.extensions.elFinderTinyMce.TinyMce',
+                            array(
+                                'name'=>'settings['.$subscriptionEmailDistEducation.']',
+                                'value'=>PortalSettings::model()->findByPk($subscriptionEmailDistEducation)->ps2,
+                                'htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'tinymce'),
+                                'fileManager' => array(
+                                    'class' => 'ext.elFinder.TinyMceElFinder',
+                                    'connectorRoute'=>'/admin/default/connector',
+                                ),
+                                /*'settings'=>array(
+                                    'theme' => "advanced",
+                                    'skin' => 'default',
+                                    'language' => Yii::app()->language,
+                                ),*/
+                            )); ?>
+                    </div>
+                </div>
+
+                <div class="">
+                    <div class="control-group">
+                        <span class="lbl"> <?=tt('Письмо о выписке с курса дист. образования')?>:</span><br>
+                        <span class="blue">{course}-название курса, {discipline}-название дисциплины, {email}-почта, {fio}-фио</span>
+                        <?php $this->widget('application.extensions.elFinderTinyMce.TinyMce',
+                            array(
+                                'name'=>'settings['.$unsubscriptionEmailDistEducation.']',
+                                'value'=>PortalSettings::model()->findByPk($unsubscriptionEmailDistEducation)->ps2,
                                 'htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'tinymce'),
                                 'fileManager' => array(
                                     'class' => 'ext.elFinder.TinyMceElFinder',
