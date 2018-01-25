@@ -10,7 +10,7 @@
     Yii::app()->clientScript->registerPackage('gritter');
     Yii::app()->clientScript->registerPackage('jquery.ui');
     Yii::app()->clientScript->registerPackage('datepicker');
-    Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/journal/journal.js', CClientScript::POS_HEAD);
+    Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/journal/journal.js?time='.time(), CClientScript::POS_HEAD);
 
     $error       = tt('Ошибка! Проверьте правильность вводимых данных или доступ для ввода!');
     $success     = tt('Cохранено!');

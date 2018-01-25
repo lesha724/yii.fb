@@ -555,7 +555,116 @@ SQL;
         return $returnArray;
     }
 
+    /**
+     * Пересчет оценок в итоговую ведомость  накопительной системы в журнале по студенту
+     * Для запорожского меда
+     * @param $st1
+     * @param $elg Elg
+     * @param $gr1
+     * @param $elgz Elgz
+     * @return void|bool
+     */
+    public function recalculateItogVmp($st1,$elg, $elgz,$gr1){
+        $ps57 = PortalSettings::model()->getSettingFor(57);
+        if($ps57!=1)
+            return;
 
+        if(SH::getUniversityCod()!=32)
+            return;
+
+        $vmp = $this->getVedItog($elg->elg2, $gr1, 98, $st1);
+        if(empty($vmp))
+            return;
+
+        if(!empty($vmp['vmpv6']))
+            return;
+
+        //var_dump($st1);
+
+        //var_dump($vmp);
+
+        $startYear = null;
+        $startSem = null;
+
+        if($elg->elg20->uo6==3){
+            $row = $this->getStartYearSem($elg->elg2);
+
+            if(empty($row)){
+                return;
+            }
+
+            $startYear = $row['sem3'];
+            $startSem = $row['sem5'];
+        }
+
+        $marksArray = $this->getMarksFromJournal($st1,$elgz,$gr1);
+
+        $min = Elgzst::model()->getMin();
+        $tek =0;
+        $count =0;
+        $countNb = $countDv = 0;
+
+        foreach ($marksArray as $key => $marks){
+
+            if(!empty($marks)) {
+                foreach ($marks['marks'] as $mark) {
+                    $bal = 0;
+                    if ($mark['elgzst3'] > 0) {
+                        $bal = $mark['elgzst5'];
+                        //Счиатть не отработаные
+                        if ($mark['elgzst5'] <= $min)
+                            $countNb++;
+                    } else {
+                        $bal = ($mark['elgzst5'] > 0) ? $mark['elgzst5'] : $mark['elgzst4'];
+
+                        if ($mark['elgzst4'] <= $min && $mark['elgzst5'] <= $min)
+                            $countDv++;
+                    }
+                    $tek += $bal;
+                }
+
+                $count += count($marks['marks']);
+            }
+        }
+
+        //var_dump($tek);
+
+        //var_dump($count);
+
+        $val = $count>0 ? $tek/$count : 0;
+
+        $tek = round($val,2);
+
+        //ar_dump($tek);
+
+        $sql = <<<SQL
+                      SELECT max(markb3) FROM markb WHERE markb2<=:BAL AND markb4=0
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':BAL', $tek);
+        $mark = $command->queryScalar();
+        //var_dump($mark);
+        if(!empty($mark)){
+            $tek = $mark;
+        }else {
+            $tek = 0;
+        }
+        //var_dump($tek);
+
+        $sql = <<<SQL
+                          UPDATE vmp set vmp5=:VMP5, vmp4=:VMP4, vmp10=:VMP10, vmp12=:VMP12 WHERE vmp2=:ST1 AND vmp1=:VMPV1
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':VMP5', $tek);
+        $command->bindValue(':VMP4', 0);
+        $command->bindValue(':ST1', $st1);
+        $command->bindValue(':VMPV1', $vmp['vmp1']);
+        $command->bindValue(':VMP12', Yii::app()->user->dbModel->p1);
+        $command->bindValue(':VMP10', date('Y-m-d H:i:s'));
+        $command->execute();
+
+    }
     /**
      * Пересчет оценко пмк в журнале по студенту
      * @param $st1
@@ -774,7 +883,7 @@ SQL;
 
                             $command = Yii::app()->db->createCommand($sql);
                             $command->bindValue(':VMP5', $tek);
-                            $command->bindValue(':VMP4', $tek);
+                            $command->bindValue(':VMP4', 0);
                             $command->bindValue(':ST1', $st1);
                             $command->bindValue(':VMPV1', $vmp['vmp1']);
                             $command->bindValue(':VMP12', Yii::app()->user->dbModel->p1);
@@ -798,7 +907,7 @@ SQL;
     public function getVedItog($uo1,$gr1,$nom,$st1)
     {
         $sql = <<<SQL
-			SELECT vmp.* from vvmp
+			SELECT vmp.*, vmpv.* from vvmp
 			INNER JOIN vmpv on (vvmp1=vmpv2)
 			INNER JOIN vmp on (vmpv1=vmp1 and vmp2=:ST1)
 			WHERE vvmp3=(
@@ -815,7 +924,7 @@ SQL;
 				WHERE gr1={$gr1} and sem3=:YEAR and sem5=:SEM
 			) and vvmp25=(
 			SELECT  gr2 from gr where gr1={$gr1}
-			) ORDER by vvmp6 ASC
+			) ORDER by vvmp6 ASC, vmpv4 DESC
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':GR1', $gr1);
