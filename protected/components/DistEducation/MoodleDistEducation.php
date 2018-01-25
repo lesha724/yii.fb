@@ -330,6 +330,9 @@ class MoodleDistEducation extends DistEducation
      */
     public function subscribeStudentsToCourse($students, $dispInfo)
     {
+        //Массив для хранения удчно записаных для рассылки по почте
+        $successLog = array();
+
         $globalResult = true;
         $log = '';
 
@@ -346,20 +349,27 @@ class MoodleDistEducation extends DistEducation
 
         foreach ($students as $student) {
             $log .='<br>';
-            $model = Stdist::model()->findByPk($student->st1);
-            if($model==null){
+            $stModel = Stdist::model()->findByPk($student->st1);
+            if($stModel==null){
                 $globalResult = false;
                 $log .= $student->getShortName(). ' Ошибка записи: Студент не зарегистрирован в Дист.образовании';
                 continue;
             }
 
-            list($result, $message) = $this->_subscribeToCourse($model, $id);
+            list($result, $message) = $this->_subscribeToCourse($stModel, $id);
 
             if(!$result) {
                 $globalResult = false;
                 $log .= $student->getShortName(). ' Ошибка записи: '. $message;
             }else{
                 $log .= $student->getShortName(). ' Запись удачна. '. $message;
+
+                $successLog[] = array(
+                    'fio' => $student->getShortName(),
+                    'email' => $stModel->stdist2,
+                    'discipline' => $dispInfo['d2'],
+                    'course' => $model->dispdist2
+                );
             }
         }
 
@@ -374,6 +384,9 @@ class MoodleDistEducation extends DistEducation
      */
     public function unsubscribeStudentsToCourse($students, $dispInfo)
     {
+        //Массив для хранения удчно отписаніх для рассылки по почте
+        $successLog = array();
+
         $globalResult = true;
         $log = '';
 
@@ -390,20 +403,27 @@ class MoodleDistEducation extends DistEducation
 
         foreach ($students as $student) {
             $log .='<br>';
-            $model = Stdist::model()->findByPk($student->st1);
-            if($model==null){
+            $stModel = Stdist::model()->findByPk($student->st1);
+            if($stModel==null){
                 $globalResult = false;
                 $log .= $student->getShortName(). ' Ошибка записи: Студент не зарегистрирован в Дист.образовании';
                 continue;
             }
 
-            list($result, $message) = $this->_unsubscribeToCourse($model, $id);
+            list($result, $message) = $this->_unsubscribeToCourse($stModel, $id);
 
             if(!$result) {
                 $globalResult = false;
                 $log .= $student->getShortName(). ' Ошибка записи: '. $message;
             }else{
                 $log .= $student->getShortName(). ' успешно выписан. '. $message;
+
+                $successLog[] = array(
+                    'fio' => $student->getShortName(),
+                    'email' => $stModel->stdist2,
+                    'discipline' => $dispInfo['d2'],
+                    'course' => $model->dispdist2
+                );
             }
 
         }
