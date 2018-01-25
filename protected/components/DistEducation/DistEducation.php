@@ -392,4 +392,16 @@ abstract class DistEducation implements IDistEducation
      */
     abstract protected function _unsubscribeToCourse($stDist, $courseId);
 
+    /**
+     * Отправка соощения об записи/віпеске на курс
+     * @param $email string email student
+     * @param $subject string
+     * @param $mailParams array
+     * @param $pattern string
+     * @return array
+     */
+    public function sendMail($email, $subject, $mailParams, $pattern){
+        return Controller::mailByTemplate($email, $subject, $pattern, $mailParams);
+    }
+
 }

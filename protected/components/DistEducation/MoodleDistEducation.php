@@ -373,6 +373,14 @@ class MoodleDistEducation extends DistEducation
             }
         }
 
+        if(!empty($successLog)){
+            list($success, $message) = $this->sendMails($successLog, PortalSettings::model()->getSettingFor(PortalSettings::UNSUBSCRIPTION_EMAIL_DIST_EDUCATION), tt('Выписка с курса'));
+            if(!$success){
+                $globalResult = false;
+                $log.=$message;
+            }
+        }
+
         return array($globalResult, $log);
     }
 
@@ -428,6 +436,41 @@ class MoodleDistEducation extends DistEducation
 
         }
 
+        if(!empty($successLog)){
+            list($success, $message) = $this->sendMails($successLog, PortalSettings::model()->getSettingFor(PortalSettings::UNSUBSCRIPTION_EMAIL_DIST_EDUCATION), tt('Выписка с курса'));
+            if(!$success){
+                $globalResult = false;
+                $log.=$message;
+            }
+        }
+
         return array($globalResult, $log);
+    }
+
+    /**
+     * Отпарвка сообщений
+     * @param $mails array массив масивов паратетров для сообщений
+     * @param $pattern string шаблон письма
+     * @param $subject string
+     * @return array
+     */
+    private function sendMails($mails, $pattern, $subject){
+        $result = true;
+        $log = false;
+        foreach ($mails as $mail){
+            if(!isset($mail['email']))
+                continue;
+            if(!isset($mail['fio']))
+                continue;
+
+            list($success, $message) = $this->sendMail($mail['email'], $subject, $mail, $pattern);
+
+            if(!$success) {
+                $result = false;
+                $log.=sprintf('<br> %s: Ошибка отправки письма на почту %s',$mail['fio'], $mail['email'] );
+            }
+        }
+
+        return array($result, $log);
     }
 }
