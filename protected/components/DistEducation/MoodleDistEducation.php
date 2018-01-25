@@ -379,7 +379,7 @@ class MoodleDistEducation extends DistEducation
         }
 
         if(!empty($successLog)){
-            list($success, $message) = $this->sendMails($successLog, PortalSettings::model()->getSettingFor(PortalSettings::UNSUBSCRIPTION_EMAIL_DIST_EDUCATION), tt('Выписка с курса'));
+            list($success, $message) = $this->sendMails($successLog, PortalSettings::model()->getSettingFor(PortalSettings::SUBSCRIPTION_EMAIL_DIST_EDUCATION), tt('Запись на курс'));
             if(!$success){
                 $globalResult = false;
                 $log.=$message;
@@ -432,7 +432,7 @@ class MoodleDistEducation extends DistEducation
                 $log .= $student->getShortName(). ' успешно выписан. '. $message;
 
                 if(!$this->stDistSub($dispInfo['uo1'], $student->st1, false)){
-                    $log .= ' Ошибка создания записи-лога';
+                    $log .= ' Ошибка удаления записи-лога';
                     $globalResult = false;
                 }
 

@@ -412,17 +412,27 @@ abstract class DistEducation implements IDistEducation
      * @return bool
      */
     public function stDistSub($uo1, $st1, $isSub = true){
-        if($isSub){
-            $model = new Stdistsub();
-            $model->stdistsub1 = $st1;
-            $model->stdistsub2 = $uo1;
-            return $model->save();
-        }else{
-            Stdistsub::model()->deleteAll(array(
-                'stdistsub1'=>$st1,
-                'stdistsub2'=>$uo1
-            ));
-            return true;
+        try {
+            if ($isSub) {
+                $model = Stdistsub::model()->findByAttributes(array(
+                    'stdistsub1' => $st1,
+                    'stdistsub2' => $uo1
+                ));
+                if(!empty($model))
+                    return true;
+                $model = new Stdistsub();
+                $model->stdistsub1 = $st1;
+                $model->stdistsub2 = $uo1;
+                return $model->save();
+            } else {
+                Stdistsub::model()->deleteAllByAttributes(array(
+                    'stdistsub1' => $st1,
+                    'stdistsub2' => $uo1
+                ));
+                return true;
+            }
+        }catch (Exception $error){
+            return false;
         }
     }
 
