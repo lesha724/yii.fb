@@ -28,6 +28,7 @@ class JournalController extends Controller
                     'saveChangeTheme',
                     'recalculateVmp',
                     'recalculateStus',
+                    'recalculateVmpItog',
                     'showMarksForRecalculate',
 
                     'retake',
@@ -324,6 +325,63 @@ SQL;
                         }
 
                     }
+                }
+            }
+        }
+
+        Yii::app()->end(CJSON::encode(array('error' => $error, 'errorType' => $errorType)));
+    }
+
+    public function actionRecalculateVmpItog()
+    {
+        if (!Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $ps57 = PortalSettings::model()->getSettingFor(57);
+        if($ps57!=1)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $error=false;
+        $errorType=0;
+
+        $gr1 = Yii::app()->request->getParam('gr1', null);
+        $uo1 = Yii::app()->request->getParam('uo1', null);
+        $sem1 = Yii::app()->request->getParam('sem1', null);
+        $type = Yii::app()->request->getParam('type', null);
+
+        if($uo1==null || $gr1==null || $sem1==null || $type==null)
+        {
+            $error = true;
+            $errorType=2;
+        }
+        else
+        {
+            $elg1=Elg::getElg1($uo1,$type,$sem1);
+            $elg = Elg::model()->findByPk($elg1);
+            if(empty($elg))
+                throw new CHttpException(404, tt('Не задана структура журнала. Обратитесь к Администратору системы').'.');
+
+            if($elg->elg4!=1){
+                throw new CHttpException(404, tt('Тип Лк').'.');
+            }
+
+            if($elg->elg20->uo6!=3)
+                throw new CHttpException(404, tt('Не накопительная система').'.');
+
+            $elgz = Elgz::model()->findByAttributes(array('elgz2'=>$elg->elg1, 'elgz4'=>3), array('order'=>'elgz3 DESC'));
+            if(empty($elgz))
+                throw new CHttpException(404, tt('Не найдено занятие диф.зачет').'.');
+
+
+            $students = St::model()->getStudentsForJournal($gr1, $uo1);
+            if(empty($students)){
+                $error = true;
+                $errorType=2;
+            }else{
+
+                foreach ($students as $student) {
+                    //пересчет ведомости итоговой накопительной
+                    Vmp::model()->recalculateItogVmp($student['st1'], $elg, $elgz, $gr1);
                 }
             }
         }

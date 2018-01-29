@@ -72,6 +72,10 @@ if (!empty($model->sem1)):
     $this->renderPartial('/filter_form/default/_refresh_filter_form_button');
 
 
+        $elg1=Elg::getElg1($uo1,$model->type_lesson,$model->sem1);
+        $elg = Elg::model()->findByPk($elg1);
+        if(empty($elg))
+            throw new CHttpException(404, tt('Не задана структура журнала. Обратитесь к Администратору системы').'.');
 
 
     if($ps57==1)
@@ -107,6 +111,29 @@ if (!empty($model->sem1)):
         ));
     }
 
+    if($elg->elg20->uo6==3){
+        $sem1End = Vmp::model()->getEndSem1($elg->elg2);
+
+        if($elg->elg3==$sem1End){
+
+            $vedItog = Vvmp::model()->checkModul($elg->elg2, $gr1, 98);
+
+            if(!empty($vedItog))
+                $this->widget('bootstrap.widgets.TbButton', array(
+                    'buttonType' => 'button',
+                    'type' => 'inverse',
+
+                    'icon' => 'refresh',
+                    'label' => tt('Пересчитать итоговую накопительную ведомость'),
+                    'htmlOptions' => array(
+                        'class' => 'btn-small',
+                        'data-url' => Yii::app()->createUrl('/journal/recalculateVmpItog', array('uo1' => $uo1, 'gr1' => $gr1, 'sem1' => $model->sem1, 'type' => $model->type_lesson)),
+                        'id' => 'recalculate-vmp-itog',
+                    )
+                ));
+        }
+    }
+
     ?>
         <span><label class="label label-warning">&nbsp;&nbsp;</label> - <?=tt('Информация требует обновления страницы')?></span>
         <div class="span-12">
@@ -119,10 +146,6 @@ if (!empty($model->sem1)):
     <?php
     endif;
 
-    $elg1=Elg::getElg1($uo1,$model->type_lesson,$model->sem1);
-    $elg = Elg::model()->findByPk($elg1);
-    if(empty($elg))
-        throw new CHttpException(404, tt('Не задана структура журнала. Обратитесь к Администратору системы').'.');
 
     $ps9  = PortalSettings::model()->getSettingFor(9);
     $ps20 = PortalSettings::model()->getSettingFor(20);// use sub modules
