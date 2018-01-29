@@ -54,7 +54,7 @@ foreach ($students as $student) {
             'style'=> !empty($stDistSub) ? '' : 'display:none'
         ))
     ;
-    $tbody.=sprintf('<tr class="tr-students-list-%d"><td>%d</td><td>%s</td><td>%s</td></tr>', $group['gr1'], $i, $student->getFullName(), $button);
+    $tbody.=sprintf('<tr class="tr-students-list-%d"><td>%d</td><td>%s</td><td class="action-td">%s</td></tr>', $group['gr1'], $i, $student->getFullName(), $button);
     $i++;
 }
 echo sprintf($table, $tbody);

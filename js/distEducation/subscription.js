@@ -50,6 +50,7 @@ $(document).on('click','.btn-show-group', function(e) {
 $(document).on('click','.btn-unsubscript-student, .btn-subscript-student', function(e) {
     e.preventDefault();
     $spinner1.show();
+    var $that = $(this);
     var url = $(this).attr('href');
     $.ajax({
         url: url,
@@ -61,6 +62,11 @@ $(document).on('click','.btn-unsubscript-student, .btn-subscript-student', funct
             }else{
                 addGritter(data.title, data.html, 'success');
             }
+
+            $that.parents('.action-td').find('.btn').show();
+
+            $that.hide();
+
             $spinner1.hide();
         },
         error: function(jqXHR, textStatus, errorThrown){
