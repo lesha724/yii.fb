@@ -423,7 +423,14 @@ abstract class DistEducation implements IDistEducation
                 $model = new Stdistsub();
                 $model->stdistsub1 = $st1;
                 $model->stdistsub2 = $uo1;
-                return $model->save();
+                if(!$model->save()) {
+                    $errors = $model->getErrors();
+                    if (!empty($errors))
+                        throw new Exception(implode(';', $errors));
+                    return false;
+                }
+                else
+                    return true;
             } else {
                 Stdistsub::model()->deleteAllByAttributes(array(
                     'stdistsub1' => $st1,
@@ -432,6 +439,7 @@ abstract class DistEducation implements IDistEducation
                 return true;
             }
         }catch (Exception $error){
+            //var_dump($error->getMessage());
             return false;
         }
     }

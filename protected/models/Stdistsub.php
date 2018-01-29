@@ -6,7 +6,6 @@
  * The followings are the available columns in table 'stdistsub':
  * @property integer $stdistsub1
  * @property integer $stdistsub2
- * @property string $stdistsub3
  */
 class Stdistsub extends CActiveRecord
 {
@@ -27,10 +26,9 @@ class Stdistsub extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('stdistsub1, stdistsub2', 'numerical', 'integerOnly'=>true),
-			array('stdistsub3', 'length', 'max'=>400),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('stdistsub1, stdistsub2, stdistsub3', 'safe', 'on'=>'search'),
+			array('stdistsub1, stdistsub2', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -53,7 +51,6 @@ class Stdistsub extends CActiveRecord
 		return array(
 			'stdistsub1' => 'Stdistsub1',
 			'stdistsub2' => 'Stdistsub2',
-			'stdistsub3' => 'Stdistsub3',
 		);
 	}
 
@@ -77,7 +74,6 @@ class Stdistsub extends CActiveRecord
 
 		$criteria->compare('stdistsub1',$this->stdistsub1);
 		$criteria->compare('stdistsub2',$this->stdistsub2);
-		$criteria->compare('stdistsub3',$this->stdistsub3,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
