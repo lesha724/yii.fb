@@ -121,7 +121,7 @@ class MoodleDistEducation extends DistEducation
         $array = json_decode($body);
 
         if(!is_array($array))
-            throw new CHttpException(500, 'EdxDistEducation: Ошибка загрузки курсов. Неверный формат ответа');
+            throw new CHttpException(500, 'MoodleDistEducation: Ошибка загрузки курсов. Неверный формат ответа');
         else
             return $array;
     }
@@ -146,7 +146,7 @@ class MoodleDistEducation extends DistEducation
             return null;
 
         if(count($course)>1)
-            throw  new CHttpException(500, 'EdxDistEducation:Несколько курсов с id');
+            throw  new CHttpException(500, 'MoodleDistEducation:Несколько курсов с id');
 
         return current($course);
     }
@@ -226,7 +226,7 @@ class MoodleDistEducation extends DistEducation
 
         switch ($type) {
             case 'GET':
-                $params = array_merge($params, $params1);
+                $params = empty($params) ? $params1 : array_merge($params, $params1);
                 $resp = $curl->get($uri, $params);
             break;
             case 'POST':
