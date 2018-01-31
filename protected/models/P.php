@@ -954,9 +954,11 @@ SQL
         if($this->isNewRecord)
             return true;
 
+        $today = date('Y-m-d 00:00');
+
         $sql = <<<SQL
               SELECT COUNT(*) FROM PD 
-              WHERE pd28 in (0,2,5,9) and pd13 is null and pd2=:P1
+              WHERE pd28 in (0,2,5,9) and pd11<='{$today}' and (pd13 is null or pd13>='{$today}') and pd2=:P1
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
