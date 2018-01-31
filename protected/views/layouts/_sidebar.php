@@ -43,7 +43,8 @@
                 U_KNAME,
                 U_NULAU,
                 U_KHADI,
-                U_URFAK
+                U_URFAK,
+                U_FGU
             ));
         ?>
         <a href="<?= $newMobile ? SH::MOBILE_URL : 'https://play.google.com/store/apps/details?id=scheduleMKP.scheduleMKP'?>" target="_blank">
