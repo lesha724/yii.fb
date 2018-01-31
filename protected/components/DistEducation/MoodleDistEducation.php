@@ -38,8 +38,17 @@ class MoodleDistEducation extends DistEducation
             'lastname'=>CHtml::encode($model->st2),
             'email'=>$user->u4,
             'idnumber'=>'student'.$user->u6,
-            'password'=>'St_password'.$user->u6,
+            'password'=>'St_'.$this->_randomKey(),
         );
+    }
+
+    /**
+     * Генерация случайный чисел
+     * @return bool
+     */
+    private function _randomKey(){
+        $token = openssl_random_pseudo_bytes(4);
+        return bin2hex($token);
     }
 
     /**
