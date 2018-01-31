@@ -33,18 +33,29 @@ class DistEducationFilterForm extends CFormModel
      */
     public $discipline;
 
+
     /**
      * @var string для фильтра по названию специальности
      */
     public $sp2;
+    /**
+     * @var int для фильтра закрпелена или нет дисциплина
+     */
+    public $isSubscript;
+    /**
+     * @var string для фильтра по названию курса
+     */
+    public $dispdist2;
+
+
 
     public function rules()
     {
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('discipline', 'numerical'),
-            array('d2, sp2', 'length', 'max'=>255),
+            array('discipline, isSubscript', 'numerical'),
+            array('d2, sp2, dispdist2', 'length', 'max'=>255),
             array('course', 'numerical', 'max'=>6, 'min'=> 1),
         );
     }
@@ -204,6 +215,19 @@ class DistEducationFilterForm extends CFormModel
             $params[':COURSE'] = $this->course;
         }
 
+        if(!$subscription)
+            if(!empty($this->isSubscript)) {
+                if($this->isSubscript==1)
+                    $where .= "AND dispdist2 is not null ";
+                else
+                    $where .= "AND dispdist2 is null ";
+            }
+
+        if(!empty($this->dispdist2)) {
+            $where .= " AND dispdist2 CONTAINING :COURSE_NAME ";
+            $params[':COURSE_NAME'] = $this->dispdist2;
+        }
+
         if($subscription){
             $where .= " AND dispdist2 is not null ";
         }
@@ -249,6 +273,11 @@ SQL;
             'course'=>array(
                 'asc'=>'sem4 ASC',
                 'desc'=>'sem4 DESC',
+                'default'=>'ASC',
+            ),
+            'dispdist2'=>array(
+                'asc'=>'dispdist2 ASC',
+                'desc'=>'dispdist2 DESC',
                 'default'=>'ASC',
             ),
         );

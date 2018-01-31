@@ -53,9 +53,19 @@ $this->widget('bootstrap.widgets.TbGridView', array(
             'header'=>$model->getAttributeLabel('sp2'),
             'value'=>'$data["sp2"]',
         ),
-        'distDisp'=>array(
+        'dispdist2'=>array(
+            'name'=>'dispdist2',
             'header'=>tt('Курс'),
             'value'=>'$data["dispdist2"]." ".$data["dispdist3"]',
+        ),
+        'isSubscript'=>array(
+            'name'=>'isSubscript',
+            'header'=>tt('Статус'),
+            'value'=>'empty($data["dispdist2"]) ? tt("Не привязана") : tt("Привязана")',
+            'filter'=>array(
+                '1' => tt('Привязана'),
+                '2' => tt('Не привязана')
+            )
         ),
         array(
             'class'=>'bootstrap.widgets.TbButtonColumn',
