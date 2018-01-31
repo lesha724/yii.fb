@@ -2,9 +2,13 @@
 
 /**
  * Class WebUser
- *
- * @property bool $isBlock
- * @property bool $isAdmin
+ * @property bool $isStd  Являеться ли студентом
+ * @property bool $isAdmin  Являеться ли администратором
+ * @property bool $isTch  Являеться ли преподователем
+ * @property bool $isPrnt  Являеться ли родителем
+ * @property bool $isBlock Заблокирован ли
+ * @property P|St $dbModel  модель персоні
+ * @property Users|null $model модель побзователя
  */
 class WebUser extends CWebUser
 {

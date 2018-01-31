@@ -9,6 +9,19 @@
  */
 class PortalSettings extends CActiveRecord
 {
+    const ENABLE_DIST_EDUCATION = 122;
+    const HOST_DIST_EDUCATION = 123;
+    const APIKEY_DIST_EDUCATION = 124;
+    /**
+     * Записівать накурсі при записи на дисциплину
+     */
+    const ENABLE_IN_SUBSCRIPTION_DIST_EDUCATION = 129;
+
+    /**
+     * роль для студиков мудла
+     */
+    const ROLE_ID_FOR_MOODLE_STUDENTS = 130;
+
     const ZAP_SUPPORT_API_KEY_ID = 38999999;//запорожье
 	//const ZAP_SUPPORT_SECRET_KEY_ID = 38999998;//запорожье
     /**
@@ -19,6 +32,18 @@ class PortalSettings extends CActiveRecord
      * @var int мобильное приложение через авторизацию
      */
     const MOBILE_APP_NEED_AUTH = 128;
+    /**
+     * @var int Письмо о ригитсрации в дист. образовании
+     */
+    const REGISTRATION_EMAIL_DIST_EDUCATION = 127;
+    /**
+     * @var int Письмо о ригитсрации на курс
+     */
+    const SUBSCRIPTION_EMAIL_DIST_EDUCATION = 131;
+    /**
+     * @var int Письмо о выпеске с курса
+     */
+    const UNSUBSCRIPTION_EMAIL_DIST_EDUCATION = 132;
 
 	private  $settings = array();
 	/**

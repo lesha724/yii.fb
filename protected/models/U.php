@@ -501,6 +501,15 @@ SQL;
 
     public function doUpdates($ucgn1_kod)
     {
+        $enableDistEducation = PortalSettings::model()->getSettingFor(PortalSettings::ENABLE_DIST_EDUCATION);
+        $enableInSubscriptionDistEducation = PortalSettings::model()->getSettingFor(PortalSettings::ENABLE_IN_SUBSCRIPTION_DIST_EDUCATION);
+
+        $connector = null;
+        if($enableDistEducation==1&&$enableInSubscriptionDistEducation==1)
+            $connector = SH::getDistEducationConnector(
+                SH::getUniversityCod()
+            );
+
         $uch_god  = $_SESSION['uch_god'];
         $semester = $_SESSION['semester'];
         $st1      = $_SESSION['st1'];
@@ -519,6 +528,7 @@ SQL;
         $codes  = $command->queryAll();
 
         $start = false;
+
         foreach ($codes as $code) {
 
             if (! $start)
@@ -527,6 +537,13 @@ SQL;
 
             if (! $start)
                 continue;
+
+            if($enableDistEducation==1&&$enableInSubscriptionDistEducation==1){
+                list($result, $error) = $connector->subscribeToCourse(Yii::app()->user->model, $code['ucgns1_vib']);
+                Yii::app()->user->setFlash($result ? 'success' : 'error' , $error);
+                if(!$result)
+                    throw new CHttpException('400',tt('Ошибка записи'));
+            }
 
             $sql = <<<SQL
 UPDATE or INSERT INTO ucsn (ucsn1,ucsn2,ucsn3,ucsn4,ucsn5)
@@ -589,7 +606,14 @@ SQL;
         );
         Yii::app()->db->createCommand($sql)->execute($params);
 
+        $enableDistEducation = PortalSettings::model()->getSettingFor(PortalSettings::ENABLE_DIST_EDUCATION);
+        $enableInSubscriptionDistEducation = PortalSettings::model()->getSettingFor(PortalSettings::ENABLE_IN_SUBSCRIPTION_DIST_EDUCATION);
 
+        $connector = null;
+        if($enableDistEducation==1&&$enableInSubscriptionDistEducation==1)
+            $connector = SH::getDistEducationConnector(
+                SH::getUniversityCod()
+            );
 
         foreach ($codes as $code) {
 
@@ -614,6 +638,11 @@ SQL;
                 ':UCGNS1_VIB3' => $code,
             );
             Yii::app()->db->createCommand($sql)->execute($params);
+
+            if($enableDistEducation==1&&$enableInSubscriptionDistEducation==1){
+                list($result, $error) = $connector->unsubscribeToCourse(Yii::app()->user->model, $code);
+                Yii::app()->user->setFlash($result ? 'success' : 'error' , $error);
+            }
         }
     }
 

@@ -33,6 +33,8 @@ $config = array(
 		'ext.elFinder.*',
 		'ext.EScriptBoost.*',
 		'ext.LangPick.*',
+        'application.components.DistEducation.*',
+        'application.components.DistEducation.forms.*',
 	),
 
 	'modules'=>array(

@@ -17,6 +17,14 @@
  * @property string $u11
  * @property string $u12
  * @property string $u13
+ *
+ * @property bool isStudent
+ * @property bool isAdmin
+ * @property bool isTeacher
+ * @property bool isBlock
+ * @property bool isParent
+ * @property string name
+ *
  */
 class Users extends CActiveRecord
 {

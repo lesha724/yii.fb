@@ -5,6 +5,13 @@ use Apostle\Mail;
 
 class SiteController extends Controller
 {
+    public function filters()
+    {
+        return array(
+            'checkPermissionDist + signUpDistEducation, signUpNewDistEducation, signUpOldDistEducation, loginDistEducation',
+            'existDist + signUpDistEducation, signUpNewDistEducation, signUpOldDistEducation'
+        );
+    }
 	/**
 	 * This is the default 'index' action that is invoked
 	 * when an action is not explicitly requested by users.
@@ -18,7 +25,140 @@ class SiteController extends Controller
 			),
         );
     }
-	
+
+    /**
+     * Фильтр для акшенов с дист. образованием кроме логина
+     * @param $filterChain
+     * @throws CHttpException
+     */
+    public function filterExistDist($filterChain)
+    {
+        if(Yii::app()->user->dbModel->st168>0) {
+            throw new CHttpException(400, tt('Пользователь уже зарегистрирован в дистанционном образовании'));
+        }
+
+        $filterChain->run();
+    }
+
+    /**
+     * Фильтр для акшенов с дист. образованием
+     * @param $filterChain
+     * @throws CHttpException
+     */
+    public function filterCheckPermissionDist($filterChain)
+    {
+        //негость
+        if(Yii::app()->user->isGuest){
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again. 1');
+        }
+        // студент
+        if(!Yii::app()->user->isStd){
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again. 2');
+        }
+        //включена ли синхронизация с дист образованием
+        $ps122 = PortalSettings::model()->getSettingFor(PortalSettings::ENABLE_DIST_EDUCATION);
+        if($ps122==0){
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again. 3');
+        }
+
+        $filterChain->run();
+    }
+
+    /**
+     * Регитсрация в дистанционом образовании
+     * Вопрос есть уже акаунт или нет
+     */
+    public function actionLoginDistEducation(){
+
+        //зарегисророван в дистанцооном образовании
+        if(Yii::app()->user->dbModel->st168==0) {
+            throw new CHttpException(400, tt('Пользователь не зарегистрирован в дистанционном образовании'));
+        }
+
+        $connector = SH::getDistEducationConnector(
+            $this->universityCode
+        );
+
+        $connector->login(Yii::app()->user->model);
+    }
+
+    /**
+     * Регитсрация в дистанционом образовании
+     * Вопрос есть уже акаунт или нет
+     */
+    public function actionSignUpDistEducation(){
+        $this->render('signUpDistEducation');
+    }
+
+    /**
+     * Регитсрация в дистанционом образовании
+     * Вопрос есть уже акаунт или нет
+     */
+    public function actionSignUpOldDistEducation(){
+        /**
+         * @var $model SingUpOldDistEducationForm
+         */
+        $model=SH::getSingUpOldDistEducationForm($this->universityCode);
+
+        $className = get_class($model);
+
+        if(!$className)
+            throw new CHttpException(500,'Error...');
+
+        $model->unsetAttributes();
+
+        $model->email = Yii::app()->user->model->u4;
+
+        if(isset($_POST[$className])) {
+
+            $model->attributes=$_POST[$className];
+
+            if($model->validate()) {
+
+                $connector = SH::getDistEducationConnector(
+                    $this->universityCode
+                );
+
+                $user = Yii::app()->user->model;
+
+                list($result, $message) = $connector->signUpOld($user, $model->params);
+
+                if (!$result) {
+                    Yii::app()->user->setFlash('error', '<strong>'.tt('Внимание!').'</strong> '. $message);
+                } else {
+                    Yii::app()->user->setFlash('success','<strong>'.tt('Внимание!').'</strong> '. tt('Регистрация прошла успешно!'));
+                }
+
+                $this->redirect('index');
+            }
+        }
+
+        $this->render('signUpOldDistEducation',array(
+            'model'=>$model
+        ));
+    }
+
+    /**
+     * Регитсрация в дистанционом образовании
+     */
+    public function actionSignUpNewDistEducation(){
+        $connector = SH::getDistEducationConnector(
+            $this->universityCode
+        );
+
+        $user = Yii::app()->user->model;
+
+        list($result, $message) = $connector->signUp(Yii::app()->user->model);
+
+        if(!$result){
+            Yii::app()->user->setFlash('error', '<strong>'.tt('Внимание!').'</strong> '. $message);
+        }else{
+            Yii::app()->user->setFlash('success', '<strong>'.tt('Внимание!').'</strong> '. tt('Регистрация прошла успешно!'));
+        }
+
+        $this->redirect('index');
+    }
+
 	public function actionIndex()
 	{
 		// renders the view file 'protected/views/site/index.php'

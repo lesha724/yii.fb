@@ -57,12 +57,6 @@ Yii::app()->clientScript->registerScript('sem-start', $js);
                     'class'=>'ace',
                 );
                 ?>
-                <?php /*
-                <div class="control-group">
-                    <?=CHtml::checkBox('', PortalSettings::model()->findByPk(122)->ps2, $checkboxStyle)?>
-                    <span class="lbl"> <?=tt('Синхронизация с дист. образованием')?></span>
-                    <?=CHtml::hiddenField('settings[122]', PortalSettings::model()->findByPk(122)->ps2)?>
-                </div>*/ ?>
 
                 <?php
                     $errorSubcriptionMessage = PortalSettings::ERROR_SUBCRIPTION_MESSAGE;
@@ -505,3 +499,4 @@ Yii::app()->clientScript->registerScript('sem-start', $js);
         </div>
     </div>
 </div>
+

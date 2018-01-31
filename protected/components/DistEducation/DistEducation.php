@@ -10,9 +10,31 @@
  * Class DistEducation
  * Класс для дистанционого обучения
  * @property string $host
+ * @property string $apiKey
  */
 abstract class DistEducation implements IDistEducation
 {
+    /*
+     *
+     */
+    const ID_FIELD_NAME = 'id';
+
+    const KEY_CACHE_COURS_LIST = 'de_courses_list';
+
+    /**
+     * @var string АпиКей
+     */
+    private $_apiKey;
+
+    /**
+     * apiKey
+     * @return string
+     */
+    public function getApiKey()
+    {
+        return $this->_apiKey;
+    }
+
     /**
      * @var string Хост
      */
@@ -28,76 +50,398 @@ abstract class DistEducation implements IDistEducation
     }
 
     /**
-     * задать host
-     * @param string $host
-     * @return void
+     * Отправка запроса для регистрации
+     * @param Users $user
+     * @param $params array
+     * @return array
      */
-    public function setHost($host)
-    {
-        $this->_host = $host;
+    abstract protected function sendSignUp($user, $params);
+
+    /**
+     * параметры для запроса регистрации
+     * @param Users $user
+     * @return array
+     */
+    abstract protected function getParamsForSignUp($user);
+
+    /**
+     * Привязка к уже существующей учетек
+     * @param $user Users
+     * @param $params array
+     * @return array
+     */
+    protected function saveSignUpOld($user, $params){
+        if(!$user->isStudent)
+            return array(false, 'DistEducation:'.tt('Пользователь не студент'));
+
+        if(!isset($params['email']))
+            return array(false, 'EdxDistEducation: params don`t contains email');
+
+        $transaction = Yii::app()->db->beginTransaction();
+        try {
+            //Сохраняем приязку студента к акунту дистанционого образлвания
+            $stDist = Stdist::model()->findByPk($user->u6);
+            if($stDist==null) {
+                $stDist = new Stdist();
+                $stDist->stdist1 = $user->u6;
+            }
+            $stDist->stdist2 = $params['email'];
+
+            $stDist->stdist3 = isset($params['id'])? $params['id'] : 0;
+
+            if(!$stDist->save()){
+                $transaction->rollback();
+
+                $text = 'Ошибка сохранения!';
+
+                $errors = $stDist->getErrors('stdist2');
+                if(is_array($errors))
+                    $text = implode('; ',$errors);
+
+                if(is_string($errors))
+                    $text = $errors;
+
+                return array(false, $text);
+            }
+            //ставим метку студенту что он имеет привязку
+            if(!$this->_setStudentSignUp($user->u6))
+                $transaction->rollback();
+
+            $transaction->commit();
+
+            return array(true, '');
+
+        } catch (Exception $e) {
+            $transaction->rollback();
+            return array(false, $e->getMessage());
+        }
     }
 
     /**
-     * Отправка запроса для регистрации
-     * @return array
+     * @param $user Users
+     * @return mixed
      */
-    abstract protected function sendSignUp($name, $username, $password, $email);
+    abstract protected function runLogin($user);
+
+    /**
+     * DistEducation constructor.
+     * @param string $host
+     * @throws Exception empty host
+     */
+    public function __construct($host, $apiKey)
+    {
+        if(empty($host))
+            throw  new CHttpException(500,'DistEducation: Host empty');
+        if(empty($apiKey))
+            throw  new CHttpException(500,'DistEducation: ApiKey empty');
+
+        $this->host = $host;
+        $this->apiKey = $apiKey;
+        //parent::__construct($host);
+    }
 
     /**
      * Регистрация в системе дистанционого обучения
-     * @param $name string Имя
-     * @param $username string Логин
-     * @param $password string Пароль
-     * @param $email string Email
+     * @param $user Users
      * @return array
      */
-    public function signUp($name, $username, $password, $email)
+    public function signUp($user)
     {
-        return $this->sendSignUp($name, $username, $password, $email);
+        if($this->validateEmail($user->u4)){
+            return array(false, tt('Уже есть пользователь в дистанционом образовании с таким email!'));
+        }
+        $params = $this->getParamsForSignUp($user);
+
+        $res = $this->sendSignUp($user, $params);
+
+        if($res[0])
+        {
+            if(isset($res[2]))
+            {
+                $params['id'] = $res[2];
+            }
+            $res2 = $this->saveSignUpOld($user, $params);
+
+            if(!$res2[0])
+                return $res2;
+
+            else
+            {
+                $message = PortalSettings::model()->getSettingFor(PortalSettings::REGISTRATION_EMAIL_DIST_EDUCATION);
+
+                if(empty($message)) {
+                    $message = '';
+                }
+
+                list($status, $message) = Controller::mailByTemplate($user->u4, tt('Регистрация дист. образование'), $message, array(
+                    'username'=> $params['username'],
+                    'email'=>$params['email'],
+                    'fio' => $user->name,
+                    'password' => $params['password']
+                ));
+
+                if (!$status) {
+                    return array(false, tt('Регистрация прошла успешно, но ошибка отправки извещения на почту. Обратитесь в тех.поддержку.'));
+                }
+            }
+        }
+
+        return $res;
+    }
+
+    /**
+     * Регистрация в системе дистанционого обучения
+     * @param $user Users
+     * @param $params array
+     * @return array
+     */
+    public function signUpOld($user, $params)
+    {
+        return $this->saveSignUpOld($user, $params);
+    }
+
+    /**
+     * Сохранить метку по студенту что регистрация в дист образовании прошла
+     * @param $st1 int
+     * @return bool
+     */
+    protected function _setStudentSignUp($st1){
+        $st = St::model()->findByPk($st1);
+
+        if($st == null)
+            return false;
+
+        if(!$st->saveAttributes(array('st168'=>1)))
+            return false;
+
+        return true;
     }
 
     /**
      * Авторизация в системе дистанционого обучения
-     * @param $username string Логин
+     * @param $user Users Логин
      * @return bool
      */
-    public function login($username)
+    public function login($user)
     {
-        // TODO: Implement login() method.
+        return $this->runLogin($user);
     }
 
     /**
-     * Отправка запроса
-     * @param $body
-     * @param array|null $headers
+     * Список курсов
      * @return mixed
      */
-    protected function _sendQuery($body, $headers = null)
+    public function getCoursesList()
     {
-        $myCurl = curl_init();
+        $id = self::KEY_CACHE_COURS_LIST;
 
-        curl_setopt_array($myCurl, array(
-            CURLOPT_URL => $this->host,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => http_build_query($body),
-            CURLOPT_HTTPHEADER => $headers
-        ));
-
-        $response = curl_exec($myCurl);
-
-        $http_code = null;
-        // Проверяем наличие ошибок
-        if (!curl_errno($myCurl)) {
-
-            $http_code = curl_getinfo($myCurl, CURLINFO_HTTP_CODE);
+        $value=Yii::app()->cache->get($id);
+        if($value===false)
+        {
+            // устанавливаем значение $value заново, т.к. оно не найдено в кэше,
+            // и сохраняем его в кэше для дальнейшего использования:
+            $list = $this->_getCoursesList();
+            Yii::app()->cache->set($id,$list,600);
+            return $list;
         }
 
-        /*if($http_code!=200)
-            throw new Exception($http_code. ' '. $response);*/
-
-        curl_close($myCurl);
-
-        return array($http_code, $response);
+        return $value;
     }
+
+    /**
+     * Список курсов
+     * @return mixed
+     */
+    abstract protected function _getCoursesList();
+
+    /**
+     * Инфо по курсу по $id
+     * @param string|int $id
+     * @return mixed
+     */
+    public function getCourse($id)
+    {
+        if(empty($id))
+            return null;
+
+        return $this->_getCourse($id);
+    }
+
+    /**
+     * Список курсов
+     * @return mixed
+     */
+    abstract protected function _getCourse($id);
+
+    /**
+     * Колокнки для ГридВьюв
+     * @return array
+     */
+    public function getColumnsForGridView()
+    {
+        return $this->_getColumnsForGridView();
+    }
+
+    /**
+     * Колокнки для ГридВьюв
+     * @return array
+     */
+    abstract protected function _getColumnsForGridView();
+
+    /**
+     * Сохранения привязки
+     * @param $uo1 int
+     * @param $course object|array
+     * @return bool
+     */
+    public function saveLinkCourse($uo1, $course)
+    {
+        $model = DispDist::model()->findByPk($uo1);
+
+        if($model==null)
+        {
+            $model = new DispDist();
+            $model->dispdist1 = $uo1;
+        }
+
+        $model->setAttributes($this->_getParamsLink($course));
+
+        $model->dispdist4 = Yii::app()->user->dbModel->p1;
+        $model->dispdist5 = date('Y-m-d H:i:s');
+
+        return $model->save();
+
+    }
+
+    /**
+     * Сохранения привязки
+     * @param $course object|array
+     * @return array
+     */
+    abstract protected function _getParamsLink($course);
+
+    /**
+     * Валидировать email (есть ли пользователь стаким email)
+     * @param string $email
+     * @return bool
+     */
+    public function validateEmail($email)
+    {
+        return $this->_validateEmail($email);
+    }
+
+    /**
+     * Валидировать email
+     * @param string $email
+     * @return bool
+     */
+    abstract protected function _validateEmail($email);
+
+    /**
+     * @return string
+     */
+    public function getNameIdFiled(){
+        return self::ID_FIELD_NAME;
+    }
+
+    /**
+     * Записать студента на курс по дисциплине
+     * @param St $st
+     * @param array $dispInfo
+     * @return array
+     */
+    abstract public function subscribeToCourse($st, $dispInfo);
+
+    /**
+     * Записать студентов на курс по дисциплине
+     * @param St[] $students
+     * @param array $dispInfo
+     * @return array
+     */
+    abstract public function subscribeStudentsToCourse($students, $dispInfo);
+
+    /**
+     * Записать студентов на курс по дисциплине
+     * @param St[] $students
+     * @param array $dispInfo
+     * @return array
+     */
+    abstract public function unsubscribeStudentsToCourse($students, $dispInfo);
+
+    /**
+     * Записать студента на курс
+     * @param Stdist $stDist
+     * @param string $courseId
+     * @return array
+     */
+    abstract protected function _subscribeToCourse($stDist, $courseId);
+
+    /**
+     * Записать студента на курс по дисциплине
+     * @param St $st
+     * @param array $dispInfo
+     * @return array
+     */
+    abstract public function unsubscribeToCourse($st, $dispInfo);
+
+    /**
+     * Записать студента на курс
+     * @param Stdist $stDist
+     * @param string $courseId
+     * @return array
+     */
+    abstract protected function _unsubscribeToCourse($stDist, $courseId);
+
+    /**
+     * Отправка соощения об записи/віпеске на курс
+     * @param $email string email student
+     * @param $subject string
+     * @param $mailParams array
+     * @param $pattern string
+     * @return array
+     */
+    public function sendMail($email, $subject, $mailParams, $pattern){
+        return Controller::mailByTemplate($email, $subject, $pattern, $mailParams);
+    }
+
+    /**
+     * Создать или удалить запись-лог о записи на дисциплину
+     * @param $uo1 int
+     * @param $st1 int
+     * @param bool $isSub запись или выписка
+     * @return bool
+     */
+    public function stDistSub($uo1, $st1, $isSub = true){
+        try {
+            if ($isSub) {
+                $model = Stdistsub::model()->findByAttributes(array(
+                    'stdistsub1' => $st1,
+                    'stdistsub2' => $uo1
+                ));
+                if(!empty($model))
+                    return true;
+                $model = new Stdistsub();
+                $model->stdistsub1 = $st1;
+                $model->stdistsub2 = $uo1;
+                if(!$model->save()) {
+                    $errors = $model->getErrors();
+                    if (!empty($errors))
+                        throw new Exception(implode(';', $errors));
+                    return false;
+                }
+                else
+                    return true;
+            } else {
+                Stdistsub::model()->deleteAllByAttributes(array(
+                    'stdistsub1' => $st1,
+                    'stdistsub2' => $uo1
+                ));
+                return true;
+            }
+        }catch (Exception $error){
+            //var_dump($error->getMessage());
+            return false;
+        }
+    }
+
 }

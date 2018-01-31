@@ -260,7 +260,7 @@ $this->widget('zii.widgets.CMenu', array(
                 array(
                     'label'  => $_l2.tt('Настройки'),
                     'url'    => _u('/admin/default/settings'),
-                    'active' => $_a=='settings' && $_m=='admin'
+                    'active' => $_a=='settings' && $_m=='admin' && $_c == 'default'
                 ),
                 array(
                     'label'  => $_l2.tt('Настройки Портала'),
@@ -296,6 +296,11 @@ $this->widget('zii.widgets.CMenu', array(
                     'label'  => $_l2.tt('Безопасность'),
                     'url'    => _u('/admin/default/security'),
                     'active' => $_a=='security' && $_m=='admin'
+                ),
+                array(
+                    'label'  => $_l2.tt('Дистанционое образование'),
+                    'url'    => _u('/admin/distEducation/settings'),
+                    'active' => $_c=='distEducation' && $_m=='admin'
                 ),
 
             ),
@@ -431,6 +436,29 @@ $this->widget('zii.widgets.CMenu', array(
                 ),
             ),getDopItem('workPlan',0)),
             'visible' => _ch('workPlan', 'main')
+        ),
+        array(
+            'label' => _l('Дист. образование', 'facetime-video'),
+            'url' => '#',
+            'linkOptions'=> $_l,
+            'itemOptions'=>array(
+                'class'=>Yii::app()->controller->id=='distEducation' && empty($_m) ? 'active open' : ''
+            ),
+            'items' => array_merge(array(
+                array(
+                    'label'   => $_l2.tt('Закрепление'),
+                    'url'     => _u('/distEducation/index'),
+                    'active'  => $_c=='distEducation' && $_a=='index',
+                    'visible' => _ch('distEducation', 'index')&& ($isTch||$isAdmin)
+                ),
+                array(
+                    'label'   => $_l2.tt('Запись'),
+                    'url'     => _u('/distEducation/subscription'),
+                    'active'  => $_c=='distEducation' && $_a=='subscription',
+                    'visible' => _ch('distEducation', 'subscription')&& ($isTch||$isAdmin)
+                ),
+            ),getDopItem('distEducation',0)),
+            'visible' => _ch('distEducation', 'main')&& ($isTch||$isAdmin) && (PortalSettings::model()->getSettingFor(PortalSettings::ENABLE_DIST_EDUCATION)==1)
         ),
 	array(
             'label' => _l('Список', 'user'),

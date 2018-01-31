@@ -18,10 +18,11 @@
  */
 class Grants extends CActiveRecord
 {
-    const EL_JOURNAL = 'grant3';
+    //const EL_JOURNAL = 'grant3';
+    const DIST_EDUCATION = 'grant3';
     const MODULES = 'grant4';
     const DOCS = 'grant5';
-    const EXAM_SESSION = 'grant6';
+    const DIST_EDUCATION_ADMIN = 'grant6';
     const STUDENT_INFO = 'grant7';
     const WORKLOAD = 'grant8';
 	/**
@@ -68,10 +69,10 @@ class Grants extends CActiveRecord
 		return array(
 			'grants1' => 'Grants1',
 			'grants2' => 'Grants2',
-			'grants3' => tt('Эл. журнал'),
+			'grants3' => tt('Дист. Образование'),
 			'grants4' => tt('Ведомости'),
 			'grants5' => tt('Документооборот'),
-			'grants6' => tt('Экз. сессия'),
+			'grants6' => tt('Дист. Образование админ'),
 			'grants7' => tt('Данные студента'),
             'grants8' => tt('Нагрузка'),
 		);
@@ -119,7 +120,7 @@ class Grants extends CActiveRecord
     public function getGrantsFor($service)
     {
         switch($service){
-            case self::EL_JOURNAL:
+            case self::DIST_EDUCATION:
                 $grants = $this->grants3;
                 break;
             case self::MODULES:
@@ -128,7 +129,7 @@ class Grants extends CActiveRecord
             case self::DOCS:
                 $grants = $this->grants5;
                 break;
-            case self::EXAM_SESSION:
+            case self::DIST_EDUCATION_ADMIN:
                 $grants = $this->grants6;
                 break;
             case self::STUDENT_INFO:

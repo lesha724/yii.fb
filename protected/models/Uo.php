@@ -224,4 +224,43 @@ class Uo extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+    /**
+     * Список uo1 по
+     * @param $ucgns1 int
+     * @return array
+     */
+	public function getListByUcgns1($ucgns1)
+    {
+        /*$sql = <<<SQL
+          select 
+            uo1
+            from uo
+               inner join us on (uo.uo1 = us.us2)
+               inner join nr on (us.us1 = nr.nr2)
+               inner join ug on (nr.nr1 = ug.ug1)
+               inner join ucgn on (ug.ug4 = ucgn.ucgn1)
+               inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
+            WHERE ucgns1=:UCGNS1
+SQL;*/
+
+        $sql = <<<SQL
+          select 
+            uo1, d2
+            from ucxg
+               inner join ucx on (ucxg.ucxg1 = ucx.ucx1)
+               inner join uo on (ucx.ucx1 = uo.uo19)
+               inner join d on (uo.uo3 = d.d1)
+               inner join ucgn on (ucxg.ucxg2 = ucgn.ucgn1)
+               inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
+            WHERE ucgns1=:UCGNS1
+            GROUP BY uo1, d2
+SQL;
+
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':UCGNS1', $ucgns1);
+
+        return $command->queryAll();
+    }
 }
