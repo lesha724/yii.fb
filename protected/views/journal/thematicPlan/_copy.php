@@ -3,12 +3,14 @@ $options =  array('autocomplete' => 'off'/*, 'empty' => '&nbsp;'*/);
 
 $groups = CHtml::listData(Gr::model()->getGroupsForCopyThematicPlan($discipline, $year, $sem), 'us1', 'name');
 
+$previous1Year = date('Y', strtotime('-2 year'));
 $previousYear = date('Y', strtotime('-1 year'));
 $currentYear  = date('Y');
 $nextYear     = date('Y', strtotime('+1 year'));
 $nextYear1     = date('Y', strtotime('+2 year'));
 
 $year_arr = array(
+    $previous1Year => $previous1Year.'/'.$previousYear,
     $previousYear => $previousYear.'/'.$currentYear,
     $currentYear  => $currentYear.'/'.$nextYear,
     $nextYear     => $nextYear.'/'.$nextYear1,
