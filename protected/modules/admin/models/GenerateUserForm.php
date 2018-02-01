@@ -22,11 +22,13 @@ class GenerateUserForm extends CFormModel
 
     public $chair;
 
+    public $chairName;
+
     public function rules()
     {
         return array(
 			array('type, faculty, course, speciality, chair', 'numerical', 'integerOnly'=>true),
-			array('lastName,firstName,secondName, users', 'type', 'type'=>'string'),
+			array('lastName,firstName,secondName, users, chairName', 'type', 'type'=>'string'),
             array('bDate', 'type', 'type'=>'date'),
 		);
     }
@@ -96,11 +98,11 @@ class GenerateUserForm extends CFormModel
         $sqlTch = "
                 SELECT p1 as id, p3 as last_name, p4 as first_name, p5 as second_name, 
                     1 as type, p9 as b_date, null as course, null as faculty, null as speciality,
-                    pd4 as chair, k2 as chair_name, null as faculty_name, null as speciality_name FROM p
+                    pd4 as chair, k3 as chair_name, null as faculty_name, null as speciality_name FROM p
                     INNER JOIN PD ON (P1=PD2)
                     INNER JOIN K on (pd4 = k1)
                     WHERE  PD28 in (0,2,5,9) and PD3=0 and (PD13 IS NULL or PD13>'$today') {{%where}}
-                GROUP by p1, p3, p4, p5, p9, pd4, k2
+                GROUP by p1, p3, p4, p5, p9, pd4, k3
       ";
 
         if(!empty($this->lastName))
@@ -134,10 +136,10 @@ class GenerateUserForm extends CFormModel
         }
 
 
-        if(!empty($this->chair))
+        if(!empty($this->chairName))
         {
-            $where.=" AND chair = :chair";
-            $params[':chair'] = $this->chair;
+            $where.=" AND chair_name CONTAINING :chair";
+            $params[':chair'] = $this->chairName;
         }
 
         if(!empty($this->course))

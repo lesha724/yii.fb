@@ -98,8 +98,8 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/a
                 },
                 'filter'=> CHtml::listData(Sp::model()->getAllSpecialities(), 'sp1','name')
             ),
-            'chair'=>array(
-                'name'=>'chair',
+            'chairName'=>array(
+                'name'=>'chairName',
                 'header'=>$model->getAttributeLabel('chair'),
                 'value'=>function($data) {
                     return $data['chair_name'];
