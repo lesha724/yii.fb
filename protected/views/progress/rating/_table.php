@@ -32,20 +32,17 @@ if(!empty($rating))
             <th style="width:40px">№</th>
             <th><?=tt('Ф.И.О.')?></th>
             <th><?=$model->getAttributeLabel('group')?></th>
-            <th><?=$model->getAttributeLabel('course')?></th>
-            <th><?=($ps81==0)?tt('5'):tt('Многобальная')?></th>
-            <th><?=tt('Не сдано')?></th>
+            <th><?=tt('Балл')?></th>
         </tr>
         </thead>
         <tbody>
         <?php
         $i=0;
-        $val='0';
-        $val100='0';
+        $val='';
 
         foreach($rating as $key)
         {
-            $_bal = round($key[$tmp], 2);
+            $_bal = round($key['value'], 2);
             if($_bal!=$val)
             {
                 $val=$_bal;
@@ -54,11 +51,11 @@ if(!empty($rating))
 
             echo '<tr>'.
                 '<td>'.$i.'</td>'.
-                '<td>'.ShortCodes::getShortName($key['fio'], $key['name'], $key['otch']).'</td>'.
-                '<td>'.$key['group_name'].'</td>'.
-                '<td>'.$key['kyrs'].'</td>'.
+                '<td>'.ShortCodes::getShortName($key['stInfo']['st2'], $key['stInfo']['st3'], $key['stInfo']['st4']).'</td>'.
+                '<td>'.$key['stInfo']['group'].'</td>'.
                 '<td>'.$_bal.'</td>'.
-                '<td>'.$key['ne_sdano'].'</td>'.
+                /*'<td>'.$key['stInfo']['sym100'].'</td>'.
+                '<td>'.$key['stInfo']['count'].'</td>'.*/
                 '</tr>';
         }
         ?>

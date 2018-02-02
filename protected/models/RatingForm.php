@@ -171,6 +171,8 @@ class RatingForm extends CFormModel
      */
     public function getRating($type){
 
+        $extraWhere = $extraJoin = $extraColumns = '';
+
         $params = array(
             ':GR1' => 0,
             ':ST1' => 0,
@@ -179,23 +181,36 @@ class RatingForm extends CFormModel
             ':SEM_END' => $this->semEnd
         );
 
+        if($this->stType>0) {
+            $extraWhere = ' AND  proc.INOSTR=:INOSTR';
+            $params['INOSTR'] = $this->stType-1;
+        }
+
         switch ($type){
             case self::GROUP:
                 $params[':GR1']= $this->group;
+                $extraColumns = 'proc.st1, st.st2, st.st3, st.st4, proc.inostr, proc.KYRS, gr.gr3, gr.gr19, gr.gr20, gr.gr21, gr.gr22, gr.gr23, gr.gr24, gr.gr28, ';
+                $extraJoin = ' INNER JOIN st on (proc.st1 = st.st1) INNER JOIN gr on (proc.gr1 = gr.gr1) ';
                 break;
             case self::STUDENT:
                 $params[':ST1']= $this->student;
+                $extraColumns = 'd2, proc.kyrs, proc.sem7, proc.tip, ';
+                $extraJoin = ' INNER JOIN d on (proc.d1 = d.d1) ';
                 break;
             case self::COURSE:
                 $sg1 = $this->getSg1ByGroup();
                 $params[':SG1']= $sg1;
+                $extraColumns = 'proc.st1, st.st2, st.st3, st.st4, proc.inostr, proc.KYRS, gr.gr3, gr.gr19, gr.gr20, gr.gr21, gr.gr22, gr.gr23, gr.gr24, gr.gr28,';
+                $extraJoin = ' INNER JOIN st on (proc.st1 = st.st1) INNER JOIN gr on (proc.gr1 = gr.gr1) ';
                 break;
             default:
                 return array();
         }
 
         $sql = <<<SQL
-            SELECT * FROM IZ_OC(:ST1, :SG1, :GR1, 0, 0, CURRENT_TIMESTAMP) WHERE sem7 BETWEEN :SEM_START and :SEM_END
+            SELECT {$extraColumns} proc.bal_5, proc.bal_100 FROM IZ_OC(:ST1, :SG1, :GR1, 0, 0, CURRENT_TIMESTAMP) proc
+              {$extraJoin}
+            WHERE  proc.sem7 BETWEEN :SEM_START and :SEM_END and  proc.tip not in (6,10) {$extraWhere} ORDER BY  proc.sem7 desc
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValues($params);
@@ -204,7 +219,56 @@ SQL;
         if($type == self::STUDENT)
             return $rows;
 
+        $is5 = true;
+
+        $stInfo = array();
+
+        foreach ($rows as $row){
+            $st1 = $row['st1'];
+
+            if(!isset($stInfo[$st1])){
+                $stInfo[$st1] = array(
+                    'count' =>0,
+                    'sym5' => 0,
+                    'sym100' => 0,
+                    'inostr'=> $row['inostr'],
+                    'st2' => $row['st2'],
+                    'st3' => $row['st3'],
+                    'st4' => $row['st4'],
+                    'group' => Gr::model()->getGroupName($row['kyrs'], $row)
+                );
+            }
+
+            $stInfo[$st1]['count']++;
+            $stInfo[$st1]['sym5']+=$row['bal_5'];
+            $stInfo[$st1]['sym100']+=$row['bal_100'];
+
+            if($row['bal_100']>0)
+                $is5 = false;
+        }
+
         $rating = array();
+
+        foreach ($stInfo as $key => $st){
+
+            $field = $is5 ? 'sym5' : 'sym100';
+
+            $rating[]= array(
+                'st1'=>$key,
+                'stInfo'=>$st,
+                'value'=> !empty($st['count']) ? $st[$field]/$st['count'] : 0
+            );
+        }
+
+        uasort (
+            $rating ,
+            function ($a, $b) {
+                if($a['value'] == $b['value']) {
+                    return 0;
+                }
+                return ($a['value'] > $b['value']) ? -1 : 1;
+            }
+        );
 
         return $rating;
     }
