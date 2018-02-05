@@ -61,4 +61,55 @@ $(document).ready(function(){
             ]
         }
     });
+    
+    $('.a-show-st-disp').click(function (event) {
+        event.preventDefault();
+
+        var $that = $(this);
+
+        var $st1  = $that.data('st1');
+
+        //var $group = $('#RatingForm_group').val();
+
+        var $semStart   = $('#RatingForm_semStart').val();
+
+        var $semEnd   = $('#RatingForm_semEnd').val();
+
+        //var $ratingType=$('#RatingForm_ratingType').val();
+
+        //var $stType   = $('#RatingForm_stType').val();
+
+        var params = {
+            st1  : $st1,
+            semStart: $semStart,
+            semEnd: $semEnd
+            /*ratingType: $ratingType,
+            stType: $stType,
+            group:$group*/
+        };
+
+        var url = $that.parents('[data-url-st]').data('url-st');
+
+        $spinner1.show();
+
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            data:params,
+            success: function( data ) {
+                if (!data.error) {
+                    $('#modalBlock .modal-header h4').html(data.title);
+                    $('#modalBlock #modal-content').html(data.html);
+                    $('#modalBlock').modal('show');
+                } else {
+                    addGritter(data.html, 'Ошибка', 'error');
+                }
+                $spinner1.hide();
+            },
+            error: function( data ) {
+                addGritter(data.html, 'Ошибка', 'error');
+                $spinner1.hide();
+            }
+        });
+    });
 });

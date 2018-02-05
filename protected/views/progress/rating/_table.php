@@ -23,10 +23,11 @@ $this->widget('bootstrap.widgets.TbButton', array(
 
 $rating = $model->getRating($model->ratingType==1 ? RatingForm::COURSE : RatingForm::GROUP);
 
+$urlSt = Yii::app()->createUrl('/progress/ratingStudent');
 if(!empty($rating))
 {
     ?>
-    <table id="rating" class="table table-striped table-hover table-condensed">
+    <table id="rating" class="table table-striped table-hover table-condensed" data-url-st="<?=$urlSt?>">
         <thead>
         <tr>
             <th style="width:40px">№</th>
@@ -49,9 +50,15 @@ if(!empty($rating))
                 $i++;
             }
 
+            $name = ShortCodes::getShortName($key['stInfo']['st2'], $key['stInfo']['st3'], $key['stInfo']['st4']);
+            $a = CHtml::link($name, '#', array(
+                'data-st1'=>$key['st1'],
+                'class'=>'a-show-st-disp'
+            ));
+
             echo '<tr>'.
                 '<td>'.$i.'</td>'.
-                '<td>'.ShortCodes::getShortName($key['stInfo']['st2'], $key['stInfo']['st3'], $key['stInfo']['st4']).'</td>'.
+                '<td>'.$a.'</td>'.
                 '<td>'.$key['stInfo']['group'].'</td>'.
                 '<td>'.$_bal.'</td>'.
                 /*'<td>'.$key['stInfo']['sym100'].'</td>'.
@@ -62,6 +69,41 @@ if(!empty($rating))
         </tbody>
     </table>
     <?php
+
+    $this->beginWidget(
+        'bootstrap.widgets.TbModal',
+        array(
+            'id' => 'modalBlock',
+            'htmlOptions'=>array(
+                'class'=>'full-modal'
+            )
+        )
+    ); ?>
+
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">&times;</a>
+        <h4></h4>
+    </div>
+
+    <div class="modal-body" style="overflow-y: unset">
+        <div id="modal-content" >
+
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <?php $this->widget(
+            'bootstrap.widgets.TbButton',
+            array(
+                'label' => tt('Закрыть'),
+                'url' => '#',
+                'htmlOptions' => array('data-dismiss' => 'modal'),
+            )
+        ); ?>
+    </div>
+
+    <?php $this->endWidget();
+
 }else
 {
     ?>

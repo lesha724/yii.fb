@@ -40,7 +40,7 @@ class ProgressController extends Controller
                 'expression' => 'Yii::app()->user->isStd',
             ),
             array('allow',
-                'actions' => array('attendanceStatistic','rating','ratingExcel')
+                'actions' => array('attendanceStatistic','rating','ratingExcel', 'ratingStudent')
             ),
             array('deny',
                 'users' => array('*'),
@@ -68,6 +68,42 @@ class ProgressController extends Controller
         $this->render('rating', array(
             'model' => $model,
         ));
+    }
+
+    /**
+     * Отображение дисциплин которіе входять в рейтинг студента
+     * @throws CHttpException
+     */
+    public function actionRatingStudent()
+    {
+        $st1 = Yii::app()->request->getParam('st1', null);
+        $semStart = Yii::app()->request->getParam('semStart', null);
+        $semEnd = Yii::app()->request->getParam('semEnd', null);
+
+        if (empty($semStart) || empty($semEnd) || empty($st1))
+            throw new CHttpException(400, 'Invalid params. Please do not repeat this request again.');
+
+        $student = St::model()->findByPk($st1);
+
+        if (empty($student))
+            throw new CHttpException(400, 'Invalid params. Please do not repeat this request again.');
+
+        $model = new RatingForm();
+        $model->semStart = $semStart;
+        $model->semEnd = $semEnd;
+        $model->student = $st1;
+
+        $html = $this->renderPartial('rating/_student', array(
+            'model' => $model,
+            'student' => $student
+        ), true);
+
+        $res = array(
+            'html' => $html,
+            'title' => $student->getFullName()
+        );
+
+        Yii::app()->end(CJSON::encode($res));
     }
 
     public function actionRatingExcel(){
