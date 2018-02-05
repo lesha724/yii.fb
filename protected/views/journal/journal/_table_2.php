@@ -738,6 +738,9 @@ HTML;
                     }
                 }
 
+                if($stusvst->stusvst6==0 || $stusvst->stusvst6==2)
+                    $readOnlySt = false;
+
                 $readOnlyByStudents[$st1] = $readOnlySt;
                 /*if ($stusvst->stusvst4 > 0 || $stusvst->stusvst6 > 0)
                     $readOnlySt = true;*/
