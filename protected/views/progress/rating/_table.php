@@ -20,7 +20,8 @@ $this->widget('bootstrap.widgets.TbButton', array(
             'semStart'=>$model->semStart,
             'semEnd'=>$model->semEnd,
             'ratingType'=>$model->ratingType,
-            'stType'=>$model->stType
+            'stType'=>$model->stType,
+            'course'=>$model->course
         )
     ),
     'htmlOptions'=>array(

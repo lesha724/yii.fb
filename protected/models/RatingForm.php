@@ -236,7 +236,7 @@ SQL;
                     'st2' => $row['st2'],
                     'st3' => $row['st3'],
                     'st4' => $row['st4'],
-                    'group' => Gr::model()->getGroupName($row['kyrs'], $row)
+                    'group' => Gr::model()->getGroupName($this->course, $row)
                 );
             }
 

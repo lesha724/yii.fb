@@ -116,8 +116,9 @@ class ProgressController extends Controller
         $model->semEnd = Yii::app()->request->getParam('semEnd', null);
         $model->stType = Yii::app()->request->getParam('stType', null);
         $model->ratingType = Yii::app()->request->getParam('ratingType', null);
+        $model->course = Yii::app()->request->getParam('ratingType', null);
 
-        if (empty($model->semEnd) || empty($model->semStart) || empty($model->group))
+        if (empty($model->course) || empty($model->semEnd) || empty($model->semStart) || empty($model->group))
             throw new CHttpException(400, 'Invalid params. Please do not repeat this request again.');
 
         $rating = $model->getRating($model->ratingType==1 ? RatingForm::COURSE : RatingForm::GROUP);
@@ -138,23 +139,28 @@ class ProgressController extends Controller
         $sheet=$objPHPExcel->getActiveSheet();
 
         $sheet->getColumnDimension('A')->setWidth(10);
-        $sheet->getColumnDimension('B')->setWidth(40);
-        $sheet->getColumnDimension('C')->setWidth(30);
-        $sheet->getColumnDimension('D')->setWidth(20);
+        $sheet->getColumnDimension('B')->setWidth(10);
+        $sheet->getColumnDimension('C')->setWidth(40);
+        $sheet->getColumnDimension('D')->setWidth(30);
+        $sheet->getColumnDimension('E')->setWidth(20);
 
-        $sheet->setCellValue('A3', '№')->getStyle('A3')->getAlignment()->setHorizontal(
+        $sheet->setCellValue('A3','№')->getStyle('A3')->getAlignment()->setHorizontal(
             PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-        $sheet->setCellValue('B3', tt('Студент'))->getStyle('B3')->getAlignment()->setHorizontal(
+        $sheet->setCellValue('B3', tt('Рейтинг'))->getStyle('B3')->getAlignment()->setHorizontal(
             PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-        $sheet->setCellValue('C3', tt('Группа'))->getStyle('C3')->getAlignment()->setHorizontal(
+        $sheet->setCellValue('C3', tt('Студент'))->getStyle('C3')->getAlignment()->setHorizontal(
             PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-        $sheet->setCellValue('D3', tt('Балл'))->getStyle('E3')->getAlignment()->setHorizontal(
+        $sheet->setCellValue('D3', tt('Группа'))->getStyle('D3')->getAlignment()->setHorizontal(
+            PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $sheet->setCellValue('E3', tt('Балл'))->getStyle('E3')->getAlignment()->setHorizontal(
             PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
         $sheet->getStyle('A3')->getFont()->setName('Arial')->setSize(15)->getColor()->applyFromArray(array('rgb' => '000000'));
         $sheet->getStyle('B3')->getFont()->setName('Arial')->setSize(15)->getColor()->applyFromArray(array('rgb' => '000000'));
         $sheet->getStyle('C3')->getFont()->setName('Arial')->setSize(15)->getColor()->applyFromArray(array('rgb' => '000000'));
         $sheet->getStyle('D3')->getFont()->setName('Arial')->setSize(15)->getColor()->applyFromArray(array('rgb' => '000000'));
+        $sheet->getStyle('E3')->getFont()->setName('Arial')->setSize(15)->getColor()->applyFromArray(array('rgb' => '000000'));
+
         $i=0;
         $val='';
         $k=0;
@@ -170,15 +176,15 @@ class ProgressController extends Controller
 
             $name = ShortCodes::getShortName($key['stInfo']['st2'], $key['stInfo']['st3'], $key['stInfo']['st4']);
 
-
-            $sheet->setCellValueByColumnAndRow(0,$k+4,$i);
-            $sheet->setCellValueByColumnAndRow(1,$k+4,$name);
-            $sheet->setCellValueByColumnAndRow(2,$k+4,$key['stInfo']['group']);
-            $sheet->setCellValueByColumnAndRow(3,$k+4,$_bal);
+            $sheet->setCellValueByColumnAndRow(0,$k+4,$k+1);
+            $sheet->setCellValueByColumnAndRow(1,$k+4,$i);
+            $sheet->setCellValueByColumnAndRow(2,$k+4,$name);
+            $sheet->setCellValueByColumnAndRow(3,$k+4,$key['stInfo']['group']);
+            $sheet->setCellValueByColumnAndRow(4,$k+4,$_bal);
             $k++;
         }
 
-        $sheet->getStyleByColumnAndRow(0,3,3,$k+3)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
+        $sheet->getStyleByColumnAndRow(0,3,4,$k+3)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
 
         $sheet->getProtection()->setSheet(true);
         $sheet->getProtection()->setSort(true);
