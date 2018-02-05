@@ -219,7 +219,8 @@ SQL;
         if($type == self::STUDENT)
             return $rows;
 
-        $is5 = true;
+        $ps81 = PortalSettings::model()->getSettingFor(81);
+        $is5 = $ps81==0;
 
         $stInfo = array();
 
@@ -243,8 +244,8 @@ SQL;
             $stInfo[$st1]['sym5']+=$row['bal_5'];
             $stInfo[$st1]['sym100']+=$row['bal_100'];
 
-            if($row['bal_100']>0)
-                $is5 = false;
+            /*if($row['bal_100']>0)
+                $is5 = false;*/
         }
 
         $rating = array();

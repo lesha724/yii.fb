@@ -14,6 +14,15 @@ $this->widget('bootstrap.widgets.TbButton', array(
     'type'=>'primary',
     'icon'=>'print',
     'label'=>tt('Печать'),
+    'url'=>Yii::app()->createUrl('/progress/ratingExcel',
+        array(
+            'group'=>$model->group,
+            'semStart'=>$model->semStart,
+            'semEnd'=>$model->semEnd,
+            'ratingType'=>$model->ratingType,
+            'stType'=>$model->stType
+        )
+    ),
     'htmlOptions'=>array(
         'class'=>'btn-mini',
         'id'=>'rating-print',

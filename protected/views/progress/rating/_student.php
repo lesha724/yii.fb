@@ -25,6 +25,9 @@ $thead = '<tr>'.
 
 $tbody = '';
 
+$ps81 = PortalSettings::model()->getSettingFor(81);
+$is5 = $ps81==0;
+
 $i=1;
 foreach ($marks as $mark){
     $tbody.=sprintf(
@@ -33,7 +36,7 @@ foreach ($marks as $mark){
         $mark['d2'],
         $mark['tip'],
         $mark['sem7'],
-        $mark['bal_100']
+        $mark[$is5 ? 'bal_5' : 'bal_100']
     );
     $i++;
 }

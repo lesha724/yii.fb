@@ -6,6 +6,10 @@ $(document).ready(function(){
 
     $('#RatingForm_semStart ,#RatingForm_semEnd ,#RatingForm_ratingType,#RatingForm_stType').change(function(){
 
+        submitForm();
+    });
+
+    function submitForm() {
         var $that   = $('#RatingForm_semStart');
         var $select = $that.clone();
         var value   = $that.val();
@@ -14,11 +18,11 @@ $(document).ready(function(){
         var $select1 = $that1.clone();
         var value1   = $that1.val();
 
-		var $checkbox=$('#RatingForm_ratingType').clone();
-		$checkbox.hide();
+        var $checkbox=$('#RatingForm_ratingType').clone();
+        $checkbox.hide();
 
         var $that2   = $('#RatingForm_stType');
-		var $select2 = $that2.clone();
+        var $select2 = $that2.clone();
         var value2   = $that2.val();
 
         var $form   = $('#filter-form');
@@ -29,14 +33,14 @@ $(document).ready(function(){
         $select.find('option[value='+value+']').attr('selected', 'selected');
         $select1.find('option[value='+value1+']').attr('selected', 'selected');
 
-		$select2.find('option[value='+value2+']').attr('selected', 'selected');
+        $select2.find('option[value='+value2+']').attr('selected', 'selected');
 
         $form.append($select);
         $form.append($select1);
-		$form.append($select2);
-		$form.append($checkbox);
+        $form.append($select2);
+        $form.append($checkbox);
         $form.submit();
-    });
+    }
 
     initDataTableOprions('rating',{
         aaSorting: [],
