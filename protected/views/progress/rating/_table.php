@@ -40,6 +40,7 @@ if(!empty($rating))
         <thead>
         <tr>
             <th style="width:40px">№</th>
+            <th style="width:40px"><?=tt('Рейтинг')?></th>
             <th><?=tt('Ф.И.О.')?></th>
             <th><?=$model->getAttributeLabel('group')?></th>
             <th><?=tt('Балл')?></th>
@@ -48,6 +49,7 @@ if(!empty($rating))
         <tbody>
         <?php
         $i=0;
+        $num = 1;
         $val='';
 
         foreach($rating as $key)
@@ -66,6 +68,7 @@ if(!empty($rating))
             ));
 
             echo '<tr>'.
+                '<td>'.$num.'</td>'.
                 '<td>'.$i.'</td>'.
                 '<td>'.$a.'</td>'.
                 '<td>'.$key['stInfo']['group'].'</td>'.
@@ -73,6 +76,8 @@ if(!empty($rating))
                 /*'<td>'.$key['stInfo']['sym100'].'</td>'.
                 '<td>'.$key['stInfo']['count'].'</td>'.*/
                 '</tr>';
+
+            $num++;
         }
         ?>
         </tbody>

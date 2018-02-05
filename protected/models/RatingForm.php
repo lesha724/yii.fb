@@ -210,7 +210,7 @@ class RatingForm extends CFormModel
         $sql = <<<SQL
             SELECT {$extraColumns} proc.bal_5, proc.bal_100 FROM IZ_OC(:ST1, :SG1, :GR1, 0, 0, CURRENT_TIMESTAMP) proc
               {$extraJoin}
-            WHERE  proc.sem7 BETWEEN :SEM_START and :SEM_END and  proc.tip not in (6,10) {$extraWhere} ORDER BY  proc.sem7 desc
+            WHERE  proc.sem7 BETWEEN :SEM_START and :SEM_END and  proc.tip not in (6,10) and proc.std11 in (0,5,6,8) and proc.ANALIZ = 1  {$extraWhere} ORDER BY  proc.sem7 desc
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValues($params);
