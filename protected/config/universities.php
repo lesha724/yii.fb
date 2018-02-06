@@ -16,3 +16,4 @@ define('U_KNAME', 6);//Бекетова
 define('U_KRNU',  58);
 define('U_KHADI',  55);
 define('U_FGU',  15); //мгу фгу
+define('U_UIPA',  8);
