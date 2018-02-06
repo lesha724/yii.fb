@@ -33,7 +33,7 @@ class MoodleDistEducation extends DistEducation
             throw new CHttpException(400, tt('Студент не найден'));
 
         return array(
-            'username'=>$user->u2,
+            'username'=>mb_strtolower($user->u2),
             'firstname'=>CHtml::encode($model->st3),
             'lastname'=>CHtml::encode($model->st2),
             'email'=>$user->u4,
