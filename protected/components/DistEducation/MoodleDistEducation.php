@@ -73,7 +73,7 @@ class MoodleDistEducation extends DistEducation
             if (count($array) != 1) {
                 return array(false, 'Ошибка');
             } else {
-                return array($array[0]->username == $user->u2, '', $array[0]->id);
+                return array($array[0]->username == mb_strtolower($user->u2), '', $array[0]->id);
             }
         }
 
