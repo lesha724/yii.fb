@@ -159,6 +159,12 @@ class Ks extends CActiveRecord
 		$filials = Ks::model()->findAllByAttributes(array('ks12'=>null,'ks13'=>0));
 
 		foreach($filials as $key => $filial){
+
+		    if($univeristyCod==U_NULAU){
+		        if($filial->ks1==7)
+		            continue;
+            }
+
 			$name =  $filial[Ks::getFieldByLanguage(false)];
 			//$filials[$key]['name'] =
 			$res[$key]['name'] = (isset($name)&&!empty($name)&&$name!="")?$name:$filial['ks2'];
