@@ -41,110 +41,110 @@ if (!empty($model->sem1)):
     $ps57 = PortalSettings::model()->getSettingFor(57);//
     $modules = null;
 
+    $elg1=Elg::getElg1($uo1,$model->type_lesson,$model->sem1);
+    $elg = Elg::model()->findByPk($elg1);
+    if(empty($elg))
+        throw new CHttpException(404, tt('Не задана структура журнала. Обратитесь к Администратору системы').'.');
+
+
     echo '<div class="container">';
-    if(!$isStd):
-    $this->widget('bootstrap.widgets.TbButton', array(
-        'buttonType'=>'button',
-        'type'=>'primary',
 
-        'icon'=>'print',
-        'label'=>tt('Печать'),
-        'htmlOptions'=>array(
-            'class'=>'btn-small',
-            'data-url'=>Yii::app()->createUrl('/journal/journalExcel',array('sem1'=>$model->sem1)),
-            'id'=>'journal-print',
-        )
-    ));
-
-    $this->widget('bootstrap.widgets.TbButton', array(
-        'buttonType'=>'button',
-        'type'=>'success',
-
-        'icon'=>'print',
-        'label'=>tt('Печать Итог'),
-        'htmlOptions'=>array(
-            'class'=>'btn-small',
-            'data-url'=>Yii::app()->createUrl('/journal/journalExcelItog',array('sem1'=>$model->sem1)),
-            'id'=>'journal-print-itog',
-        )
-    ));
-
-    $this->renderPartial('/filter_form/default/_refresh_filter_form_button');
-
-
-        $elg1=Elg::getElg1($uo1,$model->type_lesson,$model->sem1);
-        $elg = Elg::model()->findByPk($elg1);
-        if(empty($elg))
-            throw new CHttpException(404, tt('Не задана структура журнала. Обратитесь к Администратору системы').'.');
-
-
-    if($ps57==1)
-        $modules = Vvmp::model()->getModule($uo1,$gr1);
-    if(!empty($modules)) {
+    if(!$isStd){
         $this->widget('bootstrap.widgets.TbButton', array(
-            'buttonType' => 'button',
-            'type' => 'danger',
+            'buttonType'=>'button',
+            'type'=>'primary',
 
-            'icon' => 'refresh',
-            'label' => tt('Пересчитать ведомости'),
-            'htmlOptions' => array(
-                'class' => 'btn-small',
-                'data-url' => Yii::app()->createUrl('/journal/recalculateVmp', array('uo1' => $uo1, 'gr1' => $gr1, 'sem1' => $model->sem1, 'type' => $model->type_lesson)),
-                'id' => 'recalculate-vmp',
+            'icon'=>'print',
+            'label'=>tt('Печать'),
+            'htmlOptions'=>array(
+                'class'=>'btn-small',
+                'data-url'=>Yii::app()->createUrl('/journal/journalExcel',array('sem1'=>$model->sem1)),
+                'id'=>'journal-print',
             )
         ));
-    }
 
-    $ps84 = PortalSettings::model()->findByPk(84)->ps2;
-    if ($ps84 == 1) {
         $this->widget('bootstrap.widgets.TbButton', array(
-            'buttonType' => 'button',
-            'type' => 'inverse',
+            'buttonType'=>'button',
+            'type'=>'success',
 
-            'icon' => 'refresh',
-            'label' => tt('Пересчитать ведомости(и.)'),
-            'htmlOptions' => array(
-                'class' => 'btn-small',
-                'data-url' => Yii::app()->createUrl('/journal/recalculateStus', array('uo1' => $uo1, 'gr1' => $gr1, 'sem1' => $model->sem1, 'type' => $model->type_lesson)),
-                'id' => 'recalculate-stus',
+            'icon'=>'print',
+            'label'=>tt('Печать Итог'),
+            'htmlOptions'=>array(
+                'class'=>'btn-small',
+                'data-url'=>Yii::app()->createUrl('/journal/journalExcelItog',array('sem1'=>$model->sem1)),
+                'id'=>'journal-print-itog',
             )
         ));
-    }
 
-    if($elg->elg20->uo6==3){
-        $sem1End = Vmp::model()->getEndSem1($elg->elg2);
+        $this->renderPartial('/filter_form/default/_refresh_filter_form_button');
 
-        if($elg->elg3==$sem1End){
+        if($ps57==1)
+            $modules = Vvmp::model()->getModule($uo1,$gr1);
+        if(!empty($modules)) {
+            $this->widget('bootstrap.widgets.TbButton', array(
+                'buttonType' => 'button',
+                'type' => 'danger',
 
-            $vedItog = Vvmp::model()->checkModul($elg->elg2, $gr1, 98);
-
-            if(!empty($vedItog))
-                $this->widget('bootstrap.widgets.TbButton', array(
-                    'buttonType' => 'button',
-                    'type' => 'inverse',
-
-                    'icon' => 'refresh',
-                    'label' => tt('Пересчитать итоговую накопительную ведомость'),
-                    'htmlOptions' => array(
-                        'class' => 'btn-small',
-                        'data-url' => Yii::app()->createUrl('/journal/recalculateVmpItog', array('uo1' => $uo1, 'gr1' => $gr1, 'sem1' => $model->sem1, 'type' => $model->type_lesson)),
-                        'id' => 'recalculate-vmp-itog',
-                    )
-                ));
+                'icon' => 'refresh',
+                'label' => tt('Пересчитать ведомости'),
+                'htmlOptions' => array(
+                    'class' => 'btn-small',
+                    'data-url' => Yii::app()->createUrl('/journal/recalculateVmp', array('uo1' => $uo1, 'gr1' => $gr1, 'sem1' => $model->sem1, 'type' => $model->type_lesson)),
+                    'id' => 'recalculate-vmp',
+                )
+            ));
         }
-    }
 
-    ?>
-        <span><label class="label label-warning">&nbsp;&nbsp;</label> - <?=tt('Информация требует обновления страницы')?></span>
-        <div class="span-12">
-            <?= tt("Режим чтения")?>:
-            <label class="label label-warning">+</label> - <?= tt("Присутствовал на занятии")?>
-            <label class="label label-warning">-</label> - <?= tt("Отсутствовал на занятии")?>
-            <label class="label label-success">5</label> - <?= tt("Оценка за занятие")?>
-            <label class="label label-inverse">5</label> - <?= tt("Отработка занятия")?>
-        </div>
-    <?php
-    endif;
+        $ps84 = PortalSettings::model()->findByPk(84)->ps2;
+        if ($ps84 == 1) {
+            $this->widget('bootstrap.widgets.TbButton', array(
+                'buttonType' => 'button',
+                'type' => 'inverse',
+
+                'icon' => 'refresh',
+                'label' => tt('Пересчитать ведомости(и.)'),
+                'htmlOptions' => array(
+                    'class' => 'btn-small',
+                    'data-url' => Yii::app()->createUrl('/journal/recalculateStus', array('uo1' => $uo1, 'gr1' => $gr1, 'sem1' => $model->sem1, 'type' => $model->type_lesson)),
+                    'id' => 'recalculate-stus',
+                )
+            ));
+        }
+
+        if($elg->elg20->uo6==3){
+            $sem1End = Vmp::model()->getEndSem1($elg->elg2);
+
+            if($elg->elg3==$sem1End){
+
+                $vedItog = Vvmp::model()->checkModul($elg->elg2, $gr1, 98);
+
+                if(!empty($vedItog))
+                    $this->widget('bootstrap.widgets.TbButton', array(
+                        'buttonType' => 'button',
+                        'type' => 'inverse',
+
+                        'icon' => 'refresh',
+                        'label' => tt('Пересчитать итоговую накопительную ведомость'),
+                        'htmlOptions' => array(
+                            'class' => 'btn-small',
+                            'data-url' => Yii::app()->createUrl('/journal/recalculateVmpItog', array('uo1' => $uo1, 'gr1' => $gr1, 'sem1' => $model->sem1, 'type' => $model->type_lesson)),
+                            'id' => 'recalculate-vmp-itog',
+                        )
+                    ));
+            }
+        }
+
+        ?>
+            <span><label class="label label-warning">&nbsp;&nbsp;</label> - <?=tt('Информация требует обновления страницы')?></span>
+            <div class="span-12">
+                <?= tt("Режим чтения")?>:
+                <label class="label label-warning">+</label> - <?= tt("Присутствовал на занятии")?>
+                <label class="label label-warning">-</label> - <?= tt("Отсутствовал на занятии")?>
+                <label class="label label-success">5</label> - <?= tt("Оценка за занятие")?>
+                <label class="label label-inverse">5</label> - <?= tt("Отработка занятия")?>
+            </div>
+        <?php
+    }
 
 
     $ps9  = PortalSettings::model()->getSettingFor(9);
