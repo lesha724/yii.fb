@@ -42,6 +42,8 @@ $checkboxStyle = array('class' => 'ace ace-switch ace-switch-4');
                 $unsubscriptionEmailDistEducation = PortalSettings::UNSUBSCRIPTION_EMAIL_DIST_EDUCATION;
 
                 $roleId = PortalSettings::ROLE_ID_FOR_MOODLE_STUDENTS;
+
+                $adminMail = PortalSettings::ADMIN_EMAIL_DIST_EDUCATION;
                 ?>
 
                 <div class="">
@@ -64,6 +66,11 @@ $checkboxStyle = array('class' => 'ace ace-switch ace-switch-4');
                     <div class="control-group">
                         <span class="lbl"> <?=tt('RoleId for Moodle students')?>:</span>
                         <?=CHtml::textField('settings['.$roleId.']', PortalSettings::model()->findByPk($roleId)->ps2)?>
+                    </div>
+
+                    <div class="control-group">
+                        <span class="lbl"> <?=tt('Admin e-mail')?>:</span>
+                        <?=CHtml::textField('settings['.$adminMail.']', PortalSettings::model()->findByPk($adminMail)->ps2, array('type'=>'email'))?>
                     </div>
 
                     <div class="control-group">

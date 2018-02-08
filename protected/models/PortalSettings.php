@@ -44,6 +44,10 @@ class PortalSettings extends CActiveRecord
      * @var int Письмо о выпеске с курса
      */
     const UNSUBSCRIPTION_EMAIL_DIST_EDUCATION = 132;
+    /**
+     * @var int Почта администротора дсит.образования
+     */
+    const ADMIN_EMAIL_DIST_EDUCATION = 133;
 
 	private  $settings = array();
 	/**

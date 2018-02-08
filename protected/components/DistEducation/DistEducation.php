@@ -189,6 +189,15 @@ abstract class DistEducation implements IDistEducation
                 ));
 
                 if (!$status) {
+                    $adminMail = PortalSettings::model()->getSettingFor(PortalSettings::ADMIN_EMAIL_DIST_EDUCATION);
+                    if(!empty($adminMail))
+                        list($status, $message) = Controller::mailByTemplate($adminMail, tt('Регистрация дист. образование'), $message, array(
+                            'username'=> $params['username'],
+                            'email'=>$params['email'],
+                            'fio' => $user->name,
+                            'password' => $params['password']
+                        ));
+
                     return array(false, tt('Регистрация прошла успешно, но ошибка отправки извещения на почту. Обратитесь в тех.поддержку.'));
                 }
             }
