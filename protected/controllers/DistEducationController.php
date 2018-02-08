@@ -109,7 +109,7 @@ class DistEducationController extends Controller
                 if (!$_success)
                     $success = false;
             }else{
-                $_html = 'Уже зарегестрирован';
+                $_html = 'Уже зарегистрирован';
             }
 
             $html.=SH::getShortName($student['st2'], $student['st3'], $student['st4']).': ' .$_html.'<br>';
