@@ -36,8 +36,8 @@ function getPassportLabel($id,$type, $pattern, $patternAdmin){
 
     $distShow = false;
     if(!Yii::app()->user->isGuest) {
-        $model = new DistEducationFilterForm(Yii::app()->user);
-        if ($model->isAdminDistEducation)
+        $modelDist = new DistEducationFilterForm(Yii::app()->user);
+        if ($modelDist->isAdminDistEducation)
             $distShow = true;
     }
 ?>
@@ -57,7 +57,9 @@ function getPassportLabel($id,$type, $pattern, $patternAdmin){
             <th><?=$modelStForm->getAttributeLabel('snils')?></th>
         <?php endif;?>
         <?php if($distShow):?>
-            <th><?=tt('дист. обр.')?></th>
+            <th><?=tt('дист. обр.').CHtml::link('<i class="icon-ok"></i>', array('/distEducation/signUpNewDistEducationGroup', 'gr1'=>$model->group ), array(
+                    'class'=>'btn btn-success btn-mini btn-subscript-group'
+                ))?></th>
         <?php endif;?>
 	</tr>
 </thead>

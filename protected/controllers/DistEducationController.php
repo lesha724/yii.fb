@@ -61,11 +61,78 @@ class DistEducationController extends Controller
     }
 
     /**
+     * метод записи группы
+     */
+    public function actionSignUpNewDistEducationGroup(){
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+
+        $model = new DistEducationFilterForm(Yii::app()->user);
+
+        if(!$model->isAdminDistEducation){
+            throw new CHttpException(400, tt('Нет доступа'));
+        }
+        $gr1 = Yii::app()->request->getParam('gr1', null);
+
+        $group = Gr::model()->findByPk($gr1);
+        if (empty($group)) {
+            throw new CHttpException(400, tt('Нет доступа'));
+        }
+
+        $connector = SH::getDistEducationConnector(
+            $this->universityCode
+        );
+
+        if (empty($connector)) {
+            throw new CHttpException(400, tt('Ошибка создания конектора'));
+        }
+
+        $students = St::model()->getStudentsOfGroupForDistEducation($group['gr1']);
+
+        $success = true;
+        $html = '';
+
+        foreach ($students as $student) {
+            $stDist = Stdist::model()->findByPk($student['st1']);
+            if($stDist==null) {
+                $user = Users::model()->findByAttributes(array(
+                    'u5' => 0,
+                    'u6' => $student['st1']
+                ));
+                if (empty($user)) {
+                    $success = false;
+                    continue;
+                }
+
+                list($_success, $_html) = $connector->signUp($user);
+                if (!$_success)
+                    $success = false;
+            }else{
+                $_html = 'Уже зарегестрирован';
+            }
+
+            $html.=SH::getShortName($student['st2'], $student['st3'], $student['st4']).': ' .$_html.'<br>';
+        }
+
+
+        //$title = Gr::model()->getGroupName($group['sem4'], $group);
+        $res = array(
+            'error'=>!$success,
+            'html' => $html,
+            'title' => $group->gr3
+        );
+
+        Yii::app()->user->setFlash($success ? 'success' : 'error', '<h4>'.$title.'</h4>'.$html);
+
+        Yii::app()->end(CJSON::encode($res));
+    }
+    /**
      * Регитсрация в дистанционом образовании студента
      */
     public function actionSignUpNewDistEducation(){
-        //if (! Yii::app()->request->isAjaxRequest)
-            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $model = new DistEducationFilterForm(Yii::app()->user);
 
