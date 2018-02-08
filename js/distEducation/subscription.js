@@ -61,11 +61,11 @@ $(document).on('click','.btn-unsubscript-student, .btn-subscript-student', funct
                 addGritter(data.title, data.html, 'error');
             }else{
                 addGritter(data.title, data.html, 'success');
+
+                $that.parents('.action-td').find('.btn').show();
+
+                $that.hide();
             }
-
-            $that.parents('.action-td').find('.btn').show();
-
-            $that.hide();
 
             $spinner1.hide();
         },

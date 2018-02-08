@@ -33,6 +33,13 @@ function getPassportLabel($id,$type, $pattern, $patternAdmin){
             'id'=>'btn-print-excel',
         )
     ));
+
+    $distShow = false;
+    if(!Yii::app()->user->isGuest) {
+        $model = new DistEducationFilterForm(Yii::app()->user);
+        if ($model->isAdminDistEducation)
+            $distShow = true;
+    }
 ?>
 <table id="list-group" class="table table-striped table-hover">
 <thead>
@@ -48,6 +55,9 @@ function getPassportLabel($id,$type, $pattern, $patternAdmin){
             <th><?=$modelStForm->getAttributeLabel('internationalPassport')?></th>
             <th><?=$modelStForm->getAttributeLabel('inn')?></th>
             <th><?=$modelStForm->getAttributeLabel('snils')?></th>
+        <?php endif;?>
+        <?php if($distShow):?>
+            <th><?=tt('дист. обр.')?></th>
         <?php endif;?>
 	</tr>
 </thead>
@@ -106,6 +116,24 @@ function getPassportLabel($id,$type, $pattern, $patternAdmin){
                 echo sprintf($pattern,'important','-');
             }
         }
+
+        if($distShow){
+            $stDist = Stdist::model()->findByPk($student['st1']);
+            $button =
+                CHtml::link('<i class="icon-ok"></i>', array('/distEducation/signUpNewDistEducation', 'st1'=>$student['st1'], 'type'=>1 ), array(
+                    'class'=>'btn btn-success btn-mini btn-subscript-student',
+                    'style'=> !empty($stDist) ? 'display:none' : ''
+                ))
+                .
+                CHtml::link('<i class="icon-trash"></i>', array('/distEducation/signUpNewDistEducation', 'st1'=>$student['st1'], 'type'=>0), array(
+                    'class'=>'btn btn-danger btn-mini btn-unsubscript-student',
+                    'style'=> !empty($stDist) ? '' : 'display:none'
+                ))
+            ;
+
+            echo '<td class="action-td">'.$button.'</td>';
+        }
+
 		echo '</tr>';
 		$i++;
 	}

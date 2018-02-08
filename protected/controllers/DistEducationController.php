@@ -25,7 +25,8 @@ class DistEducationController extends Controller
                     'subscription',
                     'showGroup',
                     'subscriptionGroup',
-                    'subscriptionStudent'
+                    'subscriptionStudent',
+                    'signUpNewDistEducation'
                 ),
                 'expression' => 'Yii::app()->user->isTch',
             ),
@@ -57,6 +58,72 @@ class DistEducationController extends Controller
         }
 
         $filterChain->run();
+    }
+
+    /**
+     * Регитсрация в дистанционом образовании студента
+     */
+    public function actionSignUpNewDistEducation(){
+        //if (! Yii::app()->request->isAjaxRequest)
+            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $model = new DistEducationFilterForm(Yii::app()->user);
+
+        if (! $model->isAdminDistEducation)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $st1 = Yii::app()->request->getParam('st1', null);
+        $type = Yii::app()->request->getParam('type', null);
+
+        if(empty($st1))
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+
+        $st = St::model()->findByPk($st1);
+        if (empty($st)) {
+            throw new CHttpException(400, tt('Нет доступа3'));
+        }
+
+        $user = Users::model()->findByAttributes(array(
+            'u5'=>0,
+            'u6'=>$st->st1
+        ));
+        if (empty($user)) {
+            throw new CHttpException(400, tt('Нет доступа4'));
+        }
+
+
+        $connector = SH::getDistEducationConnector(
+            $this->universityCode
+        );
+
+        if (empty($connector)) {
+            throw new CHttpException(400, tt('Ошибка создания конектора'));
+        }
+
+        if($type==1) {
+            list($success, $html) = $connector->signUp($user);
+        }else{
+            $stDist = Stdist::model()->findByPk($st->st1);
+            if($stDist==null) {
+                throw new CHttpException(400, tt('Пользователь не зарегистророван в дист. образовании'));
+            }else{
+                $html = '';
+                $success = true;
+                if(!$stDist->delete()){
+                    $success = false;
+                    $html = 'Ошибка удаления привязки учеток пользователей';
+                }
+            }
+        }
+
+        $res = array(
+            'error'=>!$success,
+            'html' => $html,
+            'title' => $st->getShortName()
+        );
+
+        Yii::app()->end(CJSON::encode($res));
     }
 
     /**
@@ -190,8 +257,8 @@ class DistEducationController extends Controller
      * Рендер формы для привязки дисциплины к дист образованию
      */
 	public function actionAddLink(){
-        //if (! Yii::app()->request->isAjaxRequest)
-            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $model = new DistEducationFilterForm(Yii::app()->user);
 
@@ -504,8 +571,7 @@ class DistEducationController extends Controller
         );
 
         if (empty($connector)) {
-            $error = true;
-            $message = tt('Ошибка создания конектора');
+            throw new CHttpException(400, tt('Ошибка создания конектора'));
         }
 
         $students = St::model()->getStudentsOfGroupForDistEducation($group['gr1']);
@@ -572,8 +638,7 @@ class DistEducationController extends Controller
         );
 
         if (empty($connector)) {
-            $error = true;
-            $message = tt('Ошибка создания конектора');
+            throw new CHttpException(400, tt('Ошибка создания конектора'));
         }
 
         if($subscription==1) {

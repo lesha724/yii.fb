@@ -71,6 +71,10 @@ abstract class DistEducation implements IDistEducation
      * @return array
      */
     protected function saveSignUpOld($user, $params){
+        if(empty($user))
+        {
+            return array(false, tt('Пользователь пустой'));
+        }
         if(!$user->isStudent)
             return array(false, 'DistEducation:'.tt('Пользователь не студент'));
 
@@ -147,6 +151,10 @@ abstract class DistEducation implements IDistEducation
      */
     public function signUp($user)
     {
+        if(empty($user))
+        {
+            return array(false, tt('Пользователь пустой'));
+        }
         if($this->validateEmail($user->u4)){
             return array(false, tt('Уже есть пользователь в дистанционом образовании с таким email!'));
         }
