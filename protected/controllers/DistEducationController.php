@@ -116,7 +116,7 @@ class DistEducationController extends Controller
         }
 
 
-        //$title = Gr::model()->getGroupName($group['sem4'], $group);
+        $title = $group->gr3;
         $res = array(
             'error'=>!$success,
             'html' => $html,
