@@ -180,6 +180,9 @@ class DistEducationController extends Controller
                 if(!$stDist->delete()){
                     $success = false;
                     $html = 'Ошибка удаления привязки учеток пользователей';
+                }else{
+                    if(!$st->saveAttributes(array('st168'=>0)))
+                        $success = false;
                 }
             }
         }
