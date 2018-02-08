@@ -87,7 +87,7 @@ HTML;
             {
                 $name=$cur['d2'];
 
-                $name = str_replace('"','&quot;',$name);
+                //$name = htmlspecialchars(); str_replace('"','&quot;',$name);
                 $group=$cur['gr3'];
                 $a2=$cur['a2'];
                 $added = date('d.m.Y H:i', strtotime($cur['r11']));
@@ -116,7 +116,7 @@ HTML;
                     {$class}. {$a2}<br>
                     {$text}: {$added}
 HTML;
-                $fullText=trim($pattern);
+                $fullText=htmlspecialchars(trim($pattern));
                 $tr .='<td class="'.$class_day.' '.$class_interval.'" style="background-color:'.SH::getLessonColor($cur['tip']).'!important"><div data-rel="popover" data-placement="right" data-content="'.$fullText.'">X</div></td>';
             }  else {
                 $tr .='<td class="empty-day '.$class_day.'">&nbsp;</td>';
