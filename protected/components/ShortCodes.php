@@ -599,6 +599,10 @@ class SH extends ShortCodes
                 return new MoodleDistEducation($url, $apiKey);
                 break;
 
+            case U_KNAME:
+                return new MoodleDistEducation($url, $apiKey);
+                break;
+
             default:
                 return null;
         }
@@ -616,6 +620,10 @@ class SH extends ShortCodes
                 break;
 
             case U_NMU:
+                return new MoodleSignUpOldForm($universityCode);
+                break;
+
+            case U_KNAME:
                 return new MoodleSignUpOldForm($universityCode);
                 break;
 
