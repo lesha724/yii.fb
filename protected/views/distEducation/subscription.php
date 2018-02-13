@@ -42,8 +42,9 @@ if(!empty($model->chairId)) {
 
 
     echo '<div>';
+    $dataProvider = $model->getDispListForDistEducation(true);
 
-    $disciplines = CHtml::listData($model->getDispListForDistEducation(true)->data, 'uo1', function ($data) {
+    $disciplines = CHtml::listData($dataProvider->data, 'uo1', function ($data) {
         return $data['d2'] . ' / ' . $data['sp2'] . '-'.$data['sem4'].' курс';
     });
 

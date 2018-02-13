@@ -291,7 +291,7 @@ SQL;
             'totalItemCount'=>$count,
             'params'=>$params,
             'sort'=>$sort,
-            'pagination'=>array(
+            'pagination'=> $subscription ? false : array(
                 'pageSize'=> $pageSize,
             ),
         ));
