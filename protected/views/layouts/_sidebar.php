@@ -38,14 +38,15 @@
         <?php
             $newMobile = in_array($this->universityCode, array(
                 U_XNMU,
-                38,
+                U_NMU,
                 U_KRNU,
                 U_KNAME,
                 U_NULAU,
                 U_KHADI,
                 U_URFAK,
                 U_FGU,
-                U_UIPA
+                U_UIPA,
+                U_SEM_MGU
             ));
         ?>
         <a href="<?= $newMobile ? SH::MOBILE_URL : 'https://play.google.com/store/apps/details?id=scheduleMKP.scheduleMKP'?>" target="_blank">
