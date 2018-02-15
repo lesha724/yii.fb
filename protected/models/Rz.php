@@ -120,12 +120,16 @@ class Rz extends CActiveRecord
         return $res;
     }
 
-    public function getRzForDropdown()
+    public function getRzForDropdown($filial = null)
     {
-        $rows = Yii::app()->db->createCommand()
+        $query = Yii::app()->db->createCommand()
             ->select('*')
-            ->from($this->tableName())
-            ->queryAll();
+            ->from($this->tableName());
+        if($filial !== null)
+            $query = $query->where(" rz16 = :FILIAL", array(
+                ':FILIAL' => $filial
+            ));
+        $rows = $query->queryAll();
 
         foreach($rows as $key => $row) {
             $rows[$key]['name'] = $row['rz1'].' '.tt('пара').' ('.$row['rz2'].'-'.$row['rz3'].')';

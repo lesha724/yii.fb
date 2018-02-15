@@ -46,7 +46,7 @@ $html  = '<div>';
         $html .= '</div>';
     }
 
-    $lessons = CHtml::listData(Rz::model()->getRzForDropdown(), 'rz1', 'name');
+    $lessons = CHtml::listData(Rz::model()->getRzForDropdown($model->filial), 'rz1', 'name');
 
     $html .= '<div class="span2 ace-select">';
     $html .= $form->label($model, 'lessonStart');
