@@ -146,7 +146,7 @@ class FormValidation extends CFormModel
             if (!$this->validateValidationKey()) {
                 $this->_isFalied = true;/*что бы нельзя в рамках этого конекта уже переопределить токен*/
                 $attr = isset($params['fieldError'])?$params['fieldError']:$attribute;
-                $this->addError($attr, tt('Ошибка!Проверка на валидность не пройдена! Попробуйте перезагрузить страницу и попробовать снова!' /*. Yii::app()->session[self::SESSION_FIELD_NAME] . ' / ' . $this->_validationKey*/));
+                $this->addError($attr, tt('Ошибка!Проверка на валидность не пройдена! Попробуйте перезагрузить страницу и попробовать снова!'));
             }
         }
     }

@@ -9,9 +9,9 @@
  * @var $model Tddo
  * @var $docTypeModel Ddo
  * */
-    $this->pageHeader=tt('Документооборот: #'.$model->tddo3);
+    $this->pageHeader=tt('Документооборот: №').$model->tddo3;
     $this->breadcrumbs=array(
-        tt('Док.-оборот: #'.$model->tddo3),
+        tt('Док.-оборот: №').$model->tddo3,
     );
 ?>
     <div class="row-fluid" >

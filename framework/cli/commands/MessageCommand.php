@@ -178,6 +178,11 @@ EOD;
 			$untranslated=array();
 			foreach($messages as $message)
 			{
+                if (!is_string($message) && !is_int($message)) {
+                    echo "ошибка :".$message."\n";
+                    continue;
+                }
+
 				if(array_key_exists($message,$translated) && strlen($translated[$message])>0)
 					$merged[$message]=$translated[$message];
 				else
