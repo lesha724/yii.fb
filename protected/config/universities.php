@@ -18,3 +18,4 @@ define('U_KHADI',  55);
 define('U_FGU',  15); //мгу фгу
 define('U_UIPA',  8);
 define('U_SEM_MGU',  42);
+define('U_ONMU',  47);

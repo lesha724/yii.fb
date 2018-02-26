@@ -19,7 +19,8 @@ class TimeTableController extends Controller
                     U_URFAK,
                     U_FGU,
                     U_UIPA,
-                    U_SEM_MGU
+                    U_SEM_MGU,
+                    U_ONMU
                 ))){
                         $message = tt(' Новое мобильное приложение для Android : <strong><a href="{url}" target="_blank" style="font-size: 18px">здесь</a></strong>! Также читайте инструкцию к мобильному приложению: <strong><a href="{url-instruction}" target="_blank" style="font-size: 18px">здесь</a></strong>!', array(
                             '{url}' => SH::MOBILE_URL,
