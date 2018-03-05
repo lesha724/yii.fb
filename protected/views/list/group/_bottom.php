@@ -35,7 +35,7 @@ function getPassportLabel($id,$type, $pattern, $patternAdmin){
     ));
 
     $distShow = false;
-    if(!Yii::app()->user->isGuest) {
+    if(!Yii::app()->user->isGuest && Yii::app()->user->isTch ) {
         $modelDist = new DistEducationFilterForm(Yii::app()->user);
         if ($modelDist->isAdminDistEducation)
             $distShow = true;
