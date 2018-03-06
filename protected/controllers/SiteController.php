@@ -43,7 +43,6 @@ class SiteController extends Controller
                     'studentBarcode',
                     'userPhoto',
                     'iFrame',
-                    'resetPassword'
                 ),
                 'users'=>array('*'),
             ),
