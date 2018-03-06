@@ -8,8 +8,63 @@ class SiteController extends Controller
     public function filters()
     {
         return array(
+            'accessControl',
             'checkPermissionDist + signUpDistEducation, signUpNewDistEducation, signUpOldDistEducation, loginDistEducation',
             'existDist + signUpDistEducation, signUpNewDistEducation, signUpOldDistEducation'
+        );
+    }
+
+    public function accessRules() {
+
+        return array(
+            array('allow',
+                'actions'=>array(
+                    'logout',
+                    'getMobileKey',
+                    'changePassword'
+                ),
+                'users'=>array('@'),
+            ),
+            array('allow',
+                'actions'=>array(
+                    'resetPassword',
+                    'forgotPassword',
+                    'login',
+                    'registrationInternational',
+                    'registration'
+                ),
+                'users'=>array('?'),
+            ),
+            array('allow',
+                'actions'=>array(
+                    'index',
+                    'captcha',
+                    'error',
+                    'studentBarcode',
+                    'userPhoto',
+                    'iFrame',
+                    'resetPassword'
+                ),
+                'users'=>array('*'),
+            ),
+            array('allow',
+                'actions' => array(
+                    'signUpDistEducation',
+                    'signUpNewDistEducation',
+                    'signUpOldDistEducation',
+                    'loginDistEducation',
+                ),
+                'expression' => 'Yii::app()->user->isStd',
+            ),
+            array('allow',
+                'actions' => array(
+                    'studentPassport',
+                ),
+                'expression' => 'Yii::app()->user->isAdmin',
+            ),
+            array('deny',
+                'users' => array('*'),
+            ),
         );
     }
 	/**
@@ -633,6 +688,10 @@ HTML;
 	}
 
 	public function actionGetMobileKey(){
+        $ps128 = PortalSettings::model()->getSettingFor(PortalSettings::MOBILE_APP_NEED_AUTH);
+        if($ps128!=1)
+            throw new CHttpException(403, 'Invalid request. Please do not repeat this request again.');
+
         if(Yii::app()->user->isGuest)
             throw new CHttpException(403, 'Invalid request. Please do not repeat this request again.');
 
