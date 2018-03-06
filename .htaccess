@@ -45,3 +45,17 @@ DirectoryIndex index.php
 
 
 </IfModule>
+
+<FilesMatch ".(htaccess|htpasswd|ini|phps|fla|psd|log|sh|lock|gitignore)$">
+ Order Allow,Deny
+ Deny from all
+</FilesMatch>
+
+<files README.md>
+  Order Allow,Deny
+  Deny from all
+</files>
+<files composer.json>
+  Order Allow,Deny
+  Deny from all
+</files>
