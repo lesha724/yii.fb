@@ -51,15 +51,15 @@ DirectoryIndex index.php
  Deny from all
 </FilesMatch>
 
-<files README.md>
-  Order Allow,Deny
-  Deny from all
-</files>
-<Files .htaccess>
- order allow,deny
- deny from all
+<Files README.md>
+    Order Allow,Deny
+    Deny from all
 </Files>
-<files composer.json>
-  Order Allow,Deny
-  Deny from all
-</files>
+<Files .htaccess>
+    Order Allow,Deny
+    Deny from all
+</Files>
+<Files composer.json>
+    Order Allow,Deny
+    Deny from all
+</Files>
