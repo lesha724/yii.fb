@@ -161,12 +161,12 @@ class Users extends CActiveRecord
      */
     public function getIsAdmin()
     {
-        return $this->u7 === '1';
+        return (int)$this->u7 === 1;
     }
 
 	public function getIsBlock()
 	{
-		return $this->u8 === '1';
+		return (int)$this->u8 === 1;
 	}
 
     /**
@@ -175,12 +175,12 @@ class Users extends CActiveRecord
      */
     public function getIsTeacher()
     {
-        return $this->u5 === '1';
+        return (int)$this->u5 === 1;
     }
 
 	public function getIsParent()
 	{
-		return $this->u5 === '2';
+		return (int)$this->u5 === 2;
 	}
 
     /**
@@ -189,7 +189,7 @@ class Users extends CActiveRecord
      */
     public function getIsStudent()
     {
-        return $this->u5 === '0';
+        return (int)$this->u5 === 0;
     }
 
     public function getName()
@@ -210,14 +210,20 @@ class Users extends CActiveRecord
         return $name;
     }
 
+    /**
+     * Правило валидации для проверки логина и почты на уникальность
+     * @param $attribute
+     * @param $params
+     */
     public function checkIfUnique($attribute, $params)
     {
         if (empty($this->$attribute))
             return;
 
         $criteria = new CDbCriteria;
-        $criteria->addCondition('u1 != '.$this->u1);
+        $criteria->addCondition('u1 != :U1');
         $criteria->addInCondition($attribute, array($this->$attribute));
+        $criteria->params[':U1'] = $this->u1;
 
         $amount = Users::model()->count($criteria);
 
