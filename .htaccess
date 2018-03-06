@@ -55,6 +55,10 @@ DirectoryIndex index.php
   Order Allow,Deny
   Deny from all
 </files>
+<Files .htaccess>
+ order allow,deny
+ deny from all
+</Files>
 <files composer.json>
   Order Allow,Deny
   Deny from all
