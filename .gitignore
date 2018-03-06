@@ -30,7 +30,9 @@ Thumbs.db
 # PhpStorm project files
 /.idea
 # composer vendors
-/vendor
+/vendor/*
+!/vendor/.htaccess
+
 /protected/data/*
 !/protected/data/.gitkeep
 /kiosk
