@@ -18,7 +18,7 @@ abstract class SingUpOldDistEducationForm extends CFormModel implements ISingUpO
      */
     public $email;
 
-    public $verifyCode;
+    //public $verifyCode;
 
     /**
      * Declares the validation rules.
@@ -31,7 +31,7 @@ abstract class SingUpOldDistEducationForm extends CFormModel implements ISingUpO
             // email has to be a valid email address
             array('email', 'email'),
 
-            array('verifyCode', 'captcha', 'allowEmpty'=>!CCaptcha::checkRequirements()),
+            //array('verifyCode', 'captcha', 'allowEmpty'=>!CCaptcha::checkRequirements()),
 
             array('email', 'unique', 'className'=>'Stdist', 'attributeName'=>'stdist2'),
 

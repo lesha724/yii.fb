@@ -30,7 +30,7 @@ $this->pageHeader=tt('Регистрация в системе дистанци�
 
                         <?=$model->getFormHtml($form)?>
 
-                        <?php if(CCaptcha::checkRequirements()): ?>
+                        <?php /*if(CCaptcha::checkRequirements()): ?>
                             <div>
                                 <?php echo $form->labelEx($model,'verifyCode'); ?>
                                 <div>
@@ -41,7 +41,7 @@ $this->pageHeader=tt('Регистрация в системе дистанци�
                                     <br/> Буквы не чувствительны к регистру.')?></div>
                                 <?php echo $form->error($model,'verifyCode'); ?>
                             </div>
-                        <?php endif; ?>
+                        <?php endif;*/ ?>
 
                         <div class="space"></div>
 
