@@ -104,6 +104,14 @@
                     ),
                 ),
                 array(
+                    'name'       => 'Дист.обрзование',
+                    'controller' => 'distEducation',
+                    'items' => array(
+                        'index'    => 'Закрепление',
+                        'subscription' => 'Запись'
+                    ),
+                ),
+                array(
                     'name'       => 'Нагрузка',
                     'controller' => 'workLoad',
                     'items' => array(
