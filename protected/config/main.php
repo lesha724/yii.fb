@@ -28,6 +28,7 @@ $config = array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
+        'application.validators.*',
 		'application.extensions.bootstrap.*',
 		'application.extensions.behaviors.*',
 		'ext.elFinder.*',
