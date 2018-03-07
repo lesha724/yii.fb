@@ -65,7 +65,7 @@ class Users extends CActiveRecord
             //array('u2', 'length', 'min'=>5, 'max'=>30),
             // Логин должен соответствовать шаблону
             array('u2', 'match', 'pattern'=>'/^[a-zA-Z][a-zA-Z0-9]{7,30}$/','message'=>tt('В login могут быть только латинские символы и цифры,  длиной от 8 до 30 символов. Также логин должен начинаться с латинской буквы')),
-            array('u4', 'application.validators.EmailValidator', 'validateDomen'=> true, 'universityCode' => SH::getUniversityCod()),
+            //array('u4', 'application.validators.EmailValidator', 'validateDomen'=> true, 'universityCode' => SH::getUniversityCod()),
             array('u2, u3, u4, password', 'required', 'on'=>'admin-create,admin-update'),
 			array('u2,u4 ,u3, password', 'safe', 'on'=>'change-password'),
 			array('u8', 'unsafe', 'on'=>'change-password'),
@@ -503,7 +503,7 @@ HTML;
         if(empty($this->u4)) {
             Yii::app()->user->setFlash('warning', '<strong>' . tt('Внимание!') . '</strong> ' . tt('Заполните Email!'));
         }else{
-            $validator = new EmailValidator();
+            /*$validator = new EmailValidator();
             $validator->validateDomen = true;
             $validator->universityCode = $universityCode;
 
@@ -512,7 +512,7 @@ HTML;
                         '{attribute}' => $this->getAttributeLabel('u4'),
                         '{domen}' => $validator->universitiesDomens[$validator->universityCode]
                 )));
-            }
+            }*/
         }
 
         if($universityCode==U_NULAU){
