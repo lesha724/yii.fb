@@ -41,6 +41,9 @@ $checkboxStyle = array('class' => 'ace ace-switch ace-switch-4');
                 $subscriptionEmailDistEducation = PortalSettings::SUBSCRIPTION_EMAIL_DIST_EDUCATION;
                 $unsubscriptionEmailDistEducation = PortalSettings::UNSUBSCRIPTION_EMAIL_DIST_EDUCATION;
 
+
+                $acceptEmailDistEducation = PortalSettings::ACCEPT_EMAIL_DIST_EDUCATION;
+
                 $roleId = PortalSettings::ROLE_ID_FOR_MOODLE_STUDENTS;
 
                 $adminMail = PortalSettings::ADMIN_EMAIL_DIST_EDUCATION;
@@ -82,7 +85,7 @@ $checkboxStyle = array('class' => 'ace ace-switch ace-switch-4');
 
                 <div class="">
                     <div class="control-group">
-                        <span class="lbl"> <?=tt('Письмо о регистрации на дист. образовании')?>:</span><br>
+                        <span class="lbl"> <?=tt('Письмо о регистрации на дист. образовании (Богомольца)')?>:</span><br>
                         <span class="blue">{username}-логин, {password}-пароль, {email}-почта, {fio}-фио</span>
                         <?php $this->widget('application.extensions.elFinderTinyMce.TinyMce',
                             array(
@@ -132,6 +135,28 @@ $checkboxStyle = array('class' => 'ace ace-switch ace-switch-4');
                             array(
                                 'name'=>'settings['.$unsubscriptionEmailDistEducation.']',
                                 'value'=>PortalSettings::model()->findByPk($unsubscriptionEmailDistEducation)->ps2,
+                                'htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'tinymce'),
+                                'fileManager' => array(
+                                    'class' => 'ext.elFinder.TinyMceElFinder',
+                                    'connectorRoute'=>'/admin/default/connector',
+                                ),
+                                /*'settings'=>array(
+                                    'theme' => "advanced",
+                                    'skin' => 'default',
+                                    'language' => Yii::app()->language,
+                                ),*/
+                            )); ?>
+                    </div>
+                </div>
+
+                <div class="">
+                    <div class="control-group">
+                        <span class="lbl"> <?=tt('Письмо для подтверждения почты')?>:</span><br>
+                        <span class="blue">{username}-логин, {link} - ссылка для перехода, {email}-почта, {fio}-фио</span>
+                        <?php $this->widget('application.extensions.elFinderTinyMce.TinyMce',
+                            array(
+                                'name'=>'settings['.$acceptEmailDistEducation.']',
+                                'value'=>PortalSettings::model()->findByPk($acceptEmailDistEducation)->ps2,
                                 'htmlOptions'=>array('rows'=>6, 'cols'=>50, 'class'=>'tinymce'),
                                 'fileManager' => array(
                                     'class' => 'ext.elFinder.TinyMceElFinder',

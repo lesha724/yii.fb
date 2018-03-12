@@ -49,6 +49,11 @@ class PortalSettings extends CActiveRecord
      */
     const ADMIN_EMAIL_DIST_EDUCATION = 133;
 
+    /**
+     * @var int Письмо для подтвреднеия почты в дист образовании
+     */
+    const ACCEPT_EMAIL_DIST_EDUCATION = 134;
+
 	private  $settings = array();
 	/**
 	 * @return string the associated database table name
