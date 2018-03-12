@@ -24,7 +24,7 @@ class EmailValidator extends CEmailValidator
      * @var array
      */
     private $_universitiesDomens = array(
-        U_NMU => 'nmu.ua',
+        //U_NMU => 'nmu.ua',
         U_ZSMU => 'zsmu.edu.ua'
     );
     /**
