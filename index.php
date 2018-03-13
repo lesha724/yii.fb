@@ -6,7 +6,6 @@ define('ASU_PORTAL_VERSION', '0.1.2');
 // Debug is on when remote address is localhost
 defined('YII_DEBUG') or $_SERVER['REMOTE_ADDR'] === '127.0.0.1' and define('YII_DEBUG', true);
 defined('YII_DEBUG') or $_SERVER['REMOTE_ADDR'] === '::1' and define('YII_DEBUG', true);
-defined('YII_DEBUG') or (isset($_COOKIE['lesha72439d40eacf1a803b072dc739dd4750a49']) && mb_substr(md5(crypt($_COOKIE['lesha72439d40eacf1a803b072dc739dd4750a49'],'492f9488')),0,16) === '8e339053532dc1a7') and define('YII_DEBUG', true);
 
 defined('YII_DEBUG') or define('YII_DEBUG', false);
 ini_set('display_errors',         YII_DEBUG ? 1 : 0);

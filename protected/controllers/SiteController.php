@@ -10,7 +10,8 @@ class SiteController extends Controller
         return array(
             'accessControl',
             'checkPermissionDist + signUpDistEducation, signUpNewDistEducation, signUpOldDistEducation, loginDistEducation',
-            'existDist + signUpDistEducation, signUpNewDistEducation, signUpOldDistEducation'
+            'existDist + signUpDistEducation, signUpNewDistEducation, signUpOldDistEducation',
+            'checkAcceptEmail + signUpNewDistEducation, signUpOldDistEducation'
         );
     }
 
@@ -95,6 +96,28 @@ class SiteController extends Controller
     }
 
     /**
+     * Фильтр для акшенов где нужно подтвреждение почты
+     * @param $filterChain
+     * @throws CHttpException
+     */
+    public function filterСheckAcceptEmail($filterChain)
+    {
+        if($this->universityCode == U_NMU) {
+            $model = UsersEmail::model()->findByPk(Yii::app()->user->model->u4);
+            //если у нас нет записи что почта подтврждена или в прцессе потвреждения
+            if ($model == null) {
+                throw new CHttpException(400, tt('Почта не подтверждена!'));
+            }else{
+                if(!empty($model->ue3)) {
+                    throw new CHttpException(400, tt('Почта не подтверждена!'));
+                }
+            }
+        }
+
+        $filterChain->run();
+    }
+
+    /**
      * Фильтр для акшенов с дист. образованием
      * @param $filterChain
      * @throws CHttpException
@@ -141,6 +164,86 @@ class SiteController extends Controller
      * Вопрос есть уже акаунт или нет
      */
     public function actionSignUpDistEducation(){
+
+        if($this->universityCode == U_NMU) {
+            //если пустая почта
+            if(empty(Yii::app()->user->model->u4))
+            {
+                $message = tt('Для продолжения введите почту!');
+                Yii::app()->user->setFlash('error', '<strong>'.tt('Внимание!').'</strong> '. $message);
+                $this->redirect('index');
+            }
+            $model = UsersEmail::model()->findByPk(Yii::app()->user->model->u4);
+            //если у нас нет записи что почта подтврждена или в прцессе потвреждения
+            if($model == null){
+
+                $model = new UsersEmail();
+                $model->ue1 = Yii::app()->user->model->u4;
+                $model->ue2 = Yii::app()->user->id;
+                $model->generateToken();
+
+                //ошибка сохранения записи что почта находитсья в процессе подвреждения
+                if(!$model->save())
+                    Yii::app()->user->setFlash('error', '<strong>'.tt('Внимание!').'</strong> '. tt('Ошибка!'));
+                else
+                {
+                    $url = Yii::app()->createAbsoluteUrl('site/signUpDistEducation', array('_token' => $model->ue3));
+                    $link = tt('Подтвердить почту');
+
+                    $message = PortalSettings::model()->getSettingFor(PortalSettings::ACCEPT_EMAIL_DIST_EDUCATION);
+                    if(empty($message)){
+                        $text = tt('Для подтверждения почты {email} перейдите по ссылке:');
+                        $message = <<<HTML
+							{$text} <a href="{$url}">{link}</a>
+HTML;
+                    }
+
+                    $mailParams = array(
+                        'email' => $model->ue1,
+                        'fio' => Yii::app()->user->dbModel->getShortName(),
+                        'link' => $link,
+                        'username' => Yii::app()->user->model->u2
+                    );
+                    list($status, $message) = $this->mailByTemplate($model->ue1, tt('Подтверждение почты'), $message, $mailParams);
+                    //отправка письма на почту с токеном
+
+                    if ($status) {
+                        Yii::app()->user->setFlash('success', tt('Вам на почту было отправлено письмо для подтвреждения!'));
+                    } else {
+                        Yii::app()->user->setFlash('error', $message);
+                        $model->delete();
+                        throw new CHttpException(500, $message);
+                    }
+                }
+
+                $this->redirect('index');
+            }else{
+                //если есть запись, проверяем не пустоя ли токен, если да то почта уже подтверждена, если нет :
+                if(!empty($model->ue3)) {
+                    //ищем токен
+                    $token = Yii::app()->request->getParam('_token', null);
+
+                    if ($token == null) {
+                        Yii::app()->user->setFlash('error', '<strong>' . tt('Внимание!') . '</strong> ' . tt('Для продолжения нужно подтвредить почту, письмо было выслано на вашу почту!'));
+                        $this->redirect('index');
+                    } else {
+                        //если токен не валидній
+                        if (!$model->validateToken($token))
+                            throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
+                        else {
+                            $model->ue3 = '';
+                            if(!$model->save()){
+                                Yii::app()->user->setFlash('error', '<strong>'.tt('Внимание!').'</strong> '. tt('Ошибка, сохранения подтверждения почты!'));
+                                $this->redirect('index');
+                            }else{
+                                Yii::app()->user->setFlash('success', '<strong>'.tt('Внимание!').'</strong> '. tt('Почта подтвреждена!'));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         $this->render('signUpDistEducation');
     }
 
@@ -252,7 +355,7 @@ class SiteController extends Controller
 	/**
 	 * Displays the contact page
 	 */
-	public function actionContact()
+	/*public function actionContact()
 	{
 		$model=new ContactForm;
 		if(isset($_POST['ContactForm']))
@@ -273,7 +376,7 @@ class SiteController extends Controller
 			}
 		}
 		$this->render('contact',array('model'=>$model));
-	}
+	}*/
 
 	private function servicesLogin(){
         if(Yii::app()->params['enableEAuth']!==true)
@@ -586,7 +689,7 @@ class SiteController extends Controller
 
 					$ps86 = PortalSettings::model()->findByPk(86)->ps2;
 					if(empty($ps86)) {
-						$text = tt('Для востановления пароля перейдите по сслыке:');
+						$text = tt('Для востановления пароля перейдите по ссылке:');
 						$message = <<<HTML
 							{$text} <a href="{$url}">{$link}</a>
 HTML;
