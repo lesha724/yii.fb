@@ -101,7 +101,7 @@ class SiteController extends Controller
      * @param $filterChain
      * @throws CHttpException
      */
-    public function filterСheckAcceptEmail($filterChain)
+    public function filterCheckAcceptEmail($filterChain)
     {
         if($this->universityCode == U_NMU) {
             $model = UsersEmail::model()->findByPk(Yii::app()->user->model->u4);
