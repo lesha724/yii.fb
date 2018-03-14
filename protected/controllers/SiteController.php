@@ -183,20 +183,20 @@ class SiteController extends Controller
             else
             {
                 $url = Yii::app()->createAbsoluteUrl('site/acceptEmail', array('_token' => $model->ue3));
-                $link = tt('Подтвердить почту');
+                $linkText = tt('Подтвердить почту');
 
                 $message = PortalSettings::model()->getSettingFor(PortalSettings::ACCEPT_EMAIL_DIST_EDUCATION);
                 if(empty($message)){
-                    $text = tt('Для подтверждения почты {email} перейдите по ссылке:');
-                    $message = <<<HTML
-							{$text} <a href="{$url}">{link}</a>
-HTML;
+                    $message = tt('Для подтверждения почты {email} перейдите по ссылке:');
                 }
 
                 $mailParams = array(
                     'email' => $model->ue1,
                     'fio' => Yii::app()->user->dbModel->getShortName(),
-                    'link' => $link,
+                    'link' => <<<HTML
+							<a href="{$url}">{$linkText}</a>
+HTML
+,
                     'username' => Yii::app()->user->model->u2
                 );
                 list($status, $message) = $this->mailByTemplate($model->ue1, tt('Подтверждение почты'), $message, $mailParams);
