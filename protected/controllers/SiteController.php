@@ -213,6 +213,9 @@ HTML;
 
             $this->redirect('index');
         }else{
+            if( Yii::app()->user->id != $model->ue2)
+                throw new CHttpException(400, 'Некоректный пользователь.');
+
             //если есть запись, проверяем не пустоя ли токен, если да то почта уже подтверждена, если нет :
             if(!empty($model->ue3)) {
 
