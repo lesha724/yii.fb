@@ -239,9 +239,11 @@ SQL;
     {
         $type = mb_strtolower($type);
         switch($type){
+            case 'lec':
             case 'лк':
             case 'улк':
                 $color = '#fffadb'; break;
+            case 'prac':
             case 'пз':
             case 'пз1':
             case 'пз2':
@@ -249,12 +251,14 @@ SQL;
             case 'пз4':
             case 'упз':
                 $color = '#e2ffe2'; break;
+            case 'sem':
             case 'сем':
             case 'сем1':
             case 'сем2':
             case 'сем3':
             case 'сем4':
                 $color = '#fff0ff'; break;
+            case 'lab':
             case 'лб':
             case 'лб1':
             case 'лб2':
@@ -266,15 +270,23 @@ SQL;
             case 'улб3':
             case 'улб4':
                 $color = '#c4e5ff'; break;
+            case 'exam':
             case 'экз':	$color = '#ffe1e1'; break;
+            case 'offs':
             case 'зач':	$color = '#a7f1a7'; break;
+            case 'cont':
             case 'кр':	$color = '#d6d6bd'; break;
+            case 'cour':
             case 'кп':	$color = '#d4d4b9'; break;
+            case 'add':
             case 'доп': $color = '#e3ebe4'; break;
+            case 'ind':
             case 'инд': $color = '#fffadd'; break;
             case 'гек': $color = '#ff0000'; break;
             case 'кнч': $color = '#dfefff'; break;
+            case 'cons':
             case 'конс': $color = '#ffe2ff'; break;
+            case 'ret':
             case 'пер': $color = '#e2ffe2'; break;
             default: $color = '';
         }
@@ -285,9 +297,11 @@ SQL;
     {
         $type = mb_strtolower($type);
         switch($type){
+            case 'Lec':
             case 'лк':
             case 'улк':
                 $color = '1'; break;
+            case 'Prac':
             case 'пз':
             case 'пз1':
             case 'пз2':
@@ -295,12 +309,14 @@ SQL;
             case 'пз4':
             case 'упз':
                 $color = '2'; break;
+            case 'Sem':
             case 'сем':
             case 'сем1':
             case 'сем2':
             case 'сем3':
             case 'сем4':
                 $color = '3'; break;
+            case 'Lab':
             case 'лб':
             case 'лб1':
             case 'лб2':
@@ -312,15 +328,25 @@ SQL;
             case 'улб3':
             case 'улб4':
                 $color = '4'; break;
+            case 'Exam':
             case 'экз':	$color = '5'; break;
+            case 'Offs':
             case 'зач':	$color = '6'; break;
+            case 'Cont':
             case 'кр':	$color = '7'; break;
+            case 'Cour':
             case 'кп':	$color = '8'; break;
+            case 'Add':
             case 'доп': $color = '9'; break;
+            case 'Ind':
             case 'инд': $color = '10'; break;
+            //case 'Exam':
             case 'гек': $color = '11'; break;
+            //case 'Cont':
             case 'кнч': $color = '12'; break;
+            case 'Cons':
             case 'конс': $color = '13'; break;
+            case 'Ret':
             case 'пер': $color = '14'; break;
             default: $color = '';
         }

@@ -139,7 +139,7 @@ class A extends CActiveRecord
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':LANG', 1);
+        $command->bindValue(':LANG', TimeTableForm::getLangCode());
         $command->bindValue(':A1', $a1);
         $command->bindValue(':DATE_1', $date1);
         $command->bindValue(':DATE_2', $date2);

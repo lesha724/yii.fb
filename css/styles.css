@@ -494,6 +494,10 @@ div.module_div_table2 {
     text-align: center;
 }
 
+table.timeTable tr td:first-child div:first-child {
+    width: 50px;
+}
+
 
 table.timeTable {
     border-spacing: 0px;

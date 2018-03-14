@@ -294,7 +294,7 @@ TEXT;
 
     private function cellShortTextFor($day, $type)
     {
-        $maxLength = 15;
+        $maxLength = 13;
 
         $d3    = $day['d3'];
         $tip   = $day['tip'];
@@ -697,5 +697,16 @@ HTML;
         $this->faculty = $teacherParams['f1'];
         $this->chair = $teacherParams['k1'];
         $this->teacher = $teacherParams['p1'];
+    }
+
+    /**
+     * Код язіка для процедур
+     * @return int
+     */
+    public static function getLangCode(){
+        if(Yii::app()->language == 'en')
+            return 3;
+
+        return 1;
     }
 }

@@ -666,7 +666,7 @@ SQL;
     {
         $sql = <<<SQL
         SELECT *
-        FROM RAPR(:P1, :DATE_1, :DATE_2)
+        FROM RAPR_L(:LANG, :P1, :DATE_1, :DATE_2)
         ORDER BY r2,r3,rz2
 SQL;
 
@@ -674,6 +674,7 @@ SQL;
         $command->bindValue(':P1', $p1);
         $command->bindValue(':DATE_1', $date1);
         $command->bindValue(':DATE_2', $date2);
+        $command->bindValue(':LANG', TimeTableForm::getLangCode());
         $timeTable = $command->queryAll();
 
         if (empty($timeTable))
