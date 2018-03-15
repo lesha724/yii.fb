@@ -1125,6 +1125,7 @@ SQL;
                     //}
                     /* @var $mPDF1 mPDF*/
                     $mPDF1 = Yii::app()->ePdf->mpdf();
+                    $mPDF1->showImageErrors = true;
 
                     $patternTitle = <<<HTML
                         <style>
@@ -1194,7 +1195,8 @@ HTML;
                     {
                         //штрихкод
                         $url = $this->createAbsoluteUrl('/site/studentBarcode', array('_id' => $model->student));
-                        $mPDF1->WriteHTML('<p style="text-align:right;margin-top: 100px"><img src="'.$url.'" /><p>');
+                        $htmlBarcode = '<p style="text-align:right;margin-top: 100px;"><img src="'.$url.'" alt=""/><p>';
+                        $mPDF1->WriteHTML($htmlBarcode);
                     }
 
 
