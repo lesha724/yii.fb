@@ -1194,7 +1194,7 @@ HTML;
                     if($data!=null)
                     {
                         //штрихкод
-                        $url = $this->createAbsoluteUrl('/site/studentBarcode', array('_id' => $model->student));
+                        $url = $this->createUrl('/site/studentBarcode', array('_id' => $model->student));
                         $htmlBarcode = '<p style="text-align:right;margin-top: 100px;"><img src="'.$url.'" alt=""/><p>';
                         $mPDF1->WriteHTML($htmlBarcode);
                     }
