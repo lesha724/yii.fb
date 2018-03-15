@@ -22,7 +22,8 @@ class SiteController extends Controller
                 'actions'=>array(
                     'logout',
                     'getMobileKey',
-                    'changePassword'
+                    'changePassword',
+                    'resendCheckEmail'
                 ),
                 'users'=>array('@'),
             ),
@@ -182,33 +183,7 @@ class SiteController extends Controller
                 Yii::app()->user->setFlash('error', '<strong>'.tt('Внимание!').'</strong> '. tt('Ошибка!'));
             else
             {
-                $url = Yii::app()->createAbsoluteUrl('site/acceptEmail', array('_token' => $model->ue3));
-                $linkText = tt('Подтвердить почту');
-
-                $message = PortalSettings::model()->getSettingFor(PortalSettings::ACCEPT_EMAIL_DIST_EDUCATION);
-                if(empty($message)){
-                    $message = tt('Для подтверждения почты {email} перейдите по ссылке:');
-                }
-
-                $mailParams = array(
-                    'email' => $model->ue1,
-                    'fio' => Yii::app()->user->dbModel->getShortName(),
-                    'link' => <<<HTML
-							<a href="{$url}">{$linkText}</a>
-HTML
-,
-                    'username' => Yii::app()->user->model->u2
-                );
-                list($status, $message) = $this->mailByTemplate($model->ue1, tt('Подтверждение почты'), $message, $mailParams);
-                //отправка письма на почту с токеном
-
-                if ($status) {
-                    Yii::app()->user->setFlash('success', tt('Вам на почту было отправлено письмо для подтвреждения!'));
-                } else {
-                    Yii::app()->user->setFlash('error', $message);
-                    $model->delete();
-                    throw new CHttpException(500, $message);
-                }
+                $this->_sendCheckEmail($model);
             }
 
             $this->redirect('index');
@@ -219,12 +194,89 @@ HTML
             //если есть запись, проверяем не пустоя ли токен, если да то почта уже подтверждена, если нет :
             if(!empty($model->ue3)) {
 
-                Yii::app()->user->setFlash('error', '<strong>' . tt('Внимание!') . '</strong> ' . tt('Для продолжения нужно подтвредить почту, письмо было выслано на вашу почту!'));
+                Yii::app()->user->setFlash('error', '<strong>' . tt('Внимание!') . '</strong> ' . tt('Для продолжения нужно подтвредить почту, письмо было выслано на вашу почту! <a href="{link}">Переотправить</a>', array(
+                        '{link}' => Yii::app()->createAbsoluteUrl('site/resendCheckEmail', array('_token' => $model->ue3))
+                    )));
                 $this->redirect('index');
             }
         }
     }
 
+    /**
+     * @param $model UsersEmail
+     * @throws CHttpException
+     */
+    public function _sendCheckEmail($model){
+        $url = Yii::app()->createAbsoluteUrl('site/acceptEmail', array('_token' => $model->ue3));
+        $linkText = tt('Подтвердить почту');
+
+        $message = PortalSettings::model()->getSettingFor(PortalSettings::ACCEPT_EMAIL_DIST_EDUCATION);
+        if(empty($message)){
+            $message = tt('Для подтверждения почты {email} перейдите по ссылке:');
+        }
+
+        $mailParams = array(
+            'email' => $model->ue1,
+            'fio' => Yii::app()->user->dbModel->getShortName(),
+            'link' => <<<HTML
+							<a href="{$url}">{$linkText}</a>
+HTML
+        ,
+            'username' => Yii::app()->user->model->u2
+        );
+        list($status, $message) = $this->mailByTemplate($model->ue1, tt('Подтверждение почты'), $message, $mailParams);
+        //отправка письма на почту с токеном
+
+        if ($status) {
+            Yii::app()->user->setFlash('success', tt('Вам на почту было отправлено письмо для подтвреждения! <a href="{link}">Переотправить</a>',
+                array(
+                    '{link}' => Yii::app()->createAbsoluteUrl('site/resendCheckEmail', array('_token' => $model->ue3))
+                )));
+        } else {
+            Yii::app()->user->setFlash('error', $message);
+            $model->delete();
+            throw new CHttpException(500, $message);
+        }
+    }
+
+    /**
+     * Акшен для подтверждения
+     * @throws CHttpException
+     */
+    public function actionResendCheckEmail(){
+        //ищем токен
+        $token = Yii::app()->request->getParam('_token', null);
+
+        if ($token == null) {
+            throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
+        }
+
+        $model = UsersEmail::model()->findByAttributes(array('ue3' => $token));
+        //если у нас нет записи что почта подтврждена или в прцессе потвреждения
+        if($model == null){
+            throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
+        }
+
+        if($model->ue2 != Yii::app()->user->id){
+            throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
+        }
+
+        if(empty($model->ue3)){
+            throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
+        }
+
+        $model->generateToken();
+
+        //ошибка сохранения записи что почта находитсья в процессе подвреждения
+        if(!$model->save())
+            Yii::app()->user->setFlash('error', '<strong>'.tt('Внимание!').'</strong> '. tt('Ошибка!'));
+        else
+        {
+            $this->_sendCheckEmail($model);
+        }
+
+        $this->redirect('index');
+    }
     /**
      * Акшен для подтверждения
      * @throws CHttpException
