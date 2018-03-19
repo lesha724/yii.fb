@@ -44,12 +44,12 @@ foreach ($students as $student) {
 
     $button = empty($stDist) ?
         '' :
-        CHtml::link('<i class="icon-ok"></i>', array('subscriptionStudent', 'st1'=>$student->st1, 'uo1'=> $uo1, 'chairId'=> $model->chairId, 'subscription'=>1 ), array(
+        CHtml::link('<i class="icon-ok"></i>', array('subscriptionStudent', 'st1'=>$student->st1, 'uo1'=> $uo1, 'chairId'=> $model->chairId, 'subscription'=>1, 'gr1' => $group['gr1']), array(
             'class'=>'btn btn-success btn-mini btn-subscript-student',
             'style'=> !empty($stDistSub) ? 'display:none' : ''
         ))
         .
-        CHtml::link('<i class="icon-trash"></i>', array('subscriptionStudent', 'st1'=>$student->st1, 'uo1'=> $uo1, 'chairId'=> $model->chairId, 'subscription'=>0), array(
+        CHtml::link('<i class="icon-trash"></i>', array('subscriptionStudent', 'st1'=>$student->st1, 'uo1'=> $uo1, 'chairId'=> $model->chairId, 'subscription'=>0, 'gr1' => $group['gr1']), array(
             'class'=>'btn btn-danger btn-mini btn-unsubscript-student',
             'style'=> !empty($stDistSub) ? '' : 'display:none'
         ))

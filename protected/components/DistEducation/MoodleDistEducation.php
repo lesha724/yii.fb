@@ -283,6 +283,62 @@ class MoodleDistEducation extends DistEducation
     }
 
     /**
+     * Создать группу
+     * @param string $grName
+     * @param string $courseId
+     * @param string $description
+     * @return array
+     */
+    protected function _createGroup($grName, $courseId, $description){
+
+        $body = $this->_sendQuery('core_group_create_groups','POST', array(
+            'groups'=>array(
+                '0'=>array(
+                    'name' => $grName,
+                    'description' => $description,
+                    'courseid' => $courseId
+                )
+            )
+        ));
+
+        $array = json_decode($body);
+
+        if(isset($array->errorcode)){
+            return array(false, 'Ошибка '.$array->message, '');
+        }else {
+
+            if (count($array) != 1) {
+                return array(false, 'Ошибка', '');
+            } else {
+                return array(true, '', $array[0]->id);
+            }
+
+            //return array(true, '');
+        }
+    }
+
+    /**
+     * Удаление или запись студентов в гррупу мудл
+     * @param array $members
+     * @param bool $isAdd ДОавление или удаление
+     * @return array
+     */
+    protected function _groupMembers($members, $isAdd = true){
+
+        $body = $this->_sendQuery($isAdd ?'core_group_add_group_members' : 'core_group_delete_group_members','POST', array(
+            'members'=>$members
+        ));
+
+        $array = json_decode($body);
+
+        if(isset($array->errorcode)){
+            return array(false, 'Ошибка '.$array->message);
+        }else {
+            return array(true, '');
+        }
+    }
+
+    /**
      * Записать студента на курс
      * @param Stdist $st
      * @param string $courseId
@@ -345,6 +401,7 @@ class MoodleDistEducation extends DistEducation
         $globalResult = true;
         $log = '';
 
+        ///Ищем к какому курсу привязана дисциплина
         $model = DispDist::model()->findByPk($dispInfo['uo1']);
 
         if($model==null)
@@ -355,6 +412,46 @@ class MoodleDistEducation extends DistEducation
         }
 
         $id = $model->dispdist3;
+
+        ///Ищем группу в модле
+        $distGroup = Distgr::model()->findByAttributes(array('distgr1' => $dispInfo['gr1'], 'distgr2' => $dispInfo['uo1']));
+        if($distGroup==null)
+        {
+            //если группы нет, пытаемся создать
+            $log .= '<br> Не найдина группа в MOODLE, создаем...';
+
+            $descriptionGroup = '';
+            //создаем группу
+            list($result, $message, $idGroup) = $this->_createGroup($dispInfo['grName'],$id, $descriptionGroup);
+            if($result) {
+                //если получилось создать
+                $distGroup = new Distgr();
+                $distGroup->distgr1 = $dispInfo['gr1'];
+                $distGroup->distgr2 = $dispInfo['uo1'];
+                $distGroup->distgr3 = $idGroup;
+                //пітаемся сохранить
+                if (!$distGroup->save()) {
+                    //есои не получилось сохранить
+                    $errors = empty($distGroup->getErrors()) ? '' : implode(';', $distGroup->getErrors());
+                    $log .= '<br> Ошибка сохранения группы MOODLE c id '.$idGroup.' в АСУ: ' . $errors;
+                    $globalResult = false;
+                    return array($globalResult, $log);
+                } else {
+                    //если удачно охранили
+                    $log .= '<br> Создана группа в MOODLE с id: ' . $distGroup->distgr3;
+                }
+            }else{
+                //если ошибка созданя в моодле
+                $log .= '<br> Ошибка создания группы в MOODLE: ' . $message;
+                $globalResult = false;
+                return array($globalResult, $log);
+            }
+        }else{
+            //если нашли сразу группу
+            $log .= '<br> Найдина группа в MOODLE с id: '. $distGroup->distgr3;
+        }
+
+        $studentsForGroup = array();
 
         foreach ($students as $student) {
             $log .='<br>';
@@ -384,6 +481,19 @@ class MoodleDistEducation extends DistEducation
                     'discipline' => $dispInfo['d2'],
                     'course' => $model->dispdist2
                 );
+
+                $studentsForGroup[] = array(
+                    'groupid' => $distGroup->distgr3,
+                    'userid' => $stModel->stdist3
+                );
+            }
+        }
+
+        if(!empty($studentsForGroup)){
+            list($success, $message) = $this->_groupMembers($studentsForGroup);
+            if(!$success){
+                $globalResult = false;
+                $log .= '<br> Ошибка добавления студентов в группу MOODLE c id '.$distGroup->distgr3.': ' . $message;
             }
         }
 
@@ -423,6 +533,14 @@ class MoodleDistEducation extends DistEducation
 
         $id = $model->dispdist3;
 
+        ///Ищем группу в модле
+        $distGroup = Distgr::model()->findByAttributes(array('distgr1' => $dispInfo['gr1'], 'distgr2' => $dispInfo['uo1']));
+        /*if($distGroup!=null)
+        {
+            $
+        }*/
+        $studentsForGroup = array();
+
         foreach ($students as $student) {
             $log .='<br>';
             $stModel = Stdist::model()->findByPk($student->st1);
@@ -445,6 +563,12 @@ class MoodleDistEducation extends DistEducation
                     $globalResult = false;
                 }
 
+                if(!empty($distGroup))
+                    $studentsForGroup[] = array(
+                        'groupid' => $distGroup->distgr3,
+                        'userid' => $stModel->stdist3
+                    );
+
                 $successLog[] = array(
                     'fio' => $student->getShortName(),
                     'email' => $stModel->stdist2,
@@ -452,7 +576,14 @@ class MoodleDistEducation extends DistEducation
                     'course' => $model->dispdist2
                 );
             }
+        }
 
+        if(!empty($studentsForGroup)){
+            list($success, $message) = $this->_groupMembers($studentsForGroup, false);
+            if(!$success){
+                $globalResult = false;
+                $log .= '<br> Ошибка удаления студентов из группы MOODLE c id '.$distGroup->distgr3.': ' . $message;
+            }
         }
 
         if(!empty($successLog)){

@@ -644,7 +644,12 @@ class DistEducationController extends Controller
             throw new CHttpException(400, tt('Ошибка создания конектора'));
         }
 
+        $grName = Gr::model()->getGroupName($group['sem4'], $group);
+
         $students = St::model()->getStudentsOfGroupForDistEducation($group['gr1']);
+
+        $disp['gr1'] = $group['gr1'];
+        $disp['grName'] = $grName;
 
         if($subscription==1) {
             list($success, $html) = $connector->subscribeStudentsToCourse($students, $disp);
@@ -652,7 +657,7 @@ class DistEducationController extends Controller
             list($success, $html) = $connector->unsubscribeStudentsToCourse($students, $disp);
         }
 
-        $title = Gr::model()->getGroupName($group['sem4'], $group);
+        $title = $grName;
         $res = array(
             'error'=>!$success,
             'html' => $html,
@@ -680,6 +685,7 @@ class DistEducationController extends Controller
 
         $chairId = Yii::app()->request->getParam('chairId', null);
         $st1 = Yii::app()->request->getParam('st1', null);
+        $gr1 = Yii::app()->request->getParam('gr1', null);
         $uo1 = Yii::app()->request->getParam('uo1', null);
         $subscription = Yii::app()->request->getParam('subscription', null);
 
@@ -698,6 +704,12 @@ class DistEducationController extends Controller
             throw new CHttpException(400, tt('Нет доступа2'));
         }
 
+
+        $group = $model->getGroupsByUo1($uo1, $gr1);
+        if (empty($group)) {
+            throw new CHttpException(400, tt('Нет доступа'));
+        }
+
         $st = St::model()->findByPk($st1);
         if (empty($st)) {
             throw new CHttpException(400, tt('Нет доступа3'));
@@ -710,6 +722,12 @@ class DistEducationController extends Controller
         if (empty($connector)) {
             throw new CHttpException(400, tt('Ошибка создания конектора'));
         }
+        
+        $grName = Gr::model()->getGroupName($group['sem4'], $group);
+
+        $disp['gr1'] = $group['gr1'];
+        $disp['grName'] = $grName;
+
 
         if($subscription==1) {
             list($success, $html) = $connector->subscribeToCourse(
