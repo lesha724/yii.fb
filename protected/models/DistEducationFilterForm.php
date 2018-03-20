@@ -367,13 +367,13 @@ SQL;
             gr1, gr3, sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28
           from gr
             inner join ucgn on (gr.gr1 = ucgn.ucgn2)
-			inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
+			inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2 and (UCGNS3>0 or UCGNS4>0))
             inner join ucxg on (ucgn.ucgn1 = ucxg.ucxg2)
             inner join ucx on (ucxg.ucxg1 = ucx.ucx1)
             inner join uo on (ucx.ucx1 = uo.uo19)
             inner join us on (UO.UO1 = US.US2)
 			INNER JOIN sem ON (Us.us3 = sem.sem1)
-          WHERE uo1=:UO1 and gr13=0 and UCGNS5=:YEAR and UCGNS6=:SEM $where
+          WHERE uo1=:UO1 and gr13=0 and UCGNS5=:YEAR and UCGNS6=:SEM  $where
           GROUP BY gr1, gr3, sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28
 SQL;
 
