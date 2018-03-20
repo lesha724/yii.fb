@@ -329,6 +329,10 @@ HTML
      * Вопрос есть уже акаунт или нет
      */
     public function actionSignUpOldDistEducation(){
+
+        if(in_array($this->universityCode, array(U_NMU, U_KNAME)) ){
+            throw new CHttpException('Access denied');
+        }
         /**
          * @var $model SingUpOldDistEducationForm
          */
