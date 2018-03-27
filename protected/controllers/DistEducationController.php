@@ -26,7 +26,8 @@ class DistEducationController extends Controller
                     'showGroup',
                     'subscriptionGroup',
                     'subscriptionStudent',
-                    'signUpNewDistEducation'
+                    'signUpNewDistEducation',
+                    'uploadMarks'
                 ),
                 'expression' => 'Yii::app()->user->isTch',
             ),
@@ -596,6 +597,67 @@ class DistEducationController extends Controller
         Yii::app()->end(CJSON::encode($res));
     }
 
+    /*
+    * метод переноса оценок
+    */
+    public function actionUploadMarks(){
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+
+        $model = new DistEducationFilterForm(Yii::app()->user);
+
+        if(!$model->isAdminDistEducation){
+            throw new CHttpException(400, tt('Нет доступа'));
+        }
+
+        $chairId = Yii::app()->request->getParam('chairId', null);
+        $gr1 = Yii::app()->request->getParam('gr1', null);
+        $uo1 = Yii::app()->request->getParam('uo1', null);
+
+        $model->setChairId($chairId);
+
+        $disp = $model->getDispInfo($uo1);
+
+        if (empty($disp)) {
+            throw new CHttpException(400, tt('Нет доступа'));
+        }
+
+        if (empty($disp['dispdist2'])) {
+            throw new CHttpException(400, tt('Нет доступа'));
+        }
+
+        $group = $model->getGroupsByUo1($uo1, $gr1);
+        if (empty($group)) {
+            throw new CHttpException(400, tt('Нет доступа'));
+        }
+
+        $connector = SH::getDistEducationConnector(
+            $this->universityCode
+        );
+
+        if (empty($connector)) {
+            throw new CHttpException(400, tt('Ошибка создания конектора'));
+        }
+
+        $grName = Gr::model()->getGroupName($group['sem4'], $group);
+
+        $disp['gr1'] = $group['gr1'];
+        $disp['grName'] = $grName;
+
+        list($success, $html) = $connector->uploadMarks($uo1, $gr1, Yii::app()->session['year'], Yii::app()->session['sem']);
+
+        $title = $grName;
+        $res = array(
+            'error'=>!$success,
+            'html' => $html,
+            'title' => $title
+        );
+
+        Yii::app()->user->setFlash($success ? 'success' : 'error', '<h4>'.$title.'</h4>'.$html);
+
+        Yii::app()->end(CJSON::encode($res));
+    }
 
     /**
      * метод записи группы

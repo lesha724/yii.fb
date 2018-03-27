@@ -6,7 +6,6 @@
  * The followings are the available columns in table 'vmp':
  * @property integer $vmp1
  * @property integer $vmp2
- * @property integer $vmp3
  * @property integer $vmp4
  * @property integer $vmp5
  * @property integer $vmp6
@@ -30,10 +29,10 @@ class Vmp extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('vmp1, vmp2, vmp3, vmp4, vmp5, vmp6, vmp7', 'numerical', 'integerOnly'=>true),
+			array('vmp1, vmp2, vmp4, vmp5, vmp6, vmp7', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('vmp1, vmp2, vmp3, vmp4, vmp5, vmp6, vmp7', 'safe', 'on'=>'search'),
+			array('vmp1, vmp2, vmp4, vmp5, vmp6, vmp7', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -56,7 +55,6 @@ class Vmp extends CActiveRecord
 		return array(
 			'vmp1' => 'Vmp1',
 			'vmp2' => 'Vmp2',
-			'vmp3' => 'Vmp3',
 			'vmp4' => 'Vmp4',
 			'vmp5' => 'Vmp5',
 			'vmp6' => 'Vmp6',
@@ -84,7 +82,6 @@ class Vmp extends CActiveRecord
 
 		$criteria->compare('vmp1',$this->vmp1);
 		$criteria->compare('vmp2',$this->vmp2);
-		$criteria->compare('vmp3',$this->vmp3);
 		$criteria->compare('vmp4',$this->vmp4);
 		$criteria->compare('vmp5',$this->vmp5);
 		$criteria->compare('vmp6',$this->vmp6);

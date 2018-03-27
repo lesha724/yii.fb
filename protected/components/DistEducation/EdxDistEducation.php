@@ -483,4 +483,15 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
 
         return array($globalResult, $log);
     }
+
+    /**
+     * Получить оценки
+     * @param DistVedomost $vedomost
+     * @return DistVedomost
+     * @throws Exception
+     */
+    protected function _getMarks($vedomost)
+    {
+        throw new Exception('EDX: not implimented');
+    }
 }

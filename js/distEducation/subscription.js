@@ -87,7 +87,7 @@ $(document).on('click','.btn-unsubscript-student, .btn-subscript-student', funct
 
 });
 
-$(document).on('click','.btn-subscript-group,.btn-unsubscript-group', function(e) {
+$(document).on('click','.btn-subscript-group,.btn-unsubscript-group,.btn-subscript-disp,.btn-unsubscript-disp, .btn-upload-marks', function(e) {
     e.preventDefault();
     $spinner1.show();
     var url = $(this).attr('href');

@@ -623,4 +623,83 @@ class MoodleDistEducation extends DistEducation
 
         return array($result, $log);
     }
+
+    /**
+     * Получить оценки
+     * @param DistVedomost $vedomost
+     * @return DistVedomost
+     */
+    protected function _getMarks($vedomost)
+    {
+        $marks = $this->_getMarksFromDist($vedomost->getCourseId(), $vedomost->getGroupId());
+        //var_dump($marks);
+
+        foreach ($marks as $mark){
+            if(!isset($mark->userid))
+                continue;
+
+            if(!isset($mark->gradeitems))
+                continue;
+
+            $userId = $mark->userid;
+            //var_dump($userId);
+            $gradies = $mark->gradeitems;
+
+            $itog = end($gradies);
+            //var_dump($itog);
+
+            if(!isset($itog->itemtype))
+                continue;
+
+            if($itog->itemtype!='course')
+                continue;
+
+            if(!isset($itog->graderaw))
+                continue;
+
+            $stDist = Stdist::model()->findByAttributes(array('stdist3' => $userId));
+            if(empty($stDist))
+                continue;
+
+            /*var_dump($stDist->stdist1);
+            var_dump($itog->graderaw);
+            var_dump('-----------------------------');*/
+
+            $vedomost->addMark($stDist->stdist1 ,$itog->graderaw);
+        }
+
+        return $vedomost;
+    }
+
+    /**
+     * Получить оценки с дист образования
+     * @param int $groupId
+     * @param int $courseId
+     * @return array
+     * @throws Exception
+     */
+    protected function _getMarksFromDist($courseId, $groupId){
+
+        //var_dump($courseId);
+        //var_dump($groupId);
+
+        $body = $this->_sendQuery('gradereport_user_get_grade_items','POST', array(
+            'groupid' => $groupId,
+            'courseid' => $courseId,
+        ));
+
+        $array = json_decode($body);
+        /*if(!is_array($array))
+            throw new Exception('MoodleDistEducation: Ошибка загрузки курсов. Неверный формат ответа');
+        else {*/
+            if (isset($array->errorcode)) {
+               throw new Exception('Ошибка загрузки оценок' . $array->message);
+            } else {
+                if (!isset($array->usergrades))
+                    throw new Exception('Неизвестный ответ');
+
+                return $array->usergrades;
+            }
+        //}
+    }
 }
