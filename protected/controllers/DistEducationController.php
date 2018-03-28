@@ -26,6 +26,7 @@ class DistEducationController extends Controller
                     'showGroup',
                     'subscriptionGroup',
                     'subscriptionStudent',
+                    'subscriptionDisp',
                     'signUpNewDistEducation',
                     'uploadMarks'
                 ),
@@ -727,6 +728,89 @@ class DistEducationController extends Controller
         );
 
         Yii::app()->user->setFlash($success ? 'success' : 'error', '<h4>'.$title.'</h4>'.$html);
+
+        Yii::app()->end(CJSON::encode($res));
+    }
+
+    /**
+     * метод записи всех групп по дисциплине
+     */
+    public function actionSubscriptionDisp(){
+        //if (! Yii::app()->request->isAjaxRequest)
+            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+
+        $model = new DistEducationFilterForm(Yii::app()->user);
+
+        if(!$model->isAdminDistEducation){
+            throw new CHttpException(400, tt('Нет доступа'));
+        }
+
+        $chairId = Yii::app()->request->getParam('chairId', null);
+        //$gr1 = Yii::app()->request->getParam('gr1', null);
+        $uo1 = Yii::app()->request->getParam('uo1', null);
+        $subscription = Yii::app()->request->getParam('subscription', null);
+
+        if($subscription==null)
+            throw new CHttpException(400, tt('Неверный параметры'));
+
+        $model->setChairId($chairId);
+
+        $disp = $model->getDispInfo($uo1);
+
+        if (empty($disp)) {
+            throw new CHttpException(400, tt('Нет доступа'));
+        }
+
+        if (empty($disp['dispdist2'])) {
+            throw new CHttpException(400, tt('Нет доступа'));
+        }
+
+        /*$group = $model->getGroupsByUo1($uo1, $gr1);
+        if (empty($group)) {
+            throw new CHttpException(400, tt('Нет доступа'));
+        }*/
+
+        $connector = SH::getDistEducationConnector(
+            $this->universityCode
+        );
+
+        if (empty($connector)) {
+            throw new CHttpException(400, tt('Ошибка создания конектора'));
+        }
+
+        $log = '';
+        $globalResult = true;
+
+        $groups = $model->getGroupsByUo1($uo1);
+        foreach ($groups as $group) {
+            $grName = Gr::model()->getGroupName($group['sem4'], $group);
+
+            $students = St::model()->getStudentsOfGroupForDistEducation($group['gr1']);
+
+            $disp['gr1'] = $group['gr1'];
+            $disp['grName'] = $grName;
+
+            if ($subscription == 1) {
+                list($success, $html) = $connector->subscribeStudentsToCourse($students, $disp);
+            } else {
+                list($success, $html) = $connector->unsubscribeStudentsToCourse($students, $disp);
+            }
+
+            if(!$success)
+                $globalResult = false;
+
+            $log .= '<h5>'.$grName.'</h5>';
+            $log .= $html;
+            //$title = $grName;
+        }
+        $res = array(
+            'error'=>!$globalResult,
+            'html' => $log,
+            'title' => $disp['d2']
+        );
+
+        Yii::app()->user->setFlash($globalResult ? 'success' : 'error', '<h4>'.$disp['d2'].'</h4>'.$log);
 
         Yii::app()->end(CJSON::encode($res));
     }
