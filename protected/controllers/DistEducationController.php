@@ -736,8 +736,8 @@ class DistEducationController extends Controller
      * метод записи всех групп по дисциплине
      */
     public function actionSubscriptionDisp(){
-        //if (! Yii::app()->request->isAjaxRequest)
-            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
 
         $model = new DistEducationFilterForm(Yii::app()->user);
