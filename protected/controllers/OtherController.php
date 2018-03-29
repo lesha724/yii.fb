@@ -1591,7 +1591,7 @@ HTML;
                 $message = str_replace('{username}',$teacher->u2,$body);
                 $message = str_replace('{name}',$p->getShortName(),$message);
 
-                list($status, $message) =  $this->mailsend($student->u4, 'Antiplagiat results '.$studentName, $message);
+                list($status, $message) =  $this->mailsend($teacher->u4, 'Antiplagiat results '.$studentName, $message);
                 if(!$status)
                     Yii::app()->user->setFlash('error', tt('Ошибка отправки email для преподователя. Текст ошибки: ').$message);
             }
