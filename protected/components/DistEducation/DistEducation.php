@@ -531,9 +531,23 @@ SQL
             ':GR1' => $gr1
         ));
 
+        $selectVmpv1 = <<<SQL
+          SELECT vmpv1 from vmpv WHERE vmpv2=:VVMP1 and vmpv6 is NULL and vmpv7=:GR1
+SQL;
 
-        $transaction = Yii::app()->db->beginTransaction();
-        $insertVmpv = <<<SQL
+        $vmpv1 = Yii::app()->db->createCommand( $selectVmpv1)->queryScalar(array(
+            ':VVMP1' => $vvmp->vvmp1,
+            ':GR1' => $gr1
+        ));
+
+        $isOld = true;
+
+        if(empty($vmpv1)) {
+
+            $isOld = false;
+
+            $transaction = Yii::app()->db->beginTransaction();
+            $insertVmpv = <<<SQL
                 INSERT into vmpv(vmpv1,vmpv2,vmpv3,vmpv4,vmpv5,vmpv6,vmpv7,vmpv8,vmpv9,vmpv10,vmpv11) 
                   VALUES (
                     :VMPV1,
@@ -549,46 +563,57 @@ SQL
                     :VMPV11
                 );
 SQL;
-        try {
-            $vmpv1 = Yii::app()->db->createCommand("select first 1 id1 from pr1('vmpv1','vmpv') left join vmpv on (vmpv1=id1) where vmpv1 is null")->queryScalar();
-            $currentDate = date('Y-m-d H:i:s');
-            Yii::app()->db->createCommand($insertVmpv)->queryScalar(array(
-                ':VMPV1' => $vmpv1,
-                ':VMPV2' => $vvmp->vvmp1,
-                ':VMPV3' => '-',
-                ':VMPV7' => $gr1,
-                ':VMPV11' => Yii::app()->user->dbModel->p1,
-                ':VMPV4' => $currentDate,
-                ':VMPV5' => $currentDate,
-                ':VMPV8' => $currentDate,
-                ':VMPV9' => $currentDate
-            ));
+            try {
+                $vmpv1 = Yii::app()->db->createCommand("select first 1 id1 from pr1('vmpv1','vmpv') left join vmpv on (vmpv1=id1) where vmpv1 is null")->queryScalar();
+                $currentDate = date('Y-m-d H:i:s');
+                Yii::app()->db->createCommand($insertVmpv)->queryScalar(array(
+                    ':VMPV1' => $vmpv1,
+                    ':VMPV2' => $vvmp->vvmp1,
+                    ':VMPV3' => '-',
+                    ':VMPV7' => $gr1,
+                    ':VMPV11' => Yii::app()->user->dbModel->p1,
+                    ':VMPV4' => $currentDate,
+                    ':VMPV5' => $currentDate,
+                    ':VMPV8' => $currentDate,
+                    ':VMPV9' => $currentDate
+                ));
 
-            $transaction->commit();
-        }catch (Exception $error){
-            $transaction->rollback();
-            return array(false, 'Ошибка создания ведомости: '.$error->getMessage());
+                $transaction->commit();
+            } catch (Exception $error) {
+                $transaction->rollback();
+                return array(false, 'Ошибка создания ведомости: ' . $error->getMessage());
+            }
         }
 
         $transaction = Yii::app()->db->beginTransaction();
 
         try {
-            $name = sprintf('%s-%d.%d-%d', $f2, $sem7, (int)$year - 2000, $vmpv1);
 
-            Yii::app()->db->createCommand('UPDATE vmpv set vmpv3=:VMPV3 WHERE vmpv1= :VMPV1')->execute(array(
-                ':VMPV1' => $vmpv1,
-                ':VMPV3' => $name
-            ));
+            if(!$isOld) {
+                $name = sprintf('%s-%d.%d-%d', $f2, $sem7, (int)$year - 2000, $vmpv1);
+
+                Yii::app()->db->createCommand('UPDATE vmpv set vmpv3=:VMPV3 WHERE vmpv1= :VMPV1')->execute(array(
+                    ':VMPV1' => $vmpv1,
+                    ':VMPV3' => $name
+                ));
+            }
 
             $marks = $vedomost->getMarks();
             //var_dump($marks);
 
             foreach ($students as $student) {
 
-                $vmp = new Vmp();
-                $vmp->vmp1 = $vmpv1;
+                $vmp = Vmp::model()->findByAttributes(array(
+                    'vmp1' => $vmpv1,
+                    'vmp2' => $student->st1
+                ));
 
-                $vmp->vmp2 = $student->st1;
+                if(empty($vmp)) {
+                    $vmp = new Vmp();
+                    $vmp->vmp1 = $vmpv1;
+                    $vmp->vmp2 = $student->st1;
+                }
+
                 if(isset($marks[$student->st1])) {
                     $vmp->vmp4 = $marks[$student->st1];
                     $vmp->vmp7 = $marks[$student->st1];
