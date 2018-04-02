@@ -608,6 +608,8 @@ SQL;
                     'vmp2' => $student->st1
                 ));
 
+                //var_dump($vmp);
+
                 if(empty($vmp)) {
                     $vmp = new Vmp();
                     $vmp->vmp1 = $vmpv1;
@@ -615,8 +617,10 @@ SQL;
                 }
 
                 if(isset($marks[$student->st1])) {
-                    $vmp->vmp4 = $marks[$student->st1];
-                    $vmp->vmp7 = $marks[$student->st1];
+
+                    $vmp->vmp4 = round($marks[$student->st1],2);
+                    $vmp->vmp7 = round($marks[$student->st1],2);
+                    //var_dump($vmp);
                 }else{
                     $vmp->vmp4 = 0;
                     $vmp->vmp7 = -4;

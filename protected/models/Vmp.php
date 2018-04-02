@@ -29,7 +29,7 @@ class Vmp extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('vmp1, vmp2, vmp4, vmp5, vmp6, vmp7', 'numerical', 'integerOnly'=>true),
+			array('vmp1, vmp2, vmp4, vmp5, vmp6, vmp7', 'numerical'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('vmp1, vmp2, vmp4, vmp5, vmp6, vmp7', 'safe', 'on'=>'search'),

@@ -645,14 +645,29 @@ class MoodleDistEducation extends DistEducation
             //var_dump($userId);
             $gradies = $mark->gradeitems;
 
-            $itog = end($gradies);
-            //var_dump($itog);
+            if(empty($gradies))
+                continue;
+            $itog = null;
 
-            if(!isset($itog->itemtype))
+            foreach ($gradies as $grady){
+                if(!isset($grady->itemtype))
+                    continue;
+
+                if($grady->itemtype!='course')
+                    continue;
+
+                $itog = $grady;
+                break;
+            }
+
+            if(empty($itog))
+                continue;
+
+            /*if(!isset($itog->itemtype))
                 continue;
 
             if($itog->itemtype!='course')
-                continue;
+                continue;*/
 
             if(!isset($itog->graderaw))
                 continue;
