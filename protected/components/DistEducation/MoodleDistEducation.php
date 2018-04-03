@@ -711,7 +711,7 @@ class MoodleDistEducation extends DistEducation
                throw new Exception('Ошибка загрузки оценок' . $array->message);
             } else {
                 if (!isset($array->usergrades))
-                    throw new Exception('Неизвестный ответ');
+                    throw new Exception('Неизвестный ответ:'. $body);
 
                 return $array->usergrades;
             }
