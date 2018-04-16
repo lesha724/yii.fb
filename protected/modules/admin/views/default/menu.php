@@ -90,9 +90,9 @@
                     'name'       => 'Список',
                     'controller' => 'list',
                     'items' => array(
-                        'group'      => 'Группы',
+                        'group'      => 'Академ. группы',
                         'chair'      => 'Кафедры',
-                        'virtualGroup' => 'Виртуальные группы',
+                        'virtualGroup' => 'Группы по выборочным дисциплинам',
                     ),
                 ),
                 array(

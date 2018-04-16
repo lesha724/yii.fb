@@ -467,13 +467,13 @@ $this->widget('zii.widgets.CMenu', array(
             'itemOptions'=>_i('list'),
             'items' =>array_merge( array(
                 array(
-                    'label'   => $_l2.tt('Группы'),
+                    'label'   => $_l2.tt('Академ. группы'),
                     'url'     => _u('/list/group'),
                     'active'  => $_c=='list' && $_a=='group',
                     'visible' => _ch('list', 'group')
                 ),
                 array(
-                    'label'   => $_l2.tt('Виртуальные группы'),
+                    'label'   => $_l2.tt('Группы по выборочным дисциплинам'),
                     'url'     => _u('/list/virtualGroup'),
                     'active'  => $_c=='list' && $_a=='virtualGroup',
                     'visible' => _ch('list', 'virtualGroup')
