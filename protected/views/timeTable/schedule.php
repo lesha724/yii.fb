@@ -52,6 +52,8 @@ $html .= <<<HTML
 HTML;
 	}
     $html .= '</td>';
+    //Сообщение для тултипа для закрытых дней
+    $closedMessage = tt('Выберите необходимый диапазон дат');
     // колонки с занятиями
     $firstTs = $timestamps[0];
     for($week = 0; $week < $amountOfWeeks; $week++) {
@@ -78,6 +80,13 @@ HTML;
                 $fullText  = trim($tt[$lesson]['fullText'], '<br>');
                 if(isset($tt[$lesson]['gr3']))
                     $fullText  =str_replace('{$gr3}',$tt[$lesson]['gr3'],$fullText);
+            }else{
+                if($isClosed){
+                    $html .= <<<HTML
+<div class="cell mh-{$mh}"  data-toggle="tooltip" title="{$closedMessage}">{$shortText}</div>
+HTML;
+                    continue;
+                }
             }
 
             $html .= <<<HTML
