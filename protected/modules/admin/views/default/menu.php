@@ -21,6 +21,7 @@
 
 <form id="menu" method="post">
     <?php
+        $teacherStr = tt('Преподователь');
         $this->renderPartial('menu/_block', array(
             'settings' => $settings,
             'blocks' => array(
@@ -104,18 +105,27 @@
                     ),
                 ),
                 array(
-                    'name'       => 'Дист.обрзование',
+                    'name'       => 'Дист.образование',
                     'controller' => 'distEducation',
                     'items' => array(
-                        'index'    => 'Закрепление',
-                        'subscription' => 'Запись'
+                        'index' => array(
+                            'name'=>'Закрепление',
+                            'authOnly' => $teacherStr
+                        ),
+                        'subscription' => array(
+                            'name'=>'Запись',
+                            'authOnly' => $teacherStr
+                        ),
                     ),
                 ),
                 array(
                     'name'       => 'Нагрузка',
                     'controller' => 'workLoad',
                     'items' => array(
-                        'self'    => 'Личная',
+                        'self'    => array(
+                            'name'=>'Личная',
+                            'authOnly' => $teacherStr
+                        ),
                         'teacher' => 'Преподавателя',
                         'amount'  => 'Объем учебной нагрузки',
                     ),

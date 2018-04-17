@@ -8,6 +8,9 @@
 
 define('MENU_ELEMENT_VISIBLE', 'visible');
 define('MENU_ELEMENT_NEED_AUTH', 'need_auth');
+define('MENU_ELEMENT_AUTH_STUDENT', 'need_auth_std');
+define('MENU_ELEMENT_AUTH_TEACHER', 'need_auth_tch');
+define('MENU_ELEMENT_AUTH_PARENT', 'need_auth_prnt');
 
 Yii::setPathOfAlias('bootstrap', dirname(__FILE__).'/../extensions/bootstrap');
 

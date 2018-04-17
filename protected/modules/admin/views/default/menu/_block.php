@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * @var $settings array
+ * @var $blocks array
+ */
 global $menu;
 $menu = $settings;
 
@@ -17,18 +22,34 @@ function checkbox($controller, $action, $type)
 
     $checked = $val ? "checked='checked'" : '';
 
-    $tooltip = '';
-    if ($type == MENU_ELEMENT_VISIBLE)
-        $tooltip = tt('Скрыть пункт меню');
-    elseif ($type == MENU_ELEMENT_NEED_AUTH)
-        $tooltip = 'Доступен без авторизации';
+    $label = '';
+    switch ($type){
+        case MENU_ELEMENT_VISIBLE:
+            $label = tt('Активный');
+            break;
+        case MENU_ELEMENT_NEED_AUTH:
+            $label = tt('Доступен без авторизации');
+            break;
+        case MENU_ELEMENT_AUTH_STUDENT:
+            $label = tt('Доступен студентам');
+            break;
+        case MENU_ELEMENT_AUTH_TEACHER:
+            $label = tt('Доступен преподователям');
+            break;
+        case MENU_ELEMENT_AUTH_PARENT:
+            $label = tt('Доступен родителям');
+            break;
+        default:
+            $label = '';
+            break;
+    }
 
     $name = $controller.'['.$action.']['.$type.']';
     return <<<HTML
-        <span>
+        <label class="checkbox">
             <input type="hidden" name="{$name}" value="{$val}"/>
-            <input type="checkbox" {$checked} data-rel="tooltip" data-placement="top" data-original-title="{$tooltip}" />
-        </span>
+            <input type="checkbox" class="type-{$type}" {$checked}/>{$label}
+        </label>
 HTML;
 
 }
@@ -83,12 +104,37 @@ foreach ($blocks as $block) :
     <div class="widget-body">
         <div class="widget-main">
             <ol class="dd-list">
-                <?php foreach ($items as $action => $name): ?>
+                <?php foreach ($items as $action => $value): ?>
                     <li class="dd-item" >
                         <div class="dd-handle">
-                            <?=checkbox($controller, $action, MENU_ELEMENT_VISIBLE)?>
-                            <?=checkbox($controller, $action, MENU_ELEMENT_NEED_AUTH)?>
-                            <?=tt($name)?></div>
+                            <?php
+                                if(!is_array($value)) {
+                                    echo '<div>' . tt($value) . '</div>';
+                                    echo checkbox($controller, $action, MENU_ELEMENT_VISIBLE);
+                                    echo checkbox($controller, $action, MENU_ELEMENT_NEED_AUTH);
+
+                                    echo '<div class="block-auth-role">';
+                                    echo checkbox($controller, $action, MENU_ELEMENT_AUTH_STUDENT);
+                                    echo checkbox($controller, $action, MENU_ELEMENT_AUTH_TEACHER);
+                                    echo checkbox($controller, $action, MENU_ELEMENT_AUTH_PARENT);
+                                    echo '</div>';
+
+                                }else{
+                                    $nameAction = $value['name'];
+                                    $authOnly = $value['authOnly'];
+                                    echo checkbox($controller, $action, MENU_ELEMENT_VISIBLE);
+                                    echo '<div>'.tt('Доступен для:').'</div>';
+                                    echo '<ul>';
+                                    if(is_array($authOnly)) {
+                                        foreach ($authOnly as $auth) {
+                                            echo '<li>' . $auth . '</li>';
+                                        }
+                                    }else
+                                        echo '<li>' . $authOnly . '</li>';
+                                    echo '</ul>';
+                                }
+                            ?>
+                        </div>
                     </li>
                 <?php endforeach; ?>
             </ol>
@@ -97,3 +143,37 @@ foreach ($blocks as $block) :
 </div>
 <?php
 endforeach;
+
+$type = MENU_ELEMENT_NEED_AUTH;
+try {
+    Yii::app()->clientScript->registerScript('menu-admin-edit', <<<JS
+    
+        function setVisibleBlockAuthRole(elem){
+                var parent = elem.closest('.dd-handle');
+                var block = parent.find('.block-auth-role');
+                if(jQuery.isEmptyObject(block))
+                    return;
+                
+                if ( elem.is( ':checked' ) )
+                {
+                    block.hide();
+                }else{
+                    block.show();
+                }
+        }
+        
+        $(document).ready(function() {
+            var list = $('.type-{$type}');
+            list.each(function() {
+                setVisibleBlockAuthRole($(this));
+            });
+        });
+
+        $('.type-{$type}').change(function() {
+            setVisibleBlockAuthRole($(this));
+        });
+JS
+    );
+} catch (CException $e) {
+    throw $e;
+}
