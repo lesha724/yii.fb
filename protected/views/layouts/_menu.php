@@ -467,19 +467,19 @@ $this->widget('zii.widgets.CMenu', array(
             'itemOptions'=>_i('list'),
             'items' =>array_merge( array(
                 array(
-                    'label'   => $_l2.tt('Академ. группы'),
+                    'label'   => $_l2. tt('Академ. группы'),
                     'url'     => _u('/list/group'),
                     'active'  => $_c=='list' && $_a=='group',
                     'visible' => _ch('list', 'group')
                 ),
                 array(
-                    'label'   => $_l2.tt('Группы по выборочным дисциплинам'),
+                    'label'   => $_l2. tt('Группы по выборочным дисциплинам'),
                     'url'     => _u('/list/virtualGroup'),
                     'active'  => $_c=='list' && $_a=='virtualGroup',
                     'visible' => _ch('list', 'virtualGroup')
                 ),
                 array(
-                    'label'   => $_l2.tt('Кафедры'),
+                    'label'   => $_l2. tt('Кафедры'),
                     'url'     => _u('/list/chair'),
                     'active'  => $_c=='list' && $_a=='chair',
                     'visible' => _ch('list', 'chair')
@@ -494,43 +494,43 @@ $this->widget('zii.widgets.CMenu', array(
             'itemOptions'=>_i('journal'),
             'items' => array_merge(array(
                 array(
-                    'label'   => $_l2.tt('Статистика блокировки неоплативших студентов'),
+                    'label'   => $_l2. tt('Статистика блокировки неоплативших студентов'),
                     'url'     => _u('/journal/stFinBlockStatisticExcel'),
                     'visible' => _ch('journal', 'stFinBlockStatisticExcel') && $isAdmin,
                     'active'  => $_c=='journal' && $_a=='stFinBlockStatisticExcel'
                 ),
                 array(
-                    'label'   => $_l2.tt('Тематический план'),
+                    'label'   => $_l2. tt('Тематический план'),
                     'url'     => _u('/journal/thematicPlan'),
                     'visible' => _ch('journal', 'thematicPlan') && $isTch,
                     'active'  => $_c=='journal' && $_a=='thematicPlan'
                 ),
                 array(
-                    'label'   => $_l2.tt('Эл. журнал'),
+                    'label'   => $_l2. tt('Эл. журнал'),
                     'url'     => _u('/journal/journal'),
                     'visible' => _ch('journal', 'journal') && $isTch,
                     'active'  => $_c=='journal' && $_a=='journal'
                 ),
                 array(
-                    'label'   => $_l2.tt('Эл. журнал (моб.)'),
+                    'label'   => $_l2. tt('Эл. журнал (моб.)'),
                     'url'     => _u('/mobile/journal'),
                     'visible' => _ch('mobile', 'journal') && $isTch,
                     'active'  => $_c=='mobile' && $_a=='journal'
                 ),
                 array(
-                    'label'   => $_l2.tt('Отработка'),
+                    'label'   => $_l2. tt('Отработка'),
                     'url'     => _u('/journal/retake'),
                     'visible' => _ch('journal', 'retake')&& $isTch,
                     'active'  => $_c=='journal' && $_a=='retake'
                 ),
                 array(
-                    'label'   => $_l2.tt('Регистрация пропусков занятий'),
+                    'label'   => $_l2. tt('Регистрация пропусков занятий'),
                     'url'     => _u('/journal/omissions'),
                     'visible' => _ch('journal', 'omissions')&& $isTch,
                     'active'  => $_c=='journal' && $_a=='omissions'
                 ),
                 array(
-                    'label'   => $_l2.tt('Ввод посещаемости (для старост)'),
+                    'label'   => $_l2. tt('Ввод посещаемости (для старост)'),
                     'url'     => _u('/journal/stJournal'),
                     'visible' => _ch('journal', 'stJournal')&& $isStd && PortalSettings::model()->getSettingFor(106)==1,
                     'active'  => $_c=='journal' && $_a=='stJournal'
