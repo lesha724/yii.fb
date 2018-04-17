@@ -1007,19 +1007,19 @@ SQL;
     {
         if ($type == WorkPlanController::SPECIALITY) {
             $sql = <<<SQL
-                SELECT d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1
+                SELECT d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1, k19
                 FROM us
                 INNER JOIN uo ON (US.US2 = UO.UO1)
                 INNER JOIN u ON (UO.uo22 = U.U1)
                 INNER JOIN d ON (UO.uo3 = D.D1)
                 INNER JOIN k ON (UO.uo4 = K.K1)
                 WHERE us4<>13 and u2=:ID and us3=:SEM1 and us6<>0 and us4<>17 and us4<>18
-                ORDER BY d2,us4,uo3
+                ORDER BY d2,us4,uo3,d27
 SQL;
             $id  = $model->group;
         } elseif ($type == WorkPlanController::GROUP) {
             $sql = <<<SQL
-                SELECT d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1
+                SELECT d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1, k19
 				from ucxg
 				   inner join ucgn on (ucxg.ucxg2 = ucgn.ucgn1)
 				   inner join ucx on (ucxg.ucxg1 = ucx.ucx1)
@@ -1029,13 +1029,13 @@ SQL;
 				   inner join d on (uo.uo3 = d.d1)
 				   inner join k on (uo.uo4 = k.k1)
 				WHERE us4<>13 and ucgn2=:ID and us3=:SEM1 and us6<>0 and us4<>17 and us4<>18
-				group by d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1
-				ORDER BY d2,us4,uo3
+				group by d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1, k19
+				ORDER BY d2,us4,uo3,d27
 SQL;
             $id  = $model->group;
         } elseif ($type == WorkPlanController::STUDENT) {
              $sql = <<<SQL
-                SELECT d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1
+                SELECT d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1, k19
                     /*from ucxg
                        inner join ucgn on (ucxg.ucxg2 = ucgn.ucgn1)
                        inner join ucx on (ucxg.ucxg1 = ucx.ucx1)
@@ -1061,8 +1061,8 @@ SQL;
                            inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
                     WHERE us4<>13 and ucxg3=0 and ucsn2=:ID and us3=:SEM1 and us6<>0 and us4<>17 and us4<>18
 
-                    group by d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1
-                    ORDER BY d2,us4,uo3
+                    group by d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1, k19
+                    ORDER BY d2,us4,uo3,d27
 SQL;
             
             
@@ -1090,7 +1090,24 @@ SQL;*/
         $command->bindValue(':SEM1', $model->semester);
         $disciplines = $command->queryAll();
 
-        return $disciplines;
+        $result  = array();
+
+        if(Yii::app()->language=='en') {
+            foreach ($disciplines as $key => $value) {
+                $result[$key] = $value;
+
+                $chairName = $value['k19'];
+                if ((isset($chairName) && !empty($chairName) && $chairName != ""))
+                    $result[$key]['k2'] = $chairName;
+
+                $dispName = $value['d27'];
+                if ((isset($dispName) && !empty($dispName) && $dispName != ""))
+                    $result[$key]['d2'] = $dispName;
+            }
+        }else
+            return $disciplines;
+
+        return $result;
     }
 
     private function getNameFor($discipline)
