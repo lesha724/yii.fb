@@ -114,8 +114,8 @@ class RatingForm extends CFormModel
             array(
                 'group'=> tt('Группа'),
                 'course' => tt('Курс'),
-                'semStart' => tt('Семестр с'),
-                'semEnd' => tt('Семестр по'),
+                'semStart' => tt('Семестр "с"'),
+                'semEnd' => tt('Семестр "по"'),
                 'ratingType'=>tt('Рейтинг потока'),
                 'stType'=>tt('Тип студентов'),
             ),
