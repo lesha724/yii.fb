@@ -137,7 +137,30 @@ function _u($url)
 
 function _ch($controller, $action)
 {
-    return SH::checkServiceFor(MENU_ELEMENT_VISIBLE, $controller, $action);
+    if(!SH::checkServiceFor(MENU_ELEMENT_VISIBLE, $controller, $action))
+        return false;
+
+    if(!SH::checkServiceFor(MENU_ELEMENT_NEED_AUTH, $controller, $action))
+        if (Yii::app()->user->isGuest)
+            return false;
+        else{
+            switch (Yii::app()->user->model->u5){
+                case Users::ST1:
+                    if (! SH::checkServiceFor(MENU_ELEMENT_AUTH_STUDENT, $controller, $action))
+                        return false;
+                    break;
+                case Users::P1:
+                    if (! SH::checkServiceFor(MENU_ELEMENT_AUTH_TEACHER, $controller, $action))
+                        return false;
+                    break;
+                case Users::PRNT:
+                    if (! SH::checkServiceFor(MENU_ELEMENT_AUTH_PARENT, $controller, $action))
+                        return false;
+                    break;
+            }
+        }
+
+    return true;
 }
 
 function _i($name)
