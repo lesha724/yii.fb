@@ -28,5 +28,3 @@ if($univeristyCod==7) {
 }else
         echo PortalSettings::model()->findByPk($id)->ps2;
 echo '</div>';
-?>
-
