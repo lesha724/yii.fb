@@ -122,6 +122,7 @@ foreach ($blocks as $block) :
                                 }else{
                                     $nameAction = $value['name'];
                                     $authOnly = $value['authOnly'];
+                                    echo '<div>' . tt($nameAction) . '</div>';
                                     echo checkbox($controller, $action, MENU_ELEMENT_VISIBLE);
                                     echo '<div>'.tt('Доступен для:').'</div>';
                                     echo '<ul>';

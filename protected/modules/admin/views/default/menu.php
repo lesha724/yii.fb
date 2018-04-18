@@ -22,6 +22,9 @@
 <form id="menu" method="post">
     <?php
         $teacherStr = tt('Преподователь');
+        $studentStr = tt('Студент');
+        $parentStr = tt('Преподователь');
+
         $this->renderPartial('menu/_block', array(
             'settings' => $settings,
             'blocks' => array(
@@ -38,7 +41,13 @@
                     'name'       => 'Расписание',
                     'controller' => 'timeTable',
                     'items' => array(
-                        'self'         => 'Личное',
+                        'self'         => array(
+                            'name'=>'Личное',
+                            'authOnly' => array(
+                                $teacherStr,
+                                $studentStr
+                            )
+                        ),
                         'group'         => 'Академ. группы',
                         'teacher'       => 'Преподавателя',
                         'chair'       => 'Кафедры',
@@ -61,13 +70,28 @@
                     'controller' => 'journal',
                     'items' => array(
                         'stFinBlockStatisticExcel' => 'Статистика блокировки неоплативших студентов',
-                        'thematicPlan' => 'Тематический план',
-                        'journal' => 'Эл. журнал',
-                        'retake' => 'Отработка',
-                        'omissions'=>'Регистрация пропусков занятий',
+                        'thematicPlan' => array(
+                            'name'=>'Тематический план',
+                            'authOnly' => $teacherStr
+                        ),
+                        'journal' => array(
+                            'name'=>'Эл. журнал',
+                            'authOnly' => $teacherStr
+                        ),
+                        'retake' => array(
+                            'name'=>'Отработка',
+                            'authOnly' => $teacherStr
+                        ),
+                        'omissions' => array(
+                            'name'=>'Регистрация пропусков занятий',
+                            'authOnly' => $teacherStr
+                        ),
                         'attendanceStatistic'=>'Статистика посещаемости',
                         'attendanceStatisticPrint'=>'Статистика посещаемости на поток',
-                        'stJournal'=>'Ввод посещаемости (для старост)'
+                        'stJournal'=> array(
+                            'name'=>'Ввод посещаемости (для старост)',
+                            'authOnly' => $studentStr
+                        )
                     ),
                 ),
                 array(
@@ -82,9 +106,18 @@
                     'controller' => 'progress',
                     'items' => array(
                         'rating'      => 'Рейтинг',
-                        'test'=>'Тестирование',
-                        'modules'      => 'Ведение модулей',
-                        'examSession'=>'Экз. сессия'
+                        'test'=> array(
+                            'name'=>'Тестирование',
+                            'authOnly' => $studentStr
+                        ),
+                        'modules' =>  array(
+                            'name'=>'Ведение модулей',
+                            'authOnly' => $teacherStr
+                        ),
+                        'examSession'=>array(
+                            'name'=>'Экз. сессия',
+                            'authOnly' => $teacherStr
+                        )
                     ),
                 ),
 				array(
@@ -100,8 +133,14 @@
                     'name'       => 'Док.-оборот',
                     'controller' => 'doc',
                     'items' => array(
-                        'index' => 'Документооборот',
-                        'selfDoc' => 'Личные документы',
+                        'index' => array(
+                            'name'=>'Документооборот',
+                            'authOnly' => $teacherStr
+                        ),
+                        'selfDoc' => array(
+                            'name'=>'Личные документы',
+                            'authOnly' => $teacherStr
+                        )
                     ),
                 ),
                 array(
@@ -134,10 +173,22 @@
                     'name'       => 'Оплата',
                     'controller' => 'payment',
                     'items' => array(
-                        'hostel'    => 'Общежитие',
-                        'education' => 'Обучение',
-                        'hostelCurator'    => 'Общежитие (кур.)',
-                        'educationCurator' => 'Обучение (кур.)',
+                        'hostel'    =>  array(
+                            'name'=>'Общежитие',
+                            'authOnly' => $studentStr
+                        ),
+                        'education' => array(
+                            'name'=>'Обучение',
+                            'authOnly' => $studentStr
+                        ),
+                        'hostelCurator'    => array(
+                            'name'=>'Общежитие (кур.)',
+                            'authOnly' => $teacherStr
+                        ),
+                        'educationCurator' => array(
+                            'name'=>'Обучение (кур.)',
+                            'authOnly' => $teacherStr
+                        )
                     ),
                 ),
                 array(
@@ -145,13 +196,25 @@
                     'controller' => 'other',
                     'items' => array(
                         'phones' => 'Телефонный справочник',
-                        'gostem' => 'Запись на гос. экзамены',
+                        'gostem' => array(
+                            'name'=>'Запись на гос. экзамены',
+                            'authOnly' => $studentStr
+                        ),
                         'employment' => 'Трудоустройство',
-                        'subscription' => 'Запись на дисциплины',
-                        'orderLesson' => 'Заказ переноса заняти',
+                        'subscription' => array(
+                            'name'=>'Запись на дисциплины',
+                            'authOnly' => $studentStr
+                        ),
+                        'orderLesson' => array(
+                            'name'=>'Заказ переноса занятия',
+                            'authOnly' => $teacherStr
+                        ),
                         'studentInfo' => 'Данные студенты',
                         'studentCard' => 'Карточка студента',
-                        'antiplagiat' => 'Антиплагиат'
+                        'antiplagiat' =>  array(
+                            'name'=>'Антиплагиат',
+                            'authOnly' => $studentStr
+                        )
                     ),
                 ),
             )
