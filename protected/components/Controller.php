@@ -138,14 +138,32 @@ class Controller extends CController
     {
 
         if (! SH::checkServiceFor(MENU_ELEMENT_VISIBLE, Yii::app()->controller->id, $action->id, true))
-            throw new CHttpException(500, tt('Сервис временно недоступен!'));
+            throw new CHttpException(403, tt('Сервис временно недоступен!'));
 
         if (! SH::checkServiceFor(MENU_ELEMENT_NEED_AUTH, Yii::app()->controller->id, $action->id, true))
             if (Yii::app()->user->isGuest)
-                throw new CHttpException(500, tt('Сервис доступен только для авторизированных пользователей!'));
+                throw new CHttpException(403, tt('Сервис доступен только для авторизированных пользователей!'));
+            else{
+                //TODO: Сделать проверку на доступ пользователя по роли
 
-        if (! SH::checkServiceFor(MENU_ELEMENT_VISIBLE, Yii::app()->controller->id, $action->id, true))
-            throw new CHttpException(404, tt('Сервис закрыт!'));
+                switch (Yii::app()->user->model->u5){
+                    case Users::ST1:
+                        if (! SH::checkServiceFor(MENU_ELEMENT_AUTH_STUDENT, Yii::app()->controller->id, $action->id, true))
+                            throw new CHttpException(403, tt('Сервис недоступен для студентов!'));
+                        break;
+                    case Users::P1:
+                        if (! SH::checkServiceFor(MENU_ELEMENT_AUTH_TEACHER, Yii::app()->controller->id, $action->id, true))
+                            throw new CHttpException(403, tt('Сервис недоступен для преподователей!'));
+                        break;
+                    case Users::PRNT:
+                        if (! SH::checkServiceFor(MENU_ELEMENT_AUTH_PARENT, Yii::app()->controller->id, $action->id, true))
+                            throw new CHttpException(403, tt('Сервис недоступен для родителей!'));
+                        break;
+                }
+            }
+
+        /*if (! SH::checkServiceFor(MENU_ELEMENT_VISIBLE, Yii::app()->controller->id, $action->id, true))
+            throw new CHttpException(404, tt('Сервис закрыт!'));*/
     }
 
     private function checkCloseChair($action)
