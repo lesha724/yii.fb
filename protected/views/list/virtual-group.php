@@ -6,7 +6,7 @@
  * Time: 22:25
  */
 
-$this->pageHeader=tt('Список виртуальной группы');
+$this->pageHeader=tt('Список группы по выборочным дисциплинам');
 $this->breadcrumbs=array(
     tt('Список виртуальной группы'),
 );

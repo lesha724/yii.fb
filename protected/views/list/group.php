@@ -5,7 +5,7 @@
  * @var FilterForm $model
  */
 
-$this->pageHeader=tt('Список группы');
+$this->pageHeader=tt('Список академической группы');
 $this->breadcrumbs=array(
     tt('Список группы'),
 );
