@@ -350,7 +350,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'active'  => $_c=='workLoad' && $_a=='self'
                 ),
                 array(
-                    'label'   => $_l2.tt('Запись на дисциплины'),
+                    'label'   => $_l2.tt('Запись на выборочные дисциплины'),
                     'url'     => _u('/other/subscription'),
                     'active'  => $_c=='other' && $_a=='subscription',
                     'visible' => _ch('other', 'subscription') && $isStd,

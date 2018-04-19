@@ -202,7 +202,7 @@
                         ),
                         'employment' => 'Трудоустройство',
                         'subscription' => array(
-                            'name'=>'Запись на дисциплины',
+                            'name'=>'Запись на выборочные дисциплины',
                             'authOnly' => $studentStr
                         ),
                         'orderLesson' => array(

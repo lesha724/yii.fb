@@ -3,9 +3,9 @@
  * @var $model St
  * @var $this OtherController
  */
-$this->pageHeader=tt('Запись на дисциплины');
+$this->pageHeader=tt('Запись на выборочные дисциплины');
 $this->breadcrumbs=array(
-    tt('Запись на дисциплины'),
+    tt('Запись на выборочные дисциплины'),
 );
 
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/other/subscription.js', CClientScript::POS_HEAD);
