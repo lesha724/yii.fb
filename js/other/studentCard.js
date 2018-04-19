@@ -2,6 +2,8 @@ $(document).ready(function(){
 
     $spinner1 = $('#spinner1');
 
+    $labelSemNumber = $('#label-number-sem');
+
     initTooltips();
 
     initFilterForm($spinner1);
@@ -61,10 +63,17 @@ $(document).ready(function(){
             $('#studentCardProgressSred .mark2').html($(this).data('mark2'));
             $('#studentCardProgressSred .mark0').html($(this).data('mark0'));
             $('#studentCardProgressSred .count').html($(this).data('count'));
+
+            $labelSemNumber.html(value + " " + strSem);
+            $labelSemNumber.removeClass('label-warning').addClass('label-info');
+            $()
         }else{
             value = $(this).data('mark');
             filter = 'mark';
             $('#studentCardProgressSred tbody td').html(0);
+
+            $labelSemNumber.html(strSemNoSelected);
+            $labelSemNumber.addClass('label-warning').removeClass('label-info');
         }
         $('#studentCardProgressFilter tr a').removeClass('badge badge-success');
         $('#studentCardProgress tr:not(.head-row)').hide();
@@ -82,5 +91,7 @@ $(document).ready(function(){
         $('#studentCardProgress tr').show();
         $(this).find('a').addClass('badge badge-success');
         $('#studentCardProgressSred tbody td').html(0);
+        $labelSemNumber.html(strSemNoSelected);
+        $labelSemNumber.addClass('label-warning').removeClass('label-info');
     });
 });

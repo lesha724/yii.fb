@@ -116,10 +116,10 @@ HTML;
 
     $disciplines = Elg::model()->getDispBySt($st->st1);
     //стусв или стус (временно)
-    $ps107 = PortalSettings::model()->findByPk(107)->ps2;
+    /*$ps107 = PortalSettings::model()->findByPk(107)->ps2;
     $_pref ='';//приставка в конец дял вида со сус или стусв
-    if($ps107==1)
-        $_pref = '_new';
+    if($ps107==1)*/
+    $_pref = '_new';
 
     $params = array('gr1'=>$studentInfo['gr1'],'st'=>$st);
     $ps50 = PortalSettings::model()->findByPk(50)->ps2;

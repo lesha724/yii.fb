@@ -6,13 +6,19 @@
  * Time: 20:19
  */
 
+/**@var $this OtherController*/
+
 $marks = Stusv::model()->getMarksForStudent($st->st1);
+
+$strSemNoSelected = tt('Семестр не выбран.');
+
+$strHelp = tt('Для детального просмотра выберете семестр или оценку');
 
 $table = <<<HTML
     <div class="table-responsive">
         <table id="studentCardProgress" class="table table-bordered table-striped table-hover table-condensed">
             <thead>
-                    %s
+                %s
             </thead>
             <tbody>
                 %s
@@ -24,6 +30,7 @@ HTML;
 $tableFilter = <<<HTML
     <div class="row-fluid">
         <div class="span9">
+            <label id="label-help">{$strHelp}</label>
             <table id="studentCardProgressFilter" class="table table-bordered table-striped table-condensed">
                 <thead>
                         %s
@@ -34,6 +41,7 @@ $tableFilter = <<<HTML
             </table>
         </div>
         <div class="span3">
+            <label id="label-number-sem" class="label label-warning">{$strSemNoSelected}</label>
             <table id="studentCardProgressSred" class="table table-bordered table-striped table-condensed">
                 <thead>
                     %s
@@ -66,34 +74,46 @@ $i=1;
 
 $tableSem = array();
 
+$zachStr = tt('зач.');
+$notZachStr = tt('не зач.');
+
 $tableMark = array();
 $tableMark[5]=0;
 $tableMark[4]=0;
 $tableMark[3]=0;
 $tableMark[2]=0;
 $tableMark[0]=0;
-$tableMark[tt('зарах.')]=0;
-$tableMark[tt('не зарах.')]=0;
+$tableMark[$zachStr]=0;
+$tableMark[$notZachStr]=0;
 
 $sem = 0;
 
+$uCode = $this->universityCode;
+
 foreach ($marks as $mark) {
-    /*фильтры*/
-    if($mark['us4']!=6||$mark['us6']!=1)
-        $_bal = $mark['stusvst6'];
-    else
+
+    $zach = $mark['us4']==6 && $mark['us6']==1;
+    if($uCode == U_NMU)
+    {
+        if(!$zach && $mark['stusvst6']==-1)
+            $zach =true;
+    }
+
+    if($zach)
     {
         if($mark['stusvst6']!=-1){
-            $_bal = tt('не зарах.');
+            $_bal = $notZachStr;
         }else{
-            $_bal = tt('зарах.');
+            $_bal = $zachStr;
         }
+    }else{
+        $_bal = $mark['stusvst6'];
     }
 
     $sem = (int)$mark['sem7'];
 
+    if(!$zach){
 
-    if($mark['us4']!=6||$mark['us6']!=1){
         if (!isset($tableSem[$sem])) {
             $tableSem[$sem]['count'] = 0;
             $tableSem[$sem]['value'] = 0;
@@ -143,11 +163,11 @@ foreach ($marks as $mark) {
     $i++;
 }
 
-$thFilter = $trFilter = $thSred = $trSred = '';
+    $thFilter = $trFilter = $thSred = $trSred = '';
     $all=0;
 
     $thFilter.='<th>'.tt('Оценка').'</th>';
-    $trFilter.='<th>'.tt('Количетсво').'</th>';
+    $trFilter.='<th>'.tt('Количество').'</th>';
     foreach($tableMark as $key=>$mark){
         $thFilter.='<td>'.$key.'</td>';
         $trFilter.='<td class="filter filter-mark" data-mark="'.$key.'"><a>'.$mark.'</a></td>';
@@ -201,3 +221,11 @@ echo sprintf($tableFilter,$thFilter,$trFilter,$thSred,$trSred);
 //echo sprintf($tableFilter,$thFilter,$trFilter);
 
 echo sprintf($table,$th,$tr);
+
+$strSem = tt('cеместр');
+
+Yii::app()->clientScript->registerScript('const-progress', <<<JS
+    var strSemNoSelected = '{$strSemNoSelected}';
+    var strSem = '{$strSem}';
+JS
+    , CClientScript::POS_HEAD);
