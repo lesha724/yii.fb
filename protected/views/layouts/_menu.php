@@ -140,6 +140,9 @@ function _ch($controller, $action)
     if(!SH::checkServiceFor(MENU_ELEMENT_VISIBLE, $controller, $action))
         return false;
 
+    if(!SH::checkServiceFor(MENU_ELEMENT_VISIBLE_MENU, $controller, $action))
+        return false;
+
     if(!SH::checkServiceFor(MENU_ELEMENT_NEED_AUTH, $controller, $action))
         if (Yii::app()->user->isGuest)
             return false;

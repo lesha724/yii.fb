@@ -27,6 +27,9 @@ function checkbox($controller, $action, $type)
         case MENU_ELEMENT_VISIBLE:
             $label = tt('Активный');
             break;
+        case MENU_ELEMENT_VISIBLE_MENU:
+            $label = tt('Видимость в меню');
+            break;
         case MENU_ELEMENT_NEED_AUTH:
             $label = tt('Доступен без авторизации');
             break;
@@ -111,12 +114,15 @@ foreach ($blocks as $block) :
                                 if(!is_array($value)) {
                                     echo '<div>' . tt($value) . '</div>';
                                     echo checkbox($controller, $action, MENU_ELEMENT_VISIBLE);
-                                    echo checkbox($controller, $action, MENU_ELEMENT_NEED_AUTH);
+                                    echo '<div class="block-settings">';
+                                        echo checkbox($controller, $action, MENU_ELEMENT_VISIBLE_MENU);
+                                        echo checkbox($controller, $action, MENU_ELEMENT_NEED_AUTH);
 
-                                    echo '<div class="block-auth-role">';
-                                    echo checkbox($controller, $action, MENU_ELEMENT_AUTH_STUDENT);
-                                    echo checkbox($controller, $action, MENU_ELEMENT_AUTH_TEACHER);
-                                    echo checkbox($controller, $action, MENU_ELEMENT_AUTH_PARENT);
+                                        echo '<div class="block-auth-role">';
+                                        echo checkbox($controller, $action, MENU_ELEMENT_AUTH_STUDENT);
+                                        echo checkbox($controller, $action, MENU_ELEMENT_AUTH_TEACHER);
+                                        echo checkbox($controller, $action, MENU_ELEMENT_AUTH_PARENT);
+                                        echo '</div>';
                                     echo '</div>';
 
                                 }else{
@@ -124,15 +130,18 @@ foreach ($blocks as $block) :
                                     $authOnly = $value['authOnly'];
                                     echo '<div>' . tt($nameAction) . '</div>';
                                     echo checkbox($controller, $action, MENU_ELEMENT_VISIBLE);
-                                    echo '<div>'.tt('Доступен для:').'</div>';
-                                    echo '<ul>';
-                                    if(is_array($authOnly)) {
-                                        foreach ($authOnly as $auth) {
-                                            echo '<li>' . $auth . '</li>';
-                                        }
-                                    }else
-                                        echo '<li>' . $authOnly . '</li>';
-                                    echo '</ul>';
+                                    echo '<div class="block-settings">';
+                                        echo checkbox($controller, $action, MENU_ELEMENT_VISIBLE_MENU);
+                                        echo '<div>'.tt('Доступен для:').'</div>';
+                                        echo '<ul>';
+                                        if(is_array($authOnly)) {
+                                            foreach ($authOnly as $auth) {
+                                                echo '<li>' . $auth . '</li>';
+                                            }
+                                        }else
+                                            echo '<li>' . $authOnly . '</li>';
+                                        echo '</ul>';
+                                    echo '</div>';
                                 }
                             ?>
                         </div>
@@ -144,6 +153,8 @@ foreach ($blocks as $block) :
 </div>
 <?php
 endforeach;
+
+$typeActive = MENU_ELEMENT_VISIBLE;
 
 $type = MENU_ELEMENT_NEED_AUTH;
 try {
@@ -163,15 +174,38 @@ try {
                 }
         }
         
+         function setVisibleBlockSettings(elem){
+                var parent = elem.closest('.dd-handle');
+                var block = parent.find('.block-settings');
+                if(jQuery.isEmptyObject(block))
+                    return;
+                
+                if ( elem.is( ':checked' ) )
+                {
+                    block.show();
+                }else{
+                    block.hide();
+                }
+        }
+        
         $(document).ready(function() {
-            var list = $('.type-{$type}');
+            var list = $('.type-{$type}:input');
             list.each(function() {
                 setVisibleBlockAuthRole($(this));
             });
+            
+            var list2 = $('.type-{$typeActive}:input');
+            list2.each(function() {
+                setVisibleBlockSettings($(this));
+            });
         });
 
-        $('.type-{$type}').change(function() {
+        $('.type-{$type}:input').change(function() {
             setVisibleBlockAuthRole($(this));
+        });
+        
+        $('.type-{$typeActive}:input').change(function() {
+            setVisibleBlockSettings($(this));
         });
 JS
     );

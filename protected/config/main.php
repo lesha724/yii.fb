@@ -5,8 +5,11 @@
 
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
-
+//активность сервиса
 define('MENU_ELEMENT_VISIBLE', 'visible');
+//Видимость в меню
+define('MENU_ELEMENT_VISIBLE_MENU', 'visible_menu');
+//доступ без авториазции
 define('MENU_ELEMENT_NEED_AUTH', 'need_auth');
 define('MENU_ELEMENT_AUTH_STUDENT', 'need_auth_std');
 define('MENU_ELEMENT_AUTH_TEACHER', 'need_auth_tch');
