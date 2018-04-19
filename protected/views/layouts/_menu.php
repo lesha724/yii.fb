@@ -338,6 +338,12 @@ $this->widget('zii.widgets.CMenu', array(
                 ||($_c=='other' && $_a=='gostem') ||($_c=='other' && $_a=='orderLesson')||($_c=='other' && $_a=='studentCard') ? 'active open' : ''),
             'items' =>array(
                 array(
+                    'label'   => $_l2.tt('Карточка студента'),
+                    'url'     => _u('/other/studentCard'),
+                    'active'  => $_c=='other' && $_a=='studentCard',
+                    'visible' => _ch('other', 'studentCard') && ($isPrnt || $isStd|| $isAdmin),
+                ),
+                array(
                     'label'   => $_l2.tt('Личное расписание'),
                     'url'     => _u('/timeTable/self'),
                     'active'  => $_c=='timeTable' && $_a=='self',
@@ -372,12 +378,6 @@ $this->widget('zii.widgets.CMenu', array(
                     'url'     => _u('/other/orderLesson'),
                     'active'  => $_c=='other' && $_a=='orderLesson',
                     'visible' => _ch('other', 'orderLesson') && $isTch,
-                ),
-                array(
-                    'label'   => $_l2.tt('Карточка студента'),
-                    'url'     => _u('/other/studentCard'),
-                    'active'  => $_c=='other' && $_a=='studentCard',
-                    'visible' => _ch('other', 'studentCard') && ($isPrnt || $isStd|| $isAdmin),
                 ),
             ),
             'visible' => ($isStd||$isTch||$isAdmin||$isPrnt)
