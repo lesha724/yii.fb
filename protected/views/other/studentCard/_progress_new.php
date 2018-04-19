@@ -12,7 +12,7 @@ $marks = Stusv::model()->getMarksForStudent($st->st1);
 
 $strSemNoSelected = tt('Семестр не выбран.');
 
-$strHelp = tt('Для детального просмотра выберете семестр или оценку');
+$strHelp = tt('Для детального просмотра выберите семестр или оценку');
 
 $table = <<<HTML
     <div class="table-responsive">
