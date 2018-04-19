@@ -23,7 +23,7 @@ $options = array(
     ' '.tt('Екзаменационная сессия'),
     ' '.tt('Общая успеваемость'),
     ' '.tt('Общая информация'),
-    ' '.tt('Итоговая успеваемость (журнал)'),
+    ' '.tt('Сводный электроный журнал'),
 );
 
 $htmlOptions = array(
@@ -77,7 +77,7 @@ $htmlOptions = array(
 
     <div class="control-group">
         <?=CHtml::checkBox('settings[109]', PortalSettings::model()->findByPk(109)->ps2, $htmlOptions2)?>
-        <span class="lbl"> <?=tt('Показывать таб "Итоговая успеваемость (журнал)"')?></span>
+        <span class="lbl"> <?=tt('Показывать таб "Сводный электроный журнал"')?></span>
         <?=CHtml::hiddenField('settings[109]', PortalSettings::model()->findByPk(109)->ps2)?>
     </div>
 

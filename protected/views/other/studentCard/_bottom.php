@@ -119,7 +119,7 @@ HTML;
     /*$ps107 = PortalSettings::model()->findByPk(107)->ps2;
     $_pref ='';//приставка в конец дял вида со сус или стусв
     if($ps107==1)*/
-    $_pref = '_new';
+    $_pref = '_new';//Клименко сказал оставить только стусв 19.04.2018
 
     $params = array('gr1'=>$studentInfo['gr1'],'st'=>$st);
     $ps50 = PortalSettings::model()->findByPk(50)->ps2;
@@ -137,7 +137,7 @@ HTML;
     if(PortalSettings::model()->findByPk(91)->ps2==1)
         array_push($tabs,array('label'=>tt('Общая информация'), 'content'=>$st->st165, 'active'=>$ps50==5));
     if(PortalSettings::model()->findByPk(109)->ps2==1)
-        array_push($tabs,array('label'=>tt('Итоговая успеваемость (журнал)'), 'content'=>$this->renderPartial('studentCard/_itog_progress', $params+array('disciplines'=>$disciplines),true), 'active'=>$ps50==6));
+        array_push($tabs,array('label'=>tt('Сводный электроный журнал'), 'content'=>$this->renderPartial('studentCard/_itog_progress', $params+array('disciplines'=>$disciplines),true), 'active'=>$ps50==6));
 
     /*array('label'=>Yii::t('main', 'Текущая задолженость'), 'content'=>$this->renderPartial('studentCard/_retake',$params,true), 'active'=>$ps50==1,'visible'=>PortalSettings::model()->findByPk(48)->ps2==1);
     array('label'=>Yii::t('main', 'Модульный контроль'), 'content'=>$this->renderPartial('studentCard/_module', $params,true), 'active'=>$ps50==2,'visible'=>PortalSettings::model()->findByPk(49)->ps2==1);

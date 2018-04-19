@@ -18,20 +18,14 @@ echo "<style>
         }
 </style>";
 
-$urlShow = Yii::app()->createUrl('/other/showRetake');
-
-$_infoText = tt('Лекционные занятий не учитываються!');
-echo <<<HTML
-    <h3 class="blue header lighter tooltip-info noprint">
-    <i class="icon-info-sign show-info" style="cursor:pointer"></i>
-    <small>
-        <i class="icon-double-angle-right"></i> $_infoText
-    </small>
-</h3>
-HTML;
-
 $table = <<<HTML
-    <table id="studentCardItogProgress" data-url-retake="{$urlShow}" class="table table-bordered table-hover table-condensed">
+    <h3 class="blue header lighter tooltip-info noprint">
+        <i class="icon-info-sign show-info" style="cursor:pointer"></i>
+        <small>
+            <i class="icon-double-angle-right"></i> %s
+        </small>
+    </h3>
+    <table id="studentCardItogProgress%s"  class="table table-bordered table-hover table-condensed">
         <thead>
                 %s
         </thead>
@@ -44,7 +38,8 @@ HTML;
 /*Учитовать мин-макс или нет*/
 $ps9 = PortalSettings::model()->findByPk(9)->ps2;
 
-$th = $tr = '';
+$th = $tr = $th2 = $tr2 = '';
+//заголовок для таблицы с пз
 $th.='<tr>';
 $th.='<th>'.tt('№ пп').'</th>';
 $th.='<th>'.tt('Дисциплина').'</th>';
@@ -57,37 +52,72 @@ $th.='<th>'.tt('Количество прошедших занятий').'</th>'
 $th.='<th>'.tt('Количество пропусков').'</th>';
 $th.='<th>'.tt('Количество уваж. пропусков').'</th>';
 $th.='</tr>';
-$i=1;
+//Загловок для таблицы с лк
+$th2.='<tr>';
+$th2.='<th>'.tt('№ пп').'</th>';
+$th2.='<th>'.tt('Дисциплина').'</th>';
+$th2.='<th>'.tt('Количество прошедших занятий').'</th>';
+$th2.='<th>'.tt('Количество пропусков').'</th>';
+$th2.='<th>'.tt('Количество уваж. пропусков').'</th>';
+$th2.='</tr>';
+
+$i = $i2 =1;
 foreach($disciplines as $discipline)
 {
     if($discipline['type_journal']==0)
-        continue;
+        $type = 0;
+    else
+        $type = 1;
 
-    $type=1;
+    $statistic = Elg::model()->getItogProgressInfo($discipline['uo1'],$discipline['sem1'],$type,$st->st1, $discipline['ucgn2']);
 
-    $tr.='<tr>';
-        $tr.='<td>'.$i.'</td>';
+    $error = '';
+    if($type == 1 && $ps9){
+        if($statistic['min']>=$statistic['bal']){
+            $error = 'class="error"';
+        }
+    }
+
+    $row="<tr {$error}>";
+    $row.='<td>'.($type == 1 ? $i : $i2).'</td>';
 
         if(!empty($discipline['d27'])&&Yii::app()->language=="en")
             $d2=$discipline['d27'];
         else
             $d2=$discipline['d2'];
 
-        $tr.='<td class="text-left">'.$d2.'</td>';
 
-        $statistic = Elg::model()->getItogProgressInfo($discipline['uo1'],$discipline['sem1'],$type,$st->st1, $discipline['ucgn2']);
+        $row.='<td class="text-left">'.$d2.'</td>';
 
-        if($ps9) {
-            $tr .= '<td>' . $statistic['min'] . '</td>';
-            $tr .= '<td>' . $statistic['max'] . '</td>';
+        if($type == 1) {
+            if ($ps9) {
+                $row .= '<td>' . $statistic['min'] . '</td>';
+                $row .= '<td>' . $statistic['max'] . '</td>';
+            }
+            $row .= '<td>' . $statistic['bal'] . '</td>';
         }
-        $tr.='<td>'. $statistic['bal'].'</td>';
-        $tr.='<td>'. $statistic['countLesson'].'</td>';
-        $tr.='<td>'.$statistic['countOmissions'].'</td>';
-        $tr.='<td>'.$statistic['countOmissions1'].'</td>';
-    $tr.='</tr>';
-    $i++;
+        $row.='<td>'. $statistic['countLesson'].'</td>';
+        $row.='<td>'.$statistic['countOmissions'].'</td>';
+        $row.='<td>'.$statistic['countOmissions1'].'</td>';
+
+    $row.='</tr>';
+
+
+    if($type==1) {
+        $i++;
+        $tr.=$row;
+    }else{
+        $i2++;
+        $tr2.=$row;
+    }
 
 }
 
-echo sprintf($table,$th,$tr);
+
+$_infoText = tt('Практические занятий');
+
+echo sprintf($table, $_infoText,'PZ',$th,$tr);
+
+$_infoText = tt('Лекционные занятий');
+
+echo sprintf($table, $_infoText,'LK',$th2,$tr2);
