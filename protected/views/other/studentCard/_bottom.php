@@ -48,32 +48,42 @@ echo '<div id="studentCard">';
                 <tr>
                     <th>%s</th>
                     <td>%s</td>
-                </tr>
-                <tr>
                     <th>%s</th>
                     <td>%s</td>
                 </tr>
                 <tr>
                     <th>%s</th>
                     <td>%s</td>
-                </tr>
-                <tr>
                     <th>%s</th>
                     <td>%s</td>
                 </tr>
                 <tr>
                     <th>%s</th>
                     <td>%s</td>
-                </tr>
-                <tr>
                     <th>%s</th>
                     <td>%s</td>
                 </tr>
                 <tr>
                     <th>%s</th>
                     <td>%s</td>
+                    <th>%s</th>
+                    <td>%s</td>
                 </tr>
                 <tr>
+                    <th>%s</th>
+                    <td>%s</td>
+                    <th>%s</th>
+                    <td>%s</td>
+                </tr>
+                <tr>
+                    <th>%s</th>
+                    <td>%s</td>
+                    <th>%s</th>
+                    <td>%s</td>
+                </tr>
+                <tr>
+                    <th>%s</th>
+                    <td>%s</td>
                     <th>%s</th>
                     <td>%s</td>
                 </tr>
@@ -82,20 +92,32 @@ echo '<div id="studentCard">';
     </div>
 HTML;
 
-    $name = $st->st2.' '.$st->st3.' '.$st->st4;
+    /*$name = $st->st2.' '.$st->st3.' '.$st->st4;
     if(Yii::app()->language=='en'&&!(empty($st->st74)))
-        $name = $st->st74.' '.$st->st75.' '.$st->st76;
+        $name = $st->st74.' '.$st->st75.' '.$st->st76;*/
 
     echo sprintf($infoHtml,
-        tt('ФИО'),$name,
+        //tt('ФИО'),$name,
+        tt('Фамилия'),$st->st2,
+        tt('Фамилия (англ.)'),$st->st74,
+
+        tt('Имя'),$st->st3,
+        tt('Имя (англ.)'),$st->st75,
+
+        tt('Отчество'),$st->st4,
+        tt('Отчество (англ.)'),$st->st76,
+
         tt('Гражданство'),$studentInfo['sgr2'],
         tt('Дата рождения'),date("d.m.y",strtotime($st->st7)),
+
         tt('Факультет'), $studentInfo['f3'],
         tt('Специальность'), $studentInfo['sp2'],
+
         tt('Форма обучения'),SH::convertEducationType($studentInfo['sg4']),
         tt('Курс'), $studentInfo['sem4'],
-        tt('Группа'), Gr::model()->getGroupName($studentInfo['sem4'], $studentInfo)
 
+        tt('Группа'), Gr::model()->getGroupName($studentInfo['sem4'], $studentInfo),
+        tt('Email'),$st->st107
     );
 
     echo '</div>';//.top-block
