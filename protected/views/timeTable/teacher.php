@@ -172,7 +172,7 @@ HTML;
 			'timeTable'  => $timeTable,
 			'minMax'     => $minMax,
 			'rz'         => $rz,
-			'maxLessons' => array(),
+            'maxLessons' => $maxLessons,
             'action' =>'teacherExcel'
 		));
 	else

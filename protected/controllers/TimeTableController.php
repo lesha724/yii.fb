@@ -241,10 +241,10 @@ class TimeTableController extends Controller
         $model->date1 = Yii::app()->session['date1'];
         $model->date2 = Yii::app()->session['date2'];
 
-        $timeTable = $minMax = array();
+        $timeTable = $minMax = $maxLessons = array();
         if (! empty($model->teacher))
 			if($type==0)
-				list($minMax, $timeTable) = $model->generateTeacherTimeTable();
+				list($minMax, $timeTable, $maxLessons) = $model->generateTeacherTimeTable();
 			else
 				$timeTable=Gr::getTimeTable($model->teacher, $model->date1, $model->date2, 2);
 
@@ -256,6 +256,7 @@ class TimeTableController extends Controller
 			'teacher'	 =>$teacher,
             'timeTable'  => $timeTable,
             'minMax'     => $minMax,
+            'maxLessons' => $maxLessons,
             'rz'         => Rz::model()->getRzArray($model->filial),
 			'type'=>$type
         ));

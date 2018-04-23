@@ -470,8 +470,10 @@ HTML;
         $timeTable = $this->joinGroups($timeTable, $type);
 
         $timeTable = $this->fillMissingCells($timeTable);
+
+        $maxLessons = $this->countMaxSubjects($timeTable);
         //die(var_dump($timeTable));
-        return $timeTable;
+        return array($timeTable, $maxLessons);
     }
 
     private function joinGroups($timeTable, $type)
@@ -484,7 +486,7 @@ HTML;
 
             if (! isset($res[$r2]['timeTable'][$r3])) {
 
-                $res[$r2]['timeTable'][$r3] = $day;
+                $res[$r2]['timeTable'][$r3][] = $day;
                 $res[$r2]['timeTable'][$r3]['day'] = $day;
                 $res[$r2]['timeTable'][$r3]['gr3'] = $day['gr3'];
                 $res[$r2]['timeTable'][$r3]['shortText'] = $this->cellShortTextFor($day, $type);
@@ -495,10 +497,10 @@ HTML;
                 //$res[$r2]['timeTable'][$r3]['printText']  = '=СЦЕПИТЬ("'.$this->cellPrintTextFor($day, $type).'";СИМВОЛ(10))';
 
             } else {
-                if($type!=3) {
+                /*if($type!=3) {
                     $res[$r2]['timeTable'][$r3]['gr3'] .= ',' . $day['gr3'];
-                }else{
-                    if($day['fio']!=$res[$r2]['timeTable'][$r3]['day']['fio'] || $day['rz2']!=$res[$r2]['timeTable'][$r3]['day']['rz2']) {
+                }else{*/
+                    if($day['r1']!=$res[$r2]['timeTable'][$r3]['day']['r1'] || $day['rz2']!=$res[$r2]['timeTable'][$r3]['day']['rz2']) {
                         $res[$r2]['timeTable'][$r3]['shortText'] .= $this->cellShortTextFor($day, $type);
 
                         $res[$r2]['timeTable'][$r3]['fullText'] = str_replace('{$gr3}',$res[$r2]['timeTable'][$r3]['gr3'],$res[$r2]['timeTable'][$r3]['fullText']);
@@ -514,7 +516,7 @@ HTML;
                     {
                         $res[$r2]['timeTable'][$r3]['gr3'] .= ', '.$day['gr3'];
                     }
-                }
+                //}
             }
 
         }
@@ -672,9 +674,9 @@ HTML;
         $timeTable = P::getTimeTable($this->teacher, $this->date1, $this->date2);
         $minMax    = $this->getMinMaxLessons($timeTable);
 
-        $fullTimeTable = $this->fillTameTable($timeTable, 1);
+        list($fullTimeTable, $maxLessons)  = $this->fillTameTable($timeTable, 1);
 
-        return array($minMax, $fullTimeTable);
+        return array($minMax, $fullTimeTable, $maxLessons);
     }
 
     /**
