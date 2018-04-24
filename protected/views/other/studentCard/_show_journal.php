@@ -9,6 +9,8 @@ if(empty($elg))
 else {
     $marks = $elg->getMarksForStudent($st->st1);
 
+    $ps9 = PortalSettings::model()->getSettingFor(9);
+
     $ps57 = PortalSettings::model()->getSettingFor(57);
     $modules = null;
     if($ps57==1)
@@ -29,32 +31,55 @@ else {
                         <tr>
                             %s
                         </tr>
+                        %s
                     </thead>
                     <tbody>
                         %s
                     </tbody>
                 </table>
 HTML;
-        $th = $tr = '';
+        $th = $th2 = $tr = '';
+
+        $minMax = $ps9 == 1;
+        if($minMax)
+            $th2.='<tr>';
+
         $moduleNom=1;
         foreach($dates as $date) {
             $th .= generateColumnName($date, $type, $ps59);
+
             if($date['elgz4']>1&&$ps57==1) {
-                /*$tr .= tableTrModule($date,$gr1,$st,$elg,$moduleNom,$modules,$discipline['sem7']);
-                $moduleNom++;*/
                 $tr .='<td colspan="4"></td>';
             }elseif(($date['elgz4']==3||$date['elgz4']==4||$date['elgz4']==5)&&$ps57==1){
                 if($date['elgz4']==3) {
-                    /*$tr .=tableTrModule2($date,$gr1,$st,$elg,$moduleNom,$modules,$discipline['sem7']);
-                    $moduleNom++;*/
                     $tr.='<th></th><th></th>';
                 }else
                     $tr.='<th></th><th></th>';
-            }else
-                $tr .= tableRow($date,$st,$marks,$type, $ps56,$discipline['sem7'],$ps60,$ps55);
+            }else {
+                $tr .= tableRow($date, $st, $marks, $type, $ps56, $discipline['sem7'], $ps60, $ps55);
+                if($minMax){
+                    if ($type == 0)
+                        $th2.= '<th></th><th></th>';
+                    else {
+                        $elgz5 = '';
+                        $elgz6 = '';
+                        if ($date['elgz5'] > 0)
+                            $elgz5 = round($date['elgz5'], 1);
+                        if ($date['elgz6'] > 0)
+                            $elgz6 = round($date['elgz6'], 1);
+
+                        $th2.='<th>'.$elgz5.'</th><th>'.$elgz6.'</th>';
+                    }
+                }
+            }
         }
+
+
+        if($minMax)
+            $th2.='</tr>';
+
         echo '<div class="table-responsive">';
-        echo sprintf($table, $th, $tr); // 2 table
+        echo sprintf($table, $th, $th2, $tr); // 2 table
         echo '</div>';
     }
 }
