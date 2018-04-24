@@ -11,7 +11,6 @@ class MicrosoftDocumentViewer extends ADocumentViewer
     protected $_urlViewer = "https://view.officeapps.live.com/op/embed.aspx?src={url}";
     protected function _getIframeUrl()
     {
-        // TODO: Implement _getIframeUrl() method.
         return str_replace('{url}',$this->url, $this->_urlViewer);
     }
 }

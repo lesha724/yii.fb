@@ -616,6 +616,7 @@ HTML;
 		$this->saveAttributes(array('u12'=>$key));
 	}
 
+	//TODO: Удалить этот метод
     /**
      * Генерация ключа для мобильного приложения
      * @return bool

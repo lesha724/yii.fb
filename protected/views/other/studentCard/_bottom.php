@@ -7,6 +7,7 @@
  */
 
 /* @var $st St */
+/* @var $this OtherController */
 
 
 if(Yii::app()->user->isStd)
@@ -87,14 +88,22 @@ echo '<div id="studentCard">';
                     <th>%s</th>
                     <td>%s</td>
                 </tr>
+                <tr>
+                    <th>%s</th>
+                    <td>%s</td>
+                    <th></th>
+                    <td></td>
+                </tr>
             </tbody>
         </table>
     </div>
 HTML;
 
+    $uCode = $this->universityCode;
     /*$name = $st->st2.' '.$st->st3.' '.$st->st4;
     if(Yii::app()->language=='en'&&!(empty($st->st74)))
         $name = $st->st74.' '.$st->st75.' '.$st->st76;*/
+    $isFarm = $uCode == U_FARM;
 
     echo sprintf($infoHtml,
         //tt('ФИО'),$name,
@@ -117,7 +126,9 @@ HTML;
         tt('Курс'), $studentInfo['sem4'],
 
         tt('Группа'), Gr::model()->getGroupName($studentInfo['sem4'], $studentInfo),
-        tt('Email'),$st->st107
+        tt('Email'),$st->st107,
+
+        $isFarm ? tt('ИНН') : '', $isFarm ? $st->st15 : ''
     );
 
     echo '</div>';//.top-block
