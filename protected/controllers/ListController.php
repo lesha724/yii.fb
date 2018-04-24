@@ -193,32 +193,53 @@ class ListController extends Controller
         $objPHPExcel->setActiveSheetIndex(0);
         $sheet=$objPHPExcel->getActiveSheet();
 
-        $year = Yii::app()->session['year'];
-        $sem = Yii::app()->session['sem'];
+        /*$year = Yii::app()->session['year'];
+        $sem = Yii::app()->session['sem'];*/
+
+        list($year, $sem) = SH::getCurrentYearAndSem();
 
         $group = Gr::model()->findByPk($model->group);
+        $groupInfo = $group->getInfo();
+        $groupName = Gr::model()->getGroupName($model->course, $group);
 
-        $sheet->setCellValue('A2', tt('Год').': ');
-        $sheet->setCellValue('B2', $year.'/'.($year+1));
+        $speciality = isset($groupInfo['sp2']) ? $groupInfo['sp2'] : '';
+        $faculty = isset($groupInfo['f3']) ? $groupInfo['f3'] : '';
 
-        $sheet->setCellValue('A3', tt('Семестр').': ');
-        $sheet->setCellValue('B3',  SH::convertSem5($sem));
+        $sheet->mergeCellsByColumnAndRow(0, 2, 2, 2);
+        $sheet->setCellValue('A2', tt('Список студентов'))->getStyle('A2')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
-        $sheet->setCellValue('A4', tt('Название группы').': ');
-        $sheet->setCellValue('B4',  Gr::model()->getGroupName($model->course, $group));
+        $sheet->mergeCellsByColumnAndRow(0, 3, 2, 3);
+        $sheet->setCellValue('A3', tt('{course} курса {group} группы {speciality} специальности',array(
+            '{course}' => $model->course,
+            '{group}' => $groupName,
+            '{speciality}' => $speciality
+        )))->getStyle('A3')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+        $sheet->mergeCellsByColumnAndRow(0, 4, 2, 4);
+        $sheet->setCellValue('A4', tt('{faculty} факультета', array(
+            '{faculty}' => $faculty
+        )))->getStyle('A4')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 
-        $rowStart=6;
+        $sheet->mergeCellsByColumnAndRow(0, 5, 2, 5);
+        $sheet->setCellValue('A5', tt(' за {sem} семестр {year} учебный год', array(
+            '{sem}' => SH::convertSem5($sem),
+            '{year}' => $year.'/'.($year+1)
+        )))->getStyle('A5')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+        $sheet->getStyle('A2:A5')->getFont()->setSize(14);
+
+        $rowStart=7;
 
         $sheet->setCellValue('A'.$rowStart,"№");
-        $sheet->setCellValue('B'.$rowStart, tt('ФИО'));
+        $sheet->setCellValue('B'.$rowStart, tt('ФИО студента'));
         //$sheet->setCellValue('C'.$rowStart, tt('Академ. группа'));
         $sheet->setCellValue('C'.$rowStart,'№ '.tt('зач. книжки'));
 
-        $sheet->getColumnDimensionByColumn(0)->setWidth(20);
+        $sheet->getColumnDimensionByColumn(0)->setWidth(5);
         $sheet->getColumnDimensionByColumn(1)->setWidth(40);
         //$sheet->getColumnDimensionByColumn(2)->setWidth(20);
-        $sheet->getColumnDimensionByColumn(2)->setWidth(20);
+        $sheet->getColumnDimensionByColumn(2)->setWidth(12);
 
         $i=1;
         foreach($students as $student):
@@ -232,14 +253,17 @@ class ListController extends Controller
         endforeach;
 
 
-        $sheet->setTitle('ListGroup');
+        $sheet->setTitle(tt('Список группы'). ' '. $groupName);
+
+        $sheet->getStyleByColumnAndRow(0,7,2,$i+6)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
+
 
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a clientâ€™s web browser (Excel5)
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="ACY_ListGroup_'.date('Y-m-d H-i').'.xls"');
+        header('Content-Disposition: attachment;filename="ACY_ListGroup_'.$groupName.'_'.date('Y-m-d H-i').'.xls"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

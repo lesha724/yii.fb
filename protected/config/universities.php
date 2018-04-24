@@ -20,4 +20,4 @@ define('U_UIPA',  8);
 define('U_SEM_MGU',  42);
 define('U_ONMU',  47);
 define('U_NOBEL',  49);
-define('U_FARM',  38); //TODO: Поменять на id фарма
+define('U_FARM',  12);

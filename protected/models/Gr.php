@@ -1126,4 +1126,28 @@ SQL;
 
         return $sem1;
     }
+
+    /**
+     * Информация по группе
+     * @return array|mixed
+     * @throws CException
+     */
+    public function getInfo(){
+        if(empty($this->gr1))
+            return array();
+
+        $sql = <<<SQL
+          SELECT sp2,f2,f3 FROM gr
+			inner join sg on (gr.gr2 = sg.sg1)
+			inner join sp on (sg.sg2 = sp.sp1)
+			inner join f on (sp.sp5= f.f1)
+		where gr1=:GR1
+		GROUP BY sp2,f2,f3
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':GR1', $this->gr1);
+        $row = $command->queryRow();
+
+        return $row;
+    }
 }
