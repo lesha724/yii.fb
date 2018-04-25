@@ -962,7 +962,7 @@ SQL;
     {
 
         $sql=<<<SQL
-            SELECT st1,st2,st3,st4,st5,sk3
+            SELECT st1,st2,st3,st4,st5,sk3, st74, st75, st76
 			 FROM ST
 			   LEFT JOIN SK ON (SK.SK2 = ST.ST1)
 			   LEFT JOIN STD ON (ST.ST1 = STD.STD2)

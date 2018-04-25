@@ -202,8 +202,16 @@ class ListController extends Controller
         $groupInfo = $group->getInfo();
         $groupName = Gr::model()->getGroupName($model->course, $group);
 
-        $speciality = isset($groupInfo['sp2']) ? $groupInfo['sp2'] : '';
+        $speciality = isset($groupInfo['pnsp2']) ? $groupInfo['pnsp2'] : '';
         $faculty = isset($groupInfo['f3']) ? $groupInfo['f3'] : '';
+
+        if(Yii::app()->language=='en' && !(empty($groupInfo))){
+            if(!empty($groupInfo['pnsp17']))
+                $speciality = $groupInfo['pnsp17'];
+
+            if(!empty($groupInfo['f26']))
+                $faculty = $groupInfo['f26'];
+        }
 
         $sheet->mergeCellsByColumnAndRow(0, 2, 2, 2);
         $sheet->setCellValue('A2', tt('Список студентов'))->getStyle('A2')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
@@ -236,6 +244,9 @@ class ListController extends Controller
         //$sheet->setCellValue('C'.$rowStart, tt('Академ. группа'));
         $sheet->setCellValue('C'.$rowStart,'№ '.tt('зач. книжки'));
 
+        $sheet->getStyle('A'.$rowStart.':C'.$rowStart)->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $sheet->getStyle('A'.$rowStart.':C'.$rowStart)->getFont()->setBold( true );
+
         $sheet->getColumnDimensionByColumn(0)->setWidth(5);
         $sheet->getColumnDimensionByColumn(1)->setWidth(40);
         //$sheet->getColumnDimensionByColumn(2)->setWidth(20);
@@ -245,17 +256,21 @@ class ListController extends Controller
         foreach($students as $student):
             $name = $student['st2'].' '.$student['st3'].' '.$student['st4'];
 
+            if(Yii::app()->language == 'en' && !empty($student['st74']))
+                $name = $student['st74'].' '.$student['st75'].' '.$student['st76'];
+
             $sheet->setCellValueByColumnAndRow(0,$i+ $rowStart,$i);
             $sheet->setCellValueByColumnAndRow(1,$i+ $rowStart,$name);
-            //$sheet->setCellValueByColumnAndRow(2,$i+ $rowStart,Gr::model()->getGroupName($model->course, $group));
             $sheet->setCellValueByColumnAndRow(2,$i+ $rowStart,$student['st5']);
             $i++;
         endforeach;
 
+        $sheet->getStyle('A'.$rowStart.':A'.($rowStart+$i-1))->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $sheet->getStyle('C'.$rowStart.':C'.($rowStart+$i-1))->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
         $sheet->setTitle(tt('Список группы'). ' '. $groupName);
 
-        $sheet->getStyleByColumnAndRow(0,7,2,$i+6)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
+        $sheet->getStyleByColumnAndRow(0,7,2,$i+$rowStart-1)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
 
 
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
