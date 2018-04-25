@@ -34,7 +34,7 @@ $this->widget('bootstrap.widgets.TbButton', array(
     <thead>
     <tr>
         <th style="width:40px">№</th>
-        <th><?=tt('Ф.И.О.')?></th>
+        <th><?=tt('ФИО студента')?></th>
         <th><?=tt('Академ. группа')?></th>
         <th style="width:200px">№ <?=tt('зач. книжки')?></th>
         <?php /*if($ps34==1):?>

@@ -49,7 +49,7 @@ function getPassportLabel($id,$type, $pattern, $patternAdmin){
         <?php if($ps34==1):?>
 		<th style="width:90px"><?=tt('Вид фин.')?></th>
         <?php endif;?>
-		<th><?=tt('Ф.И.О.')?></th>
+		<th><?=tt('ФИО студента')?></th>
         <?php if($visible_passport):?>
             <th><?=$modelStForm->getAttributeLabel('passport')?></th>
             <th><?=$modelStForm->getAttributeLabel('internationalPassport')?></th>

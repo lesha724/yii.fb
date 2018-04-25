@@ -19,12 +19,25 @@ class ListController extends Controller
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),*/
             array('allow',
-                'actions' => array('group','chair','searchStudent','virtualGroup','virtualGroupExcel','groupExcel')
+                'actions' => array('course','group','chair','searchStudent','virtualGroup','virtualGroupExcel','groupExcel')
             ),
             array('deny',
                 'users' => array('*'),
             ),
         );
+    }
+
+    public function actionCourse()
+    {
+        $model = new FilterForm();
+        $model->scenario = 'list-course';
+
+        if (isset($_REQUEST['FilterForm']))
+            $model->attributes=$_REQUEST['FilterForm'];
+
+        $this->render('course', array(
+            'model' => $model,
+        ));
     }
 	
     public function actionGroup()

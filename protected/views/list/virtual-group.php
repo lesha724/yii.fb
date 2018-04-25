@@ -8,7 +8,7 @@
 
 $this->pageHeader=tt('Список группы по выборочным дисциплинам');
 $this->breadcrumbs=array(
-    tt('Список виртуальной группы'),
+    tt('Список группы по выборочным дисциплинам'),
 );
 
 Yii::app()->clientScript->registerPackage('dataTables');

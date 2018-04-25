@@ -499,6 +499,12 @@ $this->widget('zii.widgets.CMenu', array(
                     'visible' => _ch('list', 'group')
                 ),
                 array(
+                    'label'   => $_l2. tt('Потока'),
+                    'url'     => _u('/list/course'),
+                    'active'  => $_c=='list' && $_a=='course',
+                    'visible' => _ch('list', 'course')
+                ),
+                array(
                     'label'   => $_l2. tt('Группы по выборочным дисциплинам'),
                     'url'     => _u('/list/virtualGroup'),
                     'active'  => $_c=='list' && $_a=='virtualGroup',

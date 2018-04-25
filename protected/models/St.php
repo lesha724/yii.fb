@@ -957,7 +957,31 @@ SQL;
 
 		return $students;
 	}
-	
+
+    /**
+     * Список студентов по курсу
+     * @param $sg1
+     * @return array
+     * @throws CException
+     */
+    public function getListStream($sg1){
+        $sql=<<<SQL
+            SELECT st1,st2,st3,st4,st5,sk3, st74, st75, st76, gr1, gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26
+			 FROM ST
+			   INNER JOIN SK ON (SK.SK2 = ST.ST1)
+			   INNER JOIN STD ON (ST.ST1 = STD.STD2)
+			   INNER JOIN GR ON (STD.STD3 = GR.GR1)
+			 WHERE std7 is null and sk5 is null and std11 in (0,5,6,8) and gr2=:SG1 and st101!=7
+			 ORDER BY st2 collate UNICODE
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':SG1', $sg1);
+        $students = $command->queryAll();
+
+        return $students;
+    }
+
 	public function getListGroup($gr1)
     {
 
