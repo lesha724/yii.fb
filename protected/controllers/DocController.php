@@ -12,7 +12,7 @@ class DocController extends Controller
 
         return array(
             'accessControl',
-            'checkPermission'//не выполянеться для индекса
+            'checkPermission -index, -selfDoc'//не выполянеться для индекса
         );
     }
 
