@@ -125,7 +125,7 @@
                     'controller' => 'list',
                     'items' => array(
                         'group'      => 'Академ. группы',
-                        'course'      => 'Потока',
+                        'stream'      => 'Потока',
                         'chair'      => 'Кафедры',
                         'virtualGroup' => 'Группы по выборочным дисциплинам',
                     ),

@@ -500,9 +500,9 @@ $this->widget('zii.widgets.CMenu', array(
                 ),
                 array(
                     'label'   => $_l2. tt('Потока'),
-                    'url'     => _u('/list/course'),
-                    'active'  => $_c=='list' && $_a=='course',
-                    'visible' => _ch('list', 'course')
+                    'url'     => _u('/list/stream'),
+                    'active'  => $_c=='list' && $_a=='stream',
+                    'visible' => _ch('list', 'stream')
                 ),
                 array(
                     'label'   => $_l2. tt('Группы по выборочным дисциплинам'),

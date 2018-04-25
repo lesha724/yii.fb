@@ -19,7 +19,7 @@ class ListController extends Controller
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),*/
             array('allow',
-                'actions' => array('course','group','chair','searchStudent','virtualGroup','virtualGroupExcel','groupExcel')
+                'actions' => array('stream','group','chair','searchStudent','virtualGroup','virtualGroupExcel','groupExcel')
             ),
             array('deny',
                 'users' => array('*'),
@@ -27,15 +27,15 @@ class ListController extends Controller
         );
     }
 
-    public function actionCourse()
+    public function actionStream()
     {
         $model = new FilterForm();
-        $model->scenario = 'list-course';
+        $model->scenario = 'list-stream';
 
         if (isset($_REQUEST['FilterForm']))
             $model->attributes=$_REQUEST['FilterForm'];
 
-        $this->render('course', array(
+        $this->render('stream', array(
             'model' => $model,
         ));
     }
