@@ -40,7 +40,7 @@ JS
         'label'=>tt('Печать'),
         'htmlOptions'=>array(
             'class'=>'btn-small',
-            'data-url'=>Yii::app()->createUrl('/list/courseExcel'),
+            'data-url'=>Yii::app()->createUrl('/list/streamExcel'),
             'id'=>'btn-print-excel',
         )
     ));

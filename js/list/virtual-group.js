@@ -9,7 +9,7 @@ $(document).ready(function(){
 
     initTooltips();
 
-    $('#journal-print').click(function(){
+    $('#btn-print-excel').click(function(){
         var action=$("#filter-form").attr("action");
         $("#filter-form").attr("action", $(this).data('url'));
         $("#filter-form").submit();

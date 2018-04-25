@@ -19,7 +19,7 @@ class ListController extends Controller
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),*/
             array('allow',
-                'actions' => array('stream','group','chair','searchStudent','virtualGroup','virtualGroupExcel','groupExcel')
+                'actions' => array('stream','group','chair','searchStudent','virtualGroup','virtualGroupExcel','groupExcel', 'streamExcel')
             ),
             array('deny',
                 'users' => array('*'),
@@ -212,6 +212,131 @@ class ListController extends Controller
         // Redirect output to a clientâ€™s web browser (Excel5)
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="ACY_ListVirtualGroup_'.$groupName.'_'.date('Y-m-d H-i').'.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+        Yii::app()->end();
+    }
+
+    /*
+     * печать списка потока
+     * */
+    public function actionStreamExcel()
+    {
+        $model = new FilterForm();
+        $model->scenario = 'list-stream';
+
+        if (isset($_REQUEST['FilterForm']))
+            $model->attributes=$_REQUEST['FilterForm'];
+
+        if(empty($model->stream))
+            throw new Exception("Error");
+
+        $students=St::model()->getListStream($model->stream);
+
+        Yii::import('ext.phpexcel.XPHPExcel');
+        $objPHPExcel= XPHPExcel::createPHPExcel();
+        $objPHPExcel->getProperties()->setCreator("ACY")
+            ->setLastModifiedBy("ACY ".date('Y-m-d H-i'))
+            ->setTitle("ListStream ".date('Y-m-d H-i'))
+            ->setSubject("ListStream ".date('Y-m-d H-i'))
+            ->setDescription("ListStream document, generated using ACY Portal. ".date('Y-m-d H:i:'))
+            ->setKeywords("")
+            ->setCategory("Result file");
+        $objPHPExcel->setActiveSheetIndex(0);
+        $sheet=$objPHPExcel->getActiveSheet();
+
+        list($year, $sem) = SH::getCurrentYearAndSem();
+
+        $streamInfo = Gr::model()->getInfoBySg($model->stream);
+
+        $speciality = isset($streamInfo['pnsp2']) ? $streamInfo['pnsp2'] : '';
+        $faculty = isset($streamInfo['f3']) ? $streamInfo['f3'] : '';
+
+        if(Yii::app()->language=='en' && !(empty($streamInfo))){
+            if(!empty($streamInfo['pnsp17']))
+                $speciality = $streamInfo['pnsp17'];
+
+            if(!empty($streamInfo['f26']))
+                $faculty = $streamInfo['f26'];
+        }
+
+        $sheet->mergeCellsByColumnAndRow(0, 2, 2, 2);
+        $sheet->setCellValue('A2', tt('Список студентов потока'))->getStyle('A2')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+        $sheet->mergeCellsByColumnAndRow(0, 3, 2, 3);
+        $sheet->setCellValue('A3', tt('{course} курса {speciality} специальности',array(
+            '{course}' => $model->course,
+            '{speciality}' => $speciality
+        )))->getStyle('A3')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+        $sheet->mergeCellsByColumnAndRow(0, 4, 2, 4);
+        $sheet->setCellValue('A4', tt('{faculty} факультета', array(
+            '{faculty}' => $faculty
+        )))->getStyle('A4')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+
+        $sheet->mergeCellsByColumnAndRow(0, 5, 2, 5);
+        $sheet->setCellValue('A5', tt(' за {sem} семестр {year} учебный год', array(
+                '{sem}' => SH::convertSem5($sem),
+                '{year}' => $year.'/'.($year+1)
+            )))->getStyle('A5')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+        $sheet->getStyle('A2:A5')->getFont()->setSize(14);
+
+        $rowStart=7;
+
+        $sheet->setCellValue('A'.$rowStart,"№");
+        $sheet->setCellValue('B'.$rowStart, tt('ФИО студента'));
+        $sheet->setCellValue('C'.$rowStart,'№ '.tt('зач. книжки'));
+        $sheet->setCellValue('D'.$rowStart, tt('Академ. группа'));
+
+
+        $sheet->getStyle('A'.$rowStart.':D'.$rowStart)->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $sheet->getStyle('A'.$rowStart.':D'.$rowStart)->getFont()->setBold( true );
+
+
+        $sheet->getColumnDimensionByColumn(0)->setWidth(5);
+        $sheet->getColumnDimensionByColumn(1)->setWidth(40);
+        $sheet->getColumnDimensionByColumn(2)->setWidth(12);
+        $sheet->getColumnDimensionByColumn(3)->setWidth(10);
+
+        $i=1;
+        foreach($students as $student):
+            $name = $student['st2'].' '.$student['st3'].' '.$student['st4'];
+            if(Yii::app()->language == 'en' && !empty($student['st74']))
+                $name = $student['st74'].' '.$student['st75'].' '.$student['st76'];
+
+            $sheet->setCellValueByColumnAndRow(0,$i+ $rowStart,$i);
+            $sheet->setCellValueByColumnAndRow(1,$i+ $rowStart,$name);
+            $sheet->setCellValueByColumnAndRow(2,$i+ $rowStart,$student['st5']);
+            $sheet->setCellValueByColumnAndRow(3,$i+ $rowStart,Gr::model()->getGroupName($model->course, $student));
+
+            $i++;
+        endforeach;
+
+        $sheet->getStyle('A'.$rowStart.':A'.($rowStart+$i-1))->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $sheet->getStyle('C'.$rowStart.':C'.($rowStart+$i-1))->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+
+        $sheet->getStyleByColumnAndRow(0,$rowStart,3,$i+$rowStart-1)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
+
+        $sheet->setTitle(tt('Список потока'));
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        // Redirect output to a clientâ€™s web browser (Excel5)
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="ACY_ListSTREAM_'.date('Y-m-d H-i').'.xls"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

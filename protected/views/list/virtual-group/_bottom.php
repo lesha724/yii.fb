@@ -25,7 +25,7 @@ $this->widget('bootstrap.widgets.TbButton', array(
     'htmlOptions'=>array(
         'class'=>'btn-small',
         'data-url'=>Yii::app()->createUrl('/list/virtualGroupExcel'),
-        'id'=>'journal-print',
+        'id'=>'btn-print-excel',
     )
 ));
 ?>
