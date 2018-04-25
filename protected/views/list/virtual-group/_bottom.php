@@ -62,7 +62,10 @@ $this->widget('bootstrap.widgets.TbButton', array(
         }else*/
             echo '<tr class="info">';
         echo '<td>'.$i.'</td>';
-        echo '<td>'.$student['st2'].' '.$student['st3'].' '.$student['st4'].'</td>';
+        $name = $student['st2'].' '.$student['st3'].' '.$student['st4'];
+        if(Yii::app()->language == 'en' && !empty($student['st74']))
+            $name = $student['st74'].' '.$student['st75'].' '.$student['st76'];
+        echo '<td>'.$name.'</td>';
         echo '<td>'.Gr::model()->getGroupName($model->course, $student).'</td>';
         echo '<td>'.$student['st5'].'</td>';
         /*if($ps34==1)

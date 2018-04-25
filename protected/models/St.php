@@ -981,7 +981,7 @@ SQL;
 	{
 
 		$sql=<<<SQL
-            SELECT st1,st2,st3,st4,st5,sk3,gr3, gr19,gr20,gr21,gr22,gr23,gr24,gr28
+            SELECT st1,st2,st3,st4,st5,sk3,gr3, gr19,gr20,gr21,gr22,gr23,gr24,gr28, st74, st75, st76
 			from ucgn
 			   inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
 			   inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
@@ -989,7 +989,7 @@ SQL;
 			   inner join gr on (ucsn.ucsn3 = gr.gr1)
 			   LEFT JOIN SK ON (SK.SK2 = ST.ST1)
 			where ucgns5=:YEAR and ucgns6=:SEM and ucgn2=:GR1
-			group by st1,st2,st3,st4,st5,sk3,gr3, gr19,gr20,gr21,gr22,gr23,gr24,gr28
+			group by st1,st2,st3,st4,st5,sk3,gr3, gr19,gr20,gr21,gr22,gr23,gr24,gr28, st74, st75, st76
 			order by st2 collate UNICODE
 SQL;
 
