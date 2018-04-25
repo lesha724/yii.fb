@@ -635,7 +635,7 @@ HTML;
     $elgz1_arr=array();
     $th = $th2 = $tr = '';
 
-    global $total_1, $total_count_1;
+    global $total_1, $total_count_1, $minBalForAllLessons, $maxBalForAllLessons;
     global $count_dates;
     global $readOnlyByStudents;
 
@@ -685,6 +685,19 @@ HTML;
 
         if($date['elgz4']==0)
             $countDivZacvmarks++;
+
+        if($ps9==1){
+            $elgz5=0;
+            $elgz6=0;
+
+            if($date['elgz5']>0)
+                $elgz5=round($date['elgz5'],1);
+            if($date['elgz6']>0)
+                $elgz6=round($date['elgz6'],1);
+
+            $minBalForAllLessons += $elgz5;
+            $maxBalForAllLessons += $elgz6;
+        }
     }
 
 

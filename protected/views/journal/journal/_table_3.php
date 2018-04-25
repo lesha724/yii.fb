@@ -114,7 +114,7 @@ HTML;
 
 $th=$th2=$tr='';
 
-global $total_1, $total_count_1;// calculating in journal/table_2
+global $total_1, $total_count_1, $minBalForAllLessons, $maxBalForAllLessons;// calculating in journal/table_2
 global $count_dates;
 global $readOnlyByStudents;
 
@@ -124,7 +124,11 @@ $ps83 = PortalSettings::model()->getSettingFor(83);
 $ps85 = PortalSettings::model()->getSettingFor(85);
 if($ps83==0) {
     $th  .= generateTotal1Header();
-    $th2.='<th colspan="2"></th>';
+    $ps9 = PortalSettings::model()->getSettingFor(9);
+    if($ps9 == 1){
+        $th2.='<th colspan="2">'.$minBalForAllLessons. ' / '.$maxBalForAllLessons.'</th>';
+    }else
+        $th2.='<th colspan="2"></th>';
 }
 
 foreach($elgd as $key)
