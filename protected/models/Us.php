@@ -206,7 +206,7 @@ SQL;
             $arr['sum'] = $arr['nr3']*$countSubGroups[$pd1];
             // }}}
             if(isset($data[$sem5][$us4]))
-                $data[$sem5][$us4]['sum'] += $arr['nr3'];
+                $data[$sem5][$us4]['sum'] += $arr['sum'];
             else
                 $data[$sem5][$us4]= $arr;
 
@@ -217,11 +217,11 @@ SQL;
                 if (! isset($data[$sem5][$_us4]))
                     $data[$sem5][$_us4] = $data[$sem5][$us4];
                 else
-                    $data[$sem5][$_us4]['sum'] += $arr['nr3'];
+                    $data[$sem5][$_us4]['sum'] += $arr['sum'];
 
             }
 
-            $data[$sem5][0]['sum'] += $arr['nr3']; // Всего
+            $data[$sem5][0]['sum'] += $arr['sum']; // Всего
         }
 
         for ($sem5=0; $sem5<=1; $sem5++) {
