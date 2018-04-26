@@ -140,7 +140,7 @@ class Us extends CActiveRecord
     {
         if (empty($pd1) || empty($year))
             return array();
-            $sql= <<<SQL
+            /*$sql= <<<SQL
                SELECT sem5, us4, nr6, nr7, nr8, nr9, sum(nr3)
                        FROM sem
                 INNER JOIN us on (sem.sem1 = us.us12)
@@ -152,7 +152,23 @@ class Us extends CActiveRecord
                        WHERE pd1=:PD1 AND sem3=:SEM3 AND c8 != 3
                        GROUP BY sem5, us4, nr6, nr7, nr8, nr9
                        ORDER BY sem5, us4
+SQL;*/
+
+            $sql = <<<SQL
+              SELECT sem5, us4, nr6, nr7, nr8, nr9  ,nr1 ,nr3
+                FROM sem
+                INNER JOIN us on (sem.sem1 = us.us12)
+                INNER JOIN nr on (us.us1 = nr.nr2)
+                INNER JOIN ug on (nr1 = ug1)
+                INNER JOIN uo on (us.us2 = uo.uo1)
+                INNER JOIN u on (uo.uo22 = u.u1)
+                INNER JOIN c on (u.u15 = c.c1)
+                INNER JOIN pd ON (nr.nr6 = pd.pd1) OR (nr.nr7 = pd.pd1) OR (nr.nr8 = pd.pd1) OR (nr.nr9 = pd.pd1)
+                WHERE pd1=:PD1 AND sem3=:SEM3 AND c8 != 3 and ug1=ug3
+                GROUP BY sem5, us4, nr6, nr7, nr8, nr9 ,nr1 ,nr3
+                ORDER BY sem5, us4
 SQL;
+
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':PD1', $pd1);
         $command->bindValue(':SEM3', $year);
@@ -187,10 +203,10 @@ SQL;
             $subGroups = array($arr['nr6'], $arr['nr7'], $arr['nr8'], $arr['nr9']);
             $countSubGroups = array_count_values($subGroups);
 
-            $arr['sum'] = $arr['sum']*$countSubGroups[$pd1];
+            $arr['sum'] = $arr['nr3']*$countSubGroups[$pd1];
             // }}}
             if(isset($data[$sem5][$us4]))
-                $data[$sem5][$us4]['sum'] += $arr['sum'];
+                $data[$sem5][$us4]['sum'] += $arr['nr3'];
             else
                 $data[$sem5][$us4]= $arr;
 
@@ -201,11 +217,11 @@ SQL;
                 if (! isset($data[$sem5][$_us4]))
                     $data[$sem5][$_us4] = $data[$sem5][$us4];
                 else
-                    $data[$sem5][$_us4]['sum'] += $arr['sum'];
+                    $data[$sem5][$_us4]['sum'] += $arr['nr3'];
 
             }
 
-            $data[$sem5][0]['sum'] += $arr['sum']; // Всего
+            $data[$sem5][0]['sum'] += $arr['nr3']; // Всего
         }
 
         for ($sem5=0; $sem5<=1; $sem5++) {
