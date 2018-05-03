@@ -126,7 +126,7 @@ if($ps83==0) {
     $th  .= generateTotal1Header();
     $ps9 = PortalSettings::model()->getSettingFor(9);
     if($ps9 == 1){
-        $th2.='<th colspan="2">'.$minBalForAllLessons. ' / '.$maxBalForAllLessons.'</th>';
+        $th2.='<th colspan="2">'. tt('Мин: ') .$minBalForAllLessons. ' | '. tt('Мах: ') .$maxBalForAllLessons.'</th>';
     }else
         $th2.='<th colspan="2"></th>';
 }
