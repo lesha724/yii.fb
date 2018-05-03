@@ -123,7 +123,7 @@ class ListController extends Controller
         }
 
         $group = Gr::model()->getVirtualGroupByDiscipline($model->group);
-        $groupInfo = $group->getInfo();
+        $groupInfo = Gr::model()->getInfo($model->group);
         $groupName = $group['gr3'];
 
         $speciality = isset($groupInfo['pnsp2']) ? $groupInfo['pnsp2'] : '';
@@ -148,9 +148,11 @@ class ListController extends Controller
         )))->getStyle('A3')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
         $sheet->mergeCellsByColumnAndRow(0, 4, 2, 4);
-        $sheet->setCellValue('A4', tt('{faculty} факультета', array(
+        $sheet->setCellValue('A4', $faculty
+        /*tt('{faculty} факультета', array(
             '{faculty}' => $faculty
-        )))->getStyle('A4')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        ))*/
+        )->getStyle('A4')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 
         $sheet->mergeCellsByColumnAndRow(0, 5, 2, 5);
@@ -182,7 +184,7 @@ class ListController extends Controller
         $sheet->getColumnDimensionByColumn(0)->setWidth(5);
         $sheet->getColumnDimensionByColumn(1)->setWidth(40);
         $sheet->getColumnDimensionByColumn(2)->setWidth(12);
-        $sheet->getColumnDimensionByColumn(3)->setWidth(10);
+        $sheet->getColumnDimensionByColumn(3)->setWidth(15);
 
         $i=1;
         foreach($students as $student):
@@ -204,7 +206,7 @@ class ListController extends Controller
 
         $sheet->getStyleByColumnAndRow(0,$rowStart,3,$i+$rowStart-1)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
 
-        $sheet->setTitle(tt('Список виртуальной группы '. $groupName. '/дисциплина '.$disciplineName));
+        $sheet->setTitle(tt('Список виртуальной группы'));
 
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
         $objPHPExcel->setActiveSheetIndex(0);
@@ -279,9 +281,11 @@ class ListController extends Controller
         )))->getStyle('A3')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
         $sheet->mergeCellsByColumnAndRow(0, 4, 2, 4);
-        $sheet->setCellValue('A4', tt('{faculty} факультета', array(
+        $sheet->setCellValue('A4', $faculty
+        /*tt('{faculty} факультета', array(
             '{faculty}' => $faculty
-        )))->getStyle('A4')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        ))*/
+        )->getStyle('A4')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 
         $sheet->mergeCellsByColumnAndRow(0, 5, 2, 5);
@@ -307,7 +311,7 @@ class ListController extends Controller
         $sheet->getColumnDimensionByColumn(0)->setWidth(5);
         $sheet->getColumnDimensionByColumn(1)->setWidth(40);
         $sheet->getColumnDimensionByColumn(2)->setWidth(12);
-        $sheet->getColumnDimensionByColumn(3)->setWidth(10);
+        $sheet->getColumnDimensionByColumn(3)->setWidth(15);
 
         $i=1;
         foreach($students as $student):
@@ -385,7 +389,7 @@ class ListController extends Controller
         list($year, $sem) = SH::getCurrentYearAndSem();
 
         $group = Gr::model()->findByPk($model->group);
-        $groupInfo = $group->getInfo();
+        $groupInfo = Gr::model()->getInfo($group->gr1);
         $groupName = Gr::model()->getGroupName($model->course, $group);
 
         $speciality = isset($groupInfo['pnsp2']) ? $groupInfo['pnsp2'] : '';
@@ -410,9 +414,11 @@ class ListController extends Controller
         )))->getStyle('A3')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
         $sheet->mergeCellsByColumnAndRow(0, 4, 2, 4);
-        $sheet->setCellValue('A4', tt('{faculty} факультета', array(
+        $sheet->setCellValue('A4', $faculty
+        /*tt('{faculty} факультета', array(
             '{faculty}' => $faculty
-        )))->getStyle('A4')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        ))*/
+        )->getStyle('A4')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 
         $sheet->mergeCellsByColumnAndRow(0, 5, 2, 5);

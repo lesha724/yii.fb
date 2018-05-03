@@ -1182,8 +1182,8 @@ SQL;
      * @return array|mixed
      * @throws CException
      */
-    public function getInfo(){
-        if(empty($this->gr1))
+    public function getInfo($gr1){
+        if(empty($gr1))
             return array();
 
         $sql = <<<SQL
@@ -1196,7 +1196,7 @@ SQL;
 		GROUP BY pnsp2,pnsp17,f2,f3,f26,f35
 SQL;
         $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':GR1', $this->gr1);
+        $command->bindValue(':GR1', $gr1);
         $row = $command->queryRow();
 
         return $row;
