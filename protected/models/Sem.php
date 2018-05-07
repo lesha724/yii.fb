@@ -332,6 +332,36 @@ SQL;
         return $semesters;
     }
 
+    /**
+     * @param $sg1
+     * @return array
+     * @throws CException
+     */
+    public function getSemestersForStream($sg1)
+    {
+        $sql = <<<SQL
+                SELECT sem3,sem4,sem5,sem7,sem1
+                FROM sem
+                WHERE sem2=:ID
+                GROUP BY sem3,sem4,sem5,sem7,sem1
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ID', $sg1);
+        $semesters = $command->queryAll();
+
+        foreach ($semesters as $key => $sem) {
+            $semesters[$key]['name'] = $sem['sem3'].' ('.$sem['sem4'].' '.tt('курс').')';
+        }
+
+        return $semesters;
+    }
+
+    /**
+     * @param $gr1
+     * @return array
+     * @throws CException
+     */
     public function getSemestersForAttendanceStatistic($gr1)
     {
         $sql = <<<SQL
