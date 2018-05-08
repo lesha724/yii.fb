@@ -1032,6 +1032,13 @@ SQL;
 
         $nkrsList = $student->getNkrsList();
 
+        list($year, $sem) = SH::getCurrentYearAndSem();
+
+        if(!$student->checkAntiplagiatAccess($year)){
+            Yii::app()->user->setFlash('error', tt('Доступ на проверку в Антиплагиат запрещен, превышен лимит проверок'));
+            $this->redirect('/other/studentInfo');
+        }
+
         if (! empty($_FILES) && !empty($nkrsList)) {
 
             $last = $nkrsList[count($nkrsList)-1];
@@ -1043,7 +1050,8 @@ SQL;
 
         $this->render('antiplagiat', array(
             'student'=>$student,
-            'nkrsList'=>$nkrsList
+            'nkrsList'=>$nkrsList,
+            'year'=>$year
         ));
     }
 

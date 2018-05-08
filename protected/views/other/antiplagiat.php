@@ -10,6 +10,7 @@
  * @var OtherController $this
  * @var $student St
  * @var $nkrsList mixed
+ * @var $year int
  */
 
 $this->pageHeader=tt('Антиплагиат');
@@ -58,7 +59,16 @@ echo $table;
 $warning = tt('Уважаемые студенты!');
 $text = tt('«Антиплагиат» указывает лишь на факт заимствования, не оценивая правомерность заимствования. Оценка правомерности заимствований и, соответственно, реального объёма неправомерных заимствований находится к компетенции научного руководителя обучающегося. Нормативов допустимого объёма заимствований в проверяемых работах не установлено.');
 
+$textInfo = tt('Количество проверок ограничено {limit} попытками. Вы уже использовали {count} попыток.', array(
+    '{limit}'  => $student->getLimitCountAntiplagiat($year),
+    '{count}' => $student->getAntio($year)->getAttribute('antio3')
+));
+
 echo <<<HTML
+    <div class="alert alert-info">
+        <h3>{$warning}</h3>
+        {$textInfo}
+    </div>
     <div class="alert alert-block">
         <h3>{$warning}</h3>
         {$text}

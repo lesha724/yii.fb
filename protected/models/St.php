@@ -1372,7 +1372,7 @@ SQL;
      */
     public function getSg1BySt1($st1){
         if (empty($st1))
-            return array();
+            return null;
         list($sg40, $sg41) =D::model()->getSg40Sg41($st1);
 
         $sql = <<<SQL
@@ -1541,5 +1541,79 @@ SQL;
         $count = $command->queryScalar();
 
         return empty($count) || $count==0;
+    }
+
+    /**
+     * Проверка может ли студент отправить работу в аптиплагиат
+     * @param $year int
+     * @return bool
+     */
+    public function checkAntiplagiatAccess($year){
+        if(empty($this->st1))
+            return false;
+
+        return $this->_checkAntioCount( $this->getAntio($year)->getAttribute('antio3'), $year);
+    }
+
+    /**
+     * @param $year
+     * @return int
+     */
+    public function getLimitCountAntiplagiat($year){
+        $stModel = Ants::model()->findByAttributes(array('ants1'=>$this->st1, 'ants2'=>$year));
+
+        if($stModel!=null){
+            return $stModel->ants3;
+        }
+
+        $sg1 = self::model()->getSg1BySt1($this->st1);
+        if(empty($sg1))
+            return 2;
+
+        $sgModel = Antsg::model()->findByAttributes(array('antsg1'=>$sg1, 'antsg2'=>$year));
+
+        if($sgModel==null){
+            $sgModel = new Antsg();
+            $sgModel->antsg1 = $sg1;
+            $sgModel->antsg2 = $year;
+            $sgModel->antsg3 = 2;
+
+            $sgModel->save();
+        }
+
+        return $sgModel->antsg3;
+    }
+
+    /**
+     * Проверка доступа к антиплагиату
+     * @param $currentCount int текущее количество
+     * @param $year int Год
+     * @return bool
+     */
+    private function _checkAntioCount($currentCount, $year)
+    {
+        return $this->getLimitCountAntiplagiat($year) > $currentCount ;
+    }
+
+    /**
+     * Получить модельку с текущим количетсвом
+     * @param $year
+     * @return Antio|static
+     */
+    public function getAntio($year){
+        $model = Antio::model()->findByAttributes(array(
+            'antio1' => $this->st1,
+            'antio2' => $year
+        ));
+
+        if($model!=null)
+            return $model;
+
+        $model = new Antio();
+        $model->antio1 = $this->st1;
+        $model->antio2 = $year;
+        $model->antio3 = 0;
+
+        return $model;
     }
 }
