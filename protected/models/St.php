@@ -1372,7 +1372,7 @@ SQL;
      */
     public function getSg1BySt1($st1){
         if (empty($st1))
-            return array();
+            return null;
         list($sg40, $sg41) =D::model()->getSg40Sg41($st1);
 
         $sql = <<<SQL
@@ -1541,5 +1541,62 @@ SQL;
         $count = $command->queryScalar();
 
         return empty($count) || $count==0;
+    }
+
+    /**
+     * Проверка может ли студент отправить работу в аптиплагиат
+     * @param $year int
+     * @return bool
+     */
+    public function checkAntiplagiatAccess($year){
+        if(empty($this->st1))
+            return false;
+
+        return $this->_checkAntioCount( $this->getAntio($year)->getAttribute('antio3'), $year);
+    }
+
+    /**
+     * Проверка доступа к антиплагиату
+     */
+    private function _checkAntioCount($currentCount, $year){
+        $stModel = Ants::model()->findByAttributes(array('ants1'=>$this->st1, 'ants2'=>$year));
+
+        if($stModel!=null){
+            return $stModel->ants3>$currentCount;
+        }
+
+        $sg1 = self::model()->getSg1BySt1($this->st1);
+        if(empty($sg1))
+            return null;
+
+        $sgModel = Antsg::model()->findByAttributes(array('antsg1'=>$sg1, 'antsg2'=>$year));
+
+        if($sgModel!=null){
+            return $sgModel->antsg3>$currentCount;
+        }
+
+        return false;
+    }
+
+    /**
+     * Получить модельку с текущим количетсвом
+     * @param $year
+     * @return Antio|static
+     */
+    public function getAntio($year){
+        $model = Antio::model()->findByAttributes(array(
+            'antio1' => $this->st1,
+            'antio2' => $year
+        ));
+
+        if($model!=null)
+            return $model;
+
+        $model = new Antio();
+        $model->antio1 = $this->st1;
+        $model->antio2 = $year;
+        $model->antio3 = 0;
+
+        return $model;
     }
 }
