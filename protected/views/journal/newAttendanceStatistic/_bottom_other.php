@@ -9,4 +9,4 @@
 /** @var $model AttendanceStatisticForm */
 /** @var $this JournalController */
 
-//$students = $model->
+$students = $model->getStudents();

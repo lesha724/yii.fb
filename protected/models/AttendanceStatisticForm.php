@@ -107,5 +107,23 @@ class AttendanceStatisticForm extends CFormModel
         }
     }
 
+    /**
+     * Студенты исходя и фильтров (в зависимости от сценария)
+     */
+    public function getStudents(){
+        if(!$this->validate())
+            return array();
 
+        switch ($this->scenario) {
+            case self::SCENARIO_STREAM:
+                return St::model()->getListStream($this->stream);
+                break;
+            case self::SCENARIO_GROUP:
+                return St::model()->getListGroup($this->group);
+                break;
+            default:
+                return array();
+                break;
+        }
+    }
 }
