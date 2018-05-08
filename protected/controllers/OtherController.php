@@ -1050,7 +1050,8 @@ SQL;
 
         $this->render('antiplagiat', array(
             'student'=>$student,
-            'nkrsList'=>$nkrsList
+            'nkrsList'=>$nkrsList,
+            'year'=>$year
         ));
     }
 

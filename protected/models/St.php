@@ -1556,26 +1556,43 @@ SQL;
     }
 
     /**
-     * Проверка доступа к антиплагиату
+     * @param $year
+     * @return int
      */
-    private function _checkAntioCount($currentCount, $year){
+    public function getLimitCountAntiplagiat($year){
         $stModel = Ants::model()->findByAttributes(array('ants1'=>$this->st1, 'ants2'=>$year));
 
         if($stModel!=null){
-            return $stModel->ants3>$currentCount;
+            return $stModel->ants3;
         }
 
         $sg1 = self::model()->getSg1BySt1($this->st1);
         if(empty($sg1))
-            return null;
+            return 2;
 
         $sgModel = Antsg::model()->findByAttributes(array('antsg1'=>$sg1, 'antsg2'=>$year));
 
-        if($sgModel!=null){
-            return $sgModel->antsg3>$currentCount;
+        if($sgModel==null){
+            $sgModel = new Antsg();
+            $sgModel->antsg1 = $sg1;
+            $sgModel->antsg2 = $year;
+            $sgModel->antsg3 = 2;
+
+            $sgModel->save();
         }
 
-        return false;
+        return $sgModel->antsg3;
+    }
+
+    /**
+     * Проверка доступа к антиплагиату
+     * @param $currentCount int текущее количество
+     * @param $year int Год
+     * @return bool
+     */
+    private function _checkAntioCount($currentCount, $year)
+    {
+        return $this->getLimitCountAntiplagiat($year) > $currentCount ;
     }
 
     /**
