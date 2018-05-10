@@ -54,7 +54,9 @@ class JournalController extends Controller
                     'searchStudent',
 
                     'attendanceStatisticPrint',
-                    'attendanceStatisticPrintExcel'
+                    'attendanceStatisticPrintExcel',
+
+                    'newAttendanceStatistic'//новая статистика для фарма
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -3379,6 +3381,28 @@ SQL;
 
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
+    }
+
+    /**
+     * Акшен для отображения новой статистики посещаемости для фарма
+     * @throws CHttpException
+     */
+    public function actionNewAttendanceStatistic()
+    {
+        $scenario = Yii::app()->request->getParam('type', AttendanceStatisticForm::SCENARIO_STREAM);
+
+        if(!array_key_exists($scenario, AttendanceStatisticForm::scenarios() ))
+            throw new CHttpException(400, 'Bad request. Please do not repeat this request again.');
+
+        $model = new AttendanceStatisticForm();
+        $model->scenario = $scenario;
+
+        if (isset($_REQUEST['AttendanceStatisticForm']))
+            $model->attributes=$_REQUEST['AttendanceStatisticForm'];
+
+        $this->render('newAttendanceStatistic', array(
+            'model' => $model
+        ));
     }
 //----------------------------------------------------------------------------------------------
     public function actionSearchStudent()
