@@ -3,7 +3,7 @@
 <tr><td class="center">%s</td><td><label data-toggle="tooltip" data-placement="right" title="" data-original-title="%s">%s</label></td></tr>
 HTML;
 
-    $columnName = tt('Преподователь');
+    $columnName = tt('Преподаватель');
     $table = <<<HTML
 <table class="table table-bordered small-table-1 time-table-chair-1" >
     <thead>
