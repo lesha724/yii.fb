@@ -1062,6 +1062,13 @@ SQL;
      * @param $nkrs6 mixed
      */
     private function proccessAntiplagiat($student, $nkrs1, $nkrs6){
+        $st = St::model()->findByPk($student);
+        if($st == null) {
+            Yii::app()->user->setFlash('error', tt('Ошибка: не найден студент'));
+            return false;
+        }
+        list($year, $sem) = SH::getCurrentYearAndSem();
+
         if (! empty($_FILES)) {
 
             $document = CUploadedFile::getInstanceByName('document');
@@ -1075,6 +1082,11 @@ SQL;
                     D::model()->updateNkrs($nkrs1, 'nkrs8', $id);
                 Yii::app()->user->setFlash('success', tt('Документ был отправлен на проверку в Антиплагиат'));
                 Yii::app()->user->setFlash('info', tt('Результат можно посмотреть здесь:') .' '. CHtml::link(tt('Отчет'), $url, array('target' => '_blank')));
+
+                $_modelLimit = $st->getAntio($year);
+                $_modelLimit->antio3++;
+                $_modelLimit->save();
+
                 $this->sendEmails($student, $nkrs6, $url);
             }
 
