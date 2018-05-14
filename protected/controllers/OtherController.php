@@ -858,6 +858,7 @@ SQL;
         $model->spkr4=1;
         $model->spkr5=1;
         $model->spkr6=0;
+        $model->spkr9=0;
 
         $res = array(
             'error'=> !$model->save(),
