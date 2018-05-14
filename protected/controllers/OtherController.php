@@ -858,6 +858,7 @@ SQL;
         $model->spkr4=1;
         $model->spkr5=1;
         $model->spkr6=0;
+        $model->spkr8 =  date('Y-m-d H:i:s');
         $model->spkr9=0;
 
         $res = array(
