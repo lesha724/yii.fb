@@ -137,11 +137,12 @@ HTML;
         'buttonType'=>'link',
         'type'=>'primary',
         'icon'=>'print',
-        'url'=>Yii::app()->createUrl('/other/studentCardExcel'),
+        'url'=> Yii::app()->user->isAdmin ? '#' : Yii::app()->createUrl('/other/studentCardExcel'),
         'label'=>tt('Печать'),
         'htmlOptions'=>array(
             'class'=>'btn-mini',
             'id'=>'studentCard-print',
+            'data-url'=>Yii::app()->createUrl('/other/studentCardExcel'),
         )
     ));
 

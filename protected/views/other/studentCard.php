@@ -22,6 +22,17 @@ if(Yii::app()->user->isAdmin) {
         'showDateRangePicker' => false,
         'showCheckBoxCalendar' => false
     ));
+
+    Yii::app()->clientScript->registerScript('print', <<<JS
+    $('#studentCard-print').click(function(e){
+        e.preventDefault();
+        var action=$("#filter-form").attr("action");
+        $("#filter-form").attr("action", $(this).data('url'));
+        $("#filter-form").submit();
+        $("#filter-form").attr("action", action);
+    });
+JS
+, CClientScript::POS_END);
 }
 
 

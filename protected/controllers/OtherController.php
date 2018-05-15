@@ -35,6 +35,8 @@ class OtherController extends Controller
                     'cancelSubscription',
                     'renderAddSpkr',
                     'addSpkr',
+                    'studentInfoExcel',
+                    'studentInfoPdf',
                     'antiplagiat'
                 ),
                 'expression' => 'Yii::app()->user->isStd',
@@ -43,30 +45,27 @@ class OtherController extends Controller
                 'actions' => array(
                     'phones',
                     'employment',
-                    'studentInfo',
-                    'studentInfoExcel',
-                    'studentInfoPdf',
-                    'studentPassport',
-                    'deletePassport',
-                    'showPassport',
-                    'uploadPassport',
-                    'changePassport',
+                    'studentInfo', //проверка идет в самом методе
+
+                    'studentPassport', //Проверка идет в самом методе
+                    'deletePassport', //проверка идет в самом методе
+                    'showPassport', //проверка идет в самом методе
+                    'uploadPassport', //проверка идет в самом методе
+                    'changePassport', //проверка идет в самом методе
                     'autocompleteTeachers',
-                    'updateNkrs',
-                    'searchStudent',
-                    'studentCard',
+                    'studentCard', //проверка идет в самом методе
                     'studentCardExcel',
-                    'showRetake',
+                    'showRetake', //проверка идет в самом методе
                     'orderAbiturient'
                 ),
             ),
-            /*array('allow',
+            array('allow',
                 'actions' => array(
-                    'studentCard',
-                    'studentCardExcel',
+                    'searchStudent',
+                    'updateNkrs',
                 ),
-                'expression' => 'Yii::app()->user->isPrnt',
-            ),*/
+                'users' => array('@'),
+            ),
             array('deny',
                 'users' => array('*'),
             ),
@@ -198,7 +197,22 @@ class OtherController extends Controller
 
     public function actionStudentCardExcel()
     {
-        $st1 = Yii::app()->user->dbModel->st1;
+        $model = new TimeTableForm;
+        $model->scenario = 'student';
+        if (isset($_REQUEST['TimeTableForm']))
+            $model->attributes=$_REQUEST['TimeTableForm'];
+
+        if (Yii::app()->user->isAdmin) {
+
+
+        }
+        elseif (Yii::app()->user->isPrnt) {
+            $model->student = Yii::app()->user->dbModel->st1;
+        } elseif (Yii::app()->user->isStd) {
+            $model->student = Yii::app()->user->dbModel->st1;
+        }
+
+        $st1 =  $model->student;
         $st = St::model()->findByPk($st1);
 
         $studentInfo = $st->getStudentInfoForCard();
@@ -231,6 +245,7 @@ class OtherController extends Controller
                 $objDrawing->setOffsetX(10);
                 $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
             }
+
 
             $sheet->mergeCells('E1:F1');
             $sheet->setCellValue('E1', tt('ФИО'));
