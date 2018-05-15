@@ -580,7 +580,7 @@ SQL;
 
         //var_dump($vmp);
 
-        $startYear = null;
+        $startYear  = null;
         $startSem = null;
 
         if($elg->elg20->uo6==3){
@@ -662,18 +662,36 @@ SQL;
         $command->execute();
 
     }
+
+    /**
+     * @param $st1
+     * @param $elgz Elgz
+     * @param $gr1
+     * @param $elg Elg
+     */
+    protected function _recalculateBlockDisp($st1,$elgz,$gr1, $elg){
+        //TODO: Пересчет накопительно блочной системы
+
+        //list($dis)
+    }
+
     /**
      * Пересчет оценко пмк в журнале по студенту
      * @param $st1
      * @param $elgz
      * @param $gr1
+     * @throws
      */
     public function recalculate($st1,$elgz,$gr1){
+
+        $universityCode = SH::getUniversityCod();
+
         $ps57 = PortalSettings::model()->getSettingFor(57);
         if($ps57!=1)
             return;
 
         $elg = Elg::model()->findByPk($elgz->elgz2);
+
         $module = Vvmp::model()->getModul($elg->elg2, $gr1,$elgz->elgz3,$elg->elg1, $st1);
         //var_dump($module);
         if(empty($module))
@@ -704,19 +722,10 @@ SQL;
             return;
         else
         {
-
-            $startYear = null;
-            $startSem = null;
-
-            if($elg->elg20->uo6==3){
-                $row = $this->getStartYearSem($elg->elg2);
-
-                if(empty($row)){
-                    return array();
-                }
-
-                $startYear = $row['sem3'];
-                $startSem = $row['sem5'];
+            //Пересчет блочных накопительных систем
+            if($universityCode == U_ZSMU && $elg->elg20->uo18 > 0 && $elg->elg20->uo6>0){
+                $this->_recalculateBlockDisp($st1,$elgz,$gr1, $elg);
+                return;
             }
 
             $marksArray = $this->getMarksFromJournal($st1,$elgz,$gr1);
@@ -865,7 +874,7 @@ SQL;
                     $elgpmkst->elgpmkst4 = $module['vmpv1'];
                 }
                 //var_dump($_tek);
-                $elgpmkst->elgpmkst5 = ($_elgz->elgz4==3 && SH::getUniversityCod()==32) ? $_tek : $tek;
+                $elgpmkst->elgpmkst5 = ($_elgz->elgz4==3 && $universityCode==U_ZSMU) ? $_tek : $tek;
                 $elgpmkst->save();
 
                 if($elg->elg20->uo6==3){
