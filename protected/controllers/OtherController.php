@@ -337,9 +337,9 @@ class OtherController extends Controller
                 $k=2;
                 foreach($disciplines as $discipline)
                 {
-                    $type=0;
-                    if($discipline['us4']>1)
-                        $type=1;
+                    $type= $discipline['type_journal'];
+                    /*if($discipline['us4']>1)
+                        $type=1;*/
                     list($respectful,$disrespectful,$f,$nbretake,$fretake,$count) = Elg::model()->getRetakeInfo($discipline['uo1'],$discipline['sem1'],$type,$st->st1, PortalSettings::model()->getSettingFor(55));
                     $sheet->setCellValueByColumnAndRow(0,$i+$k, $i);
                     $sheet->setCellValueByColumnAndRow(1,$i+$k, $discipline['k2']);
@@ -348,7 +348,7 @@ class OtherController extends Controller
                     else
                         $d2=$discipline['d2'];
                     $sheet->setCellValueByColumnAndRow(2,$i+$k, $d2);
-                    $sheet->setCellValueByColumnAndRow(3,$i+$k, SH::convertUS4($discipline['us4']));
+                    $sheet->setCellValueByColumnAndRow(3,$i+$k, SH::convertTypeJournal($discipline['type_journal']));
                     $sheet->setCellValueByColumnAndRow(4,$i+$k, $count);
                     $sheet->setCellValueByColumnAndRow(5,$i+$k, $respectful);
                     $sheet->setCellValueByColumnAndRow(6,$i+$k, $disrespectful);

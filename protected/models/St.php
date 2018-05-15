@@ -515,7 +515,9 @@ SQL;
 		$string = Yii::app()->db->connectionString;
 		$parts  = explode('=', $string);
 
-		$host     = trim($parts[1].'d');
+		$host = str_replace(';role', '', $parts[1]);
+
+		$host     = trim($host.'d');
 		$login    = Yii::app()->db->username;
 		$password = Yii::app()->db->password;
 		$dbh      = ibase_connect($host, $login, $password);
