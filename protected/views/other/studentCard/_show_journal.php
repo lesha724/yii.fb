@@ -26,6 +26,7 @@ else {
         echo tt('Не найдены занятия.');
     else {
         $table = <<<HTML
+            <div class='table-container'>
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
@@ -37,16 +38,17 @@ else {
                         %s
                     </tbody>
                 </table>
+            </div>
 HTML;
         $th = $th2 = $tr = '';
 
-        $th.= '<th>'.tt('Занятие'). '</th>';
-        $tr.='<tr>'.'<th>'.tt('Оценки'). '</th>';
+        $th.= '<td class="headcol-fix">'.tt('Занятие'). '</td>';
+        $tr.='<tr>'.'<td class="headcol-fix">'.tt('Оценки'). '</td>';
 
-        $minMax = $ps9 == 1;
+        $minMax = $ps9 == 1 && $type > 0;
         if($minMax) {
             $th2 .= '<tr>';
-            $th2 .= '<th>'.tt('Мин&nbsp;|&nbsp;Мах'). '</th>';
+            $th2 .= '<td class="headcol-fix">'.tt('Мин&nbsp;|&nbsp;Мах'). '</td>';
         }
 
         $moduleNom=1;
@@ -63,27 +65,27 @@ HTML;
             }else {
                 $tr .= tableRow($date, $st, $marks, $type, $ps56, $discipline['sem7'], $ps60, $ps55);
                 if($minMax){
-                    if ($type == 0)
-                        $th2.= '<th></th><th></th>';
-                    else {
-                        $elgz5 = '0';
-                        $elgz6 = '0';
-                        if ($date['elgz5'] > 0)
-                            $elgz5 = round($date['elgz5'], 1);
-                        if ($date['elgz6'] > 0)
-                            $elgz6 = round($date['elgz6'], 1);
+                    /*if ($type == 0)
+                        $th2.= '<th></th><th></th>';*/
+                    /*else {*/
+                    $elgz5 = '0';
+                    $elgz6 = '0';
+                    if ($date['elgz5'] > 0)
+                        $elgz5 = round($date['elgz5'], 1);
+                    if ($date['elgz6'] > 0)
+                        $elgz6 = round($date['elgz6'], 1);
 
-                        /*if(!empty($elgz5)|| !empty($elgz6))
-                        {
-                            if(empty($elgz5))
-                                $elgz5 = 0;
+                    /*if(!empty($elgz5)|| !empty($elgz6))
+                    {
+                        if(empty($elgz5))
+                            $elgz5 = 0;
 
-                            if(empty($elgz6))
-                                $elgz6 = 0;
-                        }*/
+                        if(empty($elgz6))
+                            $elgz6 = 0;
+                    }*/
 
-                        $th2.='<th>'.$elgz5.'</th><th>'.$elgz6.'</th>';
-                    }
+                    $th2.='<th>'.$elgz5.'</th><th>'.$elgz6.'</th>';
+                    //}
                 }
             }
         }
@@ -93,8 +95,8 @@ HTML;
             $th2.='</tr>';
         $tr.='</tr>';
 
-        echo '<div class="table-responsive">';
+        //echo '<div class="table-responsive">';
         echo sprintf($table, $th, $th2, $tr); // 2 table
-        echo '</div>';
+        //echo '</div>';
     }
 }

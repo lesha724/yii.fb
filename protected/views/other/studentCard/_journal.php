@@ -9,14 +9,14 @@ function tableTrModule($date,$gr1,$st,$elg,$moduleNom,$modules,$sem7)
 {
     $ps60 = PortalSettings::model()->getSettingFor(60);
     if (($st['st71']!=$sem7&&$st['st71']!=$sem7+1) && $ps60 ==1)
-        return '<td colspan="4"></td>';
+        return '<td colspan="4">&nbsp;</td>';
 
     if (stripos($date['r2'], '11.11.1111')!==false )
-        return '<td colspan="4"></td>';
+        return '<td colspan="4">&nbsp;</td>';
 
     $ps56 = PortalSettings::model()->getSettingFor(56);
     if ($ps56 == 1 && $date['elgz4']>0)
-        return '<td colspan="4"></td>';
+        return '<td colspan="4">&nbsp;</td>';
 
     switch($date['elgz4']){
         case 2:
@@ -68,14 +68,14 @@ function tableTrModule2($date,$gr1,$st,$elg,$moduleNom,$modules,$sem7)
 {
     $ps60 = PortalSettings::model()->getSettingFor(60);
     if (($st['st71']!=$sem7&&$st['st71']!=$sem7+1) && $ps60 ==1)
-        return '<td colspan="4"></td>';
+        return '<td colspan="4">&nbsp;</td>';
 
     if (stripos($date['r2'], '11.11.1111')!==false )
-        return '<td colspan="4"></td>';
+        return '<td colspan="4">&nbsp;</td>';
 
     $ps56 = PortalSettings::model()->getSettingFor(56);
     if ($ps56 == 1 && $date['elgz4']>0)
-        return '<td colspan="4"></td>';
+        return '<td colspan="4">&nbsp;</td>';
 
     if(!isset($modules[(int)$moduleNom-1]))
         return '<td colspan="4">'.tt('Нет ведомости').'</td>';
@@ -95,15 +95,15 @@ HTML
 function tableRow($date,$st,$marks,$type_lesson,$ps56,$sem7,$ps60,$ps55)
 {
     if (($st['st71']!=$sem7&&$st['st71']!=$sem7+1) &&$ps60==1)
-        return '<td colspan="2"></td>';
+        return '<td colspan="2">&nbsp;</td>';
 
     if (stripos($date['r2'], '11.11.1111')!==false )
-        return '<td colspan="2"></td>';
+        return '<td colspan="2">&nbsp;</td>';
 
     if (strtotime($date['r2']) > strtotime('now'))
-        return '<td colspan="2"></td>';
+        return '<td colspan="2">&nbsp;</td>';
     if ($ps56 == 1 && $date['elgz4']>0)
-        return '<td colspan="2"></td>';
+        return '<td colspan="2">&nbsp;</td>';
 
     $nom=$date['elgz3'];
 
@@ -231,3 +231,19 @@ foreach ($disciplines as $discipline) {
 }
 ?>
     </div>
+
+<?php
+
+Yii::app()->clientScript->registerCss('fix-first-column', <<<CSS
+    .table-container { 
+        margin-left:75px;
+        overflow-x:scroll;  
+    }
+    
+    .headcol-fix {
+        position:absolute;
+        width:75px;
+        left:0;
+    }
+CSS
+);
