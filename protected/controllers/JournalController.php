@@ -54,9 +54,7 @@ class JournalController extends Controller
                     'searchStudent',
 
                     'attendanceStatisticPrint',
-                    'attendanceStatisticPrintExcel',
-
-                    'newAttendanceStatistic'//новая статистика для фарма
+                    'attendanceStatisticPrintExcel'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -84,7 +82,10 @@ class JournalController extends Controller
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isStd || Yii::app()->user->isTch',
             ),
             array('allow',
-                'actions' => array('attendanceStatistic')
+                'actions' => array(
+                    'attendanceStatistic',
+                    'newAttendanceStatistic'//новая статистика для фарма
+                )
             ),
             array('deny',
                 'users' => array('*'),
