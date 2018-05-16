@@ -141,6 +141,7 @@ class Pm extends CActiveRecord
         public static function getPm10Array()
         {
            $arr=array(
+               'self'=>tt('Личное'),
                'timeTable'=>tt('Расписание'),
                'workPlan'=>tt('Рабочий план'),
                'list'=>tt('Список'),

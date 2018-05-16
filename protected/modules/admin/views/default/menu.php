@@ -29,6 +29,37 @@
             'settings' => $settings,
             'blocks' => array(
                 array(
+                    'name'       => 'Личное',
+                    'controller' => 'self',
+                    'items' => array(
+                        'workLoad'    => array(
+                            'name'=>'Личная нагрузка',
+                            'authOnly' => $teacherStr
+                        ),
+                        'timeTable'         => array(
+                            'name'=>'Личное раписание',
+                            'authOnly' => array(
+                                $teacherStr,
+                                $studentStr
+                            )
+                        ),
+                        'gostem' => array(
+                            'name'=>'Запись на гос. экзамены',
+                            'authOnly' => $studentStr
+                        ),
+                        'subscription' => array(
+                            'name'=>'Запись на выборочные дисциплины',
+                            'authOnly' => $studentStr
+                        ),
+                        'orderLesson' => array(
+                            'name'=>'Заказ переноса занятия',
+                            'authOnly' => $teacherStr
+                        ),
+                        'studentInfo' => 'Данные студенты',
+                        'studentCard' => 'Карточка студента',
+                    ),
+                ),
+                array(
                     'name'       => 'Абитуриент',
                     'controller' => 'entrance',
                     'items' => array(

@@ -337,52 +337,54 @@ $this->widget('zii.widgets.CMenu', array(
             'url' => '#',
             'linkOptions'=> $_l,
             'itemOptions'=>array('class'=> ( $_c=='timeTable' && $_a=='self')||($_c=='workLoad' && $_a=='self')
-                ||($_c=='other' && $_a=='subscription')||($_c=='other' && $_a=='studentInfo')
-                ||($_c=='other' && $_a=='gostem') ||($_c=='other' && $_a=='orderLesson')||($_c=='other' && $_a=='studentCard') ? 'active open' : ''),
-            'items' =>array(
+            ||($_c=='other' && $_a=='subscription')||($_c=='other' && $_a=='studentInfo')
+            ||($_c=='other' && $_a=='gostem') ||($_c=='other' && $_a=='orderLesson')||($_c=='other' && $_a=='studentCard') ? 'active open' : ''),
+
+            //'itemOptions'=> _i('self'),
+            'items' =>array_merge(array(
                 array(
                     'label'   => $_l2.tt('Карточка студента'),
-                    'url'     => _u('/other/studentCard'),
+                    'url'     => _u('/self/studentCard'),
                     'active'  => $_c=='other' && $_a=='studentCard',
-                    'visible' => _ch('other', 'studentCard') && ($isPrnt || $isStd|| $isAdmin),
+                    'visible' => _ch('self', 'studentCard') && ($isPrnt || $isStd|| $isAdmin),
                 ),
                 array(
                     'label'   => $_l2.tt('Личное расписание'),
-                    'url'     => _u('/timeTable/self'),
+                    'url'     => _u('/self/timeTable'),
                     'active'  => $_c=='timeTable' && $_a=='self',
-                    'visible' => _ch('timeTable', 'self')&& ($isStd||$isTch)
+                    'visible' => _ch('self', 'timeTable')&& ($isStd||$isTch)
                 ),
                 array(
                     'label'   => $_l2.tt('Личная нагрузка'),
-                    'url'     => _u('/workLoad/self'),
-                    'visible' => _ch('workLoad', 'self') && $isTch,
+                    'url'     => _u('/self/workLoad'),
+                    'visible' => _ch('self', 'workLoad') && $isTch,
                     'active'  => $_c=='workLoad' && $_a=='self'
                 ),
                 array(
                     'label'   => $_l2.tt('Запись на выборочные дисциплины'),
-                    'url'     => _u('/other/subscription'),
+                    'url'     => _u('/self/subscription'),
                     'active'  => $_c=='other' && $_a=='subscription',
-                    'visible' => _ch('other', 'subscription') && $isStd,
+                    'visible' => _ch('self', 'subscription') && $isStd,
                 ),
                 array(
                     'label'   => $_l2.tt('Данные студента'),
-                    'url'     => _u('/other/studentInfo'),
+                    'url'     => _u('/self/studentInfo'),
                     'active'  => $_c=='other' && $_a=='studentInfo',
-                    'visible' => _ch('other', 'studentInfo') && ($isTch || $isStd),
+                    'visible' => _ch('self', 'studentInfo') && ($isTch || $isStd),
                 ),
                 array(
                     'label'   => $_l2.tt('Запись на гос. экзамены'),
-                    'url'     => _u('/other/gostem'),
+                    'url'     => _u('/self/gostem'),
                     'active'  => $_c=='other' && $_a=='gostem',
-                    'visible' => _ch('other', 'gostem') && $isStd,
+                    'visible' => _ch('self', 'gostem') && $isStd,
                 ),
                 array(
                     'label'   => $_l2.tt('Заказ переноса занятий'),
-                    'url'     => _u('/other/orderLesson'),
+                    'url'     => _u('/self/orderLesson'),
                     'active'  => $_c=='other' && $_a=='orderLesson',
-                    'visible' => _ch('other', 'orderLesson') && $isTch,
+                    'visible' => _ch('self', 'orderLesson') && $isTch,
                 ),
-            ),
+            ), getDopItem('self',0)),
             'visible' => ($isStd||$isTch||$isAdmin||$isPrnt)
         ),
         array(

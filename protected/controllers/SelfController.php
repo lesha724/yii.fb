@@ -1,0 +1,86 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: neffa
+ * Date: 16.05.2018
+ * Time: 10:33
+ */
+
+class SelfController extends Controller
+{
+    public function filters() {
+        return array(
+            'accessControl',
+        );
+    }
+
+    public function accessRules() {
+
+        return array(
+            array('allow',
+                'actions' => array(
+                    'orderLesson',
+                    'workLoad'
+                ),
+                'expression' => 'Yii::app()->user->isTch',
+            ),
+            array('allow',
+                'actions' => array(
+                    'gostem',
+                    'subscription',
+                ),
+                'expression' => 'Yii::app()->user->isStd',
+            ),
+            array('allow',
+                'actions' => array(
+                    'studentInfo', //проверка идет в самом методе
+                    'studentCard', //проверка идет в самом методе
+                ),
+            ),
+            array('allow',
+                'actions' => array(
+                    'timeTable',
+                ),
+                'users' => array('@'),
+            ),
+            array('deny',
+                'users' => array('*'),
+            ),
+        );
+    }
+
+    public function actionGostem()
+    {
+        $this->forward('other/gostem');
+    }
+
+    public function actionOrderLesson()
+    {
+        $this->forward('other/orderLesson');
+    }
+
+    public function actionWorkLoad()
+    {
+        $this->forward('workLoad/self');
+    }
+
+    public function actionTimeTable()
+    {
+        $this->forward('timeTable/self');
+    }
+
+    public function actionStudentCard()
+    {
+        $this->forward('other/studentCard');
+    }
+
+    public function actionSubscription()
+    {
+        $this->forward('other/studentInfo');
+    }
+
+    public function actionStudentInfo()
+    {
+        $this->forward('other/subscription');
+    }
+}
