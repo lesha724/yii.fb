@@ -169,6 +169,15 @@ class ListController extends Controller
 
         $sheet->getStyle('A2:A5')->getFont()->setSize(14);
 
+        $sheet->getRowDimension(2)->setRowHeight(-1);
+        $sheet->getStyle('A2')->getAlignment()->setWrapText(true);
+        $sheet->getRowDimension(3)->setRowHeight(-1);
+        $sheet->getStyle('A3')->getAlignment()->setWrapText(true);
+        $sheet->getRowDimension(4)->setRowHeight(-1);
+        $sheet->getStyle('A4')->getAlignment()->setWrapText(true);
+        $sheet->getRowDimension(5)->setRowHeight(-1);
+        $sheet->getStyle('A5')->getAlignment()->setWrapText(true);
+
         $rowStart=8;
 
         $sheet->setCellValue('A'.$rowStart,"№");
@@ -183,7 +192,7 @@ class ListController extends Controller
 
         $sheet->getColumnDimensionByColumn(0)->setWidth(5);
         $sheet->getColumnDimensionByColumn(1)->setWidth(40);
-        $sheet->getColumnDimensionByColumn(2)->setWidth(12);
+        $sheet->getColumnDimensionByColumn(2)->setWidth(15);
         $sheet->getColumnDimensionByColumn(3)->setWidth(15);
 
         $i=1;
@@ -296,6 +305,15 @@ class ListController extends Controller
 
         $sheet->getStyle('A2:A5')->getFont()->setSize(14);
 
+        $sheet->getRowDimension(2)->setRowHeight(-1);
+        $sheet->getStyle('A2')->getAlignment()->setWrapText(true);
+        $sheet->getRowDimension(3)->setRowHeight(-1);
+        $sheet->getStyle('A3')->getAlignment()->setWrapText(true);
+        $sheet->getRowDimension(4)->setRowHeight(-1);
+        $sheet->getStyle('A4')->getAlignment()->setWrapText(true);
+        $sheet->getRowDimension(5)->setRowHeight(-1);
+        $sheet->getStyle('A5')->getAlignment()->setWrapText(true);
+
         $rowStart=7;
 
         $sheet->setCellValue('A'.$rowStart,"№");
@@ -310,7 +328,7 @@ class ListController extends Controller
 
         $sheet->getColumnDimensionByColumn(0)->setWidth(5);
         $sheet->getColumnDimensionByColumn(1)->setWidth(40);
-        $sheet->getColumnDimensionByColumn(2)->setWidth(12);
+        $sheet->getColumnDimensionByColumn(2)->setWidth(15);
         $sheet->getColumnDimensionByColumn(3)->setWidth(15);
 
         $i=1;
@@ -429,6 +447,16 @@ class ListController extends Controller
 
         $sheet->getStyle('A2:A5')->getFont()->setSize(14);
 
+        $sheet->getRowDimension(2)->setRowHeight(-1);
+        $sheet->getStyle('A2')->getAlignment()->setWrapText(true);
+        $sheet->getRowDimension(3)->setRowHeight(-1);
+        $sheet->getStyle('A3')->getAlignment()->setWrapText(true);
+        $sheet->getRowDimension(4)->setRowHeight(-1);
+        $sheet->getStyle('A4')->getAlignment()->setWrapText(true);
+        $sheet->getRowDimension(5)->setRowHeight(-1);
+        $sheet->getStyle('A5')->getAlignment()->setWrapText(true);
+
+
         $rowStart=7;
 
         $sheet->setCellValue('A'.$rowStart,"№");
@@ -442,7 +470,7 @@ class ListController extends Controller
         $sheet->getColumnDimensionByColumn(0)->setWidth(5);
         $sheet->getColumnDimensionByColumn(1)->setWidth(40);
         //$sheet->getColumnDimensionByColumn(2)->setWidth(20);
-        $sheet->getColumnDimensionByColumn(2)->setWidth(12);
+        $sheet->getColumnDimensionByColumn(2)->setWidth(15);
 
         $i=1;
         foreach($students as $student):

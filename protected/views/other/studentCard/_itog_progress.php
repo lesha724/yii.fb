@@ -6,6 +6,9 @@
  * Time: 20:07
  */
 
+/**
+ * @var $this OtherController
+ */
 echo "<style>
         #studentCardItogProgress th{
             text-align: center;
@@ -35,6 +38,8 @@ $table = <<<HTML
     </table>
 HTML;
 
+$isFarm = $this->universityCode == U_FARM;
+
 /*Учитовать мин-макс или нет*/
 $ps9 = PortalSettings::model()->findByPk(9)->ps2;
 
@@ -50,7 +55,8 @@ if($ps9) {
 $th.='<th>'.tt('Количество балов').'</th>';
 $th.='<th>'.tt('Количество прошедших занятий').'</th>';
 $th.='<th>'.tt('Количество пропусков').'</th>';
-$th.='<th>'.tt('Количество уваж. пропусков').'</th>';
+if(!$isFarm)
+    $th.='<th>'.tt('Количество уваж. пропусков').'</th>';
 $th.='</tr>';
 //Загловок для таблицы с лк
 $th2.='<tr>';
@@ -58,7 +64,8 @@ $th2.='<th>'.tt('№ пп').'</th>';
 $th2.='<th>'.tt('Дисциплина').'</th>';
 $th2.='<th>'.tt('Количество прошедших занятий').'</th>';
 $th2.='<th>'.tt('Количество пропусков').'</th>';
-$th2.='<th>'.tt('Количество уваж. пропусков').'</th>';
+if(!$isFarm)
+    $th2.='<th>'.tt('Количество уваж. пропусков').'</th>';
 $th2.='</tr>';
 
 $i = $i2 =1;
@@ -98,7 +105,8 @@ foreach($disciplines as $discipline)
         }
         $row.='<td>'. $statistic['countLesson'].'</td>';
         $row.='<td>'.$statistic['countOmissions'].'</td>';
-        $row.='<td>'.$statistic['countOmissions1'].'</td>';
+        if(!$isFarm)
+            $row.='<td>'.$statistic['countOmissions1'].'</td>';
 
     $row.='</tr>';
 
