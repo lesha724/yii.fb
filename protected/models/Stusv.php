@@ -378,6 +378,10 @@ SQL;
 
 		$bal_itog = $bal_per2+$balInd->elgdst3;
 		if($bal_itog>=120){
+
+            if($bal_itog>200)
+                $bal_itog=200;
+
 			$mark_itog = -1;
 			$bal_itog_2='FX';
 
