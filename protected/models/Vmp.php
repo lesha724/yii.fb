@@ -724,8 +724,13 @@ SQL;
 
         $disciplines = $this->getDispNakop($elg);
 
+        //var_dump($disciplines);
+
         foreach ($disciplines as $discipline){
             $sem1 = $discipline['sem1'];//Sem::model()->getSemestrForGroupByYearAndSem($gr1, $year, $sem);
+
+            if($sem1 == $elg->elg3 && $elg->elg2 == $discipline['uo1'])
+                continue;
 
             $_elg = Elg::model()->findByAttributes(array(
                 'elg2' => $discipline['uo1'],
@@ -736,17 +741,22 @@ SQL;
             if(empty($_elg))
                 continue;
 
+            $_year = $discipline['sem3'];
+            $_sem = $discipline['sem5'];
+
             $marksBySem = array(
-                $discipline['d2'] . '('. $discipline['uo5'] . ') ' . $year.'-'.$sem=>array(
+                $discipline['d2'] . '('. $discipline['uo5'] . ') ' . $_year.'-'.$_sem=>array(
                     'discipline' => $discipline['d2'],
-                    'year'=>$year,
-                    'sem'=>$sem,
+                    'year'=>$_year,
+                    'sem'=>$_sem,
                     'marks'=>$this->getMarksBySem($_elg, $sem1, $gr1, $st1, $dopJoin, $dopColumn)
                 )
             );
 
             $dopMarks = array_merge($dopMarks, $marksBySem);
         }
+
+        //var_dump($dopMarks);
 
         $sql=<<<SQL
               SELECT elgzst5,elgzst4,elgzst3 $dopColumn FROM elgzst
@@ -775,9 +785,9 @@ SQL;
         );
 
         if(!empty($dopMarks)){
-            foreach ($dopMarks as $dopMark) {
+            foreach ($dopMarks as $key=>$dopMark) {
 
-                $key = $dopMark['year'].'-'.$dopMark['sem'];
+                //$key = $dopMark['year'].'-'.$dopMark['sem'];
 
                 $returnArray[$key] = $dopMark;
             }
@@ -885,23 +895,37 @@ SQL;
             $elgpmkst->save();
 
             if($elg->elg20->uo6==3){
-                $sem1 = $this->getEndSem1($elg->elg2);
-                if($sem1==$elg->elg3){
-                    $vmp = $this->getVedItog($elg->elg2, $gr1, 98, $st1);
+                $val = $count>0 ? $tek/$count : 0;
 
-                    if(!empty($vmp)){
-                        $sql = <<<SQL
+                $tek = round($val,2);
+
+                $sql = <<<SQL
+                      SELECT max(markb3) FROM markb WHERE markb2<=:BAL AND markb4=0
+SQL;
+                $command = Yii::app()->db->createCommand($sql);
+                $command->bindValue(':BAL', $tek);
+                $mark = $command->queryScalar();
+
+                if(!empty($mark)){
+                    $tek = $mark;
+                }else {
+                    $tek = 0;
+                }
+
+                $vmp = $this->getVedItog($elg->elg2, $gr1, 98, $st1);
+
+                if(!empty($vmp)){
+                    $sql = <<<SQL
                               UPDATE vmp set vmp5=:VMP5, vmp4=:VMP4, vmp10=:VMP10, vmp12=:VMP12 WHERE vmp2=:ST1 AND vmp1=:VMPV1
 SQL;
-                        $command = Yii::app()->db->createCommand($sql);
-                        $command->bindValue(':VMP5', $tek);
-                        $command->bindValue(':VMP4', 0);
-                        $command->bindValue(':ST1', $st1);
-                        $command->bindValue(':VMPV1', $vmp['vmp1']);
-                        $command->bindValue(':VMP12', Yii::app()->user->dbModel->p1);
-                        $command->bindValue(':VMP10', date('Y-m-d H:i:s'));
-                        $command->execute();
-                    }
+                    $command = Yii::app()->db->createCommand($sql);
+                    $command->bindValue(':VMP5', $tek);
+                    $command->bindValue(':VMP4', 0);
+                    $command->bindValue(':ST1', $st1);
+                    $command->bindValue(':VMPV1', $vmp['vmp1']);
+                    $command->bindValue(':VMP12', Yii::app()->user->dbModel->p1);
+                    $command->bindValue(':VMP10', date('Y-m-d H:i:s'));
+                    $command->execute();
                 }
             }
         }
