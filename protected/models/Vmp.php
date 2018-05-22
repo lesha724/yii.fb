@@ -808,6 +808,8 @@ SQL;
     protected function _recalculateBlockDisp($st1,$elgz,$gr1, $elg, $module, $vmp){
         $marksArray = $this->getMarksFromJournalNewNakop($st1,$elgz,$gr1,$elg);
 
+        //var_dump($marksArray);
+
         $min = Elgzst::model()->getMin();
         $tek =0;
         $count =0;
@@ -836,6 +838,8 @@ SQL;
             }
         }
 
+        //var_dump($tek);
+        //var_dump($count);
         ///Для запрожья где диф зачет считаеться без перевода балов, а среднее делиться на 5 и умножаеться на 200
         $_tek = $tek;
 
@@ -850,6 +854,8 @@ SQL;
             $_tek= ($_tek*200)/5;
 
             $_tek = round($_tek);
+
+            //var_dump($_tek);
 
             $sql = <<<SQL
                           UPDATE vmp set vmp4=:VMP4, vmp5=:VMP5, vmp6=:VMP6, vmp7=:VMP7, vmp10=:VMP10, vmp12=:VMP12 $dopColumns WHERE vmp2=:ST1 AND vmp1=:VMPV1
@@ -899,6 +905,8 @@ SQL;
 
                 $tek = round($val,2);
 
+                //var_dump($tek);
+
                 $sql = <<<SQL
                       SELECT max(markb3) FROM markb WHERE markb2<=:BAL AND markb4=0
 SQL;
@@ -906,11 +914,15 @@ SQL;
                 $command->bindValue(':BAL', $tek);
                 $mark = $command->queryScalar();
 
+                //var_dump($mark);
+
                 if(!empty($mark)){
                     $tek = $mark;
                 }else {
                     $tek = 0;
                 }
+
+                //var_dump($tek);
 
                 $vmp = $this->getVedItog($elg->elg2, $gr1, 98, $st1);
 
