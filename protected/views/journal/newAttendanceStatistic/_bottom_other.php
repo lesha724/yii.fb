@@ -36,10 +36,16 @@ $th.='</tr>';
 
 $i = 1;
 
+$groupName = '';
+if($model->scenario == AttendanceStatisticForm::SCENARIO_GROUP){
+    $_group = Gr::model()->findByPk($model->group);
+    $groupName = Gr::model()->getGroupName($model->course, $_group);
+}
+
 foreach ($students as $student){
 
     $name = $student['st2'].' '.$student['st3'].' '.$student['st4'];
-    $group = Gr::model()->getGroupName($model->course, $student);
+    $group = $model->scenario == AttendanceStatisticForm::SCENARIO_GROUP ? $groupName : Gr::model()->getGroupName($model->course, $student);
     list($respectful,$disrespectful,$count) = Elg::model()->getAttendanceStatisticInfoByDate($firstDay, $lastDay, $student['st1']);
     $tr.=<<<HTML
         <tr>
