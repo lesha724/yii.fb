@@ -565,8 +565,9 @@ SQL;
         $ps57 = PortalSettings::model()->getSettingFor(57);
         if($ps57!=1)
             return;
+        $universityCode = SH::getUniversityCod();
 
-        if(SH::getUniversityCod()!=32)
+        if($universityCode!=U_ZSMU)
             return;
 
         $vmp = $this->getVedItog($elg->elg2, $gr1, 98, $st1);
@@ -592,9 +593,14 @@ SQL;
 
             $startYear = $row['sem3'];
             $startSem = $row['sem5'];
-        }
+        } else
+            return;
 
-        $marksArray = $this->getMarksFromJournal($st1,$elgz,$gr1);
+        if($universityCode == U_ZSMU && $elg->elg20->uo18 > 0 && $elg->elg20->uo6>0)
+        {
+            $marksArray = $this->getMarksFromJournalNewNakop($st1,$elgz,$gr1,$elg);
+        } else
+            $marksArray = $this->getMarksFromJournal($st1,$elgz,$gr1);
 
         $min = Elgzst::model()->getMin();
         $tek =0;
