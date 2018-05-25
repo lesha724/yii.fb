@@ -423,13 +423,15 @@ SQL;
      * @param $date1
      * @param $date2
      * @param $st1
+     * @param $isCount bool По количеству или по часам
+     * @throws
      * @return array
      */
-    public function getAttendanceStatisticInfoByDate($date1,$date2,$st1)
+    public function getAttendanceStatisticInfoByDate($date1,$date2,$st1, $isCount = true)
     {
         $sql=<<<SQL
-                SELECT *
-                FROM STAT_PROP(:ST1,:DATE1, :DATE2)
+                SELECT proc.*, rz8 FROM STAT_PROP(:ST1,:DATE1, :DATE2) proc
+                  INNER JOIN rz on (proc.r4 = rz1)
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':ST1', $st1);
@@ -442,13 +444,72 @@ SQL;
         $count = 0;
 
         foreach ($rows as $row){
-            $elgzst3 = $row['prop'];
-            if ($elgzst3 == 1) $disrespectful++;
-            if ($elgzst3 == 2) $respectful++;
-            $count++;
+            if($isCount) {
+                $elgzst3 = $row['prop'];
+                if ($elgzst3 == 1) $disrespectful++;
+                if ($elgzst3 == 2) $respectful++;
+                $count++;
+            }else{
+                $elgzst3 = $row['prop'];
+                $hours = $row['rz8'];
+
+                if ($elgzst3 == 1) $disrespectful+=$hours;
+                if ($elgzst3 == 2) $respectful+=$hours;
+                $count+=$hours;
+            }
         }
 
         return array($respectful,$disrespectful,$count);
+    }
+
+    /**
+     * Статистика посещаемости по студенту с и по c часами
+     * @param $date1
+     * @param $date2
+     * @param $st1
+     * @param $isCount bool По количеству или по часам
+     * @throws
+     * @return array
+     */
+    public function getAttendanceStatisticInfoByDateWithHours($date1,$date2,$st1)
+    {
+        $sql=<<<SQL
+                SELECT proc.*, rz8 FROM STAT_PROP(:ST1,:DATE1, :DATE2) proc
+                  INNER JOIN rz on (proc.r4 = rz1)
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ST1', $st1);
+        $command->bindValue(':DATE1', $date1);
+        $command->bindValue(':DATE2', $date2);
+        $rows = $command->queryAll();
+
+        $respectful = 0;
+        $disrespectful = 0;
+        $count = 0;
+
+        $respectfulHours = 0;
+        $disrespectfulHours = 0;
+        $countHours = 0;
+
+        foreach ($rows as $row){
+
+            $elgzst3 = $row['prop'];
+            $hours = $row['rz8'];
+
+            if ($elgzst3 == 1) {
+                $disrespectful++;
+                $disrespectfulHours+=$hours;
+            } else if ($elgzst3 == 2) {
+                $respectful++;
+                $respectfulHours+=$hours;
+            };
+
+            $countHours+=$hours;
+            $count++;
+
+        }
+
+        return array($respectful,$disrespectful,$count, $respectfulHours,$disrespectfulHours,$countHours);
     }
     /**
      * Статистика посещаемости по студенту за семестр
