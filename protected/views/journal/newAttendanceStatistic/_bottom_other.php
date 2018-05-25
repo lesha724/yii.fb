@@ -30,6 +30,7 @@ $th.='<th>'.tt('№ пп').'</th>';
 $th.='<th>'.tt('Студент').'</th>';
 $th.='<th>'.tt('Группа').'</th>';
 $th.='<th>'.tt('Количество прошедших занятий').'</th>';
+$th.='<th>'.tt('Количество пропусков').'</th>';
 $th.='<th>'.tt('Количество уваж. пропусков').'</th>';
 $th.='<th>'.tt('Количество неуваж. пропусков').'</th>';
 $th.='</tr>';
@@ -47,12 +48,14 @@ foreach ($students as $student){
     $name = $student['st2'].' '.$student['st3'].' '.$student['st4'];
     $group = $model->scenario == AttendanceStatisticForm::SCENARIO_GROUP ? $groupName : Gr::model()->getGroupName($model->course, $student);
     list($respectful,$disrespectful,$count) = Elg::model()->getAttendanceStatisticInfoByDate($firstDay, $lastDay, $student['st1']);
+    $countProp = $respectful + $disrespectful;
     $tr.=<<<HTML
         <tr>
             <td>{$i}</td>
             <td>{$name}</td>
             <td>{$group}</td>
             <td>{$count}</td>
+            <td>{$countProp}</td>
             <td>{$respectful}</td>
             <td>{$disrespectful}</td>
         </tr>
