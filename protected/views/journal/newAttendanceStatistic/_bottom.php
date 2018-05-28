@@ -22,10 +22,24 @@ if($model->validate()) {
     $html .= CHtml::label(tt('Семестр'), 'AttendanceStatisticForm_semester');
     $html .= CHtml::dropDownList('AttendanceStatisticForm[semester]', $model->semester, $model->getSemesters(), $options);
     $html .= '</div>';
+    $html .= '</div>';
 
     echo $html;
 
     if (!empty($model->semester)) :
+
+        $this->widget('bootstrap.widgets.TbButton', array(
+            'buttonType'=>'button',
+            'type'=>'primary',
+
+            'icon'=>'print',
+            'label'=>tt('Печать'),
+            'htmlOptions'=>array(
+                'class'=>'btn-small',
+                'data-url'=>Yii::app()->createUrl('/journal/newAttendanceStatisticExcel', array('type' => $model->scenario, 'AttendanceStatisticForm[semester]'=>$model->semester)),
+                'id'=>'btn-print-excel',
+            )
+        ));
 
         $this->renderPartial('newAttendanceStatistic/' . $view, array(
             'model' => $model

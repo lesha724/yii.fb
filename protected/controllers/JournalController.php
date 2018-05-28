@@ -84,7 +84,8 @@ class JournalController extends Controller
             array('allow',
                 'actions' => array(
                     'attendanceStatistic',
-                    'newAttendanceStatistic'//новая статистика для фарма
+                    'newAttendanceStatistic',//новая статистика для фарма
+                    'newAttendanceStatisticExcel'
                 )
             ),
             array('deny',
@@ -3383,7 +3384,7 @@ SQL;
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
     }
-
+    /** ------------------------------------------------------Статистика посещаемости ------------------------- */
     /**
      * Акшен для отображения новой статистики посещаемости для фарма
      * @throws CHttpException
@@ -3404,6 +3405,153 @@ SQL;
         $this->render('newAttendanceStatistic', array(
             'model' => $model
         ));
+    }
+
+    /**
+     * Акшен для печати новой статистики посещаемости для фарма
+     * @throws CHttpException
+     */
+    public function actionNewAttendanceStatisticExcel()
+    {
+        $scenario = Yii::app()->request->getParam('type', AttendanceStatisticForm::SCENARIO_STREAM);
+
+        if(!array_key_exists($scenario, AttendanceStatisticForm::scenarios() ))
+            throw new CHttpException(400, 'Bad request. Please do not repeat this request again.');
+
+        $model = new AttendanceStatisticForm();
+        $model->scenario = $scenario;
+
+        if (isset($_REQUEST['AttendanceStatisticForm']))
+            $model->attributes=$_REQUEST['AttendanceStatisticForm'];
+
+
+        if(!$model->validate()){
+            throw new CHttpException(400, 'Bad request. Please do not repeat this request again.');
+        }
+
+        if (empty($model->semester))
+            throw new CHttpException(400, 'Bad request. Please do not repeat this request again.');
+
+        list($firstDay, $lastDay) = Sem::model()->getSemesterStartAndEnd($model->semester);
+
+        if(empty($firstDay))
+            throw new CHttpException(400, 'Bad request. Please do not repeat this request again.');
+
+        Yii::import('ext.phpexcel.XPHPExcel');
+        $objPHPExcel= XPHPExcel::createPHPExcel();
+        $objPHPExcel->getProperties()->setCreator("ACY")
+            ->setLastModifiedBy("ACY ".date('Y-m-d H-i'))
+            ->setTitle("Jornal Statistic ".date('Y-m-d H-i'))
+            ->setSubject("Jornal Statistic".date('Y-m-d H-i'))
+            ->setDescription("Jornal Statistic document, generated using ACY Portal. ".date('Y-m-d H:i:'))
+            ->setKeywords("")
+            ->setCategory("Result file");
+        $objPHPExcel->setActiveSheetIndex(0);
+        $sheet=$objPHPExcel->getActiveSheet();
+
+        $i = 7;
+
+        $sheet->getColumnDimensionByColumn(0)->setWidth(5);
+        $sheet->getColumnDimensionByColumn(1)->setWidth(40);
+
+        if($scenario == AttendanceStatisticForm::SCENARIO_STUDENT){
+
+            $statistic=St::model()->getStatisticForStudent($model->student,$model->semester);
+            $st=St::model()->getStudentName($model->student);
+
+            $sheet->setCellValue('A6', tt('№ пп'));
+            $sheet->setCellValue('B6', tt('Дата'));
+            $sheet->setCellValue('C6', tt('Дисциплина'));
+            $sheet->setCellValue('D6', tt('Тип занятия'));
+            $sheet->setCellValue('E6', tt('Статус'));
+
+            $now = strtotime('now');
+            foreach($statistic as $key)
+            {
+                $r2 = $key['r2'];
+                $timeR2 = strtotime($r2);
+                if($timeR2>$now)
+                    continue;
+
+                $type = $key['prop']==2 ? tt('уваж.') :tt('неув.');
+
+                $sheet->setCellValueByColumnAndRow(0,$i,$i-6);
+                $sheet->setCellValueByColumnAndRow(1,$i,date('d.m.Y',strtotime($key['r2'])));
+                $sheet->setCellValueByColumnAndRow(2,$i,$key['d2']);
+                $sheet->setCellValueByColumnAndRow(3,$i,SH::convertUS4($key['us4']));
+                $sheet->setCellValueByColumnAndRow(4,$i,$type);
+
+                $i++;
+            }
+
+            $sheet->getStyleByColumnAndRow(0,6,4,$i-1)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
+
+        }else{
+
+            $sheet->setCellValue('A6', tt('№ пп'));
+            $sheet->setCellValue('B6', tt('Студент'));
+            $sheet->setCellValue('C6', tt('Группа'));
+            $sheet->setCellValue('D6', tt('Количество прошедших занятий'));
+            $sheet->setCellValue('E6', tt('Количество прошедших часов'));
+            $sheet->setCellValue('F6', tt('Количество пропусков'));
+            $sheet->setCellValue('G6', tt('Количество пропущеных часов'));
+            $sheet->setCellValue('H6', tt('Количество уваж. пропусков'));
+            $sheet->setCellValue('I6', tt('Количество пропущеных часов по уваж. причине'));
+            $sheet->setCellValue('J6', tt('Количество неуваж. пропусков'));
+            $sheet->setCellValue('K6', tt('Количество пропущеных часов по неуваж. причине'));
+
+            $groupName = '';
+            if($model->scenario == AttendanceStatisticForm::SCENARIO_GROUP){
+                $_group = Gr::model()->findByPk($model->group);
+                $groupName = Gr::model()->getGroupName($model->course, $_group);
+            }
+
+            $students = $model->getStudents();
+
+            foreach ($students as $student){
+                $name = $student['st2'].' '.$student['st3'].' '.$student['st4'];
+                $group = $model->scenario == AttendanceStatisticForm::SCENARIO_GROUP ? $groupName : Gr::model()->getGroupName($model->course, $student);
+
+                list($respectful,$disrespectful,$count,  $respectfulHours,$disrespectfulHours,$countHours) = Elg::model()->getAttendanceStatisticInfoByDateWithHours($firstDay, $lastDay, $student['st1']);
+
+                $countProp = $respectful + $disrespectful;
+                $countPropHours = $respectfulHours + $disrespectfulHours;
+
+                $sheet->setCellValueByColumnAndRow(0,$i,$i-6);
+                $sheet->setCellValueByColumnAndRow(1,$i,$name);
+                $sheet->setCellValueByColumnAndRow(2,$i,$group);
+                $sheet->setCellValueByColumnAndRow(3,$i, $count);
+                $sheet->setCellValueByColumnAndRow(4,$i, $countHours);
+                $sheet->setCellValueByColumnAndRow(5,$i, $countProp);
+                $sheet->setCellValueByColumnAndRow(6,$i, $countPropHours);
+                $sheet->setCellValueByColumnAndRow(7,$i,$respectful);
+                $sheet->setCellValueByColumnAndRow(8,$i,$respectfulHours);
+                $sheet->setCellValueByColumnAndRow(9,$i,$disrespectful);
+                $sheet->setCellValueByColumnAndRow(10,$i,$disrespectfulHours);
+
+                $i++;
+            }
+
+            $sheet->getStyleByColumnAndRow(0,6,10,$i-1)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
+        }
+
+        $sheet->getRowDimension(6)->setRowHeight(-1);
+        $sheet->getStyle('A5:K6')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER)->setWrapText(true);
+
+        // Redirect output to a clientâ€™s web browser (Excel5)
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="ACY_Statistic_'.date('Y-m-d H-i').'.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0*/
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
     }
 //----------------------------------------------------------------------------------------------
     public function actionSearchStudent()

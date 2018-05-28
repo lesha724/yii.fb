@@ -20,4 +20,12 @@ $(document).ready(function(){
         $form.append($select);
         $form.submit();
     });
+
+
+    $('#btn-print-excel').click(function(){
+        var action=$("#filter-form").attr("action");
+        $("#filter-form").attr("action", $(this).data('url'));
+        $("#filter-form").submit();
+        $("#filter-form").attr("action", action);
+    });
 });
