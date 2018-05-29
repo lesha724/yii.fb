@@ -244,23 +244,31 @@ SQL;
 
 		$modules = array();
 		$max=$min=$d1=0;
+
+		$dopColumns = array();
+
 		foreach ($res as $val)
 		{
 			if($d1!=$val['d1']) {
 				$d1=$val['d1'];
 			}
 
-			if ($val['vvmp6']<$min || $min==0)
-				$min = $val['vvmp6'];
-			if ($val['vvmp6']>$max || $max==0)
-				$max = $val['vvmp6'];
+			if($val['vvmp6']<98) {
+                if ($val['vvmp6'] < $min || $min == 0)
+                    $min = $val['vvmp6'];
+                if ($val['vvmp6'] > $max || $max == 0)
+                    $max = $val['vvmp6'];
+            }else{
+                if(!in_array($val['vvmp6'], $dopColumns))
+                    $dopColumns[] = $val['vvmp6'];
+            }
 
 			$modules[$val['d1']]['discipline']=$val['d2'];
 			$modules[$val['d1']]['chair']=$val['k2'];
 			$modules[$val['d1']][$val['vvmp6']]=$val;
 		}
 
-		return array($modules,$min,$max);
+		return array($modules,$min,$max,$dopColumns);
 	}
 
 	public function getModule($uo1,$gr1)
