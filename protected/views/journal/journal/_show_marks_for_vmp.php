@@ -11,10 +11,16 @@
  * @param $sem int семетр
  * @return string
  */
-function fillMarks($marks, $year, $sem){
+function fillMarks($marks, $year, $sem, $isNakop = false, $discipline = ''){
     $html = '';
     $html.='<tr>';
-    $html.='<th colspan="6" style="align-content: center; vertical-align: middle; text-align: center"><label class="label label-info">'.$year.' '.SH::convertSem5($sem).'</label></th>';
+
+    $title = $year.' '.SH::convertSem5($sem);
+    if($isNakop)
+    {
+        $title = $discipline.' '.$title;
+    }
+    $html.='<th colspan="6" style="align-content: center; vertical-align: middle; text-align: center"><label class="label label-info">'.$title.'</label></th>';
     $html.='</tr>';
 
     foreach($marks as $mark){
@@ -104,7 +110,7 @@ HTML;
 }*/
 
 $current = $marksArray['current'];
-$tbody.= fillMarks($current['marks'],$current['year'],$current['sem']);
+$tbody.= fillMarks($current['marks'],$current['year'],$current['sem'], $isNakop, $current['discipline']);
 
 unset($marksArray['current']);
 
@@ -112,7 +118,7 @@ $array = array_reverse($marksArray);
 
 foreach ($array as $key=>$marks){
     if(!empty($marks['marks']))
-        $tbody.= fillMarks($marks['marks'],$marks['year'],$marks['sem']);
+        $tbody.= fillMarks($marks['marks'],$marks['year'],$marks['sem'], $isNakop, $marks['discipline']);
 }
 
 $title = tt('Просмотр оценок для расчета ПМК');

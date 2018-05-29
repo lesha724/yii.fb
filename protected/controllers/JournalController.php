@@ -808,8 +808,13 @@ SQL;
                             $command->bindValue(':VMPV1', $vmpv1);
                             $vmp = $command->queryRow();
 
+                            $isNakop = $this->universityCode == U_ZSMU && $elg->elg20->uo18 > 0 && $elg->elg20->uo6>0;
 
-                            $marksArray = Vmp::model()->getMarksFromJournal($st1,$elgz, $gr1, true);
+                            if(!$isNakop) {
+                                $marksArray = Vmp::model()->getMarksFromJournal($st1, $elgz, $gr1, true);
+                            }else{
+                                $marksArray = Vmp::model()->getMarksFromJournalNewNakop($st1, $elgz, $gr1, true);
+                            }
                             /** @var $st St  */
                             $st = St::model()->findByPk($st1);
 
@@ -817,6 +822,7 @@ SQL;
 
                             $html = $this->renderPartial('journal/_show_marks_for_vmp', array(
                                 'marksArray'=>$marksArray,
+                                'isNakop' => $isNakop,
                                 'vmp'=>$vmp,
                                 'module'=>$module
                             ), true);
