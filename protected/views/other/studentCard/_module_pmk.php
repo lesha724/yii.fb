@@ -76,7 +76,7 @@ foreach ($modules as $module)
 
     if(!empty($dopColumns)) {
 
-        foreach ($dopColumns as $column) {
+        foreach ($dopColumns as $i) {
             if(!isset($module[$i]))
                 $tr.='<td class="not-module"></td>';
             else {
