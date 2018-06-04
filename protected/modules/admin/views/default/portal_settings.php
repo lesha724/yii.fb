@@ -451,7 +451,9 @@ Yii::app()->clientScript->registerScript('sem-start', $js);
     </div>
 </div>
 
-<div class="span6">
+<?php
+
+/*<div class="span6">
     <div class="widget-box">
         <div class="widget-header">
             <h4><?=tt('Xml api')?></h4>
@@ -498,5 +500,5 @@ Yii::app()->clientScript->registerScript('sem-start', $js);
             </div>
         </div>
     </div>
-</div>
+</div> */
 

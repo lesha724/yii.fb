@@ -23,8 +23,9 @@ class TimeTableController extends Controller
                     U_ONMU,
                     U_NOBEL
                 ))){
-                        $message = tt(' Новое мобильное приложение для Android : <strong><a href="{url}" target="_blank" style="font-size: 18px">здесь</a></strong>! Также читайте инструкцию к мобильному приложению: <strong><a href="{url-instruction}" target="_blank" style="font-size: 18px">здесь</a></strong>!', array(
+                        $message = tt(' <br>Новое мобильное приложение для Android : <strong><a href="{url}" target="_blank" style="font-size: 18px">здесь</a></strong>! <br>Новое мобильное приложение для iOs : <strong><a href="{url_apple}" target="_blank" style="font-size: 18px">здесь</a></strong>! <br>Также читайте инструкцию к мобильному приложению: <strong><a href="{url-instruction}" target="_blank" style="font-size: 18px">здесь</a></strong>!', array(
                             '{url}' => SH::MOBILE_URL,
+                            '{url_apple}' => SH::MOBILE_URL_APPLE,
                             '{url-instruction}' => SH::MOBILE_URL_INSTRUCTION
                         ));
                     Yii::app()->user->setFlash('info', '<strong>' . tt('Внимание!') . '</strong>' . $message);

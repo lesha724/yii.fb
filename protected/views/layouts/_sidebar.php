@@ -54,6 +54,11 @@
         <a href="<?= $newMobile ? SH::MOBILE_URL : 'https://play.google.com/store/apps/details?id=scheduleMKP.scheduleMKP'?>" target="_blank">
             <img src="<?php echo Yii::app()->request->baseUrl ?>/images/googleplay.png" style="max-width:90%;padding:5%"/>
         </a>
+        <?php if($newMobile): ?>
+        <a href="<?=SH::MOBILE_URL_APPLE?>" target="_blank">
+            <img src="<?php echo Yii::app()->request->baseUrl ?>/images/appstore.png" style="max-width:90%;padding:5%"/>
+        </a>
+        <?php endif; ?>
     <?php endif; ?>
 
     <?php
