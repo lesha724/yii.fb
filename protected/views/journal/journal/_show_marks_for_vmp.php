@@ -110,15 +110,20 @@ HTML;
 }*/
 
 $current = $marksArray['current'];
-$tbody.= fillMarks($current['marks'],$current['year'],$current['sem'], $isNakop, $current['discipline']);
+
+$disciplineCurrent = isset($current['discipline']) ? $current['discipline'] : '';
+
+$tbody.= fillMarks($current['marks'],$current['year'],$current['sem'], $isNakop, $disciplineCurrent);
 
 unset($marksArray['current']);
 
 $array = array_reverse($marksArray);
 
 foreach ($array as $key=>$marks){
+    $discipline = isset($marks['discipline']) ? $marks['discipline'] : '';
+
     if(!empty($marks['marks']))
-        $tbody.= fillMarks($marks['marks'],$marks['year'],$marks['sem'], $isNakop, $marks['discipline']);
+        $tbody.= fillMarks($marks['marks'],$marks['year'],$marks['sem'], $isNakop, $discipline);
 }
 
 $title = tt('Просмотр оценок для расчета ПМК');

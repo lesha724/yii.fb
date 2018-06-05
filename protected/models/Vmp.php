@@ -486,7 +486,7 @@ SQL;
             }
         }else{
             //Накопительная система
-            list($year, $sem) = SH::getPrevSem($year, $sem);
+            //list($year, $sem) = SH::getPrevSem($year, $sem);
 
             $row = $this->getStartYearSem($elg->elg2);
 
@@ -497,7 +497,11 @@ SQL;
             $startYear = $row['sem3'];
             $startSem = $row['sem5'];
 
-            while ($startYear!= $year && $startSem!=$sem){
+            $_i = 0;
+
+            while ($startYear!= $year || $startSem!=$sem){
+
+                list($year, $sem) = SH::getPrevSem($year, $sem);
 
                 $sem1 = Sem::model()->getSemestrForGroupByYearAndSem($gr1, $year, $sem);
 
@@ -511,7 +515,10 @@ SQL;
 
                 $dopMarks = array_merge($dopMarks, $marksBySem);
 
-                list($year, $sem) = SH::getPrevSem($year, $sem);
+                $_i++;
+
+                if($_i>10)
+                    return array();
             }
         }
 
