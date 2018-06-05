@@ -1190,12 +1190,12 @@ SQL;
 			SELECT vmp.*, vmpv.* from vvmp
 			INNER JOIN vmpv on (vvmp1=vmpv2)
 			INNER JOIN vmp on (vmpv1=vmp1 and vmp2=:ST1)
+			left join vmpvf on (vvmp.vvmp1 = vmpvf.vmpvf1 and vmpvf2={$gr1})
 			WHERE vvmp3=(
-			SELECT  uo3 from uo where uo1=:UO1
+			  SELECT  uo3 from uo where uo1=:UO1
 			)
 			/*and vmpv6 is null*/
-			and VVMP6=:NOM
-			and vmpv7=:GR1 and vvmp4 = (
+			and vmpv6 is null AND vvmp6=:NOM and vmpv7=:GR1 and vmpvf3 = (
 			select
 			   first 1 sem7
 				from sem
@@ -1203,7 +1203,7 @@ SQL;
 				   inner join gr on (sg.sg1 = gr.gr2)
 				WHERE gr1={$gr1} and sem3=:YEAR and sem5=:SEM
 			) and vvmp25=(
-			SELECT  gr2 from gr where gr1={$gr1}
+			  SELECT  gr2 from gr where gr1={$gr1}
 			) ORDER by vvmp6 ASC, vmpv4 DESC
 SQL;
         $command = Yii::app()->db->createCommand($sql);
