@@ -76,11 +76,11 @@ class SelfController extends Controller
 
     public function actionSubscription()
     {
-        $this->forward('other/studentInfo');
+        $this->forward('other/subscription');
     }
 
     public function actionStudentInfo()
     {
-        $this->forward('other/subscription');
+        $this->forward('other/studentInfo');
     }
 }
