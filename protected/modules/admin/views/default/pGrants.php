@@ -28,7 +28,7 @@ $this->breadcrumbs=array(
         <label for="Users_u7" class="control-label"><?=tt('Администратор')?></label>
         <div class="controls">
             <label>
-                <?=CHtml::checkBox('Users[u7]', $user->u7, array('class' => 'ace ace-switch', 'uncheckValue'=>'0'))?>
+                <?=CHtml::checkBox('role', $user->u7, array('class' => 'ace ace-switch', 'uncheckValue'=>'0'))?>
                 <span class="lbl"></span>
             </label>
         </div>
