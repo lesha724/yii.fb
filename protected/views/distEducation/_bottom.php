@@ -31,9 +31,13 @@ $params = array();
 if($model->isAdminDistEducation)
     $params = array('chairId'=>$model->chairId);
 
+$dataProvider = $model->getDispListForDistEducation();
+$dataProvider->pagination->params = $params;
+$dataProvider->sort->params = $params;
+
 $this->widget('bootstrap.widgets.TbGridView', array(
     'id' => 'disp-list',
-    'dataProvider' => $model->getDispListForDistEducation(),
+    'dataProvider' => $dataProvider,
     'filter' => $model,
     'type' => 'striped bordered',
     'ajaxUrl' => Yii::app()->createAbsoluteUrl('/distEducation/index', $params),
