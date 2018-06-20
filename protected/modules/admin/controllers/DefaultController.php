@@ -831,6 +831,9 @@ class DefaultController extends AdminController
 
         if (isset($_REQUEST['Users'])) {
             $user->attributes = $_REQUEST['Users'];
+
+            $user->u7 = isset($_REQUEST['role']) ? (int)$_REQUEST['role'] : 0;
+
             if($user->save())
                 $this->redirect(array('teachers'));
         }

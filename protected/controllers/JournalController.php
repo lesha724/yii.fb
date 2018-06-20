@@ -3416,6 +3416,7 @@ SQL;
     /**
      * Акшен для печати новой статистики посещаемости для фарма
      * @throws CHttpException
+     * @throws Exception
      */
     public function actionNewAttendanceStatisticExcel()
     {
@@ -3455,7 +3456,122 @@ SQL;
         $objPHPExcel->setActiveSheetIndex(0);
         $sheet=$objPHPExcel->getActiveSheet();
 
-        $i = 7;
+        if($scenario == AttendanceStatisticForm::SCENARIO_STUDENT){
+            $st=St::model()->findByPk($model->student);
+
+            $sheet->mergeCellsByColumnAndRow(0, 2, 2, 2);
+            $sheet->setCellValue('A2', tt('Пропуски студента {student}', array(
+                '{student}' => $st->fullName
+            )))->getStyle('A2')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+        }else
+            if($scenario == AttendanceStatisticForm::SCENARIO_GROUP){
+                list($year, $sem) = SH::getCurrentYearAndSem();
+
+                $group = Gr::model()->findByPk($model->group);
+                $groupInfo = Gr::model()->getInfo($group->gr1);
+                $groupName = Gr::model()->getGroupName($model->course, $group);
+
+                $speciality = isset($groupInfo['pnsp2']) ? $groupInfo['pnsp2'] : '';
+                $faculty = isset($groupInfo['f3']) ? $groupInfo['f3'] : '';
+
+                if(Yii::app()->language=='en' && !(empty($groupInfo))){
+                    if(!empty($groupInfo['pnsp17']))
+                        $speciality = $groupInfo['pnsp17'];
+
+                    if(!empty($groupInfo['f26']))
+                        $faculty = $groupInfo['f26'];
+                }
+
+                $sheet->mergeCellsByColumnAndRow(0, 2, 2, 2);
+                $sheet->setCellValue('A2', tt('Статистика посещаемости студентов'))->getStyle('A2')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+                $sheet->mergeCellsByColumnAndRow(0, 3, 2, 3);
+                $sheet->setCellValue('A3', tt('{course} курса {group} группы {speciality} специальности',array(
+                    '{course}' => $model->course,
+                    '{group}' => $groupName,
+                    '{speciality}' => $speciality
+                )))->getStyle('A3')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+                $sheet->mergeCellsByColumnAndRow(0, 4, 2, 4);
+                $sheet->setCellValue('A4', $faculty
+                /*tt('{faculty} факультета', array(
+                    '{faculty}' => $faculty
+                ))*/
+                )->getStyle('A4')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+
+                $sheet->mergeCellsByColumnAndRow(0, 5, 2, 5);
+                $sheet->setCellValue('A5', tt(' за {sem} семестр {year} учебный год', array(
+                    '{sem}' => SH::convertSem5($sem),
+                    '{year}' => $year.'/'.($year+1)
+                )))->getStyle('A5')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+                $sheet->getStyle('A2:A5')->getFont()->setSize(14);
+
+                $sheet->getRowDimension(2)->setRowHeight(-1);
+                $sheet->getStyle('A2')->getAlignment()->setWrapText(true);
+                $sheet->getRowDimension(3)->setRowHeight(-1);
+                $sheet->getStyle('A3')->getAlignment()->setWrapText(true);
+                $sheet->getRowDimension(4)->setRowHeight(-1);
+                $sheet->getStyle('A4')->getAlignment()->setWrapText(true);
+                $sheet->getRowDimension(5)->setRowHeight(-1);
+                $sheet->getStyle('A5')->getAlignment()->setWrapText(true);
+
+            }else
+                if($scenario == AttendanceStatisticForm::SCENARIO_STREAM){
+                    list($year, $sem) = SH::getCurrentYearAndSem();
+
+                    $streamInfo = Gr::model()->getInfoBySg($model->stream);
+
+                    $speciality = isset($streamInfo['pnsp2']) ? $streamInfo['pnsp2'] : '';
+                    $faculty = isset($streamInfo['f3']) ? $streamInfo['f3'] : '';
+
+                    if(Yii::app()->language=='en' && !(empty($streamInfo))){
+                        if(!empty($streamInfo['pnsp17']))
+                            $speciality = $streamInfo['pnsp17'];
+
+                        if(!empty($streamInfo['f26']))
+                            $faculty = $streamInfo['f26'];
+                    }
+
+                    $sheet->mergeCellsByColumnAndRow(0, 2, 2, 2);
+                    $sheet->setCellValue('A2', tt('Статистика посещаемости студентов потока'))->getStyle('A2')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+                    $sheet->mergeCellsByColumnAndRow(0, 3, 2, 3);
+                    $sheet->setCellValue('A3', tt('{course} курса {speciality} специальности',array(
+                        '{course}' => $model->course,
+                        '{speciality}' => $speciality
+                    )))->getStyle('A3')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+                    $sheet->mergeCellsByColumnAndRow(0, 4, 2, 4);
+                    $sheet->setCellValue('A4', $faculty
+                    /*tt('{faculty} факультета', array(
+                        '{faculty}' => $faculty
+                    ))*/
+                    )->getStyle('A4')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+
+                    $sheet->mergeCellsByColumnAndRow(0, 5, 2, 5);
+                    $sheet->setCellValue('A5', tt(' за {sem} семестр {year} учебный год', array(
+                        '{sem}' => SH::convertSem5($sem),
+                        '{year}' => $year.'/'.($year+1)
+                    )))->getStyle('A5')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+                    $sheet->getStyle('A2:A5')->getFont()->setSize(14);
+
+                    $sheet->getRowDimension(2)->setRowHeight(-1);
+                    $sheet->getStyle('A2')->getAlignment()->setWrapText(true);
+                    $sheet->getRowDimension(3)->setRowHeight(-1);
+                    $sheet->getStyle('A3')->getAlignment()->setWrapText(true);
+                    $sheet->getRowDimension(4)->setRowHeight(-1);
+                    $sheet->getStyle('A4')->getAlignment()->setWrapText(true);
+                    $sheet->getRowDimension(5)->setRowHeight(-1);
+                    $sheet->getStyle('A5')->getAlignment()->setWrapText(true);
+
+                }
+
+        $i = 8;
 
         $sheet->getColumnDimensionByColumn(0)->setWidth(5);
         $sheet->getColumnDimensionByColumn(1)->setWidth(40);
@@ -3463,13 +3579,13 @@ SQL;
         if($scenario == AttendanceStatisticForm::SCENARIO_STUDENT){
 
             $statistic=St::model()->getStatisticForStudent($model->student,$model->semester);
-            $st=St::model()->getStudentName($model->student);
+            //$st=St::model()->getStudentName($model->student);
 
-            $sheet->setCellValue('A6', tt('№ пп'));
-            $sheet->setCellValue('B6', tt('Дата'));
-            $sheet->setCellValue('C6', tt('Дисциплина'));
-            $sheet->setCellValue('D6', tt('Тип занятия'));
-            $sheet->setCellValue('E6', tt('Статус'));
+            $sheet->setCellValue('A7', tt('№ пп'));
+            $sheet->setCellValue('B7', tt('Дата'));
+            $sheet->setCellValue('C7', tt('Дисциплина'));
+            $sheet->setCellValue('D7', tt('Тип занятия'));
+            $sheet->setCellValue('E7', tt('Статус'));
 
             $now = strtotime('now');
             foreach($statistic as $key)
@@ -3481,7 +3597,7 @@ SQL;
 
                 $type = $key['prop']==2 ? tt('уваж.') :tt('неув.');
 
-                $sheet->setCellValueByColumnAndRow(0,$i,$i-6);
+                $sheet->setCellValueByColumnAndRow(0,$i,$i-7);
                 $sheet->setCellValueByColumnAndRow(1,$i,date('d.m.Y',strtotime($key['r2'])));
                 $sheet->setCellValueByColumnAndRow(2,$i,$key['d2']);
                 $sheet->setCellValueByColumnAndRow(3,$i,SH::convertUS4($key['us4']));
@@ -3490,21 +3606,21 @@ SQL;
                 $i++;
             }
 
-            $sheet->getStyleByColumnAndRow(0,6,4,$i-1)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
+            $sheet->getStyleByColumnAndRow(0,7,4,$i-1)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
 
         }else{
 
-            $sheet->setCellValue('A6', tt('№ пп'));
-            $sheet->setCellValue('B6', tt('Студент'));
-            $sheet->setCellValue('C6', tt('Группа'));
-            $sheet->setCellValue('D6', tt('Количество прошедших занятий'));
-            $sheet->setCellValue('E6', tt('Количество прошедших часов'));
-            $sheet->setCellValue('F6', tt('Количество пропусков'));
-            $sheet->setCellValue('G6', tt('Количество пропущеных часов'));
-            $sheet->setCellValue('H6', tt('Количество уваж. пропусков'));
-            $sheet->setCellValue('I6', tt('Количество пропущеных часов по уваж. причине'));
-            $sheet->setCellValue('J6', tt('Количество неуваж. пропусков'));
-            $sheet->setCellValue('K6', tt('Количество пропущеных часов по неуваж. причине'));
+            $sheet->setCellValue('A7', tt('№ пп'));
+            $sheet->setCellValue('B7', tt('Студент'));
+            $sheet->setCellValue('C7', tt('Группа'));
+            $sheet->setCellValue('D7', tt('Количество прошедших занятий'));
+            $sheet->setCellValue('E7', tt('Количество прошедших часов'));
+            $sheet->setCellValue('F7', tt('Количество пропусков'));
+            $sheet->setCellValue('G7', tt('Количество пропущеных часов'));
+            $sheet->setCellValue('H7', tt('Количество уваж. пропусков'));
+            $sheet->setCellValue('I7', tt('Количество пропущеных часов по уваж. причине'));
+            $sheet->setCellValue('J7', tt('Количество неуваж. пропусков'));
+            $sheet->setCellValue('K7', tt('Количество пропущеных часов по неуваж. причине'));
 
             $groupName = '';
             if($model->scenario == AttendanceStatisticForm::SCENARIO_GROUP){
@@ -3523,7 +3639,7 @@ SQL;
                 $countProp = $respectful + $disrespectful;
                 $countPropHours = $respectfulHours + $disrespectfulHours;
 
-                $sheet->setCellValueByColumnAndRow(0,$i,$i-6);
+                $sheet->setCellValueByColumnAndRow(0,$i,$i-7);
                 $sheet->setCellValueByColumnAndRow(1,$i,$name);
                 $sheet->setCellValueByColumnAndRow(2,$i,$group);
                 $sheet->setCellValueByColumnAndRow(3,$i, $count);
@@ -3538,11 +3654,11 @@ SQL;
                 $i++;
             }
 
-            $sheet->getStyleByColumnAndRow(0,6,10,$i-1)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
+            $sheet->getStyleByColumnAndRow(0,7,10,$i-1)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
         }
 
-        $sheet->getRowDimension(6)->setRowHeight(-1);
-        $sheet->getStyle('A5:K6')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER)->setWrapText(true);
+        $sheet->getRowDimension(7)->setRowHeight(-1);
+        $sheet->getStyle('A7:K7')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER)->setWrapText(true);
 
         // Redirect output to a clientâ€™s web browser (Excel5)
         header('Content-Type: application/vnd.ms-excel');
