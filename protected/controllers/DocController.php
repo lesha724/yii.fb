@@ -21,12 +21,17 @@ class DocController extends Controller
         return array(
             array('allow',
                 'actions' => array(
+                    'selfDoc'
+                ),
+                'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
+            ),
+            array('allow',
+                'actions' => array(
                     'index',
-                    'selfDoc',
                     'view',
                     'file'
                 ),
-                'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
+                'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch || Yii::app()->user->isStd',
             ),
             array('deny',
                 'users' => array('*'),
