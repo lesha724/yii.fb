@@ -48,7 +48,8 @@
                 U_UIPA,
                 U_SEM_MGU,
                 U_ONMU,
-                U_NOBEL
+                U_NOBEL,
+                U_IRPEN
             ));
         ?>
         <a href="<?= $newMobile ? SH::MOBILE_URL : 'https://play.google.com/store/apps/details?id=scheduleMKP.scheduleMKP'?>" target="_blank">

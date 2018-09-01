@@ -21,3 +21,4 @@ define('U_SEM_MGU',  42);
 define('U_ONMU',  47);
 define('U_NOBEL',  49);
 define('U_FARM',  12);
+define('U_IRPEN',  24);
