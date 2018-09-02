@@ -77,9 +77,10 @@ HTML;
             $shortText = $fullText = $params = '';
             if (isset($tt[$lesson])) {
                 $shortText = $tt[$lesson]['shortText'];
-                $fullText  = trim($tt[$lesson]['fullText'], '<br>');
+                $fullText  = $tt[$lesson]['fullText'];
+                /*$fullText  = trim($tt[$lesson]['fullText'], '<br>');
                 if(isset($tt[$lesson]['gr3']))
-                    $fullText  =str_replace('{$gr3}',$tt[$lesson]['gr3'],$fullText);
+                    $fullText  =str_replace('{$gr3}',$tt[$lesson]['gr3'],$fullText);*/
             }else{
                 if($isClosed){
                     $html .= <<<HTML
