@@ -936,7 +936,7 @@ SQL;
             return array();
 
         $sql=<<<SQL
-            SELECT ST1,ST2,ST3,ST4,gr1, gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26, sem4
+            SELECT ST1,ST2,ST3,ST4,gr1, gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,sem4
             FROM st
             INNER JOIN std on (st.st1 = std.std2)
             INNER JOIN STDISTSUB on (st1 = STDISTSUB1)
@@ -946,11 +946,17 @@ SQL;
             ORDER BY ST2 collate UNICODE
 SQL;
 
-        $students = self::findAllBySql($sql, array(
+        /*$students = self::findAllBySql($sql, array(
             ':COURSE' => $courseId,
             ':YEAR' => Yii::app()->session['year'],
             ':SEM' => Yii::app()->session['sem']
-        ));
+        ));*/
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':COURSE', $courseId);
+        $command->bindValue(':YEAR',  Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $students = $command->queryAll();
 
         return $students;
     }
