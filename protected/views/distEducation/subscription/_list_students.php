@@ -9,12 +9,6 @@
 /* @var $this DistEducationController */
 /* @var $model DistEducationFilterForm */
 
-$buttons = tt('Запись/Выписка всех групп').': '.CHtml::link('<i class="icon-ok"></i>', array('subscriptionDisp', 'uo1'=> $model->discipline, 'chairId'=> $model->chairId, 'subscription'=>1), array(
-        'class'=>'btn btn-warning btn-mini btn-subscript-disp'
-    )).CHtml::link('<i class="icon-trash"></i>', array('subscriptionDisp', 'uo1'=> $model->discipline, 'chairId'=> $model->chairId, 'subscription'=>0), array(
-        'class'=>'btn btn-danger btn-mini btn-unsubscript-disp'
-    ));
-
 $table = <<<HTML
         <table class="table table-bordered table-condensed table-hover">
             <thead>
