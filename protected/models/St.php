@@ -930,7 +930,7 @@ SQL;
      * @param $gr1
      * @return array|St[]
      */
-    public function getStudentsForDistEducationCourse($courseId, $year, $sem)
+    public function getStudentsForDistEducationCourse($courseId)
     {
         if (empty($courseId))
             return array();
@@ -947,7 +947,9 @@ SQL;
 SQL;
 
         $students = self::findAllBySql($sql, array(
-            ':COURSE' => $courseId
+            ':COURSE' => $courseId,
+            ':YEAR' => Yii::app()->session['year'],
+            ':SEM' => Yii::app()->session['sem']
         ));
 
         return $students;
