@@ -936,10 +936,11 @@ SQL;
             return array();
 
         $sql=<<<SQL
-            SELECT ST1,ST2,ST3,ST4,gr1, gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,sem4
+            SELECT ST1,ST2,ST3,ST4,gr1, gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,sem4,stdist2
             FROM st
             INNER JOIN std on (st.st1 = std.std2)
             INNER JOIN STDISTSUB on (st1 = STDISTSUB1)
+            INNER JOIN STDIST on (st1 = STDIST1)
             INNER JOIN GR ON (STD.STD3 = GR.GR1)
             INNER JOIN SEM on (SEM.SEM3 = :YEAR and SEM.SEM5 = :SEM and sem.SEM2 = gr.gr2)
             WHERE st101<>7 and STDISTSUB2=:COURSE and STD11 in (0,5,6,8) and (STD7 is null)

@@ -25,6 +25,7 @@ $thead = <<<HTML
         <th>№</th>
         <th>ФИО</th>
         <th>Группа</th>
+        <th>Email</th>
     </tr>
 HTML;
 
@@ -37,7 +38,7 @@ foreach ($students as $student){
 
     $nameGroup = Gr::model()->getGroupName($student['sem4'], $student);
 
-    $tbody.=sprintf('<tr><td>%d</td><td>%s</td><td>%s</td></tr>', $i, $name, $nameGroup);
+    $tbody.=sprintf('<tr><td>%d</td><td>%s</td><td>%s</td><td>%s</td></tr>', $i, $name, $nameGroup, $student['stdist2']);
     $i++;
 }
 
