@@ -353,7 +353,7 @@ TEXT;
 HTML;
         elseif($type == 0) // group
         {
-            $groupName = $day['gr13'] == 1 ? $gr3 : '&nbsp';
+            $groupName = $day['gr13'] == 1 && $day['tip']!='Лк' ? $gr3 : '&nbsp';
             $pattern = <<<HTML
 <div style="background:{$color}">
     <span>{$rowDisc}{$tem_name}</span><br>
