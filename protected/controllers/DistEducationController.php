@@ -557,10 +557,6 @@ class DistEducationController extends Controller
         $model = new DistEducationFilterForm(Yii::app()->user);
         $model->unsetAttributes();
 
-        if(!$model->isAdminDistEducation){
-            throw new CHttpException(400, tt('Нет доступа'));
-        }
-
         if (isset($_GET['pageSize'])) {
             Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
             unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
@@ -568,12 +564,17 @@ class DistEducationController extends Controller
 
         if(isset($_REQUEST['DistEducationFilterForm'])){
             $model->attributes = $_REQUEST['DistEducationFilterForm'];
+
+            if(!$model->validate()){
+                throw new CHttpException(400, tt('Неверные параметры'));
+            }
         }
 
-        $chairId = Yii::app()->request->getParam('chairId', null);
+        if($model->isAdminDistEducation){
+            $chairId = Yii::app()->request->getParam('chairId', null);
 
-        $model->setChairId($chairId);
-
+            $model->setChairId($chairId);
+        }
 
         $this->render('subscriptionsList', array(
             'model' => $model
