@@ -506,7 +506,7 @@ SQL
         $vedomost = null;
 
         try {
-            $vedomost = new DistVedomost($uo1, $gr1);
+            $vedomost = new DistVedomost($uo1, $gr1, $vvmp->vvmp6);
 
             $vedomost = $this->_getMarks($vedomost);
         }catch (Exception $error){
