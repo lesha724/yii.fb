@@ -499,7 +499,7 @@ HTML;
         }
 
         if(!empty($message))
-            Yii::app()->user->setState('info_message', $message);
+            Yii::app()->user->setState('info', $message);
 
         $universityCode = SH::getUniversityCod();
 

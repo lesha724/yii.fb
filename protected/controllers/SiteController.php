@@ -600,7 +600,7 @@ HTML
 					if(UniversityCommon::SendZapApiRequest(UniversityCommon::CHANGE_PASSWORD_TYPE, $message)){
 						//Yii::app()->user->setState('info_message', $message);
 					}else{
-						Yii::app()->user->setState('info_message', tt('Ошибка отправки сообщения на поодержку!'));
+						Yii::app()->user->setState('error', tt('Ошибка отправки сообщения на поодержку!'));
 					}
 				}
 				Yii::app()->end('ok');
@@ -666,7 +666,7 @@ HTML
 					if(UniversityCommon::SendZapApiRequest(UniversityCommon::REGISTER_TYPE, $message)){
 						//Yii::app()->user->setState('info_message', $message);
 					}else{
-						Yii::app()->user->setState('info_message', tt('Ошибка отправки сообщения на поодержку!'));
+						Yii::app()->user->setState('error', tt('Ошибка отправки сообщения на поодержку!'));
 					}
 				}
 				Yii::app()->end('registered');
@@ -721,7 +721,7 @@ HTML
 					if(UniversityCommon::SendZapApiRequest(UniversityCommon::REGISTER_TYPE, $message)){
 						//Yii::app()->user->setState('info_message', $message);
 					}else{
-						Yii::app()->user->setState('info_message', tt('Ошибка отправки сообщения на поодержку!'));
+						Yii::app()->user->setState('error', tt('Ошибка отправки сообщения на поодержку!'));
 					}
 				}
 				return $this->redirect('index');
@@ -780,10 +780,10 @@ HTML;
 					list($status, $message) = $this->mailsend($model->email, tt('Забыл пароль'), $message);
 
 					if ($status) {
-						Yii::app()->user->setFlash('user', $message);
+						Yii::app()->user->setFlash('success', $message);
 						Yii::app()->end('send');
 					} else {
-						Yii::app()->user->setFlash('user_error', $message);
+						Yii::app()->user->setFlash('error', $message);
 						throw new CHttpException(500, $message);
 					}
 				}else
@@ -813,7 +813,7 @@ HTML;
 			$model->attributes = $_POST['ResetPasswordForm'];
 
 			if ($model->validate() && $model->resetPassword()) {
-				Yii::app()->user->setFlash('user', tt('Новый пароль сохранен!'));
+				Yii::app()->user->setFlash('success', tt('Новый пароль сохранен!'));
 
 				return $this->redirect('index');
 			}
