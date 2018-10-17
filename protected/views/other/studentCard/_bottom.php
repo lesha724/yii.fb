@@ -117,7 +117,7 @@ HTML;
         tt('Отчество (англ.)'),$st->st76,
 
         tt('Гражданство'),$studentInfo['sgr2'],
-        tt('Дата рождения'),date("d.m.y",strtotime($st->st7)),
+        tt('Дата рождения'),date("d.m.Y",strtotime($st->st7)),
 
         tt('Факультет'), $studentInfo['f3'],
         tt('Специальность'), $studentInfo['sp2'],
