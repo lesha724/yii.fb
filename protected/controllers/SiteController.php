@@ -21,7 +21,6 @@ class SiteController extends Controller
             array('allow',
                 'actions'=>array(
                     'logout',
-                    'getMobileKey',
                     'changePassword',
                     'resendCheckEmail'
                 ),
@@ -194,7 +193,7 @@ class SiteController extends Controller
             //если есть запись, проверяем не пустоя ли токен, если да то почта уже подтверждена, если нет :
             if(!empty($model->ue3)) {
 
-                Yii::app()->user->setFlash('error', '<strong>' . tt('Внимание!') . '</strong> ' . tt('Для продолжения нужно подтвредить почту, письмо было выслано на вашу почту! <a href="{link}">Переотправить</a>', array(
+                Yii::app()->user->setFlash('error', '<strong>' . tt('Внимание!') . '</strong> ' . tt('Для продолжения нужно подтвредить почту, письмо было выслано на вашу почту! <a href="{link}">Отправить снова</a>', array(
                         '{link}' => Yii::app()->createAbsoluteUrl('site/resendCheckEmail', array('_token' => $model->ue3))
                     )));
                 $this->redirect('index');
@@ -228,7 +227,7 @@ HTML
         //отправка письма на почту с токеном
 
         if ($status) {
-            Yii::app()->user->setFlash('success', tt('Вам на почту было отправлено письмо для подтвреждения! <a href="{link}">Переотправить</a>',
+            Yii::app()->user->setFlash('success', tt('Вам на почту было отправлено письмо для подтверждения! <a href="{link}">Отправить снова</a>',
                 array(
                     '{link}' => Yii::app()->createAbsoluteUrl('site/resendCheckEmail', array('_token' => $model->ue3))
                 )));
@@ -869,21 +868,4 @@ HTML;
 
 		$this->render('iframe',array('model'=>$model));
 	}
-
-	public function actionGetMobileKey(){
-        $ps128 = PortalSettings::model()->getSettingFor(PortalSettings::MOBILE_APP_NEED_AUTH);
-        if($ps128!=1)
-            throw new CHttpException(403, 'Invalid request. Please do not repeat this request again.');
-
-        if(Yii::app()->user->isGuest)
-            throw new CHttpException(403, 'Invalid request. Please do not repeat this request again.');
-
-        if(Yii::app()->user->model->generateMobileKey()){
-            Yii::app()->user->setFlash('info', 'Код для мобильного приложения: <i>'.Yii::app()->user->model->u13.'</i>');
-        }else{
-            Yii::app()->user->setFlash('error', 'Ошибка генерации ключа для мобильного приложения');
-        }
-
-        $this->redirect('index');
-    }
 }

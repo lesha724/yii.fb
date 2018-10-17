@@ -21,9 +21,9 @@
 
 <form id="menu" method="post">
     <?php
-        $teacherStr = tt('Преподователь');
+        $teacherStr = tt('Преподаватель');
         $studentStr = tt('Студент');
-        $parentStr = tt('Преподователь');
+        $parentStr = tt('Преподаватель');
 
         $this->renderPartial('menu/_block', array(
             'settings' => $settings,
@@ -166,7 +166,7 @@
                     ),
                 ),
                 array(
-                    'name'       => 'Док.-оборот',
+                    'name'       => 'Документооборот',
                     'controller' => 'doc',
                     'items' => array(
                         'index' => 'Документооборот',/* array(
