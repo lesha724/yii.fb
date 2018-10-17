@@ -641,12 +641,14 @@ SQL;
                 $_SESSION['func'] = 'PROCEDURA_CIKL_PO_BLOKAM';
 
                 $res = true;
+                $msg = '';
             }catch (Exception $error){
                 $res = false;
+                $msg = $error->getMessage();
             }
         }
 
-        Yii::app()->end(CJSON::encode(array('res' => $res)));
+        Yii::app()->end(CJSON::encode(array('res' => $res, 'msg' => $msg)));
     }
 
     public function actionCancelSubscription()

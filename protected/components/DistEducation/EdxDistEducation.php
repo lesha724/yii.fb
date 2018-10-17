@@ -313,7 +313,7 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
 
             return array(true, '');
         }catch (Exception $error){
-            return array(false, 'Не удалось записать на курс:'/*.$error->getMessage()*/);
+            return array(false, 'Не удалось записать на курс:' .$error->getMessage());
         }
     }
 
