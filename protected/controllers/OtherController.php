@@ -290,7 +290,7 @@ class OtherController extends Controller
                 $sheet->setCellValue('J2', tt('"2"'));
 
                 $sheet->mergeCells('K1:K2');
-                $sheet->setCellValue('K1', tt('% задолжености'));
+                $sheet->setCellValue('K1', tt('% задолженности'));
 
                 $sheet->getColumnDimension('B')->setWidth(20);
                 $sheet->getColumnDimension('C')->setWidth(40);

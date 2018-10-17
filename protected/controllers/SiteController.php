@@ -143,7 +143,7 @@ class SiteController extends Controller
     }
 
     /**
-     * Регитсрация в дистанционом образовании
+     * Регитсрация в дистанционном образовании
      * Вопрос есть уже акаунт или нет
      */
     public function actionLoginDistEducation(){
@@ -188,7 +188,7 @@ class SiteController extends Controller
             $this->redirect('index');
         }else{
             if( Yii::app()->user->id != $model->ue2)
-                throw new CHttpException(400, 'Некоректный пользователь.');
+                throw new CHttpException(400, 'Некорректный пользователь.');
 
             //если есть запись, проверяем не пустоя ли токен, если да то почта уже подтверждена, если нет :
             if(!empty($model->ue3)) {
@@ -299,10 +299,10 @@ HTML
             else {
                 $model->ue3 = '';
                 if(!$model->save()){
-                    Yii::app()->user->setFlash('error', '<strong>'.tt('Внимание!').'</strong> '. tt('Ошибка, сохранения подтверждения почты!'));
+                    Yii::app()->user->setFlash('error', '<strong>'.tt('Внимание!').'</strong> '. tt('Ошибка сохранения подтверждения почты!'));
 
                 }else{
-                    Yii::app()->user->setFlash('success', '<strong>'.tt('Внимание!').'</strong> '. tt('Почта подтвреждена!'));
+                    Yii::app()->user->setFlash('success', '<strong>'.tt('Внимание!').'</strong> '. tt('Почта подтверждена!'));
                 }
 
                 $this->redirect('index');
@@ -311,7 +311,7 @@ HTML
     }
 
     /**
-     * Регитсрация в дистанционом образовании
+     * Регитсрация в дистанционном образовании
      * Вопрос есть уже акаунт или нет
      */
     public function actionSignUpDistEducation(){
@@ -324,7 +324,7 @@ HTML
     }
 
     /**
-     * Регитсрация в дистанционом образовании
+     * Регитсрация в дистанционном образовании
      * Вопрос есть уже акаунт или нет
      */
     public function actionSignUpOldDistEducation(){
@@ -376,7 +376,7 @@ HTML
     }
 
     /**
-     * Регитсрация в дистанционом образовании
+     * Регитсрация в дистанционном образовании
      */
     public function actionSignUpNewDistEducation(){
         $connector = SH::getDistEducationConnector(

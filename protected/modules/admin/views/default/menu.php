@@ -119,7 +119,7 @@
                         ),
                         'attendanceStatistic'=>'Статистика посещаемости',
                         'newAttendanceStatistic'=> array(
-                            'name'=>'Статистика посещаемости (н.)',
+                            'name'=>'Статистика посещаемости',
                             'authOnly' => $teacherStr
                         ),
                         'attendanceStatisticPrint'=>'Статистика посещаемости на поток',

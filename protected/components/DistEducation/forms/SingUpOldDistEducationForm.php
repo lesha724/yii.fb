@@ -53,7 +53,7 @@ abstract class SingUpOldDistEducationForm extends CFormModel implements ISingUpO
                 $this->addError($attribute, tt('Ошибка создания конектора' ));
             else{
                 if(!$connector->validateEmail($this->$attribute))
-                    $this->addError($attribute, tt('Некоректный Email или ошибка проверки' ));
+                    $this->addError($attribute, tt('Некорректный Email или ошибка проверки' ));
             }
         }
     }
@@ -66,7 +66,7 @@ abstract class SingUpOldDistEducationForm extends CFormModel implements ISingUpO
     public function attributeLabels()
     {
         return array(
-            'email'=>tt('Email (существующей учетной записи дистанционого образования)'),
+            'email'=>tt('Email (существующей учетной записи дистанционного образования)'),
             'verifyCode'=>'Verification Code',
         );
     }

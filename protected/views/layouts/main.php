@@ -34,7 +34,7 @@
 
     <title>
         <?php echo CHtml::encode(
-            !empty($title)? $title :$this->pageTitle
+            !empty($title)? $title :$this->pageHeader
         ); ?>
     </title>
 
