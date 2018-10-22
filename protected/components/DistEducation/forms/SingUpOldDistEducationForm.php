@@ -28,10 +28,10 @@ abstract class SingUpOldDistEducationForm extends CFormModel implements ISingUpO
         return array(
             // name, email, subject and body are required
             array('email', 'required'),
-            // email has to be a valid email address
-            array('email', 'email'),
 
             array('email', 'filter', 'filter'=> 'trim'),
+            // email has to be a valid email address
+            array('email', 'email'),
 
             //array('verifyCode', 'captcha', 'allowEmpty'=>!CCaptcha::checkRequirements()),
             array('email', 'application.validators.EmailValidator', 'validateDomen'=> true, 'universityCode' => SH::getUniversityCod()),
@@ -53,7 +53,7 @@ abstract class SingUpOldDistEducationForm extends CFormModel implements ISingUpO
             if($connector == null)
                 $this->addError($attribute, tt('Ошибка создания конектора' ));
             else{
-                if(!$connector->validateEmail($this->$attribute))
+                if(!$connector->validateEmail(trim($this->$attribute)))
                     $this->addError($attribute, tt('Некорректный Email или ошибка проверки' ));
             }
         }
