@@ -210,7 +210,8 @@ foreach ($students as $st) {
                     }
                     $bal = '';
                     $bal = $mark->stusvst4 . ' /' . $mark->stusvst5 . ' /' . $bal_;
-                    $tr .= '<td data-stus="' . $mark['stusvst1'] .'-' . $mark['stusvst3'] .'" data-total=2>' . $bal . '</td>';
+                    $class = ($mark->stusvst6 < 3 &&  $mark->stusvst6 != -1) ? 'error' : '';
+                    $tr .= '<td class="'.$class.'" data-stus="' . $mark['stusvst1'] .'-' . $mark['stusvst3'] .'" data-total=2>' . $bal . '</td>';
                 } else {
                     $tr .= '<td data-total=2></td>'; // total 2
                 }
