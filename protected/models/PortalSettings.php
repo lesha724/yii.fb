@@ -55,6 +55,21 @@ class PortalSettings extends CActiveRecord
      */
     const ACCEPT_EMAIL_DIST_EDUCATION = 134;
 
+    /**
+     * @var int ОТобразить таб "регистрация пропусков" в карточке студента
+     */
+    const SHOW_REGISTRATION_PASS_TAB = 135;
+
+    /**
+     * @var int ОТобразить таб "Сводный электронный журнал" в карточке студента
+     */
+    const SHOW_SVOD_JOURNAL_TAB = 109;
+
+    /**
+     * @var int ОТобразить таб "Общая информация" в карточке студента
+     */
+    const SHOW_GENERAL_INFO_TAB = 91;
+
 	private  $settings = array();
 	/**
 	 * @return string the associated database table name
