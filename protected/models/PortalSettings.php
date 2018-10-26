@@ -58,7 +58,12 @@ class PortalSettings extends CActiveRecord
     /**
      * @var int ОТобразить таб "регистрация пропусков" в карточке студента
      */
-    const SHOW_REGISTRATION_PASS_TAB = 135;
+    const SHOW_REGISTRATION_PASS_TAB = 138;
+
+    /**
+     * @var int включить "регистрацию пропуска"
+     */
+    const ENABLE_REGISTRATION_PASS = 137;
 
     /**
      * @var int ОТобразить таб "Сводный электронный журнал" в карточке студента
