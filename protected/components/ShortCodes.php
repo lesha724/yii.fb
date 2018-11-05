@@ -636,6 +636,10 @@ class SH extends ShortCodes
                 return new MoodleDistEducation($url, $apiKey);
                 break;
 
+            case U_IRPEN:
+                return new MoodleDistEducation($url, $apiKey);
+                break;
+
             default:
                 return null;
         }
