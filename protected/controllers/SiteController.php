@@ -329,7 +329,7 @@ HTML
      */
     public function actionSignUpOldDistEducation(){
 
-        if(in_array($this->universityCode, array(U_NMU, U_KNAME, U_IRPEN)) ){
+        if(in_array($this->universityCode, array(U_NMU, U_KNAME)) ){
             throw new CHttpException('Access denied');
         }
         /**

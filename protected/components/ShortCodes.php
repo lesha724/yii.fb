@@ -664,6 +664,10 @@ class SH extends ShortCodes
                 return new MoodleSignUpOldForm($universityCode);
                 break;
 
+            case U_IRPEN:
+                return new MoodleSignUpOldForm($universityCode);
+                break;
+
             default:
                 return null;
         }
