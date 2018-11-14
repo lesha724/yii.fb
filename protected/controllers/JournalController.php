@@ -921,6 +921,35 @@ SQL;
                     $errorType = 3;
                 }
             }
+
+
+            try {
+                $sql = <<<SQL
+                    select elgz3,r2,r1,elgz1
+                    from elgz
+                    inner join elg on (elgz.elgz2 = elg.elg1)
+                    left join EL_GURNAL_ZAN(elg.elg2,:GR1,elg.elg3, elg.elg4) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
+                    WHERE r1=:R1 and elgz.elgz1=:ELGZ1 and elgz.elgz3=:NOM
+                    order by elgz3
+SQL;
+                $command = Yii::app()->db->createCommand($sql);
+                $command->bindValue(':GR1', $gr1);
+                $command->bindValue(':R1', $r1);
+                $command->bindValue(':ELGZ1', $elgz1);
+                $command->bindValue(':NOM', $nom);
+                $res = $command->queryRow();
+
+                //if(!empty($res))
+                $date = $res['r2'];
+            }
+            catch (Exception $e) {
+                $res = null;
+            }
+
+            if(empty($res)){
+                throw new CHttpException(404, '4Invalid request. Please do not repeat this request again.');
+            }
+
             //проверка да дату занятия
             $dateCurrLesson = strtotime($date);
             if(strtotime($date)>strtotime('now')){
@@ -941,30 +970,6 @@ SQL;
                         }
                     }
                 }
-            }
-
-            try {
-                $sql = <<<SQL
-                    select elgz3,r2,r1,elgz1
-                    from elgz
-                    inner join elg on (elgz.elgz2 = elg.elg1)
-                    left join EL_GURNAL_ZAN(elg.elg2,:GR1,elg.elg3, elg.elg4) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
-                    WHERE r1=:R1 and elgz.elgz1=:ELGZ1 and elgz.elgz3=:NOM
-                    order by elgz3
-SQL;
-                $command = Yii::app()->db->createCommand($sql);
-                $command->bindValue(':GR1', $gr1);
-                $command->bindValue(':R1', $r1);
-                $command->bindValue(':ELGZ1', $elgz1);
-                $command->bindValue(':NOM', $nom);
-                $res = $command->queryRow();
-            }
-            catch (Exception $e) {
-                $res = null;
-            }
-
-            if(empty($res)){
-                throw new CHttpException(404, '4Invalid request. Please do not repeat this request again.');
             }
 
             $whiteList = array(
