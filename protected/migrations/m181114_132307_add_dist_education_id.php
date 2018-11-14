@@ -7,7 +7,7 @@ class m181114_132307_add_dist_education_id extends CDbMigration
 		$universityCode = SH::getUniversityCod();
 
 		if($universityCode != U_IRPEN)
-		    return;
+		    return true;
 
         /**
          * @var $connector MoodleDistEducation
