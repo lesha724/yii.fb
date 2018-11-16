@@ -24,6 +24,7 @@
         $teacherStr = tt('Преподаватель');
         $studentStr = tt('Студент');
         $parentStr = tt('Преподаватель');
+        $doctorStr = tt('Доктор');
 
         $this->renderPartial('menu/_block', array(
             'settings' => $settings,

@@ -160,6 +160,10 @@ function _ch($controller, $action)
                     if (! SH::checkServiceFor(MENU_ELEMENT_AUTH_PARENT, $controller, $action))
                         return false;
                     break;
+                case Users::DOCTOR:
+                    if (! SH::checkServiceFor(MENU_ELEMENT_AUTH_DOCTOR, $controller, $action))
+                        return false;
+                    break;
             }
         }
 
@@ -207,6 +211,12 @@ $this->widget('zii.widgets.CMenu', array(
                     'label'  => $_l2.tt('Преподаватели'),
                     'url'    => _u('/admin/default/teachers'),
                     'active' => $_a=='teachers' || $_a=='PGrants'
+                ),
+                array(
+                    'label'  => $_l2.tt('Врачи'),
+                    'url'    => _u('/admin/default/doctors'),
+                    'active' => $_a=='doctors' || $_a=='dGrants',
+                    'visible' => $this->universityCode == U_XNMU
                 ),
                 array(
                     'label'  => $_l2.tt('Студенты'),
