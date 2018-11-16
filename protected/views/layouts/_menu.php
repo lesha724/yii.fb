@@ -182,6 +182,7 @@ $_l2 = '<i class="icon-double-angle-right"></i>';
 
 $isStd   = Yii::app()->user->isStd;
 $isTch   = Yii::app()->user->isTch;
+$isDoctor   = Yii::app()->user->isDoctor;
 $isAdmin = Yii::app()->user->isAdmin;
 $isPrnt = Yii::app()->user->isPrnt;
 
@@ -759,6 +760,12 @@ $this->widget('zii.widgets.CMenu', array(
             'linkOptions'=> $_l,
             'itemOptions'=>_i('other'),
             'items' =>array_merge( array(
+                array(
+                    'label'   => $_l2.tt('Разное'),
+                    'url'     => _u('/quiz/index'),
+                    'visible' => _ch('quiz', 'index') && ($isTch || $isDoctor),
+                    'active'  => $_c=='quiz' && $_a=='index '
+                ),
                 array(
                     'label'   => $_l2.tt('Телефонный справочник'),
                     'url'     => _u('/other/phones'),

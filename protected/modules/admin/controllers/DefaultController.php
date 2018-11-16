@@ -898,6 +898,13 @@ class DefaultController extends AdminController
         if (empty($id))
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
+        $model = $this->loadGrantsModel($id);
+        $model->scenario = 'admin-doctor';
+        if (isset($_REQUEST['Grants'])) {
+            $model->attributes = $_REQUEST['Grants'];
+            $model->save();
+        }
+
         $type = 3; // doctors
         $user = $this->loadUsersModel($type, $id);
 
@@ -914,6 +921,7 @@ class DefaultController extends AdminController
         }
 
         $this->render('dGrants', array(
+            'model' => $model,
             'user'  => $user
         ));
     }
