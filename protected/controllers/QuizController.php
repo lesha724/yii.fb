@@ -25,7 +25,8 @@ class QuizController extends Controller
         return array(
             array('allow',
                 'actions' => array(
-                    'index'
+                    'index',
+                    'create'
                 ),
                 'expression' => 'Yii::app()->user->isDoctor || Yii::app()->user->isTch ',
             ),
@@ -63,5 +64,24 @@ class QuizController extends Controller
         $this->render('index', array(
             'model'      => $model
         ));
+    }
+
+    /**
+     * Опросник
+     */
+    public function actionCreate()
+    {
+        $model = new CreateOprrezForm();
+
+        if (isset($_POST['CreateOprrezForm']))
+            $model->attributes=$_POST['CreateOprrezForm'];
+
+        if(!$model->validate())
+            throw new CHttpException(400, 'Ошибка вводимых данных');
+
+        if($model->createOprrez())
+            Yii::app()->end('ok');
+        else
+            throw new CHttpException(500, 'Ошибка создания');
     }
 }

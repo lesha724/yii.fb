@@ -108,6 +108,7 @@ class Users extends CActiveRecord
 			'u7' => 'U7',
 			'u8' => tt('Заблокирован'),
 			'u9' => 'U9',
+            'name' => 'Имя пользователя'
 		);
 	}
 

@@ -761,7 +761,7 @@ $this->widget('zii.widgets.CMenu', array(
             'itemOptions'=>_i('other'),
             'items' =>array_merge( array(
                 array(
-                    'label'   => $_l2.tt('Разное'),
+                    'label'   => $_l2.tt('Опрос'),
                     'url'     => _u('/quiz/index'),
                     'visible' => _ch('quiz', 'index') && ($isTch || $isDoctor),
                     'active'  => $_c=='quiz' && $_a=='index '
