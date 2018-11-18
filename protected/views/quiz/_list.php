@@ -30,7 +30,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
     'columns' => array(
         array(
             'header'=>Oprrez::model()->getAttributeLabel('oprrez2'),
-            'value'=>'SH::getShortName($data["st2"], $data["st3"], $data["st4"])',
+            'value'=>'$data["st2"] . " " . $data["st3"] . " " . $data["st4"]',
         ),
         array(
             'header'=>Oprrez::model()->getAttributeLabel('oprrez3'),
@@ -63,3 +63,11 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         ),
     ),
 ));
+
+Yii::app()->clientScript->registerCss('oprrez-select', <<<CSS
+    .oprrez-select{
+        margin-bottom: 0px;
+        width: 100%;
+    }
+CSS
+);
