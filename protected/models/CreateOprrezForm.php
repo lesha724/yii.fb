@@ -36,10 +36,10 @@ class CreateOprrezForm extends CFormModel
 	}
 
     /**
-     * Создание ответа студента (опросник)
+     * сохранение ответа студента (опросник)
      * @return bool
      */
-	public function createOprrez(){
+	public function saveOprrez(){
 
 	    $model = Oprrez::model()->findByAttributes(array('oprrez2' => $this-> st1));
         if(empty($model))
@@ -52,5 +52,13 @@ class CreateOprrezForm extends CFormModel
 	    $model->oprrez5 = Yii::app()->user->id;
 
 	    return $model->save();
+    }
+
+    /**
+     * Удаление ответа студента (опросник)
+     * @return int
+     */
+    public function deleteOprrez(){
+	    return Oprrez::model()->deleteAllByAttributes(array('oprrez2' => $this->st1));
     }
 }

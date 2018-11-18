@@ -76,10 +76,17 @@ class QuizController extends Controller
         $model->st1 = Yii::app()->request->getParam('st1', null);
         $model->opr1 = Yii::app()->request->getParam('opr1', null);
 
+        if($model->opr1 == -1){
+            if($model->deleteOprrez())
+                Yii::app()->end('ok');
+            else
+                throw new CHttpException(500, 'Ошибка удаления');
+        }
+
         if(!$model->validate())
             throw new CHttpException(400, 'Ошибка вводимых данных');
 
-        if($model->createOprrez())
+        if($model->saveOprrez())
             Yii::app()->end('ok');
         else
             throw new CHttpException(500, 'Ошибка создания');

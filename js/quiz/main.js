@@ -13,7 +13,7 @@ $(document).ready(function(){
         var $that = $(this);
         var data  = {
             st1  : $that.data('st1'),
-            opr1 : $that.val()
+            opr1 : !$that.val() ? -1 : $that.val()
         };
         var url   = $('#oprrez-list').data('url');
 
@@ -38,7 +38,7 @@ $(document).ready(function(){
                     if (jqXHR.status == 403) {
                         addGritter('Ошибка','Access error: ' + jqXHR.responseText, 'error')
                     } else {
-                        addGritter('Ошибка','Unexpected error.', 'error')
+                        addGritter('Ошибка','Unexpected error: ' + jqXHR.responseText, 'error')
                     }
                 }
                 $that.prop('disabled', false);
