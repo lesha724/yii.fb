@@ -29,6 +29,7 @@ $(document).ready(function(){
                     updateList();
                 } else
                     addGritter('Ошибка', '"Ошибка добавления', 'error');
+                $that.prop('disabled', false);
             },
             error:function(jqXHR, textStatus, errorThrown) {
                 if (jqXHR.status == 500) {
@@ -40,6 +41,7 @@ $(document).ready(function(){
                         addGritter('Ошибка','Unexpected error.', 'error')
                     }
                 }
+                $that.prop('disabled', false);
             },
 
             dataType:'html'
