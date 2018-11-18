@@ -18,7 +18,7 @@ $this->breadcrumbs=array(
 Yii::app()->clientScript->registerPackage('gritter');
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/quiz/main.js', CClientScript::POS_HEAD);
 
-$this->renderPartial('/filter_form/timeTable/student', array(
+$this->renderPartial('/filter_form/timeTable/group', array(
     'model' => $model,
     'showDateRangePicker' => false
 ));
@@ -29,7 +29,7 @@ echo <<<HTML
 HTML;
 
 
-if (! empty($model->student))
+if (! empty($model->group))
     $this->renderPartial('_bottom', array(
         'model' => $model
     ));

@@ -40,7 +40,11 @@ class CreateOprrezForm extends CFormModel
      * @return bool
      */
 	public function createOprrez(){
-	    $model = new Oprrez();
+
+	    $model = Oprrez::model()->findByAttributes(array('oprrez2' => $this-> st1));
+        if(empty($model))
+	        $model = new Oprrez();
+
         $model->oprrez1 = new CDbExpression('GEN_ID(GEN_OPRREZ, 1)');
 	    $model->oprrez2 = $this->st1;
 	    $model->oprrez3 = $this->opr1;

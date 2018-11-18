@@ -11,22 +11,17 @@
  * @var TimeTableForm $model
  */
 
-    $st = St::model()->findByPk($model->student);
+$gr = Gr::model()->findByPk($model->group);
 
-    if(empty($st)):
-        echo CHtml::tag('div', array('class' => 'alert alert-warning'), tt('Студент не выбран'));
-    else:
+if(empty($gr)):
+    echo CHtml::tag('div', array('class' => 'alert alert-warning'), tt('Группа не выбрана'));
+else:
 ?>
     <div class="row-fluid">
-        <div class="span9">
+        <div class="span12">
             <?=$this->renderPartial('_list', array(
                 'model' => $model,
-                'student' => $st
-            ));?>
-        </div>
-        <div class="span3">
-            <?=$this->renderPartial('_create', array(
-                'model' => $model
+                'group' => $gr
             ));?>
         </div>
     </div>

@@ -56,7 +56,7 @@ class QuizController extends Controller
     public function actionIndex()
     {
         $model = new TimeTableForm;
-        $model->scenario = 'student';
+        $model->scenario = 'group';
 
         if (isset($_REQUEST['TimeTableForm']))
             $model->attributes=$_REQUEST['TimeTableForm'];
@@ -73,8 +73,8 @@ class QuizController extends Controller
     {
         $model = new CreateOprrezForm();
 
-        if (isset($_POST['CreateOprrezForm']))
-            $model->attributes=$_POST['CreateOprrezForm'];
+        $model->st1 = Yii::app()->request->getParam('st1', null);
+        $model->opr1 = Yii::app()->request->getParam('opr1', null);
 
         if(!$model->validate())
             throw new CHttpException(400, 'Ошибка вводимых данных');

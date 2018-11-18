@@ -8,13 +8,16 @@ $(document).ready(function(){
         $.fn.yiiGridView.update('oprrez-list',{ data: $('#filter-form').serialize() });
     }
 
-    $(document).on('submit', '#create-oprrez-form', function(){
+    $(document).on('change', '.oprrez-select', function(){
 
-        var data  = $(this).serialize();
-        var url   = $(this).attr('action');
         var $that = $(this);
+        var data  = {
+            st1  : $that.data('st1'),
+            opr1 : $that.val()
+        };
+        var url   = $('#oprrez-list').data('url');
 
-        $that.find('button').button('loading');
+        $that.prop('disabled', 'disabled');
 
         $.ajax({
             type: 'POST',
@@ -26,8 +29,6 @@ $(document).ready(function(){
                     updateList();
                 } else
                     addGritter('Ошибка', '"Ошибка добавления', 'error');
-
-                $that.find('button').button('reset');
             },
             error:function(jqXHR, textStatus, errorThrown) {
                 if (jqXHR.status == 500) {
@@ -39,7 +40,6 @@ $(document).ready(function(){
                         addGritter('Ошибка','Unexpected error.', 'error')
                     }
                 }
-                $that.find('button').button('reset');
             },
 
             dataType:'html'
