@@ -755,6 +755,21 @@ $this->widget('zii.widgets.CMenu', array(
             'visible' => _ch('payment', 'main') && ($isStd || $isTch)
         ),
         array(
+            'label' => _l('Опрос', 'ok-sign'),
+            'url' => '#',
+            'linkOptions'=> $_l,
+            'itemOptions'=>_i('quiz'),
+            'items' =>array_merge( array(
+                array(
+                    'label'   => $_l2.tt('Опрос'),
+                    'url'     => _u('/quiz/index'),
+                    'visible' => _ch('quiz', 'index') && ($isTch || $isDoctor),
+                    'active'  => $_c=='quiz' && $_a=='index '
+                ),
+            ),getDopItem('quiz',0)),
+            'visible' => _ch('quiz', 'main'),
+        ),
+        array(
             'label' => _l('Другое', 'globe'),
             'url' => '#',
             'linkOptions'=> $_l,

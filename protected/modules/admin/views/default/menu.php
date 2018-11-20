@@ -233,6 +233,13 @@
                     ),
                 ),
                 array(
+                    'name'       => 'Опрос',
+                    'controller' => 'quiz',
+                    'items' => array(
+                        'controller' => 'index',
+                    ),
+                ),
+                array(
                     'name'       => 'Другое',
                     'controller' => 'other',
                     'items' => array(
