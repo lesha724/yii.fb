@@ -2643,6 +2643,21 @@ SQL;
                 }
             }
 
+            if(strtotime($date)>strtotime('now')){
+                $error = true;
+            }
+
+            if(!$error) {
+                $maxBall = PortalSettings::model()->getSettingFor(36);
+                if ($maxBall != 0) {
+                    if ($value > $maxBall || $value < $elgzst->getMin())
+                        if ($value != 0) {
+                            $error = true;
+                            $errorType = 4;
+                        }
+                }
+            }
+
             if($elgzst->elgzst5<=$elgzst->getMin()&&!$error)
             {
                 $model= new Elgotr();
