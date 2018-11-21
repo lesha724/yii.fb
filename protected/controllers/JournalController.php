@@ -1271,6 +1271,7 @@ SQL;
                             //если убираем пропуск удалем все записи с регитрацией пропусвов и отработок по этому занятию
                             Elgotr::model()->deleteAllByAttributes(array('elgotr1'=>$elgzst->elgzst0));
                             Elgp::model()->deleteAllByAttributes(array('elgp1'=>$elgzst->elgzst0));
+                            $elgzst->delete();
                         }elseif($field == 'elgzst3')
                         {
                             //если ставим пропуск ищем есть ли у нас запись в таблице elgp ,если нет создаем
@@ -1597,7 +1598,10 @@ SQL;
                         $errorType = 3;
                     }
                 }
-
+                $date = DateTime::createFromFormat('d.m.y', $elgotr3);
+                if($date>new DateTime()){
+                    $error = true;
+                }
 
                 if(!$error) {
                     $ps55 = PortalSettings::model()->findByPk(55)->ps2;
@@ -2643,7 +2647,8 @@ SQL;
                 }
             }
 
-            if(strtotime($date)>strtotime('now')){
+            $date = DateTime::createFromFormat('d.m.y', $elgotr3);
+            if($date>new DateTime()){
                 $error = true;
             }
 
