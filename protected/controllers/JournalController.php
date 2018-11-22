@@ -1604,6 +1604,17 @@ SQL;
                 }
 
                 if(!$error) {
+                    $maxBall = PortalSettings::model()->getSettingFor(36);
+                    if ($maxBall != 0) {
+                        if ($elgotr2 > $maxBall || $elgotr2 < $elgzst->getMin())
+                            if ($elgotr2 != 0) {
+                                $error = true;
+                                $errorType = 4;
+                            }
+                    }
+                }
+
+                if(!$error) {
                     $ps55 = PortalSettings::model()->findByPk(55)->ps2;
                     if ($elgzst->elgzst3 != 0 || ($elgzst->elgzst4 <= $elgzst->getMin() && ($elgzst->elgzst4 != 0 || ($ps55 == 1 && $elgzst->elgzst4 == 0)))) {
                         if ($elgzst->checkMinRetakeForGrid()) {
@@ -1744,6 +1755,13 @@ SQL;
         Yii::app()->end(CJSON::encode($res));
     }
 
+    /**
+     * @throws CException
+     * @throws CHttpException
+     * @throws PHPExcel_Exception
+     * @throws PHPExcel_Reader_Exception
+     * @throws PHPExcel_Writer_Exception
+     */
     public function actionJournalExcel()
     {
         $sem1=Yii::app()->request->getParam('sem1', null);
@@ -2647,8 +2665,8 @@ SQL;
                 }
             }
 
-            $date = DateTime::createFromFormat('d.m.y', $elgotr3);
-            if($date>new DateTime()){
+            $date_ = DateTime::createFromFormat('d.m.y', $date);
+            if($date_>new DateTime()){
                 $error = true;
             }
 
