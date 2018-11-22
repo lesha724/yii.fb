@@ -1607,9 +1607,16 @@ SQL;
                     $maxBall = PortalSettings::model()->getSettingFor(36);
                     if ($maxBall != 0) {
                         if ($elgotr2 > $maxBall || $elgotr2 < $elgzst->getMin())
-                            if ($elgotr2 != 0) {
-                                $error = true;
-                                $errorType = 4;
+                            if($elgz->elgz20->elg4 == 1) {
+                                if ($elgotr2 != 0) {
+                                    $error = true;
+                                    $errorType = 4;
+                                }
+                            }else{
+                                if ($elgotr2 != 0 && $elgotr2!=-1) {
+                                    $error = true;
+                                    $errorType = 4;
+                                }
                             }
                     }
                 }
@@ -2669,14 +2676,20 @@ SQL;
             if($date_>new DateTime()){
                 $error = true;
             }
-
             if(!$error) {
                 $maxBall = PortalSettings::model()->getSettingFor(36);
                 if ($maxBall != 0) {
                     if ($value > $maxBall || $value < $elgzst->getMin())
-                        if ($value != 0) {
-                            $error = true;
-                            $errorType = 4;
+                        if($elgzst->elgzst20->elgz20->elg4 == 1) {
+                            if ($value != 0) {
+                                $error = true;
+                                $errorType = 4;
+                            }
+                        }else{
+                            if ($value != 0 && $value!=-1) {
+                                $error = true;
+                                $errorType = 4;
+                            }
                         }
                 }
             }
