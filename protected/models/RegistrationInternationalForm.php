@@ -107,7 +107,7 @@ class RegistrationInternationalForm extends CFormModel
             'condition' => 'ST18 = :NUMBER AND  ST17 =:SERIAL and st63 > 0',
             'params' => array(
                 ':NUMBER'=>$this->number,
-                ':SERIAL'=>$this->serial
+                ':SERIAL'=>($this->serial)? '' :$this->serial
             ),
             'order'=>'st1 DESC'
         )));
