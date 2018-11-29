@@ -19,7 +19,7 @@ class RegistrationInternationalForm extends CFormModel
 	{
 		return array(
             array('number', 'required'),
-            array('serial', 'required','on'=>'step-2'),
+            //array('serial', 'required','on'=>'step-2'),
 			array('serial, email, username, password, password2, number', 'required','on'=>'step-3'),
             //array('verifyCode', 'captcha', 'allowEmpty'=>!CCaptcha::checkRequirements(),'on'=>'step-3'),
             array('serial', 'checkSerial'),

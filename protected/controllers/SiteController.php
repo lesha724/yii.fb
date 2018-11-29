@@ -698,7 +698,7 @@ HTML
 				$model->scenario = 'step-2';
 			}
 
-			if(!empty($model->serial)&&$model->validate(array('serial'))){
+			if($model->validate(array('serial'))){
 				$model->scenario = 'step-3';
 			}
 
