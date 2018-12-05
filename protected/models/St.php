@@ -1675,4 +1675,24 @@ SQL;
 
         return $model;
     }
+
+    /**
+     * Пропуски студента (для расширеной регитсрации пропусков / карточка студента)
+     * @return array
+     * @throws CHttpException
+     */
+    public function getPass(){
+        if(empty($this->st1))
+            return array();
+
+        $sql=<<<SQL
+            SELECT * from EL_GURNAL_STUD_PROP(:st1) 
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':st1', $this->st1);
+        $passes = $command->queryAll();
+
+        return $passes;
+    }
 }

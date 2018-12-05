@@ -6,10 +6,16 @@
  * Time: 16:01
  */
 
+/**
+ * @var $st St
+ */
+
 $ps137 = PortalSettings::model()->getSettingFor(PortalSettings::ENABLE_REGISTRATION_PASS);
 
 if($ps137!=0):
-    //$passList = $student->getPass();
+    $passList = $st->getPass();
+
+
 else:
     echo CHtml::tag('div', array('class'=> 'alert alert-error'), tt('Регистрация пропусков не активна'));
 endif;
