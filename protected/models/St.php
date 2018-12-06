@@ -1686,11 +1686,13 @@ SQL;
             return array();
 
         $sql=<<<SQL
-            SELECT * from EL_GURNAL_STUD_PROP(:st1) 
+            SELECT * from EL_GURNAL_STUD_PROP(:st1, :year, :sem) 
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':st1', $this->st1);
+        $command->bindValue(':year', Yii::app()->session['year']);
+        $command->bindValue(':sem', Yii::app()->session['sem']);
         $passes = $command->queryAll();
 
         return $passes;

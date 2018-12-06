@@ -16,6 +16,7 @@ if($ps137!=0):
     $passList = $st->getPass();
 
 
+
 else:
     echo CHtml::tag('div', array('class'=> 'alert alert-error'), tt('Регистрация пропусков не активна'));
 endif;
