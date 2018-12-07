@@ -819,16 +819,16 @@ SQL;
            inner join ucgns on (ucsn.ucsn1 = ucgns.ucgns1)
            inner join ucgn on (ucgns.ucgns2 = ucgn.ucgn1)
            inner join ug on (ucgn.ucgn1 = ug.ug4)
-           inner join nr on (ug.ug1 = nr.nr1) //было ug3 =nr1 12.09.2017
+           inner join nr on (ug.ug1 = nr.nr1) 
            inner join us on (nr.nr2 = us.us1)
-           inner join std on (st1 = std2) //Єто бі закомнтировано (Раскометировали ИС, изза виртуальніх групп)
+           inner join std on (st1 = std2) 
         where UCGNS5=:YEAR and UCGNS6=:SEM and us2=:UO1 and ug2=:GR1 and std11 in (0,6,8) and (std7 is null) and st101!=7
         group by st1,st2,st3,st4,st45,st71,st163,st167, elgvst2, elgvst3
         order by st2 collate UNICODE
 SQL;*/
         $sql = <<<SQL
        select t.st1,st.st2,st.st3,st.st4,st.st45,st.st71,st.st163,st.st167, elgvst2, elgvst3
-        from (select listst.st1,listst.gr1,listst.std11,ucx1 from listst(:DATE_1,:YEAR,:SEM,0) where listst.gr1=:GR1 and listst.std11 in (0,6,8) ) t
+        from (select listst.st1,listst.gr1,listst.std11,ucx1 from listst(:DATE_1,:YEAR,:SEM,0) where (listst.gr1=:GR1 or listst.gr1_virt=:GR1_VIRT) and listst.std11 in (0,6,8) ) t
             inner join st on (t.st1 = st.st1)
             inner join ucx on (t.ucx1 = ucx.ucx1)
             inner join uo on (ucx.ucx1 = uo19)
@@ -837,9 +837,9 @@ SQL;*/
         group by st1,st2,st3,st4,st45,st71,st163,st167, elgvst2, elgvst3
         order by st2 collate UNICODE
 SQL;
-
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':GR1', $gr1);
+        $command->bindValue(':GR1_VIRT', $gr1);
         $command->bindValue(':UO1', $uo1);
         $command->bindValue(':YEAR', $year);
         $command->bindValue(':SEM', $sem);
