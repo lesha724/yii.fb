@@ -181,7 +181,7 @@ HTML;
     array('label'=>Yii::t('main', 'Диплом'), 'content'=>$this->renderPartial('studentCard/_diplom', $params,true), 'active'=>$ps50==4,'visible'=>PortalSettings::model()->findByPk(52)->ps2==1);
     */
 
-     $this->widget('bootstrap.widgets.TbTabs', array(
+    $this->widget('bootstrap.widgets.TbTabs', array(
         'type'=>'tabs',
         'placement'=>'top',
         'tabs'=>$tabs,

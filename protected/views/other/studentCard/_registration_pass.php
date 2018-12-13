@@ -15,7 +15,31 @@ $ps137 = PortalSettings::model()->getSettingFor(PortalSettings::ENABLE_REGISTRAT
 if($ps137!=0):
     $passList = $st->getPass();
 
+    $tabs = array(
+        array(
+            'label'=>tt('Пропуски'),
+            'content'=>$this->renderPartial(
+                'studentCard/_passes',
+                array('passList'=>$passList),
+                true
+            ),
+            'active'=>true
+        ),
+        array(
+            'label'=>tt('Справки'),
+            'content'=>$this->renderPartial(
+                'studentCard/_references',
+                array(),
+                true
+            ),
+        )
+    );
 
+    $this->widget('bootstrap.widgets.TbTabs', array(
+        'type'=>'tabs',
+        'placement'=>'top',
+        'tabs'=>$tabs,
+    ));
 
 else:
     echo CHtml::tag('div', array('class'=> 'alert alert-error'), tt('Регистрация пропусков не активна'));
