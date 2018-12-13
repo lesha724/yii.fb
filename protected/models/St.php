@@ -1697,4 +1697,35 @@ SQL;
 
         return $passes;
     }
+
+    /**
+     * Справки студента (для расширеной регитсрации пропусков / карточка студента)
+     * @return Rpspr[]
+     * @throws CHttpException
+     */
+    public function getReferences(){
+        if(empty($this->st1))
+            return null;
+
+        $sql=<<<SQL
+            SELECT rpspr.* from elgp 
+            inner join elgzst on ( elgp.elgp1 = elgzst.elgzst0)
+            inner join elgz on (elgzst.elgzst2 = elgz.elgz1)
+            inner join elg on (elgz.elgz2 = elg.elg1)
+            inner JOIN sem on (elg3 = sem1)
+            inner join rpspr on (elgp.ELGP8 = rpspr.RPSPR0)
+            LEFT JOIN rpsprd on (rpspr.RPSPR0 = rpsprd.rpsprd0 and rpsprd.rpsprd1 = elgp0)
+          WHERE  elgzst1 = :ST1 and sem3 = :YEAR and sem5=:SEM and rpsprd2 is null and rpspr0>0
+SQL;
+
+
+        $references = Rpspr::model()->findAllBySql($sql, array(
+            ':ST1' => $this->st1,
+            ':YEAR' => Yii::app()->session['year'],
+            ':SEM' => Yii::app()->session['sem']
+        ));
+
+        return $references;
+    }
+
 }

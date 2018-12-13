@@ -20,7 +20,10 @@ if($ps137!=0):
             'label'=>tt('Пропуски'),
             'content'=>$this->renderPartial(
                 'studentCard/_passes',
-                array('passList'=>$passList),
+                array(
+                    'passList'=>$passList,
+                    'st' => $st
+                ),
                 true
             ),
             'active'=>true
@@ -29,7 +32,9 @@ if($ps137!=0):
             'label'=>tt('Справки'),
             'content'=>$this->renderPartial(
                 'studentCard/_references',
-                array(),
+                array(
+                    'st' => $st
+                ),
                 true
             ),
         )

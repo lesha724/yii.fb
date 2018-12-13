@@ -7,6 +7,10 @@
  */
 
 /**
+ * @var $st St
+ */
+
+/**
  * @var $passList array
  * @var $this OtherController
  */
@@ -25,6 +29,20 @@ $this->widget('bootstrap.widgets.TbGridView', array(
     'filter' => null,
     'type' => 'striped bordered',
     'columns' => array(
+        array(
+            'id' => 'selectedIds',
+            'value' => '$data["elgp0"]',
+            'class' => 'CCheckBoxColumn',
+            'disabled' => function($data){
+                if($data['otrabotal'] == 1)
+                    return true;
+
+                if(!empty($data['RPSPR0']))
+                    return true;
+
+                return false;
+            }
+        ),
         array(
             'header'=>tt('Кафедра'),
             'value'=>'$data["k2"]',
@@ -68,6 +86,11 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         array(
             'header'=>tt('Отработка'),
             'value'=>'$data["otrabotal"] == 0 ? "-" : "+"',
+        ),
+
+        array(
+            'header'=>tt('Номер справки'),
+            'value'=>'$data["rpspr4"]',
         ),
     ),
 ));
