@@ -15,6 +15,8 @@
  * @var $this OtherController
  */
 
+$passList = $st->getPass();
+
 $dataProvider=new CArrayDataProvider($passList,array(
     'sort'=>false,
     'pagination'=>false,

@@ -13,7 +13,7 @@
 $ps137 = PortalSettings::model()->getSettingFor(PortalSettings::ENABLE_REGISTRATION_PASS);
 
 if($ps137!=0):
-    $passList = $st->getPass();
+
 
     $tabs = array(
         array(
@@ -21,12 +21,22 @@ if($ps137!=0):
             'content'=>$this->renderPartial(
                 'studentCard/_passes',
                 array(
-                    'passList'=>$passList,
+                    //'passList'=>$passList,
                     'st' => $st
                 ),
                 true
             ),
             'active'=>true
+        ),
+        array(
+            'label'=>tt('Заявки на оплату'),
+            'content'=>$this->renderPartial(
+                'studentCard/_requestPayments',
+                array(
+                    'st' => $st
+                ),
+                true
+            ),
         ),
         array(
             'label'=>tt('Справки'),
