@@ -229,7 +229,7 @@ class TimeTableForm extends CFormModel
         return $color;
     }
 
-    private function cellPrintTextFor($day, $type)
+    /*private function cellPrintTextFor($day, $type)
     {
         $printAttr=0;
         if(isset(Yii::app()->session['printAttr']))
@@ -262,6 +262,7 @@ class TimeTableForm extends CFormModel
             }
         }
         $class = tt('ауд');
+        $fio = '';
         if (isset($day['fio']))
             $fio = $day['fio'];
 
@@ -294,7 +295,7 @@ TEXT;
 TEXT;
 
         return trim($pattern);
-    }
+    }*/
 
     private function cellShortTextFor($day, $type)
     {
@@ -308,7 +309,7 @@ TEXT;
         $class = tt('ауд');
         $hiddenParams = null;
         $tem_name='';
-        if(isset($day['r1_']))
+        /*if(isset($day['r1_']))
         {
             $tem = $this->getTem($day['r1_'],$day['r2']);
             if(!empty($tem))
@@ -319,7 +320,7 @@ TEXT;
                     $tem_name.='&nbsp;'.tt('з.').$tem['nom_zan'];
                 //$tem_name.='</br>';
             }
-        }
+        }*/
 
         // for order lesson service {{{
         if (Yii::app()->controller->action->id == 'orderLesson')
@@ -332,8 +333,9 @@ TEXT;
         $rowClass = $class.'. '.$a2;
         $rowClass = mb_strimwidth($rowClass, 0, $maxLength, '...');
 
-        $gr3 = mb_strimwidth($day['gr3'], 0, $maxLength, '...');
+        $gr3 = $day['grup']; //mb_strimwidth($day['gr3'], 0, $maxLength, '...');
 
+        $fio = '';
         if (isset($day['fio']))
             $fio = mb_strimwidth($day['fio'], 0, $maxLength, '...');
 
@@ -409,17 +411,17 @@ HTML;
 
     private function cellFullTextFor($day, $type)
     {
-        $d2  = $day['d2'];
-        $d2 = str_replace('"', '&quot;', $d2);
+        $d2  = CHtml::encode($day['d2']);
+        //$d2 = str_replace('"', '&quot;', $d2);
         $tip = $day['tip'];
-        //$gr3 = $day['gr3'];
-        $gr3 = '{$gr3}';
-        $gr3_ = '';
-        if(isset($day['gr3']))
-            $gr3_ = $day['gr3'];
+        $gr3 = $day['grupfull'];
+        //$gr3 = '{$gr3}';
+        /*$gr3_ = '';
+        if(isset($day['grup_full']))
+            $gr3_ = $day['grup_full'];*/
         $a2  = $day['a2'];
         $tem_name='';
-        if(isset($day['r1_']))
+        /*if(isset($day['r1_']))
         {
             $tem = $this->getTem($day['r1_'],$day['r2']);
             if(!empty($tem)) {
@@ -427,10 +429,11 @@ HTML;
                 $tem_name = str_replace("'",'`', $tem_name);
                 $tem_name = str_replace('"','&quot;', $tem_name);
             }
-        }
+        }*/
         $class = tt('ауд');
         $text  = tt('Добавлено');
         $added = date('d.m.Y H:i', strtotime($day['r11']));
+        $fio = '';
         if (isset($day['fio_full']))
             $fio = $day['fio_full'];
         else if($type == 3 && isset($day['fio']))
@@ -495,12 +498,12 @@ HTML;
 
                 $res[$r2]['timeTable'][$r3][] = $day;
                 $res[$r2]['timeTable'][$r3]['day'] = $day;
-                $res[$r2]['timeTable'][$r3]['gr3'] = $day['gr3'];
+                //$res[$r2]['timeTable'][$r3]['gr3'] = $day['gr3'];
                 $res[$r2]['timeTable'][$r3]['shortText'] = $this->cellShortTextFor($day, $type);
                 $res[$r2]['timeTable'][$r3]['fullText']  = $this->cellFullTextFor($day, $type);
 
                 $res[$r2]['timeTable'][$r3]['color'] = $this->cellColorFor($day);
-                $res[$r2]['timeTable'][$r3]['printText']  = $this->cellPrintTextFor($day, $type);
+                //$res[$r2]['timeTable'][$r3]['printText']  = $this->cellPrintTextFor($day, $type);
                 //$res[$r2]['timeTable'][$r3]['printText']  = '=СЦЕПИТЬ("'.$this->cellPrintTextFor($day, $type).'";СИМВОЛ(10))';
 
             } else {
@@ -510,18 +513,18 @@ HTML;
                     if($day['r1']!=$res[$r2]['timeTable'][$r3]['day']['r1'] || $day['rz2']!=$res[$r2]['timeTable'][$r3]['day']['rz2']) {
                         $res[$r2]['timeTable'][$r3]['shortText'] .= $this->cellShortTextFor($day, $type);
 
-                        $res[$r2]['timeTable'][$r3]['fullText'] = str_replace('{$gr3}',$res[$r2]['timeTable'][$r3]['gr3'],$res[$r2]['timeTable'][$r3]['fullText']);
-                        $res[$r2]['timeTable'][$r3]['printText'] = str_replace('{$gr3}',$res[$r2]['timeTable'][$r3]['gr3'],$res[$r2]['timeTable'][$r3]['printText']);
+                        //$res[$r2]['timeTable'][$r3]['fullText'] = str_replace('{$gr3}',$res[$r2]['timeTable'][$r3]['gr3'],$res[$r2]['timeTable'][$r3]['fullText']);
+                        //$res[$r2]['timeTable'][$r3]['printText'] = str_replace('{$gr3}',$res[$r2]['timeTable'][$r3]['gr3'],$res[$r2]['timeTable'][$r3]['printText']);
 
                         $res[$r2]['timeTable'][$r3]['fullText'] .= $this->cellFullTextFor($day, $type);
-                        $res[$r2]['timeTable'][$r3]['printText'] .= ' ' . $this->cellPrintTextFor($day, $type);
+                        //$res[$r2]['timeTable'][$r3]['printText'] .= ' ' . $this->cellPrintTextFor($day, $type);
 
                         $res[$r2]['timeTable'][$r3][] = $day;
                         $res[$r2]['timeTable'][$r3]['day'] = $day;
-                        $res[$r2]['timeTable'][$r3]['gr3'] = $day['gr3'];
+                        //$res[$r2]['timeTable'][$r3]['gr3'] = $day['gr3'];
                     }else
                     {
-                        $res[$r2]['timeTable'][$r3]['gr3'] .= ', '.$day['gr3'];
+                        //$res[$r2]['timeTable'][$r3]['gr3'] .= ', '.$day['gr3'];
                     }
                 //}
             }
@@ -583,29 +586,29 @@ HTML;
                 $res[$r2]['timeTable'][$r3]['fullText']  = $this->cellFullTextFor($day, $type);
 
                 $res[$r2]['timeTable'][$r3]['color'] = $this->cellColorFor($day);
-                $res[$r2]['timeTable'][$r3]['printText']  = $this->cellPrintTextFor($day, $type);
+                //$res[$r2]['timeTable'][$r3]['printText']  = $this->cellPrintTextFor($day, $type);
                 //$res[$r2]['timeTable'][$r3]['printText']  = '=СЦЕПИТЬ("'.$this->cellPrintTextFor($day, $type).'";СИМВОЛ(10))';
 
                 $res[$r2]['timeTable'][$r3][] = $day;
                 $res[$r2]['timeTable'][$r3]['day'] = $day;
-                $res[$r2]['timeTable'][$r3]['gr3'] = $day['gr3'];
+                //$res[$r2]['timeTable'][$r3]['gr3'] = $day['gr3'];
 
             } else {
                 if($day['fio']!=$res[$r2]['timeTable'][$r3]['day']['fio'] || $day['rz2']!=$res[$r2]['timeTable'][$r3]['day']['rz2']) {
                     $res[$r2]['timeTable'][$r3]['shortText'] .= $this->cellShortTextFor($day, $type);
 
-                    $res[$r2]['timeTable'][$r3]['fullText'] = str_replace('{$gr3}',$res[$r2]['timeTable'][$r3]['gr3'],$res[$r2]['timeTable'][$r3]['fullText']);
-                    $res[$r2]['timeTable'][$r3]['printText'] = str_replace('{$gr3}',$res[$r2]['timeTable'][$r3]['gr3'],$res[$r2]['timeTable'][$r3]['printText']);
+                    //$res[$r2]['timeTable'][$r3]['fullText'] = str_replace('{$gr3}',$res[$r2]['timeTable'][$r3]['gr3'],$res[$r2]['timeTable'][$r3]['fullText']);
+                    //$res[$r2]['timeTable'][$r3]['printText'] = str_replace('{$gr3}',$res[$r2]['timeTable'][$r3]['gr3'],$res[$r2]['timeTable'][$r3]['printText']);
 
                     $res[$r2]['timeTable'][$r3]['fullText'] .= $this->cellFullTextFor($day, $type);
-                    $res[$r2]['timeTable'][$r3]['printText'] .= ' ' . $this->cellPrintTextFor($day, $type);
+                    //$res[$r2]['timeTable'][$r3]['printText'] .= ' ' . $this->cellPrintTextFor($day, $type);
 
                     $res[$r2]['timeTable'][$r3][] = $day;
                     $res[$r2]['timeTable'][$r3]['day'] = $day;
-                    $res[$r2]['timeTable'][$r3]['gr3'] = $day['gr3'];
+                    //$res[$r2]['timeTable'][$r3]['gr3'] = $day['gr3'];
                 }else
                 {
-                    $res[$r2]['timeTable'][$r3]['gr3'] .= ', '.$day['gr3'];
+                    //$res[$r2]['timeTable'][$r3]['gr3'] .= ', '.$day['gr3'];
                 }
             }
 
@@ -622,7 +625,7 @@ HTML;
 
             foreach ($params['timeTable'] as $lessonNum => $data) {
 
-                unset($data['day'],$data['gr3'],$data['shortText'], $data['fullText'], $data['printText'], $data['color']);
+                unset($data['day'],$data['shortText'], $data['fullText'], $data['color']);
 
                 $lessonAmount = count($data);
 

@@ -402,6 +402,8 @@ class TimeTableController extends Controller
 
     private function generateExcel($timeTable,$minMax,$maxLessons,$rz,$model,$title)
     {
+        throw new CHttpException(403, 'Access denied');
+
         Yii::import('ext.phpexcel.XPHPExcel');
         $objPHPExcel= XPHPExcel::createPHPExcel();
         $objPHPExcel->getProperties()->setCreator("ACY")

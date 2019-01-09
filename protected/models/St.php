@@ -1161,9 +1161,12 @@ SQL;
 
     public static function getTimeTable($st1, $date1, $date2)
     {
+        if (empty($st1))
+            return array();
+
         $sql = <<<SQL
         SELECT *
-        FROM RAST(:LANG, :ST1, :DATE_1, :DATE_2)
+        FROM RAGRST(:LANG, 0, :ST1, 0, 0, 0, :DATE_1, :DATE_2)
         ORDER BY r2,r3,rz2
 SQL;
 
