@@ -241,11 +241,6 @@ class TimeTableForm extends CFormModel
         $hiddenParams = null;
         $tem_name='';
 
-        // for order lesson service {{{
-        /*if (Yii::app()->controller->action->id == 'orderLesson')
-            $hiddenParams = implode('/', array($day['r2'], $day['r3'], $day['r5'], $day['r7']));*/
-        // }}}
-
         $rowDisc = $d3.'['.$tip.']';
         $rowDisc = mb_strimwidth($rowDisc, 0, $maxLength, '...');
         $pos=stripos($day['d3'],"(!)");
