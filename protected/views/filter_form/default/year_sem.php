@@ -1,6 +1,8 @@
 
 <form class="form-inline" id="filter-year-sem-form" method="POST">
     <?php
+        $previousYear4 = date('Y', strtotime('-5 year'));
+        $previousYear3 = date('Y', strtotime('-4 year'));
         $previousYear2 = date('Y', strtotime('-3 year'));
         $previousYear1 = date('Y', strtotime('-2 year'));
         $previousYear = date('Y', strtotime('-1 year'));
@@ -9,6 +11,8 @@
 		$nextYear1     = date('Y', strtotime('+2 year'));
 		
         $options = array(
+            $previousYear4 => $previousYear4.'/'.$previousYear3,
+            $previousYear3 => $previousYear3.'/'.$previousYear2,
             $previousYear2 => $previousYear2.'/'.$previousYear1,
             $previousYear1 => $previousYear1.'/'.$previousYear,
             $previousYear => $previousYear.'/'.$currentYear,
