@@ -232,7 +232,7 @@ class TimeTableForm extends CFormModel
     {
         $maxLength = 18;
 
-        $d3    = $day['d3'];
+        $d3  = CHtml::encode($day['d3']);
         $tip   = $day['tip'];
         //$tip = SH::convertUS4TimeTable($day['us4'],$day['nr17']);
         $a2    = $day['a2'];
@@ -243,7 +243,7 @@ class TimeTableForm extends CFormModel
 
         $rowDisc = $d3.'['.$tip.']';
         $rowDisc = mb_strimwidth($rowDisc, 0, $maxLength, '...');
-        $pos=stripos($day['d3'],"(!)");
+        $pos=stripos($d3,"(!)");
         $empty = '<br>&nbsp';
         if($pos!==false) {
             $rowDisc .= '<br>' . $day['rz2'] . '-' . $day['rz3'];
@@ -253,7 +253,7 @@ class TimeTableForm extends CFormModel
         $rowClass = $class.'. '.$a2;
         $rowClass = mb_strimwidth($rowClass, 0, $maxLength, '...');
 
-        $gr3 = $day['grup']; //mb_strimwidth($day['gr3'], 0, $maxLength, '...');
+        $gr3 = CHtml::encode($day['grup']); //mb_strimwidth($day['gr3'], 0, $maxLength, '...');
 
         $fio = '';
         if (isset($day['fio']))
@@ -332,8 +332,9 @@ HTML;
     private function cellFullTextFor($day, $type)
     {
         $d2  = CHtml::encode($day['d2']);
+        $d3  = CHtml::encode($day['d3']);
         $tip = $day['tip'];
-        $gr3 = $day['grupfull'];
+        $gr3 = CHtml::encode($day['grupfull']);
         $a2  = $day['a2'];
         $tem_name='';
         $class = tt('ауд');
@@ -344,10 +345,9 @@ HTML;
             $fio = $day['fio_full'];
         else if($type == 3 && isset($day['fio']))
             $fio = $day['fio'];
-        $link = "<a href='#'>Доп. материалы</a>";
 
         $time='';
-        $pos=stripos($day['d3'],"(!)");
+        $pos=stripos($d3,"(!)");
         if($pos!==false)
             $time='<br>'.$day['rz2'].'-'.$day['rz3'].'<br>';
         if ($type == 1) // teacher
@@ -367,7 +367,6 @@ HTML;
 {$class}. {$a2}<br>
 {$fio}<br>
 {$text}: {$added}<br>
-{$link}<br>
 HTML;
         elseif($type == 3) // classroom
             $pattern = <<<HTML
