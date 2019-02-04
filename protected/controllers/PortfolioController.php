@@ -33,6 +33,8 @@ class PortfolioController extends Controller
             array('allow',
                 'actions' => array(
                     'uploadFile',
+                    'showFile',
+                    'removeFile'
                 ),
                 'users' => array('@'),
             ),
@@ -120,5 +122,92 @@ class PortfolioController extends Controller
             return false;
 
         return is_dir($path);
+    }
+
+    /**
+     * Проверка доступа к файлу для
+     * @param Zrst $zrst
+     * @param int $accessLevel 0 - чтение, 1 - редактирование
+     * @return bool
+     */
+    private function _checkPermissionUserForFile($zrst, $accessLevel = 0){
+        if(Yii::app()->user->isAdmin)
+            return true;
+
+        if(Yii::app()->user->isStd) {
+            if($accessLevel == 0)
+                return $zrst->zrst2 == Yii::app()->user->dbModel->st1;
+            else
+                return $zrst->zrst2 == Yii::app()->user->dbModel->st1 && $zrst->zrst6 == 0;
+        }
+
+        return false;
+    }
+
+    /**
+     * Удаление файла
+     * @param $id
+     * @throws CDbException
+     * @throws CHttpException
+     */
+    public function actionRemoveFile($id){
+        $model=$this->_loadModel($id);
+
+        if(!$this->_checkPermissionUserForFile($model, 0))
+            throw new CHttpException(403,'You don\'t have an access to this service.');
+
+        $fileName = PortalSettings::model()->getSettingFor(PortalSettings::PORTFOLIO_PATH).'/'.$id.'.pdf';
+
+        if(!file_exists($fileName))
+            throw new CHttpException(400,tt('Файл не существует или удален.'));
+
+        try {
+            if ($model->delete()) {
+                unlink($fileName);
+            } else {
+                throw  new Exception('Ошибка');
+            }
+
+            Yii::app()->user->setFlash('success', 'Файл успешно удален');
+
+        }catch (Exception $error){
+            Yii::app()->user->setFlash('error', 'Ошибка удаления файла '. $error);
+        }
+
+        $url = empty(Yii::app()->request->urlReferrer) ? (
+            Yii::app()->user->isStd ? 'student' : 'teacher'
+        ) :
+            Yii::app()->request->urlReferrer;
+
+        $this->redirect($url);
+    }
+
+    public function actionShowFile($id){
+        $model=$this->_loadModel($id);
+
+        if(!$this->_checkPermissionUserForFile($model, 0))
+            throw new CHttpException(403,'You don\'t have an access to this service.');
+
+        $fileName = PortalSettings::model()->getSettingFor(PortalSettings::PORTFOLIO_PATH).'/'.$id.'.pdf';
+
+        if(!file_exists($fileName))
+            throw new CHttpException(400,tt('Файл не существует или удален.'));
+
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: inline; filename="'.basename($fileName).'"');
+        header('Content-Transfer-Encoding: binary');
+        header('Accept-Ranges: bytes');
+        header('Content-Length: ' . filesize($fileName));
+        @readfile($fileName);
+        exit;
+    }
+
+
+    private function _loadModel($id)
+    {
+        $model=Zrst::model()->findByPk($id);
+        if($model===null)
+            throw new CHttpException(404,'The requested page does not exist.');
+        return $model;
     }
 }

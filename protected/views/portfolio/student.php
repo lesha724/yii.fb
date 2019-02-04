@@ -28,6 +28,6 @@ echo <<<HTML
 HTML;
 if ($model->student) :
     $this->renderPartial('student/_bottom', array(
-        'st' => St::model()->findByPk($model->student),
+        'student' => St::model()->findByPk($model->student),
     ));
 endif;
