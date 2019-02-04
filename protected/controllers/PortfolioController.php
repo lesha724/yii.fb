@@ -153,7 +153,7 @@ class PortfolioController extends Controller
     public function actionRemoveFile($id){
         $model=$this->_loadModel($id);
 
-        if(!$this->_checkPermissionUserForFile($model, 0))
+        if(!$this->_checkPermissionUserForFile($model, 1))
             throw new CHttpException(403,'You don\'t have an access to this service.');
 
         $fileName = PortalSettings::model()->getSettingFor(PortalSettings::PORTFOLIO_PATH).'/'.$id.'.pdf';
