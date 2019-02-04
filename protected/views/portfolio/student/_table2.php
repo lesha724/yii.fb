@@ -36,7 +36,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                         return tt('конференции, конкурсы, проекты');
                         break;
                     case 3:
-                        return tt(' публикации');
+                        return tt('публикации');
                         break;
                 }
                 return '';
