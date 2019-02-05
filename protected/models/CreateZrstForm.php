@@ -101,7 +101,7 @@ class CreateZrstForm extends CFormModel
 		    'file' => tt('Файл'),
             'zrst5' => tt('Вид'),
 			'verifyCode'=>tt('Проверочный код'),
-            'note' => tt('Примичание'),
+            'note' => tt('Пояснение'),
 		);
 	}
 

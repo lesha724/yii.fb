@@ -161,6 +161,14 @@ class PortfolioController extends Controller
                 return $zrst->zrst2 == Yii::app()->user->dbModel->st1 && $zrst->zrst6 == 0;
         }
 
+        if(Yii::app()->user->isTch){
+            if($accessLevel == 0)
+                return true;
+            else
+
+                return $zrst->checkAccessForTeacher(Yii::app()->user->dbModel->p1);
+        }
+
         return false;
     }
 

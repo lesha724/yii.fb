@@ -40,7 +40,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         ),
         array(
             'header'=>tt('Оценка'),
-            'value'=>'$data["ocenka"]'
+            'value'=>'$data["ocenka"] == -1 ? "зач.": $data["ocenka"] '
         ),
         array(
             'header'=>tt('Работа'),

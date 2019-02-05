@@ -333,4 +333,44 @@ SQL;
         }
         return $disciplines;
     }
+
+    /**
+     * Проверка на редактирование
+     * @param $p1
+     * @return bool
+     */
+    public function checkAccessForTeacher($p1){
+        $sql = <<<SQL
+        Select count(*) from (
+              select us1
+                from uo
+                   inner join us on (uo.uo1 = us.us2)
+                   inner join nr on (us.us1 = nr.nr2)
+                   inner join pd on (nr.nr6 = pd.pd1)
+                   inner join ucx on (uo.uo19 = ucx.ucx1)
+                   inner join d on (uo.uo3 = d.d1)
+                   inner join sem on (us.us3 = sem.sem1)
+                where pd2=:p1_ and (us4 in (7,8) or (d8 in (2,6) and us4=0)) and us1=:us1_
+                group by us1
+                UNION
+                select us1
+                from ucx
+                   inner join uo on (ucx.ucx1 = uo.uo19)
+                   inner join us on (uo.uo1 = us.us2)
+                   inner join nr on (us.us1 = nr.nr2)
+                   inner join pd on (nr.nr6 = pd.pd1)
+                   inner join d on (uo.uo3 = d.d1)
+                   inner join sem on (us.us3 = sem.sem1)
+                where pd2=:p1 and ucx5>1 and (us4 in (7,8)) and us1=:us1
+                group by us1
+          )
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':p1', $p1);
+        $command->bindValue(':p1_', $p1);
+        $command->bindValue(':us1', $this->zrst3);
+        $command->bindValue(':us1_', $this->zrst3);
+        return ((int)$command->queryScalar()) > 0;
+    }
 }

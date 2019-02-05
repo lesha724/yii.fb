@@ -10,7 +10,7 @@
  * @var $model FilterForm
  */
 
-$this->pageHeader=tt('Предаватель');
+$this->pageHeader=tt('Преподаватель');
 $this->breadcrumbs=array(
     tt('Портфолио'),
 );
