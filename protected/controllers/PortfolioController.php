@@ -72,10 +72,19 @@ class PortfolioController extends Controller
     {
         $model = new TimeTableForm;
         $model->scenario = 'student';
-        if (isset($_REQUEST['TimeTableForm']))
-            $model->attributes=$_REQUEST['TimeTableForm'];
 
         if (Yii::app()->user->isAdmin) {
+            $params = array();
+            if (!isset($_REQUEST['TimeTableForm'])) {
+                if (isset(Yii::app()->session['TimeTableForm'])){
+                    $params=Yii::app()->session['TimeTableForm'];
+                }
+            }
+            else{
+                $params = $_REQUEST['TimeTableForm'];
+            }
+            $model->attributes = $params;
+            Yii::app()->session['TimeTableForm']=$params;
 
         } elseif (Yii::app()->user->isStd) {
 
@@ -93,12 +102,23 @@ class PortfolioController extends Controller
      */
     public function actionTeacher()
     {
-        $model = new TimeTableForm;
-        $model->scenario = 'teacher';
-        if (isset($_REQUEST['TimeTableForm']))
-            $model->attributes=$_REQUEST['TimeTableForm'];
+        $model = new FilterForm();
+        $model->scenario = 'portfolio-teacher';
+
+        $params = array();
+        if (!isset($_REQUEST['FilterForm'])) {
+            if (isset(Yii::app()->session['FilterForm'])){
+                $params=Yii::app()->session['FilterForm'];
+            }
+        }
+        else{
+            $params = $_REQUEST['FilterForm'];
+        }
+        $model->attributes = $params;
+        Yii::app()->session['FilterForm']=$params;
 
         if (Yii::app()->user->isAdmin) {
+
 
         } elseif (Yii::app()->user->isTch) {
 
@@ -174,12 +194,20 @@ class PortfolioController extends Controller
             Yii::app()->user->setFlash('error', 'Ошибка удаления файла '. $error);
         }
 
-        $url = empty(Yii::app()->request->urlReferrer) ? (
-            Yii::app()->user->isStd ? 'student' : 'teacher'
-        ) :
-            Yii::app()->request->urlReferrer;
+        $this->_redirect($model->zrst6 == 0 ? 'student' : 'teacher');
+    }
 
-        $this->redirect($url);
+    private function _redirect($actionForAdmin = ''){
+        $url = !Yii::app()->user->isAdmin ?
+            (
+
+                Yii::app()->user->isStd ? 'student' : 'teacher'
+            ) :
+            (
+                empty($actionForAdmin) ? 'teacher': $actionForAdmin
+            );
+
+        $this->redirect('/portfolio/'.$url);
     }
 
     public function actionShowFile($id){
@@ -209,5 +237,54 @@ class PortfolioController extends Controller
         if($model===null)
             throw new CHttpException(404,'The requested page does not exist.');
         return $model;
+    }
+
+    /**
+     * Загрузка файла
+     * @param $type
+     * @param $id
+     * @param int $us1
+     * @throws CHttpException
+     */
+    public function actionUploadFile($type, $id, $us1 = 0){
+        if(!in_array($type, array(
+            CreateZrstForm::TYPE_TABLE1,
+            CreateZrstForm::TYPE_TABLE2,
+            CreateZrstForm::TYPE_TABLE3,
+            CreateZrstForm::TYPE_TEACHER
+        )))
+            throw new CHttpException(400, 'Bad request');
+
+        if(in_array($type, array(
+            CreateZrstForm::TYPE_TABLE2,
+            CreateZrstForm::TYPE_TABLE3
+        )))
+            $us1 = 0;
+
+        $model = new CreateZrstForm($type);
+
+        if(isset($_POST['CreateZrstForm']))
+        {
+            $model->attributes=$_POST['CreateZrstForm'];
+            $model->st1 = $id;
+            $model->us1 = $us1;
+            $model->file=CUploadedFile::getInstance($model,'file');
+
+            if ($model->validate()) {
+
+                try {
+                    if ($model->save()) {
+                        Yii::app()->user->setFlash('success', 'Файл успешно добавлен');
+                    } else {
+                        Yii::app()->user->setFlash('error', 'Ошибка добавления файла');
+                    }
+                }catch (Exception $error){
+                    Yii::app()->user->setFlash('error', 'Ошибка удаления файла '. $error);
+                }
+                $this->_redirect($model->scenario == CreateZrstForm::TYPE_TEACHER ? 'teacher' : 'student');
+            }
+        }
+
+        $this->render('upload',array('model'=>$model));
     }
 }

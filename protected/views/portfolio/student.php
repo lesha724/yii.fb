@@ -29,5 +29,6 @@ HTML;
 if ($model->student) :
     $this->renderPartial('student/_bottom', array(
         'student' => St::model()->findByPk($model->student),
+        'model' => $model,
     ));
 endif;

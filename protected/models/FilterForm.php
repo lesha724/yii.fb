@@ -73,7 +73,10 @@ class FilterForm extends CFormModel
 				array('filial, faculty, course, discipline, group', 'required', 'on' => 'list-virtual-group'),
                 array('filial, faculty, course, stream', 'required', 'on' => 'list-stream'),
 				array('group, student', 'required', 'on' => 'payment'),
-			);
+
+                array('filial, chair, teacher, semester, discipline', 'required', 'on' => 'portfolio-teacher'),
+
+            );
 	}
 
 	/**

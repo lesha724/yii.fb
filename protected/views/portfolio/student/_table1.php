@@ -8,6 +8,7 @@
 
 /**
  * @var St $student
+ * @var TimeTableForm $model
  */
 
 $dataProvider=new CArrayDataProvider(Zrst::model()->getTable1Data($student->st1),array(
@@ -62,10 +63,16 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         array(
             'header'=>tt('Файл'),
             'type' => 'raw',
-            'value'=>function($data){
+            'value'=>function($data) use (&$model){
                 if(empty($data['rabota']))
                     return CHtml::link('<i class="icon-plus"></i>',
-                        Yii::app()->createUrl('/portfolio/uploadFile', array('discipline'=> $data['us1'])),
+                        Yii::app()->createUrl('/portfolio/uploadFile',
+                            array(
+                                'us1'=> $data['us1'],
+                                'type' => CreateZrstForm::TYPE_TABLE1,
+                                'id' =>  $model->student
+                            )
+                        ),
                         array(
                             'class' => 'btn btn-success btn-mini'
                         )

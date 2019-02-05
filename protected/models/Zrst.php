@@ -10,6 +10,7 @@
  * @property integer $zrst4
  * @property integer $zrst5
  * @property integer $zrst6
+ * @property string $zrst7
  *
  * The followings are the available model relations:
  * @property St $zrst20
@@ -33,7 +34,8 @@ class Zrst extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('zrst1, zrst2, zrst3, zrst4, zrst5, zrst6', 'numerical', 'integerOnly'=>true),
+			array('zrst2, zrst3, zrst4, zrst5, zrst6', 'numerical', 'integerOnly'=>true),
+            array('zrst7', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('zrst1, zrst2, zrst3, zrst4, zrst5, zrst6', 'safe', 'on'=>'search'),

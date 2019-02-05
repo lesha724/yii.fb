@@ -6,26 +6,28 @@
  * Time: 13:22
  */
 
+/**
+ * @var $model FilterForm
+ */
+
 $this->pageHeader=tt('Предаватель');
 $this->breadcrumbs=array(
     tt('Портфолио'),
 );
 
+Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/timetable/timetable.js', CClientScript::POS_HEAD);
+
+$attr = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;');
+$form=$this->beginWidget('CActiveForm', array(
+    'id'=>'filter-form',
+    'action'=>array('teacher'),
+    'htmlOptions' => array('class' => 'form-inline')
+));
+
+$html = '<div>';
+$html .= '<fieldset>';
+
 if(Yii::app()->user->isAdmin) {
-
-    Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/timetable/timetable.js', CClientScript::POS_HEAD);
-
-    $attr = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;');
-    $form=$this->beginWidget('CActiveForm', array(
-        'id'=>'timeTable-form',
-        'action'=>array('teacher'),
-        'htmlOptions' => array('class' => 'form-inline')
-    ));
-
-    $ps64 = PortalSettings::model()->findByPk(64)->ps2;
-
-    $html = '<div>';
-    $html .= '<fieldset>';
 
     $filials = Ks::getListDataForKsFilter();
     if (count($filials) > 1) {
@@ -37,7 +39,6 @@ if(Yii::app()->user->isAdmin) {
         $model->filial = key($filials);
     }
 
-    //$chairs = CHtml::listData(K::model()->getOnlyChairsFor($model->filial), 'k1', 'k3');
     $chairs = K::model()->getOnlyChairsFor($model->filial);
     $html .= '<div class="span2 ace-select">';
     $html .= $form->label($model, 'chair');
@@ -49,20 +50,22 @@ if(Yii::app()->user->isAdmin) {
     $html .= $form->label($model, 'teacher');
     $html .= $form->dropDownList($model, 'teacher', $teachers, $attr);
     $html .= '</div>';
-    $html .= '</fieldset>';
-    $html .= '</div>';
-
-    echo $html;
-
-    $this->endWidget();
 }
+
+$html .= '</fieldset>';
+$html .= '</div>';
+
+echo $html;
+
+$this->endWidget();
 
 
 echo <<<HTML
     <span id="spinner1"></span>
 HTML;
-if ($model->teacher) :
+if ($model->discipline) :
     $this->renderPartial('teacher/_bottom', array(
         'teacher' => P::model()->findByPk($model->teacher),
+        'model' => $model
     ));
 endif;
