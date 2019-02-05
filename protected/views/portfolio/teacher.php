@@ -52,6 +52,18 @@ if(Yii::app()->user->isAdmin) {
     $html .= '</div>';
 }
 
+$semesters = Zrst::model()->getSemesterData($model->teacher);
+$html .= '<div class="span2 ace-select">';
+$html .= $form->label($model, 'semester');
+$html .= $form->dropDownList($model, 'semester', $semesters, $attr);
+$html .= '</div>';
+
+$disciplines = Zrst::model()->getDisciplinesData($model->teacher, $model->semester);
+$html .= '<div class="span2 ace-select">';
+$html .= $form->label($model, 'discipline');
+$html .= $form->dropDownList($model, 'discipline', $disciplines, $attr);
+$html .= '</div>';
+
 $html .= '</fieldset>';
 $html .= '</div>';
 

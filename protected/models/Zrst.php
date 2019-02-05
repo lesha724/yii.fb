@@ -172,9 +172,9 @@ SQL;
      * @return array
      * @throws CException
      */
-    public  function getTable1DataTeacher($p1){
+    public  function getTable1DataTeacher($p1, $us1){
         $sql=<<<SQL
-        select st2,st3,st4,std3,st1,us1,
+        select st2,st3,st4,std3,st1,us1,sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28,gr3,
                (select zrst1 from zrst where zrst6=1 and zrst2=st.st1 and zrst3=us.us1) as recenziya
         from uo
            inner join us on (uo.uo1 = us.us2)
@@ -187,10 +187,10 @@ SQL;
            inner join ucx on (uo.uo19 = ucx.ucx1)
            inner join d on (uo.uo3 = d.d1)
            inner join sem on (us.us3 = sem.sem1)
-        where us1=:us1 and pd2=:p1 and std7 is null and std11<>1 and ucx5<2 and (us4 in (7,8) or (d8 in (2,6) and us4=0))
-        group by st2,st3,st4,std3,st1,us1
+        where us1=:us1_ and pd2=:p1_ and std7 is null and std11<>1 and ucx5<2 and (us4 in (7,8) or (d8 in (2,6) and us4=0))
+        group by st2,st3,st4,std3,st1,us1,sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28,gr3
         UNION
-        select st2,st3,st4,std3,st1,us1,
+        select st2,st3,st4,std3,st1,us1,sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28,gr3,
                (select zrst1 from zrst where zrst6=1 and zrst2=st.st1 and zrst3=us.us1) as recenziya
         from ucgn
            inner join ucxg on (ucgn.ucgn1 = ucxg.ucxg2)
@@ -199,6 +199,7 @@ SQL;
            inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
            inner join st on (ucsn.ucsn2 =st.st1)
            inner join std on (st.st1 = std.std2)
+           inner join gr on (std.std3 = gr.gr1)
            inner join uo on (ucx.ucx1 = uo.uo19)
            inner join us on (uo.uo1 = us.us2)
            inner join nr on (us.us1 = nr.nr2)
@@ -206,12 +207,14 @@ SQL;
            inner join d on (uo.uo3 = d.d1)
            inner join sem on (us.us3 = sem.sem1)
         where us1=:us1 and pd2=:p1 and std7 is null and std11<>1 and ucx5>1 and (us4 in (7,8))
-        group by st2,st3,st4,std3,st1,us1
+        group by st2,st3,st4,std3,st1,us1,sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28,gr3
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':p1', $p1);
         $command->bindValue(':p1_', $p1);
+        $command->bindValue(':us1', $us1);
+        $command->bindValue(':us1_', $us1);
         $students = $command->queryAll();
 
         return $students;
@@ -232,8 +235,102 @@ SQL;
         ));
     }
 
+    /**
+     *
+     */
+    public function getSemesterData($p1){
+        if(empty($p1))
+            return array();
+        $sql = <<<SQL
+          select sem3,sem5
+                from uo
+                   inner join us on (uo.uo1 = us.us2)
+                   inner join nr on (us.us1 = nr.nr2)
+                   inner join pd on (nr.nr6 = pd.pd1)
+                   inner join ucx on (uo.uo19 = ucx.ucx1)
+                   inner join d on (uo.uo3 = d.d1)
+                   inner join sem on (us.us3 = sem.sem1)
+                where pd2=:p1_ and (us4 in (7,8) or (d8 in (2,6) and us4=0))
+                group by sem3,sem5
+                UNION
+                select sem3,sem5
+                from ucx
+                   inner join uo on (ucx.ucx1 = uo.uo19)
+                   inner join us on (uo.uo1 = us.us2)
+                   inner join nr on (us.us1 = nr.nr2)
+                   inner join pd on (nr.nr6 = pd.pd1)
+                   inner join d on (uo.uo3 = d.d1)
+                   inner join sem on (us.us3 = sem.sem1)
+                where pd2=:p1 and ucx5>1 and (us4 in (7,8))
+                group by sem3,sem5
+SQL;
 
-    public  function getTable3Data($st1){
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':p1', $p1);
+        $command->bindValue(':p1_', $p1);
+        $res = $command->queryAll();
 
+        $semesters = array();
+        foreach($res as $key => $semester) {
+            if($semester['sem3'] == 0)
+                continue;
+            $semesters[$semester['sem3'].'/'.$semester['sem5']] = $semester['sem3'] . '/' . ($semester['sem3']+1) . ' ' . SH::convertSem5($semester['sem5']);
+        }
+        return $semesters;
+    }
+
+
+    public function getDisciplinesData($p1, $semData){
+        if(empty($p1))
+            return array();
+        if(empty($semData))
+            return array();
+        list($year, $sem) = explode('/', $semData);
+
+        $sql = <<<SQL
+        select * from (
+        select d2,us1,iif(d8=6,'отчет по практике',
+                   iif(d8=2,'выпускная квалификационная работа',
+                   iif(us4=8,'курсовая',
+                   iif(us4=7 and (select w8 from w where w1=us.us6)=2,'реферат','контрольная' )))) as vid
+                from uo
+                   inner join us on (uo.uo1 = us.us2)
+                   inner join nr on (us.us1 = nr.nr2)
+                   inner join pd on (nr.nr6 = pd.pd1)
+                   inner join ucx on (uo.uo19 = ucx.ucx1)
+                   inner join d on (uo.uo3 = d.d1)
+                   inner join sem on (us.us3 = sem.sem1)
+                where pd2=:p1_ and (us4 in (7,8) or (d8 in (2,6) and us4=0)) and sem3=:year_ and sem5=:sem_
+                UNION
+                select d2,us1,iif(d8=6,'отчет по практике',
+       iif(d8=2,'выпускная квалификационная работа',
+       iif(us4=8,'курсовая',
+       iif(us4=7 and (select w8 from w where w1=us.us6)=2,'реферат','контрольная' )))) as vid
+                from ucx
+                   inner join uo on (ucx.ucx1 = uo.uo19)
+                   inner join us on (uo.uo1 = us.us2)
+                   inner join nr on (us.us1 = nr.nr2)
+                   inner join pd on (nr.nr6 = pd.pd1)
+                   inner join d on (uo.uo3 = d.d1)
+                   inner join sem on (us.us3 = sem.sem1)
+                where pd2=:p1 and ucx5>1 and (us4 in (7,8)) and sem3=:year and sem5=:sem
+        )
+                group by d2, us1, vid
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':p1', $p1);
+        $command->bindValue(':p1_', $p1);
+        $command->bindValue(':year', $year);
+        $command->bindValue(':sem', $sem);
+        $command->bindValue(':year_', $year);
+        $command->bindValue(':sem_', $sem);
+        $res = $command->queryAll();
+
+        $disciplines = array();
+        foreach($res as $key => $discipline) {
+            $disciplines[$discipline['us1']] = $discipline['d2']. ' ('.$discipline['vid'].')';
+        }
+        return $disciplines;
     }
 }
