@@ -177,7 +177,7 @@ SQL;
      * @return bool
      */
 	public function checkAccessMinMixIrpen(){
-	    return false;
+	    return true;
     }
 
 }
