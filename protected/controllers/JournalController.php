@@ -1340,6 +1340,12 @@ SQL;
                 } else {
                     if($elgsd->elgsd4>=3&&$elgsd->elgsd4<=5)
                         throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+                    //проверка на возможность редактирвония для ирпеня
+                    if($elgsd->elgsd4 == 1 && $this->universityCode == U_IRPEN){
+                        if(!$elgd->checkAccessIndForIrpen($gr1))
+                            throw new CHttpException(403, 'Прошло более 4-х дней с последнего занятия.');
+                    }
                     $elgdst = Elgdst::model()->findByAttributes(array('elgdst1' => $st1, 'elgdst2' => $elgd->elgd0));
                     //print_r($elgdst->elgdst0);
                     if (empty($elgdst)) {
@@ -1361,7 +1367,8 @@ SQL;
                             $elg = Elg::model()->findByPk($elg1);
                             if($elg->elg4==1) {
                                 $sem7 = Gr::model()->getSem7ByGr1ByDate($gr1, date('d.m.Y'));
-                                Stusv::model()->recalculateStusMark($st1, $gr1, $sem7, $elg);
+                                if(!Stusv::model()->recalculateStusMark($st1, $gr1, $sem7, $elg))
+                                    throw new CHttpException(500, 'Оценка сохранена, но итоговая ведомость не пересчитана');
                             }
                         }
                     }

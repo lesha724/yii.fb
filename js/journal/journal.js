@@ -615,8 +615,16 @@ $(document).ready(function(){
                 }
                 $spinner1.hide();
             },
-            error: function( data ) {
-                addGritter('', tt.error, 'error');
+            error: function(jqXHR, textStatus, errorThrown){
+                if (jqXHR.status == 500) {
+                    addGritter('Ошибка', 'Internal error: ' + jqXHR.responseText, 'error')
+                } else {
+                    if (jqXHR.status == 403) {
+                        addGritter('Ошибка', 'Access error: ' + jqXHR.responseText, 'error')
+                    } else {
+                        addGritter('', tt.error, 'error');
+                    }
+                }
                 $spinner1.hide();
             }
         });

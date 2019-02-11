@@ -135,4 +135,46 @@ SQL;
 		}
 		//return $rows;
 	}
+
+    /***
+     * Проверка доступа на редактрование инд. работы для ирпеня
+     * @param int $gr1
+     * @return bool
+     * @throws
+     */
+	public function checkAccessIndForIrpen($gr1){
+
+	    $elg = Elg::model()->findByPk($this->elgd1);
+	    if(empty($elg))
+	        return false;
+
+        $sql=<<<SQL
+              SELECT first 1 r2 from elgz
+				inner join EL_GURNAL_ZAN(:UO1,:GR1,:SEM1,:ELG4) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
+				inner join rz on (EL_GURNAL_ZAN.r4 = rz1)
+			  order by elgz3 desc
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':UO1', $elg->elg2);
+        $command->bindValue(':SEM1', $elg->elg3);
+        $command->bindValue(':ELG4', $elg->elg4);
+        $command->bindValue(':GR1', $gr1);
+        $date = $command->queryScalar();
+
+        if(empty($date))
+            return false;
+
+        $date1 = new DateTime(date('Y-m-d H:i:s'));
+        $date2 = new DateTime($date);
+
+        if($date1 < $date2)
+            return true;
+
+        $diff = $date1->diff($date2)->days;
+        if ($diff > 4)
+            return false;
+
+	    return true;
+    }
 }
