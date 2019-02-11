@@ -177,4 +177,47 @@ SQL;
 
 	    return true;
     }
+
+    /***
+     * Проверка доступа на редактрование доп. колонок
+     * @param int $gr1
+     * @return bool
+     * @throws
+     */
+    public function checkAccess($gr1){
+
+        $elg = Elg::model()->findByPk($this->elgd1);
+        if(empty($elg))
+            return false;
+
+        $sql=<<<SQL
+              SELECT first 1 r1 from elgz
+				inner join EL_GURNAL_ZAN(:UO1,:GR1,:SEM1,:ELG4) on (elgz.elgz3 = EL_GURNAL_ZAN.nom)
+				inner join rz on (EL_GURNAL_ZAN.r4 = rz1)
+			  order by elgz3 asc 
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':UO1', $elg->elg2);
+        $command->bindValue(':SEM1', $elg->elg3);
+        $command->bindValue(':ELG4', $elg->elg4);
+        $command->bindValue(':GR1', $gr1);
+        $r1 = $command->queryScalar();
+
+        if(empty($r1))
+            return false;
+
+        $sql = <<<SQL
+            SELECT * FROM  EL_GURNAL(:P1,0,0,0,2,0,:R1,0,0);
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
+        $command->bindValue(':R1', $r1);
+        $res = $command->queryRow();
+        if (count($res) == 0 || empty($res) || $res['dostup'] == 0) {
+            return false;
+        }
+
+        return true;
+    }
 }

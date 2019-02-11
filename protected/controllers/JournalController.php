@@ -1341,6 +1341,8 @@ SQL;
                     if($elgsd->elgsd4>=3&&$elgsd->elgsd4<=5)
                         throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
+                    if(!$elgd->checkAccess($gr1))
+                        throw new CHttpException(403, 'Нет доступа на редактирования данной колонки.');
                     //проверка на возможность редактирвония для ирпеня
                     if($elgsd->elgsd4 == 1 && $this->universityCode == U_IRPEN){
                         if(!$elgd->checkAccessIndForIrpen($gr1))
