@@ -1390,6 +1390,7 @@ SQL;
         $elgz1 = Yii::app()->request->getParam('elgz1', null);
         $field = Yii::app()->request->getParam('field', null);
         $value = Yii::app()->request->getParam('value', null);
+        $gr1 = Yii::app()->request->getParam('gr1', null);
         $error = false;
 
         if($elgz1==null || $field==null || $value==null)
@@ -1409,7 +1410,7 @@ SQL;
             {
                 ///проверка для ирпени, что имзенения минмакс біло только в течении 10 дней от первой даті занятия
                 if($this->universityCode == U_IRPEN && PortalSettings::model()->getSettingFor(9) == 1){
-                    if(!$elgz->checkAccessMinMixIrpen())
+                    if(!$elgz->checkAccessMinMixIrpen($gr1))
                     {
                         $error = true;
                     }

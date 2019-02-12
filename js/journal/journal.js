@@ -199,7 +199,8 @@ $(document).ready(function(){
             var params = {
                 value : 0,
                 field : $that.data('name'),
-                elgz1 : $that.data('elgz1')
+                elgz1 : $that.data('elgz1'),
+                gr1: $that.parents('[data-gr1]').data('gr1')
             }
 
             var $td = $that.parent();
@@ -241,7 +242,8 @@ $(document).ready(function(){
         var params = {
             value : parseFloat( $that.val().replace(',','.') ),
             field : $that.data('name'),
-            elgz1 : $that.data('elgz1')
+            elgz1 : $that.data('elgz1'),
+            gr1: $that.parents('[data-gr1]').data('gr1')
         }
 
         var $td = $that.parent();
