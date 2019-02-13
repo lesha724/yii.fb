@@ -874,8 +874,8 @@ SQL;
 
     public function actionInsertStMark()
     {
-        if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        //if (! Yii::app()->request->isAjaxRequest)
+            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $error=false;
         $errorType=0;
@@ -1191,6 +1191,12 @@ SQL;
                     $elgzst= Elgzst::model()->findByAttributes(array('elgzst1'=>$st1,'elgzst2'=>$elgz1));
                     if(!empty($elgzst))
                     {
+                        //Проверка на участие в допуске или заявке на олплату (для фарма)
+                        if($elgzst->elgzst3>0&&$field=='elgzst3' && $this->universityCode == U_FARM) {
+                            if(!$elgzst->checkAccessForFarmPass()){
+                                throw new CHttpException(403, 'Запрещено редактирование, пропуск участвует в допуске или заявлении на оплату.');
+                            }
+                        }
                         if($elgzst->elgzst3>0&&$field=='elgzst5')
                         {
                             $elg = Elg::model()->findByPk($elgz->elgz2);
@@ -1683,6 +1689,11 @@ SQL;
                                 $check = 2;
 
                             if ($elgzst->elgzst3 > 0 && $ps67 == 1) {
+                                if($this->universityCode == U_FARM) {
+                                    if (!$elgzst->checkAccessForFarmPass()) {
+                                        throw new CHttpException(403, 'Запрещено редактирование, допуск участвует в допуске или заявлении на оплату.');
+                                    }
+                                }
                                 $elgp = Elgp::model()->findByAttributes(array('elgp1' => $elgzst->elgzst0));
                                 if (empty($elgp)) {
                                     $error = true;
@@ -2435,6 +2446,12 @@ SQL;
 
             if(empty($elgp))
                 $error=true;
+
+            if($this->universityCode == U_FARM) {
+                if (!$elgp->elgp10->checkAccessForFarmPass()) {
+                    throw new CHttpException(403, 'Запрещено редактирование, допуск участвует в допуске или заявлении на оплату.');
+                }
+            }
 
             if(!$error)
             {

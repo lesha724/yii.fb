@@ -561,9 +561,18 @@ $(document).ready(function(){
 
                     }
                 },
-                error: function( data ) {
-                    addGritter(title, tt.error, 'error');
+                error: function(jqXHR, textStatus, errorThrown){
+                    if (jqXHR.status == 500) {
+                        addGritter(title, 'Internal error: ' + jqXHR.responseText, 'error')
+                    } else {
+                        if (jqXHR.status == 403) {
+                            addGritter(title, 'Access error: ' + jqXHR.responseText, 'error')
+                        } else {
+                            addGritter(title, tt.error, 'error');
+                        }
+                    }
                     $td.addClass('error');
+                    $spinner1.hide();
                 }
             });
         }
@@ -754,8 +763,16 @@ $(document).ready(function(){
                 $spinner1.hide();
                 $('#modalRetake').modal('hide');
             },
-            error: function( data ) {
-                addGritter(title, tt.error, 'error');
+            error: function(jqXHR, textStatus, errorThrown){
+                if (jqXHR.status == 500) {
+                    addGritter(title, 'Internal error: ' + jqXHR.responseText, 'error')
+                } else {
+                    if (jqXHR.status == 403) {
+                        addGritter(title, 'Access error: ' + jqXHR.responseText, 'error')
+                    } else {
+                        addGritter(title, tt.error, 'error');
+                    }
+                }
                 $spinner1.hide();
                 $('#modalRetake').modal('hide');
             }
@@ -902,7 +919,19 @@ function send(url,params,title,$td,$that,$spinner1,st1,ps84,ps88)
                 }
             }
         }
-    }, 'json');
+    }, 'json').error(function(jqXHR, textStatus, errorThrown) {
+        if (jqXHR.status == 500) {
+            addGritter(title, 'Internal error: ' + jqXHR.responseText, 'error')
+        } else {
+            if (jqXHR.status == 403) {
+                addGritter(title, 'Access error: ' + jqXHR.responseText, 'error')
+            } else {
+                addGritter(title, tt.error, 'error');
+            }
+        }
+        $td.addClass('error');
+        $spinner1.hide();
+    });
 }
 
 function recalculateBothTotal(st1,ps84)
