@@ -716,6 +716,7 @@ SQL;
      * Проверка можно ли редатированить пропуск (для фарма)
      *
      * @return bool
+     * @throws
      */
     public function checkAccessForFarmPass(){
         if($this->elgzst3 == 0)
@@ -736,6 +737,21 @@ SQL;
         if(!empty($count))
             return false;
 
+        if($this->checkIssetAdmit())
+            return false;
+
+        return true;
+    }
+
+    /***
+     * Проверка есть допуск для данного проруска
+     * @return bool
+     * @throws CException
+     */
+    public function checkIssetAdmit(){
+        if($this->elgzst3 == 0)
+            return true;
+
         //проверка на участие в допуске
         $sql = <<<SQL
           SELECT count(*) from elgp 
@@ -749,8 +765,8 @@ SQL;
         $count = $command->queryScalar();
 
         if(!empty($count))
-            return false;
+            return true;
 
-        return true;
+        return false;
     }
 }

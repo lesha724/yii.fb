@@ -1199,6 +1199,11 @@ SQL;
                         }
                         if($elgzst->elgzst3>0&&$field=='elgzst5')
                         {
+                            if($this->universityCode == U_FARM) {
+                                if (!$elgzst->checkIssetAdmit()) {
+                                    throw new CHttpException(403, 'Действие запрещено, нет допуска.');
+                                }
+                            }
                             $elg = Elg::model()->findByPk($elgz->elgz2);
                             if($elg->elg4==0)
                                 if($value==0)
@@ -1663,6 +1668,12 @@ SQL;
                 if(!$error) {
                     $ps55 = PortalSettings::model()->findByPk(55)->ps2;
                     if ($elgzst->elgzst3 != 0 || ($elgzst->elgzst4 <= $elgzst->getMin() && ($elgzst->elgzst4 != 0 || ($ps55 == 1 && $elgzst->elgzst4 == 0)))) {
+
+                        if($this->universityCode == U_FARM && $elgzst->elgzst3 != 0) {
+                            if (!$elgzst->checkIssetAdmit()) {
+                                throw new CHttpException(403, 'Действие запрещено, нет допуска.');
+                            }
+                        }
                         if ($elgzst->checkMinRetakeForGrid()) {
                             $gr1 = St::model()->getGr1BySt1($elgzst->elgzst1);
 
@@ -2695,6 +2706,11 @@ SQL;
         if(!$error)
         {
             $elgzst=Elgzst::model()->findByPk($elgotr1);
+            if($this->universityCode == U_FARM && $elgzst->elgzst3 != 0) {
+                if (!$elgzst->checkIssetAdmit()) {
+                    throw new CHttpException(403, 'Действие запрещено, нет допуска.');
+                }
+            }
             $ps40=PortalSettings::model()->findByPk(40)->ps2;
             if(! empty($ps40)){
                 /*$date1  = new DateTime(date('Y-m-d H:i:s'));
