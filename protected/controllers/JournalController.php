@@ -85,7 +85,8 @@ class JournalController extends Controller
                 'actions' => array(
                     'attendanceStatistic',
                     'newAttendanceStatistic',//новая статистика для фарма
-                    'newAttendanceStatisticExcel'
+                    'newAttendanceStatisticExcel',
+                    'newAttendanceStatisticStudent',//новая статистика для фарма (отдельно по студенту)
                 )
             ),
             array('deny',
@@ -3531,6 +3532,23 @@ SQL;
             $model->attributes=$_REQUEST['AttendanceStatisticForm'];
 
         $this->render('newAttendanceStatistic', array(
+            'model' => $model
+        ));
+    }
+
+    /**
+     * Акшен для отображения новой статистики посещаемости для фарма (отдельно по студенту)
+     * @throws CHttpException
+     */
+    public function actionNewAttendanceStatisticStudent()
+    {
+        $model = new AttendanceStatisticForm();
+        $model->scenario = AttendanceStatisticForm::SCENARIO_STUDENT;
+
+        if (isset($_REQUEST['AttendanceStatisticForm']))
+            $model->attributes=$_REQUEST['AttendanceStatisticForm'];
+
+        $this->render('newAttendanceStatisticStudent', array(
             'model' => $model
         ));
     }
