@@ -854,8 +854,10 @@ SQL;
 		list($firstDay, $lastDay) = Sem::model()->getSemesterStartAndEnd($sem1);
 
 		$sql=<<<SQL
-                SELECT *
-                FROM STAT_PROP(:ST1,:DATE1, :DATE2) WHERE prop>0 ORDER by r2 DESC
+                SELECT proc.*, rz8
+                FROM STAT_PROP(:ST1,:DATE1, :DATE2) proc
+                 INNER JOIN rz on (r4 = rz1)
+                 WHERE prop>0 ORDER by r2 DESC
 SQL;
 
 		$command = Yii::app()->db->createCommand($sql);
