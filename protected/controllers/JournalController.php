@@ -2367,6 +2367,11 @@ SQL;
         if (! Yii::app()->request->isAjaxRequest)
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
+
+        if($this->universityCode == U_IRPEN) {
+            throw new CHttpException(403, 'Действие запрещено.');
+        }
+
         $st1 = Yii::app()->request->getParam('st1', null);
         $date1 = Yii::app()->request->getParam('date1', null);
         $date2 = Yii::app()->request->getParam('date2', null);
@@ -2472,6 +2477,9 @@ SQL;
                 }
             }
 
+            if($this->universityCode == U_IRPEN) {
+                throw new CHttpException(403, 'Действие запрещено.');
+            }
             if(!$error)
             {
                 $attr = array_merge(array(
