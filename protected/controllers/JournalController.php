@@ -875,8 +875,8 @@ SQL;
 
     public function actionInsertStMark()
     {
-        //if (! Yii::app()->request->isAjaxRequest)
-            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $error=false;
         $errorType=0;
@@ -1204,6 +1204,9 @@ SQL;
                                 if (!$elgzst->checkIssetAdmit()) {
                                     throw new CHttpException(403, 'Действие запрещено, нет допуска.');
                                 }
+                            }
+                            if($this->universityCode == U_IRPEN && $elgzst->elgzst3== 1) {
+                                throw new CHttpException(403, 'Действие запрещено, неуважительная причина пропуска.');
                             }
                             $elg = Elg::model()->findByPk($elgz->elgz2);
                             if($elg->elg4==0)
@@ -1674,6 +1677,10 @@ SQL;
                             if (!$elgzst->checkIssetAdmit()) {
                                 throw new CHttpException(403, 'Действие запрещено, нет допуска.');
                             }
+                        }
+
+                        if($this->universityCode == U_IRPEN && $elgzst->elgzst3== 1) {
+                            throw new CHttpException(403, 'Действие запрещено, неуважительная причина пропуска.');
                         }
                         if ($elgzst->checkMinRetakeForGrid()) {
                             $gr1 = St::model()->getGr1BySt1($elgzst->elgzst1);
@@ -2711,6 +2718,9 @@ SQL;
                 if (!$elgzst->checkIssetAdmit()) {
                     throw new CHttpException(403, 'Действие запрещено, нет допуска.');
                 }
+            }
+            if($this->universityCode == U_IRPEN && $elgzst->elgzst3== 1) {
+                throw new CHttpException(403, 'Действие запрещено, неуважительная причина пропуска.');
             }
             $ps40=PortalSettings::model()->findByPk(40)->ps2;
             if(! empty($ps40)){
