@@ -11,6 +11,11 @@
  * @var $model Users
  */
 
+$this->pageHeader=tt('Оповещение');
+$this->breadcrumbs=array(
+    tt('Сообщения'),
+);
+
 echo $this->renderPartial('_input', array(
     'model' => $model
 ));
