@@ -1226,4 +1226,25 @@ SQL;
 
         return $row;
     }
+
+    public function getNameByDate($gr1,$date)
+    {
+        $sql = <<<SQL
+            SELECT first 1 sem4, gr1,gr13,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28
+            from sem
+               inner join sg on (sem.sem2 = sg.sg1)
+               inner join gr on (sg.sg1 = gr.gr2)
+            WHERE gr1=:GR1 and sem10<=:DATE_SEM ORDER BY sem10 DESC
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':GR1', $gr1);
+        $command->bindValue(':DATE_SEM', $date);
+        $row = $command->queryRow();
+
+        if(empty($row))
+            return '-';
+
+        return Gr::getGroupName($row, $row['sem4']);
+    }
 }

@@ -15,14 +15,50 @@ $this->pageHeader=tt('Оповещение');
 $this->breadcrumbs=array(
     tt('Сообщения'),
 );
+?>
+    <div class="widget-box">
+        <div class="widget-header">
+            <h5><?=tt('Входящие сообщения')?></h5>
 
-echo $this->renderPartial('_input', array(
-    'model' => $model
-));
+            <div class="widget-toolbar">
+                <a data-action="collapse" href="#">
+                    <i class="icon-chevron-down"></i>
+                </a>
+            </div>
+        </div>
 
+        <div class="widget-body">
+            <div class="widget-main">
+                <?=$this->renderPartial('_input', array(
+                    'model' => $model
+                ));?>
+            </div>
+        </div>
+    </div>
+<?php
 
 if($model->isTeacher){
-    echo $this->renderPartial('_output', array(
-        'model' => $model
-    ));
+    ?>
+
+<div class="widget-box">
+    <div class="widget-header">
+        <h5><?=tt('Отправленные сообщения')?></h5>
+
+        <div class="widget-toolbar">
+            <a data-action="collapse" href="#">
+                <i class="icon-chevron-down"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="widget-body">
+        <div class="widget-main">
+            <?=$this->renderPartial('_output', array(
+                'model' => $model
+            ))?>
+        </div>
+    </div>
+</div>
+
+<?php
 }

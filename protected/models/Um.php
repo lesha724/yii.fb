@@ -38,7 +38,8 @@ class Um extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('um1, um2, um4, um7, um8, um9, um10', 'numerical', 'integerOnly'=>true),
-			array('um3, um5', 'length', 'max'=>8),
+			array('um3', 'length', 'max'=>20),
+            array('um5', 'length', 'max'=>500),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('um1, um2, um3, um4, um5, um7, um8, um9, um10', 'safe', 'on'=>'search'),
@@ -120,4 +121,112 @@ class Um extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	public function getOutputMessage(){
+        $pattern = <<<HTML
+            <div class="media">
+              <a class="pull-left" href="#">
+                <img class="media-object" src="%s">
+              </a>
+              <div class="media-body">
+                <h4 class="media-heading">%s</h4>
+                <div class="well well-small">%s</div> 
+              </div>
+            </div>
+HTML;
+
+        list($url, $name) = $this->getUserToFotoAndName();
+
+        echo sprintf($pattern,
+            $url,
+            tt('{username} <small>{date}<small>', array(
+                '{username}' => $name,
+                '{date}' => date('d.m.Y',strtotime($this->um3))
+            )),
+            CHtml::encode($this->um5));
+    }
+
+    /***
+     * Входящее собщение
+     */
+    public function getInputMessage(){
+        $pattern = <<<HTML
+            <div class="media">
+              <a class="pull-left" href="#">
+                <img class="media-object" src="%s">
+              </a>
+              <div class="media-body">
+                <h4 class="media-heading">%s</h4>
+                <div class="well well-small">%s</div> 
+              </div>
+            </div>
+HTML;
+        $user = Users::model()->findByPk($this->um2);
+        if(empty($user)){
+            $url= '#';
+            $name = '-';
+        }else{
+            $url = Yii::app()->createUrl('/site/userPhoto', array(
+                '_id' => $user->u5,
+                'type' => $user->u6
+            ));
+            $name = $user->getName();
+        }
+
+        echo sprintf($pattern,
+            $url,
+            tt('{username} <small>{date}<small>', array(
+                '{username}' => $name,
+                '{date}' => date('d.m.Y',strtotime($this->um3))
+            )),
+            CHtml::encode($this->um5));
+    }
+
+    /**
+     * ИМя и фото пользователя
+     * @return array
+     */
+    public function getUserToFotoAndName(){
+        $url = '';
+        $name = '';
+	    if($this->um7 > 0){
+	        $user = Users::model()->findByPk($this->um7);
+	        if(empty($user)){
+                $url= '#';
+                $name = '-';
+            }else{
+                $url = Yii::app()->createUrl('/site/userPhoto', array(
+                    '_id' => $user->u5,
+                    'type' => $user->u6
+                ));
+                $name = $user->getName();
+            }
+        }
+
+        if($this->um8 > 0){
+            $gr = Gr::model()->findByPk($this->um8);
+            if(empty($gr)){
+                $url= '#';
+                $name = '-';
+            }else{
+                $url = '#';
+                $name = $gr->getNameByDate($gr->gr1, date('d.m.Y'));
+            }
+        }
+
+        if($this->um9 > 0){
+            $sg = Gr::model()->getInfoBySg($this->um9);
+            if(empty($sg)){
+                $url= '#';
+                $name = '-';
+            }else{
+                $url = '#';
+                $name = $sg['pnsp2'] . '('.$sg['f2'].')';
+            }
+        }
+
+        return array($url, $name);
+    }
+
+
 }
