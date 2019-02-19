@@ -24,5 +24,8 @@ endif;
 
 
 foreach ($messages as $message){
-    echo $message->getInputMessage();
+    echo $this->renderPartial('_inputMessage', array(
+        'model' => $model,
+        'message'=> $message
+    ));
 }

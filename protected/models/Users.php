@@ -597,7 +597,12 @@ HTML;
 		$this->saveAttributes(array('u12'=>$key));
 	}
 
-
+    /**
+     * @return string
+     */
+    public function getNameWithDept(){
+	    return '@@@@'.$this->getName();
+    }
     /**
      * Входяшие сообщения
      * @param $u1

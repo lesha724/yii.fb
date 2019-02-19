@@ -22,7 +22,10 @@ if(empty($messages)): ?>
 
 
 foreach ($messages as $message){
-    echo $message->getOutputMessage();
+    echo $this->renderPartial('_outputMessage', array(
+        'model' => $model,
+        'message'=> $message
+    ));
 }
 
 

@@ -122,66 +122,6 @@ class Um extends CActiveRecord
 		return parent::model($className);
 	}
 
-	public function getOutputMessage(){
-        $pattern = <<<HTML
-            <div class="media">
-              <a class="pull-left" href="#">
-                <img class="media-object" src="%s">
-              </a>
-              <div class="media-body">
-                <h4 class="media-heading">%s</h4>
-                <div class="well well-small">%s</div> 
-              </div>
-            </div>
-HTML;
-
-        list($url, $name) = $this->getUserToFotoAndName();
-
-        echo sprintf($pattern,
-            $url,
-            tt('{username} <small>{date}<small>', array(
-                '{username}' => $name,
-                '{date}' => date('d.m.Y',strtotime($this->um3))
-            )),
-            CHtml::encode($this->um5));
-    }
-
-    /***
-     * Входящее собщение
-     */
-    public function getInputMessage(){
-        $pattern = <<<HTML
-            <div class="media">
-              <a class="pull-left" href="#">
-                <img class="media-object" src="%s">
-              </a>
-              <div class="media-body">
-                <h4 class="media-heading">%s</h4>
-                <div class="well well-small">%s</div> 
-              </div>
-            </div>
-HTML;
-        $user = Users::model()->findByPk($this->um2);
-        if(empty($user)){
-            $url= '#';
-            $name = '-';
-        }else{
-            $url = Yii::app()->createUrl('/site/userPhoto', array(
-                '_id' => $user->u5,
-                'type' => $user->u6
-            ));
-            $name = $user->getName();
-        }
-
-        echo sprintf($pattern,
-            $url,
-            tt('{username} <small>{date}<small>', array(
-                '{username}' => $name,
-                '{date}' => date('d.m.Y',strtotime($this->um3))
-            )),
-            CHtml::encode($this->um5));
-    }
-
     /**
      * ИМя и фото пользователя
      * @return array
@@ -199,7 +139,7 @@ HTML;
                     '_id' => $user->u5,
                     'type' => $user->u6
                 ));
-                $name = $user->getName();
+                $name = $user->getNameWithDept();
             }
         }
 
