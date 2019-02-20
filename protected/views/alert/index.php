@@ -37,7 +37,7 @@ $this->breadcrumbs=array(
     </div>
 <?php
 
-if($model->isTeacher){
+if($model->isTeacher || ($model->isStudent && PortalSettings::model()->getSettingFor(PortalSettings::STUDENT_SEND_IN_ALERT) == 1)){
     ?>
 
 <div class="widget-box">

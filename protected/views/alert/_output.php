@@ -15,7 +15,7 @@ $messages = Um::model()->findAllByAttributes(array('um2'=> $model->u1));
 
 if(empty($messages)): ?>
    <div class="alert alert-warning">
-        <?=tt('Нет полученных сообщений')?>
+        <?=tt('Нет отправленных сообщений')?>
     </div>
 <?php
     endif;
