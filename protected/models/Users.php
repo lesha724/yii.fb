@@ -601,7 +601,18 @@ HTML;
      * @return string
      */
     public function getNameWithDept(){
-	    return '@@@@'.$this->getName();
+	    $name = $this->getName();
+
+	    if($this->isStudent){
+            $st = St::model()->getInfoForStudentInfoExcel($this->u6);
+            $name=$name.' ('.tt('гр.').$st['name'].')';
+        }else if($this->isTeacher){
+	        $p = P::model()->findByPk($this->u6);
+            $chair = $p->getChair();
+            $name=$name.' ('.tt('каф.').$chair->k2.')';
+        }
+
+	    return $name;
     }
     /**
      * Входяшие сообщения
