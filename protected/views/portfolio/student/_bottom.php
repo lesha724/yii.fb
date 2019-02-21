@@ -11,6 +11,83 @@
  * @var TimeTableForm $model
  */
 
+$studentInfo = $student->getStudentInfoForCard();
+
+$infoHtml = <<<HTML
+    <div class="student-info">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>%s</th>
+                    <td>%s</td>
+                    <th>%s</th>
+                    <td>%s</td>
+                </tr>
+                <tr>
+                    <th>%s</th>
+                    <td>%s</td>
+                    <th>%s</th>
+                    <td>%s</td>
+                </tr>
+                <tr>
+                    <th>%s</th>
+                    <td>%s</td>
+                    <th>%s</th>
+                    <td>%s</td>
+                </tr>
+                <tr>
+                    <th>%s</th>
+                    <td>%s</td>
+                    <th>%s</th>
+                    <td>%s</td>
+                </tr>
+                <tr>
+                    <th>%s</th>
+                    <td>%s</td>
+                    <th>%s</th>
+                    <td>%s</td>
+                </tr>
+                <tr>
+                    <th>%s</th>
+                    <td>%s</td>
+                    <th>%s</th>
+                    <td>%s</td>
+                </tr>
+                <tr>
+                    <th>%s</th>
+                    <td>%s</td>
+                    <th>%s</th>
+                    <td>%s</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+HTML;
+
+echo sprintf($infoHtml,
+    //tt('ФИО'),$name,
+    tt('Фамилия'),$student->st2,
+    tt('Фамилия (англ.)'),$student->st74,
+
+    tt('Имя'),$student->st3,
+    tt('Имя (англ.)'),$student->st75,
+
+    tt('Отчество'),$student->st4,
+    tt('Отчество (англ.)'),$student->st76,
+
+    tt('Гражданство'),$studentInfo['sgr2'],
+    tt('Дата рождения'),date("d.m.Y",strtotime($student->st7)),
+
+    tt('Факультет'), $studentInfo['f3'],
+    tt('Специальность'), $studentInfo['sp2'],
+
+    tt('Форма обучения'),SH::convertEducationType($studentInfo['sg4']),
+    tt('Курс'), $studentInfo['sem4'],
+
+    tt('Группа'), Gr::model()->getGroupName($studentInfo['sem4'], $studentInfo),
+    tt('Email'),$student->st107
+);
+
 echo '<div class="page-header">';
 echo CHtml::tag('h3', array(), tt('Дисциплины'));
 echo '</div>';
