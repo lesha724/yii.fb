@@ -716,13 +716,13 @@ SQL;
         switch($type)
         {
                 case 0:
-                        $sql ='SELECT * FROM RAGRST(:LANG, :ID, 0, 0, 0, 0, :DATE_1, :DATE_2) ORDER BY r2,r3,rz2, d3';
+                        $sql ='SELECT * FROM RASP(:LANG, :ID, 0, 0, 0, 0, :DATE_1, :DATE_2, 1) ORDER BY r2,r3,rz2, d3';
                         break;
                 case 1:
-                        $sql ='SELECT * FROM RAGRST(:LANG, 0, :ID, 0, 0, 0, :DATE_1, :DATE_2) ORDER BY r2,r3,rz2, d3';
+                        $sql ='SELECT * FROM RASP(:LANG, 0, :ID, 0, 0, 0, :DATE_1, :DATE_2, 1) ORDER BY r2,r3,rz2, d3';
                         break;
                 case 2:
-                        $sql ='SELECT * FROM RAGRST(:LANG, 0, 0, 0, :ID, 0, :DATE_1, :DATE_2) ORDER BY r2,r3,rz2, d3';
+                        $sql ='SELECT * FROM RASP(:LANG, 0, 0, 0, :ID, 0, :DATE_1, :DATE_2, 1) ORDER BY r2,r3,rz2, d3';
                         break;
                 case 3:
                         //$sql ="SELECT *,(DATEDIFF(DAY,r2, :DATE_1)*{$max}+r3) as colonka  FROM RAPR(:ID, :DATE_1, :DATE_2) ORDER BY colonka";
