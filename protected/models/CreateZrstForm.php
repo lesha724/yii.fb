@@ -22,6 +22,16 @@ class CreateZrstForm extends CFormModel
      */
     const TYPE_TABLE3 = 'table3';
     /**
+     * сценарий для четвертой таблицы (студент)
+     * @see Zrst::$zrst4 = 3
+     */
+    const TYPE_TABLE4 = 'table4';
+    /**
+     * сценарий для пятой таблицы (студент)
+     * @see Zrst::$zrst4 = 4
+     */
+    const TYPE_TABLE5 = 'table5';
+    /**
      * сценарий для третьей таблицы (студент)
      * @see Zrst::$zrst4 = 0
      * @see Zrst::$zrst6 = 1
@@ -52,7 +62,7 @@ class CreateZrstForm extends CFormModel
             array('us1', 'required', 'on' => array(self::TYPE_TABLE1, self::TYPE_TEACHER)),
             //array('us1', 'validateUs1', 'on' => array(self::TYPE_TABLE1, self::TYPE_TEACHER)),
             array('zrst5', 'numerical', 'integerOnly'=>true),
-            array('zrst5', 'safe', 'on' => array(self::TYPE_TABLE3, self::TYPE_TABLE1, self::TYPE_TEACHER)),
+            array('zrst5', 'safe', 'on' => array(self::TYPE_TABLE4, self::TYPE_TABLE5 ,self::TYPE_TABLE3, self::TYPE_TABLE1, self::TYPE_TEACHER)),
             array('zrst5', 'required', 'on' => self::TYPE_TABLE2),
             array('zrst5', 'in','range'=>array_keys(self::getZrst5Types()),'allowEmpty'=>false, 'on' => self::TYPE_TABLE2 ),
             array('file', 'file',
@@ -140,6 +150,14 @@ class CreateZrstForm extends CFormModel
                 break;
             case self::TYPE_TABLE3:
                 $model->zrst4 = 2;
+                $model->zrst6 = 0;
+                break;
+            case self::TYPE_TABLE4:
+                $model->zrst4 = 3;
+                $model->zrst6 = 0;
+                break;
+            case self::TYPE_TABLE5:
+                $model->zrst4 = 4;
                 $model->zrst6 = 0;
                 break;
             case self::TYPE_TEACHER:

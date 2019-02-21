@@ -64,3 +64,48 @@ $this->widget(
 $this->renderPartial('student/_table3', array(
     'student' => $student
 ));
+
+echo '<div class="page-header">';
+echo CHtml::tag('h3', array(), tt('Публикации в журналах, сборниках'));
+echo '</div>';
+$this->widget(
+    'bootstrap.widgets.TbButton',
+    array(
+        'label' => tt('Добавить'),
+        'url' => Yii::app()->createUrl('/portfolio/uploadFile',
+            array(
+                'type' => CreateZrstForm::TYPE_TABLE4,
+                'id' =>  $model->student
+            )
+        ),
+        'type' => 'success',
+        'size' => 'mini',
+        'icon' => 'plus'
+    )
+);
+$this->renderPartial('student/_table4', array(
+    'student' => $student
+));
+
+
+echo '<div class="page-header">';
+echo CHtml::tag('h3', array(), tt('Участие в спортивных, творческих и культурно-массовых мероприятиях'));
+echo '</div>';
+$this->widget(
+    'bootstrap.widgets.TbButton',
+    array(
+        'label' => tt('Добавить'),
+        'url' => Yii::app()->createUrl('/portfolio/uploadFile',
+            array(
+                'type' => CreateZrstForm::TYPE_TABLE5,
+                'id' =>  $model->student
+            )
+        ),
+        'type' => 'success',
+        'size' => 'mini',
+        'icon' => 'plus'
+    )
+);
+$this->renderPartial('student/_table5', array(
+    'student' => $student
+));

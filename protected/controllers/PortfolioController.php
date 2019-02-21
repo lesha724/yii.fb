@@ -268,13 +268,17 @@ class PortfolioController extends Controller
             CreateZrstForm::TYPE_TABLE1,
             CreateZrstForm::TYPE_TABLE2,
             CreateZrstForm::TYPE_TABLE3,
+            CreateZrstForm::TYPE_TABLE4,
+            CreateZrstForm::TYPE_TABLE5,
             CreateZrstForm::TYPE_TEACHER
         )))
             throw new CHttpException(400, 'Bad request');
 
         if(in_array($type, array(
             CreateZrstForm::TYPE_TABLE2,
-            CreateZrstForm::TYPE_TABLE3
+            CreateZrstForm::TYPE_TABLE3,
+            CreateZrstForm::TYPE_TABLE4,
+            CreateZrstForm::TYPE_TABLE5
         )))
             $us1 = 0;
 
