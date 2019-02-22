@@ -800,6 +800,29 @@ SQL;
 		return $info;
 	}
 
+
+    public function getStudentInfoForPortfolio(){
+        $sql = <<<SQL
+		 select first 1 sg1,sg2,sg4,gr1,gr3,sp1,sp2,sem4,f2,f3,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28,sgr2,spc4,sp4
+		   from sem
+			   inner join sg on (sem.sem2 = sg.sg1)
+			   inner join gr on (sg.sg1 = gr.gr2)
+			   inner join std on (gr.gr1 = std.std3)
+			   inner join st on (std.std2 = st.st1)
+			   inner join sgr on (st.st32 = sgr.sgr1)
+			   inner join sp on (sg.sg2 = sp.sp1)
+			   INNER JOIN spc on (gr.gr8=spc.spc1)
+			   INNER JOIN f on (sp.sp5 = f.f1)
+		   where st1=:ST1 and std11 in (0,5,6,8) and std7 is null
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ST1', $this->st1);
+        $info = $command->queryRow();
+
+        return $info;
+    }
+
 	/**
 	 * Список студентов по группе дял журнала
 	 * @param $gr1

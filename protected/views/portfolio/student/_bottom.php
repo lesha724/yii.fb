@@ -11,30 +11,12 @@
  * @var TimeTableForm $model
  */
 
-$studentInfo = $student->getStudentInfoForCard();
+$studentInfo = $student->getStudentInfoForPortfolio();
 
 $infoHtml = <<<HTML
     <div class="student-info">
         <table class="table">
             <tbody>
-                <tr>
-                    <th>%s</th>
-                    <td>%s</td>
-                    <th>%s</th>
-                    <td>%s</td>
-                </tr>
-                <tr>
-                    <th>%s</th>
-                    <td>%s</td>
-                    <th>%s</th>
-                    <td>%s</td>
-                </tr>
-                <tr>
-                    <th>%s</th>
-                    <td>%s</td>
-                    <th>%s</th>
-                    <td>%s</td>
-                </tr>
                 <tr>
                     <th>%s</th>
                     <td>%s</td>
@@ -65,27 +47,17 @@ $infoHtml = <<<HTML
 HTML;
 
 echo sprintf($infoHtml,
-    //tt('ФИО'),$name,
-    tt('Фамилия'),$student->st2,
-    tt('Фамилия (англ.)'),$student->st74,
-
-    tt('Имя'),$student->st3,
-    tt('Имя (англ.)'),$student->st75,
-
-    tt('Отчество'),$student->st4,
-    tt('Отчество (англ.)'),$student->st76,
-
-    tt('Гражданство'),$studentInfo['sgr2'],
-    tt('Дата рождения'),date("d.m.Y",strtotime($student->st7)),
+    tt('ФИО'),$student->fullName,
+    tt('Средний балл'), 0,
 
     tt('Факультет'), $studentInfo['f3'],
-    tt('Специальность'), $studentInfo['sp2'],
+    tt('Специальность, шифр'), $studentInfo['sp2'] . ', '. $studentInfo['sp4'],
 
     tt('Форма обучения'),SH::convertEducationType($studentInfo['sg4']),
     tt('Курс'), $studentInfo['sem4'],
 
     tt('Группа'), Gr::model()->getGroupName($studentInfo['sem4'], $studentInfo),
-    tt('Email'),$student->st107
+    tt('Профиль'), $studentInfo['spc4']
 );
 
 echo '<div class="page-header">';
