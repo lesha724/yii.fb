@@ -83,7 +83,7 @@ $htmlOptions = array(
     </div>
 
     <div class="control-group">
-        <?=CHtml::checkBox('settings[109]', PortalSettings::model()->getSettingFor(PortalSettings::SHOW_REGISTRATION_PASS_TAB), $htmlOptions2)?>
+        <?=CHtml::checkBox('settings['.PortalSettings::SHOW_REGISTRATION_PASS_TAB.']', PortalSettings::model()->getSettingFor(PortalSettings::SHOW_REGISTRATION_PASS_TAB), $htmlOptions2)?>
         <span class="lbl"> <?=tt('Показывать таб "Регистрация пропусков"')?></span>
         <?=CHtml::hiddenField('settings['.PortalSettings::SHOW_REGISTRATION_PASS_TAB.']', PortalSettings::model()->getSettingFor(PortalSettings::SHOW_REGISTRATION_PASS_TAB))?>
     </div>
