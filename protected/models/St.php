@@ -800,6 +800,29 @@ SQL;
 		return $info;
 	}
 
+
+    public function getStudentInfoForPortfolio(){
+        $sql = <<<SQL
+		 select first 1 sg1,sg2,sg4,gr1,gr3,sp1,sp2,sem4,f2,f3,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28,sgr2,spc4,sp4
+		   from sem
+			   inner join sg on (sem.sem2 = sg.sg1)
+			   inner join gr on (sg.sg1 = gr.gr2)
+			   inner join std on (gr.gr1 = std.std3)
+			   inner join st on (std.std2 = st.st1)
+			   inner join sgr on (st.st32 = sgr.sgr1)
+			   inner join sp on (sg.sg2 = sp.sp1)
+			   INNER JOIN spc on (gr.gr8=spc.spc1)
+			   INNER JOIN f on (sp.sp5 = f.f1)
+		   where st1=:ST1 and std11 in (0,5,6,8) and std7 is null
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ST1', $this->st1);
+        $info = $command->queryRow();
+
+        return $info;
+    }
+
 	/**
 	 * Список студентов по группе дял журнала
 	 * @param $gr1
@@ -808,7 +831,10 @@ SQL;
 	 */
     public function getStudentsForJournal($gr1, $uo1)
     {
-        $sql = <<<SQL
+        $year = Yii::app()->session['year'];
+        $sem = Yii::app()->session['sem'];
+        $date = $sem == 1 ? '31.05.'.($year+1) : '20.01.'.($year+1);
+        /*$sql = <<<SQL
        select st1,st2,st3,st4,st45,st71,st163,st167, elgvst2, elgvst3
         from st
            left join elgvst on (st.st1 = elgvst1)
@@ -816,19 +842,31 @@ SQL;
            inner join ucgns on (ucsn.ucsn1 = ucgns.ucgns1)
            inner join ucgn on (ucgns.ucgns2 = ucgn.ucgn1)
            inner join ug on (ucgn.ucgn1 = ug.ug4)
-           inner join nr on (ug.ug1 = nr.nr1) /*было ug3 =nr1 12.09.2017*/
+           inner join nr on (ug.ug1 = nr.nr1) 
            inner join us on (nr.nr2 = us.us1)
-           inner join std on (st1 = std2) /*Єто бі закомнтировано (Раскометировали ИС, изза виртуальніх групп)*/
+           inner join std on (st1 = std2) 
         where UCGNS5=:YEAR and UCGNS6=:SEM and us2=:UO1 and ug2=:GR1 and std11 in (0,6,8) and (std7 is null) and st101!=7
         group by st1,st2,st3,st4,st45,st71,st163,st167, elgvst2, elgvst3
         order by st2 collate UNICODE
+SQL;*/
+        $sql = <<<SQL
+       select t.st1,st.st2,st.st3,st.st4,st.st45,st.st71,st.st163,st.st167, elgvst2, elgvst3
+        from (select listst.st1,listst.gr1,listst.std11,ucx1 from listst(:DATE_1,:YEAR,:SEM,0) where (listst.gr1=:GR1 or listst.gr1_virt=:GR1_VIRT) and listst.std11 in (0,6,8) ) t
+            inner join st on (t.st1 = st.st1)
+            inner join ucx on (t.ucx1 = ucx.ucx1)
+            inner join uo on (ucx.ucx1 = uo19)
+            left join elgvst on (st.st1 = elgvst1)
+        where uo1=:UO1 and st101!=7
+        group by st1,st2,st3,st4,st45,st71,st163,st167, elgvst2, elgvst3
+        order by st2 collate UNICODE
 SQL;
-
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':GR1', $gr1);
+        $command->bindValue(':GR1_VIRT', $gr1);
         $command->bindValue(':UO1', $uo1);
-        $command->bindValue(':YEAR', Yii::app()->session['year']);
-        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $command->bindValue(':YEAR', $year);
+        $command->bindValue(':SEM', $sem);
+        $command->bindValue(':DATE_1', $date);
         $students = $command->queryAll();
 
         return $students;
@@ -839,8 +877,10 @@ SQL;
 		list($firstDay, $lastDay) = Sem::model()->getSemesterStartAndEnd($sem1);
 
 		$sql=<<<SQL
-                SELECT *
-                FROM STAT_PROP(:ST1,:DATE1, :DATE2) WHERE prop>0 ORDER by r2 DESC
+                SELECT proc.*, rz8
+                FROM STAT_PROP(:ST1,:DATE1, :DATE2) proc
+                 INNER JOIN rz on (r4 = rz1)
+                 WHERE prop>0 ORDER by r2 DESC
 SQL;
 
 		$command = Yii::app()->db->createCommand($sql);
@@ -1146,10 +1186,13 @@ SQL;
 
     public static function getTimeTable($st1, $date1, $date2)
     {
+        if (empty($st1))
+            return array();
+
         $sql = <<<SQL
         SELECT *
-        FROM RAST(:LANG, :ST1, :DATE_1, :DATE_2)
-        ORDER BY r2,r3,rz2
+        FROM RAGRST(:LANG, 0, :ST1, 0, 0, 0, :DATE_1, :DATE_2)
+        ORDER BY r2,r3,rz2, d3
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);

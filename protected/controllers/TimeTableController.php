@@ -26,7 +26,9 @@ class TimeTableController extends Controller
                     U_FARM,
                     U_KIEV_MVD,
                     U_UMAN,
-                    U_RGIIS
+                    U_RGIIS,
+                    U_KNU,
+                    U_HTEI
                 ))){
                         $message = tt(' <br>Новое мобильное приложение для Android : <strong><a href="{url}" target="_blank" style="font-size: 18px">здесь</a></strong>! <br>Новое мобильное приложение для iOs : <strong><a href="{url_apple}" target="_blank" style="font-size: 18px">здесь</a></strong>! <br>Также читайте инструкцию к мобильному приложению: <strong><a href="{url-instruction}" target="_blank" style="font-size: 18px">здесь</a></strong>!', array(
                             '{url}' => SH::MOBILE_URL,
@@ -74,13 +76,13 @@ class TimeTableController extends Controller
         $model->date1 = Yii::app()->session['date1'];
         $model->date2 = Yii::app()->session['date2'];
         $type=Yii::app()->user->getState('timeTable',Yii::app()->params['timeTable']);
-        $timeTable = $minMax = array();
+        $timeTable = $minMax = $maxLessons= array();
         $rasp=0;
         if(Yii::app()->user->isStd)
         {
             $model->student=Yii::app()->user->dbModel->st1;
             if($type==0)
-                list($minMax, $timeTable) = $model->generateStudentTimeTable();
+                list($minMax, $timeTable, $maxLessons) = $model->generateStudentTimeTable();
             else
                 $timeTable=Gr::getTimeTable($model->student, $model->date1, $model->date2, 1);
             $rasp=1;
@@ -89,7 +91,7 @@ class TimeTableController extends Controller
         {
             $model->teacher=Yii::app()->user->dbModel->p1;
             if($type==0)
-                list($minMax, $timeTable) = $model->generateTeacherTimeTable();
+                list($minMax, $timeTable, $maxLessons) = $model->generateTeacherTimeTable();
             else
                 $timeTable=Gr::getTimeTable($model->teacher, $model->date1, $model->date2, 2);
             $rasp=2;
@@ -101,6 +103,7 @@ class TimeTableController extends Controller
             'model'      => $model,
             'timeTable'  => $timeTable,
             'minMax'     => $minMax,
+            'maxLessons' => $maxLessons,
             'rasp'=>$rasp,
             'rz'         => Rz::model()->getRzArray($model->filial),
             'type'=>$type
@@ -389,16 +392,6 @@ class TimeTableController extends Controller
 
     }
 
-    private function countHeight($maxLessons, $dayOfWeek, $lesson)
-    {
-        $h=50;
-        $height = isset($maxLessons[$dayOfWeek][$lesson])
-            ? $h*$maxLessons[$dayOfWeek][$lesson]
-            : $h;
-
-        return $height;
-    }
-
     private function generateExcel($timeTable,$minMax,$maxLessons,$rz,$model,$title)
     {
         Yii::import('ext.phpexcel.XPHPExcel');
@@ -421,9 +414,6 @@ class TimeTableController extends Controller
         $sheet->getPageMargins()->setLeft(0.1);
         $sheet->getPageMargins()->setBottom(0.1);
 
-        //$sheet->getHeaderFooter()->setOddHeader("&C$title");
-        //$sheet->getHeaderFooter()->setOddFooter('&L&B'.$sheet->getTitle().'&RСтраница &P из &N');
-
         $sheet->getColumnDimension('A')->setWidth(9);
 
         $sheet->mergeCells('A1:D1');
@@ -437,8 +427,6 @@ class TimeTableController extends Controller
         // Применяем заливку
         $sheet->getStyleByColumnAndRow(0, 1,1,2)->getFill()->
             setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-        /*$sheet->getStyleByColumnAndRow(0, 1,1,2)->getFill()->
-            getStartColor()->applyFromArray(array('rgb' => '6FB3E0'));*/
         $sheet->getRowDimension(1)->setRowHeight(13);
         $sheet->getRowDimension(2)->setRowHeight(13);
 
@@ -446,8 +434,6 @@ class TimeTableController extends Controller
         $amountOfWeeks =  ceil(((current($timestamps) - end($timestamps))/86400) / -7);
         reset($timestamps);
         $stroka=2;
-        $stroka_day=2;
-        $str=0;
         $header_height=19;
         $column_width=25;
         foreach(range(1,7) as $dayOfWeek) {
@@ -477,10 +463,8 @@ class TimeTableController extends Controller
             $sheet->getRowDimension($stroka)->setRowHeight($header_height);
 
             foreach (range($min, $max) as $lesson) {
-                //$interval = isset($rz[$lesson]) ? $rz[$lesson]['rz2'].' - '.$rz[$lesson]['rz3'] : null;
                 $start=isset($rz[$lesson]) ? $rz[$lesson]['rz2']: null;
                 $finish=isset($rz[$lesson]) ? $rz[$lesson]['rz3']: null;
-                $h = $this->countHeight($maxLessons, $dayOfWeek, $lesson);
                 $tmp=$lesson.' '.tt('пара').': '.$start.'-'.$finish;
                 $stroka++;
                 $sheet->setCellValueByColumnAndRow(0,$stroka,$tmp)->getStyleByColumnAndRow(0, $stroka)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER)->setWrapText(true);
@@ -515,12 +499,9 @@ class TimeTableController extends Controller
                     $k++;
                     $less = '';
                     if (isset($tt[$lesson])) {
-                        $less = $tt[$lesson]['printText'];
+                        $less = CHtml::decode($tt[$lesson]['printText']);
                         $color = $tt[$lesson]['color'];
                         $color=str_replace('#','',$color);
-                        //$color=strtoupper($color);
-                        if(isset($tt[$lesson]['gr3']))
-                            $less  =str_replace('{$gr3}',$tt[$lesson]['gr3'],$less);
                         $sheet->getStyleByColumnAndRow($week+1, $stroka_day+$k)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
                         $sheet->getStyleByColumnAndRow($week+1, $stroka_day+$k)->getFill()->getStartColor()->applyFromArray(array('rgb' => $color));
                     }
@@ -554,9 +535,6 @@ class TimeTableController extends Controller
 
     public function actionGroup()
     {
-        //if($this->mobileCheck())
-            //$this->redirect('/mobile/timeTableGroup');
-
         $model = new TimeTableForm;
         $model->scenario = 'group';
 		

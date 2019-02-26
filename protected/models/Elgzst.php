@@ -392,7 +392,7 @@ class Elgzst extends CActiveRecord
         if (empty($st1) || empty($date1) || empty($date2))
             return array();
 
-        $sql=<<<SQL
+        /*$sql=<<<SQL
                 SELECT elgz1
                 FROM elgzst
                     LEFT JOIN elgp on (elgzst.elgzst0 = elgp.elgp1)
@@ -404,7 +404,13 @@ class Elgzst extends CActiveRecord
                     INNER JOIN nr on (r.r1 = nr.nr1)
                     INNER JOIN us on (nr.nr2 = us.us1)
                 WHERE elgzst1=:ST1 and r2 >= :DATE1 and r2 <= :DATE2 and elgzst3!=0 and d1 in (select d1 FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,0,0,0,3,0))
+SQL;*/
+
+        $sql = <<<SQL
+        SELECT elgz1 FROM EL_GURNAL_INFO(:YEAR, :SEM, :DATE1, :DATE2, 0, 0, :ST1, 0, 0) 
+            where d1 in (select d1 FROM  EL_GURNAL(:P1,:YEAR1,:SEM1,0,0,0,0,3,0)) and elgzst0 is not null and propusk>0
 SQL;
+
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':ST1', $st1);
@@ -413,6 +419,8 @@ SQL;
         $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
         $command->bindValue(':YEAR', Yii::app()->session['year']);
         $command->bindValue(':SEM', Yii::app()->session['sem']);
+        $command->bindValue(':YEAR1', Yii::app()->session['year']);
+        $command->bindValue(':SEM1', Yii::app()->session['sem']);
         $rows = $command->queryAll();
 
         $res=array();
@@ -702,5 +710,63 @@ SQL;
             $elgzst->elgzst5 = 0;
             $elgzst->save();
         }
+    }
+
+    /**
+     * Проверка можно ли редатированить пропуск (для фарма)
+     *
+     * @return bool
+     * @throws
+     */
+    public function checkAccessForFarmPass(){
+        if($this->elgzst3 == 0)
+            return true;
+
+        //проверка на участие в заявке на оплату
+        $sql = <<<SQL
+          SELECT count(*) from elgp 
+            INNER JOIN pptz on (pptz2=elgp0)
+            INNER JOIN ppt on (PPTZ1=ppt1)
+          WHERE elgp1=:ELGZST0 and ppt5 is null
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ELGZST0', $this->elgzst0);
+        $count = $command->queryScalar();
+
+        if(!empty($count))
+            return false;
+
+        if($this->checkIssetAdmit())
+            return false;
+
+        return true;
+    }
+
+    /***
+     * Проверка есть допуск для данного проруска
+     * @return bool
+     * @throws CException
+     */
+    public function checkIssetAdmit(){
+        if($this->elgzst3 == 0)
+            return true;
+
+        //проверка на участие в допуске
+        $sql = <<<SQL
+          SELECT count(*) from elgp 
+            INNER JOIN admitz on (admitz2=elgp0)
+            INNER JOIN admit on (admitz1=admit1)
+          WHERE elgp1=:ELGZST0 and admit5 is null
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':ELGZST0', $this->elgzst0);
+        $count = $command->queryScalar();
+
+        if(!empty($count))
+            return true;
+
+        return false;
     }
 }

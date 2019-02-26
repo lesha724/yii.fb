@@ -85,7 +85,8 @@ class JournalController extends Controller
                 'actions' => array(
                     'attendanceStatistic',
                     'newAttendanceStatistic',//новая статистика для фарма
-                    'newAttendanceStatisticExcel'
+                    'newAttendanceStatisticExcel',
+                    'newAttendanceStatisticStudent',//новая статистика для фарма (отдельно по студенту)
                 )
             ),
             array('deny',
@@ -1095,16 +1096,28 @@ SQL;
                 if($value!=0&&$value!=-1&&$value!=-2)
                     if ($field == 'elgzst4'||$field == 'elgzst5')
                     {
-                        $min=PortalSettings::model()->findByPk(37)->ps2;
+                        //$min=PortalSettings::model()->findByPk(37)->ps2;
                         $bal=PortalSettings::model()->findByPk(36)->ps2;
                         if($bal!=0)
                         {
-                            if($value>$bal||$value<$min)
+                            if($value>$bal/*||$value<$min*/ || $value<0)
                                 if($value!=0)
                                 {
                                     $error=true;
                                     $errorType=4;
                                 }
+                        }
+
+                        if(!$error){
+                            if(PortalSettings::model()->getSettingFor(9) == 1){
+                                if($elgz->elgz6 > 0) {
+                                    if ($elgz->elgz6 < $value || $value < $elgz->elgz5)
+                                        if ($value != 0) {
+                                            $error = true;
+                                            $errorType = 4;
+                                        }
+                                }
+                            }
                         }
                     }
                 //блокировка пересдач
@@ -1179,8 +1192,22 @@ SQL;
                     $elgzst= Elgzst::model()->findByAttributes(array('elgzst1'=>$st1,'elgzst2'=>$elgz1));
                     if(!empty($elgzst))
                     {
+                        //Проверка на участие в допуске или заявке на олплату (для фарма)
+                        if($elgzst->elgzst3>0&&$field=='elgzst3' && $this->universityCode == U_FARM) {
+                            if(!$elgzst->checkAccessForFarmPass()){
+                                throw new CHttpException(403, 'Запрещено редактирование, пропуск участвует в допуске или заявлении на оплату.');
+                            }
+                        }
                         if($elgzst->elgzst3>0&&$field=='elgzst5')
                         {
+                            if($this->universityCode == U_FARM) {
+                                if (!$elgzst->checkIssetAdmit()) {
+                                    throw new CHttpException(403, 'Действие запрещено, нет допуска.');
+                                }
+                            }
+                            if($this->universityCode == U_IRPEN && $elgzst->elgzst3== 1) {
+                                throw new CHttpException(403, 'Действие запрещено, неуважительная причина пропуска.');
+                            }
                             $elg = Elg::model()->findByPk($elgz->elgz2);
                             if($elg->elg4==0)
                                 if($value==0)
@@ -1328,6 +1355,14 @@ SQL;
                 } else {
                     if($elgsd->elgsd4>=3&&$elgsd->elgsd4<=5)
                         throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+                    if(!$elgd->checkAccess($gr1))
+                        throw new CHttpException(403, 'Нет доступа на редактирования данной колонки.');
+                    //проверка на возможность редактирвония для ирпеня
+                    if($elgsd->elgsd4 == 1 && $this->universityCode == U_IRPEN){
+                        if(!$elgd->checkAccessIndForIrpen($gr1))
+                            throw new CHttpException(403, 'Прошло более 4-х дней с последнего занятия.');
+                    }
                     $elgdst = Elgdst::model()->findByAttributes(array('elgdst1' => $st1, 'elgdst2' => $elgd->elgd0));
                     //print_r($elgdst->elgdst0);
                     if (empty($elgdst)) {
@@ -1349,7 +1384,8 @@ SQL;
                             $elg = Elg::model()->findByPk($elg1);
                             if($elg->elg4==1) {
                                 $sem7 = Gr::model()->getSem7ByGr1ByDate($gr1, date('d.m.Y'));
-                                Stusv::model()->recalculateStusMark($st1, $gr1, $sem7, $elg);
+                                if(!Stusv::model()->recalculateStusMark($st1, $gr1, $sem7, $elg))
+                                    throw new CHttpException(500, 'Оценка сохранена, но итоговая ведомость не пересчитана');
                             }
                         }
                     }
@@ -1369,6 +1405,8 @@ SQL;
         $elgz1 = Yii::app()->request->getParam('elgz1', null);
         $field = Yii::app()->request->getParam('field', null);
         $value = Yii::app()->request->getParam('value', null);
+        $gr1 = Yii::app()->request->getParam('gr1', null);
+        $error = false;
 
         if($elgz1==null || $field==null || $value==null)
             $error = true;
@@ -1385,8 +1423,18 @@ SQL;
                 $error=true;
             else
             {
-                $elgz->$field=$value;
-                $error =!$elgz->save();
+                ///проверка для ирпени, что имзенения минмакс біло только в течении 10 дней от первой даті занятия
+                if($this->universityCode == U_IRPEN && PortalSettings::model()->getSettingFor(9) == 1){
+                    if(!$elgz->checkAccessMinMixIrpen($gr1))
+                    {
+                        $error = true;
+                    }
+                }
+
+                if(!$error) {
+                    $elgz->$field = $value;
+                    $error = !$elgz->save();
+                }
             }
 
         }
@@ -1624,6 +1672,16 @@ SQL;
                 if(!$error) {
                     $ps55 = PortalSettings::model()->findByPk(55)->ps2;
                     if ($elgzst->elgzst3 != 0 || ($elgzst->elgzst4 <= $elgzst->getMin() && ($elgzst->elgzst4 != 0 || ($ps55 == 1 && $elgzst->elgzst4 == 0)))) {
+
+                        if($this->universityCode == U_FARM && $elgzst->elgzst3 != 0) {
+                            if (!$elgzst->checkIssetAdmit()) {
+                                throw new CHttpException(403, 'Действие запрещено, нет допуска.');
+                            }
+                        }
+
+                        if($this->universityCode == U_IRPEN && $elgzst->elgzst3== 1) {
+                            throw new CHttpException(403, 'Действие запрещено, неуважительная причина пропуска.');
+                        }
                         if ($elgzst->checkMinRetakeForGrid()) {
                             $gr1 = St::model()->getGr1BySt1($elgzst->elgzst1);
 
@@ -1646,10 +1704,15 @@ SQL;
                             $ps67 = PortalSettings::model()->findByPk(67)->ps2;
 
                             $check = 1;
-                            if ($elgp2 < 4)
+                            if ($elgp2 <= 4)
                                 $check = 2;
 
                             if ($elgzst->elgzst3 > 0 && $ps67 == 1) {
+                                if($this->universityCode == U_FARM) {
+                                    if (!$elgzst->checkAccessForFarmPass()) {
+                                        throw new CHttpException(403, 'Запрещено редактирование, допуск участвует в допуске или заявлении на оплату.');
+                                    }
+                                }
                                 $elgp = Elgp::model()->findByAttributes(array('elgp1' => $elgzst->elgzst0));
                                 if (empty($elgp)) {
                                     $error = true;
@@ -2304,6 +2367,11 @@ SQL;
         if (! Yii::app()->request->isAjaxRequest)
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
+
+        if($this->universityCode == U_IRPEN) {
+            throw new CHttpException(403, 'Действие запрещено.');
+        }
+
         $st1 = Yii::app()->request->getParam('st1', null);
         $date1 = Yii::app()->request->getParam('date1', null);
         $date2 = Yii::app()->request->getParam('date2', null);
@@ -2317,7 +2385,7 @@ SQL;
         else {
             $check=1;
 
-            if($type<4)
+            if($type<=4)
                 $check=2;
 
             $attr = array(
@@ -2403,6 +2471,15 @@ SQL;
             if(empty($elgp))
                 $error=true;
 
+            if($this->universityCode == U_FARM) {
+                if (!$elgp->elgp10->checkAccessForFarmPass()) {
+                    throw new CHttpException(403, 'Запрещено редактирование, допуск участвует в допуске или заявлении на оплату.');
+                }
+            }
+
+            if($this->universityCode == U_IRPEN) {
+                throw new CHttpException(403, 'Действие запрещено.');
+            }
             if(!$error)
             {
                 $attr = array_merge(array(
@@ -2645,6 +2722,14 @@ SQL;
         if(!$error)
         {
             $elgzst=Elgzst::model()->findByPk($elgotr1);
+            if($this->universityCode == U_FARM && $elgzst->elgzst3 != 0) {
+                if (!$elgzst->checkIssetAdmit()) {
+                    throw new CHttpException(403, 'Действие запрещено, нет допуска.');
+                }
+            }
+            if($this->universityCode == U_IRPEN && $elgzst->elgzst3== 1) {
+                throw new CHttpException(403, 'Действие запрещено, неуважительная причина пропуска.');
+            }
             $ps40=PortalSettings::model()->findByPk(40)->ps2;
             if(! empty($ps40)){
                 /*$date1  = new DateTime(date('Y-m-d H:i:s'));
@@ -3465,6 +3550,23 @@ SQL;
             $model->attributes=$_REQUEST['AttendanceStatisticForm'];
 
         $this->render('newAttendanceStatistic', array(
+            'model' => $model
+        ));
+    }
+
+    /**
+     * Акшен для отображения новой статистики посещаемости для фарма (отдельно по студенту)
+     * @throws CHttpException
+     */
+    public function actionNewAttendanceStatisticStudent()
+    {
+        $model = new AttendanceStatisticForm();
+        $model->scenario = AttendanceStatisticForm::SCENARIO_STUDENT;
+
+        if (isset($_REQUEST['AttendanceStatisticForm']))
+            $model->attributes=$_REQUEST['AttendanceStatisticForm'];
+
+        $this->render('newAttendanceStatisticStudent', array(
             'model' => $model
         ));
     }

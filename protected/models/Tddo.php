@@ -410,6 +410,6 @@ SQL;
 	 */
 	public function getExtByName($fileName){
 		$ext = explode(".",$fileName);
-		return end($ext);
+		return strtolower(end($ext));
 	}
 }
