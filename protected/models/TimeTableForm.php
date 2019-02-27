@@ -432,47 +432,6 @@ HTML;
         return array($timeTable, $maxLessons);
     }
 
-    /*private function joinGroups($timeTable, $type)
-    {
-        $res = array();
-        foreach($timeTable as $day) {
-
-            $r2 = strtotime($day['r2']); // date
-            $r3 = $day['r3'];            // lesson
-
-            if (! isset($res[$r2]['timeTable'][$r3])) {
-
-                $res[$r2]['timeTable'][$r3][] = $day;
-                $res[$r2]['timeTable'][$r3]['day'] = $day;
-                $res[$r2]['timeTable'][$r3]['shortText'] = $this->cellShortTextFor($day, $type);
-                $res[$r2]['timeTable'][$r3]['fullText']  = $this->cellFullTextFor($day, $type);
-                $res[$r2]['timeTable'][$r3]['printText']  = $this->cellPrintTextFor($day, $type);
-
-                $res[$r2]['timeTable'][$r3]['color'] = $this->cellColorFor($day);
-            } else {
-
-                    if($day['r1']!=$res[$r2]['timeTable'][$r3]['day']['r1'] || $day['rz2']!=$res[$r2]['timeTable'][$r3]['day']['rz2']) {
-                        $res[$r2]['timeTable'][$r3]['shortText'] .= $this->cellShortTextFor($day, $type);
-
-                        $res[$r2]['timeTable'][$r3]['fullText'] .= $this->cellFullTextFor($day, $type);
-                        $res[$r2]['timeTable'][$r3]['printText']  .= "\n".$this->cellPrintTextFor($day, $type);
-
-                        $res[$r2]['timeTable'][$r3][] = $day;
-                        $res[$r2]['timeTable'][$r3]['day'] = $day;
-                    }else
-                    {
-
-                    }
-            }
-
-        }
-        //die(var_dump($res));
-        return $res;
-    }*/
-
-
-
-
     public function fillTameTableForGroup($timeTable)
     {
         $timeTable = $this->joinLessons($timeTable, 0);
@@ -528,7 +487,7 @@ HTML;
                 $res[$r2]['timeTable'][$r3]['day'] = $day;
 
             } else {
-                if($day['fio']!=$res[$r2]['timeTable'][$r3]['day']['fio'] || $day['rz2']!=$res[$r2]['timeTable'][$r3]['day']['rz2']) {
+                /*if($day['fio']!=$res[$r2]['timeTable'][$r3]['day']['fio'] || $day['rz2']!=$res[$r2]['timeTable'][$r3]['day']['rz2']) {
                     $res[$r2]['timeTable'][$r3]['shortText'] .= $this->cellShortTextFor($day, $type);
                     $res[$r2]['timeTable'][$r3]['fullText'] .= $this->cellFullTextFor($day, $type);
                     $res[$r2]['timeTable'][$r3]['printText'] .= "\n".$this->cellPrintTextFor($day, $type);
@@ -538,7 +497,14 @@ HTML;
                 }else
                 {
 
-                }
+                }*/
+
+                $res[$r2]['timeTable'][$r3]['shortText'] .= $this->cellShortTextFor($day, $type);
+                $res[$r2]['timeTable'][$r3]['fullText'] .= "<br>".$this->cellFullTextFor($day, $type);
+                $res[$r2]['timeTable'][$r3]['printText'] .= "\n".$this->cellPrintTextFor($day, $type);
+
+                $res[$r2]['timeTable'][$r3][] = $day;
+                $res[$r2]['timeTable'][$r3]['day'] = $day;
             }
 
         }
