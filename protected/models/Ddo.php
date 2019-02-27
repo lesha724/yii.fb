@@ -302,7 +302,7 @@ class Ddo extends CActiveRecord
 
 						return $tdo->tdo2;
 					};
-					$items[$docTypeIndexModel->$indexAttr]['filter'] = Org::getAll();
+					$items[$docTypeIndexModel->$indexAttr]['filter'] = Tdo::getAll();
 				break;
 				case 'tddo17':
 					$items[$docTypeIndexModel->$indexAttr]['value'] ='$data->getTddo17Type()';
