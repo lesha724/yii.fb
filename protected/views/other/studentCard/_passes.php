@@ -87,7 +87,8 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         ),
         array(
             'header'=>tt('Отработка'),
-            'value'=>'$data["otrabotal"] == 0 ? "-" : "+"',
+            'type' => 'raw',
+            'value'=>'$data["otrabotal"] == 0 ? "<label class=\'label label-warning\'>-</label>" : "<label class=\'label label-success\'>+</label>"',
         ),
 
         array(

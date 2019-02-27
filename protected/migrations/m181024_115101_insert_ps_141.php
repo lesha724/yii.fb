@@ -8,7 +8,7 @@ class m181024_115101_insert_ps_141 extends CDbMigration
          * Показывать таб "ресгистрацию пропусков" в карточке студентов
          */
 		$sql = <<<SQL
-        insert into PORTAL_SETTINGS(PS1, PS2) values(138, '0');
+        insert into PORTAL_SETTINGS(PS1, PS2) values(141, '0');
 SQL;
 		$this->execute($sql);
 	}
