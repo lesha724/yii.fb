@@ -456,11 +456,15 @@ class Ddo extends CActiveRecord
 										<tr>
 											<th>'.tt('Необходимая дата').'</th>
 											<th>'.tt('Фактическая дата').'</th>
+											<th>'.tt('Исполнитель').'</th>
 										</tr>
 									</thead>
 									<tbody>
 							';
 							foreach ($dkids as $dkid) {
+                                /**
+                                 * @var $dkid Dkid
+                                 */
 								if(!empty($dkid->dkid3))
 									$html.= '<tr class="success">';
 								else
@@ -477,8 +481,17 @@ class Ddo extends CActiveRecord
 								else
 									$html.= '<td/>';
 
+                                $html.='<td/>';
+
 								$html.= '</tr>';
-							}
+                                foreach ($dkid->performens as $performen){
+                                    /**
+                                     * @var $performen Ido
+                                     */
+                                    $html.='<tr><td/><td/><td>'.$performen->getFullText().'</td></tr>';
+                                }
+
+                            }
 
 							$html.='
 									</tbody>

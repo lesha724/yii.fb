@@ -331,7 +331,7 @@ class Tddo extends CActiveRecord
 	public function getPerformans(){
 		$data = array();
 
-		$models = Ido::model()->findAll('ido1=:TDDO1 AND (ido8 is null OR ido8=0)', array(
+		$models = Ido::model()->findAll('ido1=:TDDO1 AND (ido8 is null OR ido8=0) and ido11=0', array(
 			':TDDO1'=>$this->tddo1
 		));
 
