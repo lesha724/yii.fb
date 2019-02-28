@@ -474,10 +474,9 @@ class Ddo extends CActiveRecord
 									else
 										$html.= '<tr class="warning">';
 								}
-
-								$html.= '<td>'.date_format(date_create_from_format('Y-m-d H:i:s', $dkid->dkid2), 'Y-m-d').'</td>';
+								$html.= '<td>'.Dkid::model()->getDateString(date_create_from_format('Y-m-d H:i:s', $dkid->dkid2)).'</td>';
 								if(!empty($dkid->dkid3))
-									$html.= '<td>'.date_format(date_create_from_format('Y-m-d H:i:s', $data['tddo4']), 'Y-m-d').'</td>';
+									$html.= '<td>'.Dkid::model()->getDateString(date_create_from_format('Y-m-d H:i:s', $data['tddo4'])).'</td>';
 								else
 									$html.= '<td/>';
 

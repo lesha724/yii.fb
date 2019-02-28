@@ -230,8 +230,6 @@ class TimeTableForm extends CFormModel
     }
     private function cellShortTextFor($day, $type)
     {
-        $maxLength = 18;
-
         $d3  = CHtml::encode($day['d3']);
         $tip   = $day['tip'];
         $a2    = $day['a2'];
@@ -239,22 +237,16 @@ class TimeTableForm extends CFormModel
         $class = tt('ауд');
 
         $rowDisc = $d3.'['.$tip.']';
-        $rowDisc = mb_strimwidth($rowDisc, 0, $maxLength, '...');
         $pos=stripos($d3,"(!)");
-        $empty = '<br>&nbsp';
-        if($pos!==false) {
-            $rowDisc .= '<br>' . $day['rz2'] . '-' . $day['rz3'];
-            $empty = '';
-        }
-
         $rowClass = $class.'. '.$a2;
-        $rowClass = mb_strimwidth($rowClass, 0, $maxLength, '...');
-
+        if($pos!==false) {
+            $rowClass = $day['rz2'] . '-' . $day['rz3']. ' | '. $rowClass;
+        }
         $gr3 = CHtml::encode($day['grup']);
 
         $fio = '';
         if (isset($day['fio']))
-            $fio = mb_strimwidth($day['fio'], 0, $maxLength, '...');
+            $fio = $day['fio'];
 
 
         $color = SH::getLessonColor($day['tip']);
@@ -271,7 +263,6 @@ class TimeTableForm extends CFormModel
     <span>{$rowDisc}</span><br>
     {$gr3}<br>
     {$rowClass}
-    {$empty}
 </div>
 HTML;
         elseif($type == 0) // group
@@ -292,7 +283,6 @@ HTML;
     <span>{$rowDisc}</span><br>
     {$rowClass}<br>
     {$fio}
-    {$empty}
 </div>
 HTML;
         elseif($type == 3) // classroom
@@ -301,7 +291,6 @@ HTML;
     <span>{$rowDisc}</span><br>
     {$gr3}<br>
     {$fio}
-    {$empty}
 </div>
 HTML;
 

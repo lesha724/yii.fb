@@ -164,11 +164,11 @@ class Ido extends CActiveRecord
 		}
 
 		$text= tt("Исполнитель: ") . $text . ";";
-		if ($text.$this->ido9 > 0)
+		if ($this->ido9 > 0)
 		{
 			$info = Pd::model()->getTeacherAndChairByP1($this->ido9);
 			if(!empty($info))
-				$text .= tt(" Контролер: ") . sprintf("%s (%s);", SH::getShortName($info['p3'],$info['p4'],$info['p5']), $info['k3']);
+				$text .=' '. tt(" Контролер: ") . sprintf("%s (%s);", SH::getShortName($info['p3'],$info['p4'],$info['p5']), $info['k3']);
 		}
 
 		return $text;

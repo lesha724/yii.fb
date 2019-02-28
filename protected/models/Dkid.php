@@ -70,4 +70,17 @@ class Dkid extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+    /**
+     * @param $date false|DateTime
+     * @return string
+     */
+	public function getDateString($date){
+        if($date===false)
+            return '';
+        if($date->format('Y') =='0001')
+            return '';
+
+        return $date->format('Y-m-d');
+    }
 }
