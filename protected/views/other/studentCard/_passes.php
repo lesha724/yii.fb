@@ -25,6 +25,18 @@ $dataProvider=new CArrayDataProvider($passList,array(
 
 $list=CHtml::listData(Opr::model()->findAll(), 'opr1', 'opr2');
 
+$this->widget('bootstrap.widgets.TbButton', array(
+    'buttonType'=>'link',
+    'type'=>'primary',
+    'icon'=>'plus',
+    'label'=>tt('Создать заявку на оплату'),
+    'htmlOptions'=>array(
+        'class'=>'btn-mini',
+        'id'=>'studentCard-create-request',
+        'data-url'=>Yii::app()->createUrl('/other/createPayment'),
+    )
+));
+
 $this->widget('bootstrap.widgets.TbGridView', array(
     'id' => 'passes-list',
     'dataProvider' => $dataProvider,
@@ -97,3 +109,13 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         ),
     ),
 ));
+
+
+Yii::app()->clientScript->registerScript('create-request-payment', <<<JS
+    $('#studentCard-create-request').click(function(){
+        var keys = $('#passes-list').yiiGridView('getSelectedRows');
+        
+    });
+JS
+    , CClientScript::POS_END);
+

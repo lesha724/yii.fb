@@ -1781,15 +1781,15 @@ SQL;
             return null;
 
         $sql=<<<SQL
-            SELECT zsno.* from zsno 
-            inner join zsnop on ( zsnop.zsnop = zsno.zsno0)
+            SELECT zsno0, zsno1, zsno2 from zsno 
+            inner join zsnop on ( zsnop.zsnop0 = zsno.zsno0)
             inner join elgp on ( elgp.elgp0 = zsnop.zsnop1)
             inner join elgzst on ( elgp.elgp1 = elgzst.elgzst0)
             inner join elgz on (elgzst.elgzst2 = elgz.elgz1)
             inner join elg on (elgz.elgz2 = elg.elg1)
             inner JOIN sem on (elg3 = sem1)
-          WHERE  zsno.zsno1=:ST1 and elgzst1 = :ST1 and sem3 = :YEAR and sem5=:SEM
-          GROUP BY zsno1, zsno1, zsno2
+          WHERE  zsno.zsno1=:ST1_ and elgzst1 = :ST1 and sem3 = :YEAR and sem5=:SEM
+          GROUP BY zsno0, zsno1, zsno2
           ORDER BY zsno2 desc 
 SQL;
 

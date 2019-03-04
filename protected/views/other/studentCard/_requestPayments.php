@@ -8,6 +8,7 @@
 
 /**
  * @var $st St
+ * @var $this OtherController
  */
 
 $requests = $st->getRequestPayment();
@@ -27,6 +28,20 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         array(
             'header' => Zsno::model()->getAttributeLabel('zsno2'),
             'value'=>'$data->zsno2'
-        )
+        ),
+        array(
+            'class'=>'bootstrap.widgets.TbButtonColumn',
+            'template'=>'{delete}',
+            'buttons'=>array
+            (
+                'delete' => array(
+                    'label'=>tt('Удалить заявку'),
+                    'icon'=>'icon-trash bigger-120',
+                    'url'=>'array("deletePayment")',
+                    'options' => array('class' => 'btn btn-mini btn-danger'),
+                    'visible'=>'Elgzst::checkMinRetakeForGridRetake($data["elgzst5"])'
+                ),
+            ),
+        ),
     ),
 ));

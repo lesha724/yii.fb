@@ -59,7 +59,7 @@ class Zsno extends CActiveRecord
 		return array(
 			'zsno0' => 'Zsno0',
 			'zsno1' => 'Zsno1',
-			'zsno2' => 'Zsno2',
+			'zsno2' => tt('Дата создания'),
 		);
 	}
 
