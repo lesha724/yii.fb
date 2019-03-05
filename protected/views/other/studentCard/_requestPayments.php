@@ -26,8 +26,12 @@ $this->widget('bootstrap.widgets.TbGridView', array(
     'type' => 'striped bordered',
     'columns' => array(
         array(
+            'header' => Zsno::model()->getAttributeLabel('zsno0'),
+            'value'=>'"#".$data->zsno0'
+        ),
+        array(
             'header' => Zsno::model()->getAttributeLabel('zsno2'),
-            'value'=>'$data->zsno2'
+            'value'=>'date("d.m.Y H:i:s",strtotime($data->zsno2))'
         ),
         array(
             'class'=>'bootstrap.widgets.TbButtonColumn',

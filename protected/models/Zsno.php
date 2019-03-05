@@ -57,7 +57,7 @@ class Zsno extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'zsno0' => 'Zsno0',
+			'zsno0' => '№',
 			'zsno1' => 'Zsno1',
 			'zsno2' => tt('Дата создания'),
 		);

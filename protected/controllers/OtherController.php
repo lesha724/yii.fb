@@ -90,8 +90,8 @@ class OtherController extends Controller
 
     public function actionDeleteRequestPayment($id)
     {
-        if(Yii::app()->request->isPostRequest)
-            throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
+        //if(Yii::app()->request->isPostRequest)
+            //throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
 
         if (!Yii::app()->user->isStd)
             throw new CHttpException(403, 'Invalid request. You don\'t have access to the service.');
@@ -115,7 +115,7 @@ class OtherController extends Controller
             )));
         }
 
-        $this->redirect('studentCard');
+        $this->redirect('/other/studentCard');
     }
 
     public function actionCreateRequestPayment()

@@ -26,6 +26,8 @@ $dataProvider=new CArrayDataProvider($passList,array(
 
 $list=CHtml::listData(Opr::model()->findAll(), 'opr1', 'opr2');
 
+echo '<div>';
+echo '<div class="pull-left">';
 $this->widget('bootstrap.widgets.TbButton', array(
     'buttonType'=>'link',
     'type'=>'primary',
@@ -36,6 +38,11 @@ $this->widget('bootstrap.widgets.TbButton', array(
         'id'=>'studentCard-create-request'
     )
 ));
+echo '</div>';
+echo '<div class="pull-right">';
+echo '<label id="label-price" class="label label-info"/>';
+echo '</div>';
+echo '</div>';
 
 $this->widget('bootstrap.widgets.TbGridView', array(
     'id' => 'passes-list',
@@ -49,8 +56,8 @@ $this->widget('bootstrap.widgets.TbGridView', array(
             'class' => 'CCheckBoxColumn',
             'selectableRows'=>100,
             'disabled' => function($data){
-                /*if($data['otrabotal'] == 1)
-                    return true;*/
+                if($data['otrabotal'] == 1)
+                    return true;
 
                 if(!empty($data['RPSPR0']))
                     return true;
@@ -115,8 +122,12 @@ $url = Yii::app()->createUrl('/other/createRequestPayment');
 
 
 Yii::app()->clientScript->registerScript('create-request-payment', <<<JS
+    $(document).on('change', '.checkbox-column>input[type="checkbox"]', function(event) {
+        var keys = $.fn.yiiGridView.getChecked("passes-list","price");
+        //alert(keys);
+    });
+
     $('#studentCard-create-request').click(function(){
-        alert(1);
         var keys = $.fn.yiiGridView.getChecked("passes-list","selectedIds");
         
         if (!keys || keys.length ==0) {
