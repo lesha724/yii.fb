@@ -37,7 +37,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                 'delete' => array(
                     'label'=>tt('Удалить заявку'),
                     'icon'=>'icon-trash bigger-120',
-                    'url'=>'array("deletePayment")',
+                    'url'=>'array("deleteRequestPayment")',
                     'options' => array('class' => 'btn btn-mini btn-danger'),
                     'visible'=>'Elgzst::checkMinRetakeForGridRetake($data["elgzst5"])'
                 ),

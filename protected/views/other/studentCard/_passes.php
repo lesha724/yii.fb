@@ -14,6 +14,7 @@
  * @var $passList array
  * @var $this OtherController
  */
+Yii::app()->clientScript->registerPackage('gritter');
 
 $passList = $st->getPass();
 
@@ -110,11 +111,39 @@ $this->widget('bootstrap.widgets.TbGridView', array(
     ),
 ));
 
+$url = Yii::app()->createUrl('/other/createRequestPayment');
+
 
 Yii::app()->clientScript->registerScript('create-request-payment', <<<JS
     $('#studentCard-create-request').click(function(){
-        var keys = $('#passes-list').yiiGridView('getSelectedRows');
+        var keys = $('#passes-list').yiiGridView('getChecked', 'elgp0');
         
+        if (!keys || keys.length ==0) {
+            addGritter('','Выберите пропуски', 'error')
+            return;
+        }
+        
+        $.ajax({
+            url: '{$url}', 
+            type: 'POST',
+            data:{
+                lessons:keys
+            },
+            success: function( data ) {
+                window.location.reload();
+            },
+            error:function(jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status == 500) {
+                    addGritter('','Internal error: ' + jqXHR.responseText, 'error')
+                } else {
+                    if (jqXHR.status == 403) {
+                        addGritter('','Access error: ' + jqXHR.responseText, 'error')
+                    } else {
+                        addGritter('','Unexpected error: ' + jqXHR.responseText, 'error')
+                    }
+                }
+            },
+        });
     });
 JS
     , CClientScript::POS_END);
