@@ -31,7 +31,7 @@ class CreateRequestPaymentForm extends CFormModel
             $this->addError($attributeName, "$attributeName cannot be empty array.");
         }
         foreach ($this->$attributeName as $key => $value) {
-            if (!is_int($value)) {
+            if (!is_numeric($value)) {
                 $this->addError($attributeName, "$attributeName contains invalid value: $value.");
             }
         }
@@ -48,6 +48,8 @@ class CreateRequestPaymentForm extends CFormModel
             return false;
 
         $passList = $this->_getPass();
+
+        var_dump($passList);
 
         if(count($passList)!=count($this->lessons))
             return false;
@@ -73,7 +75,7 @@ class CreateRequestPaymentForm extends CFormModel
         $passListStr = implode(', ', $this->lessons);
 
         $sql=<<<SQL
-            SELECT * from EL_GURNAL_STUD_PROP(:st1, :year, :sem) where egp0 in ($passListStr)
+            SELECT * from EL_GURNAL_STUD_PROP(:st1, :year, :sem) where elgp0 in ($passListStr)
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);

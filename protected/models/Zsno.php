@@ -31,7 +31,7 @@ class Zsno extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('zsno0, zsno1', 'numerical', 'integerOnly'=>true),
-			array('zsno2', 'length', 'max'=>8),
+			array('zsno2', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('zsno0, zsno1, zsno2', 'safe', 'on'=>'search'),

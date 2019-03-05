@@ -33,8 +33,7 @@ $this->widget('bootstrap.widgets.TbButton', array(
     'label'=>tt('Создать заявку на оплату'),
     'htmlOptions'=>array(
         'class'=>'btn-mini',
-        'id'=>'studentCard-create-request',
-        'data-url'=>Yii::app()->createUrl('/other/createPayment'),
+        'id'=>'studentCard-create-request'
     )
 ));
 
@@ -48,9 +47,10 @@ $this->widget('bootstrap.widgets.TbGridView', array(
             'id' => 'selectedIds',
             'value' => '$data["elgp0"]',
             'class' => 'CCheckBoxColumn',
+            'selectableRows'=>100,
             'disabled' => function($data){
-                if($data['otrabotal'] == 1)
-                    return true;
+                /*if($data['otrabotal'] == 1)
+                    return true;*/
 
                 if(!empty($data['RPSPR0']))
                     return true;
@@ -116,7 +116,8 @@ $url = Yii::app()->createUrl('/other/createRequestPayment');
 
 Yii::app()->clientScript->registerScript('create-request-payment', <<<JS
     $('#studentCard-create-request').click(function(){
-        var keys = $('#passes-list').yiiGridView('getChecked', 'elgp0');
+        alert(1);
+        var keys = $.fn.yiiGridView.getChecked("passes-list","selectedIds");
         
         if (!keys || keys.length ==0) {
             addGritter('','Выберите пропуски', 'error')

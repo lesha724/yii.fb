@@ -120,7 +120,7 @@ class OtherController extends Controller
 
     public function actionCreateRequestPayment()
     {
-        if(Yii::app()->request->isPostRequest)
+        if(!Yii::app()->request->isPostRequest)
             throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
 
         if (!Yii::app()->user->isStd)
@@ -139,6 +139,7 @@ class OtherController extends Controller
         $model = new Zsno();
         $model->zsno1= Yii::app()->user->dbModel->st1;
         $model->zsno0 =  Yii::app()->db->createCommand('select gen_id(GEN_ZSNO, 1) from rdb$database')->queryScalar();
+        $model->zsno2 = date('Y-m-d H:i:s');
 
         $trans = Yii::app()->db->beginTransaction();
 
@@ -166,6 +167,12 @@ class OtherController extends Controller
 
         }catch (Exception $error){
             $trans->rollback();
+
+            throw new CHttpException(400,tt('Ошибка создания заявки на оплату №{number} от {date}: {error}', array(
+                '{number}' => $model->zsno0,
+                '{date}'=> date("d.m.Y",strtotime($model->zsno2)),
+                '{error}' => $error->getMessage()
+            )));
         }
     }
 
