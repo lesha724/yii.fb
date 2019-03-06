@@ -49,7 +49,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
     'dataProvider' => $dataProvider,
     'filter' => null,
     'type' => 'striped bordered',
-    'rowHtmlOptionsExpression' => function ($data){
+    'rowHtmlOptionsExpression' => function ($row, $data){
         return array(
             'data-price'=>round($data["stoimost"], 2)
         );
@@ -128,9 +128,13 @@ $url = Yii::app()->createUrl('/other/createRequestPayment');
 
 Yii::app()->clientScript->registerScript('create-request-payment', <<<JS
     $(document).on('change', '.checkbox-column>input[type="checkbox"]', function(event) {
-        var keys = $('#passes-list').yiiGridView('getSelection');
+        var checkboxes = $('#passes-list .checkbox-column>input[type="checkbox"]:checked');
         var sum = 0;
-        $.each(keys, function (index, item) { if ($(item).data('price')>0) sum+=$(item).data('price'); });
+        $.each(checkboxes, function (index, item) { 
+            var price = $(item).parents('tr').data('price');
+            if (price>0) 
+                sum+=price; 
+        });
         
         $('#label-price').text(sum);
     });
