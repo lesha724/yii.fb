@@ -40,7 +40,7 @@ $this->widget('bootstrap.widgets.TbButton', array(
 ));
 echo '</div>';
 echo '<div class="pull-right">';
-echo '<label id="label-price" class="label label-info"/>';
+echo '<span>'.tt('Выбрано на:').'</span><label id="label-price" class="label label-info">0</label>';
 echo '</div>';
 echo '</div>';
 
@@ -49,6 +49,11 @@ $this->widget('bootstrap.widgets.TbGridView', array(
     'dataProvider' => $dataProvider,
     'filter' => null,
     'type' => 'striped bordered',
+    'rowHtmlOptionsExpression' => function ($data){
+        return array(
+            'data-price'=>round($data["stoimost"], 2)
+        );
+    },
     'columns' => array(
         array(
             'id' => 'selectedIds',
@@ -123,8 +128,11 @@ $url = Yii::app()->createUrl('/other/createRequestPayment');
 
 Yii::app()->clientScript->registerScript('create-request-payment', <<<JS
     $(document).on('change', '.checkbox-column>input[type="checkbox"]', function(event) {
-        var keys = $.fn.yiiGridView.getChecked("passes-list","price");
-        //alert(keys);
+        var keys = $('#passes-list').yiiGridView('getSelection');
+        var sum = 0;
+        $.each(keys, function (index, item) { if ($(item).data('price')>0) sum+=$(item).data('price'); });
+        
+        $('#label-price').text(sum);
     });
 
     $('#studentCard-create-request').click(function(){
