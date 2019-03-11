@@ -1804,4 +1804,34 @@ SQL;
         return $result;
     }
 
+    public function findStudentByName($query, $faculty)
+    {
+        $sql = <<<SQL
+            select st1,st2,st3,st4,st20, std3, gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28
+			FROM st
+				INNER JOIN std ON(st1=std2)
+				INNER JOIN gr ON(std3=gr1)
+				INNER JOIN sg ON(sg1=gr2)
+				INNER JOIN sp ON(sp1=sg2)
+				where st2<>'' and sp5=:f1 and std11 in (0,5,6,8) and std7 is null
+				and
+				(
+					st2 CONTAINING :QUERY1
+					or st74 CONTAINING :QUERY2
+					or st117 CONTAINING :QUERY3
+					or st120 CONTAINING :QUERY4
+					or st123 CONTAINING :QUERY5
+				)
+            group by st1,st2,st3,st4,st20, std3, gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28
+			order by st2 collate UNICODE,st3,st4
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':QUERY1', $query);
+        $command->bindValue(':QUERY2', $query);
+        $command->bindValue(':QUERY3', $query);
+        $command->bindValue(':QUERY4', $query);
+        $command->bindValue(':QUERY5', $query);
+        $command->bindValue(':f1', $faculty);
+        return $command->queryAll();
+    }
 }

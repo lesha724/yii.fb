@@ -26,7 +26,6 @@ if(empty($user)){
 }
 
 $extra = '';
-$extra = '';
 /*if($message->um10 > 0)
     if(!empty($message->um100)){
         $extra = $this->renderPartial('_outputMessage', array(

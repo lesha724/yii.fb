@@ -37,77 +37,8 @@ $this->breadcrumbs=array(
     </div>
 <?php
 
-if($model->isTeacher || ($model->isStudent && PortalSettings::model()->getSettingFor(PortalSettings::STUDENT_SEND_IN_ALERT) == 1)){
-
-    $this->widget('bootstrap.widgets.TbButton', array(
-        'buttonType'=>'button',
-        'type'=>'success',
-
-        'icon'=>'plus',
-        'label'=>tt('Написать сообщение'),
-        'htmlOptions'=>array(
-            'class'=>'btn-small',
-            'id'=>'btn-new-message',
-            'data-toggle' => 'modal',
-            'data-target' => '#myModal',
-        )
-    ));
-
-    $this->beginWidget(
-        'bootstrap.widgets.TbModal',
-        array('id' => 'myModal')
-    ); ?>
-
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">&times;</a>
-        <h4><?=tt('Написать новое сообщение')?></h4>
-    </div>
-
-    <div class="modal-body">
-        <?php
-        $formModel = new CreateMessageForm();
-        /**
-         * @var $form TbActiveForm
-         */
-        $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-            'id'=>'create-message-form',
-            'htmlOptions' => array('class' => ''),
-            'method'=>'post',
-            'action'=> array('alert/send-message'),
-        ));
-
-        echo $form->textAreaRow($formModel,'body',array('rows'=>6, 'cols'=>50));
-
-        echo $form->checkBoxRow($formModel, 'notification');
-
-        $this->endWidget();
-        ?>
-    </div>
-
-    <div class="modal-footer">
-        <?php $this->widget(
-            'bootstrap.widgets.TbButton',
-            array(
-                'type' => 'primary',
-                'label' => tt('Отправить'),
-                'url' => '#',
-                'htmlOptions' => array(
-                    'id'=>'btn-send-new-message',
-                ),
-            )
-        ); ?>
-        <?php $this->widget(
-            'bootstrap.widgets.TbButton',
-            array(
-                'label' => tt('Отмена'),
-                'url' => '#',
-                'htmlOptions' => array('data-dismiss' => 'modal'),
-            )
-        ); ?>
-    </div>
-
-    <?php $this->endWidget();
-
+if($model->isTeacher || ($model->isStudent && PortalSettings::model()->getSettingFor(PortalSettings::STUDENT_SEND_IN_ALERT) == 1)):
+    echo $this->renderPartial('_form');
 ?>
 
 <div class="widget-box">
@@ -131,4 +62,4 @@ if($model->isTeacher || ($model->isStudent && PortalSettings::model()->getSettin
 </div>
 
 <?php
-}
+endif;
