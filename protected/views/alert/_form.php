@@ -72,7 +72,13 @@ $this->beginWidget(
 
 
         echo '<div class="span12">';
-        echo $form->textAreaRow($formModel,'body',array('rows'=>6, 'cols'=>100));
+        echo $form->textAreaRow($formModel,'body',
+            array(
+                'rows'=>6,
+                'cols'=>100,
+                'style'=> 'width:90%'
+            )
+        );
 
         echo $form->checkBoxRow($formModel, 'notification');
         echo $form->checkBoxRow($formModel, 'sendMail');

@@ -136,8 +136,8 @@ class Um extends CActiveRecord
                 $name = '-';
             }else{
                 $url = Yii::app()->createUrl('/site/userPhoto', array(
-                    '_id' => $user->u5,
-                    'type' => $user->u6
+                    '_id' => $user->u6,
+                    'type' => $user->u5 == 1 ? 0 : 1
                 ));
                 $name = $user->getNameWithDept();
             }

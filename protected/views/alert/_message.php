@@ -21,7 +21,7 @@ $pattern = <<<HTML
                 <img class="media-object" src="%s">
               </a>
               <div class="media-body">
-                <h4 class="media-heading">%s</h4>
+                <h5 class="media-heading">%s</h5>
                 <div class="well well-small">%s</div> 
                 %s
               </div>
@@ -33,7 +33,7 @@ echo sprintf($pattern,
     $url,
     tt('{username} <small>{date}</small>', array(
         '{username}' => $name,
-        '{date}' => date('d.m.Y',strtotime($date))
+        '{date}' => date('d.m.Y H:i',strtotime($date))
     )),
     CHtml::encode($text),
     $extra);

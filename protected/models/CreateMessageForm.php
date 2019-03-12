@@ -59,12 +59,12 @@ class CreateMessageForm extends CFormModel
 	{
         return array(
             'body'=> tt('Текст сообщения'),
-            'notification' => tt('Уведомление'),
+            'notification' => tt('Отправить с уведомлением'),
             'type' =>  tt('Кому'),
             'to' => tt('Получатель'),
             'searchField' => tt('Введите фамилию/группу (от 4-х букв)'),
             'faculty' => tt('Факультет'),
-            'sendMail' => tt('Отправлять уведомление на почту')
+            'sendMail' => tt('Отправлять сообщение на почту')
         );
 	}
 
