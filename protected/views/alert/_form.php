@@ -50,16 +50,16 @@ $this->beginWidget(
         ));
 
         echo $form->errorSummary($formModel);
-
+        echo '<div class="row-fluid">';
         echo '<div class="span6">';
         echo $form->dropDownListRow($formModel,'type', $formModel->getTypes());
         echo '</div>';
 
-        echo '<div class="span6">';
+        echo '<div class="span6" id="faculty-block">';
         echo $form->dropDownListRow($formModel,'faculty', CHtml::listData(F::model()->getAllFaculties(), 'f1', 'f3'));
         echo '</div>';
 
-        echo '<div class="span6">';
+        echo '<div class="span12">';
         echo '<div class="control-group">';
         echo '<div class="controls">';
         echo $form->hiddenField($formModel,'to', array());
@@ -70,10 +70,13 @@ $this->beginWidget(
         echo '</div>';
         echo '</div>';
 
+
         echo '<div class="span12">';
         echo $form->textAreaRow($formModel,'body',array('rows'=>6, 'cols'=>100));
 
         echo $form->checkBoxRow($formModel, 'notification');
+        echo $form->checkBoxRow($formModel, 'sendMail');
+        echo '</div>';
         echo '</div>';
 
         $this->endWidget();
@@ -113,6 +116,11 @@ Yii::app()->clientScript->registerScript('alert-autocomplite', <<<JS
     $("#CreateMessageForm_type").change(function() {
         $('#CreateMessageForm_to').val('');  
         $('#CreateMessageForm_searchField').val('');  
+        
+        if($(this).val() == '4')
+            $('#faculty-block').hide();
+        else 
+            $('#faculty-block').show();
     });
 
     $('.autocomplete').autocomplete({

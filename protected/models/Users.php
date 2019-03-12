@@ -270,35 +270,40 @@ class Users extends CActiveRecord
 
     public function renderPhoto($foto1, $type)
     {
-        $sql = <<<SQL
+        try {
+            $sql = <<<SQL
         SELECT foto3 as foto
         FROM foto
         WHERE foto1 = {$foto1} AND foto2 = {$type}
 SQL;
 
-        $string = Yii::app()->db->connectionString;
-        $parts  = explode('=', $string);
+            $string = Yii::app()->db->connectionString;
+            $parts = explode('=', $string);
 
-        $host = str_replace(';role', '', $parts[1]);
+            $host = str_replace(';role', '', $parts[1]);
 
-        $host     = trim($host.'d');
+            $host = trim($host . 'd');
 
-        $login    = Yii::app()->db->username;
-        $password = Yii::app()->db->password;
-        $dbh      = ibase_connect($host, $login, $password);
+            $login = Yii::app()->db->username;
+            $password = Yii::app()->db->password;
+            $dbh = ibase_connect($host, $login, $password);
 
-        $result = ibase_query($dbh, $sql);
-        $data   = ibase_fetch_object($result);
+            $result = ibase_query($dbh, $sql);
+            $data = ibase_fetch_object($result);
 
-        if (empty($data->FOTO)) {
+            if (empty($data->FOTO)) {
+                $defaultImg = imagecreatefrompng(Yii::app()->basePath . '/../theme/ace/assets/avatars/avatar2.png');
+                imagepng($defaultImg);
+            } else {
+                header("Content-type: image/jpeg");
+                ibase_blob_echo($data->FOTO);
+            }
+
+            ibase_free_result($result);
+        }catch (Exception $error){
             $defaultImg = imagecreatefrompng(Yii::app()->basePath.'/../theme/ace/assets/avatars/avatar2.png');
             imagepng($defaultImg);
-        } else {
-            header("Content-type: image/jpeg");
-            ibase_blob_echo($data->FOTO);
         }
-
-        ibase_free_result($result);
     }
 
 	public function getU8Type(){

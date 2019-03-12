@@ -75,7 +75,16 @@ class AlertController extends Controller
             {
                 try {
                     if ($model->save()) {
-                        Yii::app()->user->setFlash('success', 'Сообщение успешно отправлено');
+                        try {
+
+                            Yii::app()->user->setFlash('success', 'Сообщение успешно отправлено');
+
+                            if($model->sendMail){
+                                $model->sendMails();
+                            }
+                        }catch (Exception $error){
+                            Yii::app()->user->setFlash('error', 'Сообщение успешно отправлено, но ошибка оправки уведомления на почту: '. $error->getMessage());
+                        }
                     } else {
                         Yii::app()->user->setFlash('error', 'Ошибка отправления сообщения ');
                     }
@@ -87,10 +96,7 @@ class AlertController extends Controller
 
             }
         }
-        $this->redirect(array('index'));
-        /*$this->render('create',array(
-            'model'=>$model,
-        ));*/
+        $this->redirect('index');
     }
 
     /**
@@ -108,15 +114,15 @@ class AlertController extends Controller
 
     public function actionAutocomplete($type, $faculty)
     {
-        //if (! Yii::app()->request->isAjaxRequest)
-            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $query = Yii::app()->request->getParam('query', null);
 
         $suggestions = array();
 
         if($type == CreateMessageForm::TYPE_TEACHER){
-            $teachers = P::model()->findTeacherByName($query);
+            $teachers = P::model()->findUsersByNameTeacher($query);
 
             foreach($teachers as $tch)
             {
@@ -130,11 +136,11 @@ class AlertController extends Controller
 
                 $suggestions[] = array(
                     'value' => implode(' ', array($tch['dol2'], SH::getShortName($tch['p3'], $tch['p4'], $tch['p5']))) .' '. $t,
-                    'id'    => $tch['p1']
+                    'id'    => $tch['u1']
                 );
             }
         }else if ($type == CreateMessageForm::TYPE_STUDENT){
-            $students = St::model()->findStudentByName($query, $faculty);
+            $students = St::model()->findUsersByStudentName($query, $faculty);
 
             foreach($students as $st)
             {
@@ -147,11 +153,27 @@ class AlertController extends Controller
                             '{group}' => Gr::model()->getGroupName($st['st20'], $st)
                         )
                     ),
-                    'id'    => $st['st1']
+                    'id'    => $st['u1']
                 );
             }
         } else if($type == CreateMessageForm::TYPE_GROUP){
-
+            $groups = Gr::model()->getGroupsForFaculty($faculty, $query);
+            foreach($groups as $key=>$group)
+            {
+                $suggestions[] = array(
+                    'value' => Gr::model()->getGroupName($group['sem4'], $group),
+                    'id'    => $group['gr1']
+                );
+            }
+        } else if($type == CreateMessageForm::TYPE_STREAM){
+            $streams = Gr::model()->getStreamsForFaculty($faculty, $query);
+            foreach($streams as $key=>$stream)
+            {
+                $suggestions[] = array(
+                    'value' => $stream,
+                    'id'    => $key
+                );
+            }
         }
 
         $res = array(
