@@ -119,6 +119,11 @@ $this->beginWidget(
 $url = Yii::app()->createUrl('alert/autocomplete');
 
 Yii::app()->clientScript->registerScript('alert-autocomplite', <<<JS
+    $('#btn-new-message').click(function(e) {
+        $("#CreateMessageForm_type").val('1');
+        typeChanged($("#CreateMessageForm_type"));
+    });
+
     $('#btn-send-new-message').click(function(e) {
         $('#create-message-form').submit();
         e.preventDefault();

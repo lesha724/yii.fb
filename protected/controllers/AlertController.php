@@ -110,7 +110,8 @@ class AlertController extends Controller
                     Yii::app()->user->setFlash('error', 'Ошибка отправления сообщения: '.$error->getMessage());
                 }
             }else{
-                Yii::app()->user->setFlash('error', 'Ошибка отправления сообщения: '.implode('</br>', array_values($model->getErrors())));
+                $error = is_array($model->getErrors()) ? implode('</br>', array_values($model->getErrors())) : $model->getErrors();
+                Yii::app()->user->setFlash('error', 'Ошибка отправления сообщения: '. $error);
 
             }
         }
