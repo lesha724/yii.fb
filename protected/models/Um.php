@@ -148,10 +148,10 @@ class Um extends CActiveRecord
         if($this->um8 > 0){
             $gr = Gr::model()->findByPk($this->um8);
             if(empty($gr)){
-                $url= '#';
+                $url= '';
                 $name = '-';
             }else{
-                $url = '#';
+                $url = '';
                 $name = $gr->getNameByDate($gr->gr1, date('d.m.Y'));
             }
         }
@@ -159,10 +159,10 @@ class Um extends CActiveRecord
         if($this->um9 > 0){
             $sg = Gr::model()->getInfoBySg($this->um9);
             if(empty($sg)){
-                $url= '#';
+                $url= '';
                 $name = '-';
             }else{
-                $url = '#';
+                $url = '';
                 $name = $sg['pnsp2'] . '('.$sg['f2'].')';
             }
         }

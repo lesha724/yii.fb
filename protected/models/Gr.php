@@ -1346,6 +1346,6 @@ SQL;
         if(empty($row))
             return '-';
 
-        return Gr::getGroupName($row, $row['sem4']);
+        return $this->getGroupName($row['sem4'],$row);
     }
 }

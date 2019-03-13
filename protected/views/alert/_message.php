@@ -37,7 +37,7 @@ if($model->um4 == 1 && $model->um2 == Yii::app()->user->id && $model->um7 > 0) {
 $pattern = <<<HTML
             <div class="media">
               <a class="pull-left" href="#">
-                <img class="media-object" src="%s">
+                %s
               </a>
               <div class="media-body">
                 <h5 class="media-heading {$classNotification}">%s</h5>
@@ -49,7 +49,7 @@ HTML;
 
 
 echo sprintf($pattern,
-    $url,
+    empty($url) ? '' : '<img class="media-object" src="'.$url.'">',
     tt('{username} <small>{date}</small> {read}', array(
         '{username}' => $name,
         '{date}' => date('d.m.Y H:i',strtotime($date)),

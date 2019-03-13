@@ -294,6 +294,7 @@ SQL;
             $data = ibase_fetch_object($result);
 
             if (empty($data->FOTO)) {
+                header("Content-type: image/png");
                 $defaultImg = imagecreatefrompng(Yii::app()->basePath . '/../theme/ace/assets/avatars/avatar2.png');
                 imagepng($defaultImg);
             } else {
@@ -303,6 +304,7 @@ SQL;
 
             ibase_free_result($result);
         }catch (Exception $error){
+            header("Content-type: image/png");
             $defaultImg = imagecreatefrompng(Yii::app()->basePath.'/../theme/ace/assets/avatars/avatar2.png');
             imagepng($defaultImg);
         }
@@ -634,13 +636,13 @@ HTML;
               UNION
                 SELECT um.* from UM
                   INNER JOIN gr on (gr1=um8)
-                  INNER JOIN std on (std2={$this->u1} and std3=gr1)
+                  INNER JOIN std on (std2={$this->u6} and std3=gr1)
                   where um8>0 and um7=0 and um9=0 and STD11 in (0,5,6,8) and (STD7 is null)
               UNION
                 SELECT um.* from UM
                   INNER JOIN sg on (sg1=um9)
                   inner join gr on (sg.sg1 = gr.gr2)
-                  INNER JOIN std on (std2={$this->u1} and std3=gr1)
+                  INNER JOIN std on (std2={$this->u6} and std3=gr1)
                   where um8=0 and um7=0 and um9>0 and STD11 in (0,5,6,8) and (STD7 is null)
 SQL
             : '';
