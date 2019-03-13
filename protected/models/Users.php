@@ -621,11 +621,13 @@ HTML;
     }
     /**
      * Входяшие сообщения
-     * @param $u1
-     * @param bool $isStd
-     * @return static[]
+     * @param $period string
+     * @return Um[]
      */
-    public function getInputMessages(){
+    public function getInputMessages($period=Um::TIME_PERIOD_MONTH){
+
+        list($date1, $date2) = $this->_datesByPeriod($period);
+
         $extraQuery = $this->isStudent ? <<<SQL
               UNION
                 SELECT um.* from UM
@@ -647,11 +649,47 @@ SQL
                 SELECT um.* from UM
                   where um7=:id
                 {$extraQuery}
-              ) order by um3 desc
+              ) where um3 between :DATE1 and :DATE2 order by um3 desc
 SQL
             , array(
-                ':id' => $this->u1
+                ':id' => $this->u1,
+                ':DATE1' => $date1,
+                ':DATE2' => $date2
             )
         );
     }
+
+    private function _datesByPeriod($period){
+        $datetime1 = new DateTime('tomorrow');
+        $datetime2 = new DateTime();
+
+        if($period == Um::TIME_PERIOD_MONTH){
+            $datetime2 = new DateTime('- 1 month');
+        }
+        if($period == Um::TIME_PERIOD_YEAR){
+            $datetime2 = new DateTime('- 1 year');
+        }
+
+
+        return array($datetime2->format('Y-m-d H:i:s'), $datetime1->format('Y-m-d H:i:s'));
+    }
+    /**
+     * Исходящие сообщения
+     * @param $period string
+     * @return Um[]
+     */
+    public function getOutputMessages($period=Um::TIME_PERIOD_MONTH){
+
+        list($date1, $date2) = $this->_datesByPeriod($period);
+
+        return Um::model()->findAllBySql(<<<SQL
+    SELECT * FROM um WHERe um2=:um2 and um3 between :DATE1 and :DATE2 ORDER BY um3 DESC
+SQL
+            , array(
+                ':um2'=> $this->u1,
+                ':DATE1' => $date1,
+                ':DATE2' => $date2
+            ));
+    }
+
 }

@@ -8,6 +8,8 @@
 
 class AlertController extends Controller
 {
+
+
     public function filters() {
 
         return array(
@@ -50,14 +52,20 @@ class AlertController extends Controller
 
     /**
      * Индесная страница
+     * @param $period string
+     * @throws
      */
-    public function actionIndex()
+    public function actionIndex($period = Um::TIME_PERIOD_MONTH)
     {
         if(Yii::app()->user->isGuest)
             throw new CHttpException(403, tt('Доступ запрещен'));
 
+        if(!in_array($period, array(Um::TIME_PERIOD_MONTH, Um::TIME_PERIOD_YEAR)))
+            $period = Um::TIME_PERIOD_MONTH;
+
         $this->render('index', array(
-            'model'   => Yii::app()->user->model
+            'model'   => Yii::app()->user->model,
+            'period' => $period
         ));
     }
 

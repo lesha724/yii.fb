@@ -21,6 +21,8 @@
  */
 class Um extends CActiveRecord
 {
+    const TIME_PERIOD_MONTH = 'month';
+    const TIME_PERIOD_YEAR = 'year';
 	/**
 	 * @return string the associated database table name
 	 */

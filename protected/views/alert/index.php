@@ -9,6 +9,7 @@
 /**
  * @var $this AlertController
  * @var $model Users
+ * @var $period string
  */
 
 $this->pageHeader=tt('Оповещение');
@@ -27,11 +28,39 @@ Yii::app()->clientScript->registerCss('style-alert', <<<CSS
     #alert-service img{
         max-height: 50px;
     }
+    #period-type label{
+        display: inline;
+    }
 CSS
 );
-
-if($model->isTeacher || ($model->isStudent && PortalSettings::model()->getSettingFor(PortalSettings::STUDENT_SEND_IN_ALERT) == 1))
+echo '<div class="row-fluid">';
+$isOutputEnabled = $model->isTeacher || ($model->isStudent && PortalSettings::model()->getSettingFor(PortalSettings::STUDENT_SEND_IN_ALERT) == 1);
+if($isOutputEnabled){
+    echo '<div class="pull-left">';
     echo $this->renderPartial('_form');
+    echo '</div>';
+}
+
+echo '<div class="pull-right">';
+echo CHtml::radioButtonList('period-type', $period,
+    array(
+        Um::TIME_PERIOD_MONTH => tt('Месяц'),
+        Um::TIME_PERIOD_YEAR => tt('Год')
+    ),
+    array(
+        'separator' => " | ",
+    )
+);
+echo '</div>';
+echo '</div>';
+$url = Yii::app()->createUrl("/alert/index");
+Yii::app()->clientScript->registerScript('change-periodType', <<<JS
+     $("#period-type").on("change", function(){
+         var period = $('input[name="period-type"]:checked').val();
+         window.location = "{$url}?period=" + period;
+     });
+JS
+    );
 ?>
 <div class="row-fluid" id="alert-service">
     <div class="span6">
@@ -49,7 +78,8 @@ if($model->isTeacher || ($model->isStudent && PortalSettings::model()->getSettin
             <div class="widget-body">
                 <div class="widget-main">
                     <?=$this->renderPartial('_input', array(
-                        'model' => $model
+                        'model' => $model,
+                        'period' => $period
                     ));?>
                 </div>
             </div>
@@ -57,8 +87,7 @@ if($model->isTeacher || ($model->isStudent && PortalSettings::model()->getSettin
     </div>
 <?php
 
-if($model->isTeacher || ($model->isStudent && PortalSettings::model()->getSettingFor(PortalSettings::STUDENT_SEND_IN_ALERT) == 1)):
-    //echo $this->renderPartial('_form');
+if($isOutputEnabled):
 ?>
 
     <div class="span6">
@@ -76,7 +105,8 @@ if($model->isTeacher || ($model->isStudent && PortalSettings::model()->getSettin
             <div class="widget-body">
                 <div class="widget-main">
                     <?=$this->renderPartial('_output', array(
-                        'model' => $model
+                        'model' => $model,
+                        'period' => $period
                     ))?>
                 </div>
             </div>

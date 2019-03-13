@@ -9,14 +9,10 @@
 /**
  * @var $this AlertController
  * @var $model Users
+ * @var $period string
  */
 
-$messages = Um::model()->findAllBySql(<<<SQL
-    SELECT * FROM um WHERe um2=:um2 ORDER BY um3 DESC
-SQL
-    , array(
-        ':um2'=> $model->u1
-    ));
+$messages = $model->getOutputMessages($period);
 
 if(empty($messages)): ?>
    <div class="alert alert-warning">

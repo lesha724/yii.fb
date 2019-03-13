@@ -10,10 +10,11 @@
 /**
  * @var $this AlertController
  * @var $model Users
+ * @var $period string
  */
 
 
-$messages = $model->getInputMessages();
+$messages = $model->getInputMessages($period);
 
 if(empty($messages)): ?>
     <div class="alert alert-warning">
