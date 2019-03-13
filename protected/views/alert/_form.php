@@ -80,7 +80,9 @@ $this->beginWidget(
             )
         );
 
+        echo '<div id="notification-block">';
         echo $form->checkBoxRow($formModel, 'notification');
+        echo '</div>';
         echo $form->checkBoxRow($formModel, 'sendMail');
         echo '</div>';
         echo '</div>';
@@ -98,6 +100,7 @@ $this->beginWidget(
                 'url' => '#',
                 'htmlOptions' => array(
                     'id'=>'btn-send-new-message',
+                    'data-loading-text' => "Loading..."
                 ),
             )
         ); ?>
@@ -116,17 +119,25 @@ $this->beginWidget(
 $url = Yii::app()->createUrl('alert/autocomplete');
 
 Yii::app()->clientScript->registerScript('alert-autocomplite', <<<JS
-    $('#btn-send-new-message').click(function() {
+    $('#btn-send-new-message').click(function(e) {
         $('#create-message-form').submit();
+        e.preventDefault();
     })
     $("#CreateMessageForm_type").change(function() {
         $('#CreateMessageForm_to').val('');  
         $('#CreateMessageForm_searchField').val('');  
+        var current = $(this).val();
         
-        if($(this).val() == '4')
-            $('#faculty-block').hide();
-        else 
+        if(current == '2' || current == '3'){
+            $('#notification-block').hide();
             $('#faculty-block').show();
+        }else {
+            $('#notification-block').show();
+            if($(this).val() == '4')
+                $('#faculty-block').hide();
+            else 
+                $('#faculty-block').show();
+        }
     });
 
     $('.autocomplete').autocomplete({

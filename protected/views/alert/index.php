@@ -31,6 +31,9 @@ Yii::app()->clientScript->registerCss('style-alert', <<<CSS
     #period-type label{
         display: inline;
     }
+    #alert-service .badge>small {
+        color:#eeeeee;
+    }
 CSS
 );
 echo '<div class="row-fluid">';

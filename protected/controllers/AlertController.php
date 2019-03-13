@@ -8,7 +8,14 @@
 
 class AlertController extends Controller
 {
+    public function beforeAction($action){
+        if(!Yii::app()->user->isGuest)
+            Yii::app()->user->model->saveAttributes(array(
+                'u15' => date('Y-m-d H:i:s')
+            ));
 
+        return parent::beforeAction($action);
+    }
 
     public function filters() {
 
@@ -79,6 +86,9 @@ class AlertController extends Controller
         if(isset($_POST['CreateMessageForm']))
         {
             $model->attributes=$_POST['CreateMessageForm'];
+            if($model->type != $model::TYPE_STUDENT && $model->type != $model::TYPE_TEACHER)
+                $model->notification = false;
+
             if($model->validate())
             {
                 try {

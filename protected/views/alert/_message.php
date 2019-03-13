@@ -7,6 +7,7 @@
  */
 
 /**
+ * @var $model Um
  * @var $this AlertController
  * @var $text string
  * @var $name string
@@ -15,13 +16,30 @@
  * @var $extra string
  */
 
+$classNotification = '';
+$strNotification = '';
+if($model->um4 == 1 && $model->um2 == Yii::app()->user->id && $model->um7 > 0) {
+    $to = Users::model()->findByPk($model->um7);
+    if($to != null){
+        $classNotification = $to->u15 > $model->um3 ? 'badge badge-success' : 'badge badge-important';
+        /*$strNotification =
+            $to->u15 > $model->um3 ?
+                '<span class="badge badge-success"><i class="icon-plus"></i></span>' :
+                '<span class="badge badge-important"><i class="icon-minus"></i></span>';
+
+        $strNotification = CHtml::tag('div',  array(
+            'class' => 'pull-right'
+        ), $strNotification);*/
+    }
+}
+
 $pattern = <<<HTML
             <div class="media">
               <a class="pull-left" href="#">
                 <img class="media-object" src="%s">
               </a>
               <div class="media-body">
-                <h5 class="media-heading">%s</h5>
+                <h5 class="media-heading {$classNotification}">%s</h5>
                 <div class="well well-small">%s</div> 
                 %s
               </div>
@@ -31,9 +49,10 @@ HTML;
 
 echo sprintf($pattern,
     $url,
-    tt('{username} <small>{date}</small>', array(
+    tt('{username} <small>{date}</small> {read}', array(
         '{username}' => $name,
-        '{date}' => date('d.m.Y H:i',strtotime($date))
+        '{date}' => date('d.m.Y H:i',strtotime($date)),
+        '{read}' => $strNotification
     )),
     CHtml::encode($text),
     $extra);

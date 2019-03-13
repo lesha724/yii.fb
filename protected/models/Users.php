@@ -17,6 +17,7 @@
  * @property string $u11
  * @property string $u12
  * @property string $u13
+ * @property string $u15
  *
  * @property bool isStudent
  * @property bool isAdmin
@@ -63,6 +64,7 @@ class Users extends CActiveRecord
 			array('u4', 'length', 'max'=>400),
 			array('u9, u10, u12', 'length', 'max'=>45),
             array('u13', 'length', 'max'=>20),
+            array('u15', 'length', 'max'=>20),
             array('u2, u4', 'checkIfUnique'),
             //array('u2', 'length', 'min'=>5, 'max'=>30),
             // Логин должен соответствовать шаблону

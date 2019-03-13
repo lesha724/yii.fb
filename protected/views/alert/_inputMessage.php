@@ -39,5 +39,6 @@ echo $this->renderPartial('_message', array(
     'text' => $message->um5,
     'url'=> $url,
     'name' => $name,
-    'extra' => $extra
+    'extra' => $extra,
+    'model' =>$message
 ));

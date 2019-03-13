@@ -135,6 +135,24 @@ class CreateMessageForm extends CFormModel
                 throw new Exception($message);
 
             return true;
+        }else if($this->type == self::TYPE_GROUP){
+
+            return true;
+        }else if($this->type == self::TYPE_STREAM){
+
+            return true;
         }
+
+        return false;
+    }
+
+    /**
+     * @param null $attributes
+     * @param bool $clearErrors
+     * @return bool
+     */
+    public function validate($attributes = null, $clearErrors = true)
+    {
+        return parent::validate($attributes, $clearErrors);
     }
 }
