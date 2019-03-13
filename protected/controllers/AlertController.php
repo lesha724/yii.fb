@@ -133,8 +133,8 @@ class AlertController extends Controller
 
     public function actionAutocomplete($type, $faculty)
     {
-        if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        //if (! Yii::app()->request->isAjaxRequest)
+            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $query = Yii::app()->request->getParam('query', null);
 

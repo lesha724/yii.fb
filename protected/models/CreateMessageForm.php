@@ -137,8 +137,42 @@ class CreateMessageForm extends CFormModel
             return true;
         }else if($this->type == self::TYPE_GROUP){
 
+            $users = Users::model()->getUsersByGroup($this->to);
+
+            if(empty($users))
+                throw new Exception('Не найдены пользователи данной группы');
+
+            //var_dump($users);
+
+            list($result, $message) = Controller::mail(
+                CHtml::listData($users, 'u4', 'name'),
+                tt('Сообщение от {name}', array(
+                    '{name}' => Yii::app()->user->name
+                )),
+                $this->body
+            );
+
+            if(!$result)
+                throw new Exception($message);
+
             return true;
         }else if($this->type == self::TYPE_STREAM){
+
+            $users = Users::model()->getUsersByStream($this->to);
+
+            if(empty($users))
+                throw new Exception('Не найдены пользователи данной группы');
+
+            list($result, $message) = Controller::mail(
+                CHtml::listData($users, 'u4', 'name'),
+                tt('Сообщение от {name}', array(
+                    '{name}' => Yii::app()->user->name
+                )),
+                $this->body
+            );
+
+            if(!$result)
+                throw new Exception($message);
 
             return true;
         }

@@ -696,4 +696,37 @@ SQL
             ));
     }
 
+    /**
+     * @param $gr1
+     * @return Users[]
+     */
+    public function getUsersByGroup($gr1){
+        $sql = <<<SQL
+        SELECT users.* FROM std
+            INNER JOIN users on (u5=0 and u6=std2)
+            where STD11 in (0,5,6,8) and (STD7 is null) and u4!='' and std3=:GR1
+SQL;
+
+        return $this->findAllBySql($sql, array(
+            ':GR1' => $gr1
+        ));
+    }
+
+    /**
+     * @param $gr1
+     * @return Users[]
+     */
+    public function getUsersByStream($sg1){
+        $sql = <<<SQL
+        SELECT users.* FROM gr
+            INNER JOIN std on (std3=gr1)
+            INNER JOIN users on (u5=0 and u6=std2)
+            where STD11 in (0,5,6,8) and (STD7 is null) and u4!='' and gr2=:SG1
+SQL;
+
+        return $this->findAllBySql($sql, array(
+            ':SG1' => $sg1
+        ));
+    }
+
 }
