@@ -91,6 +91,11 @@ class PortalSettings extends CActiveRecord
     const STUDENT_SEND_IN_ALERT = 140;
 
     /**
+     * @var int дефолтный акшен
+     */
+    const DEFAULT_ACTION = 142;
+
+    /**
      * Для хранения настро
      * @var array
      */
