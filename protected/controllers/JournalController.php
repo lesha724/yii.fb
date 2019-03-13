@@ -1630,8 +1630,10 @@ SQL;
             }else
             {
                 $r1 = R::model()->getR1ByLesson($elgzst->elgzst2, $elgzst->elgzst1);
-                if(empty($r1))
+                if(empty($r1)) {
+                    $errorType = 2;
                     $error = true;
+                }
                 else {
                     $sql = <<<SQL
             SELECT * FROM  EL_GURNAL(:P1,0,0,0,2,0,:R1,2,0);
