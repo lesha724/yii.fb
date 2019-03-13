@@ -30,5 +30,6 @@ echo $this->renderPartial('_message', array(
     'url'=> $url,
     'name' => $name,
     'extra' => $extra,
-    'model' =>$message
+    'model' =>$message,
+    'extraTitle' => ''
 ));

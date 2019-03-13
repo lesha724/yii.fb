@@ -14,6 +14,7 @@
  * @var $url string
  * @var $date string
  * @var $extra string
+ * @var $extraTitle string
  */
 
 $classNotification = '';
@@ -53,6 +54,6 @@ echo sprintf($pattern,
         '{username}' => $name,
         '{date}' => date('d.m.Y H:i',strtotime($date)),
         '{read}' => $strNotification
-    )),
+    )). $extraTitle,
     CHtml::encode($text),
     $extra);

@@ -122,24 +122,42 @@ Yii::app()->clientScript->registerScript('alert-autocomplite', <<<JS
     $('#btn-send-new-message').click(function(e) {
         $('#create-message-form').submit();
         e.preventDefault();
-    })
+    });
+    
+    $('.btn-response').click(function(e) {
+        
+        $("#CreateMessageForm_type").val($(this).data('type'));
+        typeChanged($("#CreateMessageForm_type"));
+        
+        $('#CreateMessageForm_to').val($(this).data('id'));
+        $('#CreateMessageForm_searchField').val($(this).data('name'));  
+        
+        
+        $('#myModal').modal('show');
+        e.preventDefault();
+    });
+
     $("#CreateMessageForm_type").change(function() {
+        typeChanged($(this));
+    });
+
+    function typeChanged(elem){
         $('#CreateMessageForm_to').val('');  
         $('#CreateMessageForm_searchField').val('');  
-        var current = $(this).val();
+        var current = elem.val();
         
         if(current == '2' || current == '3'){
             $('#notification-block').hide();
             $('#faculty-block').show();
         }else {
             $('#notification-block').show();
-            if($(this).val() == '4')
+            if(current == '4')
                 $('#faculty-block').hide();
             else 
                 $('#faculty-block').show();
         }
-    });
-
+    }
+    
     $('.autocomplete').autocomplete({
         serviceUrl: 
             function(obj){

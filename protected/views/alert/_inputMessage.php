@@ -40,5 +40,20 @@ echo $this->renderPartial('_message', array(
     'url'=> $url,
     'name' => $name,
     'extra' => $extra,
-    'model' =>$message
+    'model' =>$message,
+    'extraTitle' => CHtml::tag(
+        'div',
+        array(
+            'class' => 'pull-right'
+        ),
+        CHtml::button(
+            tt('Ответить'),
+            array(
+                'class' => 'btn btn-mini btn-success btn-response',
+                'data-id' => $message->um2,
+                'data-name' => $name,
+                'data-type' => ! $user ? '0' : ($user->u5 == 0 ? 1 : 4)
+            )
+        )
+    )
 ));
