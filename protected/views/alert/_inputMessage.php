@@ -10,6 +10,7 @@
  * @var $model Users
  * @var $this AlertController
  * @var $message Um
+ * @var $isOutputEnabled bool
  */
 
 
@@ -33,6 +34,21 @@ $extra = '';
             'message'=> $message->um100
         ), true);
     }*/
+$extraTitle = $isOutputEnabled ? CHtml::tag(
+    'div',
+    array(
+        'class' => 'pull-right'
+    ),
+    CHtml::button(
+        tt('Ответить'),
+        array(
+            'class' => 'btn btn-mini btn-success btn-response',
+            'data-id' => $message->um2,
+            'data-name' => $name,
+            'data-type' => ! $user ? '0' : ($user->u5 == 0 ? 1 : 4)
+        )
+    )
+) : '';
 
 echo $this->renderPartial('_message', array(
     'date' => $message->um3,
@@ -41,19 +57,5 @@ echo $this->renderPartial('_message', array(
     'name' => $name,
     'extra' => $extra,
     'model' =>$message,
-    'extraTitle' => CHtml::tag(
-        'div',
-        array(
-            'class' => 'pull-right'
-        ),
-        CHtml::button(
-            tt('Ответить'),
-            array(
-                'class' => 'btn btn-mini btn-success btn-response',
-                'data-id' => $message->um2,
-                'data-name' => $name,
-                'data-type' => ! $user ? '0' : ($user->u5 == 0 ? 1 : 4)
-            )
-        )
-    )
+    'extraTitle' => $extraTitle
 ));

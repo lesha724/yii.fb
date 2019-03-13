@@ -82,7 +82,8 @@ JS
                 <div class="widget-main">
                     <?=$this->renderPartial('_input', array(
                         'model' => $model,
-                        'period' => $period
+                        'period' => $period,
+                        'isOutputEnabled' => $isOutputEnabled
                     ));?>
                 </div>
             </div>
