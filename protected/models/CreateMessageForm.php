@@ -148,12 +148,17 @@ class CreateMessageForm extends CFormModel
             return true;
         }else if($this->type == self::TYPE_STREAM){
 
-            $users = Users::model()->getUsersByStream($this->to);
+            $groups = Gr::model()->getGroupsIdBySg1($this->to);
 
-            if(empty($users))
-                throw new Exception('Не найдены пользователи данного потока');
+            foreach ($groups as $group) {
 
-            $this->_sendMailByUsers($users);
+                $users = Users::model()->getUsersByGroup($group);
+
+                if (empty($users))
+                    throw new Exception('Не найдены пользователи данного потока');
+
+                $this->_sendMailByUsers($users);
+            }
 
             return true;
         }
@@ -175,7 +180,7 @@ class CreateMessageForm extends CFormModel
 
         foreach ($listUsers as $usersForMail) {
             list($result, $message) = Controller::mail(
-                CHtml::listData($usersForMail, 'u4', 'name'),
+                CHtml::listData($usersForMail, 'u4', 'u1'),
                 tt('Сообщение от {name}', array(
                     '{name}' => Yii::app()->user->name
                 )),
