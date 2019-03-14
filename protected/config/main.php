@@ -56,10 +56,6 @@ $config = array(
 				//'enableCsrfValidation'=>true,
 				//'csrfTokenName'=>'csrf-mkr'
 		),
-		/*'user'=>array(
-			// enable cookie-based authentication
-			'allowAutoLogin'=>true,
-		),*/
 		'session'=>array(
 			'timeout' => 1440,
 		),
@@ -85,10 +81,6 @@ $config = array(
 		'cache' => array(
 			'class' => 'CFileCache',
 		),
-		/*'assetManager' => array(
-			'class' => 'ext.EAssetManagerBoostGz',
-			'minifiedExtensionFlags' => array('min.js', 'minified.js', 'packed.js'),
-		),*/
 		'clientScript'=>array(
 			'packages' => array(
 				'jquery' => array( // jQuery CDN - provided by (mt) Media Temple
@@ -199,14 +191,6 @@ $config = array(
                     'depends'=>array('jquery'),
                 ),
             ),
-			'behaviors' => array(
-				array(
-					'class' => 'ext.behaviors.localscripts.LocalScriptsBehavior',
-					'publishJs' => !YII_DEBUG,
-					// Uncomment this if your css don't use relative links
-					// 'publishCss' => !YII_DEBUG,
-				),
-			),
 		),
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
@@ -223,12 +207,6 @@ $config = array(
 					'class'=>'CFileLogRoute',
 					'levels'=>'error, warning',
 				),
-				/*array(
-					'class'=>'application.extensions.yii-debug-toolbar.YiiDebugToolbarRoute',
-					//'ipFilters'=>array('77.121.11.10'),
-					//'ipFilters'=>array('109.87.233.112'),
-					//'ipFilters'=>array('93.78.170.140'),
-				),*/
 			),
 		),
 		'mobileDetect' => array(
