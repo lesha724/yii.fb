@@ -44,9 +44,10 @@ $this->beginWidget(
             'method'=>'post',
             'action'=> array('alert/send'),
             'enableAjaxValidation'=>true,
-            /*'clientOptions'=>array(
+            'clientOptions'=>array(
                 'validateOnSubmit'=>true,
-            ),*/
+                'validationUrl' => array('alert/validateSend')
+            ),
         ));
 
         echo $form->errorSummary($formModel);

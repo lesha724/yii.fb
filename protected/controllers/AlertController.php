@@ -21,7 +21,7 @@ class AlertController extends Controller
 
         return array(
             'accessControl',
-            'checkPermission + send, autocomplete '
+            'checkPermission + send, autocomplete, validateSend '
         );
     }
 
@@ -38,6 +38,7 @@ class AlertController extends Controller
                 'actions' => array(
                     'index',
                     'send',
+                    'validateSend',
                     'autocomplete'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch || Yii::app()->user->isStd',
@@ -76,12 +77,21 @@ class AlertController extends Controller
         ));
     }
 
+    public function actionValidateSend(){
+        $model=new CreateMessageForm();
+        $model->unsetAttributes();
+        echo CActiveForm::validate($model);
+        Yii::app()->end();
+    }
+
     public function actionSend()
     {
+        if(Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(400, 'Только POST');
         $model=new CreateMessageForm();
         $model->unsetAttributes();
         // Uncomment the following line if AJAX validation is needed
-        $this->performAjaxValidation($model);
+        //$this->performAjaxValidation($model);
 
         if(isset($_POST['CreateMessageForm']))
         {
@@ -115,7 +125,7 @@ class AlertController extends Controller
 
             }
         }
-        $this->redirect('index');
+        $this->redirect(array('alert/index'), false, 301);
     }
 
     /**
