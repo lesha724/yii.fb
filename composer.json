@@ -8,5 +8,10 @@
         "ext-mbstring": "*",
         "ext-PDO": "*",
         "ext-PDO_Firebird": "*"
+    },
+    "autoload": {
+        "files": [
+            "protected/globalFunctions.php"
+        ]
     }
 }

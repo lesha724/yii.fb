@@ -18,10 +18,10 @@ define('MENU_ELEMENT_AUTH_DOCTOR', 'need_auth_doctor');
 
 Yii::setPathOfAlias('bootstrap', dirname(__FILE__).'/../extensions/bootstrap');
 
-$params = require(dirname(__FILE__).'/params.php');
+$params = getSettingsArrayFromFile(dirname(__FILE__).'/params.inc');
 //разрешена ли у нас авторизация через соцсети
 $params['enableEAuth'] = false;
-$paramsEAuth = require(dirname(__FILE__) . '/paramsEAuth.php');
+$paramsEAuth = getSettingsArrayFromFile(dirname(__FILE__) . '/paramsEAuth.inc');
 if (isset($paramsEAuth['enable']))
     $params['enableEAuth'] = $paramsEAuth['enable'];
 
@@ -112,12 +112,12 @@ $config = array(
                     'js' => array('js/spin.min.js'),
                     'depends' => array('jquery')
                 ),
-                'jqgrid' => array(
+                /*'jqgrid' => array(
                     'baseUrl' => 'theme/ace/assets/',
                     'css' => array('css/ui.jqgrid.css'),
                     'js' => array('js/jqGrid/jquery.jqGrid.min.js'),
                     'depends' => array('jquery')
-                ),
+                ),*/
                 'dataTables' => array(
                     'baseUrl' => 'theme/ace/assets/',
                     'js' => array('js/jquery.dataTables.min1.js', 'js/jquery.dataTables.bootstrap.js'),
@@ -153,7 +153,7 @@ $config = array(
                     'js' => array('js/jquery-ui-1.10.3.full.min.js'),
                     'depends'=>array('jquery'),
                 ),
-                'jqplot' => array(
+                /*'jqplot' => array(
                     'baseUrl' => 'theme/ace/assets/',
                     'css' => array('css/jquery.jqplot.css'),
                     'js' => array(
@@ -163,17 +163,17 @@ $config = array(
                         'js/jqplot/jqplot.dateAxisRenderer.js',
                     ),
                     'depends'=>array('jquery'),
-                ),
-                'nestable' => array(
+                ),*/
+                /*'nestable' => array(
                     'baseUrl' => 'theme/ace/assets/',
                     'js' => array('js/jquery.nestable.min.js'),
                     'depends'=>array('jquery'),
-                ),
+                ),*/
                 'jquery2' => array(
                     'baseUrl' => 'theme/ace/assets/',
                     'js' => array('js/jquery-2.0.3.min.js'),
                 ),
-                'form-wizard' => array(
+                /*'form-wizard' => array(
                     'baseUrl' => 'theme/ace/assets/',
                     'css' => array('css/select2.css'),
                     'js' => array(
@@ -184,7 +184,7 @@ $config = array(
                         'js/select2.min.js'
                     ),
                     'depends'=>array('jquery'),
-                ),
+                ),*/
                 'autocomplete' => array(
                     'baseUrl' => 'js/',
                     'js' => array('jquery.autocomplete.js'),
@@ -196,10 +196,13 @@ $config = array(
 			// use 'site/error' action to display errors
 			'errorAction'=>'site/error',
 		),
-		'Smtpmail'=>array(
+		'Smtpmail'=>array_merge(
+		    array(
 				'class'=>'application.extensions.smtpmail.PHPMailer',
 				'SMTPAuth'=>true,
-		)+require(dirname(__FILE__).'/mail.php'),
+		    ),
+            getSettingsArrayFromFile(dirname(__FILE__) .'/mail.inc')
+        ),
 		'log'=>array(
 			'class'=>'CLogRouter',
 			'routes'=>array(
