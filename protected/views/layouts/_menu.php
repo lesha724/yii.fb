@@ -275,11 +275,6 @@ $this->widget('zii.widgets.CMenu', array(
                     'active' => $_a=='modules' && $_m=='admin'
                 ),
                 array(
-                    'label'  => $_l2.tt('Абитуриент'),
-                    'url'    => _u('/admin/default/entrance'),
-                    'active' => $_a=='entrance' && $_m=='admin'
-                ),
-                array(
                     'label'  => $_l2.tt('Трудоустройство'),
                     'url'    => _u('/admin/default/employment'),
                     'active' => $_a=='employment' && $_m=='admin'
@@ -689,39 +684,6 @@ $this->widget('zii.widgets.CMenu', array(
             'visible' => _ch('portfolio', 'main') && ($isTch||$isAdmin||$isStd) && PortalSettings::model()->getSettingFor(PortalSettings::USE_PORTFOLIO) == 1,
         ),
         array(
-            'label' => _l('Абитуриент', 'book'),
-            'url' => '#',
-            'linkOptions'=> $_l,
-            'itemOptions'=>_i('entrance'),
-            'items' => array_merge(array(
-                array(
-                    'label'   => $_l2.tt('Ход приема документов'),
-                    'url'     => _u('/entrance/documentReception'),
-                    'visible' => _ch('entrance', 'documentReception'),
-                    'active'  => $_c=='entrance' && $_a=='documentReception'
-                ),
-                array(
-                    'label'   => $_l2.tt('Рейтинговый список'),
-                    'url'     => _u('/entrance/rating'),
-                    'visible' => _ch('entrance', 'rating'),
-                    'active'  => $_c=='entrance' && $_a=='rating' && !Yii::app()->request->getParam('sortByStatus', null)
-                ),
-                array(
-                    'label'   => $_l2.tt('Список рекомендованных'),
-                    'url'     => _u('/entrance/rating', array('sortByStatus' => 1)),
-                    'visible' => _ch('entrance', 'rating'),
-                    'active'  => $_c=='entrance' && $_a=='rating' && Yii::app()->request->getParam('sortByStatus', null)
-                ),
-                array(
-                    'label'   => $_l2.tt('Регистрация'),
-                    'url'     => _u('/entrance/registration'),
-                    'visible' => _ch('entrance', 'registration'),
-                    'active'  => $_c=='entrance' && $_a=='registration'
-                ),
-            ),getDopItem('entrance',0)),
-            'visible' => _ch('entrance', 'main')
-        ),
-        array(
             'label' => _l('Нагрузка', 'briefcase'),
             'url' => '#',
             'linkOptions'=> $_l,
@@ -817,12 +779,6 @@ $this->widget('zii.widgets.CMenu', array(
             'linkOptions'=> $_l,
             'itemOptions'=>_i('other'),
             'items' =>array_merge( array(
-                array(
-                    'label'   => $_l2.tt('Опрос'),
-                    'url'     => _u('/quiz/index'),
-                    'visible' => _ch('quiz', 'index') && ($isTch || $isDoctor),
-                    'active'  => $_c=='quiz' && $_a=='index '
-                ),
                 array(
                     'label'   => $_l2.tt('Телефонный справочник'),
                     'url'     => _u('/other/phones'),

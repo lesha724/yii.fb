@@ -1,9 +1,5 @@
 <?php
 
-
-// Grab the Apostle namespace
-use Apostle\Mail;
-
 class OtherController extends Controller
 {
     public function filters() {
@@ -34,7 +30,6 @@ class OtherController extends Controller
             array('allow',
                 'actions' => array(
                     'orderLesson', 'freeRooms', 'saveLessonOrder',
-                    'deleteComment',
                     'renderAddSpkr',
                     'addSpkr'
                 ),
@@ -61,7 +56,6 @@ class OtherController extends Controller
             array('allow',
                 'actions' => array(
                     'phones',
-                    'employment',
                     'studentInfo', //проверка идет в самом методе
 
                     'studentPassport', //Проверка идет в самом методе
@@ -593,113 +587,6 @@ class OtherController extends Controller
                 'res'    => $res,
                 'errors' => isset($model)?$model->getErrors():null
             ))
-        );
-    }
-
-    public function actionEmployment()
-    {
-        $st1 = Yii::app()->request->getParam('id', null);
-
-        if (empty($st1)) {
-
-            $model = new FilterForm;
-            $model->scenario = 'employment';
-
-            if (isset($_REQUEST['FilterForm']))
-                $model->attributes=$_REQUEST['FilterForm'];
-
-            $this->render('employment', array(
-                'model' => $model,
-            ));
-
-        } else {
-
-            $student = St::model()->findByPk($st1);
-
-            $model = Sdp::model()->loadModel($st1);
-
-            $user = Yii::app()->user;
-            $isEditable = $user->isAdmin ||
-                          ($user->isStd && $user->dbModel->st1 == $st1);
-
-            if ($isEditable && isset($_REQUEST['Sdp'])) {
-
-                $model->attributes = $_REQUEST['Sdp'];
-
-                if ($model->validate()) {
-                    $model->save();
-                } else
-                    Yii::app()->user->setFlash('error', tt('Пожалуйста, исправьте возникшие ошибки!'));
-
-            }
-
-            if ($user->isTch) {
-                $message = Yii::app()->request->getParam('message', null);
-                if (! empty($message)) {
-                    $comment = new Psto;
-                    $comment->psto1 = $user->dbModel->p1;
-                    $comment->psto2 = $st1;
-                    $comment->psto3 = $message;
-                    $comment->psto4 = new CDbExpression('current_timestamp');
-                    $comment->save();
-                    $this->redirect($this->createUrl('/other/employment', array('id' => $st1)));
-                }
-
-            }
-
-            $criteria = new CDbCriteria;
-            $criteria->compare('psto2', $st1);
-            $criteria->order = 'psto4 DESC';
-            $comments = Psto::model()->findAll($criteria);
-
-
-            $this->render('employment/_st_info', array(
-                'model'      => $model,
-                'student'    => $student,
-                'isEditable' => $isEditable,
-                'comments'   => $comments,
-            ));
-
-        }
-    }
-
-    public function actionDeleteComment()
-    {
-        //if (! Yii::app()->request->isAjaxRequest)
-        //    throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
-
-        $user = Yii::app()->user;
-
-        if (! $user->isTch)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
-
-        $psto1 = Yii::app()->request->getParam('psto1', null);
-        $psto2 = Yii::app()->request->getParam('psto2', null);
-        $psto4 = Yii::app()->request->getParam('psto4', null);
-
-
-        if (empty($psto1) || empty($psto2) || empty($psto4))
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
-
-        if ($psto1 != $user->dbModel->p1)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
-
-        $sql = <<<SQL
-            DELETE
-            FROM psto
-            WHERE psto1 = :PSTO1 and psto2 = :PSTO2 and psto4 >= :PSTO4
-            ROWS 1
-SQL;
-
-
-        $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':PSTO1', $psto1);
-        $command->bindValue(':PSTO2', $psto2);
-        $command->bindValue(':PSTO4', $psto4);
-        $res = $command->execute();
-
-        Yii::app()->end(
-            CJSON::encode(array('res' => $res))
         );
     }
 

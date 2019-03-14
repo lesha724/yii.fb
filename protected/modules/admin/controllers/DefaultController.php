@@ -1061,22 +1061,6 @@ class DefaultController extends AdminController
         ));
     }
 
-    public function actionEntrance()
-    {
-        $settings = Yii::app()->request->getParam('settings', array());
-
-        foreach ($settings as $key => $value) {
-            PortalSettings::model()
-                ->findByPk($key)
-                ->saveAttributes(array(
-                    'ps2' => $value
-                ));
-        }
-
-        $this->render('entrance', array(
-        ));
-    }
-
     public function actionMenu()
     {
         $webroot = Yii::getPathOfAlias('application');
@@ -1111,26 +1095,8 @@ class DefaultController extends AdminController
         else
             $settings = '';
 
-        //var_dump($settings);
-
         $this->render('seo', array(
             'settings' => $settings
-        ));
-    }
-
-    public function actionEmployment()
-    {
-        $settings = Yii::app()->request->getParam('settings', array());
-
-        foreach ($settings as $key => $value) {
-            PortalSettings::model()
-                ->findByPk($key)
-                ->saveAttributes(array(
-                    'ps2' => $value
-                ));
-        }
-
-        $this->render('employment', array(
         ));
     }
 }
