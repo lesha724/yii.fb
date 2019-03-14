@@ -163,7 +163,7 @@ class Um extends CActiveRecord
                 $name = '-';
             }else{
                 $url = '';
-                $name = $sg['pnsp2'] . '('.$sg['f2'].')';
+                $name = $sg['pnsp2'] . '('.$sg['f2'].') '. $sg['sg3']. ' '. SH::convertEducationType($sg['sg4']);
             }
         }
 

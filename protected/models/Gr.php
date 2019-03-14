@@ -1347,12 +1347,12 @@ SQL;
             return array();
 
         $sql = <<<SQL
-          SELECT pnsp2, pnsp17,f2,f3,f26,f35 FROM sg
+          SELECT pnsp2, pnsp17,f2,f3,f26,f35,sg3, sg4 FROM sg
 			inner join sp on (sg.sg2 = sp.sp1)
 			inner join pnsp on (sp.sp11 = pnsp.pnsp1)
 			inner join f on (sp.sp5= f.f1)
 		where sg1=:SG1
-		GROUP BY pnsp2,pnsp17,f2,f3,f26,f35
+		GROUP BY pnsp2,pnsp17,f2,f3,f26,f35,sg3, sg4
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':SG1', $sg1);
