@@ -52,21 +52,8 @@
                             'name'=>'Запись на выборочные дисциплины',
                             'authOnly' => $studentStr
                         ),
-                        'orderLesson' => array(
-                            'name'=>'Заказ переноса занятия',
-                            'authOnly' => $teacherStr
-                        ),
                         'studentInfo' => 'Данные студенты',
                         'studentCard' => 'Карточка студента',
-                    ),
-                ),
-                array(
-                    'name'       => 'Абитуриент',
-                    'controller' => 'entrance',
-                    'items' => array(
-                        'documentReception' => 'Ход приема документов',
-                        'rating'            => 'Рейтинговый список',
-                        'registration'      => 'Регистрация',
                     ),
                 ),
                 array(
@@ -140,13 +127,6 @@
                             'name'=>'Ввод посещаемости (для старост)',
                             'authOnly' => $studentStr
                         )
-                    ),
-                ),
-                array(
-                    'name'       => 'Для моб.',
-                    'controller' => 'mobile',
-                    'items' => array(
-                        'journal' => 'Эл. журнал (моб.)',
                     ),
                 ),
                 array(
@@ -273,14 +253,9 @@
                             'name'=>'Запись на гос. экзамены',
                             'authOnly' => $studentStr
                         ),
-                        'employment' => 'Трудоустройство',
                         'subscription' => array(
                             'name'=>'Запись на выборочные дисциплины',
                             'authOnly' => $studentStr
-                        ),
-                        'orderLesson' => array(
-                            'name'=>'Заказ переноса занятия',
-                            'authOnly' => $teacherStr
                         ),
                         'studentInfo' => 'Данные студенты',
                         'studentCard' => 'Карточка студента',

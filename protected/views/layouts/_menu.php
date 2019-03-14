@@ -275,11 +275,6 @@ $this->widget('zii.widgets.CMenu', array(
                     'active' => $_a=='modules' && $_m=='admin'
                 ),
                 array(
-                    'label'  => $_l2.tt('Трудоустройство'),
-                    'url'    => _u('/admin/default/employment'),
-                    'active' => $_a=='employment' && $_m=='admin'
-                ),
-                array(
                     'label'  => $_l2.tt('Меню'),
                     'url'    => _u('/admin/default/menu'),
                     'active' => $_a=='menu' && $_m=='admin'
@@ -383,12 +378,6 @@ $this->widget('zii.widgets.CMenu', array(
                     'url'     => _u('/self/gostem'),
                     'active'  => $_c=='other' && $_a=='gostem',
                     'visible' => _ch('self', 'gostem') && $isStd,
-                ),
-                array(
-                    'label'   => $_l2.tt('Заказ переноса занятий'),
-                    'url'     => _u('/self/orderLesson'),
-                    'active'  => $_c=='other' && $_a=='orderLesson',
-                    'visible' => _ch('self', 'orderLesson') && $isTch,
                 ),
             ), getDopItem('self',0)),
             'visible' => ($isStd||$isTch||$isAdmin||$isPrnt)
@@ -790,18 +779,6 @@ $this->widget('zii.widgets.CMenu', array(
                     'url'     => _u('/other/gostem'),
                     'active'  => $_c=='other' && $_a=='gostem',
                     'visible' => _ch('other', 'gostem') && $isStd,
-                ),
-                array(
-                    'label'   => $_l2.tt('Заказ переноса занятий'),
-                    'url'     => _u('/other/orderLesson'),
-                    'active'  => $_c=='other' && $_a=='orderLesson',
-                    'visible' => _ch('other', 'orderLesson') && $isTch,
-                ),
-                array(
-                    'label'   => $_l2.tt('Трудоустройство'),
-                    'url'     => _u('/other/employment'),
-                    'active'  => $_c=='other' && $_a=='employment',
-                    'visible' => _ch('other', 'employment'),
                 ),
                 array(
                     'label'   => $_l2.tt('Запись на дисциплины'),

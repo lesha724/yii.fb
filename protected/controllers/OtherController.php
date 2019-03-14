@@ -29,7 +29,6 @@ class OtherController extends Controller
         return array(
             array('allow',
                 'actions' => array(
-                    'orderLesson', 'freeRooms', 'saveLessonOrder',
                     'renderAddSpkr',
                     'addSpkr'
                 ),
@@ -84,8 +83,8 @@ class OtherController extends Controller
 
     public function actionDeleteRequestPayment($id)
     {
-        //if(Yii::app()->request->isPostRequest)
-            //throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
+        if(Yii::app()->request->isPostRequest)
+            throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
 
         if (!Yii::app()->user->isStd)
             throw new CHttpException(403, 'Invalid request. You don\'t have access to the service.');
@@ -509,85 +508,6 @@ class OtherController extends Controller
         );
 
         Yii::app()->end(CJSON::encode($res));
-    }
-
-    public function actionOrderLesson()
-    {
-        $model = new TimeTableForm;
-        $model->scenario = 'group';
-        if (isset($_REQUEST['TimeTableForm']))
-            $model->attributes=$_REQUEST['TimeTableForm'];
-        $model->date1 = Yii::app()->session['date1'];
-        $model->date2 = Yii::app()->session['date2'];
-
-        $timeTable = $minMax = $maxLessons = array();
-        if (! empty($model->group))
-        {
-            list($minMax, $timeTable, $maxLessons) = $model->generateGroupTimeTable();;
-        }
-
-
-        $this->render('orderLesson', array(
-            'model'      => $model,
-            'timeTable'  => $timeTable,
-            'minMax'     => $minMax,
-            'maxLessons' => $maxLessons,
-            'rz'         => Rz::model()->getRzArray($model->filial),
-            'type'=>-1
-        ));
-    }
-
-    public function actionFreeRooms()
-    {
-        if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
-
-        $zpz6   = Yii::app()->request->getParam('zpz6', null);
-        $zpz7   = Yii::app()->request->getParam('zpz7', null);
-        $filial = Yii::app()->request->getParam('filial', null);
-
-        if (empty($zpz6) || empty($zpz7))
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
-
-        $rooms = CHtml::listData(A::model()->getFreeRooms($filial, $zpz6, $zpz7), 'a1', 'a2', 'ka2');
-
-        $html = CHtml::dropDownList('ZPZ[zpz8]', null, $rooms, array('style'=>'width:155px'));
-
-        Yii::app()->end(
-            CJSON::encode(array('html' => $html))
-        );
-    }
-
-    public function actionSaveLessonOrder()
-    {
-        if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
-
-        $res = null;
-
-        $params = Yii::app()->request->getParam('params');
-        $params = explode('/',$params);
-
-        if (isset($_POST['ZPZ'])) {
-
-            $model = new Zpz;
-            $model->attributes = $_POST['ZPZ'];
-            $model->zpz1 = new CDbExpression('GEN_ID(GEN_ZPZ, 1)');
-            $model->zpz2 = $params[0];
-            $model->zpz3 = $params[1];
-            $model->zpz4 = $params[2];
-            $model->zpz5 = $params[3];
-            $model->zpz9 = Yii::app()->user->dbModel->p1;
-            $model->zpz10 = new CDbExpression('CURRENT_TIMESTAMP');
-            $res = $model->save();
-        }
-
-        Yii::app()->end(
-            CJSON::encode(array(
-                'res'    => $res,
-                'errors' => isset($model)?$model->getErrors():null
-            ))
-        );
     }
 
     public function actionSubscription()

@@ -19,7 +19,6 @@ class SelfController extends Controller
         return array(
             array('allow',
                 'actions' => array(
-                    'orderLesson',
                     'workLoad'
                 ),
                 'expression' => 'Yii::app()->user->isTch',
@@ -33,8 +32,8 @@ class SelfController extends Controller
             ),
             array('allow',
                 'actions' => array(
-                    'studentInfo', //проверка идет в самом методе
-                    'studentCard', //проверка идет в самом методе
+                    'studentInfo',
+                    'studentCard',
                 ),
             ),
             array('allow',
@@ -52,11 +51,6 @@ class SelfController extends Controller
     public function actionGostem()
     {
         $this->forward('other/gostem');
-    }
-
-    public function actionOrderLesson()
-    {
-        $this->forward('other/orderLesson');
     }
 
     public function actionWorkLoad()
