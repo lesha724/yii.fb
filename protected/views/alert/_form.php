@@ -127,11 +127,8 @@ Yii::app()->clientScript->registerScript('alert-autocomplite', <<<JS
     });
 
     $('#btn-send-new-message').click(function(e) {
-        //alert(1);
         $(this).attr("disabled", "disabled");
         $('#create-message-form').submit();
-        //e.preventDefault();
-        //$(this).attr("disabled", false);
     });
     
     $('.btn-response').click(function(e) {
