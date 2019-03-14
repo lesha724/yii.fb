@@ -9,6 +9,16 @@
  */
 class PortalSettings extends CActiveRecord
 {
+    /**
+     * Количетво дней на редектированеи мин макс
+     */
+    const IRPEN_COUNT_DAYS_FOR_MIN_MAX = 24999999;
+
+    /**
+     * Количевто дней ра редактированеи инд работы
+     */
+    const IRPEN_COUNT_DAYS_FOR_IND = 24999998;
+
     const ENABLE_DIST_EDUCATION = 122;
     const HOST_DIST_EDUCATION = 123;
     const APIKEY_DIST_EDUCATION = 124;
