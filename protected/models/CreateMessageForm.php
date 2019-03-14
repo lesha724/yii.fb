@@ -171,7 +171,7 @@ class CreateMessageForm extends CFormModel
         if(empty($users))
             return;
 
-        $listUsers = array_chunk($users, 30);
+        $listUsers = array_chunk($users, 20);
 
         foreach ($listUsers as $usersForMail) {
             list($result, $message) = Controller::mail(
