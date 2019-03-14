@@ -45,7 +45,7 @@ $this->beginWidget(
             'action'=> array('alert/send'),
             'enableAjaxValidation'=>true,
             'clientOptions'=>array(
-                'validateOnSubmit'=>true,
+                //'validateOnSubmit'=>true,
                 'validationUrl' => array('alert/validateSend')
             ),
         ));
