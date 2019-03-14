@@ -354,7 +354,6 @@ SQL;
         $mail->SetFrom($mail->Username,$_SERVER['HTTP_HOST']);
         $mail->Subject = $subject;
         $mail->MsgHTML($message);
-        $mail->SMTPDebug = true;
         //var_dump($to);
         if(is_array($to)){
             //$first = true;
