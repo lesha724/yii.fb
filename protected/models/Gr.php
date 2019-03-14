@@ -1007,7 +1007,7 @@ SQL;
         $sql= <<<SQL
 				SELECT gr1 from gr
 				WHERE gr2 = :SG1 and gr13=0 and gr6 is null
-				GROUP BY gr7
+				ORDER BY gr7
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
