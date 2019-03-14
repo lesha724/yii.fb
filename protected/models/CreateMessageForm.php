@@ -151,7 +151,7 @@ class CreateMessageForm extends CFormModel
             $users = Users::model()->getUsersByStream($this->to);
 
             if(empty($users))
-                throw new Exception('Не найдены пользователи данной группы');
+                throw new Exception('Не найдены пользователи данного потока');
 
             $this->_sendMailByUsers($users);
 
