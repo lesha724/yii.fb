@@ -89,7 +89,7 @@ $config = array(
 				),
                 'chosen' => array(
                     'baseUrl' => 'theme/ace/assets/',
-                    'css' => array('css/chosen.css'),
+                    'css' => array('css/chosen.min.css'),
                     'js' => array('js/uncompressed/chosen.jquery.js'),
 					//'css' => array('chosen.min.css'),
 					//'js' => array('chosen.jquery.min.js'),
@@ -164,11 +164,11 @@ $config = array(
                     ),
                     'depends'=>array('jquery'),
                 ),*/
-                /*'nestable' => array(
+                'nestable' => array(
                     'baseUrl' => 'theme/ace/assets/',
                     'js' => array('js/jquery.nestable.min.js'),
                     'depends'=>array('jquery'),
-                ),*/
+                ),
                 'jquery2' => array(
                     'baseUrl' => 'theme/ace/assets/',
                     'js' => array('js/jquery-2.0.3.min.js'),
