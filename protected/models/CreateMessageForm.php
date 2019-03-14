@@ -36,7 +36,8 @@ class CreateMessageForm extends CFormModel
             array('type', 'in', 'range' => array(self::TYPE_STUDENT, self::TYPE_GROUP ,self::TYPE_STREAM, self::TYPE_TEACHER)),
             array('notification, sendMail', 'boolean'),
             array('searchField', 'validationSearchField'),
-            array('body, type, to', 'required'),
+            array('to', 'numerical', 'integerOnly'=>true),
+            array('body, type', 'required'),
             array('faculty', 'safe'),
             array('body','filter','filter'=>array($obj=new CHtmlPurifier(),'purify')),
 		);
@@ -109,7 +110,7 @@ class CreateMessageForm extends CFormModel
     /**
      * Отправка сообщений на почту
      * @return bool
-     * @throws phpmailerException
+     * @throws Exception
      */
     public function sendMails(){
         if(!$this->sendMail)
@@ -142,18 +143,7 @@ class CreateMessageForm extends CFormModel
             if(empty($users))
                 throw new Exception('Не найдены пользователи данной группы');
 
-            //var_dump($users);
-
-            list($result, $message) = Controller::mail(
-                CHtml::listData($users, 'u4', 'name'),
-                tt('Сообщение от {name}', array(
-                    '{name}' => Yii::app()->user->name
-                )),
-                $this->body
-            );
-
-            if(!$result)
-                throw new Exception($message);
+            $this->_sendMailByUsers($users);
 
             return true;
         }else if($this->type == self::TYPE_STREAM){
@@ -163,21 +153,38 @@ class CreateMessageForm extends CFormModel
             if(empty($users))
                 throw new Exception('Не найдены пользователи данной группы');
 
+            $this->_sendMailByUsers($users);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Отправка писем людям
+     * @param $users
+     * @throws phpmailerException
+     */
+    private function _sendMailByUsers($users){
+
+        if(empty($users))
+            return;
+
+        $listUsers = array_chunk($users, 40);
+
+        foreach ($listUsers as $usersForMail) {
             list($result, $message) = Controller::mail(
-                CHtml::listData($users, 'u4', 'name'),
+                CHtml::listData($usersForMail, 'u4', 'name'),
                 tt('Сообщение от {name}', array(
                     '{name}' => Yii::app()->user->name
                 )),
                 $this->body
             );
 
-            if(!$result)
+            if (!$result)
                 throw new Exception($message);
-
-            return true;
         }
-
-        return false;
     }
 
     /**
@@ -188,5 +195,21 @@ class CreateMessageForm extends CFormModel
     public function validate($attributes = null, $clearErrors = true)
     {
         return parent::validate($attributes, $clearErrors);
+    }
+
+    public function getErrorString($delimiter = '<br>'){
+        if(is_array($this->errors)){
+            $errors = '';
+            foreach ($this->errors as $key=>$error){
+                if(is_array($error)){
+                    $errors.=$delimiter.current($error);
+                }else
+                    $errors.=$delimiter.$error;
+            }
+
+            return $errors;
+        }
+
+        return $this->errors;
     }
 }

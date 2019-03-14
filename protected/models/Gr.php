@@ -564,7 +564,13 @@ SQL;
         if (empty($f1))
             return array();
 
-        $where= empty($query) ? '' : ' AND ( sp2 CONTAINING :QUERY or gr3 CONTAINING :QUERY1)';
+        $where= empty($query) ? '' : ' AND ( sp2 CONTAINING :QUERY or gr3 CONTAINING :QUERY7 or 
+            gr19 CONTAINING :QUERY1 or 
+            gr20 CONTAINING :QUERY2 or 
+            gr21 CONTAINING :QUERY3 or 
+            gr22 CONTAINING :QUERY4 or 
+            gr23 CONTAINING :QUERY5 or 
+            gr24 CONTAINING :QUERY6)';
         $sql=<<<SQL
            SELECT  sem4, sp2, t2.sg4, gr7,gr3,gr1, gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26, t2.sg1
 			from sp
@@ -576,14 +582,11 @@ SQL;
 			      inner join sg t on (sp.sp1 = t.sg2)
                    inner join sem on (t.sg1 = sem.sem2)
                    inner join gr on (t.sg1 = gr.gr2)
-                   inner join ucgn on (gr.gr1 = ucgn.ucgn2)
-                   inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
-                   inner join ucxg on (ucgn.ucgn1 = ucxg.ucxg2)
-			  where  ucxg1<30000 and gr13=0 and gr6 is null
-				 and sp5=:FACULTY and sem3=:YEAR1 and sem5=:SEM1 and ucgns5=:YEAR2 and ucgns6=:SEM2 {$where}
-			)
+			  where  gr13=0 and gr6 is null
+				 and sp5=:FACULTY and sem3=:YEAR1 and sem5=:SEM1 {$where}
+			) and sem3=:YEAR2 and sem5=:SEM2 and gr13=0
 			GROUP BY sem4, sp2, sg4, gr7,gr3,gr1, gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26, sg1
-			ORDER BY gr7,gr3
+			ORDER BY sem4, gr7,gr3
 SQL;
 
         list($year, $sem) = SH::getCurrentYearAndSem();
@@ -592,6 +595,12 @@ SQL;
         if(!empty($query)) {
             $command->bindValue(':QUERY1', $query);
             $command->bindValue(':QUERY', $query);
+            $command->bindValue(':QUERY2', $query);
+            $command->bindValue(':QUERY3', $query);
+            $command->bindValue(':QUERY4', $query);
+            $command->bindValue(':QUERY5', $query);
+            $command->bindValue(':QUERY6', $query);
+            $command->bindValue(':QUERY7', $query);
         }
         $command->bindValue(':FACULTY', $f1);
         $command->bindValue(':YEAR1', $year);
@@ -624,20 +633,25 @@ SQL;
         if (empty($f1))
             return array();
 
-        $where= empty($query) ? '' : ' AND gr3 CONTAINING :QUERY';
+        $where= empty($query) ? '' : ' AND (
+            gr3 CONTAINING :QUERY or 
+            gr19 CONTAINING :QUERY1 or 
+            gr20 CONTAINING :QUERY2 or 
+            gr21 CONTAINING :QUERY3 or 
+            gr22 CONTAINING :QUERY4 or 
+            gr23 CONTAINING :QUERY5 or 
+            gr24 CONTAINING :QUERY6  
+        )';
         $sql=<<<SQL
            SELECT  sem4,gr7,gr3,gr1, gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26
 			from sp
 			   inner join sg t2 on (sp.sp1 = t2.sg2)
 			   inner join sem on (t2.sg1 = sem.sem2)
 			   inner join gr on (t2.sg1 = gr.gr2)
-               inner join ucgn on (gr.gr1 = ucgn.ucgn2)
-               inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
-               inner join ucxg on (ucgn.ucgn1 = ucxg.ucxg2)
-			WHERE ucxg1<30000 and gr13=0 and gr6 is null
-				 and sp5=:FACULTY and sem3=:YEAR1 and sem5=:SEM1 and ucgns5=:YEAR2 and ucgns6=:SEM2 {$where}
+			WHERE gr13=0 and gr6 is null
+				 and sp5=:FACULTY and sem3=:YEAR1 and sem5=:SEM1 {$where}
 			GROUP BY sem4, gr7,gr3,gr1, gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26, sg1
-			ORDER BY gr7,gr3
+			ORDER BY sem4, gr7,gr3
 SQL;
 
         list($year, $sem) = SH::getCurrentYearAndSem();
@@ -645,6 +659,12 @@ SQL;
         $command = Yii::app()->db->createCommand($sql);
         if(!empty($query)) {
             $command->bindValue(':QUERY', $query);
+            $command->bindValue(':QUERY1', $query);
+            $command->bindValue(':QUERY2', $query);
+            $command->bindValue(':QUERY3', $query);
+            $command->bindValue(':QUERY4', $query);
+            $command->bindValue(':QUERY5', $query);
+            $command->bindValue(':QUERY6', $query);
         }
         $command->bindValue(':FACULTY', $f1);
         $command->bindValue(':YEAR1', $year);

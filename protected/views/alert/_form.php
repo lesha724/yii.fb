@@ -44,9 +44,9 @@ $this->beginWidget(
             'method'=>'post',
             'action'=> array('alert/send'),
             'enableAjaxValidation'=>true,
-            'clientOptions'=>array(
+            /*'clientOptions'=>array(
                 'validateOnSubmit'=>true,
-            ),
+            ),*/
         ));
 
         echo $form->errorSummary($formModel);
@@ -95,6 +95,7 @@ $this->beginWidget(
         <?php $this->widget(
             'bootstrap.widgets.TbButton',
             array(
+                'buttonType' => 'button',
                 'type' => 'primary',
                 'label' => tt('Отправить'),
                 'url' => '#',
@@ -125,8 +126,11 @@ Yii::app()->clientScript->registerScript('alert-autocomplite', <<<JS
     });
 
     $('#btn-send-new-message').click(function(e) {
+        //alert(1);
+        $(this).attr("disabled", "disabled");
         $('#create-message-form').submit();
-        e.preventDefault();
+        //e.preventDefault();
+        //$(this).attr("disabled", false);
     });
     
     $('.btn-response').click(function(e) {
@@ -147,6 +151,7 @@ Yii::app()->clientScript->registerScript('alert-autocomplite', <<<JS
     });
 
     function typeChanged(elem){
+        $(this).attr("disabled", false);
         $('#CreateMessageForm_to').val('');  
         $('#CreateMessageForm_searchField').val('');  
         var current = elem.val();
@@ -169,7 +174,7 @@ Yii::app()->clientScript->registerScript('alert-autocomplite', <<<JS
                 return "{$url}?type=" +  $("#CreateMessageForm_type").val() + "&faculty=" + $("#CreateMessageForm_faculty").val();
             },
         
-        minChars:4,
+        minChars:2,
         delimiter: /(,|;)\s*/, // regex or character
         maxHeight:300,
         width:'auto',

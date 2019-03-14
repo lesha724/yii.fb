@@ -91,26 +91,26 @@ class AlertController extends Controller
 
             if($model->validate())
             {
-                try {
-                    if ($model->save()) {
-                        try {
+                //try {
+                if ($model->save()) {
+                    try {
 
-                            Yii::app()->user->setFlash('success', 'Сообщение успешно отправлено');
+                        Yii::app()->user->setFlash('success', 'Сообщение успешно отправлено');
 
-                            if($model->sendMail){
-                                $model->sendMails();
-                            }
-                        }catch (Exception $error){
-                            Yii::app()->user->setFlash('error', 'Сообщение успешно отправлено, но ошибка оправки уведомления на почту: '. $error->getMessage());
+                        if($model->sendMail){
+                            $model->sendMails();
                         }
-                    } else {
-                        Yii::app()->user->setFlash('error', 'Ошибка отправления сообщения ');
+                    }catch (Exception $error){
+                        Yii::app()->user->setFlash('error', 'Сообщение успешно отправлено, но ошибка оправки уведомления на почту: '. $error->getMessage());
                     }
-                }catch (Exception $error){
-                    Yii::app()->user->setFlash('error', 'Ошибка отправления сообщения: '.$error->getMessage());
+                } else {
+                    Yii::app()->user->setFlash('error', 'Ошибка отправления сообщения ');
                 }
+                /*}catch (Exception $error){
+                    Yii::app()->user->setFlash('error', 'Ошибка отправления сообщения: '.$error->getMessage());
+                }*/
             }else{
-                $error = is_array($model->getErrors()) ? implode('</br>', array_values($model->getErrors())) : $model->getErrors();
+                $error = $model->getErrorString('</br>');
                 Yii::app()->user->setFlash('error', 'Ошибка отправления сообщения: '. $error);
 
             }
@@ -133,8 +133,8 @@ class AlertController extends Controller
 
     public function actionAutocomplete($type, $faculty)
     {
-        //if (! Yii::app()->request->isAjaxRequest)
-            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $query = Yii::app()->request->getParam('query', null);
 
