@@ -491,7 +491,6 @@ class DefaultController extends AdminController
             $model->kcp1 = $model->getMax()+1;
             if($model->save())
                 $this->redirect(array('closeChair'));
-            print_r($model->getErrors());
         }else
             throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
     }
