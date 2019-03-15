@@ -93,6 +93,9 @@ class CreateMessageForm extends CFormModel
 	    $model->um3 = date('Y-m-d H:i:s');
 	    $model->um4 = $this->notification ? 1 : 0;
 	    $model->um5 = $this->body;
+        $model->um7 = 0;
+        $model->um8 = 0;
+        $model->um9 = 0;
         if($this->type == self::TYPE_STUDENT || $this->type == self::TYPE_TEACHER){
             //$model->um6 = 0;
             $model->um7 = $this->to;
