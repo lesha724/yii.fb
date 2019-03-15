@@ -44,10 +44,6 @@
                                 $studentStr
                             )
                         ),
-                        'gostem' => array(
-                            'name'=>'Запись на гос. экзамены',
-                            'authOnly' => $studentStr
-                        ),
                         'subscription' => array(
                             'name'=>'Запись на выборочные дисциплины',
                             'authOnly' => $studentStr
@@ -241,10 +237,6 @@
                     'controller' => 'other',
                     'items' => array(
                         'phones' => 'Телефонный справочник',
-                        'gostem' => array(
-                            'name'=>'Запись на гос. экзамены',
-                            'authOnly' => $studentStr
-                        ),
                         'subscription' => array(
                             'name'=>'Запись на выборочные дисциплины',
                             'authOnly' => $studentStr

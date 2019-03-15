@@ -36,8 +36,6 @@ class OtherController extends Controller
             ),
             array('allow',
                 'actions' => array(
-                    'gostem',
-                    'deleteGostem',
                     'subscription',
                     'saveCiklVBloke',
                     'saveDisciplines',
@@ -460,54 +458,6 @@ class OtherController extends Controller
             'phones' => $phones,
             'department' => $department
         ));
-    }
-
-    public function actionGostem()
-    {
-        $model = new FilterForm;
-        $model->scenario = 'gostem';
-
-        if (isset($_REQUEST['FilterForm'])) {
-            $model->attributes=$_REQUEST['FilterForm'];
-
-            if (isset($_REQUEST['subscribe'])) {
-                $nrst = new Nrst;
-                $nrst->nrst1 = $model->nr1;
-                $nrst->nrst2 = Yii::app()->user->dbModel->st1;
-                $nrst->nrst3 = $model->gostem1;
-                $nrst->save();
-                $this->redirect('/other/gostem');
-            }
-        }
-
-
-        $this->render('gostem', array(
-            'model' => $model,
-        ));
-    }
-
-    public function actionDeleteGostem()
-    {
-        if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
-
-        $nrst1 = Yii::app()->request->getParam('nrst1', null);
-        $nrst3 = Yii::app()->request->getParam('nrst3', null);
-
-        if (empty($nrst1) || empty($nrst3))
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
-
-        $deleted = (bool)Nrst::model()->deleteAllByAttributes(array(
-            'nrst1' => $nrst1,
-            'nrst2' => Yii::app()->user->dbModel->st1,
-            'nrst3' => $nrst3,
-        ));
-
-        $res = array(
-            'deleted' => $deleted
-        );
-
-        Yii::app()->end(CJSON::encode($res));
     }
 
     public function actionSubscription()

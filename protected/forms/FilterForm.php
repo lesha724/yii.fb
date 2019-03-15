@@ -24,7 +24,6 @@ class FilterForm extends CFormModel
 
     public $chair = 0;
     public $d1 = 0;
-    public $gostem1;
     public $nr1;
 
     public $sel_1;
@@ -57,7 +56,6 @@ class FilterForm extends CFormModel
                 array('filial, faculty, speciality, course, group,discipline', 'required', 'on' => 'retake'),
                 //array('filial, faculty, speciality, course, group, semester, discipline,type_lesson', 'required', 'on' => 'thematicPlan'),
                 array('duration, teacher, code, course', 'safe', 'on' => 'thematicPlan'),
-                array('chair, gostem1, nr1, d1', 'safe', 'on' => 'gostem'),
                 array('sel_1, sel_2, course, adp1, cn1, speciality', 'safe', 'on' => 'rating'),
                 array('filial, teacher, chair, year, semester, extendedForm', 'required', 'on' => 'workLoad-teacher'),
                 array('filial, faculty, course, group, student, semester', 'required', 'on' => 'workPlan-student'),

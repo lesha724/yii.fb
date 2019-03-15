@@ -334,7 +334,7 @@ $this->widget('zii.widgets.CMenu', array(
             'linkOptions'=> $_l,
             'itemOptions'=>array('class'=> ( $_c=='timeTable' && $_a=='self')||($_c=='workLoad' && $_a=='self')
             ||($_c=='other' && $_a=='subscription')||($_c=='other' && $_a=='studentInfo')
-            ||($_c=='other' && $_a=='gostem') ||($_c=='other' && $_a=='orderLesson')||($_c=='other' && $_a=='studentCard') ? 'active open' : ''),
+             ||($_c=='other' && $_a=='orderLesson')||($_c=='other' && $_a=='studentCard') ? 'active open' : ''),
 
             //'itemOptions'=> _i('self'),
             'items' =>array_merge(array(
@@ -367,13 +367,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'url'     => _u('/self/studentInfo'),
                     'active'  => $_c=='other' && $_a=='studentInfo',
                     'visible' => _ch('self', 'studentInfo') && ($isTch || $isStd),
-                ),
-                array(
-                    'label'   => $_l2.tt('Запись на гос. экзамены'),
-                    'url'     => _u('/self/gostem'),
-                    'active'  => $_c=='other' && $_a=='gostem',
-                    'visible' => _ch('self', 'gostem') && $isStd,
-                ),
+                )
             ), getDopItem('self',0)),
             'visible' => ($isStd||$isTch||$isAdmin||$isPrnt)
         ),
@@ -756,12 +750,6 @@ $this->widget('zii.widgets.CMenu', array(
                     'url'     => _u('/other/phones'),
                     'visible' => _ch('other', 'phones'),
                     'active'  => $_c=='other' && $_a=='phones'
-                ),
-                array(
-                    'label'   => $_l2.tt('Запись на гос. экзамены'),
-                    'url'     => _u('/other/gostem'),
-                    'active'  => $_c=='other' && $_a=='gostem',
-                    'visible' => _ch('other', 'gostem') && $isStd,
                 ),
                 array(
                     'label'   => $_l2.tt('Запись на дисциплины'),

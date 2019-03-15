@@ -111,7 +111,6 @@
                 'controller' => 'other',
                 'items' => array(
                     'phones' => 'Телефонный справочник',
-                    'gostem' => 'Запись на гос. экзамены',
                     'subscription' => 'Запись на дисциплины',
                     'studentInfo' => 'Данные студенты',
                     'studentCard' => 'Карточка студента',

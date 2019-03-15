@@ -25,7 +25,6 @@ class SelfController extends Controller
             ),
             array('allow',
                 'actions' => array(
-                    'gostem',
                     'subscription',
                 ),
                 'expression' => 'Yii::app()->user->isStd',
@@ -46,11 +45,6 @@ class SelfController extends Controller
                 'users' => array('*'),
             ),
         );
-    }
-
-    public function actionGostem()
-    {
-        $this->forward('other/gostem');
     }
 
     public function actionWorkLoad()
