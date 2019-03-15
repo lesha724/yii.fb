@@ -618,7 +618,8 @@ HTML;
         }else if($this->isTeacher){
 	        $p = P::model()->findByPk($this->u6);
             $chair = $p->getChair();
-            $name=$name.' ('.tt('каф.').$chair->k2.')';
+            $chairName = $chair == null ? '' : ' ('.tt('каф.').$chair->k2.')';
+            $name=$name.$chairName;
         }
 
 	    return $name;
