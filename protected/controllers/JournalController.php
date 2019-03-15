@@ -3074,7 +3074,7 @@ SQL;
             'html' => $html,
             'errors' => $model->getErrors(),
             'error'=>$error,
-            'typeError'=>$typeError
+            'errorType'=>$typeError
         );
 
         Yii::app()->end(CJSON::encode($res));
@@ -3147,7 +3147,7 @@ SQL;
             'html' => $html,
             'errors' => $model->getErrors(),
             'error'=>$error,
-            'typeError'=>$typeError
+            'errorType'=>$typeError
         );
 
         Yii::app()->end(CJSON::encode($res));
