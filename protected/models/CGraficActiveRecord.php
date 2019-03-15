@@ -14,6 +14,7 @@ class CGraficActiveRecord extends CActiveRecord
 {
     /**
      * @return CDbConnection the database connection used for this class
+     * @throws
      */
     public function getDbConnection()
     {

@@ -12,12 +12,6 @@ class ListController extends Controller
     public function accessRules() {
 
         return array(
-            /*array('allow',
-                'actions' => array(
-                    'journal',
-                ),
-                'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
-            ),*/
             array('allow',
                 'actions' => array('stream','group','chair','searchStudent','virtualGroup','virtualGroupExcel','groupExcel', 'streamExcel')
             ),
@@ -47,29 +41,13 @@ class ListController extends Controller
 
         if (isset($_REQUEST['TimeTableForm']))
             $model->attributes=$_REQUEST['TimeTableForm'];
-        $res=PortalSettings::model()->findByPk(35);
-        $ps35=0;
-        if(!empty($res))
-            $ps35 = $res->ps2;
-        $dbh=null;
-        if($ps35==1&&Yii::app()->user->isAdmin)
-        {
-            $string = Yii::app()->db->connectionString;
-            $parts  = explode('=', $string);
-
-            $host     = trim($parts[1].'d');
-            $login    = Yii::app()->db->username;
-            $password = Yii::app()->db->password;
-            $dbh      = ibase_connect($host, $login, $password);
-        }
 
         $student = new St;
         $student->unsetAttributes();
 
         $this->render('group', array(
             'model' => $model,
-            'dbh'=> $dbh,
-            'ps35'=>$ps35,
+            'ps35'=>PortalSettings::model()->getSettingFor(PortalSettings::SHOW_PASSPORT_IN_LIST_OG_GROUP),
             'student'=>$student
         ));
     }

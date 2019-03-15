@@ -10,6 +10,10 @@
 class PortalSettings extends CActiveRecord
 {
     /**
+     * Отображать паспорта в списке группы
+     */
+    const SHOW_PASSPORT_IN_LIST_OG_GROUP = 35;
+    /**
      * Количетво дней на редектированеи мин макс
      */
     const IRPEN_COUNT_DAYS_FOR_MIN_MAX = 24999999;

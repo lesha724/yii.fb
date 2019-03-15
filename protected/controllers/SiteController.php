@@ -821,6 +821,10 @@ HTML;
 		Foto::renderStudentBarcode($id);
 	}
 
+    /**
+     * Отрисовка паспорта
+     * @throws CHttpException
+     */
 	public function actionStudentPassport()
 	{
 		if(!Yii::app()->user->isAdmin)
@@ -832,7 +836,7 @@ HTML;
 		if (is_null($id) || is_null($type))
 			throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
-		St::model()->renderPassport($id, $type);
+		Passport::renderPassport($id, $type);
 	}
 
 	public function actionIFrame($id)

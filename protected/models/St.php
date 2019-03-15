@@ -459,59 +459,19 @@ class St extends CActiveRecord implements IPerson
         );
     }
 
-    public function checkPassport($dbh,$id,$type)
+    public function checkPassport($id,$type)
     {
-        $sql = <<<SQL
-                    SELECT passport4 as foto
-                    FROM passport
-                    WHERE passport2 = {$id} AND passport3 = {$type}
-SQL;
-        $result = ibase_query($dbh, $sql);
-        $data   = ibase_fetch_object($result);
-        if (empty($data))
-            return false;
-        else
-            return true;
+        return Passport::model()->countByAttributes(array(
+            'passport2' => $id,
+            'passport3' => $type
+        )) > 0;
     }
-
-	public function renderPassport($id, $type)
-	{
-		$sql = <<<SQL
-			SELECT passport4 as passport
-			FROM passport
-			WHERE passport2 = {$id} AND passport3 = {$type}
-SQL;
-
-		$string = Yii::app()->db->connectionString;
-		$parts  = explode('=', $string);
-
-		$host     = trim($parts[1].'d');
-		$login    = Yii::app()->db->username;
-		$password = Yii::app()->db->password;
-		$dbh      = ibase_connect($host, $login, $password);
-
-		$result = ibase_query($dbh, $sql);
-		$data   = ibase_fetch_object($result);
-
-		if (empty($data->PASSPORT)) {
-			$defaultImg = imagecreatefrompng(Yii::app()->basePath.'/../theme/ace/assets/avatars/avatar2.png');
-			imagepng($defaultImg);
-		} else {
-			header("Content-type: image/jpeg");
-			ibase_blob_echo($data->PASSPORT);
-		}
-
-		ibase_free_result($result);
-	}
 
     public function getInfoForStudentInfoExcel($st1)
     {
         if (empty($st1))
             return array();
         list($sg40, $sg41) =D::model()->getSg40Sg41($st1);
-        //$sg40=2014;
-        //$sg41=1;
-
 
         $sql = <<<SQL
         SELECT gr1,gr3,sem4,sg4,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,f2,f3 FROM std
