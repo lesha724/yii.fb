@@ -36,6 +36,7 @@ $config = array(
 		'application.models.*',
         'application.forms.*',
 		'application.components.*',
+        'application.components.OAuth.*',
         'application.validators.*',
 		'application.extensions.bootstrap.*',
 		'application.extensions.behaviors.*',
