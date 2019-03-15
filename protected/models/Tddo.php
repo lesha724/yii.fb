@@ -355,15 +355,7 @@ class Tddo extends CActiveRecord
 	}
 
 	public function getFiles(){
-		$files = array();
-
-		$dbh = SH::getGrafConnection();
-
-		try{
-			$dbh->active = true;
-		}catch(Exception $error) {
-			throw new Exception("Ошибка подключения к графической базе, с ошибкой: " . $error->getMessage());
-		}
+		$dbh = Yii::app()->db2;
 
 		$sql = <<<SQL
 			SELECT fpdd1,fpdd4
