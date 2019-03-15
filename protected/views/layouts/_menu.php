@@ -270,11 +270,6 @@ $this->widget('zii.widgets.CMenu', array(
                     'active' => $_a=='rating' && $_m=='admin'
                 ),
                 array(
-                    'label'  => $_l2.tt('Ведение модулей'),
-                    'url'    => _u('/admin/default/modules'),
-                    'active' => $_a=='modules' && $_m=='admin'
-                ),
-                array(
                     'label'  => $_l2.tt('Меню'),
                     'url'    => _u('/admin/default/menu'),
                     'active' => $_a=='menu' && $_m=='admin'
@@ -614,19 +609,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'url'     => _u('/progress/test'),
                     'visible' => _ch('progress', 'test') && $isStd,
                     'active'  => $_c=='progress' && $_a=='test'
-                ),
-                array(
-                    'label'   => $_l2.tt('Ведение модулей'),
-                    'url'     => _u('/progress/modules'),
-                    'visible' => _ch('progress', 'modules') && $isTch,
-                    'active'  => $_c=='progress' && $_a=='modules'
-                ),
-                array(
-                    'label'   => $_l2.tt('Экз. сессия'),
-                    'url'     => _u('/progress/examSession'),
-                    'visible' => _ch('progress', 'examSession') && $isTch,
-                    'active'  => $_c=='progress' && $_a=='examSession'
-                ),
+                )
             ),getDopItem('progress',0)),
             'visible' => _ch('progress', 'main')
         ),

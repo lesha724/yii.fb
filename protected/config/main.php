@@ -34,12 +34,12 @@ $config = array(
 	// autoloading model and component classes
 	'import'=>array(
 		'application.models.*',
+        'application.forms.*',
 		'application.components.*',
         'application.validators.*',
 		'application.extensions.bootstrap.*',
 		'application.extensions.behaviors.*',
 		'ext.elFinder.*',
-		'ext.EScriptBoost.*',
 		'ext.LangPick.*',
         'application.components.DistEducation.*',
         'application.components.DistEducation.forms.*',

@@ -243,6 +243,8 @@ class DefaultController extends AdminController
     }
 
     public function actionEnter($id){
+        if(!Yii::app()->user->isAdmin)
+            throw new CHttpException(404,'The requested page does not exist.');
         $user = Users::model()->findByPk($id);
         if($user === null){
             throw new CHttpException(404,'The requested page does not exist.');
@@ -1042,22 +1044,6 @@ class DefaultController extends AdminController
 
 
         $this->render('list', array(
-        ));
-    }
-
-    public function actionModules()
-    {
-        $settings = Yii::app()->request->getParam('settings', array());
-        print_r($settings);
-        foreach ($settings as $key => $value) {
-            PortalSettings::model()
-                ->findByPk($key)
-                ->saveAttributes(array(
-                    'ps2' => $value
-                ));
-        }
-
-        $this->render('modules', array(
         ));
     }
 

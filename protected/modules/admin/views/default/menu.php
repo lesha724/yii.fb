@@ -138,14 +138,6 @@
                             'name'=>'Тестирование',
                             'authOnly' => $studentStr
                         ),
-                        'modules' =>  array(
-                            'name'=>'Ведение модулей',
-                            'authOnly' => $teacherStr
-                        ),
-                        'examSession'=>array(
-                            'name'=>'Экз. сессия',
-                            'authOnly' => $teacherStr
-                        )
                     ),
                 ),
 				array(

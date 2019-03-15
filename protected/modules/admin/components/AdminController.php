@@ -28,7 +28,6 @@ class AdminController extends Controller
                     'timeTable',
                     'prntGrants',
                     'journal',
-                    'modules',
                     'menu',
                     'seo',
 					'settings',
