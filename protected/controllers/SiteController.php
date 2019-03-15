@@ -796,6 +796,10 @@ HTML;
 		$this->render('resetPassword',array('model'=>$model));
 	}
 
+    /**
+     * Отрисовка автара пользователя
+     * @throws CHttpException
+     */
     public function actionUserPhoto()
     {
         $id   = Yii::app()->request->getParam('_id', null);
@@ -804,7 +808,7 @@ HTML;
         if (is_null($id) || is_null($type))
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
-        Users::model()->renderPhoto($id, $type);
+        Foto::renderFoto($id, $type);
     }
 
 	public function actionStudentBarcode()
@@ -814,7 +818,7 @@ HTML;
 		if (is_null($id))
 			throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
-		St::model()->getShortCodesImageRender($id);
+		Foto::renderStudentBarcode($id);
 	}
 
 	public function actionStudentPassport()

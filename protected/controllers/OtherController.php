@@ -293,12 +293,12 @@ class OtherController extends Controller
 
             $sheet->mergeCells('A1:D8');
 
-            $data = St::model()->getFoto($st->st1);
+            $data = Foto::getStudentFoto($st->st1);
             if ($data != null) {
 
                 $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
                 $objDrawing->setName('logo');
-                $objDrawing->setImageResource(imagecreatefromstring($data));
+                $objDrawing->setImageResource(imagecreatefromstring($data->foto3));
                 $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_DEFAULT);
                 $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
                 $objDrawing->setHeight(100);
@@ -1104,7 +1104,7 @@ HTML;
                         $nkrs6
                     ));
 
-                    $data=St::model()->getShortCodesImage($model->student);
+                    $data=Foto::getStudentFoto($model->student);
                     if($data!=null)
                     {
                         //штрихкод
@@ -1232,13 +1232,13 @@ HTML;
                     $sheet->setCellValue('A18','(только для дипломных работ)')->getStyle('A18')->getAlignment()->setWrapText(true)->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT)->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
                     $sheet->getRowDimension(18)->setRowHeight(30);
 
-                    $data=St::model()->getShortCodesImage($model->student);
+                    $data=Foto::getStudentFoto($model->student);
                     if($data!=null)
                     {
                         $sheet->setCellValue('A19','Штрихкод');
                         $objDrawing = new PHPExcel_Worksheet_MemoryDrawing();
                         $objDrawing->setName('logo');
-                        $objDrawing->setImageResource( imagecreatefromstring($data));
+                        $objDrawing->setImageResource( imagecreatefromstring($data->foto4));
                         $objDrawing->setRenderingFunction(PHPExcel_Worksheet_MemoryDrawing::RENDERING_DEFAULT);
                         $objDrawing->setMimeType(PHPExcel_Worksheet_MemoryDrawing::MIMETYPE_DEFAULT);
                         $objDrawing->setHeight(100);

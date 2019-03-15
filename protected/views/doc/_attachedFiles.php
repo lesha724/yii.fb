@@ -5,6 +5,9 @@
  * @var Tddo $model
  */
 
+/**
+ * @var $attachedFiles Fpdd[]
+ */
 $attachedFiles = $model->getFiles();
 ?>
 
@@ -24,16 +27,16 @@ $attachedFiles = $model->getFiles();
 HTML;
 
         foreach ($attachedFiles as $file) {
-            $link = Yii::app()->createUrl('/doc/file/',array('id'=>$file['FPDD1']));
+            $link = Yii::app()->createUrl('/doc/file/',array('id'=>$file->fpdd1));
 
-            if(Tddo::model()->isImage($file['FPDD4'])) {
+            if($file->isImage()) {
                 $file_ = '<img src="%s" alt="%s">';
-                $file_ = sprintf($file_, $link, $file['FPDD4']);
+                $file_ = sprintf($file_, $link, $file->fpdd4);
             }else{
                 $file_ ='';
             }
 
-            $html .= sprintf($pattern,$link, $file_, $file['FPDD4']);
+            $html .= sprintf($pattern,$link, $file_, $file->fpdd4);
         }
         echo $html;
         ?>
