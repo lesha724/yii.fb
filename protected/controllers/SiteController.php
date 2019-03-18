@@ -1,7 +1,5 @@
 <?php
 
-// Grab the Apostle namespace
-use Apostle\Mail;
 
 class SiteController extends Controller
 {
@@ -419,18 +417,6 @@ HTML
 				$this->render('error', $error);
 		}
 	}
-
-    public function actionClose()
-    {
-        $this->layout='//layouts/clear';
-        if($error=Yii::app()->errorHandler->error)
-        {
-            if(Yii::app()->request->isAjaxRequest)
-                echo $error['message'];
-            else
-                $this->render('close', $error);
-        }
-    }
 
 	private function servicesLogin(){
         if(Yii::app()->params['enableEAuth']!==true)
