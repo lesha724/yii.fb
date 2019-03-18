@@ -5,14 +5,12 @@
  *
  * The followings are the available columns in table 'fpdd':
  * @property integer $fpdd1
- * @property string $fpdd2
- * @property integer $fpdd3
+ * @property integer $fpdd2
+ * @property string $fpdd3
  * @property string $fpdd4
- * @property string $fpdd5
  */
-class Fpdd extends CActiveRecord
+class Fpdd extends CGraficActiveRecord
 {
-    public $doc_file;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -29,13 +27,13 @@ class Fpdd extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('fpdd1, fpdd3', 'numerical', 'integerOnly'=>true),
-			array('fpdd2', 'length', 'max'=>400),
-			array('fpdd4, fpdd5', 'length', 'max'=>1000),
-            array('doc_file', 'file', 'allowEmpty'=>true, 'maxSize'=>1024 * 1024 * 10, 'tooLarge'=>'File has to be smaller than 10MB'),
+			array('fpdd1, fpdd2, fpdd3, fpdd4', 'required'),
+			array('fpdd1, fpdd2', 'numerical', 'integerOnly'=>true),
+			//array('fpdd3', 'length', 'max'=>8),
+			array('fpdd4', 'length', 'max'=>200),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('fpdd1, fpdd2, fpdd3, fpdd4, fpdd5', 'safe', 'on'=>'search'),
+			array('fpdd1, fpdd2, fpdd3, fpdd4', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -60,8 +58,6 @@ class Fpdd extends CActiveRecord
 			'fpdd2' => 'Fpdd2',
 			'fpdd3' => 'Fpdd3',
 			'fpdd4' => 'Fpdd4',
-			'fpdd5' => 'Fpdd5',
-            'doc_file' => tt('Прикрепить файл')
 		);
 	}
 
@@ -84,16 +80,14 @@ class Fpdd extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('fpdd1',$this->fpdd1);
-		$criteria->compare('fpdd2',$this->fpdd2,true);
-		$criteria->compare('fpdd3',$this->fpdd3);
+		$criteria->compare('fpdd2',$this->fpdd2);
+		$criteria->compare('fpdd3',$this->fpdd3,true);
 		$criteria->compare('fpdd4',$this->fpdd4,true);
-		$criteria->compare('fpdd5',$this->fpdd5,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
-
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
@@ -104,4 +98,36 @@ class Fpdd extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+    /**
+     * Являеться ли пикрепленый файл изображением
+     * @return bool
+     */
+    public function isImage(){
+        $ext=$this->getExtension();
+
+        switch($ext){
+            case 'doc':
+            case 'docx':
+            case 'xls':
+            case 'xlsx':
+            case 'pdf':
+                $result = false;
+                break;
+            default:
+                $result = true;
+                break;
+        }
+        return $result;
+    }
+
+    /**
+     * расширение прикрепленого файла по имени
+     * @param $fileName
+     * @return mixed
+     */
+    public function getExtension(){
+        $ext = explode(".",$this->fpdd4);
+        return strtolower(end($ext));
+    }
 }

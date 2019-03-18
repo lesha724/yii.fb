@@ -54,15 +54,6 @@ class DefaultController extends AdminController
         if(empty($model))
             throw new CHttpException(404,'The requested page does not exist.');
 
-        /*if (!isset($_POST["St"])) {
-            if (isset(Yii::app()->session["St"])){
-                $_POST["St"]=Yii::app()->session["St"];
-            }
-        }
-        else{
-            Yii::app()->session["St"]=$_POST["St"];
-        }*/
-
         if(isset($_POST['St'])) {
             $model->st165 = $_POST['St']['st165'];
             $model->saveAttributes(array(
@@ -243,6 +234,8 @@ class DefaultController extends AdminController
     }
 
     public function actionEnter($id){
+        if(!Yii::app()->user->isAdmin)
+            throw new CHttpException(404,'The requested page does not exist.');
         $user = Users::model()->findByPk($id);
         if($user === null){
             throw new CHttpException(404,'The requested page does not exist.');
@@ -301,14 +294,11 @@ class DefaultController extends AdminController
         if (isset($_POST['ConfigMailForm']))
         {
             $config = array(
-                //'Class'=>'application.extensions.smtpmail.PHPMailer',
                 'Host'=>$_POST['ConfigMailForm']['Host'],
                 'Username'=>$_POST['ConfigMailForm']['Username'],
                 'Password'=>$_POST['ConfigMailForm']['Password'],
-                'Mailer'=>$_POST['ConfigMailForm']['Mailer'],
                 'Port'=>$_POST['ConfigMailForm']['Port'],
-                'SMTPSecure'=>$_POST['ConfigMailForm']['SMTPSecure'],
-                //'SMTPAuth'=>true,
+                'SMTPSecure'=>$_POST['ConfigMailForm']['SMTPSecure']
             );
             $model->setAttributes($config);
             if($model->validate())
@@ -343,11 +333,6 @@ class DefaultController extends AdminController
 
     public function actionUserHistory()
     {
-        /*if (!isset($_SERVER['HTTP_REFERER'])or(!strpos($_SERVER['HTTP_REFERER'], 'userHistory'))) //change _ControllerName_ to your controller page
-        {
-            Yii::app()->user->setState('SearchParamsUH', null);
-            Yii::app()->user->setState('CurrentPageUH', null);
-        }*/
         $model = new UsersHistory();
         $model->unsetAttributes();
         if (isset($_GET['pageSize'])) {
@@ -369,22 +354,6 @@ class DefaultController extends AdminController
                 $model->attributes = $searchParams;
             }
         }
-
-        /*if (isset($_GET['UsersHistory_page']))
-        {
-            Yii::app()->user->setState('CurrentPageUH', $_GET['UsersHistory_page']);
-        }
-        else
-        {
-            $page = Yii::app()->user->getState('CurrentPageUH');
-            if ( isset($page) )
-            {
-                $_GET['UsersHistory_page'] = $page;
-            }
-        }*/
-
-        /*if (isset($_REQUEST['UsersHistory']))
-            $model->attributes = $_REQUEST['UsersHistory'];*/
 
         $this->render('userHistory', array(
             'model' => $model,
@@ -489,7 +458,6 @@ class DefaultController extends AdminController
             $model->kcp1 = $model->getMax()+1;
             if($model->save())
                 $this->redirect(array('closeChair'));
-            print_r($model->getErrors());
         }else
             throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
     }
@@ -514,12 +482,6 @@ class DefaultController extends AdminController
 	{
        $chairId = Yii::app()->request->getParam('chairId', null);
 
-        /*if (!isset($_SERVER['HTTP_REFERER'])or(!strpos($_SERVER['HTTP_REFERER'], 'teachers'))) //change _ControllerName_ to your controller page
-        {
-            Yii::app()->user->setState('SearchParamsP', null);
-            Yii::app()->user->setState('CurrentPageP', null);
-        }*/
-
         $model = new P;
         $model->unsetAttributes();
         if (isset($_GET['pageSize'])) {
@@ -541,22 +503,6 @@ class DefaultController extends AdminController
             }
         }
 
-        //$page = null;
-        /*if (isset($_REQUEST['P_page']))
-        {
-            Yii::app()->user->setState('CurrentPageP', $_REQUEST['P_page']-1);
-            $page = $_REQUEST['P_page'];
-        }
-        else
-        {
-            $page = Yii::app()->user->getState('CurrentPageP');
-            //print_r($page);
-            if ( isset($page) )
-            {
-                $_REQUEST['P_page'] = $page;
-            }
-        }*/
-
         if (isset($_REQUEST['P_page']))
         {
             Yii::app()->user->setState('CurrentPageP',$_REQUEST['P_page']-1);
@@ -571,7 +517,6 @@ class DefaultController extends AdminController
         $this->render('teachers', array(
             'model' => $model,
             'chairId' => $chairId,
-            //'page'=>$page
         ));
 	}
 
@@ -1045,38 +990,6 @@ class DefaultController extends AdminController
         ));
     }
 
-    public function actionModules()
-    {
-        $settings = Yii::app()->request->getParam('settings', array());
-        print_r($settings);
-        foreach ($settings as $key => $value) {
-            PortalSettings::model()
-                ->findByPk($key)
-                ->saveAttributes(array(
-                    'ps2' => $value
-                ));
-        }
-
-        $this->render('modules', array(
-        ));
-    }
-
-    public function actionEntrance()
-    {
-        $settings = Yii::app()->request->getParam('settings', array());
-
-        foreach ($settings as $key => $value) {
-            PortalSettings::model()
-                ->findByPk($key)
-                ->saveAttributes(array(
-                    'ps2' => $value
-                ));
-        }
-
-        $this->render('entrance', array(
-        ));
-    }
-
     public function actionMenu()
     {
         $webroot = Yii::getPathOfAlias('application');
@@ -1111,26 +1024,8 @@ class DefaultController extends AdminController
         else
             $settings = '';
 
-        //var_dump($settings);
-
         $this->render('seo', array(
             'settings' => $settings
-        ));
-    }
-
-    public function actionEmployment()
-    {
-        $settings = Yii::app()->request->getParam('settings', array());
-
-        foreach ($settings as $key => $value) {
-            PortalSettings::model()
-                ->findByPk($key)
-                ->saveAttributes(array(
-                    'ps2' => $value
-                ));
-        }
-
-        $this->render('employment', array(
         ));
     }
 }
