@@ -36,4 +36,3 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         )
     ),
 ));
-?>

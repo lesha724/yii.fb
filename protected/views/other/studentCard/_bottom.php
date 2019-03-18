@@ -174,6 +174,8 @@ HTML;
         array_push($tabs,array('label'=>tt('Сводный электронный журнал'), 'content'=>$this->renderPartial('studentCard/_itog_progress', $params+array('disciplines'=>$disciplines),true), 'active'=>$ps50==6));
     if(PortalSettings::model()->getSettingFor(PortalSettings::SHOW_REGISTRATION_PASS_TAB)==1)
         array_push($tabs,array('label'=>tt('Регистрация пропусков'), 'content'=>$this->renderPartial('studentCard/_registration_pass', $params+array('disciplines'=>$disciplines),true), 'active'=>$ps50==7));
+    if(PortalSettings::model()->getSettingFor(PortalSettings::SHOW_GOSTEM_TAB)==1)
+        array_push($tabs,array('label'=>tt('Гос. экзамены'), 'content'=>$this->renderPartial('studentCard/_gostem', $params,true), 'active'=>$ps50==8));
 
     $this->widget('bootstrap.widgets.TbTabs', array(
         'type'=>'tabs',

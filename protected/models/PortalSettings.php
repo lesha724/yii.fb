@@ -43,11 +43,6 @@ class PortalSettings extends CActiveRecord
      */
     const ERROR_SUBCRIPTION_MESSAGE = 126;
     /**
-     * @var int мобильное приложение через авторизацию
-     * Не используется
-     */
-    //const MOBILE_APP_NEED_AUTH = 128;
-    /**
      * @var int Письмо о ригитсрации в дист. образовании
      */
     const REGISTRATION_EMAIL_DIST_EDUCATION = 127;
@@ -105,9 +100,9 @@ class PortalSettings extends CActiveRecord
     const STUDENT_SEND_IN_ALERT = 140;
 
     /**
-     * @var int дефолтный акшен
+     * @var int ОТобразить таб "Гос.экзамены" в карточке студента
      */
-    const DEFAULT_ACTION = 142;
+    const SHOW_GOSTEM_TAB = 142;
 
     /**
      * Для хранения настро

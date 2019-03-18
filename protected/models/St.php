@@ -1589,4 +1589,21 @@ SQL;
         $command->bindValue(':f1', $faculty);
         return $command->queryAll();
     }
+
+    public function getGostem(){
+        $sql = <<<SQL
+            select stusvst1, d2, STUSVST6, sem3, sem4, sem5, sem7
+                from sem
+                   inner join us on (sem.sem1 = us.us3)
+                   inner join stusv on (us.us1 = stusv.stusv1)
+                   inner join stusvst on (stusv.stusv0 = stusvst.stusvst1)
+                   inner join uo on (us.us2 = uo.uo1)
+                   inner join d on (uo.uo3 = d.d1)
+                WHERE d8=2 and STUSVST3=:st1
+                ORDER BY sem7, d2
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':st1',  $this->st1);
+        return $command->queryAll();
+    }
 }
