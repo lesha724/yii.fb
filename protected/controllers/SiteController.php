@@ -726,14 +726,6 @@ HTML
 				if($user===null)
 					throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
-                /*Apostle::setup("a596c9f9cb4066dd716911ef92be9bd040b0664d");
-                $mail = new Mail( "forgot-password", array( "email" => $user->u4 ) );
-                $mail->name = $user->name;
-                $mail->url  = Yii::app()->createAbsoluteUrl('site/index');
-                $mail->login    = $user->u2;
-                $mail->password = $user->u3;
-                $t = $mail->deliver();*/
-
 				$user->generatePasswordResetToken();
 				$key = $user->getValidationKey();
 				if($user->saveAttributes(array('u10'=>$user->u10))) {

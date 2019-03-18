@@ -69,7 +69,7 @@
     <script>
         tt = {} // object containing translations
         tt.registerConfirm = '<?=tt('Регистрация прошла успешно! Пожалуйста, авторизируйтесь!')?>'
-        tt.sendingConfirm  = '<?=tt('Интсрукция была отправлены Вам на почту!')?>'
+        tt.sendingConfirm  = '<?=tt('Инструкция была отправлены Вам на почту!')?>'
     </script>
     <?php
         Yii::app()->clientScript->registerPackage('chosen');

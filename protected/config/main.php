@@ -201,6 +201,7 @@ $config = array(
 		    array(
 				'class'=>'application.extensions.smtpmail.PHPMailer',
 				'SMTPAuth'=>true,
+                'Mailer' => 'smtp',
 		    ),
             getSettingsArrayFromFile(dirname(__FILE__) .'/mail.inc')
         ),
