@@ -508,6 +508,18 @@ $this->widget('zii.widgets.CMenu', array(
                     'active'  => $_c=='list' && $_a=='chair',
                     'visible' => _ch('list', 'chair')
                 ),
+                array(
+                    'label'   => $_l2. tt('Контакты академ. группы'),
+                    'url'     => _u('/list/contactStudents'),
+                    'active'  => $_c=='list' && $_a=='contactStudents',
+                    'visible' => _ch('list', 'contactStudents') && $this->universityCode == U_RGIIS
+                ),
+                array(
+                    'label'   => $_l2. tt('Контакты кафедры'),
+                    'url'     => _u('/list/contactTeachers'),
+                    'active'  => $_c=='list' && $_a=='contactTeachers',
+                    'visible' => _ch('list', 'contactTeachers') && $this->universityCode == U_RGIIS
+                ),
             ),getDopItem('list',0)),
             'visible' => _ch('list', 'main')
         ),

@@ -7,7 +7,7 @@ function getPassportLabel($id,$type, $pattern, $patternAdmin){
     }
 }
 /**
- * @var WorkPlanController $this
+ * @var ListController $this
  * @var FilterForm $model
  * @var $ps35 int
  */

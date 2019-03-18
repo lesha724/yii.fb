@@ -934,11 +934,17 @@ SQL;
         return $students;
     }
 
+    /**
+     * список группы
+     * @param $gr1
+     * @return array
+     * @throws CException
+     */
 	public function getListGroup($gr1)
     {
 
         $sql=<<<SQL
-            SELECT st1,st2,st3,st4,st5,sk3, st74, st75, st76
+            SELECT st1,st2,st3,st4,st5,sk3, st74, st75, st76, st107
 			 FROM ST
 			   LEFT JOIN SK ON (SK.SK2 = ST.ST1)
 			   LEFT JOIN STD ON (ST.ST1 = STD.STD2)
