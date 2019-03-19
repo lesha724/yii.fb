@@ -251,11 +251,12 @@ class TimeTableController extends Controller
         $model->date2 = Yii::app()->session['date2'];
 
         $timeTable = $minMax = $maxLessons = array();
-        if (! empty($model->teacher))
-			if($type==0)
-				list($minMax, $timeTable, $maxLessons) = $model->generateTeacherTimeTable();
-			else
-				$timeTable=Gr::getTimeTable($model->teacher, $model->date1, $model->date2, 2);
+        if (!empty($model->teacher)) {
+            if ($type == 0)
+                list($minMax, $timeTable, $maxLessons) = $model->generateTeacherTimeTable();
+            else
+                $timeTable = Gr::getTimeTable($model->teacher, $model->date1, $model->date2, 2);
+        }
 
 		$teacher = new P;
         $teacher->unsetAttributes();
@@ -549,7 +550,7 @@ class TimeTableController extends Controller
         $model->date2 = Yii::app()->session['date2'];
 		
         $timeTable = $minMax = $maxLessons = array();
-        if (! empty($model->group))
+        if (!empty($model->group))
         {
             if($type==0)
                list($minMax, $timeTable, $maxLessons) = $model->generateGroupTimeTable();
@@ -570,9 +571,6 @@ class TimeTableController extends Controller
 
     public function actionStudent()
     {
-        /*if($this->mobileCheck())
-            $this->redirect('/mobile/timeTableStudent');*/
-
         $model = new TimeTableForm;
         $model->scenario = 'student';
 		
@@ -589,11 +587,12 @@ class TimeTableController extends Controller
         $model->date2 = Yii::app()->session['date2'];
 
         $timeTable = $minMax = $maxLessons = array();
-        if (! empty($model->student))
-			if($type==0)
-				list($minMax, $timeTable, $maxLessons) = $model->generateStudentTimeTable();
-			else
-				$timeTable=Gr::getTimeTable($model->student, $model->date1, $model->date2, 1);
+        if (! empty($model->student)) {
+            if ($type == 0)
+                list($minMax, $timeTable, $maxLessons) = $model->generateStudentTimeTable();
+            else
+                $timeTable = Gr::getTimeTable($model->student, $model->date1, $model->date2, 1);
+        }
 
 		$student = new St;
         $student->unsetAttributes();
