@@ -481,7 +481,7 @@ SQL;
         $command->bindValue(':ST1', $st1);
         $command->bindValue(':DATE1', $date1);
         $command->bindValue(':DATE2', $date2);
-        $command->bindValue(':DATE2_1', $date2);
+        $command->bindValue(':DATE2_1', date('Y-m-d'));
         $rows = $command->queryAll();
 
         $respectful = 0;
