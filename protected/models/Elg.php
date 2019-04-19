@@ -430,7 +430,7 @@ SQL;
     public function getAttendanceStatisticInfoByDate($date1,$date2,$st1, $isCount = true)
     {
         $sql=<<<SQL
-                SELECT proc.*, rz8 FROM STAT_PROP(:ST1,:DATE1, :DATE2) proc
+                SELECT proc.*, rz8 FROM el_gurnal_info(0,0, :DATE1, :DATE2, 0, 0, :ST1,0,0) proc
                   INNER JOIN rz on (proc.r4 = rz1)
 SQL;
         $command = Yii::app()->db->createCommand($sql);
@@ -445,12 +445,12 @@ SQL;
 
         foreach ($rows as $row){
             if($isCount) {
-                $elgzst3 = $row['prop'];
+                $elgzst3 = $row['propusk'];
                 if ($elgzst3 == 1) $disrespectful++;
                 if ($elgzst3 == 2) $respectful++;
                 $count++;
             }else{
-                $elgzst3 = $row['prop'];
+                $elgzst3 = $row['propusk'];
                 $hours = $row['rz8'];
 
                 if ($elgzst3 == 1) $disrespectful+=$hours;
@@ -474,7 +474,7 @@ SQL;
     public function getAttendanceStatisticInfoByDateWithHours($date1,$date2,$st1)
     {
         $sql=<<<SQL
-                SELECT proc.*, rz8 FROM STAT_PROP(:ST1,:DATE1, :DATE2) proc
+                SELECT proc.*, rz8 FROM el_gurnal_info(0,0, :DATE1, :DATE2, 0, 0, :ST1,0,0) proc
                   INNER JOIN rz on (proc.r4 = rz1) WHERE r2<=:DATE2_1
 SQL;
         $command = Yii::app()->db->createCommand($sql);
@@ -494,7 +494,7 @@ SQL;
 
         foreach ($rows as $row){
 
-            $elgzst3 = $row['prop'];
+            $elgzst3 = $row['propusk'];
             $hours = $row['rz8'];
 
             if ($elgzst3 == 1) {

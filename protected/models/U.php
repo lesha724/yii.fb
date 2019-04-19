@@ -546,8 +546,8 @@ SQL;
             }
 
             $sql = <<<SQL
-UPDATE or INSERT INTO ucsn (ucsn1,ucsn2,ucsn3,ucsn4,ucsn5)
-VALUES (:UCGNS1_VIB,:ST1,:GR1_KOD,current_timestamp,0) MATCHING(ucsn1,ucsn2)
+UPDATE or INSERT INTO ucsn (ucsn1,ucsn2,ucsn4,ucsn5)
+VALUES (:UCGNS1_VIB,:ST1,current_timestamp,0) MATCHING(ucsn1,ucsn2)
 SQL;
             $params = array(
                 ':UCGNS1_VIB' => $code['ucgns1_vib'],

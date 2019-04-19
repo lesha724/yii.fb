@@ -751,9 +751,9 @@ SQL;
 
 		$sql=<<<SQL
                 SELECT proc.*, rz8
-                FROM STAT_PROP(:ST1,:DATE1, :DATE2) proc
+                FROM el_gurnal_info(0,0, :DATE1, :DATE2, 0, 0, :ST1,0,0) proc
                  INNER JOIN rz on (r4 = rz1)
-                 WHERE prop>0 ORDER by r2 DESC
+                 WHERE propusk in (1,2) ORDER by r2 DESC
 SQL;
 
 		$command = Yii::app()->db->createCommand($sql);
