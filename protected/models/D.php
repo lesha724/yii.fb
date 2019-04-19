@@ -316,22 +316,15 @@ SQL;
             return array();
 
         $sql = <<<SQL
-            select * from (select d2,d1,uo1,sem1,us4,
-              iif(us.us4=1,
-              (select elgno4 from elgno where elgno2=uo.uo1 and elgno3=sem.sem1 and elgno4=0),
-              (select elgno4 from elgno where elgno2=uo.uo1 and elgno3=sem.sem1 and elgno4=1)) as vivodit
-                        from gr
-                           inner join ucsn on (gr.gr1 = ucsn.ucsn3)
-                           inner join ucgns on (ucsn.ucsn1 = ucgns.ucgns1)
-                           inner join ucgn on (ucgns.ucgns2 = ucgn.ucgn1)
-                           inner join ug on (ucgn.ucgn1 = ug.ug4)
-                           inner join nr on (ug.ug3 = nr.nr1)
-                           inner join us on (nr.nr2 = us.us1)
-                           inner join uo on (us.us2 = uo.uo1)
+            select * from (select d2,d1,LISTST.uo1,LISTST.sem1,LISTST.us4,
+              iif(LISTST.us4=1,
+              (select elgno4 from elgno where elgno2=LISTST.uo1 and elgno3=LISTST.sem1 and elgno4=0),
+              (select elgno4 from elgno where elgno2=LISTST.uo1 and elgno3=LISTST.sem1 and elgno4=1)) as vivodit
+                        from LISTST(current_timestamp,:YEAR,:SEM,2,:GR1)
+                           inner join uo on (LISTST.uo1 = uo.uo1)
                            inner join d on (uo.uo3 = d.d1)
-                           inner join sem on (us.us12 = sem.sem1)
-                        where ucgn2=:GR1 and sem3=:YEAR and sem5=:SEM and UCGNS5=:YEAR1 and UCGNS6=:SEM1
-                        group by d2,d1,uo1,sem1,us4,vivodit
+                        where us4 in (1,2,3,4)
+                        group by d2,d1,LISTST.uo1,LISTST.sem1,LISTST.us4,vivodit
                         order by d2 collate UNICODE
             ) where vivodit is null
 SQL;
@@ -339,8 +332,6 @@ SQL;
         $command->bindValue(':GR1', $group);
         $command->bindValue(':YEAR', Yii::app()->session['year']);
         $command->bindValue(':SEM', Yii::app()->session['sem']);
-        $command->bindValue(':YEAR1', Yii::app()->session['year']);
-        $command->bindValue(':SEM1', Yii::app()->session['sem']);
         $disciplines = $command->queryAll();
 
         foreach($disciplines as $key => $discipline) {

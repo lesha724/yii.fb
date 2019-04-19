@@ -724,7 +724,7 @@ SQL;
 SQL;*/
         $sql = <<<SQL
        select t.st1,st.st2,st.st3,st.st4,st.st45,st.st71,st.st163,st.st167, elgvst2, elgvst3
-        from (select listst.st1,listst.gr1,listst.std11,ucx1 from listst(:DATE_1,:YEAR,:SEM,0) where (listst.gr1=:GR1 or listst.gr1_virt=:GR1_VIRT) and listst.std11 in (0,6,8) ) t
+        from (select listst.st1,listst.gr1,listst.std11,ucx1 from listst(:DATE_1,:YEAR,:SEM,0,0) where (listst.gr1=:GR1 or listst.gr1_virt=:GR1_VIRT) and listst.std11 in (0,6,8) ) t
             inner join st on (t.st1 = st.st1)
             inner join ucx on (t.ucx1 = ucx.ucx1)
             inner join uo on (ucx.ucx1 = uo19)
@@ -984,15 +984,16 @@ SQL
 
 		$sql=<<<SQL
             SELECT st1,st2,st3,st4,st5,sk3,gr3, gr19,gr20,gr21,gr22,gr23,gr24,gr28, st74, st75, st76
-			from ucgn
-			   inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
-			   inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
-			   inner join st on (ucsn.ucsn2 = st.st1)
-			   inner join gr on (ucsn.ucsn3 = gr.gr1)
-			   LEFT JOIN SK ON (SK.SK2 = ST.ST1)
-			where ucgns5=:YEAR and ucgns6=:SEM and ucgn2=:GR1
-			group by st1,st2,st3,st4,st5,sk3,gr3, gr19,gr20,gr21,gr22,gr23,gr24,gr28, st74, st75, st76
-			order by st2 collate UNICODE
+            from std
+               inner join gr on (std.std3 = gr.gr1)
+               inner join st on (std.std2 = st.st1)
+               inner join ucsn on (st.st1 = ucsn.ucsn2)
+               inner join ucgns on (ucsn.ucsn1 = ucgns.ucgns1)
+               inner join ucgn on (ucgns.ucgns2 = ucgn.ucgn1)
+               inner JOIN SK ON (SK.SK2 = ST.ST1 and sk5 is null)
+            where ucgns5=:YEAR and ucgns6=:SEM and ucgn2=:GR1
+            group by st1,st2,st3,st4,st5,sk3,gr3, gr19,gr20,gr21,gr22,gr23,gr24,gr28, st74, st75, st76
+            order by st2 collate UNICODE
 SQL;
 
 		$command = Yii::app()->db->createCommand($sql);

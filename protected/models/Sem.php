@@ -426,7 +426,7 @@ SQL;
         return $months;
     }
 
-    public function getSemestersForSt($st1)
+    /*public function getSemestersForSt($st1)
     {
         $sql = <<<SQL
             SELECT sem7
@@ -443,7 +443,7 @@ SQL;
         $semesters = $command->queryColumn();
 
         return $semesters;
-    }
+    }*/
 	
 	public function getModule($uo1)
 	{
