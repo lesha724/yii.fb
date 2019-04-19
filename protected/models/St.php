@@ -984,14 +984,15 @@ SQL
 
 		$sql=<<<SQL
             SELECT st1,st2,st3,st4,st5,sk3,gr3, gr19,gr20,gr21,gr22,gr23,gr24,gr28, st74, st75, st76
-            from std
+            from ucxg
+               inner join ucgn on (ucxg.ucxg2 = ucgn.ucgn1)
+               inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
+               inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
+               inner join st on (ucsn.ucsn2 = st.st1)
+               inner join std on (st.st1 = std.std2)
                inner join gr on (std.std3 = gr.gr1)
-               inner join st on (std.std2 = st.st1)
-               inner join ucsn on (st.st1 = ucsn.ucsn2)
-               inner join ucgns on (ucsn.ucsn1 = ucgns.ucgns1)
-               inner join ucgn on (ucgns.ucgns2 = ucgn.ucgn1)
                inner JOIN SK ON (SK.SK2 = ST.ST1 and sk5 is null)
-            where ucgns5=:YEAR and ucgns6=:SEM and ucgn2=:GR1
+            where ucgns5=:YEAR and ucgns6=:SEM and ucgn2=:GR1 and UCXG3=0 and std11<>1 and std4<=current_timestamp and (std7 is null or std7>=current_timestamp)
             group by st1,st2,st3,st4,st5,sk3,gr3, gr19,gr20,gr21,gr22,gr23,gr24,gr28, st74, st75, st76
             order by st2 collate UNICODE
 SQL;
