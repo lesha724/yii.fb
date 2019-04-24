@@ -320,7 +320,7 @@ SQL;
               iif(LISTST.us4=1,
               (select elgno4 from elgno where elgno2=LISTST.uo1 and elgno3=LISTST.sem1 and elgno4=0),
               (select elgno4 from elgno where elgno2=LISTST.uo1 and elgno3=LISTST.sem1 and elgno4=1)) as vivodit
-                        from LISTST(current_timestamp,:YEAR,:SEM,2,:GR1)
+                        from LISTST(current_timestamp,:YEAR,:SEM,2,:GR1,0,0,0,0)
                            inner join uo on (LISTST.uo1 = uo.uo1)
                            inner join d on (uo.uo3 = d.d1)
                         where us4 in (1,2,3,4)
@@ -940,16 +940,16 @@ SQL;
                     ORDER BY d2,us4,uo3,d27
 SQL;*/
             $sql = <<<SQL
-                SELECT d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1, k19
-                    from LISTST(current_timestamp,0,0,3,0,:ID,:SEM1)
-                       inner join us on (LISTST.us1 = us.us1)
-                       inner join uo on (us.us2 = uo.uo1)
-                       inner join u on (uo.uo22 = u.u1)
-                       inner join d on (uo.uo3 = d.d1)
-                       inner join k on (uo.uo4 = k.k1)
-                    WHERE us4<>13 and us6<>0 and us4<>17 and us4<>18
-                    group by d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1, k19
-                    ORDER BY d2,us4,uo3,d27
+            SELECT d2,LISTST.us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,LISTST.uo1, k19
+                from LISTST(current_timestamp,0,0,3,0,:ID,:SEM1,0,0)
+                   inner join us on (LISTST.us1 = us.us1)
+                   inner join uo on (us.us2 = uo.uo1)
+                   inner join u on (uo.uo22 = u.u1)
+                   inner join d on (uo.uo3 = d.d1)
+                   inner join k on (uo.uo4 = k.k1)
+                WHERE LISTST.us4<>13 and us6<>0 and LISTST.us4<>17 and LISTST.us4<>18
+                group by d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1, k19
+                ORDER BY d2,us4,uo3,d27
 SQL;
             $id  = $model->student;
         }
@@ -1056,8 +1056,8 @@ SQL;
 SQL;*/
 
         $sql = <<<SQL
-            select us1,d2
-            from LISTST(current_timestamp,:SG40,0,4,0,:ST1,0)
+        select LISTST.us1,d2
+            from LISTST(current_timestamp,:SG40,0,4,0,:ST1,0,0,0)
                inner join uo on (LISTST.uo1 = uo.uo1)
                inner join u on (uo.uo22 = u.u1)
                inner join d on (uo.uo3 = d.d1)
@@ -1178,8 +1178,8 @@ SQL;
 SQL;*/
 
         $sql = <<<SQL
-            SELECT d1,d2
-            from LISTST(current_timestamp,0,0,2,:GR1,0,:SEM1)
+        SELECT d1,d2
+            from LISTST(current_timestamp,0,0,2,:GR1,0,:SEM1,0,0)
                inner join uo on (LISTST.uo1 = uo.uo1)
                inner join elg on (uo.uo1 = elg.elg2)
                inner join d on (uo.uo3 = d.d1)

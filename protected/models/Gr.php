@@ -271,13 +271,13 @@ SQL;*/
 
         $sql = /** @lang text */
             <<<SQL
-          select LISTST.sem4 as st56, gr13,gr1, gr3, gr7,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28
-            from LISTST(current_timestamp,:YEAR,:SEM,3,0,:ST1,0)
-               inner join sst on (LISTST.gr1 = sst.sst3)
-               inner join gr on (LISTST.gr1 = gr.gr1)
-            where sst.sst2 = :ST1 and sst6 is null
-            group by LISTST.sem4, gr13, gr1, gr3, gr7,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28
-            ORDER by gr13, gr7 DESC, gr3 ASC;
+            select LISTST.sem4 as st56, gr13,gr.gr1, gr3, gr7,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28
+                from LISTST(current_timestamp,:YEAR,:SEM,3,0,:ST1,0,0,0)
+                   inner join sst on (LISTST.gr1 = sst.sst3)
+                   inner join gr on (LISTST.gr1 = gr.gr1)
+                where sst.sst2 = :ST1 and sst6 is null
+                group by LISTST.sem4, gr13, gr1, gr3, gr7,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28
+                ORDER by gr13, gr7 DESC, gr3 ASC;
 SQL;
 
 
@@ -1030,7 +1030,7 @@ SQL;
         }
 
         $sql = <<<SQL
-            SELECT d1, gr1, ug2, sem4, gr3, gr19, gr20, gr21, gr22, gr23, gr24, gr28 {$fields}
+            SELECT d1, gr1, ug2, sem4, gr3, gr19, gr20, gr21, gr22, gr23, gr24, gr28, ug3 {$fields}
             FROM sem
             INNER JOIN us ON (sem.sem1 = us.us12)
             INNER JOIN nr ON (us.us1 = nr.nr2)
@@ -1040,7 +1040,7 @@ SQL;
             INNER JOIN d ON (uo.uo3 = d.d1)
             INNER JOIN gr ON (ug.ug2 = gr.gr1)
             WHERE pd1=:PD1 and sem3=:SEM3 and sem5=:SEM5 and d1 = :D1 {$condition}
-            GROUP BY  d1, d2, gr1, ug2, sem4, gr3, gr19, gr20, gr21, gr22, gr23, gr24, gr28 {$fields}
+            GROUP BY  d1, d2, gr1, ug2, sem4, gr3, gr19, gr20, gr21, gr22, gr23, gr24, gr28, ug3 {$fields}
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
@@ -1055,7 +1055,7 @@ SQL;
 
         foreach ($groups as $group) {
             $groupNames[] = Gr::model()->getGroupName($group['sem4'], $group);
-            $studentsAmount += St::model()->getStudentsAmountFor($group['gr1']);
+            $studentsAmount += St::model()->getStudentsAmountFor($group['gr1'], $group['ug3']);
         }
 
         return array($groupNames, $studentsAmount);

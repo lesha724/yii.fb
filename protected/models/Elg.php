@@ -195,9 +195,9 @@ SQL;
 
 		$type_str="";
 		if($type==0)
-			$type_str=" and us4=1";
+			$type_str=" and LISTST.us4=1";
 		if($type==1)
-			$type_str=" and us4 in (2,3,4)";
+			$type_str=" and LISTST.us4 in (2,3,4)";
 		//(1,2,3,4)
 
 		/*$sql=<<<SQL
@@ -219,14 +219,14 @@ SQL;
 SQL;*/
 
 		$sql = <<<SQL
-        SELECT d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1,LISTST.sem1
-            from LISTST(current_timestamp,0,0,3,0,:ST1,:SEM1)
+        SELECT d2,LISTST.us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,LISTST.uo1,LISTST.sem1
+            from LISTST(current_timestamp,0,0,3,0,:ST1,:SEM1,0,0)
                inner join us on (LISTST.us1 = us.us1)
                inner join uo on (us.us2 = uo.uo1)
                inner join u on (uo.uo22 = u.u1)
                inner join d on (uo.uo3 = d.d1)
                inner join k on (uo.uo4 = k.k1)
-            WHERE LISTST.uo1=:UO1 and us6<>0
+            WHERE LISTST.uo1=:UO1 and us6<>0 {$type_str}
             group by d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1,LISTST.sem1
             ORDER BY d2,us4,uo3
 SQL;
@@ -266,22 +266,22 @@ SQL;*/
 
 		$sql = <<<SQL
             SELECT d2,
-                (CASE us4
-                  WHEN 1 THEN 0
-                  ELSE 1
-                END) as type_journal,
-                k2,k15,uo3,u16,u1,d1,d27,d32,d34,d36,uo1,sem1, sem7,ucgn2
-            from LISTST(current_timestamp,:YEAR,:SEM,3,0,:ST1,0)
-               inner join us on (LISTST.us1 = us.us1)
-               inner join uo on (us.us2 = uo.uo1)
-               inner join u on (uo.uo22 = u.u1)
-               inner join d on (uo.uo3 = d.d1)
-               inner join k on (uo.uo4 = k.k1)
-               inner join sem on (LISTST.sem1 = sem.sem1)
-               inner join ucgn on (LISTST.ucgn1 = ucgn.ucgn1)
-            WHERE us6<>0 and us4 in (1,2,3,4) and uo26<2
-            group by d2,type_journal,k2, k15,uo3,u16,u1,d1,d27,d32,d34,d36,uo1,sem1, sem7,ucgn2
-            ORDER BY d2,type_journal,uo3
+                    (CASE us.us4
+                      WHEN 1 THEN 0
+                      ELSE 1
+                    END) as type_journal,
+                    k2,k15,uo3,u16,u1,d1,d27,d32,d34,d36,uo.uo1,sem.sem1, sem7,ucgn2
+                from LISTST(current_timestamp,:YEAR,:SEM,3,0,:ST1,0,0,0)
+                   inner join us on (LISTST.us1 = us.us1)
+                   inner join uo on (us.us2 = uo.uo1)
+                   inner join u on (uo.uo22 = u.u1)
+                   inner join d on (uo.uo3 = d.d1)
+                   inner join k on (uo.uo4 = k.k1)
+                   inner join sem on (LISTST.sem1 = sem.sem1)
+                   inner join ucgn on (LISTST.ucgn1 = ucgn.ucgn1)
+                WHERE us6<>0 and LISTST.us4 in (1,2,3,4) and uo26<2
+                group by d2,type_journal,k2, k15,uo3,u16,u1,d1,d27,d32,d34,d36,uo1,sem1, sem7,ucgn2
+                ORDER BY d2,type_journal,uo3
 SQL;
 
 		$command = Yii::app()->db->createCommand($sql);
