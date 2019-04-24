@@ -920,19 +920,8 @@ SQL;
 SQL;
             $id  = $model->group;
         } elseif ($type == WorkPlanController::STUDENT) {
-             $sql = <<<SQL
+             /*$sql = <<<SQL
                 SELECT d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1, k19
-                    /*from ucxg
-                       inner join ucgn on (ucxg.ucxg2 = ucgn.ucgn1)
-                       inner join ucx on (ucxg.ucxg1 = ucx.ucx1)
-                       inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
-                       inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
-
-                       inner join uo on (ucx.ucx1 = uo.uo19)
-                       inner join us on (uo.uo1 = us.us2)
-                       inner join u on (uo.uo22 = u.u1)
-                       inner join d on (uo.uo3 = d.d1)
-                       inner join k on (uo.uo4 = k.k1)*/
                        from nr
                            inner join us on (nr.nr2 = us.us1)
                            inner join uo on (us.us2 = uo.uo1)
@@ -949,25 +938,19 @@ SQL;
 
                     group by d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1, k19
                     ORDER BY d2,us4,uo3,d27
-SQL;
-            
-            
-            /*$sql = <<<SQL
-                SELECT d2,us4,us6,k2,uo3,u16,u1,d27,d32,d34,d36,uo1
-					FROM us
-					   INNER JOIN uo ON (us.us2 = uo.uo1)
-					   INNER JOIN nr ON (us.us1 = nr2)
-					   INNER JOIN ug ON (nr1 = ug3)
-					   INNER JOIN u ON (uo.uo22 = u.u1)
-					   INNER JOIN d ON (uo.uo3 = d.d1)
-					   INNER JOIN k ON (uo.uo4 = k.k1)
-					   inner join ucgn on (ug.ug4 = ucgn.ucgn1)
-					   inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
-					   inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
-					   inner join ucxg on (ucgn.ucgn1 = ucxg.ucxg2)
-					WHERE us4<>13 and ucxg3=0 and ucsn2=:ID and us3=:SEM1 and us6<>0 and us4<>17 and us4<>18
-					ORDER BY d2,us4,uo3
 SQL;*/
+            $sql = <<<SQL
+                SELECT d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1, k19
+                    from LISTST(current_timestamp,0,0,3,0,:ID,:SEM1)
+                       inner join us on (LISTST.us1 = us.us1)
+                       inner join uo on (us.us2 = uo.uo1)
+                       inner join u on (uo.uo22 = u.u1)
+                       inner join d on (uo.uo3 = d.d1)
+                       inner join k on (uo.uo4 = k.k1)
+                    WHERE us4<>13 and us6<>0 and us4<>17 and us4<>18
+                    group by d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1, k19
+                    ORDER BY d2,us4,uo3,d27
+SQL;
             $id  = $model->student;
         }
 
@@ -1056,7 +1039,7 @@ SQL;
         list($sg40, $sg41) = $this->getSg40Sg41($st1);
         //$sg40=2014;
         //$sg41=1;
-        $sql = <<<SQL
+        /*$sql = <<<SQL
 			select us1,d2
 			   from u
 				  inner join uo on (u.u1 = uo.uo22)
@@ -1068,30 +1051,21 @@ SQL;
 				  inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
 				  inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
 				  inner join d on (uo.uo3 = d.d1)
-			   where us4 = 8 and ucsn2=:ST1 and u38<=current_timestamp and u39>=current_timestamp and
-			   sem3=:SG40
-			   /*and
-			   sem5=:SG41*/
-			   group by us1,d2
-SQL;
-       /* $sql = <<<SQL
-			select us1,d2
-			   from u
-				  inner join uo on (u.u1 = uo.uo22)
-				  inner join us on (uo.uo1 = us.us2)
-				  inner join nr on (us.us1 = nr.nr2)
-				  inner join ug on (nr.nr1 = ug.ug3)
-				  inner join sem on (us.us3 = sem.sem1)
-				  inner join ucgn on (ug.ug4 = ucgn.ucgn1)
-				  inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
-				  inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
-				  inner join d on (uo.uo3 = d.d1)
-			   where us4 = 8 and ucsn2=:ST1 and
-			   sem3=:SG40
-			   and
-			   sem5=:SG41
+			   where us4 = 8 and ucsn2=:ST1 and u38<=current_timestamp and u39>=current_timestamp and sem3=:SG40
 			   group by us1,d2
 SQL;*/
+
+        $sql = <<<SQL
+            select us1,d2
+            from LISTST(current_timestamp,:SG40,0,4,0,:ST1,0)
+               inner join uo on (LISTST.uo1 = uo.uo1)
+               inner join u on (uo.uo22 = u.u1)
+               inner join d on (uo.uo3 = d.d1)
+               inner join sem on (LISTST.sem1 = sem.sem1)
+            where us4 = 8 and u38<=current_timestamp and u39>=current_timestamp and sem3=:SG40
+            group by us1,d2
+SQL;
+
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':ST1', $st1);
@@ -1157,19 +1131,6 @@ SQL;
             return;
 
         $sql = <<<SQL
-		 /*select sg40, sg41
-		   from u
-			  inner join uo on (u.u1 = uo.uo22)
-			  inner join us on (uo.uo1 = us.us2)
-			  inner join nr on (us.us1 = nr.nr2)
-			  inner join ug on (nr.nr1 = ug.ug3)
-			  inner join ucgn on (ug.ug4 = ucgn.ucgn1)
-			  inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
-			  inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
-			  inner join sg on (u.u2 = sg.sg1)
-		   where ucsn2=:ST1 and u38<=current_timestamp and u39>=current_timestamp*/
-SQL;
-        $sql = <<<SQL
 		   select first 1 sg40, sg41
             from sg
                inner join gr on (sg.sg1 = gr.gr2)
@@ -1201,7 +1162,7 @@ SQL;
      * @return mixed
      */
     public function getDisciplinesForAttendanceStatistic($gr1, $sem1){
-        $sql = <<<SQL
+        /*$sql = <<<SQL
         SELECT d1,d2 from ucsn
             inner join ucgns on (ucsn.ucsn1 = ucgns.ucgns1)
             inner join ucgn on (ucgns.ucgns2 = ucgn.ucgn1)
@@ -1214,7 +1175,18 @@ SQL;
             inner join d on (uo.uo3 = d.d1)
         WHERE std3 = :GR1 and elg3 = :SEM1 and STD11 in (0,5,6,8) and (STD7 is null)
         GROUP BY d1,d2 order by d2 collate UNICODE
+SQL;*/
+
+        $sql = <<<SQL
+            SELECT d1,d2
+            from LISTST(current_timestamp,0,0,2,:GR1,0,:SEM1)
+               inner join uo on (LISTST.uo1 = uo.uo1)
+               inner join elg on (uo.uo1 = elg.elg2)
+               inner join d on (uo.uo3 = d.d1)
+            WHERE elg3 = LISTST.SEM1
+            GROUP BY d1,d2 order by d2 collate UNICODE
 SQL;
+
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':GR1', $gr1);
