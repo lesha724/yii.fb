@@ -1062,7 +1062,7 @@ SQL;*/
                inner join u on (uo.uo22 = u.u1)
                inner join d on (uo.uo3 = d.d1)
                inner join sem on (LISTST.sem1 = sem.sem1)
-            where us4 = 8 and u38<=current_timestamp and u39>=current_timestamp and sem3=:SG40
+            where us4 = 8 and u38<=current_timestamp and u39>=current_timestamp and sem3=:SG40_
             group by us1,d2
 SQL;
 
@@ -1070,7 +1070,7 @@ SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':ST1', $st1);
 		$command->bindValue(':SG40', $sg40);
-        $command->bindValue(':SG41', $sg41);
+        $command->bindValue(':SG40_', $sg40);
         $discipline = $command->queryRow();
 
         return $discipline;
