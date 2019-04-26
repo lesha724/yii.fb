@@ -873,20 +873,29 @@ SQL;
 		if(empty($uo1))
 			return '';
 		$sql = <<<SQL
-            select mtmo11
+            select mtmo11, mtv2
 			from mtz
 			   inner join mtmo on (mtz1 = mtmo1)
+			   inner join mtv on (mtv1 = mtmo4)
 			where mtz2 = :sem1 and mtz3 = :uo1
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':uo1', $uo1);
         $command->bindValue(':sem1', $model->semester);
-        $link = $command->queryRow();
-		if($link==null)
+        $links = $command->queryAll();
+		if(empty($links))
 			return '';
-		
-		if(!empty($link['mtmo11']))
-			return CHtml::link('<i class="icon-file"></i>',$link['mtmo11'], array('data-toggle'=>"tooltip", 'data-placement'=>"right",'data-original-title'=>tt("Отобразить файл"),'class'=>'link-disp','style'=>'margin-left:10px','target'=>'_blank'));
+
+		$result = '';
+
+		foreach ($links as $link) {
+            if (empty($link['mtmo11']))
+                continue;
+
+            $result.=CHtml::link('<i class="icon-file"></i>', $link['mtmo11'], array('data-toggle' => "tooltip", 'data-placement' => "right", 'data-original-title' => $link['mtv2'], 'class' => 'link-disp', 'style' => 'margin-left:10px', 'target' => '_blank'));
+        }
+
+        return $result;
 	}
 	
     private function getWorkPlanDisciplinesFor($model, $type)
