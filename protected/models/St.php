@@ -1619,7 +1619,8 @@ SQL;
 				INNER JOIN gr ON(std3=gr1)
 				INNER JOIN sg ON(sg1=gr2)
 				INNER JOIN sp ON(sp1=sg2)
-				where st2<>'' and sp5=:f1 and std11 in (0,5,6,8) and std7 is null
+				INNER JOIN f ON(sp5=f1)
+				where st2<>'' and sp5=:f1 and std11 in (0,5,6,8) and std7 is null and f32=0
 				and
 				(
 					st2 CONTAINING :QUERY1
