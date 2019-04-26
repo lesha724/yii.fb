@@ -542,7 +542,9 @@ SQL;
                 list($result, $error) = $connector->subscribeToCourse(Yii::app()->user->model, $code['ucgns1_vib']);
                 Yii::app()->user->setFlash($result ? 'success' : 'error' , $error);
                 if(!$result)
-                    throw new CHttpException('400',tt('Ошибка записи ' . $error));
+                    throw new CHttpException('400',tt('Ошибка записи {error}', array(
+                        '{error}' => $error
+                    )));
             }
 
             $sql = <<<SQL
