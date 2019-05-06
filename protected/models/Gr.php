@@ -275,7 +275,7 @@ SQL;*/
                 from LISTST(current_timestamp,:YEAR,:SEM,3,0,:ST1,0,0,0)
                    inner join sst on (LISTST.gr1 = sst.sst3)
                    inner join gr on (LISTST.gr1 = gr.gr1)
-                where sst.sst2 = :ST1 and sst6 is null
+                where sst.sst2 = :ST1_ and sst6 is null
                 group by LISTST.sem4, gr13, gr1, gr3, gr7,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28
                 ORDER by gr13, gr7 DESC, gr3 ASC;
 SQL;
@@ -283,7 +283,7 @@ SQL;
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':ST1', $st1);
-        $command->bindValue(':ST1', $st1);
+        $command->bindValue(':ST1_', $st1);
         $command->bindValue(':YEAR', Yii::app()->session['year']);
         $command->bindValue(':SEM', Yii::app()->session['sem']);
         $groups = $command->queryAll();
