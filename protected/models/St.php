@@ -676,7 +676,7 @@ SQL;
 
     public function getStudentInfoForPortfolio(){
         $sql = <<<SQL
-		 select first 1 sg1,sg2,sg4,gr1,gr3,sp1,sp2,sem4,f2,f3,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28,sgr2,spc4,sp4
+		 select first 1 sg1,sg2,sg4,gr1,gr3,sp1,sp2,sem4,f2,f3,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28,sgr2,spc4,sp4, st56
 		   from sem
 			   inner join sg on (sem.sem2 = sg.sg1)
 			   inner join gr on (sg.sg1 = gr.gr2)
@@ -1657,5 +1657,28 @@ SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':st1',  $this->st1);
         return $command->queryAll();
+    }
+
+    /**
+     * @return array
+     * @throws CException
+     */
+    public function getSredniyBall(){
+        $sql = <<<SQL
+            select AVG(BAL_5)
+                from DISC_VKL_ST_IT(
+                   (
+                      select first 1 sg1 from sg 
+                      inner join gr on (sg.sg1 = gr.gr2)
+                      inner join std on (gr.gr1 = std.std3)
+                      where std2=:st1_ and std7 is null and std11 in (0,5,6,8)
+                   )
+                )
+                WHERE st1=:st1 and BAL_5>=0
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':st1',  $this->st1);
+        $command->bindValue(':st1_',  $this->st1);
+        return $command->queryScalar();
     }
 }
