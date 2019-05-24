@@ -663,6 +663,42 @@ SQL;
         return $command->queryAll();
     }
 
+    public function getGroupsForTimeTableForPortfolio($faculty, $course)
+    {
+        if (empty($faculty) || empty($course))
+            return array();
+
+        $sql=<<<SQL
+           SELECT sg4, sem4, gr7,gr3,gr1, gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26
+			from sp
+			   inner join sg on (sp.sp1 = sg.sg2)
+			   inner join sem on (sg.sg1 = sem.sem2)
+			   inner join gr on (sg.sg1 = gr.gr2)
+			   inner join ucgn on (gr.gr1 = ucgn.ucgn2)
+			   inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
+			   inner join ucxg on (ucgn.ucgn1 = ucxg.ucxg2)
+			WHERE ucxg1<30000 and gr13=0 and gr6 is null
+				 and sp5=:FACULTY and sem3=:YEAR1 and sem5=:SEM1 and ucgns5=:YEAR2 and ucgns6=:SEM2 and sem4=:COURSE
+			GROUP BY sg4, sem4, gr7,gr3,gr1, gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26
+			ORDER BY gr7,gr3
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':FACULTY', $faculty);
+        $command->bindValue(':COURSE', $course);
+        $command->bindValue(':YEAR1', Yii::app()->session['year']);
+        $command->bindValue(':SEM1', Yii::app()->session['sem']);
+        $command->bindValue(':YEAR2', Yii::app()->session['year']);
+        $command->bindValue(':SEM2', Yii::app()->session['sem']);
+        $groups = $command->queryAll();
+
+        foreach($groups as $key => $group) {
+            $groups[$key]['name'] = $this->getGroupName($course, $group);
+        }
+
+        return $groups;
+    }
+
     public function getGroupsForTimeTable($faculty, $course)
     {
         if (empty($faculty) || empty($course))
