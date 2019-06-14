@@ -1234,7 +1234,7 @@ SQL;
 			  where ucxg3=0 and ucxg1=:UO19 and ucsn2=:ST1 and ucgns5=:YEAR and ucgns6=:SEM
 SQL;*/
 		$sql = <<<SQL
-		select first 1 LISTST.gr1, gr3
+		select first 1 LISTST.gr1, gr3, listst.GR1_VIRT
         from LISTST(:DATE_1,0,0,7,0,:ST1,0,0,0)
            inner join gr on (LISTST.gr1_virt = gr.gr1)
            inner join ug on (gr.gr1 = ug.ug2)
@@ -1251,8 +1251,10 @@ SQL;
 		$command->bindValue(':UO19', $uo19);
 		$command->bindValue(':YEAR', $year);
 		$command->bindValue(':SEM', $sem);
-		$gr1 = $command->queryScalar();
-		return $gr1;
+		$row = $command->queryRow();
+
+
+		return empty($row['gr1_virt']) ? $row['gr1'] : $row['gr1_virt'];
 	}
 
 	public function getGr1BySt1($st1)
