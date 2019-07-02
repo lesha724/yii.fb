@@ -87,7 +87,7 @@
     ?>
     <?php if(!empty(Yii::app()->params['analytics'])){
 
-        if(strpos(Yii::app()->params['analytics'], '<script') == false)
+        if(strpos(Yii::app()->params['analytics'], '<script') === false)
             Yii::app()->clientScript->registerScript('google-analitics', Yii::app()->params['analytics'], CClientScript::POS_HEAD);
         else
            echo  Yii::app()->params['analytics'];
