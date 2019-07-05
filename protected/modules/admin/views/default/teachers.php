@@ -107,7 +107,7 @@ HTML;
                 'header'=>CHtml::dropDownList(
                         'pageSize',
                         $pageSize,
-                        $this->getPageSizeArray(),
+                        SH::getPageSizeArray(),
                         array('class'=>'change-pageSize')
                     ),
                 'buttons'=>array
