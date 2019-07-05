@@ -1,5 +1,6 @@
 <?php
 mb_internal_encoding("UTF-8");
+ini_set('expose_php', 'Off');
 
 define('ASU_PORTAL_VERSION', '0.2.0.21');
 
@@ -13,7 +14,7 @@ ini_set('display_startup_errors', YII_DEBUG ? 1 : 0);
 error_reporting(YII_DEBUG ? -1 : 0);
 
 // change the following paths if necessary
-$yii    = dirname(__FILE__) . '/framework/' . (YII_DEBUG ? 'yii.php' : 'yiilite.php');
+$yii    = dirname(__FILE__) . '/vendor/yiisoft/yii/framework/' . (YII_DEBUG ? 'yii.php' : 'yiilite.php');
 $config = dirname(__FILE__) . '/protected/config/main.php';
 
 // specify how many levels of call stack should be shown in each log message
