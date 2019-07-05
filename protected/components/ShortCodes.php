@@ -111,7 +111,7 @@ class ShortCodes extends CApplicationComponent
     {
         if($_type!==null) {
 
-            $arr = FilterForm::getTypesForJournal();
+            $arr = static::getTypesForJournal();
             switch ($_type) {
                 case 0:
                 case 1:
@@ -431,6 +431,14 @@ class ShortCodes extends CApplicationComponent
             default: $name='';
         }
         return $name;
+    }
+
+    public static function getTypesForJournal()
+    {
+        return array(
+            '0'=>static::convertUS4(1),
+            '1'=>tt('пз/лб/сем')
+        );
     }
     
     public static function russianDayName($month)
