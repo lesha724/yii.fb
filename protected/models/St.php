@@ -1081,7 +1081,7 @@ SQL;
 
         $sql = <<<SQL
         SELECT *
-        FROM RAGRST(:LANG, 0, :ST1, 0, 0, 0, :DATE_1, :DATE_2)
+        FROM RASP(:LANG, 0, :ST1, 0, 0, 0, :DATE_1, :DATE_2, 1)
         ORDER BY r2,r3,rz2, d3
 SQL;
 
