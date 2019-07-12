@@ -1025,13 +1025,12 @@ SQL;
 			return array();
 
 		$sql = <<<SQL
-          select gr1,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,st2||' '||st3||' '||st4||' ' as stud,st56,gr7
+          select gr.gr1,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,st2||' '||st3||' '||st4||' ' as stud,st56,gr7
             from LISTST(current_timestamp,:sem3,:sem5,5,0,0,0,:uo1,0)
-               inner join uo on (LISTST.uo1 = uo.uo1)
                inner join st on (LISTST.st1 = st.st1)
                inner join gr on (LISTST.gr1 = gr.gr1)
             where st101!=7
-            GROUP BY gr1,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,st2,st3,st4,st56,gr7
+            GROUP BY gr.gr1,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,st2,st3,st4,st56,gr7
             ORDER BY gr7,gr3,st2 collate UNICODE
 SQL;
 
