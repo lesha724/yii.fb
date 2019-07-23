@@ -141,9 +141,6 @@ class Controller extends CController
                         break;
                 }
             }
-
-        /*if (! SH::checkServiceFor(MENU_ELEMENT_VISIBLE, Yii::app()->controller->id, $action->id, true))
-            throw new CHttpException(404, tt('Сервис закрыт!'));*/
     }
 
     private function processYearAndSem()
@@ -285,13 +282,5 @@ class Controller extends CController
         }
         $mail->ClearAddresses();
         return $result;
-    }
-
-    /**
-     * КОд Вуза
-     * @return int
-     */
-    public function getUniversityCode(){
-        return Yii::app()->core->universityCode;
     }
 }
