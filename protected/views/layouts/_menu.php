@@ -217,7 +217,7 @@ $this->widget('zii.widgets.CMenu', array(
                     'label'  => $_l2.tt('Врачи'),
                     'url'    => _u('/admin/default/doctors'),
                     'active' => $_a=='doctors' || $_a=='dGrants',
-                    'visible' => $this->universityCode == U_XNMU
+                    'visible' => Yii::app()->core->universityCode == U_XNMU
                 ),
                 array(
                     'label'  => $_l2.tt('Студенты'),
@@ -507,13 +507,13 @@ $this->widget('zii.widgets.CMenu', array(
                     'label'   => $_l2. tt('Контакты академ. группы'),
                     'url'     => _u('/list/contactStudents'),
                     'active'  => $_c=='list' && $_a=='contactStudents',
-                    'visible' => _ch('list', 'contactStudents') && $this->universityCode == U_RGIIS
+                    'visible' => _ch('list', 'contactStudents') && Yii::app()->core->universityCode == U_RGIIS
                 ),
                 array(
                     'label'   => $_l2. tt('Контакты кафедры'),
                     'url'     => _u('/list/contactTeachers'),
                     'active'  => $_c=='list' && $_a=='contactTeachers',
-                    'visible' => _ch('list', 'contactTeachers') && $this->universityCode == U_RGIIS
+                    'visible' => _ch('list', 'contactTeachers') && Yii::app()->core->universityCode == U_RGIIS
                 ),
             ),getDopItem('list',0)),
             'visible' => _ch('list', 'main')
@@ -545,7 +545,7 @@ $this->widget('zii.widgets.CMenu', array(
                 array(
                     'label'   => $_l2. tt('Эл. журнал (моб.)'),
                     'url'     => _u('/mobile/journal'),
-                    'visible' => _ch('mobile', 'journal') && $isTch /*&& $this->universityCode == U_ZSMU*/,
+                    'visible' => _ch('mobile', 'journal') && $isTch,
                     'active'  => $_c=='mobile' && $_a=='journal'
                 ),
                 array(

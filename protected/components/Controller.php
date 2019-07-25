@@ -283,4 +283,11 @@ class Controller extends CController
         $mail->ClearAddresses();
         return $result;
     }
+
+    /**
+     * @return int
+     */
+    public function getUniversityCode(){
+        return Yii::app()->core->universityCode;
+    }
 }
