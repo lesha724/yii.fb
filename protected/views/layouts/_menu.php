@@ -604,12 +604,6 @@ $this->widget('zii.widgets.CMenu', array(
                     'url'     => _u('/progress/rating'),
                     'active'  => $_c=='progress' && $_a=='rating',
                     'visible' => _ch('progress', 'rating')
-                ),
-                array(
-                    'label'   => $_l2.tt('Тестирование'),
-                    'url'     => _u('/progress/test'),
-                    'visible' => _ch('progress', 'test') && $isStd,
-                    'active'  => $_c=='progress' && $_a=='test'
                 )
             ),getDopItem('progress',0)),
             'visible' => _ch('progress', 'main')
