@@ -507,7 +507,7 @@ SQL;
         $connector = null;
         if($enableDistEducation==1&&$enableInSubscriptionDistEducation==1)
             $connector = SH::getDistEducationConnector(
-                SH::getUniversityCod()
+                Yii::app()->core->universityCode
             );
 
         $uch_god  = $_SESSION['uch_god'];
@@ -617,7 +617,7 @@ SQL;
         $connector = null;
         if($enableDistEducation==1&&$enableInSubscriptionDistEducation==1)
             $connector = SH::getDistEducationConnector(
-                SH::getUniversityCod()
+                Yii::app()->core->universityCode
             );
 
         foreach ($codes as $code) {
