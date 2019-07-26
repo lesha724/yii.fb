@@ -2,6 +2,7 @@
 /**
  * @var ProgressController $this
  * @var FilterForm $model
+ * @var St[] $students
  */
 $th  = '<th class="center" colspan="3">%s</th>';
 $th2 = '<th class="center">Зн</th><th class="center">Ну</th><th class="center">Ув</th>';
@@ -103,9 +104,7 @@ if (! empty($firstDay) && !empty($lastDay)) :
             <?php
                 $html = '';
                 foreach ($students as $student) {
-
-                    $attendance = Elgzst::model()->getAttendanceStatisticFor($student['st1'], $firstDay, $lastDay, $monthStatistic, $model->discipline);
-                    //$attendance['summary']['td1'] = Elgzst::getCountLesson($model->group, $model->semester, $firstDay, $lastDay);
+                    $attendance = Elgzst::model()->getAttendanceStatisticFor($student->st1, $firstDay, $lastDay, $monthStatistic, $model->discipline);
 
                     $html .= '<tr>';
                     foreach ($columns as $start => $name) {

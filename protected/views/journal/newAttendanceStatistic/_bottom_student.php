@@ -10,7 +10,9 @@
 /** @var $this JournalController */
 
 $statistic=St::model()->getStatisticForStudent($model->student,$model->semester);
-$st=St::model()->getStudentName($model->student);
+$st=St::model()->findByPk($model->student);
+if(!$st)
+    throw new CHttpException(400, tt('Не найден студент'));
 
 echo '<div class="row-fluid">';
 

@@ -305,21 +305,21 @@ class TimeTableController extends Controller
         $model->printAttr = Yii::app()->request->getParam('type', 0);
         Yii::app()->session['printAttr'] = $model->printAttr;
 
-        $timeTable = $minMax = $maxLessons = array();
+        $minMax = $maxLessons = array();
         if (! empty($model->student))
         {
             $title=tt('Расписание студента');
             $gr=Gr::model()->findByPk($model->group);
             $title.=' Группы '.Gr::model()->getGroupName($model->course,$gr);
-            $st=St::model()->getStudentName($model->student);
+            $st=St::model()->findByPk($model->student);
             if(!empty($st))
-                $title.=' '.ShortCodes::getShortName($st[0]['st2'],$st[0]['st3'],$st[0]['st4']);
+                $title.=' '.$st->fullName;
             list($minMax, $timeTable) = $model->generateStudentTimeTable();
             $rz= Rz::model()->getRzArray($model->filial);
             $this->generateExcel($timeTable,$minMax,$maxLessons,$rz,$model,$title);
 
         }else
-            throw new CHttpException(404, '4Invalid request. Please do not repeat this request again.');
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
     }
 

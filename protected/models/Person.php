@@ -42,6 +42,10 @@
  * @property string $pe63
  * @property integer $pe64
  *
+ * @property string $fullName
+ * @property string $shortName
+ *
+ *
  * The followings are the available model relations:
  * @property St[] $sts
  * @property Pefio[] $pefios
@@ -50,6 +54,10 @@
  * @property Voen $pe540
  * @property Sgr $pe300
  * @property I $pe320
+ *
+ *  * From ShortNameBehaviour:
+ * @method string getShortName() Returns default truncated name.
+ * @method string getFullName() Returns name.
  */
 class Person extends CActiveRecord
 {

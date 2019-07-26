@@ -76,7 +76,7 @@ if(!empty($students))
 	{
 		echo '<tr>
           <th scope="row">'.$i.'</th>
-          <td>'.SH::getShortName($student['st2'], $student['st3'], $student['st4']).'</td>
+          <td>'.SH::getShortName($student['pe2'], $student['pe3'], $student['pe4']).'</td>
 		  <td>'.$student['group_name'].'</td>
 		  <td>'.$student['sem4'].'</td>
           <td>'.$student['f2'].'</td>';

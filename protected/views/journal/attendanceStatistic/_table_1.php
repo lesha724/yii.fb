@@ -1,4 +1,10 @@
 <?php
+
+/**
+ * @var St[] $students
+ * @var int $type_statistic
+ */
+
 $pattern = <<<HTML
 <tr><td class="center">%s</td><td>%s</td></tr>
 HTML;
@@ -21,9 +27,9 @@ HTML;
 /*** 1 table ***/
 $tr = '';
 foreach($students as $key => $st) {
-    $name = ShortCodes::getShortName($st['st2'], $st['st3'], $st['st4']);
+    $name = $st->fullName;
 	if($type_statistic==0)
-		$name = '<a href="#" class="student-statistic" data-st1="'.$st['st1'].'">'.mb_strimwidth($name, 0, 15, '...').'</a>';
+		$name = '<a href="#" class="student-statistic" data-st1="'.$st->st1.'">'.mb_strimwidth($name, 0, 15, '...').'</a>';
 	else
 		$name = mb_strimwidth($name, 0, 15, '...');
     $num  = $key+1;

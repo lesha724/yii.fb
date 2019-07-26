@@ -1,5 +1,11 @@
 <?php
-	$this->pageHeader=tt('Статистика посещаемости студента').' '.ShortCodes::getShortName($st[0]['st2'], $st[0]['st3'], $st[0]['st4']);
+
+/**
+ * @var $statistic array
+ * @var $model FilterForm
+ * @var $st St
+ */
+	$this->pageHeader=tt('Статистика посещаемости студента').' '.$st->fullName;
 	$this->breadcrumbs=array(
 		tt('Электронный журнал'),
 	);

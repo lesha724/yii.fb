@@ -2116,10 +2116,10 @@ SQL;
             if(!empty($res))
                 $p = SH::getShortName($res['p3'], $res['p4'], $res['p5']);
             $sheet->setCellValue('A24',tt('Преподаватель').': '.$p)->getStyle('A24')->getFont()->setSize(16);
-            $res = Gr::model()->getStarostaFromGr1($gr1);
-            $nameStarosta='';
-            if(!empty($res))
-                $nameStarosta=SH::getShortName($res['st2'],$res['st3'],$res['st4']);
+
+            $st = St::model()->getStarostaFromGr1($gr1);
+            $nameStarosta= $st == null ? $st->fullName : '';
+
             $sheet->mergeCells('A25:I25');
             $sheet->setCellValue('A25',tt('Староста').': '.$nameStarosta)->getStyle('A25')->getFont()->setSize(16);
 
@@ -3420,8 +3420,7 @@ SQL;
             $model->attributes=$_REQUEST['FilterForm'];
 
         $this->render('attendanceStatistic', array(
-            'model' => $model,
-            'type_statistic'=>PortalSettings::model()->findByPk(41)->ps2
+            'model' => $model
         ));
     }
 

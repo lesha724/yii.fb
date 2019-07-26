@@ -41,7 +41,9 @@ echo $html;
 if ((! empty($model->student))&&(! empty($model->semester))){ 
 		echo CHtml::link(tt('Назад к группе'),'#',array('class'=>'student-statistic','data-id'=>''));
 		$statistic=St::model()->getStatisticForStudent($model->student,$model->semester);
-		$st=St::model()->getStudentName($model->student);
+		$st=St::model()->findByPk($model->student);
+        if(!$st)
+            throw new CHttpException(400, tt('Не найден студент'));
 		$this->renderPartial('attendanceStatistic/_student', array(
 			'statistic' => $statistic,
 			'model'    => $model,
@@ -82,7 +84,7 @@ HTML;
 
 		$this->renderPartial('attendanceStatistic/_table_1', array(
 			'students' => $students,
-			'type_statistic'=>$type_statistic,
+            'model'    => $model
 		));
 
 		$this->renderPartial('attendanceStatistic/_table_2', array(
