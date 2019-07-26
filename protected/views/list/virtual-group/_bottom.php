@@ -37,39 +37,19 @@ $this->widget('bootstrap.widgets.TbButton', array(
         <th><?=tt('ФИО студента')?></th>
         <th><?=tt('Академ. группа')?></th>
         <th style="width:200px">№ <?=tt('зач. книжки')?></th>
-        <?php /*if($ps34==1):?>
-            <th style="width:90px"><?=tt('Вид фин.')?></th>
-        <?php endif;*/?>
-
     </tr>
     </thead>
     <tbody>
     <?php
-    /*$type=array(
-        0=>tt('бюджет'),
-        1=>tt('контракт')
-    );*/
     $i=1;
     foreach($students as $student)
     {
-        /*if($ps34==1){
-            if($student['sk3']==0){
-                echo '<tr class="success">';
-            }else
-            {
-                echo '<tr class="warning">';
-            }
-        }else*/
-            echo '<tr class="info">';
+        echo '<tr class="info">';
         echo '<td>'.$i.'</td>';
-        $name = $student['st2'].' '.$student['st3'].' '.$student['st4'];
-        if(Yii::app()->language == 'en' && !empty($student['st74']))
-            $name = $student['st74'].' '.$student['st75'].' '.$student['st76'];
+        $name = $student['pe2'].' '.$student['pe3'].' '.$student['pe4'];
         echo '<td>'.$name.'</td>';
         echo '<td>'.Gr::model()->getGroupName($model->course, $student).'</td>';
         echo '<td>'.$student['st5'].'</td>';
-        /*if($ps34==1)
-            echo '<td>'.$type[$student['sk3']].'</td>';*/
         echo '</tr>';
         $i++;
     }

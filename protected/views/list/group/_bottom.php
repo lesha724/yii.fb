@@ -91,7 +91,7 @@ function getPassportLabel($id,$type, $pattern, $patternAdmin){
         if($ps34==1)
 		    echo '<td>'.$type[$student['sk3']].'</td>';
 
-        $name = $student['st2'].' '.$student['st3'].' '.$student['st4'];
+        $name = $student['pe2'].' '.$student['pe3'].' '.$student['pe4'];
 
 		echo '<td>'.$name.'</td>';
         if($visible_passport){

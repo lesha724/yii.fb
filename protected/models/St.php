@@ -694,20 +694,20 @@ SQL
      */
 	public function getListVirtualGroup($gr1)
 	{
-
 		$sql=<<<SQL
-            SELECT st1,st2,st3,st4,st5,sk3,gr3, gr19,gr20,gr21,gr22,gr23,gr24,gr28, st74, st75, st76
+            SELECT st1,pe1,pe2,pe3,pe4,st5,sk3,gr3, gr19,gr20,gr21,gr22,gr23,gr24,gr28
             from ucxg
                inner join ucgn on (ucxg.ucxg2 = ucgn.ucgn1)
                inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
                inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
                inner join st on (ucsn.ucsn2 = st.st1)
+               INNER JOIN pe on (st200 = pe1)
                inner join std on (st.st1 = std.std2)
                inner join gr on (std.std3 = gr.gr1)
                inner JOIN SK ON (SK.SK2 = ST.ST1 and sk5 is null)
             where ucgns5=:YEAR and ucgns6=:SEM and ucgn2=:GR1 and UCXG3=0 and std11<>1 and std4<=current_timestamp and (std7 is null or std7>=current_timestamp)
-            group by st1,st2,st3,st4,st5,sk3,gr3, gr19,gr20,gr21,gr22,gr23,gr24,gr28, st74, st75, st76
-            order by st2 collate UNICODE
+            group by st1,pe1,pe2,pe3,pe4,st5,sk3,gr3, gr19,gr20,gr21,gr22,gr23,gr24,gr28
+            order by pe2 collate UNICODE
 SQL;
 
 		$command = Yii::app()->db->createCommand($sql);

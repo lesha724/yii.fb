@@ -221,9 +221,7 @@ class ListController extends Controller
 
         $i=1;
         foreach($students as $student):
-            $name = $student['st2'].' '.$student['st3'].' '.$student['st4'];
-            if(Yii::app()->language == 'en' && !empty($student['st74']))
-                $name = $student['st74'].' '.$student['st75'].' '.$student['st76'];
+            $name = $student['pe2'].' '.$student['pe3'].' '.$student['pe4'];
 
             $sheet->setCellValueByColumnAndRow(0,$i+ $rowStart,$i);
             $sheet->setCellValueByColumnAndRow(1,$i+ $rowStart,$name);
@@ -357,9 +355,7 @@ class ListController extends Controller
 
         $i=1;
         foreach($students as $student):
-            $name = $student['st2'].' '.$student['st3'].' '.$student['st4'];
-            if(Yii::app()->language == 'en' && !empty($student['st74']))
-                $name = $student['st74'].' '.$student['st75'].' '.$student['st76'];
+            $name = $student['pe2'].' '.$student['pe3'].' '.$student['pe4'];
 
             $sheet->setCellValueByColumnAndRow(0,$i+ $rowStart,$i);
             $sheet->setCellValueByColumnAndRow(1,$i+ $rowStart,$name);
