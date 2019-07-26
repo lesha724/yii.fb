@@ -80,10 +80,7 @@ JS
         if($ps34==1)
 		    echo '<td>'.$type[$student['sk3']].'</td>';
 
-        $name = $student['st2'].' '.$student['st3'].' '.$student['st4'];
-
-        if(Yii::app()->language == 'en' && !empty($student['st74']))
-            $name = $student['st74'].' '.$student['st75'].' '.$student['st76'];
+        $name = $student['pe2'].' '.$student['pe3'].' '.$student['pe4'];
 
 		echo '<td>'.$name.'</td>';
         echo '<td>'.$student['st5'].'</td>';

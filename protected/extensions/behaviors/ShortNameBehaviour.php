@@ -31,7 +31,7 @@ class ShortNameBehaviour extends CActiveRecordBehavior
      * Полное имя
      * @return string
      */
-    public function geFullName()
+    public function getFullName()
     {
         $model = $this->owner;
 
@@ -44,7 +44,7 @@ class ShortNameBehaviour extends CActiveRecordBehavior
         $fieldName = $this->patronymic;
         $res3 = $model->$fieldName;
 
-        return strtr('%s %s %s', $res1, $res2, $res3);
+        return sprintf('%s %s %s', $res1, $res2, $res3);
     }
 
     private function truncateText($text)

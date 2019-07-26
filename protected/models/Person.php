@@ -69,6 +69,21 @@ class Person extends CActiveRecord
 		return 'pe';
 	}
 
+    /**
+     * @return array
+     */
+    public function behaviors()
+    {
+        return array(
+            'shortNameBehaviour' => array(
+                'class'      => 'ShortNameBehaviour',
+                'surname'    => 'pe2',
+                'name'       => 'pe3',
+                'patronymic' => 'pe4',
+            )
+        );
+    }
+
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -157,67 +172,6 @@ class Person extends CActiveRecord
 			'pe63' => 'Pe63',
 			'pe64' => 'Pe64',
 		);
-	}
-
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
-		$criteria=new CDbCriteria;
-
-		$criteria->compare('pe1',$this->pe1);
-		$criteria->compare('pe2',$this->pe2,true);
-		$criteria->compare('pe3',$this->pe3,true);
-		$criteria->compare('pe4',$this->pe4,true);
-		$criteria->compare('pe5',$this->pe5,true);
-		$criteria->compare('pe6',$this->pe6,true);
-		$criteria->compare('pe7',$this->pe7,true);
-		$criteria->compare('pe8',$this->pe8);
-		$criteria->compare('pe9',$this->pe9,true);
-		$criteria->compare('pe10',$this->pe10,true);
-		$criteria->compare('pe11',$this->pe11,true);
-		$criteria->compare('pe12',$this->pe12);
-		$criteria->compare('pe20',$this->pe20,true);
-		$criteria->compare('pe21',$this->pe21);
-		$criteria->compare('pe22',$this->pe22,true);
-		$criteria->compare('pe23',$this->pe23,true);
-		$criteria->compare('pe24',$this->pe24,true);
-		$criteria->compare('pe25',$this->pe25,true);
-		$criteria->compare('pe30',$this->pe30);
-		$criteria->compare('pe31',$this->pe31,true);
-		$criteria->compare('pe32',$this->pe32);
-		$criteria->compare('pe33',$this->pe33);
-		$criteria->compare('pe34',$this->pe34,true);
-		$criteria->compare('pe35',$this->pe35,true);
-		$criteria->compare('pe36',$this->pe36,true);
-		$criteria->compare('pe37',$this->pe37,true);
-		$criteria->compare('pe50',$this->pe50);
-		$criteria->compare('pe51',$this->pe51,true);
-		$criteria->compare('pe52',$this->pe52,true);
-		$criteria->compare('pe53',$this->pe53,true);
-		$criteria->compare('pe54',$this->pe54);
-		$criteria->compare('pe59',$this->pe59);
-		$criteria->compare('pe60',$this->pe60,true);
-		$criteria->compare('pe61',$this->pe61,true);
-		$criteria->compare('pe62',$this->pe62,true);
-		$criteria->compare('pe63',$this->pe63,true);
-		$criteria->compare('pe64',$this->pe64);
-
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
 	}
 
 	/**

@@ -30,7 +30,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
     'columns' => array(
         array(
             'header'=>Oprrez::model()->getAttributeLabel('oprrez2'),
-            'value'=>'$data["st2"] . " " . $data["st3"] . " " . $data["st4"]',
+            'value'=>'$data["pe2"] . " " . $data["pe3"] . " " . $data["pe4"]',
         ),
         array(
             'header'=>Oprrez::model()->getAttributeLabel('oprrez3'),

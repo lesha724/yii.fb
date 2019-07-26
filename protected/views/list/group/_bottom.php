@@ -93,9 +93,6 @@ function getPassportLabel($id,$type, $pattern, $patternAdmin){
 
         $name = $student['st2'].' '.$student['st3'].' '.$student['st4'];
 
-        if(Yii::app()->language == 'en' && !empty($student['st74']))
-            $name = $student['st74'].' '.$student['st75'].' '.$student['st76'];
-
 		echo '<td>'.$name.'</td>';
         if($visible_passport){
             if(St::model()->checkPassport($student['st1'],1)){

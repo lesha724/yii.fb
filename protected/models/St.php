@@ -15,6 +15,7 @@
  * @property integer $st101
  * @property integer $st103
  * @property integer $st104
+ * @property string $st107
  * @property integer $st114
  * @property string $st126
  * @property string $st131
@@ -97,7 +98,7 @@ class St extends CActiveRecord implements IPerson
 			array('st126', 'length', 'max'=>24),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('st1,st5, st29, st34, st38, st63, st66, st101, st103, st104, st99, st126, st131, st132, st139, st144, st145, st146, st147, st148', 'safe', 'on'=>'search'),
+			array('st1,st5, st29, st34, st38, st63, st66, st101, st103, st104, st107,st99, st126, st131, st132, st139, st144, st145, st146, st147, st148', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -111,7 +112,7 @@ class St extends CActiveRecord implements IPerson
 		return array(
             'account' => array(self::HAS_ONE, 'Users', 'u6', 'on' => 'u6=st1 AND u5=0'),
             'parentsAccount' => array(self::HAS_ONE, 'Users', 'u6', 'on' => 'u6=st1 AND u5=2'),
-            'person' => array(self::BELONGS_TO, 'Pe', 'st200'),
+            'person' => array(self::BELONGS_TO, 'Person', 'st200'),
             'elgvst' => array(self::HAS_ONE, 'Elgvst', 'elgvst1'),
             'stbl' => array(self::HAS_ONE, 'Stbl', 'stbl2'),
             'stusvs' => array(self::MANY_MANY, 'Stusv', 'stusvst(stusvst3, stusvst1)'),
@@ -623,13 +624,14 @@ SQL;
      */
     public function getListStream($sg1){
         $sql=<<<SQL
-            SELECT st1,st2,st3,st4,st5,sk3, st74, st75, st76, gr1, gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26
+            SELECT st1,pe2,pe3,pe4,st5,sk3 gr1, gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26
 			 FROM ST
+			  INNER JOIN pe on (st200 = pe1)
 			   INNER JOIN SK ON (SK.SK2 = ST.ST1)
 			   INNER JOIN STD ON (ST.ST1 = STD.STD2)
 			   INNER JOIN GR ON (STD.STD3 = GR.GR1)
 			 WHERE std7 is null and sk5 is null and std11 in (0,5,6,8) and gr2=:SG1 and st101!=7
-			 ORDER BY st2 collate UNICODE
+			 ORDER BY pe2 collate UNICODE
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
@@ -647,19 +649,33 @@ SQL;
      */
 	public function getListGroup($gr1)
     {
-
+        $sql=<<<SQL
+            SELECT st1,pe2,pe3,pe4,st5,sk3
+			 FROM ST
+			   INNER JOIN pe on (st200 = pe1)
+			   LEFT JOIN SK ON (SK.SK2 = ST.ST1)
+			   LEFT JOIN STD ON (ST.ST1 = STD.STD2)
+			 WHERE std7 is null and sk5 is null and std11 in (0,5,6,8) and std3=:gr1 and st101!=7
+			 ORDER BY pe2 collate UNICODE
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':gr1', $gr1);
+        $students = $command->queryAll();
+        return $students;
     }
 
     /**
      * @param $gr1
      * @return array
+     * @throws CException
      */
     public function getOpprezByGroup($gr1)
     {
         $students = $this->getListGroup($gr1);
 
         foreach ($students as $key => $student){
-            $students[$key]['oprrez'] = Oprrez::model()->findBySql(<<<SQL
+            $students[$key]['oprrez'] = Oprrez::model()->findBySql(/** @lang text */
+                <<<SQL
               SELECT * FROM oprrez WHERE oprrez2=:ST1 ORDER BY oprrez4 DESC
 SQL
             , array(

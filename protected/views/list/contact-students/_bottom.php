@@ -4,7 +4,7 @@
  * @var FilterForm $model
  */
 
-    $dataProvider=new CArrayDataProvider(St::model()->getListGroup($model->group),array(
+    $dataProvider=new CArrayDataProvider(St::model()->getStudentsOfGroup($model->group),array(
         'sort'=>false,
         'pagination'=>false,
         'keyField' => 'st1'
@@ -19,18 +19,24 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         array(
             'header'=>tt('ФИО'),
             'value'=>function($data){
-                return SH::getShortName($data['st2'], $data['st3'], $data['st4']);
+                /**
+                 * @var $data St
+                 */
+                return $data->fullName;
             },
         ),
         array(
             'header'=>tt('Логин Skype'),
             'type' => 'raw',
             'value'=>function($data){
-                if(empty($data['st107']))
+                /**
+                 * @var $data St
+                 */
+                if(empty($data->st107))
                     return '';
                 return CHtml::link(
                     $data['st107'],
-                    'skype:'.$data['st107'].'?chat'
+                    'skype:'.$data->st107.'?chat'
                 );
             },
         )

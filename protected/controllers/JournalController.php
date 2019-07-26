@@ -3495,10 +3495,6 @@ SQL;
 
         list($year, $sem) = SH::getCurrentYearAndSem();
 
-        /*var_dump($year);
-        var_dump($sem);
-        var_dump($speciality->sp1);
-        var_dump($model->course);*/
         $students = St::model()->getStudentsBySpeciality($speciality->sp1, $model->course,$year, $sem);
 
         foreach ($students as $student){
@@ -3790,7 +3786,7 @@ SQL;
             $students = $model->getStudents();
 
             foreach ($students as $student){
-                $name = $student['st2'].' '.$student['st3'].' '.$student['st4'];
+                $name = $student['pe2'].' '.$student['pe3'].' '.$student['pe4'];
                 $group = $model->scenario == AttendanceStatisticForm::SCENARIO_GROUP ? $groupName : Gr::model()->getGroupName($model->course, $student);
 
                 list($respectful,$disrespectful,$count,  $respectfulHours,$disrespectfulHours,$countHours) = Elg::model()->getAttendanceStatisticInfoByDateWithHours($firstDay, $lastDay, $student['st1']);

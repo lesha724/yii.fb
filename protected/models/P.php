@@ -157,7 +157,7 @@ class P extends CActiveRecord implements IPerson
     public function behaviors()
     {
         return array(
-            'ShortNameBehaviour' => array(
+            'shortNameBehaviour' => array(
                 'class'      => 'ShortNameBehaviour',
                 'surname'    => 'p3',
                 'name'       => 'p4',

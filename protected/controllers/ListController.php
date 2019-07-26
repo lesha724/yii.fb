@@ -456,11 +456,8 @@ class ListController extends Controller
         )))->getStyle('A3')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
         $sheet->mergeCellsByColumnAndRow(0, 4, 2, 4);
-        $sheet->setCellValue('A4', $faculty
-        /*tt('{faculty} факультета', array(
-            '{faculty}' => $faculty
-        ))*/
-        )->getStyle('A4')->getAlignment()-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $sheet->setCellValue('A4', $faculty)->getStyle('A4')->getAlignment()->
+            setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 
         $sheet->mergeCellsByColumnAndRow(0, 5, 2, 5);
@@ -498,11 +495,7 @@ class ListController extends Controller
 
         $i=1;
         foreach($students as $student):
-            $name = $student['st2'].' '.$student['st3'].' '.$student['st4'];
-
-            if(Yii::app()->language == 'en' && !empty($student['st74']))
-                $name = $student['st74'].' '.$student['st75'].' '.$student['st76'];
-
+            $name = $student['pe2'].' '.$student['pe3'].' '.$student['pe4'];
             $sheet->setCellValueByColumnAndRow(0,$i+ $rowStart,$i);
             $sheet->setCellValueByColumnAndRow(1,$i+ $rowStart,$name);
             $sheet->setCellValueByColumnAndRow(2,$i+ $rowStart,$student['st5']);
