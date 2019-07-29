@@ -54,7 +54,7 @@ if(!empty($this->menu))
                 'header'=>CHtml::dropDownList(
                         'pageSize',
                         $pageSize,
-                        SH::getPageSizeArray(),,
+                        SH::getPageSizeArray(),
                         array('class'=>'change-pageSize')
                     ),
             ),

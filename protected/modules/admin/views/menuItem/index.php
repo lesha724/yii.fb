@@ -63,7 +63,7 @@ $this->widget('bootstrap.widgets.TbGridView',array(
                     'header'=>CHtml::dropDownList(
                         'pageSize',
                         $pageSize,
-                        SH::getPageSizeArray(),,
+                        SH::getPageSizeArray(),
                         array('class'=>'change-pageSize','style'=>'max-width:70px')
                     ),
 		),
