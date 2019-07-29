@@ -751,9 +751,10 @@ SQL;
             return array();
 
         $sql = <<<SQL
-            select LISTST.gr1,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,st2||' '||st3||' '||st4||' ' as stud,st56
+            select LISTST.gr1,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,pe2||' '||pe3||' '||pe4||' ' as stud,st56, st.st1
             from LISTST(current_timestamp,0,0,6,0,0,0,0,:nr1)
                inner join st on (LISTST.st1 = st.st1)
+               INNER JOIN pe on (st200 = pe1)
                inner join gr on (LISTST.gr1 = gr.gr1)
             where std11 in (0,5,6,8) and st101!=7
             ORDER BY gr7,gr3,st2 collate UNICODE

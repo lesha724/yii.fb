@@ -19,7 +19,7 @@
             return '';
     }
 
-    $students = St::model()->getStudentsOfNr($nr/*, $year, $sem*/);
+    $students = St::model()->getStudentsOfNr($nr);
 
     $gr1=-1;
     $li='';
