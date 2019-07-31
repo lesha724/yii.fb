@@ -189,8 +189,8 @@ class RatingForm extends CFormModel
         switch ($type){
             case self::GROUP:
                 $params[':GR1']= $this->group;
-                $extraColumns = 'proc.st1, st.st2, st.st3, st.st4, proc.inostr, proc.KYRS, gr.gr3, gr.gr19, gr.gr20, gr.gr21, gr.gr22, gr.gr23, gr.gr24, gr.gr28, ';
-                $extraJoin = ' INNER JOIN st on (proc.st1 = st.st1) INNER JOIN gr on (proc.gr1 = gr.gr1) ';
+                $extraColumns = 'proc.st1, pe2, pe3, pe4, proc.inostr, proc.KYRS, gr.gr3, gr.gr19, gr.gr20, gr.gr21, gr.gr22, gr.gr23, gr.gr24, gr.gr28, ';
+                $extraJoin = ' INNER JOIN st on (proc.st1 = st.st1) INNER JOIN pe on (st.st200 = pe.pe1) INNER JOIN gr on (proc.gr1 = gr.gr1) ';
                 break;
             case self::STUDENT:
                 $params[':ST1']= $this->student;
@@ -200,8 +200,8 @@ class RatingForm extends CFormModel
             case self::COURSE:
                 $sg1 = $this->getSg1ByGroup();
                 $params[':SG1']= $sg1;
-                $extraColumns = 'proc.st1, st.st2, st.st3, st.st4, proc.inostr, proc.KYRS, gr.gr3, gr.gr19, gr.gr20, gr.gr21, gr.gr22, gr.gr23, gr.gr24, gr.gr28,';
-                $extraJoin = ' INNER JOIN st on (proc.st1 = st.st1) INNER JOIN gr on (proc.gr1 = gr.gr1) ';
+                $extraColumns = 'proc.st1,  pe2, pe3, pe4, proc.inostr, proc.KYRS, gr.gr3, gr.gr19, gr.gr20, gr.gr21, gr.gr22, gr.gr23, gr.gr24, gr.gr28,';
+                $extraJoin = ' INNER JOIN st on (proc.st1 = st.st1)  INNER JOIN pe on (st.st200 = pe.pe1) INNER JOIN gr on (proc.gr1 = gr.gr1) ';
                 break;
             default:
                 return array();
@@ -235,9 +235,9 @@ SQL;
                     'sym5' => 0,
                     'sym100' => 0,
                     'inostr'=> $row['inostr'],
-                    'st2' => $row['st2'],
-                    'st3' => $row['st3'],
-                    'st4' => $row['st4'],
+                    'pe2' => $row['pe2'],
+                    'pe3' => $row['pe3'],
+                    'pe4' => $row['pe4'],
                     'group' => Gr::model()->getGroupName($this->course, $row)
                 );
             }

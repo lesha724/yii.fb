@@ -159,7 +159,7 @@ class ProgressController extends Controller
                 $i++;
             }
 
-            $name = ShortCodes::getShortName($key['stInfo']['st2'], $key['stInfo']['st3'], $key['stInfo']['st4']);
+            $name = ShortCodes::getShortName($key['stInfo']['pe2'], $key['stInfo']['pe3'], $key['stInfo']['pe4']);
 
             $sheet->setCellValueByColumnAndRow(0,$k+4,$k+1);
             $sheet->setCellValueByColumnAndRow(1,$k+4,$i);

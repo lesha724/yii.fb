@@ -62,7 +62,7 @@ if(!empty($rating))
                 $i++;
             }
 
-            $name = ShortCodes::getShortName($key['stInfo']['st2'], $key['stInfo']['st3'], $key['stInfo']['st4']);
+            $name = ShortCodes::getShortName($key['stInfo']['pe2'], $key['stInfo']['pe3'], $key['stInfo']['pe4']);
             $a = CHtml::link($name, '#', array(
                 'data-st1'=>$key['st1'],
                 'class'=>'a-show-st-disp'

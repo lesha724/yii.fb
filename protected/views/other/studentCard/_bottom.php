@@ -99,25 +99,27 @@ echo '<div id="studentCard">';
     </div>
 HTML;
 
-    $uCode = $this->universityCode;
-    /*$name = $st->st2.' '.$st->st3.' '.$st->st4;
-    if(Yii::app()->language=='en'&&!(empty($st->st74)))
-        $name = $st->st74.' '.$st->st75.' '.$st->st76;*/
+    $fioTranslate = Pefio::model()->findByAttributes(array('pefio1'=>$st->st200, 'pefio2'=>1, 'pefio3' =>0));
+    if(empty($fioTranslate))
+        $fioTranslate = new Pefio();
+
+    $uCode = Yii::app()->core->universityCode;
+
     $isFarm = $uCode == U_FARM;
 
     echo sprintf($infoHtml,
         //tt('ФИО'),$name,
-        tt('Фамилия'),$st->st2,
-        tt('Фамилия (англ.)'),$st->st74,
+        tt('Фамилия'),$st->person->pe2,
+        tt('Фамилия (англ.)'),$fioTranslate->pefio5,
 
-        tt('Имя'),$st->st3,
-        tt('Имя (англ.)'),$st->st75,
+        tt('Имя'),$st->person->pe3,
+        tt('Имя (англ.)'),$fioTranslate->pefio6,
 
-        tt('Отчество'),$st->st4,
-        tt('Отчество (англ.)'),$st->st76,
+        tt('Отчество'),$st->person->pe4,
+        tt('Отчество (англ.)'),$fioTranslate->pefio7,
 
         tt('Гражданство'),$studentInfo['sgr2'],
-        tt('Дата рождения'),date("d.m.Y",strtotime($st->st7)),
+        tt('Дата рождения'),date("d.m.Y",strtotime($st->person->pe9)),
 
         tt('Факультет'), $studentInfo['f3'],
         tt('Специальность'), $studentInfo['sp2'],
@@ -128,7 +130,7 @@ HTML;
         tt('Группа'), Gr::model()->getGroupName($studentInfo['sem4'], $studentInfo),
         tt('Email'),$st->st107,
 
-        $isFarm ? tt('ИНН') : '', $isFarm ? $st->st15 : ''
+        $isFarm ? tt('ИНН') : '', $isFarm ? $st->person->pe20 : ''
     );
 
     echo '</div>';//.top-block
@@ -149,10 +151,6 @@ HTML;
     echo '<div class="bottom-block">';
 
     $disciplines = Elg::model()->getDispBySt($st->st1);
-    //стусв или стус (временно)
-    /*$ps107 = PortalSettings::model()->findByPk(107)->ps2;
-    $_pref ='';//приставка в конец дял вида со сус или стусв
-    if($ps107==1)*/
     $_pref = '_new';//Клименко сказал оставить только стусв 19.04.2018
 
     $params = array('gr1'=>$studentInfo['gr1'],'st'=>$st);

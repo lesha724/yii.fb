@@ -34,7 +34,7 @@ $tbody = '';
 $students = St::model()->getStudentsForDistEducationCourse($model->discipline);
 $i=1;
 foreach ($students as $student){
-    $name = SH::getShortName($student['st2'], $student['st3'], $student['st4']);
+    $name = SH::getShortName($student['pe2'], $student['pe3'], $student['pe4']);
 
     $nameGroup = Gr::model()->getGroupName($student['sem4'], $student);
 

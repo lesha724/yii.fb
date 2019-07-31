@@ -115,7 +115,7 @@ class DistEducationController extends Controller
                 $_html = 'Уже зарегистрирован';
             }
 
-            $html.=SH::getShortName($student['st2'], $student['st3'], $student['st4']).': ' .$_html.'<br>';
+            $html.=$student->fullName.': ' .$_html.'<br>';
         }
 
 
