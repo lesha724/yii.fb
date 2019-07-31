@@ -13,29 +13,7 @@ class ProgressController extends Controller
 
         return array(
             array('allow',
-                'actions' => array(
-                    'getGroups',
-                    'insertMejModule',
-                    'deleteMejModule',
-                    'module',
-                    'updateVvmp',
-                    'insertVmpMark',
-                    'updateStus',
-                    'closeModule',
-                    'renderExtendedModule',
-                    'examSession',
-                    'insertStus',
-                    //'insertVmp',
-
-                    'modules',
-                    'insertJpvd',
-                    'getCxmb'
-                ),
-                'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
-            ),
-
-            array('allow',
-                'actions' => array('attendanceStatistic','rating','ratingExcel', 'ratingStudent')
+                'actions' => array('rating','ratingExcel', 'ratingStudent')
             ),
             array('deny',
                 'users' => array('*'),
@@ -45,7 +23,6 @@ class ProgressController extends Controller
     
     public function actionRating()
     {
-        //throw new CHttpException(400, 'Сервис времено недоступен по техническим причинам. В близжайшее время работа возобновиться.');
         $model = new RatingForm();
         $model->scenario = 'rating-group';
         if (isset($_REQUEST['RatingForm']))
@@ -57,6 +34,7 @@ class ProgressController extends Controller
 
     /**
      * Отображение дисциплин которіе входять в рейтинг студента
+     * @throws CException
      * @throws CHttpException
      */
     public function actionRatingStudent()
