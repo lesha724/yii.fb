@@ -257,7 +257,7 @@ class JournalController extends Controller
                 $error = true;
                 $errorType=2;
             }else{
-                $sem7 = Gr::model()->getSem7ByGr1ByDate($gr1,date('d.m.Y'));
+
                 $students = St::model()->getStudentsForJournal($gr1, $uo1);
                 if(empty($students)){
                     $error = true;
@@ -1883,8 +1883,7 @@ SQL;
             $count_st=0;
             foreach ($students as $key => $student)
             {
-                //$name = ShortCodes::getShortName($student['st2'], $student['st3'], $student['st4']);
-                $name = $student['st2'].' '.$student['st3'].' '.$student['st4'];
+                $name = $student['pe2'].' '.$student['pe3'].' '.$student['pe4'];
                 $num  = $key+1;
                 $sheet->mergeCellsByColumnAndRow(0, $i+ 4, 0, $i+5);
                 $sheet->mergeCellsByColumnAndRow(1, $i+ 4, 1, $i+5);
@@ -2164,12 +2163,9 @@ SQL;
             if(empty($elg))
                 throw new CHttpException(404, 'Elg empty.');
 
-            $ps45 = PortalSettings::model()->findByPk(45)->ps2;//вуз
-            $ps46 = PortalSettings::model()->findByPk(46)->ps2;//министерство
+            $ps45 = PortalSettings::model()->getSettingFor(45);//вуз
 
             $year=(int)Yii::app()->session['year'];
-            $first_title='%s семестр %s - %s навчальний рік %s курс';
-            $second_title='%s факультет %s група';
 
             Yii::import('ext.phpexcel.XPHPExcel');
             $objPHPExcel= XPHPExcel::createPHPExcel();
@@ -2198,7 +2194,7 @@ SQL;
             $sheet->mergeCells('H7:I7');
             $sheet->setCellValue('H7', $group);
             $sheet->mergeCells('B9:C9');
-            $sheet->setCellValue('B9', sprintf('%s - %s н. рік',$year,$year+1));
+            $sheet->setCellValue('B9', sprintf('%s / %s уч. год',$year,$year+1));
             $sheet->mergeCells('A11:J13');
             $sheet->setCellValue('A11', tt("ВЕДОМОСТЬ {br} учета поточной успеваимости",array('{br}'=>"\n")))->getStyle('A11')->getAlignment()->setWrapText(true)-> setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
             $sheet->mergeCells('A14:J14');

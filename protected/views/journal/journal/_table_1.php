@@ -37,6 +37,6 @@ HTML;
                 $button = CHtml::link('<i class="icon-info-sign"></i>', '#', array('class' => 'btn-fin-block btn btn-mini btn-warning'));
             }
         }
-        $tr .= sprintf($pattern, $st['st1'], $class, $num,$st['st2'].' '.$st['st3'].' '.$st['st4'] ,$name.$button);
+        $tr .= sprintf($pattern, $st['st1'], $class, $num,$st['pe2'].' '.$st['pe3'].' '.$st['pe4'] ,$name.$button);
     }
     echo sprintf($table, $tr); // 1 table

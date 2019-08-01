@@ -400,12 +400,13 @@ SQL;
         return $info;
     }
 
-	/**
-	 * Список студентов по группе дял журнала
-	 * @param $gr1
-	 * @param $uo1
-	 * @return mixed
-	 */
+    /**
+     * Список студентов по группе дял журнала
+     * @param $gr1
+     * @param $uo1
+     * @return mixed
+     * @throws CException
+     */
     public function getStudentsForJournal($gr1, $uo1)
     {
         $year = Yii::app()->session['year'];
@@ -413,9 +414,10 @@ SQL;
         $date = $sem == 1 ? '31.05.'.($year+1) : '20.01.'.($year+1);
 
         $sql = <<<SQL
-       select t.st1,st.st2,st.st3,st.st4,st.st45,st.st71,st.st163,st.st167, elgvst2, elgvst3
+       select t.st1,pe2,pe3,pe4,st.st45,st.st71,st.st163,st.st167, elgvst2, elgvst3
         from (select listst.st1,listst.gr1,listst.std11,ucx1 from listst(:DATE_1,:YEAR,:SEM,0,0,0,0,0,0) where (listst.gr1=:GR1 or listst.gr1_virt=:GR1_VIRT) and listst.std11 in (0,6,8) ) t
             inner join st on (t.st1 = st.st1)
+            inner join pe on (st.st200 = pe.pe1)
             inner join ucx on (t.ucx1 = ucx.ucx1)
             inner join uo on (ucx.ucx1 = uo19)
             left join elgvst on (st.st1 = elgvst1)

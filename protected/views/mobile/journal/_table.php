@@ -11,7 +11,7 @@ function getCellStName($st)
     $cell = <<<HTML
         <td  data-container="body" data-toggle="popover" data-placement="top" data-content="%s">%s</td>
 HTML;
-    return sprintf($cell,$st['st2'].' '.$st['st3'].' '.$st['st4'],ShortCodes::getShortName($st['st2'], $st['st3'], $st['st4']));
+    return sprintf($cell,$st['pe2'].' '.$st['pe3'].' '.$st['pe4'],ShortCodes::getShortName($st['pe2'], $st['pe3'], $st['pe4']));
 }
 function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$sem7,$min,$moduleNom)
 {
