@@ -117,10 +117,7 @@ class JournalController extends Controller
         $model = new StFinBlockSearch();
         $model->scenario = 'search';
         $model->unsetAttributes();
-        /*if (isset($_GET['pageSize'])) {
-            Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
-            unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
-        }*/
+
         if (isset($_REQUEST['StFinBlockSearch']))
             $model->attributes=$_REQUEST['StFinBlockSearch'];
 
@@ -160,7 +157,7 @@ class JournalController extends Controller
             $sheet->setCellValueByColumnAndRow(0,$i,$i-1);
             $sheet->setCellValueByColumnAndRow(1,$i,SH::getShortName($data->st_lname, $data->st_fname, $data->st_sname));
             $sheet->setCellValueByColumnAndRow(2,$i,$data->gr_name);
-            $sheet->setCellValueByColumnAndRow(3,$i,$data->course);
+            //$sheet->setCellValueByColumnAndRow(3,$i,$data->course);
             $sheet->setCellValueByColumnAndRow(4,$i,$data->stbl3);
             $sheet->setCellValueByColumnAndRow(5,$i,$data->stbl5);
             $sheet->setCellValueByColumnAndRow(6,$i,SH::getShortName($data->tch_lname, $data->tch_fname, $data->tch_sname));
@@ -205,8 +202,6 @@ class JournalController extends Controller
         if (isset($_REQUEST['FilterForm']))
             $model->attributes=$_REQUEST['FilterForm'];
 
-        //$model->group = $sstRow['sst3'];
-
         $this->render('stJournal', array(
             'model' => $model,
         ));
@@ -216,36 +211,11 @@ class JournalController extends Controller
     {
         $model = new FilterForm;
         $model->scenario = 'journal';
-        /*if (isset($_REQUEST['showRetake'])) {
-            Yii::app()->user->setState('showRetake',(int)$_REQUEST['showRetake']);
-            unset($_REQUEST['showRetake']);
-        }*/
+
         if (isset($_REQUEST['FilterForm']))
             $model->attributes=$_REQUEST['FilterForm'];
 
         $read_only=false;
-        /*if(!empty($model->group))
-        {
-            list($uo1,$gr1) = explode("/", $model->group);
-
-            $sql = <<<SQL
-                     SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,2,:US1,0,0,:TYPE_LESSON);
-SQL;
-            $command = Yii::app()->db->createCommand($sql);
-
-            $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
-            $command->bindValue(':UO1', $uo1);
-            $command->bindValue(':US1', 0);
-            $command->bindValue(':GR1', $gr1);
-            $command->bindValue(':TYPE_LESSON', $model->type_lesson);
-            $command->bindValue(':YEAR', Yii::app()->session['year']);
-            $command->bindValue(':SEM', Yii::app()->session['sem']);
-            $res = $command->queryRow();
-            if(empty($res)||$res['dostup']==0)
-            {
-                $read_only=true;
-            }
-        }*/
 
         $this->render('journal', array(
             'model' => $model,
@@ -3838,8 +3808,8 @@ SQL;
         if (isset($_REQUEST['St']))
             $model->attributes = $_REQUEST['St'];
 
-        $this->render('/filter_form/default/search_student', array(
-            'model' => $model,
+        $this->render('/Sfilter_form/default/search_student', array(
+            'model' => $model
         ));
     }
 }

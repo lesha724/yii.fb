@@ -11,7 +11,7 @@ class StFinBlockSearch extends Stbl
     public $st_fname, $st_sname, $st_lname;
     public $tch_fname, $tch_sname, $tch_lname;
     public $gr_name;
-    public $course;
+    //public $course;
 
     public $st;
     public $tch;
@@ -19,7 +19,7 @@ class StFinBlockSearch extends Stbl
     public function rules()
     {
         return array(
-            array('st, tch, st_fname, st_sname, st_lname, gr_name,course, stbl3, stbl5', 'safe', 'on'=>'search'),
+            array('st, tch, st_fname, st_sname, st_lname, gr_name,stbl3, stbl5', 'safe', 'on'=>'search'),
         );
     }
 
@@ -35,43 +35,33 @@ class StFinBlockSearch extends Stbl
             'gr_name'=>tt('Группа'),
             'stbl3'=>tt('Дата блокировки'),
             'stbl5'=>tt('Дата извещения'),
-            'course'=>tt('Курс'),
+            //'course'=>tt('Курс'),
             'tch'=>tt('Известивший преподаватель'),
         );
     }
     /**
-     * Retrieves a list of models based on the current search/filter conditions.
-     *
-     * Typical usecase:
-     * - Initialize the model fields with values from filter form.
-     * - Execute this method to get CActiveDataProvider instance which will filter
-     * models according to data in model fields.
-     * - Pass data provider to CGridView, CListView or any similar widget.
-     *
-     * @return CActiveDataProvider the data provider that can return the models
-     * based on the search/filter conditions.
+     * @return CActiveDataProvider
      */
     public function search()
     {
-        // @todo Please modify the following code to remove attributes that should not be searched.
-
         $criteria=new CDbCriteria;
-        /*$params = array();*/
 
         $criteria->select = 't.*,
-							st2 as st_lname,st3 as st_fname,st4 as st_sname,
+							pe2 as st_lname,pe3 as st_fname,pe4 as st_sname,
 							p3 as tch_lname,p4 as tch_fname,p5 as tch_sname,
-							gr3 as gr_name, st56 as course';
+							gr3 as gr_name';
         $criteria->join = 'INNER JOIN st ON (stbl2=st.st1) ';
+        $criteria->join = 'LEFT JOIN pe ON (st.st200=pe.pe1) ';
         $criteria->join .= 'INNER JOIN std ON (st1 = std.std2) ';
         $criteria->join .= 'INNER JOIN gr ON (std.std3 = gr1) ';
         $criteria->join .= 'INNER JOIN sg ON (gr.gr2 = sg1) ';
-        //$criteria->join .= 'INNER JOIN sem ON (sg.sg1 = sem2) ';
+
         $criteria->join .= 'LEFT JOIN p ON (stbl6=p.p1) ';
         $criteria->compare('stbl3',$this->stbl3,true);
         $criteria->compare('stbl5',$this->stbl5,true);
-        if(!empty($this->course))
-            $criteria->compare('st56',$this->course);
+        //что делать не понятно, аналогичного поля нет
+        //if(!empty($this->course))
+            //$criteria->compare('st56',$this->course);
 
         if(!empty($this->gr_name)) {
             $criteria->addCondition("gr3 CONTAINING :gr_name");
@@ -82,7 +72,7 @@ class StFinBlockSearch extends Stbl
 
 
         if(!empty($this->st)) {
-            $criteria->addCondition("(st2 CONTAINING :stName or st3 CONTAINING :stName or st4  CONTAINING :stName)");
+            $criteria->addCondition("(pe2 CONTAINING :stName or pe3 CONTAINING :stName or pe4  CONTAINING :stName)");
             $criteria->params[':stName'] =$this->st;
         }
 
@@ -99,8 +89,8 @@ class StFinBlockSearch extends Stbl
         $sort->defaultOrder = 'stbl3 desc';
         $sort->attributes = array(
             'st'=>array(
-                'asc'=>'st2 ASC, st3 ASC, st4 ASC',
-                'desc'=>'st2 DESC, st3 ASC, st4 ASC',
+                'asc'=>'pe2 ASC, pe3 ASC, pe4 ASC',
+                'desc'=>'pe2 DESC, pe3 ASC, pe4 ASC',
                 'default'=>'ASC',
             ),
             'gr_name'=>array(
@@ -108,11 +98,11 @@ class StFinBlockSearch extends Stbl
                 'desc'=>'gr3 DESC',
                 'default'=>'ASC',
             ),
-            'course'=>array(
+            /*'course'=>array(
                 'asc'=>'st56 ASC',
                 'desc'=>'st56 DESC',
                 'default'=>'ASC',
-            ),
+            ),*/
             'stbl3'=>array(
                 'asc'=>'stbl3 ASC',
                 'desc'=>'stbl3 DESC',

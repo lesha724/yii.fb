@@ -13,8 +13,6 @@ class RegistrationForm extends CFormModel
 	public $password;
 	public $password2;
 
-    //public $verifyCode;
-
     public $type = self::TYPE_TEACHER;
 
     private $_u5;
@@ -34,13 +32,9 @@ class RegistrationForm extends CFormModel
             array('email', 'unique', 'className'=>'Users', 'attributeName'=>'u4'),
             array('username', 'unique', 'className'=>'Users', 'attributeName'=>'u2'),
             array('password', 'compare', 'compareAttribute'=>'password2'),
-            //array('username', 'match', 'pattern'=>'/^[A-z][\w]+$/','message'=>tt('В Логине могут быть только латинские символы')),
             array('username', 'match', 'pattern'=>'/^[a-zA-Z][a-zA-Z0-9-_.]{7,30}$/','message'=>tt('В login могут быть только латинские символы и цифры, а так же символы "." и "_",  длиной от 8 до 30 символов. Также логин должен начинаться с латинской буквы')),
             array('password', 'match', 'pattern'=>'/^[a-zA-Z0-9-_\.,$|]{7,}$/','message'=>tt('В password могут быть только строчные и прописные латинские буквы, цифры, спецсимволы. Минимум 8 символов')),
-            //array('password', 'match', 'pattern'=>'/^[A-z][\w]+$/','message'=>tt('В password могут быть только латинские символы')),
-            //array('username, password', 'length', 'min' => 6,'max'=>50),
             array('email', 'length', 'max'=>100),
-            //array('verifyCode', 'captcha', 'allowEmpty'=>!CCaptcha::checkRequirements()),
 		);
 	}
 
@@ -62,16 +56,12 @@ class RegistrationForm extends CFormModel
 
     public function checkExistence($attribute,$params)
     {
-        /*$st = St::model()->with(array(
-            'std' => array(
-                'join' => 'inner join std on (st1 = std2)',
-                'condition' => "std11 in (0,3,5,7,6,8) and (std7 is null)",
-            )
-        ))->findAll('st15=:ID ORDER BY st1 DESC', );*/
-
         $st = $p = array();
 
         if($this->type==self::TYPE_STUDENT||$this->type==self::TYPE_PARENT) {
+            /**
+             * @var St[] $st
+             */
             $st = St::model()->findAllBySql(<<<SQL
           SELECT st.* FROM st
             inner join std on (st1 = std2)
@@ -93,13 +83,12 @@ SQL
         if (! $this->hasErrors($attribute)) {
 
             $isTeacher = $this->type==self::TYPE_TEACHER || $this->type==self::TYPE_DOCTOR;
-            //$this->_u5 = $st ? 0 : 1;
-            //$this->_u6 = $st ? $st[0]->st1 : $p[0]->p1;
+
             $this->_u5 = $this->type;
             $this->_u6 = $isTeacher ? $p[0]->p1 : $st[0]->st1;
 
-            $this->_fio = $isTeacher ? $p[0]->p3.' '.$p[0]->p4.' '.$p[0]->p5 : $st[0]->st2.' '.$st[0]->st3.' '.$st[0]->st4;
-            //$alreadyRegistered = 1 <= Users::model()->count('u5=:U5 AND u6=:U6 AND u2!=""',array(':U5'=>$this->_u5,':U6'=>$this->_u6));
+            $this->_fio = $isTeacher ? $p[0]->p3.' '.$p[0]->p4.' '.$p[0]->p5 : $st[0]->person->fullName;
+
             $alreadyRegistered = 1 <= Users::model()->countByAttributes(
                 array('u5'=>$this->_u5,'u6'=>$this->_u6),
                 array(

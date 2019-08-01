@@ -6,6 +6,11 @@
  * Time: 14:44
  */
 
+/**
+ * @var $model StFinBlockSearch
+ * @var $this JournalController
+ */
+
 $this->pageHeader=tt('История блокировки неоплативших студентов');
 $this->breadcrumbs=array(
     tt('История блокировки неоплативших студентов'),
@@ -29,7 +34,7 @@ $this->widget('bootstrap.widgets.TbGridView',array(
             'value'=>'SH::getShortName($data->st_lname, $data->st_fname, $data->st_sname)',
         ),
         'gr_name',
-        'course',
+        //'course',
         'stbl3',
         'stbl5',
         array(

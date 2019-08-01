@@ -807,9 +807,8 @@ SQL;
         if (isset($_REQUEST['St']))
             $model->attributes = $_REQUEST['St'];
 		
-        $this->render('/timeTable/search_student', array(
-            'model' => $model,
-            'url'=>array('other/studentInfo')
+        $this->render('/filter_form/default/search_student', array(
+            'model' => $model
         ));
     }
     
