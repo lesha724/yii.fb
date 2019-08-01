@@ -300,11 +300,12 @@ SQL;
         }
     }
 
+    /**
+     * @return bool
+     */
     public function checkMinRetakeForGrid()
     {
-        //return $this->count_elgotr==0||($this->elgzst5<=$this->getMin()&&$this->elgzst5!=-1);
         return ($this->elgzst5<=$this->getMin()&&$this->elgzst5!=-1);
-        //return $this->stegn6<=$this->getMin()||$this->stegn6!=-1;
     }
 
     public function getType()

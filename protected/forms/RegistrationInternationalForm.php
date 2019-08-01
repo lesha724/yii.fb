@@ -125,7 +125,7 @@ class RegistrationInternationalForm extends CFormModel
             $this->_u5 = 0;
             $this->_u6 = $student->st1;
 
-            $this->_fio = $student->st2.' '.$student->st3.' '.$student->st4;
+            $this->_fio = $student->fullName;
 
             $alreadyRegistered = 1 <= Users::model()->countByAttributes(
                     array('u5'=>$this->_u5,'u6'=>$this->_u6),
