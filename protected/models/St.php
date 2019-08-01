@@ -727,13 +727,13 @@ SQL;
 			return array();
 
 		$sql = <<<SQL
-          select gr.gr1,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,pe2||' '||pe3||' '||pe4||' ' as stud,st56,gr7, st.st1
+          select gr.gr1,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,pe2||' '||pe3||' '||pe4||' ' as stud,sem4,gr7, st.st1
             from LISTST(current_timestamp,:sem3,:sem5,5,0,0,0,:uo1,0)
                inner join st on (LISTST.st1 = st.st1)
                INNER JOIN pe on (st200 = pe1)
                inner join gr on (LISTST.gr1 = gr.gr1)
             where st101!=7
-            GROUP BY gr.gr1,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,pe2,pe3,pe4,st56,gr7, st.st1
+            GROUP BY gr.gr1,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,pe2,pe3,pe4,sem4,gr7, st.st1
             ORDER BY gr7,gr3,pe2 collate UNICODE
 SQL;
 
@@ -753,7 +753,7 @@ SQL;
             return array();
 
         $sql = <<<SQL
-            select LISTST.gr1,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,pe2||' '||pe3||' '||pe4||' ' as stud,st56, st.st1
+            select LISTST.gr1,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28,pe2||' '||pe3||' '||pe4||' ' as stud,sem4, st.st1
             from LISTST(current_timestamp,0,0,6,0,0,0,0,:nr1)
                inner join st on (LISTST.st1 = st.st1)
                INNER JOIN pe on (st200 = pe1)

@@ -255,28 +255,15 @@ SQL;
     {
         if (empty($st1))
             return array();
-        /*$sql = <<<SQL
-             select st56, gr13,gr1, gr3, gr7,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28
-                from std
-                   inner join sst on (std.std3 = sst.sst3)
-                   inner join st on (std.std2 = st.st1)
-                   inner join ucsn on (st.st1 = ucsn.ucsn2)
-                   inner join ucgns on (ucsn.ucsn1 = ucgns.ucgns1)
-                   inner join ucgn on (ucgns.ucgns2 = ucgn.ucgn1)
-                   inner join gr on (ucgn.ucgn2 = gr.gr1)
-                where std11 in (0,5,6,8) and std7 is null and sst2=:ST1 and sst6 is null and ucgns5=:YEAR and ucgns6=:SEM
-                group by st56, gr13, gr1, gr3, gr7,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28
-                ORDER by gr13, gr7 DESC, gr3 ASC;
-SQL;*/
 
         $sql = /** @lang text */
             <<<SQL
-            select LISTST.sem4 as st56, gr13,gr.gr1, gr3, gr7,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28
+            select LISTST.sem4, gr13,gr.gr1, gr3, gr7,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28
                 from LISTST(current_timestamp,:YEAR,:SEM,3,0,:ST1,0,0,0)
                    inner join sst on (LISTST.gr1 = sst.sst3)
                    inner join gr on (LISTST.gr1 = gr.gr1)
                 where sst.sst2 = :ST1_ and sst6 is null
-                group by LISTST.sem4, gr13, gr1, gr3, gr7,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28
+                group by sem4, gr13, gr1, gr3, gr7,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28
                 ORDER by gr13, gr7 DESC, gr3 ASC;
 SQL;
 
@@ -289,7 +276,7 @@ SQL;
         $groups = $command->queryAll();
 
         foreach($groups as $key => $group) {
-            $groups[$key]['name'] = $this->getGroupName($group['st56'], $group);
+            $groups[$key]['name'] = $this->getGroupName($group['sem4'], $group);
             $groups[$key]['group'] = $group['gr1'];
         }
 
