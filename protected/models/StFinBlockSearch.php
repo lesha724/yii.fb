@@ -60,8 +60,8 @@ class StFinBlockSearch extends Stbl
         $criteria->compare('stbl3',$this->stbl3,true);
         $criteria->compare('stbl5',$this->stbl5,true);
         //что делать не понятно, аналогичного поля нет
-        //if(!empty($this->course))
-            //$criteria->compare('st56',$this->course);
+        if(!empty($this->course))
+            $criteria->compare('std20',$this->course);
 
         if(!empty($this->gr_name)) {
             $criteria->addCondition("gr3 CONTAINING :gr_name");
@@ -98,11 +98,11 @@ class StFinBlockSearch extends Stbl
                 'desc'=>'gr3 DESC',
                 'default'=>'ASC',
             ),
-            /*'course'=>array(
-                'asc'=>'st56 ASC',
-                'desc'=>'st56 DESC',
+            'course'=>array(
+                'asc'=>'std20 ASC',
+                'desc'=>'std20 DESC',
                 'default'=>'ASC',
-            ),*/
+            ),
             'stbl3'=>array(
                 'asc'=>'stbl3 ASC',
                 'desc'=>'stbl3 DESC',

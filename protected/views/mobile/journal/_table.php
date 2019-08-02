@@ -25,7 +25,7 @@ function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$sem
     $ps78 = PortalSettings::model()->getSettingFor(78);
 
     $nom=$date['elgz3'];
-    if ($st['st71']!=$sem7 &&$ps60==1)
+    if ($st['std23']!=$sem7 &&$ps60==1)
         return '<td colspan="4"></td>';
 
     if (stripos($date['r2'], '11.11.1111')!==false )
@@ -236,7 +236,7 @@ HTML;
 function table2TrModule($date,$gr1,$st,$ps20,$ps55,$ps56,$moduleNom,$uo1,$modules,$potoch,$sem7,$ps60)
 {
     $nom=$date['elgz3'];
-    if ($st['st71']!=$sem7 && $ps60 ==1)
+    if ($st['std23']!=$sem7 && $ps60 ==1)
         return '<td data-number="'.$nom.'" colspan="4"></td>';
 
     if (stripos($date['r2'], '11.11.1111')!==false )

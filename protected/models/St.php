@@ -379,7 +379,7 @@ SQL;
     public function getStudentInfoForPortfolio(){
         $sql = /** @lang text */
             <<<SQL
-		 select first 1 sg1,sg2,sg4,gr1,gr3,sp1,sp2,sem4,f2,f3,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28,sgr2,spc4,sp4
+		 select first 1 sg1,sg2,sg4,gr1,gr3,sp1,sp2,sem4,f2,f3,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28,sgr2,spc4,sp4, std20
 		   from sem
 			   inner join sg on (sem.sem2 = sg.sg1)
 			   inner join gr on (sg.sg1 = gr.gr2)
@@ -414,15 +414,16 @@ SQL;
         $date = $sem == 1 ? '31.05.'.($year+1) : '20.01.'.($year+1);
 
         $sql = <<<SQL
-       select t.st1,pe2,pe3,pe4,st.st45,st.st71,st.st163,st.st167, elgvst2, elgvst3
+       select t.st1,pe2,pe3,pe4,st.st45,std.std23,st.st163,st.st167, elgvst2, elgvst3
         from (select listst.st1,listst.gr1,listst.std11,ucx1 from listst(:DATE_1,:YEAR,:SEM,0,0,0,0,0,0) where (listst.gr1=:GR1 or listst.gr1_virt=:GR1_VIRT) and listst.std11 in (0,6,8) ) t
             inner join st on (t.st1 = st.st1)
+            inner join std on (t.std1 = std.std1)
             inner join pe on (st.st200 = pe.pe1)
             inner join ucx on (t.ucx1 = ucx.ucx1)
             inner join uo on (ucx.ucx1 = uo19)
             left join elgvst on (st.st1 = elgvst1)
         where uo1=:UO1 and st101!=7
-        group by st1,st2,st3,st4,st45,st71,st163,st167, elgvst2, elgvst3
+        group by st1,st2,st3,st4,st45,std23,st163,st167, elgvst2, elgvst3
         order by st2 collate UNICODE
 SQL;
         $command = Yii::app()->db->createCommand($sql);
