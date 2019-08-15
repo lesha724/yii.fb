@@ -8,7 +8,8 @@
         "ext-mbstring": "*",
         "ext-PDO": "*",
         "ext-PDO_Firebird": "*",
-        "yiisoft/yii": "*"
+        "yiisoft/yii": "*",
+        "endroid/qrcode": "^2.5.1"
     },
     "autoload": {
         "files": [
