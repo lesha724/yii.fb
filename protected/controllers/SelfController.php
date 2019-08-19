@@ -21,14 +21,27 @@ class SelfController extends Controller
                 'actions' => array(
                     'workLoad'
                 ),
-                'expression' => 'Yii::app()->user->isTch',
+                'expression' => function(){
+                    return Yii::app()->user->isTch;
+                }
             ),
             array('allow',
                 'actions' => array(
-                    'subscription',
+                    'subscription'
                 ),
-                'expression' => 'Yii::app()->user->isStd',
+                'expression' => function(){
+                    return Yii::app()->user->isStd;
+                },
             ),
+            array('allow',
+                'actions' => array(
+                    'score',
+                ),
+                /*'expression' => function(){
+                    return Yii::app()->user->isStd && Yii::app()->core->universityCode == U_URFAK;
+                },*/
+            ),
+
             array('allow',
                 'actions' => array(
                     'studentInfo',
@@ -70,5 +83,44 @@ class SelfController extends Controller
     public function actionStudentInfo()
     {
         $this->forward('other/studentInfo');
+    }
+
+    /**
+     * Печать счета для оплаты
+     */
+    public function actionScore(){
+        //$mPDF1 = Yii::app()->ePdf->mpdf();
+
+        $setting = Mp::getSettinsBy2602();
+        if(empty($setting))
+            throw new CHttpException(400, tt('Не заданы настройки оплаты. Обратитесь к администратору системы!'));
+
+        $html = $this->_getScoreHtml($setting, 'SeventyPercent');
+
+        $html .= $this->_getScoreHtml($setting, 'ThirtyPercent');
+
+        /*$mPDF1->WriteHTML($html);
+
+        $mPDF1->Output();*/
+
+        return $html;
+    }
+
+    /**
+     * нтмл счета
+     * @param $setting array
+     * @param $type string
+     *
+     * @return string
+     * @throws CHttpException
+     */
+    private function _getScoreHtml($setting,$type){
+        if(!isset($setting[$type]))
+            throw new CHttpException(500);
+
+        return $this->renderPartial('score', array_merge($setting[$type], array(
+            'TypeScore' => $type == 'SeventyPercent' ? 70 : 30
+        )));
+
     }
 }

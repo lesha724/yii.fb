@@ -596,7 +596,6 @@ class OtherController extends Controller
         if($psp1!=null && $type!=null)
         {
             $this->checkAccessPasport($psp1);
-            $stInfoForm= new StInfoForm;
             $html = $this->renderPartial('studentInfo/_show',array(
                 'psp1'=>$psp1,
                 'type'=>$type
@@ -627,7 +626,6 @@ class OtherController extends Controller
         if($psp1!=null && $type!=null)
         {
             $this->checkAccessPasport($psp1);
-            $stInfoForm= new StInfoForm;
             $html = $this->renderPartial('studentInfo/_change',array(
                 'psp1'=>$psp1,
                 'type'=>$type
@@ -651,8 +649,8 @@ class OtherController extends Controller
 
         if(PortalSettings::model()->findByPk(72)->ps2==1)
             throw new CHttpException(403, 'Редактирование тем закрыто.');
+
         $error=false;
-        $html='';
 
         $model=new Spkr;
         $model->unsetAttributes();
@@ -675,9 +673,6 @@ class OtherController extends Controller
         if(PortalSettings::model()->findByPk(72)->ps2==1)
             throw new CHttpException(403, 'Редактирование тем закрыто.');
 
-        $error=false;
-        $html='';
-
         $model=new Spkr;
         $model->unsetAttributes();
 
@@ -691,7 +686,6 @@ class OtherController extends Controller
                 SELECT MAX(spkr1) FROM spkr
 SQL;
         $command = Yii::app()->db->createCommand($sql);
-        //$command->bindValue(':us1', $ustem2);
         $spkr1 = (int)$command->queryScalar();
 
         $model->spkr1= $spkr1+1;
@@ -1384,14 +1378,7 @@ HTML;
             else
                 $nkrs->nkrs6=0;
             $nkrs->nkrs8='';
-            //$nkrs->$field=$value;
             $res=$nkrs->save();
-            /*if(!$res)
-            {
-                print_r($nkrs->getErrors());
-               */ //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
-            /*}*/
-
         }
 
         Yii::app()->end(CJSON::encode(array('res' => $res)));
@@ -1421,11 +1408,6 @@ HTML;
         if (! empty($student)) {
 
             if ($student->u4) {
-                /*Apostle::setup("a596c9f9cb4066dd716911ef92be9bd040b0664d");
-                $mail = new Mail( "antiplagiat-notification", array( "email" => $student->u4 ) );
-                $mail->url  = $url;
-                $mail->textFrom = implode(' ', array($st->st2, $st->st3, $st->st4));
-                $mail->deliver();*/
                 $message = str_replace('{username}',$student->u2,$body);
                 $message = str_replace('{name}',$studentName,$message);
 
@@ -1445,11 +1427,6 @@ HTML;
             if ($teacher->u4) {
 
                 $p = P::model()->findByPk($p1);
-                /*Apostle::setup("a596c9f9cb4066dd716911ef92be9bd040b0664d");
-                $mail = new Mail( "antiplagiat-notification", array( "email" => $teacher->u4 ) );
-                $mail->url  = $url;
-                $mail->textFrom = implode(' ', array($st->st2, $st->st3, $st->st4));
-                $mail->deliver();*/
 
                 $message = str_replace('{username}',$teacher->u2,$body);
                 $message = str_replace('{name}',$p->getShortName(),$message);
