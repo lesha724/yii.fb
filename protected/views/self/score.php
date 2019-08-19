@@ -29,92 +29,15 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
 ?>
 
 <style>
-    tr
-    {mso-height-source:auto;}
-    col
-    {mso-width-source:auto;}
-    br
-    {mso-data-placement:same-cell;}
-    .style0
-    {mso-number-format:General;
-        vertical-align:bottom;
-        white-space:nowrap;
-        mso-rotate:0;
-        mso-background-source:auto;
-        mso-pattern:auto;
-        color:black;
-        font-size:12.0pt;
-        font-weight:400;
-        font-style:normal;
-        text-decoration:none;
-        font-family:"Times New Roman", sans-serif;
-        mso-font-charset:204;
-        border:none;
-        mso-protection:locked visible;
-        mso-style-name:Звичайний;
-        mso-style-id:0;}
-    .style17
-    {mso-number-format:General;
-        vertical-align:bottom;
-        white-space:nowrap;
-        mso-rotate:0;
-        mso-background-source:auto;
-        mso-pattern:auto;
-        color:windowtext;
-        font-size:10.0pt;
-        font-weight:400;
-        font-style:normal;
-        text-decoration:none;
-        font-family:"Arial Cyr";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        border:none;
-        mso-protection:locked visible;
-        mso-style-name:"Обычный 2";}
-    .style16
-    {mso-number-format:General;
-        vertical-align:bottom;
-        white-space:nowrap;
-        mso-rotate:0;
-        mso-background-source:auto;
-        mso-pattern:auto;
-        color:windowtext;
-        font-size:10.0pt;
-        font-weight:400;
-        font-style:normal;
-        text-decoration:none;
-        font-family:"Arial Cyr";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        border:none;
-        mso-protection:locked visible;
-        mso-style-name:Обычный_Книга1;}
-    .font12
-    {color:black;
-        font-size:11.0pt;
-        font-weight:400;
-        font-style:normal;
-        text-decoration:none;
-        font-family:Arial, sans-serif;
-        mso-font-charset:204;}
-    .font17
-    {color:black;
-        font-size:12.0pt;
-        font-weight:400;
-        font-style:normal;
-        text-decoration:none;
-        font-family:"Times New Roman", serif;
-        mso-font-charset:204;}
     td
-    {mso-style-parent:style0;
-        padding:0px;
+    {
         mso-ignore:padding;
         color:black;
         font-size:12.0pt;
         font-weight:400;
         font-style:normal;
         text-decoration:none;
-        font-family:"Times New Roman", sans-serif;
+        font-family:"Arial", sans-serif;
         mso-font-charset:204;
         mso-number-format:General;
         vertical-align:bottom;
@@ -124,207 +47,18 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
         mso-protection:locked visible;
         white-space:nowrap;
         mso-rotate:0;}
-    .xl67
-    {mso-style-parent:style0;
-        color:black;
-        font-weight:700;
-        font-family:"Times New Roman", serif;
-        mso-font-charset:204;
-        mso-number-format:"\@";}
-    .xl68
-    {mso-style-parent:style0;
-        white-space:normal;}
-    .xl69
-    {mso-style-parent:style0;
-        color:black;
-        font-weight:700;
-        font-family:"Times New Roman", serif;
-        mso-font-charset:204;
-        mso-number-format:"Short Date";
-        text-align:right;}
-    .xl70
-    {mso-style-parent:style0;
-        mso-number-format:"\@";
-        mso-protection:unlocked visible;}
-    .xl71
-    {mso-style-parent:style0;
-        mso-protection:unlocked visible;}
-    .xl72
-    {mso-style-parent:style0;
-        font-weight:700;
-        font-family:"Times New Roman", serif;
-        mso-font-charset:204;
-        text-align:left;
-        vertical-align:middle;
-        padding-left:48px;
-        mso-char-indent-count:4;}
-    .xl73
-    {mso-style-parent:style0;
-        font-family:"Times New Roman", serif;
-        mso-font-charset:204;
-        text-align:left;
-        vertical-align:middle;
-        padding-left:12px;
-        mso-char-indent-count:1;}
-    .xl74
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:10.0pt;
-        font-family:"Arial Cyr";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;}
-    .xl75
-    {mso-style-parent:style0;
-        mso-number-format:"\@";
-        text-align:center;
-        vertical-align:middle;
-        mso-protection:unlocked visible;}
-    .xl76
-    {mso-style-parent:style0;
-        color:black;
-        font-weight:700;
-        font-family:"Times New Roman", serif;
-        mso-font-charset:204;
-        mso-number-format:Standard;
-        text-align:right;
-        border:.5pt solid windowtext;}
-    .xl77
-    {mso-style-parent:style0;
-        color:black;
-        font-weight:700;
-        font-family:"Times New Roman", serif;
-        mso-font-charset:204;
-        mso-number-format:"\#\,\#\#0";
-        text-align:right;
-        border:.5pt solid windowtext;}
-    .xl78
-    {mso-style-parent:style0;
-        color:black;
-        font-family:"Times New Roman", serif;
-        mso-font-charset:204;
-        mso-number-format:"\@";
-        text-align:right;
-        border:.5pt solid windowtext;
-        white-space:nowrap;
-        mso-text-control:shrinktofit;}
-    .xl79
-    {mso-style-parent:style0;
-        color:black;
-        font-weight:700;
-        font-family:"Times New Roman", serif;
-        mso-font-charset:204;
-        mso-number-format:"\@";
-        text-align:center;
-        vertical-align:middle;
-        white-space:normal;}
-    .xl80
-    {mso-style-parent:style0;
-        mso-number-format:"\@";
-        text-align:center;
-        vertical-align:middle;}
-    .xl81
-    {mso-style-parent:style0;
-        text-align:center;
-        vertical-align:middle;}
-    .xl82
-    {mso-style-parent:style0;
-        color:#00B050;
-        font-weight:700;
-        font-family:"Times New Roman", serif;
-        mso-font-charset:204;
-        text-align:left;
-        vertical-align:middle;
-        mso-protection:unlocked visible;}
-    .xl83
-    {mso-style-parent:style0;
-        color:black;
-        font-weight:700;
-        mso-number-format:"\@";
-        text-align:center;
-        vertical-align:middle;
-        border-top:none;
-        border-right:.5pt solid windowtext;
-        border-bottom:.5pt solid windowtext;
-        border-left:.5pt solid windowtext;
-        background:#FC9204;
-        mso-pattern:black none;
-        white-space:normal;}
-    .xl84
-    {mso-style-parent:style0;
-        text-align:left;
-        vertical-align:middle;}
-    .xl85
-    {mso-style-parent:style0;
-        color:black;
-        mso-protection:unlocked visible;}
-    .xl86
-    {mso-style-parent:style17;
-        color:black;
-        font-size:10.0pt;
-        font-family:"Arial Cyr";
-        mso-generic-font-family:auto;
-        mso-font-charset:0;
-        mso-number-format:"\@";
-        text-align:center;
-        border-top:none;
-        border-right:.5pt solid windowtext;
-        border-bottom:none;
-        border-left:.5pt solid windowtext;
-        mso-protection:unlocked visible;}
-    .xl87
-    {mso-style-parent:style17;
-        color:black;
-        font-size:10.0pt;
-        font-family:"Arial Cyr";
-        mso-generic-font-family:auto;
-        mso-font-charset:0;
-        mso-number-format:Fixed;
-        text-align:center;
-        border-top:none;
-        border-right:.5pt solid windowtext;
-        border-bottom:none;
-        border-left:.5pt solid windowtext;
-        mso-protection:unlocked visible;}
-    .xl88
-    {mso-style-parent:style17;
-        color:black;
-        font-size:10.0pt;
-        font-family:"Arial Cyr";
-        mso-generic-font-family:auto;
-        mso-font-charset:0;
-        mso-number-format:"\@";
-        text-align:center;
-        border-top:.5pt solid windowtext;
-        border-right:.5pt solid windowtext;
-        border-bottom:none;
-        border-left:.5pt solid windowtext;
-        mso-protection:unlocked visible;}
-    .xl89
-    {mso-style-parent:style17;
-        color:black;
-        font-size:10.0pt;
-        font-family:"Arial Cyr";
-        mso-generic-font-family:auto;
-        mso-font-charset:0;
-        mso-number-format:Fixed;
-        text-align:center;
-        border-top:.5pt solid windowtext;
-        border-right:.5pt solid windowtext;
-        border-bottom:none;
-        border-left:.5pt solid windowtext;
-        mso-protection:unlocked visible;}
     .xl90
     {mso-style-parent:style0;
         font-size:10.0pt;}
     .xl91
     {mso-style-parent:style0;
         font-size:10.0pt;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;}
     .xl92
     {mso-style-parent:style0;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         border-top:none;
@@ -333,264 +67,9 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
         border-left:none;
         background:white;
         mso-pattern:black none;}
-    .xl93
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:10.0pt;
-        font-family:"Arial Cyr";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        border-top:.5pt dashed windowtext;
-        border-right:none;
-        border-bottom:none;
-        border-left:.5pt dashed windowtext;
-        background:white;
-        mso-pattern:black none;}
-    .xl94
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:10.0pt;
-        font-family:"Arial Cyr";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        border-top:.5pt dashed windowtext;
-        border-right:none;
-        border-bottom:none;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;}
-    .xl95
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:10.0pt;
-        font-family:"Arial Cyr";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        border-top:.5pt dashed windowtext;
-        border-right:.5pt dotted windowtext;
-        border-bottom:none;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;}
-    .xl96
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:10.0pt;
-        font-family:"Arial Cyr";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        border-top:none;
-        border-right:none;
-        border-bottom:none;
-        border-left:.5pt dashed windowtext;
-        background:white;
-        mso-pattern:black none;}
-    .xl97
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:10.0pt;
-        font-family:"Arial Cyr";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        vertical-align:middle;
-        background:white;
-        mso-pattern:black none;
-        white-space:normal;}
-    .xl98
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:10.0pt;
-        font-family:"Arial Cyr";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        background:white;
-        mso-pattern:black none;}
-    .xl99
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:10.0pt;
-        font-family:"Arial Cyr";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        border-top:none;
-        border-right:.5pt dotted windowtext;
-        border-bottom:none;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;}
-    .xl100
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:10.0pt;
-        font-family:"Arial Cyr";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        border-top:none;
-        border-right:none;
-        border-bottom:.5pt dashed windowtext;
-        border-left:.5pt dashed windowtext;
-        background:white;
-        mso-pattern:black none;}
-    .xl101
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:10.0pt;
-        font-family:"Arial Cyr";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        border-top:none;
-        border-right:none;
-        border-bottom:.5pt dashed windowtext;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;}
-    .xl102
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:11.0pt;
-        font-weight:700;
-        font-family:"Arial Cyr", sans-serif;
-        mso-font-charset:204;
-        vertical-align:top;
-        background:white;
-        mso-pattern:black none;
-        white-space:normal;}
-    .xl103
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:11.0pt;
-        font-weight:700;
-        font-family:"Arial Cyr", sans-serif;
-        mso-font-charset:204;
-        mso-number-format:Standard;
-        vertical-align:middle;
-        background:white;
-        mso-pattern:black none;
-        white-space:normal;}
-    .xl104
-    {mso-style-parent:style0;
-        color:black;
-        font-size:11.0pt;
-        font-weight:700;
-        font-family:Calibri, sans-serif;
-        mso-font-charset:204;
-        mso-number-format:Standard;
-        vertical-align:middle;
-        background:white;
-        mso-pattern:black none;
-        white-space:normal;}
-    .xl105
-    {mso-style-parent:style0;
-        border-top:none;
-        border-right:none;
-        border-bottom:.5pt dashed windowtext;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;}
-    .xl106
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:10.0pt;
-        font-family:"Arial Cyr";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        border-top:none;
-        border-right:.5pt dotted windowtext;
-        border-bottom:.5pt dashed windowtext;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;}
-    .xl107
-    {mso-style-parent:style0;
-        color:black;
-        font-size:10.0pt;
-        font-weight:700;
-        font-family:Calibri, sans-serif;
-        mso-font-charset:204;
-        text-align:center;
-        vertical-align:middle;
-        background:white;
-        mso-pattern:black none;
-        white-space:normal;}
-    .xl108
-    {mso-style-parent:style0;
-        color:black;
-        font-size:10.0pt;
-        font-weight:700;
-        font-family:Calibri, sans-serif;
-        mso-font-charset:204;
-        text-align:center;
-        vertical-align:middle;
-        border-top:none;
-        border-right:.5pt dotted windowtext;
-        border-bottom:none;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;
-        white-space:normal;}
-    .xl109
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:10.0pt;
-        font-family:"Arial Cyr";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        border-top:none;
-        border-right:none;
-        border-bottom:.5pt dotted windowtext;
-        border-left:.5pt dotted windowtext;
-        background:white;
-        mso-pattern:black none;}
-    .xl110
-    {mso-style-parent:style0;
-        border-top:none;
-        border-right:none;
-        border-bottom:.5pt dotted windowtext;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;}
-    .xl111
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:10.0pt;
-        font-family:"Arial Cyr";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        border-top:none;
-        border-right:none;
-        border-bottom:.5pt dotted windowtext;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;}
-    .xl112
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:10.0pt;
-        font-family:"Arial Cyr";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        border-top:none;
-        border-right:.5pt dotted windowtext;
-        border-bottom:.5pt dotted windowtext;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;}
-    .xl113
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:10.0pt;
-        font-family:"Arial Cyr";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        border-top:none;
-        border-right:none;
-        border-bottom:.5pt dashed windowtext;
-        border-left:.5pt dotted windowtext;
-        background:white;
-        mso-pattern:black none;}
     .xl114
     {mso-style-parent:style0;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         border-top:none;
@@ -601,14 +80,14 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
         mso-pattern:black none;}
     .xl115
     {mso-style-parent:style0;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         background:white;
         mso-pattern:black none;}
     .xl116
     {mso-style-parent:style0;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         border-top:none;
@@ -619,7 +98,7 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
         mso-pattern:black none;}
     .xl117
     {mso-style-parent:style0;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         border-top:none;
@@ -630,7 +109,7 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
         mso-pattern:black none;}
     .xl118
     {mso-style-parent:style0;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         border-top:none;
@@ -639,26 +118,10 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
         border-left:none;
         background:white;
         mso-pattern:black none;}
-    .xl119
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:11.0pt;
-        font-weight:700;
-        font-family:"Arial Cyr", sans-serif;
-        mso-font-charset:204;
-        mso-number-format:Standard;
-        vertical-align:middle;
-        border-top:none;
-        border-right:.5pt dashed windowtext;
-        border-bottom:none;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;
-        white-space:normal;}
     .xl120
     {mso-style-parent:style0;
         font-size:9.0pt;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         border-top:none;
@@ -670,7 +133,7 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
     .xl121
     {mso-style-parent:style0;
         font-size:9.0pt;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         border-top:.5pt solid windowtext;
@@ -690,7 +153,7 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
     .xl123
     {mso-style-parent:style0;
         font-size:9.0pt;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         vertical-align:middle;
@@ -700,99 +163,19 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
         border-left:none;
         background:white;
         mso-pattern:black none;}
-    .xl124
-    {mso-style-parent:style0;
-        color:black;
-        font-weight:700;
-        font-family:"Times New Roman", serif;
-        mso-font-charset:204;
-        mso-number-format:"\@";
-        text-align:center;
-        vertical-align:middle;
-        border-top:none;
-        border-right:.5pt solid windowtext;
-        border-bottom:.5pt solid windowtext;
-        border-left:.5pt solid windowtext;
-        background:#FC9204;
-        mso-pattern:black none;
-        white-space:normal;}
-    .xl125
-    {mso-style-parent:style0;
-        font-weight:700;
-        font-family:"Times New Roman", serif;
-        mso-font-charset:204;
-        text-align:center;
-        vertical-align:middle;}
-    .xl126
-    {mso-style-parent:style0;
-        color:windowtext;
-        mso-number-format:"\@";
-        text-align:center;}
-    .xl127
-    {mso-style-parent:style0;
-        text-align:center;
-        vertical-align:middle;
-        mso-protection:unlocked visible;}
-    .xl128
-    {mso-style-parent:style0;
-        mso-number-format:"\@";}
-    .xl129
-    {mso-style-parent:style0;
-        text-align:left;}
-    .xl130
-    {mso-style-parent:style0;
-        color:red;
-        font-weight:700;
-        font-family:"Times New Roman", serif;
-        mso-font-charset:204;
-        mso-number-format:"\@";
-        text-align:center;
-        vertical-align:middle;
-        border-top:1.0pt solid windowtext;
-        border-right:1.0pt solid windowtext;
-        border-bottom:none;
-        border-left:1.0pt solid windowtext;
-        mso-protection:unlocked visible;}
-    .xl131
-    {mso-style-parent:style0;
-        color:red;
-        font-weight:700;
-        font-family:"Times New Roman", serif;
-        mso-font-charset:204;
-        mso-number-format:"\@";
-        text-align:center;
-        vertical-align:middle;
-        border-top:none;
-        border-right:1.0pt solid windowtext;
-        border-bottom:1.0pt solid windowtext;
-        border-left:1.0pt solid windowtext;
-        mso-protection:unlocked visible;}
     .xl132
     {mso-style-parent:style0;
         font-size:6.0pt;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         text-align:left;
-        background:white;
-        mso-pattern:black none;}
-    .xl133
-    {mso-style-parent:style0;
-        font-size:6.0pt;
-        font-family:"Arial Cur";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:left;
-        border-top:none;
-        border-right:.5pt solid windowtext;
-        border-bottom:none;
-        border-left:none;
         background:white;
         mso-pattern:black none;}
     .xl134
     {mso-style-parent:style0;
         font-size:6.0pt;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         text-align:left;
@@ -805,7 +188,7 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
     .xl135
     {mso-style-parent:style0;
         font-size:6.0pt;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         text-align:right;
@@ -817,24 +200,12 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
         mso-pattern:black none;}
     .xl136
     {mso-style-parent:style0;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         text-align:center;
         border-top:none;
         border-right:none;
-        border-bottom:.5pt solid windowtext;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;}
-    .xl137
-    {mso-style-parent:style0;
-        font-family:"Arial Cur";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:center;
-        border-top:none;
-        border-right:.5pt solid windowtext;
         border-bottom:.5pt solid windowtext;
         border-left:none;
         background:white;
@@ -853,7 +224,7 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
     {mso-style-parent:style0;
         font-size:8.0pt;
         font-weight:700;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         text-align:center;
@@ -862,45 +233,13 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
         border-right:none;
         border-bottom:.5pt solid windowtext;
         border-left:.5pt solid windowtext;
-        background:white;
-        mso-pattern:black none;
-        white-space:normal;}
-    .xl140
-    {mso-style-parent:style0;
-        font-size:8.0pt;
-        font-weight:700;
-        font-family:"Arial Cur";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:center;
-        vertical-align:middle;
-        border-top:.5pt solid windowtext;
-        border-right:none;
-        border-bottom:.5pt solid windowtext;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;
-        white-space:normal;}
-    .xl141
-    {mso-style-parent:style0;
-        font-size:8.0pt;
-        font-weight:700;
-        font-family:"Arial Cur";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:center;
-        vertical-align:middle;
-        border-top:.5pt solid windowtext;
-        border-right:.5pt solid windowtext;
-        border-bottom:.5pt solid windowtext;
-        border-left:none;
         background:white;
         mso-pattern:black none;
         white-space:normal;}
     .xl142
     {mso-style-parent:style0;
         font-size:10.0pt;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         text-align:center;
@@ -909,84 +248,13 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
         border-right:none;
         border-bottom:none;
         border-left:.5pt solid windowtext;
-        background:white;
-        mso-pattern:black none;
-        white-space:normal;}
-    .xl143
-    {mso-style-parent:style0;
-        font-size:10.0pt;
-        font-family:"Arial Cur";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:center;
-        vertical-align:middle;
-        background:white;
-        mso-pattern:black none;
-        white-space:normal;}
-    .xl144
-    {mso-style-parent:style0;
-        font-size:10.0pt;
-        font-family:"Arial Cur";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:center;
-        vertical-align:middle;
-        border-top:none;
-        border-right:.5pt solid windowtext;
-        border-bottom:none;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;
-        white-space:normal;}
-    .xl145
-    {mso-style-parent:style0;
-        font-size:10.0pt;
-        font-family:"Arial Cur";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:center;
-        vertical-align:middle;
-        border-top:none;
-        border-right:none;
-        border-bottom:.5pt solid windowtext;
-        border-left:.5pt solid windowtext;
-        background:white;
-        mso-pattern:black none;
-        white-space:normal;}
-    .xl146
-    {mso-style-parent:style0;
-        font-size:10.0pt;
-        font-family:"Arial Cur";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:center;
-        vertical-align:middle;
-        border-top:none;
-        border-right:none;
-        border-bottom:.5pt solid windowtext;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;
-        white-space:normal;}
-    .xl147
-    {mso-style-parent:style0;
-        font-size:10.0pt;
-        font-family:"Arial Cur";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:center;
-        vertical-align:middle;
-        border-top:none;
-        border-right:.5pt solid windowtext;
-        border-bottom:.5pt solid windowtext;
-        border-left:none;
         background:white;
         mso-pattern:black none;
         white-space:normal;}
     .xl148
     {mso-style-parent:style0;
         font-size:6.0pt;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         text-align:center;
@@ -995,34 +263,6 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
         border-right:none;
         border-bottom:none;
         border-left:.5pt solid windowtext;
-        background:white;
-        mso-pattern:black none;}
-    .xl149
-    {mso-style-parent:style0;
-        font-size:6.0pt;
-        font-family:"Arial Cur";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:center;
-        vertical-align:top;
-        border-top:.5pt solid windowtext;
-        border-right:none;
-        border-bottom:none;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;}
-    .xl150
-    {mso-style-parent:style0;
-        font-size:6.0pt;
-        font-family:"Arial Cur";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:center;
-        vertical-align:top;
-        border-top:.5pt solid windowtext;
-        border-right:.5pt solid windowtext;
-        border-bottom:none;
-        border-left:none;
         background:white;
         mso-pattern:black none;}
     .xl151
@@ -1045,45 +285,21 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
         border-left:none;
         background:white;
         mso-pattern:black none;}
-    .xl153
-    {mso-style-parent:style0;
-        font-size:11.0pt;
-        text-align:center;
-        border-top:none;
-        border-right:.5pt solid windowtext;
-        border-bottom:.5pt solid windowtext;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;}
     .xl154
     {mso-style-parent:style0;
         font-size:6.0pt;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         text-align:center;
         vertical-align:top;
-        background:white;
-        mso-pattern:black none;}
-    .xl155
-    {mso-style-parent:style0;
-        font-size:6.0pt;
-        font-family:"Arial Cur";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:center;
-        vertical-align:top;
-        border-top:none;
-        border-right:.5pt solid windowtext;
-        border-bottom:none;
-        border-left:none;
         background:white;
         mso-pattern:black none;}
     .xl156
     {mso-style-parent:style0;
         font-size:9.0pt;
         font-weight:700;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         text-align:center;
@@ -1097,7 +313,7 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
     {mso-style-parent:style0;
         font-size:9.0pt;
         font-weight:700;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         text-align:center;
@@ -1110,7 +326,7 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
     .xl158
     {mso-style-parent:style0;
         font-size:9.0pt;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         text-align:left;
@@ -1123,7 +339,7 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
     .xl159
     {mso-style-parent:style0;
         font-size:8.0pt;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         text-align:left;
@@ -1134,24 +350,10 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
         border-left:none;
         background:white;
         mso-pattern:black none;}
-    .xl160
-    {mso-style-parent:style0;
-        font-size:8.0pt;
-        font-family:"Arial Cur";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:left;
-        vertical-align:middle;
-        border-top:.5pt solid windowtext;
-        border-right:.5pt solid windowtext;
-        border-bottom:.5pt solid windowtext;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;}
     .xl161
     {mso-style-parent:style0;
         font-size:9.0pt;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         text-align:center;
@@ -1161,24 +363,11 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
         border-left:none;
         background:white;
         mso-pattern:black none;}
-    .xl162
-    {mso-style-parent:style0;
-        font-size:9.0pt;
-        font-family:"Arial Cur";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:left;
-        border-top:.5pt solid windowtext;
-        border-right:.5pt solid windowtext;
-        border-bottom:.5pt solid windowtext;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;}
     .xl163
     {mso-style-parent:style0;
         font-size:9.0pt;
         font-weight:700;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         text-align:center;
@@ -1192,7 +381,7 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
     {mso-style-parent:style0;
         font-size:9.0pt;
         font-weight:700;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         text-align:center;
@@ -1205,25 +394,12 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
     .xl165
     {mso-style-parent:style0;
         font-size:9.0pt;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         text-align:left;
         border-top:none;
         border-right:none;
-        border-bottom:.5pt solid windowtext;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;}
-    .xl166
-    {mso-style-parent:style0;
-        font-size:9.0pt;
-        font-family:"Arial Cur";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:left;
-        border-top:none;
-        border-right:.5pt solid windowtext;
         border-bottom:.5pt solid windowtext;
         border-left:none;
         background:white;
@@ -1231,7 +407,7 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
     .xl167
     {mso-style-parent:style0;
         font-weight:700;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         text-align:center;
@@ -1240,78 +416,12 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
         border-right:none;
         border-bottom:none;
         border-left:.5pt solid windowtext;
-        background:white;
-        mso-pattern:black none;}
-    .xl168
-    {mso-style-parent:style0;
-        font-weight:700;
-        font-family:"Arial Cur";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:center;
-        vertical-align:middle;
-        border-top:.5pt solid windowtext;
-        border-right:none;
-        border-bottom:none;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;}
-    .xl169
-    {mso-style-parent:style0;
-        font-weight:700;
-        font-family:"Arial Cur";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:center;
-        vertical-align:middle;
-        border-top:.5pt solid windowtext;
-        border-right:.5pt solid windowtext;
-        border-bottom:none;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;}
-    .xl170
-    {mso-style-parent:style0;
-        font-weight:700;
-        font-family:"Arial Cur";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:center;
-        vertical-align:middle;
-        border-top:none;
-        border-right:none;
-        border-bottom:none;
-        border-left:.5pt solid windowtext;
-        background:white;
-        mso-pattern:black none;}
-    .xl171
-    {mso-style-parent:style0;
-        font-weight:700;
-        font-family:"Arial Cur";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:center;
-        vertical-align:middle;
-        background:white;
-        mso-pattern:black none;}
-    .xl172
-    {mso-style-parent:style0;
-        font-weight:700;
-        font-family:"Arial Cur";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:center;
-        vertical-align:middle;
-        border-top:none;
-        border-right:.5pt solid windowtext;
-        border-bottom:none;
-        border-left:none;
         background:white;
         mso-pattern:black none;}
     .xl173
     {mso-style-parent:style0;
         font-size:6.0pt;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         text-align:center;
@@ -1324,27 +434,13 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
         mso-pattern:black none;}
     .xl174
     {mso-style-parent:style0;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         text-align:center;
         vertical-align:middle;
         border-top:.5pt solid windowtext;
         border-right:none;
-        border-bottom:none;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;}
-    .xl175
-    {mso-style-parent:style0;
-        font-size:6.0pt;
-        font-family:"Arial Cur";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:center;
-        vertical-align:middle;
-        border-top:.5pt solid windowtext;
-        border-right:.5pt solid windowtext;
         border-bottom:none;
         border-left:none;
         background:white;
@@ -1352,32 +448,19 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
     .xl176
     {mso-style-parent:style0;
         font-size:9.0pt;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         text-align:center;
         border-top:none;
         border-right:none;
-        border-bottom:.5pt solid windowtext;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;}
-    .xl177
-    {mso-style-parent:style0;
-        font-size:9.0pt;
-        font-family:"Arial Cur";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:center;
-        border-top:none;
-        border-right:.5pt solid windowtext;
         border-bottom:.5pt solid windowtext;
         border-left:none;
         background:white;
         mso-pattern:black none;}
     .xl178
     {mso-style-parent:style0;
-        font-family:"Arial Cur";
+        
         mso-generic-font-family:auto;
         mso-font-charset:204;
         text-align:center;
@@ -1387,165 +470,6 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
         border-left:.5pt solid windowtext;
         background:white;
         mso-pattern:black none;}
-    .xl179
-    {mso-style-parent:style0;
-        font-family:"Arial Cur";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:center;
-        background:white;
-        mso-pattern:black none;}
-    .xl180
-    {mso-style-parent:style0;
-        font-family:"Arial Cur";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:center;
-        border-top:none;
-        border-right:.5pt solid windowtext;
-        border-bottom:none;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;}
-    .xl181
-    {mso-style-parent:style0;
-        font-family:"Arial Cur";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:center;
-        border-top:none;
-        border-right:none;
-        border-bottom:.5pt solid windowtext;
-        border-left:.5pt solid windowtext;
-        background:white;
-        mso-pattern:black none;}
-    .xl182
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:10.0pt;
-        font-family:"Arial Cyr";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:left;
-        vertical-align:middle;
-        background:white;
-        mso-pattern:black none;
-        white-space:normal;}
-    .xl183
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:11.0pt;
-        font-family:"Arial Cyr";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        mso-number-format:Standard;
-        text-align:left;
-        vertical-align:middle;
-        background:white;
-        mso-pattern:black none;
-        white-space:normal;}
-    .xl184
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:10.0pt;
-        font-weight:700;
-        font-family:"Arial Cyr", sans-serif;
-        mso-font-charset:204;
-        text-align:center;
-        vertical-align:middle;
-        border-top:none;
-        border-right:none;
-        border-bottom:none;
-        border-left:.5pt dashed windowtext;
-        background:white;
-        mso-pattern:black none;
-        white-space:normal;}
-    .xl185
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:10.0pt;
-        font-weight:700;
-        font-family:"Arial Cyr", sans-serif;
-        mso-font-charset:204;
-        text-align:center;
-        vertical-align:middle;
-        background:white;
-        mso-pattern:black none;
-        white-space:normal;}
-    .xl186
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:11.0pt;
-        font-weight:700;
-        font-family:"Arial Cyr", sans-serif;
-        mso-font-charset:204;
-        mso-number-format:Standard;
-        text-align:left;
-        vertical-align:middle;
-        background:white;
-        mso-pattern:black none;
-        white-space:normal;}
-    .xl187
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:10.0pt;
-        font-family:"Arial Cyr";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:left;
-        vertical-align:middle;
-        border-top:none;
-        border-right:.5pt dotted windowtext;
-        border-bottom:none;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;
-        white-space:normal;}
-    .xl188
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:10.0pt;
-        font-weight:700;
-        font-family:"Arial Cyr", sans-serif;
-        mso-font-charset:204;
-        text-align:center;
-        vertical-align:middle;
-        border-top:none;
-        border-right:.5pt dotted windowtext;
-        border-bottom:none;
-        border-left:none;
-        background:white;
-        mso-pattern:black none;
-        white-space:normal;}
-    .xl189
-    {mso-style-parent:style16;
-        color:windowtext;
-        font-size:11.0pt;
-        font-weight:700;
-        font-family:"Arial Cyr";
-        mso-generic-font-family:auto;
-        mso-font-charset:204;
-        text-align:left;
-        vertical-align:middle;
-        background:white;
-        mso-pattern:black none;
-        white-space:normal;}
-    .xl190
-    {mso-style-parent:style0;
-        color:black;
-        font-size:10.0pt;
-        font-weight:700;
-        font-family:Calibri, sans-serif;
-        mso-font-charset:204;
-        text-align:center;
-        vertical-align:middle;
-        border-top:none;
-        border-right:none;
-        border-bottom:none;
-        border-left:.5pt dashed windowtext;
-        background:white;
-        mso-pattern:black none;
-        white-space:normal;}
 </style>
 
 <table border="0" cellpadding="0" cellspacing="0" width="689" style="border-collapse:

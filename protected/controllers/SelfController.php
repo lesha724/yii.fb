@@ -89,7 +89,8 @@ class SelfController extends Controller
      * Печать счета для оплаты
      */
     public function actionScore(){
-//        /$mPDF1 = Yii::app()->ePdf->mpdf();
+
+        $html2pdf = new Spipu\Html2Pdf\Html2Pdf('L', 'A5', 'ru');
 
         $setting = Mp::getSettinsBy2602();
         if(empty($setting))
@@ -112,10 +113,10 @@ class SelfController extends Controller
 
         $html .= $this->_getScoreHtml($setting, 'ThirtyPercent', $spo->spo2 * 0.3, $sk['sk6'], $sk['sk7']);
 
-        return $html;
-        /*$mPDF1->WriteHTML($html);
+        //$this->renderText($html);
+        $html2pdf->writeHTML($html);
 
-        $mPDF1->Output('score.pdf', 'D');*/
+        $html2pdf->output();
     }
 
     /**
@@ -137,6 +138,6 @@ class SelfController extends Controller
             'sk6' => $sk6,
             'sk7' => $sk7,
             'price' => round($price, 2)
-        )));
+        )), true);
     }
 }
