@@ -513,9 +513,9 @@ SQL;
             <<<SQL
             SELECT st1, st200
 			 FROM ST
-			   LEFT JOIN SK ON (SK.SK2 = ST.ST1)
-			   LEFT JOIN STD ON (ST.ST1 = STD.STD2)
-			 WHERE std7 is null and sk5 is null and std11 in (0,5,6,8) and std3=:gr1 and st101!=7
+			   INNER JOIN STD ON (ST.ST1 = STD.STD2)
+			   INNER JOIN SK ON (SK.SK1 = STD.STD26)
+			 WHERE std7 is null and std11 in (0,5,6,8) and std3=:gr1 and st101!=7
 			 ORDER BY st2 collate UNICODE
 SQL;
         return static::findAllBySql($sql, array(':gr1'=>$gr1));
@@ -603,8 +603,8 @@ SQL;
 				FROM st
 				inner join pe on (st.st200 = pe.pe1)
 				INNER JOIN std on (st.st1 = std.std2)
-				LEFT JOIN SK ON (SK.SK2 = ST.ST1)
-				WHERE st101<>7 and STD3=:GR1 and STD11 in (0,5,6,8) and (STD7 is null) and sk5 is null and sk3=1
+				LEFT JOIN SK ON (SK.SK1 = STD.STD26)
+				WHERE st101<>7 and STD3=:GR1 and STD11 in (0,5,6,8) and (STD7 is null) and sk3=1
 				ORDER BY ST2 collate UNICODE
 SQL;
 
@@ -632,10 +632,10 @@ SQL;
             SELECT st1,pe2,pe3,pe4,st5,sk3 gr1, gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26
 			 FROM ST
 			  INNER JOIN pe on (st200 = pe1)
-			   INNER JOIN SK ON (SK.SK2 = ST.ST1)
 			   INNER JOIN STD ON (ST.ST1 = STD.STD2)
+			   INNER JOIN SK ON (SK.SK1 = STD.STD26)
 			   INNER JOIN GR ON (STD.STD3 = GR.GR1)
-			 WHERE std7 is null and sk5 is null and std11 in (0,5,6,8) and gr2=:SG1 and st101!=7
+			 WHERE std7 is null and std11 in (0,5,6,8) and gr2=:SG1 and st101!=7
 			 ORDER BY pe2 collate UNICODE
 SQL;
 
@@ -658,9 +658,9 @@ SQL;
             SELECT st1,pe2,pe3,pe4,st5,sk3
 			 FROM ST
 			   INNER JOIN pe on (st200 = pe1)
-			   LEFT JOIN SK ON (SK.SK2 = ST.ST1)
-			   LEFT JOIN STD ON (ST.ST1 = STD.STD2)
-			 WHERE std7 is null and sk5 is null and std11 in (0,5,6,8) and std3=:gr1 and st101!=7
+			   INNER JOIN STD ON (ST.ST1 = STD.STD2)
+			   INNER JOIN SK ON (SK.SK1 = STD.STD26)
+			 WHERE std7 is null and std11 in (0,5,6,8) and std3=:gr1 and st101!=7
 			 ORDER BY pe2 collate UNICODE
 SQL;
         $command = Yii::app()->db->createCommand($sql);
@@ -709,7 +709,7 @@ SQL
                INNER JOIN pe on (st200 = pe1)
                inner join std on (st.st1 = std.std2)
                inner join gr on (std.std3 = gr.gr1)
-               inner JOIN SK ON (SK.SK2 = ST.ST1 and sk5 is null)
+               inner JOIN SK ON (SK.SK1 = std.std26)
             where ucgns5=:YEAR and ucgns6=:SEM and ucgn2=:GR1 and UCXG3=0 and std11<>1 and std4<=current_timestamp and (std7 is null or std7>=current_timestamp)
             group by st1,pe1,pe2,pe3,pe4,st5,sk3,gr3, gr19,gr20,gr21,gr22,gr23,gr24,gr28
             order by pe2 collate UNICODE
@@ -1302,5 +1302,23 @@ SQL;
         $command->bindValue(':st1',  $this->st1);
         $command->bindValue(':st1_',  $this->st1);
         return $command->queryScalar();
+    }
+
+    /**
+     * получить данные контракта
+     */
+    public function getSk(){
+        $sql = <<<SQL
+          SELECT first 1 sk.*
+			 FROM ST
+			   INNER JOIN STD ON (ST.ST1 = STD.STD2)
+			   INNER JOIN SK ON (STD.STD26 = SK.SK1)
+			 WHERE std7 is null and std11 in (0,5,6,8) and st1=:st1
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':st1',  $this->st1);
+        return $command->queryRow();
+
     }
 }

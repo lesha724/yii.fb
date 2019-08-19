@@ -37,9 +37,9 @@ class SelfController extends Controller
                 'actions' => array(
                     'score',
                 ),
-                /*'expression' => function(){
+                'expression' => function(){
                     return Yii::app()->user->isStd && Yii::app()->core->universityCode == U_URFAK;
-                },*/
+                },
             ),
 
             array('allow',
@@ -89,38 +89,54 @@ class SelfController extends Controller
      * Печать счета для оплаты
      */
     public function actionScore(){
-        //$mPDF1 = Yii::app()->ePdf->mpdf();
+//        /$mPDF1 = Yii::app()->ePdf->mpdf();
 
         $setting = Mp::getSettinsBy2602();
         if(empty($setting))
             throw new CHttpException(400, tt('Не заданы настройки оплаты. Обратитесь к администратору системы!'));
 
-        $html = $this->_getScoreHtml($setting, 'SeventyPercent');
+        $spo = Spo::model()->findByAttributes(array(
+            'spo1' => Yii::app()->user->dbModel->st1,
+            'spo5' => 0,
+            'spo6' => Yii::app()->core->currentYear
+        ));
 
-        $html .= $this->_getScoreHtml($setting, 'ThirtyPercent');
+        if(empty($spo))
+            throw new CHttpException(400, tt('Не найден план оплаты'));
 
-        /*$mPDF1->WriteHTML($html);
+        $sk = Yii::app()->user->dbModel->getSk();
+        if(empty($sk) || $sk['sk3'] == 0)
+            throw new CHttpException(400, tt('Не найден контракт'));
 
-        $mPDF1->Output();*/
+        $html = $this->_getScoreHtml($setting, 'SeventyPercent', $spo->spo2 * 0.7, $sk['sk6'], $sk['sk7']);
+
+        $html .= $this->_getScoreHtml($setting, 'ThirtyPercent', $spo->spo2 * 0.3, $sk['sk6'], $sk['sk7']);
 
         return $html;
+        /*$mPDF1->WriteHTML($html);
+
+        $mPDF1->Output('score.pdf', 'D');*/
     }
 
     /**
      * нтмл счета
      * @param $setting array
      * @param $type string
+     * @param $price double
      *
      * @return string
      * @throws CHttpException
+     * @throws CException
      */
-    private function _getScoreHtml($setting,$type){
+    private function _getScoreHtml($setting,$type, $price, $sk6, $sk7){
         if(!isset($setting[$type]))
             throw new CHttpException(500);
 
         return $this->renderPartial('score', array_merge($setting[$type], array(
-            'TypeScore' => $type == 'SeventyPercent' ? 70 : 30
+            'TypeScore' => $type == 'SeventyPercent' ? 70 : 30,
+            'sk6' => $sk6,
+            'sk7' => $sk7,
+            'price' => round($price, 2)
         )));
-
     }
 }

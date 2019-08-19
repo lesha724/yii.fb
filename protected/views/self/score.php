@@ -19,9 +19,13 @@
  * @var $BIK string
  * @var $sk6 string
  * @var $sk7 string
- *
+ * @var $price double
+ * @var $ServiceCode string
  */
 
+$rubles = intval($price);
+$penny= round($price - $rubles, 2) * 100;
+$priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $rubles ).' '.$penny.' '.tt( 'копейка|копейки|копеек|копейка', $penny)
 ?>
 
 <style>
@@ -33,7 +37,6 @@
     {mso-data-placement:same-cell;}
     .style0
     {mso-number-format:General;
-        text-align:general;
         vertical-align:bottom;
         white-space:nowrap;
         mso-rotate:0;
@@ -52,7 +55,6 @@
         mso-style-id:0;}
     .style17
     {mso-number-format:General;
-        text-align:general;
         vertical-align:bottom;
         white-space:nowrap;
         mso-rotate:0;
@@ -71,7 +73,6 @@
         mso-style-name:"Обычный 2";}
     .style16
     {mso-number-format:General;
-        text-align:general;
         vertical-align:bottom;
         white-space:nowrap;
         mso-rotate:0;
@@ -116,7 +117,6 @@
         font-family:"Times New Roman", sans-serif;
         mso-font-charset:204;
         mso-number-format:General;
-        text-align:general;
         vertical-align:bottom;
         border:none;
         mso-background-source:auto;
@@ -1615,8 +1615,7 @@
     </tr>
     <tr height="21" style="mso-height-source:userset;height:15.75pt">
         <td colspan="31" height="21" class="xl139" width="403" style="border-right:.5pt solid black;
-  height:15.75pt;border-left:none;width:310pt">ВЫСШАЯ ШКОЛА КУЛЬТУРНОЙ ПОЛИТИКИ
-            И УПРАВЛЕНИЯ В ГУМ.СФЕРЕ</td>
+  height:15.75pt;border-left:none;width:310pt">ЮРИДИЧЕСКИЙ ФАКУЛЬТЕТ</td>
         <td colspan="8" class="xl139" width="104" style="border-right:.5pt solid black;
   border-left:none;width:80pt"><?=$TypeScore?>% ОБУЧЕНИЯ</td>
         <td></td>
@@ -1637,7 +1636,7 @@
     </tr>
     <tr height="21" style="mso-height-source:userset;height:15.75pt">
         <td colspan="39" height="21" class="xl152" style="border-right:.5pt solid black;
-  height:15.75pt">Сумма: 1000 руб. 00 коп.</td>
+  height:15.75pt">Сумма: <?=$priceStr?></td>
         <td></td>
     </tr>
     <tr height="13" style="mso-height-source:userset;height:9.95pt">
@@ -1680,7 +1679,37 @@
 
     <tr height="20" style="mso-height-source:userset;height:15.0pt">
         <td height="20" class="xl114" style="height:15.0pt">&nbsp;</td>
-        <td class="xl115">&nbsp;</td>
+        <td class="xl115">&nbsp;
+            <?php
+                $text = strtr(
+                    'ST00012|Name={CompanyName}|PersonalAcc={ChkAcc}|BankName={BankName}|BIC={BIK}|CorrespAcc=0|PayeeINN={INN}|KPP={KPP}|CBC={KBK}|OKTMO={OKTMO}|contract={sk6}|Branch=ЮРИДИЧЕСКИЙ ФАКУЛЬТЕТ|PayType={PayType}|ServiceName={ServiceCode}|instNum=|childFio={STName}|LASTNAME={sk7}|Sum={Price}',
+                    array(
+                        '{CompanyName}' => $CompanyName,
+                        '{ChkAcc}' => $ChkAcc,
+                        '{BankName}' => $BankName,
+                        '{BIK}' => $BIK,
+                        '{INN}' => $INN,
+                        '{KPP}' => $KPP,
+                        '{KBK}' => $KBK,
+                        '{OKTMO}' => $OKTMO,
+                        '{PayType}' => $TypeScore.'% ОБУЧЕНИЯ',
+                        '{sk6}' => $sk6,
+                        '{sk7}' => $sk7,
+                        '{STName}' => Yii::app()->user->dbModel->fullName,
+                        '{Price}' => $price * 100,
+                        '{ServiceCode}' => $ServiceCode
+                    )
+                );
+
+                //var_dump($text);
+
+                $qrCode = new Endroid\QrCode\QrCode($text);
+                $qrCode->setEncoding('utf-8');
+                $qrCode->setMargin(5);
+                $qrCode->setSize(100);
+            ?>
+            <span style="position:absolute;z-index:2;"><img src="data:<?=$qrCode->writeDataUri()?>"></span>
+        </td>
         <td class="xl115">&nbsp;</td>
         <td class="xl115">&nbsp;</td>
         <td class="xl115">&nbsp;</td>
@@ -1744,8 +1773,7 @@
         <td class="xl116">&nbsp;</td>
         <td class="xl116">&nbsp;</td>
         <td colspan="31" class="xl139" width="403" style="border-right:.5pt solid black;
-  border-left:none;width:310pt">ВЫСШАЯ ШКОЛА КУЛЬТУРНОЙ ПОЛИТИКИ И УПРАВЛЕНИЯ В
-            ГУМ.СФЕРЕ</td>
+  border-left:none;width:310pt">ЮРИДИЧЕСКИЙ ФАКУЛЬТЕТ</td>
         <td colspan="8" class="xl139" width="104" style="border-right:.5pt solid black;
   border-left:none;width:80pt"><?=$TypeScore?>% ОБУЧЕНИЯ</td>
         <td></td>
@@ -1816,8 +1844,7 @@
         <td class="xl115">&nbsp;</td>
         <td class="xl115">&nbsp;</td>
         <td class="xl115">&nbsp;</td>
-        <td colspan="39" class="xl151" style="border-right:.5pt solid black">Сумма: 1000
-            руб. 00 коп.</td>
+        <td colspan="39" class="xl151" style="border-right:.5pt solid black">Сумма: <?=$priceStr?></td>
         <td></td>
     </tr>
     <tr height="21" style="mso-height-source:userset;height:15.75pt">

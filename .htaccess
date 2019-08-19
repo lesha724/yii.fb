@@ -8,7 +8,6 @@ php_value date.timezone UTC
 DirectoryIndex index.php
 
 #php_value short_open_tag 1
-
 <IfModule mod_rewrite.c>
     RewriteEngine on
 
