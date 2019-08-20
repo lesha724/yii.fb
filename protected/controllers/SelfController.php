@@ -91,7 +91,7 @@ class SelfController extends Controller
     public function actionScore(){
 
         $pdf = new Mpdf\Mpdf(array(
-            'format' => 'A4-L',
+            'format' => 'A4-P',
         ));
 
         $setting = Mp::getSettinsBy2602();
@@ -111,10 +111,12 @@ class SelfController extends Controller
         if(empty($sk) || $sk['sk3'] == 0)
             throw new CHttpException(400, tt('Не найден контракт'));
 
-        $html = $this->_getScoreHtml($setting, 'SeventyPercent', $spo->spo2 / 2 * 0.7, $sk['sk6'], $sk['sk7']);
-        $html .= '<pagebreak />';
+        $html = '<table  width="689" style="border-collapse:
+ collapse;table-layout:fixed;width:530pt">
+    <tbody>';
+        $html .= $this->_getScoreHtml($setting, 'SeventyPercent', $spo->spo2 / 2 * 0.7, $sk['sk6'], $sk['sk7']);
         $html .= $this->_getScoreHtml($setting, 'ThirtyPercent', $spo->spo2 / 2 * 0.3, $sk['sk6'], $sk['sk7']);
-
+        $html.= '</tbody></table>';
         //$pdf->SetDisplayMode('fullpage');
         //$this->renderText($html);
 

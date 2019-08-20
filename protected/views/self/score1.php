@@ -377,9 +377,8 @@ $text = strtr(
     }
 </style>
 
-<table  width="689" style="border-collapse:
- collapse;table-layout:fixed;width:530pt">
-    <tbody><tr style="height:9.95pt">
+
+    <tr style="height:9.95pt">
         <td colspan="13" rowspan="3" height="46" class="xl167" width="169" style="border-right:
   .5pt solid black;height:34.9pt;width:130pt">ИЗВЕЩЕНИЕ</td>
         <td colspan="10" class="xl173" width="130" style="width:100pt">ПАО СБЕРБАНК</td>
@@ -509,13 +508,10 @@ $text = strtr(
         <td class="xl115">&nbsp;</td>
         <td class="xl115">
             <?php
-
-            //var_dump($text);
-
             $qrCode = new Endroid\QrCode\QrCode($text);
-            $qrCode->setSize(115);
+            $qrCode->setSize(150);
             ?>
-            <span><img style="position: absolute; width: 115px; height: 115px;" src="data:<?=$qrCode->writeDataUri()?>"></span>
+            <span><img style="position: absolute; width: 150px; height: 150px;" src="data:<?=$qrCode->writeDataUri()?>"></span>
         </td>
         <td class="xl115">&nbsp;</td>
         <td class="xl115">&nbsp;</td>
@@ -725,4 +721,4 @@ $text = strtr(
         <td colspan="5" class="xl136" style="border-right:.5pt solid black">&nbsp;</td>
         <td></td>
     </tr>
-    </tbody></table>
+
