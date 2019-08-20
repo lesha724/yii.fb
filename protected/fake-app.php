@@ -13,7 +13,6 @@
  * @property ShortCodes $shortcodes
  * @property MobileDetect $mobileDetect
  * @property Core $core
- * @property EYiiPdf $ePdf
  * @property CFirebirdConnection $db
  * @property CFirebirdConnection $db2
  * @property EAuth $eauth

@@ -90,7 +90,9 @@ class SelfController extends Controller
      */
     public function actionScore(){
 
-        //$mpdf = Yii::app()->ePdf->HTML2PDF();
+        $pdf = new Mpdf\Mpdf(array(
+            'format' => 'A4-L',
+        ));
 
         $setting = Mp::getSettinsBy2602();
         if(empty($setting))
@@ -110,13 +112,17 @@ class SelfController extends Controller
             throw new CHttpException(400, tt('Не найден контракт'));
 
         $html = $this->_getScoreHtml($setting, 'SeventyPercent', $spo->spo2 / 2 * 0.7, $sk['sk6'], $sk['sk7']);
-
+        $html .= '<pagebreak />';
         $html .= $this->_getScoreHtml($setting, 'ThirtyPercent', $spo->spo2 / 2 * 0.3, $sk['sk6'], $sk['sk7']);
 
-        $this->renderText($html);
-        //$mpdf->WriteHTML($html);
+        //$pdf->SetDisplayMode('fullpage');
+        //$this->renderText($html);
 
-        //$mpdf->Output();
+        //$html=iconv("UTF-8","CP1251", $html);
+
+        $pdf->writeHTML($html);
+
+        $pdf->output();
     }
 
     /**
@@ -133,7 +139,7 @@ class SelfController extends Controller
         if(!isset($setting[$type]))
             throw new CHttpException(500);
 
-        return $this->renderPartial('score', array_merge($setting[$type], array(
+        return $this->renderPartial('score1', array_merge($setting[$type], array(
             'TypeScore' => $type == 'SeventyPercent' ? 70 : 30,
             'sk6' => $sk6,
             'sk7' => $sk7,
