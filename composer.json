@@ -9,7 +9,8 @@
         "ext-PDO": "*",
         "ext-PDO_Firebird": "*",
         "yiisoft/yii": "*",
-        "endroid/qrcode": "^2.5.1"
+        "endroid/qrcode": "2.5.1",
+        "myclabs/php-enum": "1.6"
     },
     "autoload": {
         "files": [
