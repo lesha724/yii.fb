@@ -493,39 +493,74 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
         <td></td>
     </tr>
 
-    <tr style="height:15.0pt">
+    <tr height="20" style="mso-height-source:userset;height:15.0pt">
         <td height="20" class="xl114" style="height:15.0pt">&nbsp;</td>
-        <td class="xl115">&nbsp;
+        <td class="xl115">&nbsp;</td>
+        <td align="left" valign="top">
             <?php
-                $text = strtr(
-                    'ST00012|Name={CompanyName}|PersonalAcc={ChkAcc}|BankName={BankName}|BIC={BIK}|CorrespAcc=0|PayeeINN={INN}|KPP={KPP}|CBC={KBK}|OKTMO={OKTMO}|contract={sk6}|Branch=ЮРИДИЧЕСКИЙ ФАКУЛЬТЕТ|PayType={PayType}|ServiceName={ServiceCode}|instNum=|childFio={STName}|LASTNAME={sk7}|Sum={Price}',
-                    array(
-                        '{CompanyName}' => $CompanyName,
-                        '{ChkAcc}' => $ChkAcc,
-                        '{BankName}' => $BankName,
-                        '{BIK}' => $BIK,
-                        '{INN}' => $INN,
-                        '{KPP}' => $KPP,
-                        '{KBK}' => $KBK,
-                        '{OKTMO}' => $OKTMO,
-                        '{PayType}' => $TypeScore.'% ОБУЧЕНИЯ',
-                        '{sk6}' => $sk6,
-                        '{sk7}' => $sk7,
-                        '{STName}' => Yii::app()->user->dbModel->fullName,
-                        '{Price}' => $price * 100,
-                        '{ServiceCode}' => $ServiceCode
-                    )
-                );
+            $text = strtr(
+                'ST00012|Name={CompanyName}|PersonalAcc={ChkAcc}|BankName={BankName}|BIC={BIK}|CorrespAcc=0|PayeeINN={INN}|KPP={KPP}|CBC={KBK}|OKTMO={OKTMO}|contract={sk6}|Branch=ЮРИДИЧЕСКИЙ ФАКУЛЬТЕТ|PayType={PayType}|ServiceName={ServiceCode}|instNum=|childFio={STName}|LASTNAME={sk7}|Sum={Price}',
+                array(
+                    '{CompanyName}' => $CompanyName,
+                    '{ChkAcc}' => $ChkAcc,
+                    '{BankName}' => $BankName,
+                    '{BIK}' => $BIK,
+                    '{INN}' => $INN,
+                    '{KPP}' => $KPP,
+                    '{KBK}' => $KBK,
+                    '{OKTMO}' => $OKTMO,
+                    '{PayType}' => $TypeScore.'% ОБУЧЕНИЯ',
+                    '{sk6}' => $sk6,
+                    '{sk7}' => $sk7,
+                    '{STName}' => Yii::app()->user->dbModel->fullName,
+                    '{Price}' => $price * 100,
+                    '{ServiceCode}' => $ServiceCode
+                )
+            );
 
-                //var_dump($text);
+            //var_dump($text);
 
-                $qrCode = new Endroid\QrCode\QrCode($text);
-                $qrCode->setEncoding('utf-8');
-                $qrCode->setMargin(5);
-                $qrCode->setSize(100);
+            $qrCode = new Endroid\QrCode\QrCode($text);
+            $qrCode->setSize(115);
             ?>
             <span style="position:absolute;z-index:2;"><img src="data:<?=$qrCode->writeDataUri()?>"></span>
+            <span>
+                <table cellpadding="0" cellspacing="0">
+                <tbody><tr>
+                <td height="20" class="xl115" width="13" style="height:15.0pt;width:10pt">&nbsp;</td>
+                </tr>
+                </tbody>
+                </table>
+            </span>
         </td>
+        <td class="xl115">&nbsp;</td>
+        <td class="xl115">&nbsp;</td>
+        <td class="xl115">&nbsp;</td>
+        <td class="xl115">&nbsp;</td>
+        <td class="xl115">&nbsp;</td>
+        <td class="xl115">&nbsp;</td>
+        <td class="xl115">&nbsp;</td>
+        <td class="xl115">&nbsp;</td>
+        <td class="xl115">&nbsp;</td>
+        <td class="xl116">&nbsp;</td>
+        <td colspan="3" class="xl163" style="border-left:none">ИНН:</td>
+        <td colspan="6" class="xl165"><?=$INN?></td>
+        <td class="xl120">&nbsp;</td>
+        <td class="xl122">&nbsp;</td>
+        <td class="xl122">&nbsp;</td>
+        <td class="xl122">&nbsp;</td>
+        <td colspan="3" class="xl164">КПП:</td>
+        <td colspan="6" class="xl165"><?=$KPP?></td>
+        <td class="xl122">&nbsp;</td>
+        <td class="xl122">&nbsp;</td>
+        <td colspan="3" class="xl164">р/с:</td>
+        <td colspan="12" class="xl165" style="border-right:.5pt solid black"><?=$ChkAcc?></td>
+        <td></td>
+    </tr>
+
+    <tr style="height:15.0pt">
+        <td height="20" class="xl114" style="height:15.0pt">&nbsp;</td>
+        <td class="xl115">&nbsp</td>
         <td class="xl115">&nbsp;</td>
         <td class="xl115">&nbsp;</td>
         <td class="xl115">&nbsp;</td>
