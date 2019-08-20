@@ -109,9 +109,9 @@ class SelfController extends Controller
         if(empty($sk) || $sk['sk3'] == 0)
             throw new CHttpException(400, tt('Не найден контракт'));
 
-        $html = $this->_getScoreHtml($setting, 'SeventyPercent', $spo->spo2 * 0.7, $sk['sk6'], $sk['sk7']);
+        $html = $this->_getScoreHtml($setting, 'SeventyPercent', $spo->spo2 / 2 * 0.7, $sk['sk6'], $sk['sk7']);
 
-        $html .= $this->_getScoreHtml($setting, 'ThirtyPercent', $spo->spo2 * 0.3, $sk['sk6'], $sk['sk7']);
+        $html .= $this->_getScoreHtml($setting, 'ThirtyPercent', $spo->spo2 / 2 * 0.3, $sk['sk6'], $sk['sk7']);
 
         $this->renderText($html);
         //$mpdf->WriteHTML($html);

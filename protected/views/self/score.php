@@ -46,8 +46,6 @@ $text = strtr(
         '{ServiceCode}' => $ServiceCode
     )
 );
-
-echo CHtml::textArea('test', $text);
 ?>
 
 <style>
