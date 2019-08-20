@@ -25,7 +25,29 @@
 
 $rubles = intval($price);
 $penny= round($price - $rubles, 2) * 100;
-$priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $rubles ).' '.$penny.' '.tt( 'копейка|копейки|копеек|копейка', $penny)
+$priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $rubles ).' '.$penny.' '.tt( 'копейка|копейки|копеек|копейка', $penny);
+
+$text = strtr(
+    'ST00012|Name={CompanyName}|PersonalAcc={ChkAcc}|BankName={BankName}|BIC={BIK}|CorrespAcc=0|PayeeINN={INN}|KPP={KPP}|CBC={KBK}|OKTMO={OKTMO}|contract={sk6}|Branch=ЮРИДИЧЕСКИЙ ФАКУЛЬТЕТ|PayType={PayType}|ServiceName={ServiceCode}|instNum=|childFio={STName}|LASTNAME={sk7}|Sum={Price}',
+    array(
+        '{CompanyName}' => $CompanyName,
+        '{ChkAcc}' => $ChkAcc,
+        '{BankName}' => $BankName,
+        '{BIK}' => $BIK,
+        '{INN}' => $INN,
+        '{KPP}' => $KPP,
+        '{KBK}' => $KBK,
+        '{OKTMO}' => $OKTMO,
+        '{PayType}' => $TypeScore.'% ОБУЧЕНИЯ',
+        '{sk6}' => $sk6,
+        '{sk7}' => $sk7,
+        '{STName}' => Yii::app()->user->dbModel->fullName,
+        '{Price}' => $price * 100,
+        '{ServiceCode}' => $ServiceCode
+    )
+);
+
+echo CHtml::textArea('test', $text);
 ?>
 
 <style>
@@ -498,25 +520,6 @@ $priceStr =  $rubles.' '.tt( 'рубль|рубля|рублей|рубль', $r
         <td class="xl115">&nbsp;</td>
         <td align="left" valign="top">
             <?php
-            $text = strtr(
-                'ST00012|Name={CompanyName}|PersonalAcc={ChkAcc}|BankName={BankName}|BIC={BIK}|CorrespAcc=0|PayeeINN={INN}|KPP={KPP}|CBC={KBK}|OKTMO={OKTMO}|contract={sk6}|Branch=ЮРИДИЧЕСКИЙ ФАКУЛЬТЕТ|PayType={PayType}|ServiceName={ServiceCode}|instNum=|childFio={STName}|LASTNAME={sk7}|Sum={Price}',
-                array(
-                    '{CompanyName}' => $CompanyName,
-                    '{ChkAcc}' => $ChkAcc,
-                    '{BankName}' => $BankName,
-                    '{BIK}' => $BIK,
-                    '{INN}' => $INN,
-                    '{KPP}' => $KPP,
-                    '{KBK}' => $KBK,
-                    '{OKTMO}' => $OKTMO,
-                    '{PayType}' => $TypeScore.'% ОБУЧЕНИЯ',
-                    '{sk6}' => $sk6,
-                    '{sk7}' => $sk7,
-                    '{STName}' => Yii::app()->user->dbModel->fullName,
-                    '{Price}' => $price * 100,
-                    '{ServiceCode}' => $ServiceCode
-                )
-            );
 
             //var_dump($text);
 
