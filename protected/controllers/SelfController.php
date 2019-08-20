@@ -90,7 +90,7 @@ class SelfController extends Controller
      */
     public function actionScore(){
 
-        $html2pdf = new Spipu\Html2Pdf\Html2Pdf('L', 'A5', 'ru');
+        //$mpdf = Yii::app()->ePdf->HTML2PDF();
 
         $setting = Mp::getSettinsBy2602();
         if(empty($setting))
@@ -113,10 +113,10 @@ class SelfController extends Controller
 
         $html .= $this->_getScoreHtml($setting, 'ThirtyPercent', $spo->spo2 * 0.3, $sk['sk6'], $sk['sk7']);
 
-        //$this->renderText($html);
-        $html2pdf->writeHTML($html);
+        $this->renderText($html);
+        //$mpdf->WriteHTML($html);
 
-        $html2pdf->output();
+        //$mpdf->Output();
     }
 
     /**

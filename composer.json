@@ -9,8 +9,7 @@
         "ext-PDO": "*",
         "ext-PDO_Firebird": "*",
         "yiisoft/yii": "*",
-        "endroid/qrcode": "^2.5.1",
-        "spipu/html2pdf": "*"
+        "endroid/qrcode": "^2.5.1"
     },
     "autoload": {
         "files": [

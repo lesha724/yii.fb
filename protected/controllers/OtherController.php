@@ -980,7 +980,7 @@ SQL;
                             $nkrs5=$spkr->spkr3;
                         }
                     //}
-                    $mPDF1 = new Spipu\Html2Pdf\Html2Pdf();
+                    $mPDF1 = Yii::app()->ePdf->mpdf();
                     //$mPDF1->showImageErrors = true;
 
                     $patternTitle = <<<HTML
