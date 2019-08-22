@@ -12,6 +12,7 @@
         "endroid/qrcode": "2.5.1",
         "myclabs/php-enum": "1.6",
         "myclabs/deep-copy": "1.7.0",
+        "paragonie/random_compat": "^2.0",
         "mpdf/mpdf": "^8.0"
     },
     "autoload": {
