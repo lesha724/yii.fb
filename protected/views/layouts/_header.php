@@ -107,6 +107,7 @@
 
                             <?php
                                 if(Yii::app()->user->isStd){
+
                                     $ps122 = PortalSettings::model()->getSettingFor(PortalSettings::ENABLE_DIST_EDUCATION);
                                     if($ps122==1){
                                         if(Yii::app()->user->dbModel->st168>0) {
@@ -135,7 +136,16 @@
                                             <?php
                                         }
                                     }
-                            } ?>
+                            }
+
+                            if(PortalSettings::model()->getSettingFor(PortalSettings::SHOW_SCORE_LINK) && Yii::app()->core->universityCode == U_URFAK)
+                                echo '<li>
+                                    <a href="'.Yii::app()->createUrl('self/score').'" target="_blank">
+                                        <i class="icon-list-alt"></i>'
+                                        .tt('Счет').
+                                    '</a>
+                                </li>';
+                            ?>
 
                             <li>
                                 <a href="<?=Yii::app()->createUrl('site/changePassword')?>" id="change-password">
