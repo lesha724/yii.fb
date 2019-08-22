@@ -25,7 +25,6 @@ $form=$this->beginWidget('CActiveForm', array(
             $model->filial = key($filials);
         }
 
-        //$chairs = CHtml::listData(K::model()->getOnlyChairsFor($model->filial), 'k1', 'k3');
         $chairs = K::model()->getOnlyChairsFor($model->filial);
         $html .= '<div class="span2 ace-select">';
         $html .= $form->label($model, 'chair');

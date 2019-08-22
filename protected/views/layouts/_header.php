@@ -138,7 +138,7 @@
                                     }
                             }
 
-                            if(PortalSettings::model()->getSettingFor(PortalSettings::SHOW_SCORE_LINK) && Yii::app()->core->universityCode == U_URFAK)
+                            if(PortalSettings::model()->getSettingFor(PortalSettings::SHOW_SCORE_LINK) && Yii::app()->core->universityCode == U_URFAK && Yii::app()->user->isStd)
                                 echo '<li>
                                     <a href="'.Yii::app()->createUrl('self/score').'" target="_blank">
                                         <i class="icon-list-alt"></i>'

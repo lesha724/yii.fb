@@ -41,10 +41,22 @@ $this->widget('bootstrap.widgets.TbGridView', array(
     'type' => 'striped bordered',
     'ajaxUrl' => Yii::app()->createAbsoluteUrl('/admin/default/students'),
     'columns' => array(
-        'st2',
-        'st3',
-        'st4',
-        'st15',
+        array(
+            'name' => 'st2',
+            'value' => '$data->person->pe2',
+        ),
+        array(
+            'name' => 'st3',
+            'value' => '$data->person->pe3',
+        ),
+        array(
+            'name' => 'st3',
+            'value' => '$data->person->pe3',
+        ),
+        array(
+            'name' => 'st15',
+            'value' => '$data->person->pe20',
+        ),
         array(
             'header' => 'Login',
             'filter' => CHtml::textField('login', Yii::app()->request->getParam('login')),
@@ -53,14 +65,6 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                                 ? $data->account->u2
                                 : ""',
         ),
-        /*array(
-            'header' => 'Password',
-            'filter' => CHtml::textField('password', Yii::app()->request->getParam('password')),
-            'name'   => 'account.u3',
-            'value'  => '! empty($data->account)
-                                ? $data->account->u3
-                                : ""',
-        ),*/
         array(
             'header' => 'Email',
             'filter' => CHtml::textField('email', Yii::app()->request->getParam('email')),

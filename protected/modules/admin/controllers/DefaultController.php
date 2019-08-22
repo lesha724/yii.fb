@@ -547,17 +547,17 @@ class DefaultController extends AdminController
 
     public function actionStudents()
     {
-        $model = new St;
+        $model = new SearchStudents();
         $model->unsetAttributes();
         if (isset($_GET['pageSize'])) {
             Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
             unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
         }
 
-        if (isset($_REQUEST['St']))
+        if (isset($_REQUEST['SearchStudents']))
         {
-            $model->attributes = $_REQUEST['St'];
-            Yii::app()->user->setState('SearchParamsStAdmin', $_REQUEST['St']);
+            $model->attributes = $_REQUEST['SearchStudents'];
+            Yii::app()->user->setState('SearchParamsStAdmin', $_REQUEST['SearchStudents']);
         }
         else
         {

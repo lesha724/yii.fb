@@ -48,11 +48,6 @@
  */
 class St extends CActiveRecord implements IPerson
 {
-    /**
-     * for @see getStudentsForAdmin
-     * @var int
-     */
-    public $st_status;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -86,20 +81,15 @@ class St extends CActiveRecord implements IPerson
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('st1', 'required'),
-			array('st_status, st1, st29, st34, st63, st101, st103, st104, st114, st115, st99, st139, st144, st167, 168', 'numerical', 'integerOnly'=>true),
+			array('st1, st29, st34, st63, st101, st103, st104, st114, st115, st99, st139, st144, st167, 168', 'numerical', 'integerOnly'=>true),
 			array('st131, st132', 'length', 'max'=>80),
 			array('st5, st148', 'length', 'max'=>60),
 			array('st66', 'length', 'max'=>4),
 			array('st145, st146, st147', 'length', 'max'=>8),
 			array('st126', 'length', 'max'=>24),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
-			array('st1,st5, st29, st34, st38, st63, st66, st101, st103, st104, st107,st99, st126, st131, st132, st139, st144, st145, st146, st147, st148', 'safe', 'on'=>'search'),
-		);
+        );
 	}
 
 	/**
@@ -220,82 +210,6 @@ SQL;
             $students[$key]['group_name'] = Gr::model()->getGroupName($students[$key]['sem4'], $student);
         }
         return $students;
-    }
-	
-    public function getStudentsForAdmin()
-    {
-        $criteria=new CDbCriteria;
-
-        $criteria->join = 'INNER JOIN std ON st1=std2 and std7 is null';
-
-        $criteria->select = array( 't.st2', 't.st3', 't.st4', 't.st15','std11 as st_status');
-        $with = array(
-            'account' => array(
-                'select' => 'u2, u3, u4'
-            ),
-        );
-
-        $criteria->addCondition("st1 > 0");
-        $criteria->addCondition("st2 <> ''");
-		$criteria->addCondition("st101 != 7");
-
-		$criteria->addCondition("std11 != 1"); //std11 = 4,2 закончил
-        if(!empty($this->st2))
-		    $criteria->addCondition('st2 CONTAINING :ST2');
-        if(!empty($this->st3))
-		    $criteria->addCondition('st3 CONTAINING :ST3');
-        if(!empty($this->st4))
-		    $criteria->addCondition('st4 CONTAINING :ST4');
-        if(!empty($this->st15))
-            $criteria->addCondition('st15 = :ST15');
-
-        if($this->st_status>0) {
-            if($this->st_status==1)
-                $criteria->addCondition('std11!=4 and std11!=2');
-            if($this->st_status==2)
-                $criteria->addCondition(' ( std11=4 or std11=2)');
-        }
-		
-        $login = Yii::app()->request->getParam('login');
-        $email = Yii::app()->request->getParam('email');
-
-        if(!empty($login))
-            $criteria->addCondition('account.u2 CONTAINING :LOGIN');
-        if(!empty($email))
-            $criteria->addCondition('account.u4 CONTAINING :EMAIL');
-        //$criteria->addSearchCondition('account.u2', );
-        //$criteria->addSearchCondition('account.u4', );
-
-        $criteria->with = $with;
-
-        $criteria->params = array(
-            ':ST2'=>$this->st2,
-            ':ST3'=>$this->st3,
-            ':ST4'=>$this->st4,
-            ':ST15'=>$this->st15,
-            ':LOGIN' => $login,
-            ':EMAIL' => $email
-        );
-
-        return new CActiveDataProvider($this, array(
-            'criteria'=>$criteria,
-            'pagination'=>array(
-                'pageSize'=> Yii::app()->user->getState('pageSize',10),
-				'currentPage'=> Yii::app()->user->getState('CurrentPageSt',null),
-            ),
-            'sort' => array(
-                'defaultOrder' => 'st2 collate UNICODE,st3 collate UNICODE,st4 collate UNICODE',
-                'attributes' => array(
-                    'st2',
-                    'st3',
-                    'st4',
-                    'st15',
-                    'account.u2',
-                    'account.u3',
-                    'account.u4',
-                ),
-            )
-        ));
     }
 
     public function getParentsForAdmin()
