@@ -509,9 +509,9 @@ $text = strtr(
         <td class="xl115">
             <?php
             $qrCode = new Endroid\QrCode\QrCode($text);
-            $qrCode->setSize(150);
+            $qrCode->setSize(200);
             ?>
-            <span><img style="position: absolute; width: 150px; height: 150px;" src="data:<?=$qrCode->writeDataUri()?>"></span>
+            <span><img style="position: absolute; width: 210px; height: 210px;" src="data:<?=$qrCode->writeDataUri()?>"></span>
         </td>
         <td class="xl115">&nbsp;</td>
         <td class="xl115">&nbsp;</td>

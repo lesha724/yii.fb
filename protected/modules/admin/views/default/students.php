@@ -50,8 +50,8 @@ $this->widget('bootstrap.widgets.TbGridView', array(
             'value' => '$data->person->pe3',
         ),
         array(
-            'name' => 'st3',
-            'value' => '$data->person->pe3',
+            'name' => 'st4',
+            'value' => '$data->person->pe4',
         ),
         array(
             'name' => 'st15',
