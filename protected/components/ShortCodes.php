@@ -527,7 +527,7 @@ class SH extends ShortCodes
                 break;
 
             case U_IRPEN:
-                return new MoodleDistEducation($url, $apiKey);
+                return new IrpenMoodleDistEducation($url, $apiKey);
                 break;
 
             default:
