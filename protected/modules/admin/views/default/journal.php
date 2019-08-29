@@ -38,7 +38,3 @@ HTML;
     $html  = $this->renderPartial('journal/_retake', array(), true);
     echo sprintf($widget, $title, $html);
 
-    $title = tt('Статистика посещаемости');
-    $html  = $this->renderPartial('journal/_statistic', array(), true);
-    echo sprintf($widget, $title, $html);
-

@@ -105,7 +105,6 @@ if (! empty($firstDay) && !empty($lastDay)) :
                 $html = '';
                 foreach ($students as $student) {
                     $attendance = Elgzst::model()->getAttendanceStatisticFor($student->st1, $firstDay, $lastDay, $monthStatistic, $model->discipline);
-
                     $html .= '<tr>';
                     foreach ($columns as $start => $name) {
                         $html .= tds($start, $attendance, $monthStatistic);

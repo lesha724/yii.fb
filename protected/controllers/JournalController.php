@@ -3376,7 +3376,6 @@ SQL;
         Yii::app()->end(CJSON::encode($res));
     }
 //----------------------------------------------------------------------------------------------
-//-------------------- attendanceStatistic---------------------------------------------------------------
     public function actionAttendanceStatistic()
     {
         $model = new FilterForm();
@@ -3404,8 +3403,7 @@ SQL;
         }
         
         $this->render('attendanceStatisticPrint', array(
-            'model' => $model,
-            'type_statistic'=>PortalSettings::model()->findByPk(41)->ps2
+            'model' => $model
         ));
     }
 

@@ -248,20 +248,6 @@ class Elgzst extends CActiveRecord
         if (empty($st1) || empty($date1) || empty($date2))
             return array();
 
-        /*$sql=<<<SQL
-                SELECT elgz1
-                FROM elgzst
-                    LEFT JOIN elgp on (elgzst.elgzst0 = elgp.elgp1)
-                    INNER JOIN elgz on (elgzst.elgzst2 = elgz.elgz1)
-                    INNER JOIN elg on (elgz.elgz2 = elg.elg1)
-                    INNER JOIN uo on (elg.elg2 = uo.uo1)
-                    INNER JOIN d on (d.d1 = uo.uo3)
-                    INNER JOIN r on (elgz.elgz1 = r.r8)
-                    INNER JOIN nr on (r.r1 = nr.nr1)
-                    INNER JOIN us on (nr.nr2 = us.us1)
-                WHERE elgzst1=:ST1 and r2 >= :DATE1 and r2 <= :DATE2 and elgzst3!=0 and d1 in (select d1 FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,0,0,0,3,0))
-SQL;*/
-
         $sql = <<<SQL
         SELECT elgz1 FROM EL_GURNAL_INFO(:YEAR, :SEM, :DATE1, :DATE2, 0, 0, :ST1, 0, 0) 
             where d1 in (select d1 FROM  EL_GURNAL(:P1,:YEAR1,:SEM1,0,0,0,0,3,0)) and elgzst0 is not null and propusk>0
