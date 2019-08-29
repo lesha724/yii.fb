@@ -19,7 +19,7 @@ else:
 ?>
     <div class="row-fluid">
         <div class="span12">
-            <?=$this->renderPartial('_list', array(
+            <?=$this->renderPartial('index/_list', array(
                 'model' => $model,
                 'group' => $gr
             ));?>

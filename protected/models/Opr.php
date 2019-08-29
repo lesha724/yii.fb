@@ -6,6 +6,9 @@
  * The followings are the available columns in table 'opr':
  * @property integer $opr1
  * @property string $opr2
+ * @property string $opr3
+ * @property string $opr4
+ * @property string $opr5
  *
  * The followings are the available model relations:
  * @property Oprrez[] $oprrezs
@@ -25,14 +28,10 @@ class Opr extends CActiveRecord
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('opr1', 'numerical', 'integerOnly'=>true),
 			array('opr2', 'length', 'max'=>400),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
-			array('opr1, opr2', 'safe', 'on'=>'search'),
+            array('opr3, opr4, opr5', 'length', 'max'=>50),
 		);
 	}
 
@@ -55,34 +54,11 @@ class Opr extends CActiveRecord
 	{
 		return array(
 			'opr1' => 'Opr1',
-			'opr2' => 'Opr2',
+			'opr2' => tt('Вопрос'),
+            'opr3' => tt('От'),
+            'opr4' => tt('Среднее'),
+            'opr5' => tt('До'),
 		);
-	}
-
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
-		$criteria=new CDbCriteria;
-
-		$criteria->compare('opr1',$this->opr1);
-		$criteria->compare('opr2',$this->opr2,true);
-
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
 	}
 
 	/**

@@ -50,6 +50,7 @@ class CreateOprrezForm extends CFormModel
 	    $model->oprrez3 = $this->opr1;
         $model->oprrez4 =  date('Y-m-d H:i:s');
 	    $model->oprrez5 = Yii::app()->user->id;
+	    $model->oprrez7 = Yii::app()->request->userHostAddress;
 
 	    return $model->save();
     }

@@ -734,8 +734,14 @@ $this->widget('zii.widgets.CMenu', array(
                 array(
                     'label'   => $_l2.tt('Опрос'),
                     'url'     => _u('/quiz/index'),
-                    'visible' => _ch('quiz', 'index') && ($isTch || $isDoctor),
+                    'visible' => _ch('quiz', 'index') && ($isTch || $isDoctor) && Yii::app()->core->universityCode == U_XNMU,
                     'active'  => $_c=='quiz' && $_a=='index'
+                ),
+                array(
+                    'label'   => $_l2.tt('Опрос'),
+                    'url'     => _u('/quiz/index2'),
+                    'visible' => _ch('quiz', 'index2') && ($isStd) && Yii::app()->core->universityCode != U_XNMU,
+                    'active'  => $_c=='quiz' && $_a=='index2'
                 ),
             ),getDopItem('quiz',0)),
             'visible' => _ch('quiz', 'main'),

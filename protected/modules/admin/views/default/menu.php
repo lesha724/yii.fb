@@ -218,7 +218,17 @@
                     'name'       => 'Опрос',
                     'controller' => 'quiz',
                     'items' => array(
-                        'index' => 'Опрос',
+                        'index' => array(
+                            'name' =>'Опрос(ХНМУ)',
+                            'authOnly' => array(
+                                $teacherStr,
+                                $doctorStr
+                            )
+                        ),
+                        'index2' => array(
+                            'name' =>'Опрос',
+                            'authOnly' => $studentStr
+                        )
                     ),
                 ),
                 array(

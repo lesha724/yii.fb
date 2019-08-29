@@ -16,7 +16,7 @@ class QuizController extends Controller
 
         return array(
             'accessControl',
-            'checkPermission'
+            'checkPermission +index,create'
         );
     }
 
@@ -30,6 +30,14 @@ class QuizController extends Controller
                 ),
                 'expression' => 'Yii::app()->user->isDoctor || Yii::app()->user->isTch ',
             ),
+            array('allow',
+                'actions' => array(
+                    'index2',
+                    'save',
+                    'cancel'
+                ),
+                'expression' => 'Yii::app()->user->isStd ',
+            ),
             array('deny',
                 'users' => array('*'),
             ),
@@ -38,6 +46,9 @@ class QuizController extends Controller
 
     public function filterCheckPermission($filterChain)
     {
+        if(Yii::app()->core->universityCode!=U_XNMU)
+            throw new CHttpException(403, 'Invalid request. You don\'t have access to the service.');
+        
         if(!Yii::app()->user->isAdmin) {
             $grants = Yii::app()->user->dbModel->grants;
 
@@ -90,5 +101,19 @@ class QuizController extends Controller
             Yii::app()->end('ok');
         else
             throw new CHttpException(500, 'Ошибка создания');
+    }
+
+
+    public function actionIndex2()
+    {
+        $model = new TimeTableForm;
+        $model->scenario = 'group';
+
+        if (isset($_REQUEST['TimeTableForm']))
+            $model->attributes=$_REQUEST['TimeTableForm'];
+
+        $this->render('index2', array(
+            'model'      => $model
+        ));
     }
 }

@@ -113,6 +113,7 @@ class PortalSettings extends CActiveRecord
      */
     const SHOW_SCORE_LINK = 143;
 
+
     /**
      * Для хранения настро
      * @var array

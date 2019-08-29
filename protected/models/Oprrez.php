@@ -9,6 +9,8 @@
  * @property integer $oprrez3
  * @property string $oprrez4
  * @property integer $oprrez5
+ * @property integer $oprrez6
+ * @property string $oprrez7
  *
  * The followings are the available model relations:
  * @property St $oprrez20
@@ -33,11 +35,9 @@ class Oprrez extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('oprrez2, oprrez3, oprrez5', 'numerical', 'integerOnly'=>true),
+			array('oprrez2, oprrez3, oprrez5, oprrez6', 'numerical', 'integerOnly'=>true),
 			array('oprrez4', 'length', 'max'=>20),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
-			array('oprrez1, oprrez2, oprrez3, oprrez4, oprrez5', 'safe', 'on'=>'search'),
+            array('oprrez7', 'length', 'max'=>15),
 		);
 	}
 
@@ -62,10 +62,12 @@ class Oprrez extends CActiveRecord
 	{
 		return array(
 			'oprrez1' => '#',
-			'oprrez2' => 'Студент',
-			'oprrez3' => 'Вариант ответа',
-			'oprrez4' => 'Дата',
-			'oprrez5' => 'Кто проставил',
+			'oprrez2' => tt('Студент'),
+			'oprrez3' => tt('Вариант ответа'),
+			'oprrez4' => tt('Дата'),
+			'oprrez5' => tt('Кто проставил'),
+            'oprrez6' => tt('Оценка'),
+            'oprrez7' => tt('IP'),
 		);
 	}
 
@@ -83,8 +85,6 @@ class Oprrez extends CActiveRecord
 	 */
 	public function search()
 	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('oprrez2',$this->oprrez2);
@@ -110,4 +110,15 @@ class Oprrez extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+    /**
+     * Получить список ответов стуента
+     * @param $st1
+     * @return Oprrez[]
+     */
+	public function getByStudent($st1){
+	    return $this->findAllByAttributes(array(
+	        'oprrez2' => $st1
+        ));
+    }
 }
