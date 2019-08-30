@@ -8,7 +8,7 @@
 
 /**
  * @var QuizController $this
- * @var TimeTableForm $model
+ * @var St $st
  */
 $this->pageHeader=tt('Опрос');
 $this->breadcrumbs=array(
@@ -22,8 +22,6 @@ echo <<<HTML
     <span id="spinner1"></span>
 HTML;
 
-
-if (! empty($model->group))
-    $this->renderPartial('index/_bottom', array(
-        'model' => $model
-    ));
+$this->renderPartial('index2/_index', array(
+    'st' => $st
+));

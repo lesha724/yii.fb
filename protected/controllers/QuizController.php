@@ -16,7 +16,8 @@ class QuizController extends Controller
 
         return array(
             'accessControl',
-            'checkPermission +index,create'
+            'checkPermission +index,create',
+            'postOnly +save,cancel'
         );
     }
 
@@ -44,6 +45,10 @@ class QuizController extends Controller
         );
     }
 
+    /**
+     * @param $filterChain
+     * @throws CHttpException
+     */
     public function filterCheckPermission($filterChain)
     {
         if(Yii::app()->core->universityCode!=U_XNMU)
@@ -79,6 +84,7 @@ class QuizController extends Controller
 
     /**
      * Опросник
+     * @throws CHttpException
      */
     public function actionCreate()
     {
@@ -103,17 +109,82 @@ class QuizController extends Controller
             throw new CHttpException(500, 'Ошибка создания');
     }
 
-
+    /**
+     *
+     */
     public function actionIndex2()
     {
-        $model = new TimeTableForm;
-        $model->scenario = 'group';
-
-        if (isset($_REQUEST['TimeTableForm']))
-            $model->attributes=$_REQUEST['TimeTableForm'];
-
         $this->render('index2', array(
-            'model'      => $model
+            'st'  => Yii::app()->user->dbModel
         ));
+    }
+
+    /**
+     * сохранение опроса
+     * @throws CException
+     * @throws CHttpException
+     */
+    public function actionSave(){
+
+        if(count(Oprrez::model()->getByStudent(Yii::app()->user->dbModel->st1)))
+            throw new CHttpException(400, tt('Ошибка сохранения результатов опроса. Отмените сначала предедущие результаты'));
+
+        $oprList = Opr::model()->findAll();
+        if(empty($oprList))
+            throw new CHttpException(400, tt('Ошибка сохранения результатов опроса. Не найдены вопросы'));
+
+        if (!isset($_POST['answers']))
+            throw new CHttpException(400, tt('Ошибка сохранения результатов опроса. Не отправлены ответы'));
+
+        $oprrez = $_POST['answers'];
+
+        $trans = Yii::app()->db->beginTransaction();
+
+        try{
+            foreach ($oprList as $opr)
+            {
+                if(!isset($oprrez[$opr->opr1]))
+                    throw  new Exception(tt('Не задан ответ для вопроса {opr}', array(
+                        '{opr}' => $opr->opr2
+                    )));
+
+                $model = new Oprrez();
+                $model->oprrez1 = new CDbExpression('GEN_ID(GEN_OPRREZ, 1)');
+                $model->oprrez2 = Yii::app()->user->dbModel->st1;
+                $model->oprrez3 = $opr->opr1;
+                $model->oprrez4 =  date('Y-m-d H:i:s');
+                $model->oprrez5 = Yii::app()->user->id;
+                $model->oprrez7 = Yii::app()->request->userHostAddress;
+                $model->oprrez6 = $oprrez[$opr->opr1];
+
+                if(!$model->save())
+                    throw new Exception(tt('Ошибка сохранения ответ на вопрос {opr}', array(
+                        '{opr}' => $opr->opr2
+                    )));
+            }
+
+            $trans->commit();
+
+            Yii::app()->user->setFlash('success', tt('Результаты успешно сохранены!'));
+
+        }catch (Exception $error){
+            $trans->rollback();
+            throw new CHttpException(400, tt('Ошибка сохранения результатов опроса.').$error->getMessage());
+        }
+
+        $this->redirect('/quiz/index2');
+    }
+
+    /**
+     * Отмена опроса
+     * @throws CHttpException
+     */
+    public function actionCancel(){
+        if(!Oprrez::model()->deleteAllByAttributes(array(
+            'oprrez2' => Yii::app()->user->dbModel->st1
+        )))
+            throw new CHttpException(400, tt('Ошибка удаления результатов опроса.'));
+
+        $this->redirect('/quiz/index2');
     }
 }

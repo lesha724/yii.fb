@@ -113,6 +113,11 @@ class PortalSettings extends CActiveRecord
      */
     const SHOW_SCORE_LINK = 143;
 
+    /**
+     * @var int максимальная оценка для опроса
+     */
+    const MAX_MARK_QUIZ = 144;
+
 
     /**
      * Для хранения настро
