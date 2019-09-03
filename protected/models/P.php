@@ -1120,14 +1120,37 @@ SQL;
         $sql = <<<SQL
               SELECT COUNT(*) FROM kgrp
                 INNER JOIN std on (std2=:st1 and std3=kgrp2)
-              where kgrp1=:p1
+              where kgrp1=:p1 and STD11 in (0,5,6,8) and (STD7 is null)
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':p1', $this->p1);
         $command->bindValue(':st1', $st1);
         return ((int)$command->queryScalar()) > 0;
+    }
 
-         $count>=0;
+    /**
+     * @param $st1
+     * @return bool
+     * @throws CException
+     */
+    public function isDekanForStudent($st1){
+        if(empty($st1))
+            return false;
+
+        $sql = <<<SQL
+              SELECT COUNT(*) FROM st
+                INNER JOIN std on (st1 = std3)
+                INNER JOIN gr on (std2 = gr1)
+                INNER join sg on (sg1 = gr2)
+                INNER join sp on (sp1 = sg2)
+                INNER join f on (f1 = f5)
+              where st1=:st1 and f37=:p1 and f32=0 and f19 is null and STD11 in (0,5,6,8) and (STD7 is null)
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':p1', $this->p1);
+        $command->bindValue(':st1', $st1);
+        return ((int)$command->queryScalar()) > 0;
     }
 }
