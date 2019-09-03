@@ -32,9 +32,6 @@ class Spkr extends CActiveRecord
 			array('spkr1', 'required'),
 			array(' spkr4, spkr5, spkr6', 'numerical', 'integerOnly'=>true),
 			array('spkr2, spkr3', 'length', 'max'=>1000),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
-			array('spkr1, spkr2, spkr3, spkr4, spkr5, spkr6', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -53,36 +50,6 @@ class Spkr extends CActiveRecord
 			'spkr5' => 'Spkr5',
 			'spkr6' => 'Spkr6',
 		);
-	}
-
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
-		$criteria=new CDbCriteria;
-
-		$criteria->compare('spkr1',$this->spkr1);
-		$criteria->compare('spkr2',$this->spkr2,true);
-		$criteria->compare('spkr3',$this->spkr3,true);
-		$criteria->compare('spkr4',$this->spkr4);
-		$criteria->compare('spkr5',$this->spkr5);
-		$criteria->compare('spkr6',$this->spkr6);
-
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
 	}
 
 	/**
