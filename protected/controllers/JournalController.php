@@ -1324,6 +1324,9 @@ SQL;
         Yii::app()->end(CJSON::encode(array('error' => $error, 'errorType' => $errorType)));
     }
 
+    /**
+     * @throws CHttpException
+     */
     public function actionInsertDopMark()
     {
         if (! Yii::app()->request->isAjaxRequest)
