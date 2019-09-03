@@ -741,6 +741,7 @@ SQL;
      * список групп по куратору (оплата за обучение)
      * @param $p1
      * @return mixed
+     * @throws CException
      */
     public function getGroupsForCurator($p1)
     {

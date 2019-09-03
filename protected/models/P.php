@@ -636,7 +636,6 @@ SQL;
 	
 	public function getP9String()
 	{
-		//return date("d-m-Y", strtotime($this->p9));
 		return date_format(date_create_from_format('Y-m-d H:i:s', $this->p9), 'd-m-Y');
 	}
 	
@@ -1106,5 +1105,29 @@ SQL;
         $count = $command->queryScalar();
 
         return empty($count) || $count==0;
+    }
+
+    /**
+     * Являеться ли текущий преподователь куратором студента
+     * @param $st1
+     * @return bool
+     * @throws CException
+     */
+    public function isKuratorForStudent($st1){
+        if(empty($st1))
+            return false;
+
+        $sql = <<<SQL
+              SELECT COUNT(*) FROM kgrp
+                INNER JOIN std on (std2=:st1 and std3=kgrp2)
+              where kgrp1=:p1
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':p1', $this->p1);
+        $command->bindValue(':st1', $st1);
+        return ((int)$command->queryScalar()) > 0;
+
+         $count>=0;
     }
 }
