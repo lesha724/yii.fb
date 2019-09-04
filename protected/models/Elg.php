@@ -33,10 +33,7 @@ class Elg extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('elg1', 'required'),
-			array('elg1, elg2, elg3, elg4', 'numerical', 'integerOnly'=>true),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
-			array('elg1, elg2, elg3, elg4', 'safe', 'on'=>'search'),
+			array('elg1, elg2, elg3, elg4', 'numerical', 'integerOnly'=>true)
 		);
 	}
 
@@ -52,47 +49,6 @@ class Elg extends CActiveRecord
 			'elg30' => array(self::BELONGS_TO, 'Sem', 'elg3'),
 			'elgzs' => array(self::HAS_MANY, 'Elgz', 'elgz2'),
 		);
-	}
-
-	/**
-	 * @return array customized attribute labels (name=>label)
-	 */
-	public function attributeLabels()
-	{
-		return array(
-			'elg1' => 'Elg1',
-			'elg2' => 'Elg2',
-			'elg3' => 'Elg3',
-			'elg4' => 'Elg4',
-		);
-	}
-
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
-		$criteria=new CDbCriteria;
-
-		$criteria->compare('elg1',$this->elg1);
-		$criteria->compare('elg2',$this->elg2);
-		$criteria->compare('elg3',$this->elg3);
-		$criteria->compare('elg4',$this->elg4);
-
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
 	}
 
 	/**

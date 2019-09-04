@@ -36,7 +36,6 @@ class Pmg extends CActiveRecord
 			array('pmg6,pmg7, pmg8', 'numerical', 'integerOnly'=>true),
 			array('pmg2, pmg3, pmg4, pmg5, pmg9', 'length', 'max'=>400),
 			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
 			array('pmg1, pmg2, pmg3, pmg4, pmg5, pmg6, pmg7, pmg8, pmg9', 'safe', 'on'=>'search'),
 		);
 	}
@@ -75,8 +74,6 @@ class Pmg extends CActiveRecord
 	 */
 	public function search()
 	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('pmg1',$this->pmg1);

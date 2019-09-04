@@ -45,7 +45,6 @@ class Pm extends CActiveRecord
             array('pm6', 'url'),
 			array('pm10,pm1', 'length', 'max'=>80),
 			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
 			array('pm1,pm2, pm3, pm4, pm5, pm6, pm7, pm8, pm9,pm10,pm11,pm12,pm13,pm14,pm15', 'safe', 'on'=>'search'),
 		);
 	}
@@ -90,8 +89,6 @@ class Pm extends CActiveRecord
 	 */
 	public function search()
 	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('pm1',$this->pm1);
