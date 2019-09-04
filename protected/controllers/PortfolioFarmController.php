@@ -88,7 +88,7 @@ class PortfolioFarmController extends Controller
         } else
             throw new CHttpException(404, 'You don\'t have an access to this service');
 
-        $this->render('student', array(
+        $this->render('index', array(
             'model'=>$model
         ));
     }

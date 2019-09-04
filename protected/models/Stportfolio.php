@@ -9,14 +9,18 @@
  * @property string $stportfolio3
  * @property integer $stportfolio4
  * @property string $stportfolio5
- * @property string $stportfolio6
+ * @property integer $stportfolio6
  *
  * The followings are the available model relations:
  * @property St $stportfolio20
  * @property Users $stportfolio40
+ * @property Stpfile $stportfolio60
  */
 class Stportfolio extends CActiveRecord
 {
+
+    const FIELD_EXTRA_EDUCATION = 1;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -33,10 +37,9 @@ class Stportfolio extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('stportfolio1, stportfolio2, stportfolio4', 'numerical', 'integerOnly'=>true),
-			array('stportfolio3', 'length', 'max'=>350),
-			array('stportfolio5', 'length', 'max'=>20),
-            array('stportfolio6', 'length', 'max'=>45),
+			array('stportfolio1, stportfolio2, stportfolio4, stportfolio6', 'numerical', 'integerOnly'=>true),
+			array('stportfolio3', 'length', 'max'=>1400),
+			array('stportfolio5', 'length', 'max'=>20)
 		);
 	}
 
@@ -50,6 +53,7 @@ class Stportfolio extends CActiveRecord
 		return array(
 			'stportfolio20' => array(self::BELONGS_TO, 'St', 'stportfolio2'),
 			'stportfolio40' => array(self::BELONGS_TO, 'Users', 'stportfolio4'),
+			'stportfolio60' => array(self::BELONGS_TO, 'Stpfile', 'stportfolio6'),
 		);
 	}
 
@@ -67,7 +71,7 @@ class Stportfolio extends CActiveRecord
     /**
      * @return bool
      */
-	public function beforeSave()
+    public function beforeSave()
     {
         $this->stportfolio4 = Yii::app()->user->id;
         $this->stportfolio5 = date('Y-m-d H:i:s');
