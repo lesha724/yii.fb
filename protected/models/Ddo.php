@@ -268,7 +268,12 @@ class Ddo extends CActiveRecord
 
 		return $items;
 	}
-	/*поля для вьюва для докумнта*/
+
+    /**
+     * @param $controller Controller
+     * @param $model Tddo
+     * @return array
+     */
 	public function generateAttributesView($controller,$model){
 		$docTypeIndexModel = Ddoi::model()->findByAttributes(array('ddoi2'=>$this->ddo1));
 		if(empty($docTypeIndexModel))
