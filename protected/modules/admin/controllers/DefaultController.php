@@ -385,17 +385,6 @@ class DefaultController extends AdminController
             }
         }
 
-        if (isset($_REQUEST['P_page']))
-        {
-            Yii::app()->user->setState('CurrentPageP',$_REQUEST['P_page']-1);
-        } else
-        {
-            if (Yii::app()->user->hasState('P_page'))
-            {
-                $_REQUEST['P_page'] = Yii::app()->user->getState('CurrentPageP')+1;
-            }
-        }
-
         $this->render('teachers', array(
             'model' => $model,
             'chairId' => $chairId,
@@ -429,17 +418,6 @@ class DefaultController extends AdminController
             if ( isset($searchParams) )
             {
                 $model->attributes = $searchParams;
-            }
-        }
-
-        if (isset($_REQUEST['D_page']))
-        {
-            Yii::app()->user->setState('CurrentPageD',$_REQUEST['D_page']-1);
-        } else
-        {
-            if (Yii::app()->user->hasState('D_page'))
-            {
-                $_REQUEST['D_page'] = Yii::app()->user->getState('CurrentPageD')+1;
             }
         }
 
@@ -568,17 +546,6 @@ class DefaultController extends AdminController
             }
         }
 
-        if (isset($_REQUEST['St_page']))
-        {
-            Yii::app()->user->setState('CurrentPageSt',$_REQUEST['St_page']-1);
-        } else
-        {
-            if (Yii::app()->user->hasState('St_page'))
-            {
-                $_REQUEST['St_page'] = Yii::app()->user->getState('CurrentPageSt')+1;
-            }
-        }
-
         $this->render('students', array(
             'model' => $model,
         ));
@@ -586,11 +553,27 @@ class DefaultController extends AdminController
 
     public function actionParents()
     {
-        $model = new St;
+        $model = new SearchStudents();
         $model->unsetAttributes();
 
-        if (isset($_REQUEST['St']))
-            $model->attributes = $_REQUEST['St'];
+        if (isset($_GET['pageSize'])) {
+            Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
+            unset($_GET['pageSize']);  // сбросим, чтобы не пересекалось с настройками пейджера
+        }
+
+        if (isset($_REQUEST['SearchStudents']))
+        {
+            $model->attributes = $_REQUEST['SearchStudents'];
+            Yii::app()->user->setState('SearchParamsParentAdmin', $_REQUEST['SearchStudents']);
+        }
+        else
+        {
+            $searchParams = Yii::app()->user->getState('SearchParamsParentAdmin');
+            if ( isset($searchParams) )
+            {
+                $model->attributes = $searchParams;
+            }
+        }
 
         $this->render('parents', array(
             'model' => $model,

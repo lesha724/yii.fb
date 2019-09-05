@@ -212,48 +212,6 @@ SQL;
         return $students;
     }
 
-    public function getParentsForAdmin()
-    {
-        $criteria=new CDbCriteria;
-
-        $criteria->select = 't.st1, t.st2, t.st3, t.st4';
-
-        $with = array(
-            'parentsAccount' => array(
-                'select' => 'u2, u3, u4'
-            )
-        );
-
-        $criteria->addCondition("st1 > 0");
-        $criteria->addCondition("st2 <> ''");
-
-
-        $criteria->addSearchCondition('st2', $this->st2);
-        $criteria->addSearchCondition('st3', $this->st3);
-        $criteria->addSearchCondition('st4', $this->st4);
-
-        $criteria->addSearchCondition('parentsAccount.u2', Yii::app()->request->getParam('login'));
-        $criteria->addSearchCondition('parentsAccount.u3', Yii::app()->request->getParam('password'));
-        $criteria->addSearchCondition('parentsAccount.u4', Yii::app()->request->getParam('email'));
-
-        $criteria->with = $with;
-
-        return new CActiveDataProvider($this, array(
-            'criteria'=>$criteria,
-            'sort' => array(
-                'defaultOrder' => 'st2 collate UNICODE',
-                'attributes' => array(
-                    'st2',
-                    'st3',
-                    'st4',
-                    'parentsAccount.u2',
-                    'parentsAccount.u3',
-                    'parentsAccount.u4',
-                ),
-            )
-        ));
-    }
-
     /**
      * получить данные по студенту для карточки
      * @return mixed

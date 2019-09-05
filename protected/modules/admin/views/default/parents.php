@@ -2,7 +2,7 @@
 /**
  *
  * @var DefaultController $this
- * @var St $model
+ * @var SearchStudents $model
  *
  */
 $this->pageHeader=tt('Родители');
@@ -12,33 +12,76 @@ $this->breadcrumbs=array(
 ?>
 
 <?php
+$template = <<<HTML
+            <div>
+                <div class="pull-left">{summary}</div>
+                <div class="pull-right">{pager}</div>
+            </div>
+            {items}
+            <div>
+                <div class="pull-right">{pager}</div>
+            </div>
+HTML;
+
 $provider = $model->getParentsForAdmin();
 $this->widget('bootstrap.widgets.TbGridView', array(
     'id' => 'parents',
     'dataProvider' => $provider,
     'filter' => $model,
+    'pager' => array(
+        'firstPageLabel'=>'<<',
+        'prevPageLabel'=>'<',
+        'nextPageLabel'=>'>',
+        'lastPageLabel'=>'>>',
+        'class'=>'bootstrap.widgets.TbPager',
+        'displayFirstAndLast'=>true
+    ),
+    'template' => $template,
     'type' => 'striped bordered',
     'ajaxUrl' => Yii::app()->createAbsoluteUrl('/admin/default/parents'),
     'columns' => array(
-        'st2',
-        'st3',
-        'st4',
+        array(
+            'name' => 'st2',
+            'value' => '$data->person->pe2',
+        ),
+        array(
+            'name' => 'st3',
+            'value' => '$data->person->pe3',
+        ),
+        array(
+            'name' => 'st4',
+            'value' => '$data->person->pe4',
+        ),
+        array(
+            'name' => 'st15',
+            'value' => '$data->person->pe20',
+        ),
         array(
             'header' => 'Login',
             'filter' => CHtml::textField('login', Yii::app()->request->getParam('login')),
-            'name'   => 'parentsAccount.u2',
-            'value'  => '! empty($data->parentsAccount)
+            'name' => 'parentsAccount.u2',
+            'value' => '! empty($data->parentsAccount)
                                 ? $data->parentsAccount->u2
                                 : ""',
         ),
-        /*array(
-            'header' => 'Password',
-            'filter' => CHtml::textField('password', Yii::app()->request->getParam('password')),
-            'name'   => 'parentsAccount.u3',
-            'value'  => '! empty($data->parentsAccount)
-                                ? $data->parentsAccount->u3
+        array(
+            'header' => 'Email',
+            'filter' => CHtml::textField('email', Yii::app()->request->getParam('email')),
+            'name' => 'parentsAccount.u4',
+            'value' => '! empty($data->parentsAccount)
+                                ? $data->parentsAccount->u4
                                 : ""',
-        ),*/
+        ),
+        'st_status'=>array(
+            'name'=>'st_status',
+            'header' => 'Статус обучения',
+            'type'=>'raw',
+            'filter' => array(
+                '1'=>tt("Активный"),
+                '2'=>tt("Выпущен")
+            ),
+            'value'=>' !in_array($data["st_status"],array(4,2)) ? "<label class=\'label label-success\'>".tt("Активный")."</label>" : "<label class=\'label\'>".tt("Выпущен")."</label>"'
+        ),
         array(
             'class'=>'CButtonColumn',
             'template'=>'{grants} {enter} {delete}',

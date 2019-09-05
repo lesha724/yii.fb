@@ -536,7 +536,6 @@ SQL;
         $criteria->addSearchCondition('p13', $this->p13);
         if(!empty($this->p9))
             $criteria->addCondition("p9 CONTAINING '".date_format(date_create_from_format('d-m-Y', trim($this->p9)), 'Y-m-d')."'");
-            //$criteria->addSearchCondition('p9', date_format(date_create_from_format('d-m-Y', $this->p9), 'Y-m-d H:i:s'));
 
         $criteria->addSearchCondition('account.u2', Yii::app()->request->getParam('login'));
         //$criteria->addCondition('account.u5 = 1');
@@ -550,7 +549,6 @@ SQL;
             'criteria'=>$criteria,
 			'pagination'=>array(
                 'pageSize'=> Yii::app()->user->getState('pageSize',10),
-				'currentPage'=> Yii::app()->user->getState('CurrentPageP',null),
             ),
             'sort' => array(
                 'defaultOrder' => 'p3 collate UNICODE',
@@ -615,7 +613,6 @@ SQL;
             'criteria'=>$criteria,
             'pagination'=>array(
                 'pageSize'=> Yii::app()->user->getState('pageSize',10),
-                'currentPage'=> Yii::app()->user->getState('CurrentPageD',null),
             ),
             'sort' => array(
                 'defaultOrder' => 'p3 collate UNICODE',

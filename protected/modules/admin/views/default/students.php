@@ -2,7 +2,7 @@
 /**
  *
  * @var DefaultController $this
- * @var St $model
+ * @var SearchStudents $model
  *
  */
 $this->pageHeader=tt('Студенты');
