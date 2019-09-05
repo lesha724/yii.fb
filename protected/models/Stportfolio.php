@@ -21,6 +21,26 @@ class Stportfolio extends CActiveRecord
 
     const FIELD_EXTRA_EDUCATION = 1;
 
+    const FIELD_WORK_EXPERIENCE = 2;
+
+    const FIELD_PHONE = 3;
+
+    const FIELD_EMAIL = 4;
+
+    const FIELD_EXTRA_COURSES = 5;
+
+    const FIELD_OLIMPIADS = 6;
+
+    const FIELD_SPORTS = 7;
+
+    const FIELD_SCIENCES = 8;
+
+    const FIELD_STUD_ORGS = 9;
+
+    const FIELD_VOLONTER = 10;
+
+    const FIELD_GROMADSKE = 11;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -77,5 +97,34 @@ class Stportfolio extends CActiveRecord
         $this->stportfolio5 = date('Y-m-d H:i:s');
 
         return parent::beforeSave();
+    }
+
+    /**
+     * Список полей для заполнения
+     * @return array
+     */
+    public function getFieldsList(){
+        return array(
+            self::FIELD_EXTRA_EDUCATION => array(
+                'text' => 'Дані про додаткову отриману освіту (музичну, мистецьку, спортивну школу, школу іноземних мов тощо)',
+                'needFile' => false
+            ),
+            self::FIELD_WORK_EXPERIENCE => array(
+                'text' => 'Досвід роботи за спеціальністю (де і на якій посаді)',
+                'needFile' => false
+            ),
+            self::FIELD_PHONE => array(
+                'text' => 'Контактний телефон',
+                'needFile' => false
+            ),
+            self::FIELD_EMAIL => array(
+                'text' => 'Е-mail',
+                'needFile' => false
+            ),
+            self::FIELD_EXTRA_COURSES => array(
+                'text' => 'Курси, додаткова освіта: назва курсів, отриманий документ – назва (сертифікат, посвідчення тощо), дата, рівень',
+                'needFile' => true
+            )
+        );
     }
 }
