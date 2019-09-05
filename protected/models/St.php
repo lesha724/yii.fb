@@ -304,11 +304,8 @@ SQL;
         $criteria->addCondition("st2 <> ''");
 		$criteria->addCondition("st101 != 7");
 
-        //$criteria->join = 'INNER JOIN std ON st1=std2';
 		$criteria->addCondition("std11 != 1"); //std11 = 4,2 закончил
-        //$criteria->addSearchCondition('st2', $this->st2);
-        //$criteria->addSearchCondition('st3', $this->st3);
-        //$criteria->addSearchCondition('st4', $this->st4);
+
         if(!empty($this->st2))
 		    $criteria->addCondition('st2 CONTAINING :ST2');
         if(!empty($this->st3))
@@ -332,8 +329,6 @@ SQL;
             $criteria->addCondition('account.u2 CONTAINING :LOGIN');
         if(!empty($email))
             $criteria->addCondition('account.u4 CONTAINING :EMAIL');
-        //$criteria->addSearchCondition('account.u2', );
-        //$criteria->addSearchCondition('account.u4', );
 
         $criteria->with = $with;
 
@@ -350,7 +345,6 @@ SQL;
             'criteria'=>$criteria,
             'pagination'=>array(
                 'pageSize'=> Yii::app()->user->getState('pageSize',10),
-				'currentPage'=> Yii::app()->user->getState('CurrentPageSt',null),
             ),
             'sort' => array(
                 'defaultOrder' => 'st2 collate UNICODE,st3 collate UNICODE,st4 collate UNICODE',

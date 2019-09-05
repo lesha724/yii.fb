@@ -385,17 +385,6 @@ class DefaultController extends AdminController
             }
         }
 
-        if (isset($_REQUEST['P_page']))
-        {
-            Yii::app()->user->setState('CurrentPageP',$_REQUEST['P_page']-1);
-        } else
-        {
-            if (Yii::app()->user->hasState('P_page'))
-            {
-                $_REQUEST['P_page'] = Yii::app()->user->getState('CurrentPageP')+1;
-            }
-        }
-
         $this->render('teachers', array(
             'model' => $model,
             'chairId' => $chairId,
@@ -429,17 +418,6 @@ class DefaultController extends AdminController
             if ( isset($searchParams) )
             {
                 $model->attributes = $searchParams;
-            }
-        }
-
-        if (isset($_REQUEST['D_page']))
-        {
-            Yii::app()->user->setState('CurrentPageD',$_REQUEST['D_page']-1);
-        } else
-        {
-            if (Yii::app()->user->hasState('D_page'))
-            {
-                $_REQUEST['D_page'] = Yii::app()->user->getState('CurrentPageD')+1;
             }
         }
 
@@ -565,17 +543,6 @@ class DefaultController extends AdminController
             if ( isset($searchParams) )
             {
                 $model->attributes = $searchParams;
-            }
-        }
-
-        if (isset($_REQUEST['St_page']))
-        {
-            Yii::app()->user->setState('CurrentPageSt',$_REQUEST['St_page']-1);
-        } else
-        {
-            if (Yii::app()->user->hasState('St_page'))
-            {
-                $_REQUEST['St_page'] = Yii::app()->user->getState('CurrentPageSt')+1;
             }
         }
 
