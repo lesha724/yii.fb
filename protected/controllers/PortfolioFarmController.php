@@ -112,7 +112,7 @@ class PortfolioFarmController extends Controller
      * @return bool
      * @throws CException
      */
-    private function _checkPermissionUserForFile($st1){
+    private function _checkPermission($st1){
         if(Yii::app()->user->isAdmin)
             return true;
 
@@ -128,8 +128,27 @@ class PortfolioFarmController extends Controller
         return false;
     }
 
-
+    /**
+     * @throws CException
+     * @throws CHttpException
+     */
     public function actionChangeField(){
+        if (!Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(405, 'Invalid request. Please do not repeat this request again.');
+
+        $st1 = Yii::app()->request->getParam('st1', null);
+        $id = Yii::app()->request->getParam('id', null);
+        $value = Yii::app()->request->getParam('value', null);
+
+        if(empty($id) || empty($value) || empty($st1))
+            throw new CHttpException(400, tt('Не все данные переданны'));
+
+        if(!in_array($id, Stportfolio::model()->getFieldsIdList()))
+            throw new CHttpException(400, tt('Неверные входящие данные'));
+
+        if(!$this->_checkPermission($st1))
+            throw new CHttpException(403, tt('Нет доступа к данному студенту'));
+
 
     }
 }

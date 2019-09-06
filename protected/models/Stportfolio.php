@@ -100,6 +100,26 @@ class Stportfolio extends CActiveRecord
     }
 
     /**
+     * Список id полей
+     * @return array
+     */
+    public function getFieldsIdList(){
+        return array(
+            self::FIELD_EXTRA_EDUCATION,
+            self::FIELD_WORK_EXPERIENCE,
+            self::FIELD_PHONE,
+            self::FIELD_EMAIL,
+            self::FIELD_EXTRA_COURSES,
+            self::FIELD_OLIMPIADS,
+            self::FIELD_SPORTS,
+            self::FIELD_SCIENCES,
+            self::FIELD_STUD_ORGS,
+            self::FIELD_VOLONTER,
+            self::FIELD_GROMADSKE
+        );
+    }
+
+    /**
      * Список полей для заполнения
      * @return array
      */
