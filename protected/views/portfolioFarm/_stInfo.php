@@ -12,10 +12,14 @@
  */
 
 $studentInfo = $student->getStudentInfoForPortfolio();
-
+$url = $this->createUrl('/site/userPhoto', array('_id' => $student->st1, 'type' => Users::FOTO_ST1));
+$class='img-circle';
 $infoHtml = <<<HTML
-    <div class="student-info">
-        <table class="table">
+    <div class="student-info row">
+        <div class="student-photo span3">
+             <img alt="photo" src="{$url}" class="{$class}">
+        </div>
+        <table class="table span9">
             <tbody>
                 <tr>
                     <th>%s</th>
