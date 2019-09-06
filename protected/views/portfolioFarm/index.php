@@ -6,12 +6,16 @@
  * Time: 15:31
  */
 
+/**
+ * @var $this PortfolioFarmController
+ * @var TimeTableForm $model
+ */
 
 $this->pageHeader=tt('Студент');
 $this->breadcrumbs=array(
     tt('Портфолио'),
 );
-
+Yii::app()->clientScript->registerPackage('gritter');
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/timetable/timetable.js', CClientScript::POS_HEAD);
 
 if(Yii::app()->user->isAdmin) {
@@ -27,6 +31,13 @@ echo <<<HTML
     <span id="spinner1"></span>
 HTML;
 if ($model->student) :
+
+    if(Yii::app()->user->isTch && !Yii::app()->user->isAdmin){
+        $p = Yii::app()->user->dbModel;
+        if(!$p->isKuratorForStudent($model->student) && !$p->isDekanForStudent($model->student))
+            throw new CHttpException(403, tt('Нет доступа к данному студенту'));
+    }
+
     $this->renderPartial('_bottom', array(
         'student' => St::model()->findByPk($model->student),
         'model' => $model,

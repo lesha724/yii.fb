@@ -21,7 +21,7 @@ class PortfolioFarmController extends Controller
             array('allow',
                 'actions' => array(
                     'index',
-                    'saveField'
+                    'changeField'
                 ),
                 'expression' => 'Yii::app()->user->isTch ||Yii::app()->user->isStd || Yii::app()->user->isAdmin',
             ),
@@ -69,7 +69,7 @@ class PortfolioFarmController extends Controller
         $model = new TimeTableForm;
         $model->scenario = 'student';
 
-        if (Yii::app()->user->isAdmin) {
+        if (Yii::app()->user->isTch) {
             $params = array();
             if (!isset($_REQUEST['TimeTableForm'])) {
                 if (isset(Yii::app()->session['TimeTableForm'])){
@@ -104,5 +104,32 @@ class PortfolioFarmController extends Controller
             return false;
 
         return is_dir($path);
+    }
+
+    /**
+     * Проверка доступа к студенту
+     * @param int $st1
+     * @return bool
+     * @throws CException
+     */
+    private function _checkPermissionUserForFile($st1){
+        if(Yii::app()->user->isAdmin)
+            return true;
+
+        if(Yii::app()->user->isStd) {
+            return $st1 == Yii::app()->user->dbModel->st1;
+        }
+
+        if(Yii::app()->user->isTch){
+            $p = Yii::app()->user->dbModel;
+            return $p->isDekanForStudent($st1) || $p->isKuratorForStudent($st1);
+        }
+
+        return false;
+    }
+
+
+    public function actionChangeField(){
+
     }
 }

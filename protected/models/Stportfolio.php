@@ -103,52 +103,104 @@ class Stportfolio extends CActiveRecord
      * Список полей для заполнения
      * @return array
      */
-    public function getFieldsList(){
+    public function getFieldsList($st1){
+        $values = $this->getFieldsByStudent($st1);
         return array(
             self::FIELD_EXTRA_EDUCATION => array(
+                'code' => self::FIELD_EXTRA_EDUCATION,
                 'text' => 'Дані про додаткову отриману освіту (музичну, мистецьку, спортивну школу, школу іноземних мов тощо)',
-                'needFile' => false
+                'needFile' => false,
+                'inputType' => 'textArea',
+                'value' => isset($values[self::FIELD_EXTRA_EDUCATION]) ? $values[self::FIELD_EXTRA_EDUCATION]->stportfolio3 : ''
             ),
             self::FIELD_WORK_EXPERIENCE => array(
+                'code' => self::FIELD_WORK_EXPERIENCE,
                 'text' => 'Досвід роботи за спеціальністю (де і на якій посаді)',
-                'needFile' => false
+                'needFile' => false,
+                'inputType' => 'textArea',
+                'value' => isset($values[self::FIELD_WORK_EXPERIENCE]) ? $values[self::FIELD_WORK_EXPERIENCE]->stportfolio3 : ''
             ),
             self::FIELD_PHONE => array(
+                'code' => self::FIELD_PHONE,
                 'text' => 'Контактний телефон',
-                'needFile' => false
+                'needFile' => false,
+                'inputType' => 'textField',
+                'value' => isset($values[self::FIELD_PHONE]) ? $values[self::FIELD_PHONE]->stportfolio3 : ''
             ),
             self::FIELD_EMAIL => array(
+                'code' => self::FIELD_EMAIL,
                 'text' => 'Е-mail',
-                'needFile' => false
+                'needFile' => false,
+                'inputType' => 'textField',
+                'value' => isset($values[self::FIELD_EMAIL]) ? $values[self::FIELD_EMAIL]->stportfolio3 : ''
             ),
             self::FIELD_EXTRA_COURSES => array(
+                'code' => self::FIELD_EXTRA_COURSES,
                 'text' => 'Курси, додаткова освіта: назва курсів, отриманий документ – назва (сертифікат, посвідчення тощо), дата, рівень',
-                'needFile' => true
+                'needFile' => true,
+                'inputType' => 'textArea',
+                'value' => isset($values[self::FIELD_EXTRA_COURSES]) ? $values[self::FIELD_EXTRA_COURSES]->stportfolio3 : ''
             ),
             self::FIELD_OLIMPIADS => array(
+                'code' => self::FIELD_OLIMPIADS,
                 'text' => 'Олімпіади, конкурси за навчальними дисциплінами (навчальний рік, назва дисципліни, результат',
-                'needFile' => true
+                'needFile' => true,
+                'inputType' => 'textArea',
+                'value' => isset($values[self::FIELD_OLIMPIADS]) ? $values[self::FIELD_OLIMPIADS]->stportfolio3 : ''
             ),
             self::FIELD_SPORTS => array(
+                'code' => self::FIELD_SPORTS,
                 'text' => 'Спортивні досягнення (навчальний рік, рівень змагань, вид спорту, результат)',
-                'needFile' => true
+                'needFile' => true,
+                'inputType' => 'textArea',
+                'value' => isset($values[self::FIELD_SPORTS]) ? $values[self::FIELD_SPORTS]->stportfolio3 : ''
             ),
             self::FIELD_SCIENCES => array(
+                'code' => self::FIELD_SCIENCES,
                 'text' => 'Наукова діяльність (участь у науково-практичних конференціях, рівень, теми досліджень, статті чи тези, результат)',
-                'needFile' => true
+                'needFile' => true,
+                'inputType' => 'textArea',
+                'value' => isset($values[self::FIELD_SCIENCES]) ? $values[self::FIELD_SCIENCES]->stportfolio3 : ''
             ),
             self::FIELD_STUD_ORGS => array(
+                'code' => self::FIELD_STUD_ORGS,
                 'text' => 'Участь у органах студентського самоврядування (назва, форма участі, доручення, які виконувалися)',
-                'needFile' => false
+                'needFile' => false,
+                'inputType' => 'textArea',
+                'value' => isset($values[self::FIELD_STUD_ORGS]) ? $values[self::FIELD_STUD_ORGS]->stportfolio3 : ''
             ),
             self::FIELD_VOLONTER => array(
+                'code' => self::FIELD_VOLONTER,
                 'text' => 'Участь у волонтерській діяльності (назва заходу, форма участі)',
-                'needFile' => true
+                'needFile' => true,
+                'inputType' => 'textArea',
+                'value' => isset($values[self::FIELD_VOLONTER]) ? $values[self::FIELD_VOLONTER]->stportfolio3 : ''
             ),
             self::FIELD_GROMADSKE => array(
+                'code' => self::FIELD_GROMADSKE,
                 'text' => 'Досягнення у творчій та громадській діяльності (назва заходу, форма участі)',
-                'needFile' => false
+                'needFile' => false,
+                'inputType' => 'textArea',
+                'value' => isset($values[self::FIELD_GROMADSKE]) ? $values[self::FIELD_GROMADSKE]->stportfolio3 : ''
             )
         );
+    }
+
+    /**
+     * Список значчений полей
+     * @param $st1
+     * @return Stportfolio[]
+     */
+    public function getFieldsByStudent($st1){
+        $list = self::model()->findAllByAttributes(array(
+            'stportfolio2' => $st1
+        ));
+
+        $result = array();
+        foreach ($list as $item){
+            $result[$item->stportfolio1] = $item;
+        }
+
+        return $result;
     }
 }
