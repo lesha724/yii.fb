@@ -28,11 +28,16 @@ function renderField($number, $code, $name, $needFile, $inputType, $value = ''){
         'class' => 'field-input',
         'data-id' => $code
     ));
+    $html .= CHtml::closeTag('div');
     if($needFile) {
+        $html .= CHtml::openTag('div', array(
+            'class' => 'file-control-group'
+        ));
         $html .= CHtml::fileField('field-file-' . $code, $value, array(
             'class' => 'field-file-input',
             'data-id' => $code
         ));
+        $html .= CHtml::closeTag('div');
     }
     $html .= CHtml::closeTag('ol');
     return $html;
@@ -44,6 +49,13 @@ function renderField($number, $code, $name, $needFile, $inputType, $value = ''){
  * @var St $student
  * @var TimeTableForm $model
  */
+Yii::app()->clientScript->registerCss('portfolioFarm', <<<CSS
+    .control-group textarea{
+        width: 500px;
+        height: 80px;
+    }
+CSS
+    );
 
 $url = Yii::app()->createUrl('/portfolioFarm/changeField');
 $spinner1 = '$spinner1';
@@ -71,11 +83,13 @@ Yii::app()->clientScript->registerScript('portfolioFarm', <<<JS
             success: function(data) {
                 addGritter('', successFieldMessage, 'success');
                 $spinner1.hide();
+                parentControl.removeClass('error');
                 parentControl.addClass('success');
             },
             error: function(jqXHR, textStatus, errorThrown){
                 addGritter('', textStatus + ':'+ jqXHR.responseText, 'error');
                 $spinner1.hide();
+                parentControl.removeClass('success');
                 parentControl.addClass('error');
             }
         });
@@ -114,6 +128,33 @@ echo CHtml::closeTag('ul');
 echo '<div class="page-header">
   <h3>2.ПОРТФОЛІО ДОСЯГНЕНЬ</h3>
 </div>';
+
+echo CHtml::openTag('ul');
+
+$field = $fields[Stportfolio::FIELD_EXTRA_COURSES];
+echo renderField('2.2', $field['code'], $field['text'], $field['needFile'], $field['inputType'], $field['value']);
+
+$field = $fields[Stportfolio::FIELD_OLIMPIADS];
+echo renderField('2.4',  $field['code'], $field['text'], $field['needFile'], $field['inputType'], $field['value']);
+
+$field = $fields[Stportfolio::FIELD_SPORTS];
+echo renderField('2.5',  $field['code'], $field['text'], $field['needFile'], $field['inputType'], $field['value']);
+
+$field = $fields[Stportfolio::FIELD_SCIENCES];
+echo renderField('2.6',  $field['code'], $field['text'], $field['needFile'], $field['inputType'], $field['value']);
+
+$field = $fields[Stportfolio::FIELD_STUD_ORGS];
+echo renderField('2.7',  $field['code'], $field['text'], $field['needFile'], $field['inputType'], $field['value']);
+
+$field = $fields[Stportfolio::FIELD_VOLONTER];
+echo renderField('2.8',  $field['code'], $field['text'], $field['needFile'], $field['inputType'], $field['value']);
+
+$field = $fields[Stportfolio::FIELD_GROMADSKE];
+echo renderField('2.9',  $field['code'], $field['text'], $field['needFile'], $field['inputType'], $field['value']);
+
+echo CHtml::closeTag('ul');
+
+
 
 echo '<div class="page-header">
   <h3>3.ПОРТФОЛІО РОБІТ</h3>
