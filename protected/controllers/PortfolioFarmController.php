@@ -145,7 +145,7 @@ class PortfolioFarmController extends Controller
         $id = Yii::app()->request->getParam('id', null);
         $value = Yii::app()->request->getParam('value', null);
 
-        if(empty($id) || empty($value) || empty($st1))
+        if(empty($id) || empty($st1))
             throw new CHttpException(400, tt('Не все данные переданны'));
 
         if(!in_array($id, Stportfolio::model()->getFieldsIdList()))
