@@ -62,6 +62,7 @@ class PortfolioFarmController extends Controller
 
     /**
      *
+     * @throws CException
      * @throws CHttpException
      */
     public function actionIndex()
@@ -87,6 +88,10 @@ class PortfolioFarmController extends Controller
             $model->student = Yii::app()->user->dbModel->st1;
         } else
             throw new CHttpException(404, 'You don\'t have an access to this service');
+
+        if(!empty($model->student))
+            if(!$this->_checkPermission($model->student))
+                throw new CHttpException(403, tt('Нет доступа к данному студенту'));
 
         $this->render('index', array(
             'model'=>$model
@@ -150,5 +155,17 @@ class PortfolioFarmController extends Controller
             throw new CHttpException(403, tt('Нет доступа к данному студенту'));
 
 
+        $model = Stportfolio::model()->findByAttributes(array('stportfolio1' => $id, 'stportfolio2' => $st1));
+        if(empty($model))
+            $model = new Stportfolio();
+
+        $model->stportfolio1 = $id;
+        $model->stportfolio2 = $st1;
+        $model->stportfolio3 = $value;
+
+        if(!$model->save())
+            throw new CHttpException(500, tt('Ошибка сохранения'));
+
+        Yii::app()->end(CJSON::encode(array('error' => false)));
     }
 }

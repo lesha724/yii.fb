@@ -31,13 +31,6 @@ echo <<<HTML
     <span id="spinner1"></span>
 HTML;
 if ($model->student) :
-
-    if(Yii::app()->user->isTch && !Yii::app()->user->isAdmin){
-        $p = Yii::app()->user->dbModel;
-        if(!$p->isKuratorForStudent($model->student) && !$p->isDekanForStudent($model->student))
-            throw new CHttpException(403, tt('Нет доступа к данному студенту'));
-    }
-
     $this->renderPartial('_bottom', array(
         'student' => St::model()->findByPk($model->student),
         'model' => $model,

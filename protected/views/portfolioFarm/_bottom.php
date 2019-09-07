@@ -18,7 +18,12 @@
 function renderField($number, $code, $name, $needFile, $inputType, $value = ''){
     $html = CHtml::openTag('ol');
     $html .= CHtml::tag('span', array(), $number);
-    $html .= CHtml::label($name,'field-'.$code);
+    $html .= CHtml::openTag('div', array(
+        'class' => 'control-group'
+    ));
+    $html .= CHtml::label($name,'field-'.$code, array(
+        'class' => 'control-label'
+    ));
     $html .= CHtml::$inputType('field-'.$code, $value, array(
         'class' => 'field-input',
         'data-id' => $code
@@ -50,16 +55,28 @@ Yii::app()->clientScript->registerScript('portfolioFarm', <<<JS
         $spinner1.show();
         var url = '{$url}';
         
+        var parentControl = $(this).closest('.control-group');
+        
+        var params = {
+            st1:{$model->student},
+            id: $(this).data('id'),
+            value:$(this).val()
+        };
+        
         $.ajax({
-            url: url,
+            type: 'POST',
+            url:  url,
+            data: params,
             dataType: 'json',
-            success: function() {
+            success: function(data) {
                 addGritter('', successFieldMessage, 'success');
                 $spinner1.hide();
+                parentControl.addClass('success');
             },
             error: function(jqXHR, textStatus, errorThrown){
                 addGritter('', textStatus + ':'+ jqXHR.responseText, 'error');
                 $spinner1.hide();
+                parentControl.addClass('error');
             }
         });
     });
