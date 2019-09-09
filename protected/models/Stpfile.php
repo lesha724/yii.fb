@@ -52,6 +52,13 @@ class Stpfile extends CActiveRecord
 		);
 	}
 
+    public function attributeLabels()
+    {
+        return array(
+            'stpfile2' => tt('Имя файла')
+        );
+    }
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

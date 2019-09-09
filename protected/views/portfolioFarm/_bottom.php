@@ -43,22 +43,56 @@ function renderField($number, $st1, $code, $name, $needFile, $inputType, $value 
             'class' => 'file-control-group'
         ));
 
-        $files =  Stpfile::model()->findAllBySql(
+        $dataProvider = new CArrayDataProvider(
+            Stpfile::model()->findAllBySql(
             <<<SQL
-                  SELECT stpfile.* from stpfile
-                    INNER JOIN stpfieldfile on (stpfieldfile1=:codeM and stpfieldfile2 = stpfile1)
-                  where stpfile5 = :stpfile5
+                      SELECT stpfile.* from stpfile
+                        INNER JOIN stpfieldfile on (stpfieldfile1=:codeM and stpfieldfile2 = stpfile1)
+                      where stpfile5 = :stpfile5
 SQL
-            ,array(
-                ':codeM' => $code,
-                ':stpfile5' => $st1
+                ,array(
+                    ':codeM' => $code,
+                    ':stpfile5' => $st1
+                )
+            ),
+            array(
+                'id'=>'user',
+                'sort'=>false,
+                'pagination'=>false
             )
         );
 
+        $html .= Yii::app()->controller->widget('bootstrap.widgets.TbGridView', array(
+            'dataProvider' => $dataProvider,
+            'filter' => null,
+            'type' => 'striped bordered',
+            'columns' => array(
+                array(
+                    'name' => 'stpfile2',
+                    'header' => tt('Файл'),
+                    'value' => 'basename(stpfile2)'
+                ),
+                array(
+                    'class'=>'bootstrap.widgets.TbButtonColumn',
+                    'template'=>'{view} {delete}',
+                    'buttons'=>array(
+                        'delete' => array
+                        (
+                            'url'=>'array("/portfolioFarm/deleteFile","id"=>$data->stpfile1)',
+                        ),
+                        'update' => array
+                        (
+                            'url'=>'array("/portfolioFarm/file","id"=>$data->stpfile1)',
+                        ),
+                    ),
+                ),
+            )
+        ), true);
+
         $html .= CHtml::fileField('field-file-' . $code, $value, array(
             'class' => 'field-file-input',
-            'data-id' => $code
         ));
+        $html .= CHtml::button(tt('Добавить'), array('class'=>'btn-create-file', 'data-id'=>$code));
         $html .= CHtml::closeTag('div');
     }
     $html .= CHtml::closeTag('ol');
@@ -78,6 +112,16 @@ $spinner1 = '$spinner1';
 
 Yii::app()->clientScript->registerScript('portfolioFarm', <<<JS
     var successFieldMessage = 'Изменение сохранено';
+
+    $('.btn-create-file').click(function(){
+        var id =  $(this).data('id');
+        var params = {
+            st1:{$model->student},
+            id: id,
+            type: 'field',
+            file:$('#field-file-'+id).val()
+        };
+    });
     
     $('.field-input').change(function(event) {
         $spinner1.show();
