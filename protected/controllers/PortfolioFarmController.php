@@ -21,7 +21,10 @@ class PortfolioFarmController extends Controller
             array('allow',
                 'actions' => array(
                     'index',
-                    'changeField'
+                    'changeField',
+                    'deleteFile',
+                    'file',
+                    'uploadFile'
                 ),
                 'expression' => 'Yii::app()->user->isTch ||Yii::app()->user->isStd || Yii::app()->user->isAdmin',
             ),
@@ -159,13 +162,99 @@ class PortfolioFarmController extends Controller
         if(empty($model))
             $model = new Stportfolio();
 
+        if($model->stportfolio6 == 1)
+            throw new CHttpException(400, tt('Изменение запрещено! Данные уже подтвержденны!'));
+
         $model->stportfolio1 = $id;
         $model->stportfolio2 = $st1;
         $model->stportfolio3 = $value;
+        $model->stportfolio4 = Yii::app()->user->id;
+        $model->stportfolio5 = date('Y-m-d H:i:s');
+        $model->stportfolio6 = 0;
+        $model->stportfolio7 = $model->stportfolio8 = null;
 
         if(!$model->save())
             throw new CHttpException(500, tt('Ошибка сохранения'));
 
         Yii::app()->end(CJSON::encode(array('error' => false)));
+    }
+
+    /**
+     * @param $id
+     * @throws CException
+     * @throws CHttpException
+     */
+    public function actionDeleteFile($id){
+        if (!Yii::app()->request->isPostRequest)
+            throw new CHttpException(405, 'Invalid request. Please do not repeat this request again.');
+
+        $file = $this->_getFile($id);
+
+        $fileName = PortalSettings::model()->getSettingFor(PortalSettings::PORTFOLIO_PATH).'/'.$id.'.'.$file->stpfile2;
+
+        if(!file_exists($fileName))
+            throw new CHttpException(400,tt('Файл не существует или удален.'));
+
+        try {
+            if ($file->delete()) {
+                unlink($fileName);
+            } else {
+                throw  new Exception('Ошибка');
+            }
+
+            Yii::app()->end(CJSON::encode(array('error' => false)));
+
+        }catch (Exception $error){
+            throw new CHttpException(500, tt('Ошибка удаления: {error}', array(
+                '{error}' => $error->getMessage()
+            )));
+        }
+    }
+
+    /**
+     * @param $id
+     * @throws CException
+     * @throws CHttpException
+     */
+    public function actionFile($id){
+        $file = $this->_getFile($id);
+
+        $fileName = PortalSettings::model()->getSettingFor(PortalSettings::PORTFOLIO_PATH).'/'.$id.'.'.$file->stpfile2;
+
+        if(!file_exists($fileName))
+            throw new CHttpException(400,tt('Файл не существует или удален.'));
+
+        header('Content-Type: application/'.pathinfo($fileName,PATHINFO_EXTENSION));
+        header('Content-Disposition: inline; filename="'.basename($fileName).'"');
+        header('Content-Transfer-Encoding: binary');
+        header('Accept-Ranges: bytes');
+        header('Content-Length: ' . filesize($fileName));
+        @readfile($fileName);
+        exit;
+    }
+
+    /**
+     * Файл по айди
+     * @param $id int
+     * @return Stpfile
+     * @throws CException
+     * @throws CHttpException
+     */
+    private function _getFile($id){
+        $file = Stpfile::model()->findByPk($id);
+
+        if(empty($file))
+            throw new CHttpException(404, tt('Файл не найден'));
+
+        if(!$this->_checkPermission($file->stpfile5))
+            throw new CHttpException(403, tt('Нет доступа к данному студенту'));
+
+        return $file;
+    }
+
+
+    public function uploadFile(){
+        //$this->stpfile3 = Yii::app()->user->id;
+        //$this->stpfile4 = date('Y-m-d H:i:s');
     }
 }

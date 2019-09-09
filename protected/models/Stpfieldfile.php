@@ -1,27 +1,23 @@
 <?php
 
 /**
- * This is the model class for table "stpfile".
+ * This is the model class for table "stpfieldfile".
  *
- * The followings are the available columns in table 'stpfile':
- * @property integer $stpfile1
- * @property string $stpfile2
- * @property integer $stpfile3
- * @property string $stpfile4
- * @property integer $stpfile5
+ * The followings are the available columns in table 'stpfieldfile':
+ * @property integer $stpfieldfile1
+ * @property integer $stpfieldfile2
  *
  * The followings are the available model relations:
- * @property Users $stpfile30
- * @property St $stpfile50
+ * @property Stpfile $stpfieldfile20
  */
-class Stpfile extends CActiveRecord
+class Stpfieldfile extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'stpfile';
+		return 'stpfieldfile';
 	}
 
 	/**
@@ -32,9 +28,7 @@ class Stpfile extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('stpfile1, stpfile3, stpfile5', 'numerical', 'integerOnly'=>true),
-			array('stpfile2', 'length', 'max'=>180),
-			array('stpfile4', 'length', 'max'=>20)
+			array('stpfieldfile1, stpfieldfile2', 'numerical', 'integerOnly'=>true),
 		);
 	}
 
@@ -46,9 +40,7 @@ class Stpfile extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'stpfile30' => array(self::BELONGS_TO, 'Users', 'stpfile3'),
-			'stpfile50' => array(self::BELONGS_TO, 'St', 'stpfile5'),
-            'stpfieldfiles' => array(self::HAS_MANY, 'Stpfieldfile', 'stpfiledfile2'),
+			'stpfieldfile20' => array(self::BELONGS_TO, 'Stpfile', 'stpfieldfile2'),
 		);
 	}
 
@@ -56,18 +48,10 @@ class Stpfile extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Stpfile the static model class
+	 * @return Stpfieldfile the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
 	}
-
-    /**
-     * @return bool
-     */
-    public function beforeSave()
-    {
-        return parent::beforeSave();
-    }
 }
