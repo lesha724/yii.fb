@@ -34,6 +34,7 @@ $config = array(
 	// autoloading model and component classes
 	'import'=>array(
 		'application.models.*',
+        'application.models.farm-portfolio.*',
         'application.forms.*',
 		'application.components.*',
         'application.components.OAuth.*',

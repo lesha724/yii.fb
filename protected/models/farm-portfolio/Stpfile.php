@@ -77,4 +77,12 @@ class Stpfile extends CActiveRecord
     {
         return parent::beforeSave();
     }
+
+    /**
+     * Путь к файлу
+     * @return string
+     */
+    public function getFilePath(){
+        return $this->stpfile5.'/'.$this->stpfile1.'.'.$this->stpfile2;
+    }
 }
