@@ -27,12 +27,12 @@ $this->renderPartial('/filter_form/default/year_sem');
 
 $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id'=>'search-form',
-    'htmlOptions' => array('class' => 'form-inline noprint'),
+    'htmlOptions' => array('class' => 'form-inline'),
 	'method'=>'post',
-	'action'=> array('journal/searchStudent'),
+	'action'=> array('other/searchStudent', 'type' => 'ommisions'),
 ));
 ?>
-	<?php echo $form->textField($student,'st2',array('size'=>60,'maxlength'=>255,'class'=>'search-by-name')); ?>
+	<?php echo $form->textField(new SearchStudentsForm(),'name',array('size'=>60,'maxlength'=>255,'class'=>'search-by-name')); ?>
 	
 	<?php $this->widget('bootstrap.widgets.TbButton', array(
 		'buttonType'=>'submit',

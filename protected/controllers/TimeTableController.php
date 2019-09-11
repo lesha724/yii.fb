@@ -147,19 +147,6 @@ class TimeTableController extends Controller
             'model' => $model,
         ));
 	}
-	
-    public function actionSearchStudent()
-    {
-        $model = new St;
-        $model->unsetAttributes();
-        if (isset($_REQUEST['St']))
-            $model->attributes = $_REQUEST['St'];
-		
-        $this->render('search_student', array(
-            'model' => $model,
-            'url'=>array('timeTable/student')
-        ));
-    }
     
     public function actionChair()
     {
@@ -581,9 +568,6 @@ class TimeTableController extends Controller
             else
                 $timeTable = Gr::getTimeTable($model->student, $model->date1, $model->date2, 1);
         }
-
-		$student = new St;
-        $student->unsetAttributes();
 		
         $this->render('student', array(
             'model'      => $model,
@@ -591,8 +575,7 @@ class TimeTableController extends Controller
             'maxLessons' => $maxLessons,
             'minMax'     => $minMax,
             'rz'         => Rz::model()->getRzArray($model->filial),
-			'type'=>$type,
-			'student'=>$student
+			'type'=>$type
         ));
     }
 

@@ -794,15 +794,27 @@ SQL;
         
     }
     
-    public function actionSearchStudent()
+    public function actionSearchStudent($type = 'timeTable')
     {
-        $model = new St;
+        $model = new SearchStudentsForm();
         $model->unsetAttributes();
-        if (isset($_REQUEST['St']))
-            $model->attributes = $_REQUEST['St'];
+        if (isset($_REQUEST['SearchStudentsForm']))
+            $model->attributes = $_REQUEST['SearchStudentsForm'];
+
+        $url = Yii::app()->request->urlReferrer;
+        switch ($type){
+            case 'timeTable':
+                $url = Yii::app()->createUrl('timeTable/student');
+                break;
+            case 'omissions':
+                $url = Yii::app()->createUrl('journal/ommisisons');
+                break;
+        }
 		
         $this->render('/filter_form/default/search_student', array(
-            'model' => $model
+            'model' => $model,
+            'url' => $url,
+            'type' => $type
         ));
     }
     

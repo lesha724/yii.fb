@@ -51,8 +51,6 @@ class JournalController extends Controller
                     'updateOmissionsStMark',
                     'insertOmissionsStMark',
 
-                    'searchStudent',
-
                     'attendanceStatisticPrint',
                     'attendanceStatisticPrintExcel'
                 ),
@@ -2322,11 +2320,9 @@ SQL;
             $model->attributes=$_REQUEST['TimeTableForm'];
         $model->date1 = Yii::app()->session['date1'];
         $model->date2 = Yii::app()->session['date2'];
-        $student = new St;
-        $student->unsetAttributes();
+
         $this->render('omissions', array(
-            'model'      => $model,
-            'student'	 =>$student,
+            'model'      => $model
         ));
     }
 
@@ -3793,17 +3789,5 @@ SQL;
 
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
-    }
-//----------------------------------------------------------------------------------------------
-    public function actionSearchStudent()
-    {
-        $model = new St;
-        $model->unsetAttributes();
-        if (isset($_REQUEST['St']))
-            $model->attributes = $_REQUEST['St'];
-
-        $this->render('/Sfilter_form/default/search_student', array(
-            'model' => $model
-        ));
     }
 }

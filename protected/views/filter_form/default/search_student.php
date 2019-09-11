@@ -1,8 +1,10 @@
 <?php
 /**
  *
- * @var TimeTableController $this
- * @var St $model
+ * @var OtherController $this
+ * @var SearchStudentsForm $model
+ * @var string $type
+ * @var string $url
  * @var CActiveForm $form
  */
 $this->pageHeader=tt('Поиск студента');
@@ -10,15 +12,15 @@ $this->breadcrumbs=array(
     tt('Поиск студента'),
 );
 	
-$students = $model->getSearchStudents($model->st2);
+$students = $model->getSearchStudents();
 $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id'=>'search-form',
     'htmlOptions' => array('class' => 'form-inline noprint'),
 	'method'=>'post',
-	'action'=> array('journal/searchStudent'),
+	'action'=> array('other/searchStudent', 'type' => $type),
 ));
 ?>
-	<?php echo $form->textField($model,'st2',array('size'=>60,'maxlength'=>255,'class'=>'search-by-name')); ?>
+	<?php echo $form->textField($model,'name',array('size'=>60,'maxlength'=>255,'class'=>'search-by-name')); ?>
 	
 	<?php $this->widget('bootstrap.widgets.TbButton', array(
 		'buttonType'=>'submit',
@@ -37,7 +39,7 @@ $form1=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id'=>'timeTable-form',
     'htmlOptions' => array('style'=>'display:none'),
 	'method'=>'post',
-	'action'=> Yii::app()->request->urlReferrer,
+	'action'=> $url,
 ));
 ?>
 	<?php echo $form1->hiddenField($timTable,'filial'); ?>
@@ -92,7 +94,7 @@ if(!empty($students))
 }
 else{
 	$error=tt('Нет результатов');
-	if(empty($model->st2))
+	if(empty($model->name))
 		$error=tt('Введите запрос');
 ?>
 	<div class="alert alert-danger alert-dismissible" role="alert">

@@ -16,10 +16,10 @@ if(!(PortalSettings::model()->findByPk(77)->ps2&&Yii::app()->user->isGuest)) {
 			'id' => 'search-form',
 			'htmlOptions' => array('class' => 'form-inline'),
 			'method' => 'post',
-			'action' => array('timeTable/searchStudent'),
+			'action' => array('other/searchStudent', 'type' => 'timeTable'),
 	));
 	?>
-	<?php echo $form->textField($student, 'st2', array('size' => 60, 'maxlength' => 255, 'class' => 'search-by-name')); ?>
+	<?php echo $form->textField(new SearchStudentsForm(), 'name', array('size' => 60, 'maxlength' => 255, 'class' => 'search-by-name')); ?>
 
 	<?php $this->widget('bootstrap.widgets.TbButton', array(
 			'buttonType' => 'submit',
