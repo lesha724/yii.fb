@@ -97,7 +97,7 @@ class Controller extends CController
             $enable_close=false;
         if(!Yii::app()->user->isAdmin) {
             if (!Yii::app()->user->isGuest && !Yii::app()->user->isBlock) {
-                if (Yii::app()->user->dbModel->checkBlocked()) {
+                if (Yii::app()->user->dbModel->checkBlocked()&&$enable_close) {
                     throw new CHttpException(403, tt('Доступ закрыт! Учетная запись заблокирована!'));
                 }
             }

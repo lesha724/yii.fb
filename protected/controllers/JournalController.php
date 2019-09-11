@@ -843,8 +843,8 @@ SQL;
 
     public function actionInsertStMark()
     {
-        if (! Yii::app()->request->isAjaxRequest)
-            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        //if (! Yii::app()->request->isAjaxRequest)
+            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $error=false;
         $errorType=0;
@@ -1096,34 +1096,26 @@ SQL;
                 }
 
                 $st=St::model()->findByPk($st1);
-                if($st->st45==1)
-                {
-                    $error=true;
-                    $errorType=5;
-                }
                 if($st->st167==1)
                 {
                     $error=true;
                     $errorType=5;
                 }
                 $sem7 = Gr::model()->getSem7ByGr1ByDate($gr1,date('d.m.Y'));
-                $ps60 = PortalSettings::model()->findByPk(60)->ps2;
+                /*$ps60 = PortalSettings::model()->findByPk(60)->ps2;
                 if(($st['std23']!=$sem7&&$st['std23']!=$sem7+1)&&$ps60==1)
                 {
                     $error=true;
                     $errorType=5;
-                }
-                //$ps107 = PortalSettings::model()->getSettingFor(107);
-                /*if($ps107==1) {*/
+                }*/
+
                 $stusv = Stusv::model()->getStusvByJournalAndStudent($elg, $st1);
                 if ($stusv!=null) {
                     $stusvst = $stusv->getMarkForStudent($st1);
                     if ($stusvst!=null) {
                         if(!empty($stusv['stusv15'])) {
-                            //if ($stusvst->stusvst4 > 0 || $stusvst->stusvst6 > 0) {
-                                $error = true;
-                                $errorType = 5;
-                            //}
+                            $error = true;
+                            $errorType = 5;
                         }
 
                         $stusv12 = $stusv['stusv12'];
@@ -1142,7 +1134,6 @@ SQL;
                         }
                     }
                 }
-                //}
 
                 if(!$error)
                 {
