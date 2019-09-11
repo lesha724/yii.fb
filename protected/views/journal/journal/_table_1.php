@@ -21,7 +21,7 @@ HTML;
     /*** 1 table ***/
     $tr = '';
     foreach($students as $key => $st) {
-        $name = ShortCodes::getShortName($st['st2'], $st['st3'], $st['st4']);
+        $name = ShortCodes::getShortName($st['pe2'], $st['pe3'], $st['pe4']);
         $num  = $key+1;
 
         if($st['st45']==1)
