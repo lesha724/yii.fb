@@ -115,8 +115,8 @@ class Stportfolio extends CActiveRecord
      * Список полей для заполнения
      * @return array
      */
-    public function getFieldsList($st1){
-        $values = $this->getFieldsByStudent($st1);
+    public function getFieldsList($st1 = null){
+        $values = empty($st1) ? array() : $this->getFieldsByStudent($st1);
         return array(
             self::FIELD_EXTRA_EDUCATION => array(
                 'code' => self::FIELD_EXTRA_EDUCATION,

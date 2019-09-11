@@ -54,6 +54,9 @@ class CreateStpfileForm extends CFormModel
      * @param $attribute
      */
 	public function validateForm($attribute){
+	    if($this->hasErrors())
+	        return;
+
         if($this->type == self::TYPE_FIELD){
             $field = Stportfolio::model()->findByAttributes(array('stportfolio1' => $this->id, 'stportfolio2'=>$this->st1));
             if(empty($field))
@@ -61,13 +64,6 @@ class CreateStpfileForm extends CFormModel
                 $this->addError($attribute, tt('Сначала добавьте текст'));
                 return;
             }
-
-            if($field->stportfolio6 == 1)
-            {
-                $this->addError($attribute, tt('Запрещено редактирование данного поля, оно уже подтвержденно!'));
-                return;
-            }
-
         }
     }
 
@@ -84,23 +80,22 @@ class CreateStpfileForm extends CFormModel
                 return false;
             }
 
-            if($field->stportfolio6 == 1)
-            {
-                return false;
-            }
-
             $model = new Stpfile();
             $model->stpfile1 = Yii::app()->db->createCommand('select gen_id(GEN_STPFILE, 1) from rdb$database')->queryScalar();
 
             $trans = $model->getDbConnection()->beginTransaction();
             try {
-                $model->stpfile3 = $this->file->extensionName;
+                $model->setFilePath($this->file->name);
                 $model->stpfile3 = Yii::app()->user->id;
                 $model->stpfile4 = date('Y-m-d H:i:s');
                 $model->stpfile5 = $this->st1;
 
                 if ($model->save()) {
                     $fileName = PortalSettings::model()->getSettingFor(PortalSettings::PORTFOLIO_PATH) . '/' . $model->getFilePath();
+                    $dir = dirname($fileName);
+                    if (!file_exists($dir)) {
+                        CFileHelper::createDirectory($dir, 0755, true);
+                    }
                     if($this->file->saveAs($fileName) === false)
                         throw new CException('Ошибка сохранения файла');
                 }else{
@@ -110,8 +105,8 @@ class CreateStpfileForm extends CFormModel
                 $model1 = new Stpfieldfile();
                 $model1->stpfieldfile2 = $model->stpfile1;
                 $model1->stpfieldfile1 = $field->stportfolio1;
-                if (!$model->save()) {
-                    throw new CException('Ошибка добавления файла');
+                if (!$model1->save()) {
+                    throw new CException('Ошибка привязки файла');
                 }
 
                 $trans->commit();
@@ -119,7 +114,7 @@ class CreateStpfileForm extends CFormModel
                 return true;
             }catch (CException $error){
                 $trans->rollback();
-                throw new CException('Ошибка сохранения файла, откат');
+                throw new CException('Ошибка сохранения файла, '. $error->getMessage());
             }
         }
 

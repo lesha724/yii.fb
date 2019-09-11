@@ -289,11 +289,12 @@ class PortfolioFarmController extends Controller
         if(!$this->_checkPermission($st1, true))
             throw new CHttpException(403, tt('Нет доступа к данному студенту'));
 
-
+        if(isset($_POST['CreateStpfileForm'])) {
+            $model->attributes = $_POST['CreateStpfileForm'];
             $model->st1 = $st1;
             $model->type = $type;
             $model->id = $id;
-            $model->file=CUploadedFile::getInstanceByName('file');
+            $model->file=CUploadedFile::getInstance($model,'file');
 
             if ($model->validate()) {
 
@@ -301,22 +302,21 @@ class PortfolioFarmController extends Controller
                     if (!$model->save()) {
                         throw new CException(tt('Ошибка сохранения'));
                     }
-                }catch (CException $error){
+                } catch (CException $error) {
                     throw new CHttpException(500, tt('Ошибка добавления файла: {error}', array(
                         '{error}' => $error->getMessage()
                     )));
                 }
                 Yii::app()->user->setFlash('success', 'Файл успешно добавлен');
-                Yii::app()->end(CJSON::encode(array('error' => false)));
-            }else{
-                $error = $model->getError('file');
-
-                throw new CHttpException(500, tt('Ошибка добавления файла: {error}', array(
-                    '{error}' => $error
-                )));
+                $this->redirect(array('index'));
             }
+        }
 
-            throw new CHttpException(500, tt('Ошибка добавления'));
+        $this->render('upload-file',array(
+            'model'=>$model,
+            'type' => $type,
+            'id' => $id
+        ));
     }
 
     /**
@@ -378,6 +378,9 @@ class PortfolioFarmController extends Controller
         $this->redirect(array('index'));
     }
 
+
+
+
     /**
      * Удаление елемента (учебно рабочая практика)
      * @param $id
@@ -424,7 +427,10 @@ class PortfolioFarmController extends Controller
             $model->attributes=$_POST['Stpwork'];
             if($model->validate())
             {
-                $model->stpwork1=new CDbExpression('GEN_ID(GEN_Stpwork, 1)');
+                $model->stpwork2 = $id;
+                $model->stpwork1 = new CDbExpression('GEN_ID(GEN_Stpwork, 1)');
+                $model->stpwork7 = Yii::app()->user->id;
+                $model->stpwork8 = date('Y-m-d H:i:s');
                 if($model->save())
                     $this->redirect(array('index'));
             }
@@ -438,14 +444,23 @@ class PortfolioFarmController extends Controller
     /**
      * @param $id
      * @throws CHttpException
+     * @throws CException
      */
     public function actionUpdateStpwork($id)
     {
         $model=$this->_loadStpworkModel($id);
 
+        $studentId = $model->stpwork2;
+
+        if(!$this->_checkPermission($model->stpwork2, true))
+            throw new CHttpException(403, tt('Нет доступа к данному студенту'));
+
         if(isset($_POST['Stpwork']))
         {
             $model->attributes=$_POST['Stpwork'];
+            $model->stpwork2 = $studentId;
+            $model->stpwork7 = Yii::app()->user->id;
+            $model->stpwork8 = date('Y-m-d H:i:s');
             if($model->save())
                 $this->redirect(array('index'));
         }

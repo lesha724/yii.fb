@@ -85,4 +85,11 @@ class Stpfile extends CActiveRecord
     public function getFilePath(){
         return $this->stpfile5.'/'.$this->stpfile1.'.'.$this->stpfile2;
     }
+
+    /**
+     * @param $name
+     */
+    public function setFilePath($name){
+        $this->stpfile2 = $this->stpfile5.'/'.$this->stpfile1.'.'.$name;
+    }
 }

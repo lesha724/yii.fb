@@ -32,12 +32,11 @@ class Stpwork extends CActiveRecord
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
-			array('stpwork1, stpwork2, stpwork7', 'numerical', 'integerOnly'=>true),
+		    array('stpwork3, stpwork4, stpwork5, stpwork6', 'required'),
+			array('stpwork2, stpwork7', 'numerical', 'integerOnly'=>true),
 			array('stpwork3, stpwork4, stpwork5, stpwork6', 'length', 'max'=>200),
-			array('stpwork8', 'length', 'max'=>8),
+			array('stpwork8', 'length', 'max'=>20),
 		);
 	}
 
@@ -46,8 +45,6 @@ class Stpwork extends CActiveRecord
 	 */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
 		return array(
 			'stpwork20' => array(self::BELONGS_TO, 'St', 'stpwork2'),
 			'stpwork70' => array(self::BELONGS_TO, 'Users', 'stpwork7'),

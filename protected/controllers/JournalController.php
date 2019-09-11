@@ -216,36 +216,11 @@ class JournalController extends Controller
     {
         $model = new FilterForm;
         $model->scenario = 'journal';
-        /*if (isset($_REQUEST['showRetake'])) {
-            Yii::app()->user->setState('showRetake',(int)$_REQUEST['showRetake']);
-            unset($_REQUEST['showRetake']);
-        }*/
+
         if (isset($_REQUEST['FilterForm']))
             $model->attributes=$_REQUEST['FilterForm'];
 
         $read_only=false;
-        /*if(!empty($model->group))
-        {
-            list($uo1,$gr1) = explode("/", $model->group);
-
-            $sql = <<<SQL
-                     SELECT * FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,2,:US1,0,0,:TYPE_LESSON);
-SQL;
-            $command = Yii::app()->db->createCommand($sql);
-
-            $command->bindValue(':P1', Yii::app()->user->dbModel->p1);
-            $command->bindValue(':UO1', $uo1);
-            $command->bindValue(':US1', 0);
-            $command->bindValue(':GR1', $gr1);
-            $command->bindValue(':TYPE_LESSON', $model->type_lesson);
-            $command->bindValue(':YEAR', Yii::app()->session['year']);
-            $command->bindValue(':SEM', Yii::app()->session['sem']);
-            $res = $command->queryRow();
-            if(empty($res)||$res['dostup']==0)
-            {
-                $read_only=true;
-            }
-        }*/
 
         $this->render('journal', array(
             'model' => $model,
@@ -287,7 +262,6 @@ SQL;
                 $error = true;
                 $errorType=2;
             }else{
-                $sem7 = Gr::model()->getSem7ByGr1ByDate($gr1,date('d.m.Y'));
                 $students = St::model()->getStudentsForJournal($gr1, $uo1);
                 if(empty($students)){
                     $error = true;
