@@ -11,7 +11,7 @@
  * @var TimeTableForm $model
  */
 
-$this->pageHeader=tt('Студент');
+$this->pageHeader=tt('Портфолио');
 $this->breadcrumbs=array(
     tt('Портфолио'),
 );
