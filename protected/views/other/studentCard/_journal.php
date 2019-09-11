@@ -8,8 +8,8 @@
 function tableTrModule($date,$gr1,$st,$elg,$moduleNom,$modules,$sem7)
 {
     $ps60 = PortalSettings::model()->getSettingFor(60);
-    if (($st['std23']!=$sem7&&$st['std23']!=$sem7+1) && $ps60 ==1)
-        return '<td colspan="4">&nbsp;</td>';
+    /*if (($st['std23']!=$sem7&&$st['std23']!=$sem7+1) && $ps60 ==1)
+        return '<td colspan="4">&nbsp;</td>';*/
 
     if (stripos($date['r2'], '11.11.1111')!==false )
         return '<td colspan="4">&nbsp;</td>';
@@ -67,8 +67,8 @@ HTML
 function tableTrModule2($date,$gr1,$st,$elg,$moduleNom,$modules,$sem7)
 {
     $ps60 = PortalSettings::model()->getSettingFor(60);
-    if (($st['std23']!=$sem7&&$st['std23']!=$sem7+1) && $ps60 ==1)
-        return '<td colspan="4">&nbsp;</td>';
+    /*if (($st['std23']!=$sem7&&$st['std23']!=$sem7+1) && $ps60 ==1)
+        return '<td colspan="4">&nbsp;</td>';*/
 
     if (stripos($date['r2'], '11.11.1111')!==false )
         return '<td colspan="4">&nbsp;</td>';
@@ -94,8 +94,8 @@ HTML
 
 function tableRow($date,$st,$marks,$type_lesson,$ps56,$sem7,$ps60,$ps55)
 {
-    if (($st['std23']!=$sem7&&$st['std23']!=$sem7+1) &&$ps60==1)
-        return '<td colspan="2">&nbsp;</td>';
+    /*if (($st['std23']!=$sem7&&$st['std23']!=$sem7+1) &&$ps60==1)
+        return '<td colspan="2">&nbsp;</td>';*/
 
     if (stripos($date['r2'], '11.11.1111')!==false )
         return '<td colspan="2">&nbsp;</td>';
