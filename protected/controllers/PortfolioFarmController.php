@@ -127,36 +127,58 @@ class PortfolioFarmController extends Controller
     /**
      * Проверка доступа к студенту
      * @param int $st1
-     * @param $write bool для записис
      * @return bool
      * @throws CException
      */
-    private function _checkPermission($st1, $write = false){
+    private function _checkPermission($st1){
         if(Yii::app()->user->isAdmin)
             return true;
 
-        $block = false;
-        if($write)
-            $block = Stpblock::model()->findByPk($st1) != null;
-
         if(Yii::app()->user->isStd) {
-            return $st1 == Yii::app()->user->dbModel->st1 && !$block;
+            return $st1 == Yii::app()->user->dbModel->st1;
         }
 
         if(Yii::app()->user->isTch){
             $p = Yii::app()->user->dbModel;
-            return ($p->isDekanForStudent($st1) || $p->isKuratorForStudent($st1)) && !$block;
+            return ($p->isDekanForStudent($st1) || $p->isKuratorForStudent($st1));
         }
 
         return false;
     }
 
     /**
-     * Изменнеие поля
+     * удаление поля
+     * @param $id
+     * @throws CDbException
      * @throws CException
      * @throws CHttpException
      */
-    public function actionChangeField(){
+    public function actionDeleteField($id){
+        if (!Yii::app()->request->isPostRequest)
+            throw new CHttpException(405, 'Invalid request. Please do not repeat this request again.');
+
+        $field = Stportfolio::model()->findByPk(array('stportfolio0' => $id));
+        if(empty($field))
+            throw new CHttpException(500, tt('Ошибка сохранения'));
+
+        if(!$this->_checkPermission($field->stportfolio2))
+            throw new CHttpException(403, tt('Нет доступа к данному студенту'));
+
+        if(!empty($field->stportfolio7))
+            throw new CHttpException(403, tt('Элемент уже подтвержден'));
+
+        if(!$field->delete())
+            throw new CHttpException(500, tt('Ошибка сохранения'));
+
+        $this->redirect(array('index'));
+    }
+
+    /**
+     * добавления поля
+     * @throws CException
+     * @throws CHttpException
+     */
+    public function actionAddField(){
         if (!Yii::app()->request->isAjaxRequest)
             throw new CHttpException(405, 'Invalid request. Please do not repeat this request again.');
 
@@ -170,15 +192,14 @@ class PortfolioFarmController extends Controller
         if(!in_array($id, Stportfolio::model()->getFieldsIdList()))
             throw new CHttpException(400, tt('Неверные входящие данные'));
 
-        if(!$this->_checkPermission($st1, false))
+        if(!$this->_checkPermission($st1))
             throw new CHttpException(403, tt('Нет доступа к данному студенту'));
 
 
-        $model = Stportfolio::model()->findByAttributes(array('stportfolio1' => $id, 'stportfolio2' => $st1));
-        if(empty($model))
-            $model = new Stportfolio();
+        $model = new Stportfolio();
 
         $p = new CHtmlPurifier();
+        $model->stportfolio0 = new CDbExpression('GEN_ID(GEN_Stpwork, 1)');
         $model->stportfolio1 = $id;
         $model->stportfolio2 = $st1;
         $model->stportfolio3 = $p->purify($value);
@@ -264,8 +285,20 @@ class PortfolioFarmController extends Controller
         if(empty($file))
             throw new CHttpException(404, tt('Файл не найден'));
 
-        if(!$this->_checkPermission($file->stpfile5, $write))
+        if(!$this->_checkPermission($file->stpfile5))
             throw new CHttpException(403, tt('Нет доступа к данному студенту'));
+
+        if($write){
+            if($file->stpfile6 == Stpfile::TYPE_STPORTFOLIO) {
+                if (empty($file->stportfolios))
+                    throw new CHttpException(400, tt('Не найден елемент'));
+                foreach ($file->stportfolios as $stportfolio){
+                    if(!empty($stportfolio->stportfolio7))
+                        throw new CHttpException(403, tt('Элемент к которому привязан файл уже подтвержден'));
+                }
+            }
+
+        }
 
         return $file;
     }
@@ -286,7 +319,7 @@ class PortfolioFarmController extends Controller
         if(empty($id) || empty($st1) || empty($type))
             throw new CHttpException(400, tt('Не все данные переданны'));
 
-        if(!$this->_checkPermission($st1, true))
+        if(!$this->_checkPermission($st1))
             throw new CHttpException(403, tt('Нет доступа к данному студенту'));
 
         if(isset($_POST['CreateStpfileForm'])) {
@@ -320,68 +353,6 @@ class PortfolioFarmController extends Controller
     }
 
     /**
-     * Заблокирвать студента
-     * @param $id
-     * @throws CHttpException
-     * @throws CException
-     */
-    public function actionBlock($id){
-        $student = St::model()->findByPk($id);
-        if(empty($student))
-            throw new CHttpException(400, tt('Не найден студент'));
-
-        if(!$this->_checkPermission($id, true))
-            throw new CHttpException(403, tt('Нет доступа к данному студенту'));
-
-        $block = Stpblock::model()->findByPk($id);
-        if(!empty($block))
-            throw new CHttpException(400, tt('Студент уже заблокирован'));
-
-        $block = new Stpblock();
-        $block->stpblock1 = $id;
-        $block->stpblock2 = Yii::app()->user->id;
-        $block->stpblock3 = date('Y-m-d H:i:s');
-
-        if ($block->save()) {
-            Yii::app()->user->setFlash('success', tt('Студент успешно заблокирован'));
-        } else {
-            Yii::app()->user->setFlash('error', tt('Ошибка блокировки студента'));
-        }
-
-        $this->redirect('/portfolioFarm/index');
-    }
-
-    /**
-     * Снять блокирвоку со студента
-     * @param $id
-     * @throws CHttpException
-     * @throws CException
-     */
-    public function actionUnBlock($id){
-        $student = St::model()->findByPk($id);
-        if(empty($student))
-            throw new CHttpException(400, tt('Не найден студент'));
-
-        if(!$this->_checkPermission($id, true))
-            throw new CHttpException(403, tt('Нет доступа к данному студенту'));
-
-        $block = Stpblock::model()->findByPk($id);
-        if(empty($block))
-            throw new CHttpException(400, tt('Студент не заблокирован'));
-
-        if ($block->delete()) {
-            Yii::app()->user->setFlash('success', tt('Студент успешно разблокирован'));
-        } else {
-            Yii::app()->user->setFlash('error', tt('Ошибка разблокировки студента'));
-        }
-
-        $this->redirect(array('index'));
-    }
-
-
-
-
-    /**
      * Удаление елемента (учебно рабочая практика)
      * @param $id
      * @throws CException
@@ -393,7 +364,7 @@ class PortfolioFarmController extends Controller
 
         $model = $this->_loadStpworkModel($id);
 
-        if(!$this->_checkPermission($model->stpwork2, true))
+        if(!$this->_checkPermission($model->stpwork2))
             throw new CHttpException(403, tt('Нет доступа к данному студенту'));
 
         if ($model->delete()) {
@@ -416,7 +387,7 @@ class PortfolioFarmController extends Controller
         if(empty($student))
             throw new CHttpException(400, tt('Не найден студент'));
 
-        if(!$this->_checkPermission($id, true))
+        if(!$this->_checkPermission($id))
             throw new CHttpException(403, tt('Нет доступа к данному студенту'));
 
         $model=new Stpwork;
@@ -452,7 +423,7 @@ class PortfolioFarmController extends Controller
 
         $studentId = $model->stpwork2;
 
-        if(!$this->_checkPermission($model->stpwork2, true))
+        if(!$this->_checkPermission($model->stpwork2))
             throw new CHttpException(403, tt('Нет доступа к данному студенту'));
 
         if(isset($_POST['Stpwork']))
@@ -481,6 +452,9 @@ class PortfolioFarmController extends Controller
         $model=Stpwork::model()->findByPk($id);
         if($model===null)
             throw new CHttpException(404,'The requested page does not exist.');
+        if(!empty($model->stpwork9))
+            throw new CHttpException(403, tt('Элемент уже подтвержден'));
+
         return $model;
     }
 }

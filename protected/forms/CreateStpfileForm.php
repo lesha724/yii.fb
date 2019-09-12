@@ -58,27 +58,31 @@ class CreateStpfileForm extends CFormModel
 	        return;
 
         if($this->type == self::TYPE_FIELD){
-            $field = Stportfolio::model()->findByAttributes(array('stportfolio1' => $this->id, 'stportfolio2'=>$this->st1));
+            $field = Stportfolio::model()->findByAttributes(array('stportfolio0' => $this->id, 'stportfolio2'=>$this->st1));
             if(empty($field))
             {
-                $this->addError($attribute, tt('Сначала добавьте текст'));
+                $this->addError($attribute, tt('Не найден елемент'));
                 return;
             }
         }
     }
 
     /**
+     * Сохран
      * @return bool
      * @throws CDbException
      * @throws CException
      */
     public function save(){
         if($this->type == self::TYPE_FIELD){
-            $field = Stportfolio::model()->findByAttributes(array('stportfolio1' => $this->id, 'stportfolio2'=>$this->st1));
+            $field = Stportfolio::model()->findByAttributes(array('stportfolio0' => $this->id, 'stportfolio2'=>$this->st1));
             if(empty($field))
             {
                 return false;
             }
+
+            if(!empty($field->stportfolio7))
+                return false;
 
             $model = new Stpfile();
             $model->stpfile1 = Yii::app()->db->createCommand('select gen_id(GEN_STPFILE, 1) from rdb$database')->queryScalar();
@@ -102,10 +106,8 @@ class CreateStpfileForm extends CFormModel
                     throw new CException('Ошибка добавления файла');
                 }
 
-                $model1 = new Stpfieldfile();
-                $model1->stpfieldfile2 = $model->stpfile1;
-                $model1->stpfieldfile1 = $field->stportfolio1;
-                if (!$model1->save()) {
+                $field->stportfolio6 = $model->stpfile1;
+                if (!$field->save()) {
                     throw new CException('Ошибка привязки файла');
                 }
 

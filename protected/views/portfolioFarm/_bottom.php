@@ -19,18 +19,13 @@
  * @return mixed|string
  * @throws Exception
  */
-function grid($code, $st1){
+function gridFiles($code, $st1){
 
     $dataProvider = new CArrayDataProvider(
-        Stpfile::model()->findAllBySql(
-            <<<SQL
-                      SELECT stpfile.* from stpfile
-                        INNER JOIN stpfieldfile on (stpfieldfile1=:codeM and stpfieldfile2 = stpfile1)
-                      where stpfile5 = :stpfile5
-SQL
-            ,array(
-                ':codeM' => $code,
-                ':stpfile5' => $st1
+        Stpfile::model()->findAllByAttributes(
+            array(
+                'stpfile6' => $code,
+                'stpfile5' => $st1
             )
         ),
         array(
@@ -83,7 +78,7 @@ SQL
  * @return string
  * @throws Exception
  */
-function renderField($number, $st1, $code, $name, $needFile, $inputType, $value = ''){
+function renderField($number, $st1, $code, $name, $needFile, $inputType){
     $html = CHtml::openTag('ol');
     $html .= CHtml::tag('strong', array(), $number);
     $html .= CHtml::openTag('div', array(
@@ -92,50 +87,64 @@ function renderField($number, $st1, $code, $name, $needFile, $inputType, $value 
     $html .= CHtml::label($name,'field-'.$code, array(
         'class' => 'control-label'
     ));
-    $html .= CHtml::$inputType('field-'.$code, $value, array(
-        'class' => 'field-input',
-        'data-id' => $code
+    $html .= CHtml::$inputType('field-'.$code, '', array(
+        'class' => 'field-input'
     ));
+    $html .= CHtml::link(tt('Добавить'), '#', array('class'=>'btn-mini btn btn-add-field', 'data-id' => $code));
+    $html .= Yii::app()->controller->widget('bootstrap.widgets.TbGridView', array(
+        'dataProvider' => Stportfolio::model()->search($st1, $code),
+        'id' => 'field-grid-'.$code,
+        'filter' => null,
+        'type' => 'striped bordered',
+        'columns' => array(
+            'stportfolio3',
+            array(
+                'name' => 'stportfolio6',
+                'header' => tt('Файл'),
+                'value' => 'empty($data->stportfolio6) ? "" : $data->stportfolio60->stpfile2',
+                'visible' => $needFile
+            ),
+            array(
+                'class'=>'bootstrap.widgets.TbButtonColumn',
+                'template'=>'{delete}',
+                'buttons'=>array(
+                    'delete' => array
+                    (
+                        'url'=>'array("/portfolioFarm/deleteField","id"=>$data->stportfolio0)',
+                    ),
+                    /*'viewFile' => array
+                    (
+                        'url'=>'array("/portfolioFarm/file","id"=>$data->stportfolio6)',
+                        'visible' => $needFile
+                    ),*/
+                ),
+            ),
+        )
+    ), true);
     $html .= CHtml::closeTag('div');
-    if($needFile) {
-        $html .= CHtml::openTag('div', array(
-            'class' => 'file-control-group'
-        ));
 
-        $html .= '<div class="form-actions">';
-        $html .= grid($code, $st1);
-        $html .= '</div>';
-
-        $html .= CHtml::closeTag('div');
-    }
     $html .= CHtml::closeTag('ol');
     return $html;
 }
 
-Yii::app()->clientScript->registerCss('portfolioFarm', <<<CSS
-    .control-group textarea{
-        width: 500px;
-        height: 80px;
-    }
-CSS
-    );
-
-$url = Yii::app()->createUrl('/portfolioFarm/changeField');
+$url = Yii::app()->createUrl('/portfolioFarm/addField');
 $spinner1 = '$spinner1';
 
 Yii::app()->clientScript->registerScript('portfolioFarm', <<<JS
     var successFieldMessage = 'Изменение сохранено';
     
-    $('.field-input').change(function(event) {
-        
+    $('.btn-add-field').click(function(event) {
+        event.preventDefault();
         var url = '{$url}';
         
         var parentControl = $(this).closest('.control-group');
         
+        var id = $(this).data('id');
+        
         var params = {
             st1:{$model->student},
-            id: $(this).data('id'),
-            value:$(this).val()
+            id: id,
+            value:$('#field-'+id).val()
         };
         $spinner1.show();
         $.ajax({
@@ -148,6 +157,8 @@ Yii::app()->clientScript->registerScript('portfolioFarm', <<<JS
                 $spinner1.hide();
                 parentControl.removeClass('error');
                 parentControl.addClass('success');
+                $('#field-'+id).val('');
+                $.fn.yiiGridView.update('field-grid-'+id);
             },
             error: function(jqXHR, textStatus, errorThrown){
                 addGritter('', textStatus + ':'+ jqXHR.responseText, 'error');
@@ -159,35 +170,6 @@ Yii::app()->clientScript->registerScript('portfolioFarm', <<<JS
     });
 JS
    , CClientScript::POS_END );
-
-$block = Stpblock::model()->findByPk($student->st1);
-if($block){
-    Yii::app()->clientScript->registerCss('block-st', <<<CSS
-        .btn-create-file, .field-input{
-            pointer-events: none;
-            opacity: 0.6;
-        }
-CSS
-    );
-    ?>
-    <div class="alert alert-warning">
-        <?=tt('Данный студент заблокирован для изменений. Пользователь {userName} {date}', array(
-            '{userName}' => $block->stpblock20->getName(),
-            '{date}' => $block->stpblock3
-        ))?>
-    </div>
-    <?php
-}
-
-if(Yii::app()->user->isTch){
-    $this->widget('bootstrap.widgets.TbButton', array(
-        'buttonType'=>'link',
-        'type'=>!$block ? 'success' : 'warning',
-        'url' => Yii::app()->createUrl(!$block ? '/portfolioFarm/block' : '/portfolioFarm/unblock', array('id' => $model->student)),
-        'icon'=>!$block ? 'ok' : 'remove',
-        'label'=>!$block ? tt('Заблокировать') : tt('Отменить блокировку') ,
-    ));
-}
 
 $fields = Stportfolio::model()->getFieldsList($student->st1);
 
@@ -204,16 +186,16 @@ echo CHtml::openTag('ul');
 
 
 $field = $fields[Stportfolio::FIELD_EXTRA_EDUCATION];
-echo renderField('',$student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType'], $field['value']);
+echo renderField('',$student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType']);
 
 $field = $fields[Stportfolio::FIELD_WORK_EXPERIENCE];
-echo renderField('',$student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType'], $field['value']);
+echo renderField('',$student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType']);
 
 $field = $fields[Stportfolio::FIELD_PHONE];
-echo renderField('',$student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType'], $field['value']);
+echo renderField('',$student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType']);
 
 $field = $fields[Stportfolio::FIELD_EMAIL];
-echo renderField('',$student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType'], $field['value']);
+echo renderField('',$student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType']);
 
 echo CHtml::closeTag('ul');
 
@@ -257,25 +239,25 @@ echo CHtml::link(tt('Добавить'), Yii::app()->createUrl('/portfolioFarm/a
 echo CHtml::closeTag('ol');
 
 $field = $fields[Stportfolio::FIELD_EXTRA_COURSES];
-echo renderField('2.2', $student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType'], $field['value']);
+echo renderField('2.2', $student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType']);
 
 $field = $fields[Stportfolio::FIELD_OLIMPIADS];
-echo renderField('2.4',  $student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType'], $field['value']);
+echo renderField('2.4',  $student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType']);
 
 $field = $fields[Stportfolio::FIELD_SPORTS];
-echo renderField('2.5',  $student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType'], $field['value']);
+echo renderField('2.5',  $student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType']);
 
 $field = $fields[Stportfolio::FIELD_SCIENCES];
-echo renderField('2.6',  $student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType'], $field['value']);
+echo renderField('2.6',  $student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType']);
 
 $field = $fields[Stportfolio::FIELD_STUD_ORGS];
-echo renderField('2.7',  $student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType'], $field['value']);
+echo renderField('2.7',  $student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType']);
 
 $field = $fields[Stportfolio::FIELD_VOLONTER];
-echo renderField('2.8',  $student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType'], $field['value']);
+echo renderField('2.8',  $student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType']);
 
 $field = $fields[Stportfolio::FIELD_GROMADSKE];
-echo renderField('2.9',  $student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType'], $field['value']);
+echo renderField('2.9',  $student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType']);
 
 echo CHtml::closeTag('ul');
 
@@ -291,7 +273,7 @@ echo '<div class="page-header">
   <h3>4. ПОРТФОЛІО ВІДГУКІВ</h3>
 </div>';
 
-echo grid(-1, $model->student);
+echo gridFiles(-1, $model->student);
 
 
 
