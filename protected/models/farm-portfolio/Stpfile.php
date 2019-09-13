@@ -90,6 +90,6 @@ class Stpfile extends CActiveRecord
      * @param $name
      */
     public function setFilePath($name){
-        $this->stpfile2 = $this->stpfile5.'/'.$this->stpfile1.'.'.$name;
+        $this->stpfile2 = pathinfo($name, PATHINFO_BASENAME);
     }
 }

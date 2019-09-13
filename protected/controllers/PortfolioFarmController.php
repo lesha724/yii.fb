@@ -236,7 +236,7 @@ class PortfolioFarmController extends Controller
                 throw  new Exception('Ошибка');
             }
 
-            Yii::app()->end(CJSON::encode(array('error' => false)));
+            $this->redirect(array('index'));
 
         }catch (Exception $error){
             throw new CHttpException(500, tt('Ошибка удаления: {error}', array(
@@ -259,7 +259,7 @@ class PortfolioFarmController extends Controller
         if(!file_exists($fileName))
             throw new CHttpException(400,tt('Файл не существует или удален.'));
         $ext = pathinfo($fileName,PATHINFO_EXTENSION);
-        if(!in_array($ext, array('png', 'jpg')))
+        if(!in_array(mb_strtolower($ext), array('png', 'jpg')))
             header('Content-Type: application/'.$ext);
         else
             header('Content-Type: image/'.$ext);
@@ -313,7 +313,7 @@ class PortfolioFarmController extends Controller
         $model = new CreateStpfileForm();
 
         $st1 = Yii::app()->request->getParam('st1', null);
-        $id = Yii::app()->request->getParam('id', null);
+        $id = Yii::app()->request->getParam('idField', null);
         $type = Yii::app()->request->getParam('type', null);
 
         if(empty($id) || empty($st1) || empty($type))

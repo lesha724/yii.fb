@@ -62,7 +62,7 @@ function gridFiles($code, $st1){
         )
     ), true);
 
-    $html .= CHtml::link(tt('Добавить'), Yii::app()->createUrl('/portfolioFarm/uploadFile', array('id'=>$code, 'st1'=> $st1, 'type' => 'field')), array('class'=>'btn-mini btn btn-create-file'));
+    $html .= CHtml::link(tt('Добавить'), Yii::app()->createUrl('/portfolioFarm/uploadFile', array('st1'=> $st1, 'type' => 'others', 'idField'=>$code)), array('class'=>'btn-mini btn btn-create-file'));
 
     return $html;
 }
@@ -74,7 +74,6 @@ function gridFiles($code, $st1){
  * @param $name string
  * @param $needFile bool
  * @param $inputType string
- * @param $value string
  * @return string
  * @throws Exception
  */
@@ -101,7 +100,15 @@ function renderField($number, $st1, $code, $name, $needFile, $inputType){
             array(
                 'name' => 'stportfolio6',
                 'header' => tt('Файл'),
-                'value' => 'empty($data->stportfolio6) ? "" : $data->stportfolio60->stpfile2',
+                'type'   => 'raw',
+                'value' => function($data) use (&$needFile){
+                    if(!$needFile)
+                        echo '';
+                    if(empty($data->stportfolio6))
+                        return CHtml::link(tt('Добавить файл'), Yii::app()->createUrl('/portfolioFarm/uploadFile', array('st1'=> $data->stportfolio2, 'type' => 'field', 'idField'=>$data->stportfolio0)));
+
+                    return CHtml::link($data->stportfolio60->stpfile2, array('/portfolioFarm/file','id'=>$data->stportfolio6)). ' ('.CHtml::link(tt('удалить'), '#', array('submit'=>array('/portfolioFarm/deleteFile','id'=>$data->stportfolio6))).')';
+                },
                 'visible' => $needFile
             ),
             array(
