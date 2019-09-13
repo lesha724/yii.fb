@@ -43,26 +43,36 @@ function gridFiles($code, $st1){
             array(
                 'name' => 'stpfile2',
                 'header' => tt('Файл'),
-                'value' => 'basename($data->stpfile2)'
+                'type' => 'raw',
+                'value' => function($data){
+                    return CHtml::link(
+                            $data->stpfile2,
+                            array(
+                                '/portfolioFarm/file','id'=>$data->stpfile1)
+                        );
+                }
             ),
             array(
                 'class'=>'bootstrap.widgets.TbButtonColumn',
-                'template'=>'{view} {delete}',
+                'template'=>'{delete}',
                 'buttons'=>array(
                     'delete' => array
                     (
                         'url'=>'array("/portfolioFarm/deleteFile","id"=>$data->stpfile1)',
+                        'options'=>array(
+                            'class' => 'text-error'
+                        )
                     ),
-                    'view' => array
+                    /*'view' => array
                     (
                         'url'=>'array("/portfolioFarm/file","id"=>$data->stpfile1)',
-                    ),
+                    ),*/
                 ),
             ),
         )
     ), true);
 
-    $html .= CHtml::link(tt('Добавить'), Yii::app()->createUrl('/portfolioFarm/uploadFile', array('st1'=> $st1, 'type' => 'others', 'idField'=>$code)), array('class'=>'btn-mini btn btn-create-file'));
+    $html .= CHtml::link(tt('Добавить'), Yii::app()->createUrl('/portfolioFarm/uploadFile', array('st1'=> $st1, 'type' => 'others', 'idField'=>$code)), array('class'=>'btn-mini btn btn-primary btn-create-file'));
 
     return $html;
 }
@@ -82,13 +92,13 @@ function renderField($number, $st1, $code, $name, $needFile, $inputType){
     $html .= CHtml::openTag('div', array(
         'class' => 'control-group'
     ));
-    $html .= CHtml::label(CHtml::tag('strong', array(), $number).'&nbsp;'. $name,'field-'.$code, array(
-        'class' => 'control-label'
+    $html .= CHtml::label($number.'&nbsp;'. $name,'field-'.$code, array(
+        'class' => 'control-label label-field'
     ));
     $html .= CHtml::$inputType('field-'.$code, '', array(
         'class' => 'field-input'
     ));
-    $html .= CHtml::link(tt('Добавить'), '#', array('class'=>'btn-mini btn btn-add-field', 'data-id' => $code));
+    $html .= CHtml::link(tt('Добавить'), '#', array('class'=>'btn-mini btn btn-primary btn-add-field', 'data-id' => $code));
     $html .= Yii::app()->controller->widget('bootstrap.widgets.TbGridView', array(
         'dataProvider' => Stportfolio::model()->search($st1, $code),
         'id' => 'field-grid-'.$code,
@@ -107,9 +117,15 @@ function renderField($number, $st1, $code, $name, $needFile, $inputType){
                     if(!$needFile)
                         return '';
                     if(empty($data->stportfolio6))
-                        return CHtml::link(tt('Добавить файл'), Yii::app()->createUrl('/portfolioFarm/uploadFile', array('st1'=> $data->stportfolio2, 'type' => 'field', 'idField'=>$data->stportfolio0)));
+                        return CHtml::link(tt('Добавить файл'), Yii::app()->createUrl('/portfolioFarm/uploadFile', array('st1'=> $data->stportfolio2, 'type' => 'field', 'idField'=>$data->stportfolio0)), array(
+                            'class' => 'text-success'
+                        ));
 
-                    return CHtml::link($data->stportfolio60->stpfile2, array('/portfolioFarm/file','id'=>$data->stportfolio6)). ' ('.CHtml::link(tt('удалить'), '#', array('submit'=>array('/portfolioFarm/deleteFile','id'=>$data->stportfolio6))).')';
+                    return CHtml::link(
+                        $data->stportfolio60->stpfile2,
+                        array(
+                            '/portfolioFarm/file','id'=>$data->stportfolio6)
+                        ). ' ('.CHtml::link(tt('удалить'), '#', array('submit'=>array('/portfolioFarm/deleteFile','id'=>$data->stportfolio6), 'class' => 'text-error')).')';
                 },
                 'visible' => $needFile
             ),
@@ -146,6 +162,9 @@ function renderField($number, $st1, $code, $name, $needFile, $inputType){
                     'delete' => array
                     (
                         'url'=>'array("/portfolioFarm/deleteField","id"=>$data->stportfolio0)',
+                        'options'=>array(
+                            'class' => 'text-error'
+                        )
                     )
                 ),
             ),
@@ -159,6 +178,41 @@ function renderField($number, $st1, $code, $name, $needFile, $inputType){
 
 $url = Yii::app()->createUrl('/portfolioFarm/addField');
 $spinner1 = '$spinner1';
+
+Yii::app()->clientScript->registerCss('portfolioBottom', <<<CSS
+    .label-field{
+        font-weight: bold;
+        font-size: 17px;
+    }
+
+    .field-input{
+        width: 99%;
+    }
+    
+    .ul-fields>ol{
+        border-bottom: 1px solid #0B6CBC;
+        border-bottom-style: dotted;
+        border-bottom-width: 2px;
+    }
+
+    .btn-create-file, .btn-add-field, .btn-add-stpwork {
+        min-width: 100px;
+        font-size: 15px!important;
+    }
+
+    .btn-add-stpwork{
+        margin-bottom: 5px!important;
+    }
+
+    .ul-fields .table thead tr{
+        color: #000;
+    }
+    
+    h3 {
+        font-weight: bold!Important;
+    }
+CSS
+    );
 
 Yii::app()->clientScript->registerScript('portfolioFarm', <<<JS
     var successFieldMessage = 'Изменение сохранено';
@@ -221,7 +275,9 @@ $this->renderPartial('_stInfo', array(
     'model' => $model,
 ));
 
-echo CHtml::openTag('ul');
+echo CHtml::openTag('ul', array(
+    'class' => 'ul-fields'
+));
 
 
 $field = $fields[Stportfolio::FIELD_EXTRA_EDUCATION];
@@ -243,11 +299,15 @@ echo '<div class="page-header">
   <h3>2. ПОРТФОЛІО ДОСЯГНЕНЬ</h3>
 </div>';
 
-echo CHtml::openTag('ul');
+echo CHtml::openTag('ul', array(
+    'class' => 'ul-fields'
+));
 
 
 echo CHtml::openTag('ol');
-echo CHtml::label(CHtml::tag('strong', array(), '2.1').'&nbsp;'.'Навчально-професійна діяльність', '');
+echo CHtml::label('2.1'.'&nbsp;'.'Навчально-професійна діяльність', '', array(
+    'class' => 'label-field'
+));
 Yii::app()->controller->widget('bootstrap.widgets.TbGridView', array(
     'dataProvider' => Stpwork::model()->search($model->student),
     'filter' => null,
@@ -290,6 +350,9 @@ Yii::app()->controller->widget('bootstrap.widgets.TbGridView', array(
                 'delete' => array
                 (
                     'url'=>'array("/portfolioFarm/deleteStpwork","id"=>$data->stpwork1)',
+                    'options'=>array(
+                        'class' => 'text-error'
+                    )
                 ),
                 'update' => array
                 (
@@ -299,7 +362,7 @@ Yii::app()->controller->widget('bootstrap.widgets.TbGridView', array(
         ),
     )
 ));
-echo CHtml::link(tt('Добавить'), Yii::app()->createUrl('/portfolioFarm/addStpwork', array( 'id'=> $model->student)), array('class'=>'btn-mini btn'));
+echo CHtml::link(tt('Добавить'), Yii::app()->createUrl('/portfolioFarm/addStpwork', array( 'id'=> $model->student)), array('class'=>'btn-mini btn btn-primary btn-add-stpwork'));
 echo CHtml::closeTag('ol');
 
 $field = $fields[Stportfolio::FIELD_EXTRA_COURSES];

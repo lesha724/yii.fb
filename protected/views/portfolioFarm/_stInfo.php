@@ -11,6 +11,14 @@
  * @var TimeTableForm $model
  */
 
+Yii::app()->clientScript->registerCss('stInfo', <<<CSS
+    .student-info td {
+        font-size: 1.2em;
+        color: #0A246A;
+    }
+CSS
+    );
+
 $studentInfo = $student->getStudentInfoForPortfolio();
 $url = $this->createUrl('/site/userPhoto', array('_id' => $student->st1, 'type' => Users::FOTO_ST1));
 $class='img-circle';
