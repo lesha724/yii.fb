@@ -89,14 +89,15 @@ class CreateStpfileForm extends CFormModel
 
             $trans = $model->getDbConnection()->beginTransaction();
             try {
-                $model->setFilePath($this->file->name);
+                $model->stpfile2 = pathinfo($this->file->name, PATHINFO_BASENAME);
                 $model->stpfile3 = Yii::app()->user->id;
                 $model->stpfile4 = date('Y-m-d H:i:s');
                 $model->stpfile5 = $this->st1;
                 $model->stpfile6 = 0;
+                $model->stpfile7 = Stpfile::generateFilePath($model);
 
                 if ($model->save()) {
-                    $fileName = PortalSettings::model()->getSettingFor(PortalSettings::PORTFOLIO_PATH) . '/' . $model->getFilePath();
+                    $fileName = PortalSettings::model()->getSettingFor(PortalSettings::PORTFOLIO_PATH) . '/' . $model->stpfile7;
                     $dir = dirname($fileName);
                     if (!file_exists($dir)) {
                         CFileHelper::createDirectory($dir, 0755, true);
@@ -125,14 +126,15 @@ class CreateStpfileForm extends CFormModel
 
             $trans = $model->getDbConnection()->beginTransaction();
             try {
-                $model->setFilePath($this->file->name);
+                $model->stpfile2 = pathinfo($this->file->name, PATHINFO_BASENAME);
                 $model->stpfile3 = Yii::app()->user->id;
                 $model->stpfile4 = date('Y-m-d H:i:s');
                 $model->stpfile5 = $this->st1;
                 $model->stpfile6 = $this->id;
+                $model->stpfile7 = Stpfile::generateFilePath($model);
 
                 if ($model->save()) {
-                    $fileName = PortalSettings::model()->getSettingFor(PortalSettings::PORTFOLIO_PATH) . '/' . $model->getFilePath();
+                    $fileName = PortalSettings::model()->getSettingFor(PortalSettings::PORTFOLIO_PATH) . '/' . $model->stpfile7;
                     $dir = dirname($fileName);
                     if (!file_exists($dir)) {
                         CFileHelper::createDirectory($dir, 0755, true);

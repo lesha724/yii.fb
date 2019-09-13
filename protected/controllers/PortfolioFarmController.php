@@ -168,7 +168,16 @@ class PortfolioFarmController extends Controller
             throw new CHttpException(403, tt('Элемент уже подтвержден'));
 
         if(!$field->delete())
-            throw new CHttpException(500, tt('Ошибка сохранения'));
+            throw new CHttpException(500, tt('Ошибка удаления'));
+
+        if(!empty($field->stportfolio60)){
+            if ($field->stportfolio60->delete()) {
+                $fileName = PortalSettings::model()->getSettingFor(PortalSettings::PORTFOLIO_PATH).'/'.$field->stportfolio60->stpfile7;
+                unlink($fileName);
+            } else {
+                throw  new Exception('Ошибка удаления файла');
+            }
+        }
 
         $this->redirect(array('index'));
     }
@@ -224,7 +233,7 @@ class PortfolioFarmController extends Controller
 
         $file = $this->_getFile($id, true);
 
-        $fileName = PortalSettings::model()->getSettingFor(PortalSettings::PORTFOLIO_PATH).'/'.$file->getFilePath();
+        $fileName = PortalSettings::model()->getSettingFor(PortalSettings::PORTFOLIO_PATH).'/'.$file->stpfile7;
 
         if(!file_exists($fileName))
             throw new CHttpException(400,tt('Файл не существует или удален.'));
@@ -254,7 +263,7 @@ class PortfolioFarmController extends Controller
     public function actionFile($id){
         $file = $this->_getFile($id);
 
-        $fileName = PortalSettings::model()->getSettingFor(PortalSettings::PORTFOLIO_PATH).'/'.$file->getFilePath();
+        $fileName = PortalSettings::model()->getSettingFor(PortalSettings::PORTFOLIO_PATH).'/'.$file->stpfile7;
 
         if(!file_exists($fileName))
             throw new CHttpException(400,tt('Файл не существует или удален.'));

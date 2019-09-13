@@ -10,6 +10,7 @@
  * @property string $stpfile4
  * @property integer $stpfile5
  * @property integer $stpfile6
+ * @property string $stpfile7
  *
  * The followings are the available model relations:
  * @property Users $stpfile30
@@ -39,7 +40,7 @@ class Stpfile extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('stpfile1, stpfile3, stpfile5, stpfile6', 'numerical', 'integerOnly'=>true),
-			array('stpfile2', 'length', 'max'=>180),
+			array('stpfile2, stpfile7', 'length', 'max'=>180),
 			array('stpfile4', 'length', 'max'=>20),
 		);
 	}
@@ -80,16 +81,18 @@ class Stpfile extends CActiveRecord
 
     /**
      * Путь к файлу
+     * @param $model static
      * @return string
      */
-    public function getFilePath(){
-        return $this->stpfile5.'/'.$this->stpfile1.'.'.$this->stpfile2;
+    public static function generateFilePath($model){
+        return date('Y').'/'.date('m').'/'.date('d').'/'.$model->stpfile5.'/'.$model->stpfile1.'.'.$model->stpfile2;
     }
 
     /**
      * @param $name
      */
-    public function setFilePath($name){
-        $this->stpfile2 = pathinfo($name, PATHINFO_BASENAME);
+    public function setFilePath($filePath){
+        $this->stpfile7 = $filePath;
+        $this->stpfile2 = pathinfo($filePath, PATHINFO_BASENAME);
     }
 }
