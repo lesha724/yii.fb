@@ -19,8 +19,6 @@ Yii::app()->clientScript->registerPackage('gritter');
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/timetable/timetable.js', CClientScript::POS_HEAD);
 
 if(Yii::app()->user->isAdmin) {
-    $this->renderPartial('/filter_form/default/year_sem');
-
     $this->renderPartial('_student', array(
         'model' => $model
     ));

@@ -79,11 +79,10 @@ function gridFiles($code, $st1){
  */
 function renderField($number, $st1, $code, $name, $needFile, $inputType){
     $html = CHtml::openTag('ol');
-    $html .= CHtml::tag('strong', array(), $number);
     $html .= CHtml::openTag('div', array(
         'class' => 'control-group'
     ));
-    $html .= CHtml::label($name,'field-'.$code, array(
+    $html .= CHtml::label(CHtml::tag('strong', array(), $number).'&nbsp;'. $name,'field-'.$code, array(
         'class' => 'control-label'
     ));
     $html .= CHtml::$inputType('field-'.$code, '', array(
@@ -102,8 +101,11 @@ function renderField($number, $st1, $code, $name, $needFile, $inputType){
                 'header' => tt('Файл'),
                 'type'   => 'raw',
                 'value' => function($data) use (&$needFile){
+                    /**
+                     * @var $data Stportfolio
+                     */
                     if(!$needFile)
-                        echo '';
+                        return '';
                     if(empty($data->stportfolio6))
                         return CHtml::link(tt('Добавить файл'), Yii::app()->createUrl('/portfolioFarm/uploadFile', array('st1'=> $data->stportfolio2, 'type' => 'field', 'idField'=>$data->stportfolio0)));
 
@@ -112,18 +114,39 @@ function renderField($number, $st1, $code, $name, $needFile, $inputType){
                 'visible' => $needFile
             ),
             array(
+                'name' => 'stportfolio7',
+                'header' => tt('Подтвердил'),
+                'value' => function($data){
+                    /**
+                     * @var $data Stportfolio
+                     */
+                    if(empty($data->stportfolio7))
+                        return '';
+
+                    return $data->stportfolio70->getName();
+                },
+            ),
+            array(
+                'name' => 'stportfolio8',
+                'header' => tt('Дата подтверждения'),
+                'value' => function($data){
+                    /**
+                     * @var $data Stportfolio
+                     */
+                    if(empty($data->stportfolio7))
+                        return '';
+
+                    return $data->stportfolio8;
+                },
+            ),
+            array(
                 'class'=>'bootstrap.widgets.TbButtonColumn',
                 'template'=>'{delete}',
                 'buttons'=>array(
                     'delete' => array
                     (
                         'url'=>'array("/portfolioFarm/deleteField","id"=>$data->stportfolio0)',
-                    ),
-                    /*'viewFile' => array
-                    (
-                        'url'=>'array("/portfolioFarm/file","id"=>$data->stportfolio6)',
-                        'visible' => $needFile
-                    ),*/
+                    )
                 ),
             ),
         )
@@ -180,6 +203,15 @@ JS
 
 $fields = Stportfolio::model()->getFieldsList($student->st1);
 
+if(Yii::app()->user->isTch){
+    $this->widget('bootstrap.widgets.TbButton', array(
+        'buttonType'=>'button',
+        'type'=>'warning',
+        'icon'=>'ok',
+        'label'=>tt('Подтвердить')
+    ));
+}
+
 echo '<div class="page-header">
   <h3>1. РЕЗЮМЕ</h3>
 </div>';
@@ -215,8 +247,7 @@ echo CHtml::openTag('ul');
 
 
 echo CHtml::openTag('ol');
-echo CHtml::tag('strong', array(), '2.1');
-echo CHtml::label('Навчально-професійна діяльність', '');
+echo CHtml::label(CHtml::tag('strong', array(), '2.1').'&nbsp;'.'Навчально-професійна діяльність', '');
 Yii::app()->controller->widget('bootstrap.widgets.TbGridView', array(
     'dataProvider' => Stpwork::model()->search($model->student),
     'filter' => null,
@@ -226,6 +257,32 @@ Yii::app()->controller->widget('bootstrap.widgets.TbGridView', array(
         'stpwork4',
         'stpwork5',
         'stpwork6',
+        array(
+            'name' => 'stpwork9',
+            'header' => tt('Подтвердил'),
+            'value' => function($data){
+                /**
+                 * @var $data Stpwork
+                 */
+                if(empty($data->stpwork9))
+                    return '';
+
+                return $data->stpwork9->getName();
+            },
+        ),
+        array(
+            'name' => 'stpwork10',
+            'header' => tt('Дата подтверждения'),
+            'value' => function($data){
+                /**
+                 * @var $data Stpwork
+                 */
+                if(empty($data->stpwork10))
+                    return '';
+
+                return $data->stpwork10;
+            },
+        ),
         array(
             'class'=>'bootstrap.widgets.TbButtonColumn',
             'template'=>'{update} {delete}',

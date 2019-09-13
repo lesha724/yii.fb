@@ -38,7 +38,7 @@ class Stpwork extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('stpwork1, stpwork2, stpwork7, stpwork9', 'numerical', 'integerOnly'=>true),
+			array('stpwork2, stpwork7, stpwork9', 'numerical', 'integerOnly'=>true),
 			array('stpwork3, stpwork4, stpwork5, stpwork6', 'length', 'max'=>200),
 			array('stpwork8, stpwork10', 'length', 'max'=>20),
 		);

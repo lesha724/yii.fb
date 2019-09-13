@@ -18,6 +18,7 @@
  * @property St $stportfolio20
  * @property Users $stportfolio40
  * @property Stpfile $stportfolio60
+ * @property Users $stportfolio70
  */
 class Stportfolio extends CActiveRecord
 {
@@ -76,6 +77,7 @@ class Stportfolio extends CActiveRecord
 			'stportfolio20' => array(self::BELONGS_TO, 'St', 'stportfolio2'),
 			'stportfolio40' => array(self::BELONGS_TO, 'Users', 'stportfolio4'),
 			'stportfolio60' => array(self::BELONGS_TO, 'Stpfile', 'stportfolio6'),
+            'stportfolio70' => array(self::BELONGS_TO, 'Users', 'stportfolio7'),
 		);
 	}
 
