@@ -411,6 +411,7 @@ class PortfolioFarmController extends Controller
                 $model->stpwork1 = new CDbExpression('GEN_ID(GEN_Stpwork, 1)');
                 $model->stpwork7 = Yii::app()->user->id;
                 $model->stpwork8 = date('Y-m-d H:i:s');
+                $model->stpwork9 = $model->stpwork10 = null;
                 if($model->save())
                     $this->redirect(array('index'));
             }
@@ -441,6 +442,7 @@ class PortfolioFarmController extends Controller
             $model->stpwork2 = $studentId;
             $model->stpwork7 = Yii::app()->user->id;
             $model->stpwork8 = date('Y-m-d H:i:s');
+            $model->stpwork9 = $model->stpwork10 = null;
             if($model->save())
                 $this->redirect(array('index'));
         }
@@ -465,5 +467,114 @@ class PortfolioFarmController extends Controller
             throw new CHttpException(403, tt('Элемент уже подтвержден'));
 
         return $model;
+    }
+
+
+    /**
+     * Загрзка модели Stppart по id
+     * @param $id
+     * @return Stppart
+     * @throws CHttpException
+     */
+    private function _loadStppartModel($id)
+    {
+        $model=Stppart::model()->findByPk($id);
+        if($model===null)
+            throw new CHttpException(404,'The requested page does not exist.');
+        if(!empty($model->stpwork9))
+            throw new CHttpException(403, tt('Элемент уже подтвержден'));
+
+        return $model;
+    }
+
+    /**
+     * @param $id
+     * @throws CException
+     * @throws CHttpException
+     */
+    public function actionAddStppart($id)
+    {
+        $student = St::model()->findByPk($id);
+        if(empty($student))
+            throw new CHttpException(400, tt('Не найден студент'));
+
+        if(!$this->_checkPermission($id))
+            throw new CHttpException(403, tt('Нет доступа к данному студенту'));
+
+        $model=new Stppart;
+        $model->unsetAttributes();
+
+        if(isset($_POST['Stppart']))
+        {
+            $model->attributes=$_POST['Stppart'];
+            if($model->validate())
+            {
+                $model->stppart2 = $id;
+                $model->stppart1 = new CDbExpression('GEN_ID(GEN_Stpwork, 1)');
+                $model->stppart10 = Yii::app()->user->id;
+                $model->stppart11 = date('Y-m-d H:i:s');
+                $model->stppart12 = $model->stppart13 = null;
+                if($model->save())
+                    $this->redirect(array('index'));
+            }
+        }
+
+        $this->render('add-stppart',array(
+            'model'=>$model,
+        ));
+    }
+
+    /**
+     * @param $id
+     * @throws CHttpException
+     * @throws CException
+     */
+    public function actionUpdateStppart($id)
+    {
+        $model=$this->_loadStppartModel($id);
+
+        $studentId = $model->stppart2;
+
+        if(!$this->_checkPermission($model->stppart2))
+            throw new CHttpException(403, tt('Нет доступа к данному студенту'));
+
+        if(isset($_POST['Stppart']))
+        {
+            $model->attributes=$_POST['Stppart'];
+            $model->stppart2 = $studentId;
+            $model->stppart10 = Yii::app()->user->id;
+            $model->stppart11 = date('Y-m-d H:i:s');
+            $model->stppart12 = $model->stppart13 = null;
+            if($model->save())
+                $this->redirect(array('index'));
+        }
+
+        $this->render('update-stppart',array(
+            'model'=>$model,
+        ));
+    }
+
+    /**
+     * Удаление елемента (данные на счет мероприятий)
+     * @param $id
+     * @throws CException
+     * @throws CHttpException
+     */
+    public function actionDeleteStppart($id){
+        if (!Yii::app()->request->isPostRequest)
+            throw new CHttpException(405, 'Invalid request. Please do not repeat this request again.');
+
+        $model = $this->_loadStppartModel($id);
+
+        if(!$this->_checkPermission($model->stppart2))
+            throw new CHttpException(403, tt('Нет доступа к данному студенту'));
+
+        if ($model->delete()) {
+            Yii::app()->user->setFlash('success', tt('Успешно удалено'));
+        } else {
+            Yii::app()->user->setFlash('error', tt('Ошибка удаления'));
+        }
+
+        $this->redirect(array('index'));
     }
 }
