@@ -32,24 +32,20 @@ $infoHtml = <<<HTML
                 <tr>
                     <th>%s</th>
                     <td>%s</td>
+                </tr>
+                <tr>
                     <th>%s</th>
                     <td>%s</td>
                 </tr>
                 <tr>
                     <th>%s</th>
                     <td>%s</td>
-                    <th>%s</th>
-                    <td>%s</td>
                 </tr>
                 <tr>
                     <th>%s</th>
                     <td>%s</td>
-                    <th>%s</th>
-                    <td>%s</td>
                 </tr>
                 <tr>
-                    <th>%s</th>
-                    <td>%s</td>
                     <th>%s</th>
                     <td>%s</td>
                 </tr>
@@ -60,15 +56,10 @@ HTML;
 
 echo sprintf($infoHtml,
     tt('ФИО'),$student->fullName,
+    tt('Дата рождения'),date( 'd.m.Y', strtotime($student->st7)),
 
-    tt('Факультет'), $studentInfo['f3'],
-    tt('Специальность, шифр'), $studentInfo['sp2'] . ', '. $studentInfo['sp4'],
+    tt('Образовательная программа'), '',
 
-    tt('Форма обучения'),SH::convertEducationType($studentInfo['sg4']),
-    tt('Курс'), $studentInfo['st56'],
-
-    tt('Группа'), Gr::model()->getGroupName($studentInfo['sem4'], $studentInfo),
-    tt('Профиль'), $studentInfo['spc4'],
-
-    '', ''
+    tt('Шифр'), $studentInfo['sp4'],
+    tt('Специальность'), $studentInfo['pnsp2']
 );

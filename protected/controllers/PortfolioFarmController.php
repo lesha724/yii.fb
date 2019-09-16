@@ -27,14 +27,16 @@ class PortfolioFarmController extends Controller
                     'uploadFile',
                     'addStpwork',
                     'updateStpwork',
-                    'deleteStpwork'
+                    'deleteStpwork',
+                    'addStppart',
+                    'updateStppart',
+                    'deleteStppart'
                 ),
                 'expression' => 'Yii::app()->user->isTch ||Yii::app()->user->isStd || Yii::app()->user->isAdmin',
             ),
             array('allow',
                 'actions' => array(
-                    'block',
-                    'unblock'
+                    'accept',
                 ),
                 'expression' => 'Yii::app()->user->isTch || Yii::app()->user->isAdmin',
             ),
@@ -575,6 +577,43 @@ class PortfolioFarmController extends Controller
         } else {
             Yii::app()->user->setFlash('error', tt('Ошибка удаления'));
         }
+
+        $this->redirect(array('index'));
+    }
+
+    /**
+     * @param $id
+     * @throws CException
+     * @throws CHttpException
+     */
+    public function actionAccept($id){
+        if(!$this->_checkPermission($id))
+            throw new CHttpException(403, tt('Нет доступа к данному студенту'));
+
+        Stportfolio::model()->updateAll(
+            array(
+                'stportfolio7' => Yii::app()->user->id,
+                'stportfolio8' => date('Y-m-d H:i:s')
+            ),
+            'stportfolio7 is null'
+        );
+
+        Stpwork::model()->updateAll(
+            array(
+                'stpwork9' => Yii::app()->user->id,
+                'stpwork10' => date('Y-m-d H:i:s')
+            ),
+            'stpwork9 is null'
+        );
+
+        Stppart::model()->updateAll(
+            array(
+                'stppart12' => Yii::app()->user->id,
+                'stppart13' => date('Y-m-d H:i:s')
+            ),
+            'stppart12 is null'
+        );
+
 
         $this->redirect(array('index'));
     }

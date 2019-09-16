@@ -44,6 +44,10 @@ class Stportfolio extends CActiveRecord
 
     const FIELD_GROMADSKE = 11;
 
+    const FIELD_EDUCATION_SCHOOL = 12;
+
+    const FIELD_EDUCATION_DATE_END = 13;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -135,7 +139,9 @@ class Stportfolio extends CActiveRecord
             self::FIELD_SCIENCES,
             self::FIELD_STUD_ORGS,
             self::FIELD_VOLONTER,
-            self::FIELD_GROMADSKE
+            self::FIELD_GROMADSKE,
+            self::FIELD_EDUCATION_SCHOOL,
+            self::FIELD_EDUCATION_DATE_END
         );
     }
 
@@ -210,7 +216,19 @@ class Stportfolio extends CActiveRecord
                 'text' => 'Досягнення у творчій та громадській діяльності (назва заходу, форма участі)',
                 'needFile' => false,
                 'inputType' => 'textArea'
-            )
+            ),
+            self::FIELD_EDUCATION_SCHOOL => array(
+                'code' => self::FIELD_EDUCATION_SCHOOL,
+                'text' => 'Поперядня освіта (Навчальний заклад)',
+                'needFile' => false,
+                'inputType' => 'textField'
+            ),
+            self::FIELD_EDUCATION_DATE_END => array(
+                'code' => self::FIELD_EDUCATION_DATE_END,
+                'text' => 'Поперядня освіта (дата закінчення)',
+                'needFile' => false,
+                'inputType' => 'dateField'
+            ),
         );
     }
 }

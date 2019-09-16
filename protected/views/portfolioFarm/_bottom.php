@@ -259,7 +259,7 @@ $fields = Stportfolio::model()->getFieldsList($student->st1);
 
 if(Yii::app()->user->isTch){
     $this->widget('bootstrap.widgets.TbButton', array(
-        'buttonType'=>'button',
+        'url'=>Yii::app()->createUrl('/portfolioFarm/accept', array('id'=>$model->student)),
         'type'=>'warning',
         'icon'=>'ok',
         'label'=>tt('Подтвердить')
@@ -278,7 +278,11 @@ $this->renderPartial('_stInfo', array(
 echo CHtml::openTag('ul', array(
     'class' => 'ul-fields'
 ));
+$field = $fields[Stportfolio::FIELD_EDUCATION_SCHOOL];
+echo renderField('',$student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType']);
 
+$field = $fields[Stportfolio::FIELD_EDUCATION_DATE_END];
+echo renderField('',$student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType']);
 
 $field = $fields[Stportfolio::FIELD_EXTRA_EDUCATION];
 echo renderField('',$student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType']);
@@ -327,7 +331,7 @@ Yii::app()->controller->widget('bootstrap.widgets.TbGridView', array(
                 if(empty($data->stpwork9))
                     return '';
 
-                return $data->stpwork9->getName();
+                return $data->stpwork90->getName();
             },
         ),
         array(
@@ -497,6 +501,16 @@ echo '<div class="page-header">
 
 echo '<div class="page-header">
   <h3>4. ПОРТФОЛІО ВІДГУКІВ</h3>
+</div>';
+
+echo '<div class="alert alert-info">
+<ul>Тут можно розмістити скановані копії файлів: 
+<ol> 1.	Характеристики з місць проходження практик,</ol> 
+<ol> 2.	Рекомендаційні листи, </ol> 
+<ol> 3.	Листи-подяки, </ol> 
+<ol> 4.	Відгуки про досягнення, </ol> 
+<ol> 5.	Характеристики куратора тощо</ol> 
+</ul>
 </div>';
 
 echo gridFiles(-1, $model->student);
