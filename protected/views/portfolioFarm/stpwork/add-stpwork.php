@@ -18,6 +18,6 @@ $this->breadcrumbs=array(
 );
 
 
-echo $this->renderPartial('_form-stpwork', array(
+echo $this->renderPartial('stpwork/_form-stpwork', array(
     'model' => $model
 ));

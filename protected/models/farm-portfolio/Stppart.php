@@ -43,6 +43,7 @@ class Stppart extends CActiveRecord
 			array('stppart2, stppart3, stppart5, stppart6, stppart7, stppart8, stppart9, stppart10, stppart12', 'numerical', 'integerOnly'=>true),
 			array('stppart4', 'length', 'max'=>200),
 			array('stppart11, stppart13', 'length', 'max'=>20),
+            array('stppart9', 'safe'),
 		);
 	}
 
@@ -105,4 +106,101 @@ class Stppart extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+    /**
+     * Типы мероприятий
+     * @return array
+     */
+	public static function getStppart3Types(){
+	   return array(
+	       0 => 'фаховий конкурс',
+           1 => 'концерт',
+           2 => 'волонтерська акція',
+           3 => 'конкурс (інтеллектуальний, творчий)',
+       );
+    }
+
+    /**
+     * Типы мероприятий
+     * @return string
+     */
+    public function getStppart3Type(){
+        $types = static::getStppart3Types();
+        if(isset($types[$this->stppart3]))
+            return $types[$this->stppart3];
+        return '-';
+    }
+
+
+    /**
+     * Рівень
+     * @return array
+     */
+    public static function getStppart6Types(){
+        return array(
+            0 => 'всеукраїнський',
+            1 => 'регіональний',
+            2 => 'міський',
+            3 => 'внутрішньоуніверситетський',
+        );
+    }
+
+    /**
+     * Рівень
+     * @return string
+     */
+    public function getStppart6Type(){
+        $types = static::getStppart6Types();
+        if(isset($types[$this->stppart6]))
+            return $types[$this->stppart6];
+        return '-';
+    }
+
+    /**
+     * Форма участі
+     * @return array
+     */
+    public static function getStppart7Types(){
+        return array(
+            0 => 'виступ',
+            1 => 'презентація',
+            2 => 'членство у оргкомітеті',
+            3 => 'тощо',
+        );
+    }
+
+    /**
+     * Форма участі
+     * @return string
+     */
+    public function getStppart7Type(){
+        $types = static::getStppart7Types();
+        if(isset($types[$this->stppart7]))
+            return $types[$this->stppart7];
+        return '-';
+    }
+
+    /**
+     * Результат
+     * @return array
+     */
+    public static function getStppart8Types(){
+        return array(
+            0 => 'грамота',
+            1 => 'сертифікат',
+            2 => 'подяка',
+            3 => 'тощо',
+        );
+    }
+
+    /**
+     * Результат
+     * @return string
+     */
+    public function getStppart8Type(){
+        $types = static::getStppart8Types();
+        if(isset($types[$this->stppart8]))
+            return $types[$this->stppart8];
+        return '-';
+    }
 }

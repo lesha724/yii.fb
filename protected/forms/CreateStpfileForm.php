@@ -11,6 +11,9 @@ class CreateStpfileForm extends CFormModel
     /**
      */
     const TYPE_OTHERS = 'others';
+    /**
+     */
+    const TYPE_FIELD23 = 'type23';
 
 	public $st1;
     /**
@@ -27,7 +30,7 @@ class CreateStpfileForm extends CFormModel
 	{
 		return array(
 			array('st1, file, type, id', 'required'),
-            array('type', 'in', 'range' => array(self::TYPE_FIELD, self::TYPE_OTHERS)),
+            array('type', 'in', 'range' => array(self::TYPE_FIELD, self::TYPE_OTHERS, self::TYPE_FIELD23)),
             array('st1, id', 'numerical', 'integerOnly'=>true),
             array('file', 'validateForm'),
             array('file', 'file',
@@ -143,6 +146,52 @@ class CreateStpfileForm extends CFormModel
                         throw new CException('Ошибка сохранения файла');
                 }else{
                     throw new CException('Ошибка добавления файла');
+                }
+
+                $trans->commit();
+
+                return true;
+            }catch (CException $error){
+                $trans->rollback();
+                throw new CException('Ошибка сохранения файла, '. $error->getMessage());
+            }
+        } elseif ($this->type == static::TYPE_FIELD23){
+            $field = Stppart::model()->findByAttributes(array('stppart1' => $this->id, 'stppart2'=>$this->st1));
+            if(empty($field))
+            {
+                return false;
+            }
+
+            if(!empty($field->stppart12))
+                return false;
+
+            $model = new Stpfile();
+            $model->stpfile1 = Yii::app()->db->createCommand('select gen_id(GEN_STPFILE, 1) from rdb$database')->queryScalar();
+
+            $trans = $model->getDbConnection()->beginTransaction();
+            try {
+                $model->stpfile2 = pathinfo($this->file->name, PATHINFO_BASENAME);
+                $model->stpfile3 = Yii::app()->user->id;
+                $model->stpfile4 = date('Y-m-d H:i:s');
+                $model->stpfile5 = $this->st1;
+                $model->stpfile6 = $this->id;
+                $model->stpfile7 = Stpfile::generateFilePath($model);
+
+                if ($model->save()) {
+                    $fileName = PortalSettings::model()->getSettingFor(PortalSettings::PORTFOLIO_PATH) . '/' . $model->stpfile7;
+                    $dir = dirname($fileName);
+                    if (!file_exists($dir)) {
+                        CFileHelper::createDirectory($dir, 0755, true);
+                    }
+                    if($this->file->saveAs($fileName) === false)
+                        throw new CException('Ошибка сохранения файла');
+                }else{
+                    throw new CException('Ошибка добавления файла');
+                }
+
+                $field->stppart9 = $model->stpfile1;
+                if (!$field->save()) {
+                    throw new CException('Ошибка привязки файла');
                 }
 
                 $trans->commit();

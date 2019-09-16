@@ -17,6 +17,6 @@ $this->breadcrumbs=array(
     tt('Редагування в "Навчально-професійна діяльність"'),
 );
 
-echo $this->renderPartial('_form-stpwork', array(
+echo $this->renderPartial('stpwork/_form-stpwork', array(
     'model' => $model
 ));

@@ -195,12 +195,12 @@ Yii::app()->clientScript->registerCss('portfolioBottom', <<<CSS
         border-bottom-width: 2px;
     }
 
-    .btn-create-file, .btn-add-field, .btn-add-stpwork {
+    .btn-create-file, .btn-add-field, .btn-add-stpwork, .btn-add-stppart {
         min-width: 100px;
         font-size: 15px!important;
     }
 
-    .btn-add-stpwork{
+    .btn-add-stpwork, .btn-add-stppart{
         margin-bottom: 5px!important;
     }
 
@@ -367,6 +367,105 @@ echo CHtml::closeTag('ol');
 
 $field = $fields[Stportfolio::FIELD_EXTRA_COURSES];
 echo renderField('2.2', $student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType']);
+
+echo CHtml::openTag('ol');
+echo CHtml::label('2.3'.'&nbsp;'.'Дані щодо участі у заходах', '', array(
+    'class' => 'label-field'
+));
+Yii::app()->controller->widget('bootstrap.widgets.TbGridView', array(
+    'dataProvider' => Stppart::model()->search($model->student),
+    'filter' => null,
+    'type' => 'striped bordered',
+    'columns' => array(
+        array(
+            'name' => 'stppart3',
+            'header' => Stppart::model()->getAttributeLabel('stppart3'),
+            'value' => '$data->getStppart3Type()',
+        ),
+        'stppart4',
+        'stppart5',
+        array(
+            'name' => 'stppart6',
+            'header' => Stppart::model()->getAttributeLabel('stppart6'),
+            'value' => '$data->getStppart6Type()',
+        ),
+        array(
+            'name' => 'stppart7',
+            'header' => Stppart::model()->getAttributeLabel('stppart7'),
+            'value' => '$data->getStppart7Type()',
+        ),
+        array(
+            'name' => 'stppart8',
+            'header' => Stppart::model()->getAttributeLabel('stppart8'),
+            'value' => '$data->getStppart8Type()',
+        ),
+        array(
+            'name' => 'stppart9',
+            'header' => tt('Файл'),
+            'type'   => 'raw',
+            'value' => function($data){
+                /**
+                 * @var $data Stppart
+                 */
+                if(empty($data->stppart9))
+                    return CHtml::link(tt('Добавить файл'), Yii::app()->createUrl('/portfolioFarm/uploadFile', array('st1'=> $data->stppart2, 'type' => 'type23', 'idField'=>$data->stppart1)), array(
+                        'class' => 'text-success'
+                    ));
+
+                return CHtml::link(
+                        $data->stppart90->stpfile2,
+                        array(
+                            '/portfolioFarm/file','id'=>$data->stppart9)
+                    ). ' ('.CHtml::link(tt('удалить'), '#', array('submit'=>array('/portfolioFarm/deleteFile','id'=>$data->stppart9), 'class' => 'text-error')).')';
+            },
+        ),
+        array(
+            'name' => 'stppart12',
+            'header' => tt('Подтвердил'),
+            'value' => function($data){
+                /**
+                 * @var $data Stppart
+                 */
+                if(empty($data->stppart12))
+                    return '';
+
+                return $data->stppart120->getName();
+            },
+        ),
+        array(
+            'name' => 'stppart13',
+            'header' => tt('Дата подтверждения'),
+            'value' => function($data){
+                /**
+                 * @var $data Stppart
+                 */
+                if(empty($data->stppart13))
+                    return '';
+
+                return $data->stppart13;
+            },
+        ),
+        array(
+            'class'=>'bootstrap.widgets.TbButtonColumn',
+            'template'=>'{update} {delete}',
+            'buttons'=>array(
+                'delete' => array
+                (
+                    'url'=>'array("/portfolioFarm/deleteStppart","id"=>$data->stppart1)',
+                    'options'=>array(
+                        'class' => 'text-error'
+                    )
+                ),
+                'update' => array
+                (
+                    'url'=>'array("/portfolioFarm/updateStppart","id"=>$data->stppart1)',
+                ),
+            ),
+        ),
+    )
+));
+echo CHtml::link(tt('Добавить'), Yii::app()->createUrl('/portfolioFarm/addStppart', array( 'id'=> $model->student)), array('class'=>'btn-mini btn btn-primary btn-add-stppart'));
+echo CHtml::closeTag('ol');
 
 $field = $fields[Stportfolio::FIELD_OLIMPIADS];
 echo renderField('2.4',  $student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType']);

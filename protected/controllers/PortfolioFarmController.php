@@ -417,7 +417,7 @@ class PortfolioFarmController extends Controller
             }
         }
 
-        $this->render('add-stpwork',array(
+        $this->render('stpwork/add-stpwork',array(
             'model'=>$model,
         ));
     }
@@ -447,7 +447,7 @@ class PortfolioFarmController extends Controller
                 $this->redirect(array('index'));
         }
 
-        $this->render('update-stpwork',array(
+        $this->render('stpwork/update-stpwork',array(
             'model'=>$model,
         ));
     }
@@ -481,7 +481,7 @@ class PortfolioFarmController extends Controller
         $model=Stppart::model()->findByPk($id);
         if($model===null)
             throw new CHttpException(404,'The requested page does not exist.');
-        if(!empty($model->stpwork9))
+        if(!empty($model->stppart12))
             throw new CHttpException(403, tt('Элемент уже подтвержден'));
 
         return $model;
@@ -511,6 +511,7 @@ class PortfolioFarmController extends Controller
             {
                 $model->stppart2 = $id;
                 $model->stppart1 = new CDbExpression('GEN_ID(GEN_Stpwork, 1)');
+                $model->stppart9 = null;
                 $model->stppart10 = Yii::app()->user->id;
                 $model->stppart11 = date('Y-m-d H:i:s');
                 $model->stppart12 = $model->stppart13 = null;
@@ -519,7 +520,7 @@ class PortfolioFarmController extends Controller
             }
         }
 
-        $this->render('add-stppart',array(
+        $this->render('stppart/add-stppart',array(
             'model'=>$model,
         ));
     }
@@ -549,7 +550,7 @@ class PortfolioFarmController extends Controller
                 $this->redirect(array('index'));
         }
 
-        $this->render('update-stppart',array(
+        $this->render('stppart/update-stppart',array(
             'model'=>$model,
         ));
     }
