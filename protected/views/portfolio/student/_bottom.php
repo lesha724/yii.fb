@@ -56,7 +56,7 @@ echo sprintf($infoHtml,
     tt('Форма обучения'),SH::convertEducationType($studentInfo['sg4']),
     tt('Курс'), $studentInfo['std20'],
 
-    tt('Группа'), Gr::model()->getGroupName($studentInfo['sem4'], $studentInfo),
+    tt('Группа'), Gr::model()->getGroupName($studentInfo['std20'], $studentInfo),
     tt('Профиль'), $studentInfo['spc4']
 );
 

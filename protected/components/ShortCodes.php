@@ -179,12 +179,20 @@ class ShortCodes extends CApplicationComponent
     
     public static function getSel2ForRating($i)
     {
-        $sel_2 = array(
-            0 => tt('Дневная'),
-            1 => tt('Заочная'),
-            2 => tt('Вечерняя'),
-            3 => tt('Экстернат')
-        );
+        if(!in_array(Yii::app()->core->universityCode, array(3,U_URFAK,U_FGU,U_RGIIS,31,34,U_SEM_MGU)))
+            $sel_2 = array(
+                0 => tt('Дневная'),
+                1 => tt('Заочная'),
+                2 => tt('Вечерняя'),
+                3 => tt('Экстернат')
+            );
+        else
+            $sel_2 = array(
+                0 => tt('Очная'),
+                1 => tt('Заочная'),
+                2 => tt('Вечерняя'),
+                3 => tt('Экстернат')
+            );
         if(isset($sel_2[$i]))
             return $sel_2[$i];
         else {
@@ -322,7 +330,12 @@ class ShortCodes extends CApplicationComponent
     public static function convertEducationType($sg4)
     {
         switch($sg4){
-            case 0:	$type = tt('Дневная'); break;
+            case 0:
+                if(!in_array(Yii::app()->core->universityCode, array(3,U_URFAK,U_FGU,U_RGIIS,31,34,U_SEM_MGU)))
+                    $type = tt('Дневная');
+                else
+                    $type = tt('Очная');
+                break;
             case 1:	$type = tt('Заочная'); break;
             case 2:	$type = tt('Вечерняя'); break;
             case 3:	$type = tt('Экстернат'); break;
