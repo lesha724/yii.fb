@@ -66,7 +66,41 @@ echo '</div>';
 $this->renderPartial('student/_table1', array(
     'student' => $student,
     'model' => $model,
+    'dataProvider' => new CArrayDataProvider(Zrst::model()->getTable1Data($student->st1),array(
+        'sort'=>false,
+        'pagination'=>false,
+        'keyField' => false
+    ))
 ));
+
+
+echo '<div class="page-header">';
+echo CHtml::tag('h3', array(), tt('Практики'));
+echo '</div>';
+$this->renderPartial('student/_table1', array(
+    'student' => $student,
+    'model' => $model,
+    'dataProvider' => new CArrayDataProvider(Zrst::model()->getTable1Data1($student->st1),array(
+        'sort'=>false,
+        'pagination'=>false,
+        'keyField' => false
+    ))
+));
+
+
+echo '<div class="page-header">';
+echo CHtml::tag('h3', array(), tt('Гос.экзамены'));
+echo '</div>';
+$this->renderPartial('student/_table1', array(
+    'student' => $student,
+    'model' => $model,
+    'dataProvider' => new CArrayDataProvider(Zrst::model()->getTable1Data2($student->st1),array(
+        'sort'=>false,
+        'pagination'=>false,
+        'keyField' => false
+    ))
+));
+
 
 
 echo '<div class="page-header">';

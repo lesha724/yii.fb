@@ -137,7 +137,7 @@ class Zrst extends CActiveRecord
                inner join ucx on (uo.uo19 = ucx.ucx1)
                inner join d on (uo.uo3 = d.d1)
                inner join sem on (us.us3 = sem.sem1)
-            where std2=:st1_ and std7 is null and std11<>1 and ucx5<2 and (us4 in (7,8) or (d8 in (2,6) and us4=0))
+            where std2=:st1_ and std7 is null and std11<>1 and ucx5<2 and (us4 in (7,8))
             group by sem4,sem3,sem5,d2,us1,us4,us6,d8,ucx5,st1
             UNION
             select sem4,sem3,sem5,d2,us1,us4,us6,d8,ucx5,st1,iif(d8=6,'отчет по практике',
@@ -158,6 +158,78 @@ class Zrst extends CActiveRecord
                inner join d on (uo.uo3 = d.d1)
                inner join sem on (us.us3 = sem.sem1)
             where st1=:st1 and ucx5>1 and (us4 in (7,8))
+            group by sem4,sem3,sem5,d2,us1,us4,us6,d8,ucx5,st1
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':st1', $st1);
+        $command->bindValue(':st1_', $st1);
+        $students = $command->queryAll();
+
+        return $students;
+    }
+
+    /**
+     * @param $st1
+     * @return array
+     * @throws CException
+     */
+    public  function getTable1Data1($st1){
+        $sql=<<<SQL
+            select sem4,sem3,sem5,d2,us1,us4,us6,d8,ucx5,st1,iif(d8=6,'отчет по практике',
+                   iif(d8=2,'выпускная квалификационная работа',
+                   iif(us4=8,'курсовая',
+                   iif(us4=7 and (select w8 from w where w1=us.us6)=2,'реферат','контрольная' )))) as vid,
+                   (select first 1 stusvst6 from stusv,stusvst where stusv0=stusvst1 and stusv1=us.us1 and stusvst3=st.st1 order by stusv11 DESC) as ocenka,
+                   (select first 1 zrst1 from zrst where zrst6=0 and zrst2=st.st1 and zrst3=us.us1 order by zrst1 desc) as rabota,
+                   (select first 1 zrst1 from zrst where zrst6=1 and zrst2=st.st1 and zrst3=us.us1 order by zrst1 desc) as recenziya
+            from uo
+               inner join us on (uo.uo1 = us.us2)
+               inner join nr on (us.us1 = nr.nr2)
+               inner join ug on (nr.nr1 = ug.ug1)
+               inner join gr on (ug.ug2 = gr.gr1)
+               inner join std on (gr.gr1 = std.std3)
+               inner join st on (std.std2 =st.st1)
+               inner join ucx on (uo.uo19 = ucx.ucx1)
+               inner join d on (uo.uo3 = d.d1)
+               inner join sem on (us.us3 = sem.sem1)
+            where std2=:st1_ and std7 is null and std11<>1 and ucx5<2 and ((d8 in (6) and us4=0))
+            group by sem4,sem3,sem5,d2,us1,us4,us6,d8,ucx5,st1
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':st1', $st1);
+        $command->bindValue(':st1_', $st1);
+        $students = $command->queryAll();
+
+        return $students;
+    }
+
+    /**
+     * @param $st1
+     * @return array
+     * @throws CException
+     */
+    public  function getTable1Data2($st1){
+        $sql=<<<SQL
+            select sem4,sem3,sem5,d2,us1,us4,us6,d8,ucx5,st1,iif(d8=6,'отчет по практике',
+                   iif(d8=2,'выпускная квалификационная работа',
+                   iif(us4=8,'курсовая',
+                   iif(us4=7 and (select w8 from w where w1=us.us6)=2,'реферат','контрольная' )))) as vid,
+                   (select first 1 stusvst6 from stusv,stusvst where stusv0=stusvst1 and stusv1=us.us1 and stusvst3=st.st1 order by stusv11 DESC) as ocenka,
+                   (select first 1 zrst1 from zrst where zrst6=0 and zrst2=st.st1 and zrst3=us.us1 order by zrst1 desc) as rabota,
+                   (select first 1 zrst1 from zrst where zrst6=1 and zrst2=st.st1 and zrst3=us.us1 order by zrst1 desc) as recenziya
+            from uo
+               inner join us on (uo.uo1 = us.us2)
+               inner join nr on (us.us1 = nr.nr2)
+               inner join ug on (nr.nr1 = ug.ug1)
+               inner join gr on (ug.ug2 = gr.gr1)
+               inner join std on (gr.gr1 = std.std3)
+               inner join st on (std.std2 =st.st1)
+               inner join ucx on (uo.uo19 = ucx.ucx1)
+               inner join d on (uo.uo3 = d.d1)
+               inner join sem on (us.us3 = sem.sem1)
+            where std2=:st1_ and std7 is null and std11<>1 and ucx5<2 and ((d8 in (2) and us4=0))
             group by sem4,sem3,sem5,d2,us1,us4,us6,d8,ucx5,st1
 SQL;
 

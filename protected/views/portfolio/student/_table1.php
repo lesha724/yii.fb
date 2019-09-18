@@ -9,13 +9,8 @@
 /**
  * @var St $student
  * @var TimeTableForm $model
+ * @var $dataProvider CArrayDataProvider
  */
-
-$dataProvider=new CArrayDataProvider(Zrst::model()->getTable1Data($student->st1),array(
-    'sort'=>false,
-    'pagination'=>false,
-    'keyField' => false
-));
 
 $this->widget('bootstrap.widgets.TbGridView', array(
     'id' => 'table1-list',
