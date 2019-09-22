@@ -100,8 +100,8 @@ class Elgzst extends CActiveRecord
         $from.= ' INNER JOIN elgz on (elgz.elgz1 = EL_GURNAL_INFO.elgz1)';
         $from.= ' INNER JOIN elg on (elgz.elgz2 = elg.elg1)';
         $from.= ' INNER JOIN elgzst on (elgzst.elgzst0 = EL_GURNAL_INFO.elgzst0)';
-        $from.= ' INNER JOIN elgp on (elgp.elgp1 = EL_GURNAL_INFO.elgzst0)';
-        $from.= ' INNER JOIN ustem on (ustem.ustem1 = EL_GURNAL_INFO.ustem1)';
+        $from.= ' LEFT JOIN elgp on (elgp.elgp1 = EL_GURNAL_INFO.elgzst0)';
+        $from.= ' LEFT JOIN ustem on (ustem.ustem1 = EL_GURNAL_INFO.ustem1)';
 
         $ps55 = PortalSettings::model()->findByPk(55)->ps2;
         if($ps55==0)
