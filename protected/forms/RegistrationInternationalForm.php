@@ -59,42 +59,11 @@ class RegistrationInternationalForm extends CFormModel
 		);
 	}
 
-    /*public function checkExistence($attribute,$params)
+    public function checkNumber($attribute)
     {
-        $st = St::model()->findAll('st15=:ID', array(':ID'=>$this->$attribute));
-        $p  = P::model()->findAll('p13=:ID', array(':ID'=>$this->$attribute));
-
-        $thereIsNotSuchId = count($st) + count($p) == 0;
-        if ($thereIsNotSuchId)
-            $this->addError($attribute, tt('Идентификационный код не зарегистрирован!'));
-
-        $thereIsDuplicate = count($st) + count($p) > 1;
-        if ($thereIsDuplicate)
-            $this->addError($attribute, tt('Идентификационный код зарегистрирован несколько раз!'));
-
-        if (! $this->hasErrors($attribute)) {
-
-            //$this->_u5 = $st ? 0 : 1;
-            //$this->_u6 = $st ? $st[0]->st1 : $p[0]->p1;
-            $this->_u5 = $p ? 1 : 0;
-            $this->_u6 = $p ? $p[0]->p1 : $st[0]->st1;
-            //$alreadyRegistered = 1 <= Users::model()->count('u5=:U5 AND u6=:U6 AND u2!=""',array(':U5'=>$this->_u5,':U6'=>$this->_u6));
-            $alreadyRegistered = 1 <= Users::model()->countByAttributes(
-                array('u5'=>$this->_u5,'u6'=>$this->_u6),
-                array(
-                    'condition'=>'u2 != :U2',
-                    'params'=>array(':U2'=>"")
-                ));
-            if ($alreadyRegistered)
-                $this->addError($attribute, tt('Пользователь с таким идентификационным кодом уже зарегистрирован!'));
-        }
-    }*/
-
-    public function checkNumber($attribute,$params)
-    {
-        $count = St::model()->count(new CDbCriteria(array
+        $count = St::model()->with('person')->count(new CDbCriteria(array
         (
-            'condition' => 'ST18 = :NUMBER and st63 > 0',
+            'condition' => 'pe23 = :NUMBER and st63 > 0',
             'params' => array(':NUMBER'=>$this->number)
         )));
 
@@ -102,14 +71,14 @@ class RegistrationInternationalForm extends CFormModel
             $this->addError($attribute, tt('Не найдены иност. граждане с таким номером паспорта'));
     }
 
-    public function checkSerial($attribute,$params)
+    public function checkSerial($attribute)
     {
         if (empty($this->number))
             $this->addError($attribute, tt('Пустой номер паспорта'));
 
-        $students = St::model()->findAll(new CDbCriteria(array
+        $students = St::model()->with('person')->findAll(new CDbCriteria(array
         (
-            'condition' => 'ST18 = :NUMBER AND  ST17 =:SERIAL and st63 > 0',
+            'condition' => 'pe23 = :NUMBER AND  pe22 =:SERIAL and st63 > 0',
             'params' => array(
                 ':NUMBER'=>$this->number,
                 ':SERIAL'=>!empty($this->emptySerial)? '' :$this->serial
@@ -131,7 +100,7 @@ class RegistrationInternationalForm extends CFormModel
                     array('u5'=>$this->_u5,'u6'=>$this->_u6),
                     array(
                         'condition'=>'u2 != :U2',
-                        'params'=>array(':U2'=>"")
+                        'params'=>array(':U2'=>'')
                     ));
             if ($alreadyRegistered)
                 $this->addError($attribute, tt('Иност. гражданин с таким номером и серией паспорта уже зарегистрирован!'));
