@@ -64,8 +64,9 @@ class RegistrationForm extends CFormModel
              */
             $st = St::model()->findAllBySql(<<<SQL
           SELECT st.* FROM st
+            inner join pe on (st200 = pe1)
             inner join std on (st1 = std2)
-          WHERE std11 in (0,3,5,7,6,8) and (std7 is null) AND st15=:ID ORDER BY st1 DESC
+          WHERE std11 in (0,3,5,7,6,8) and (std7 is null) AND pe20=:ID ORDER BY st1 DESC
 SQL
                 , array(':ID' => $this->$attribute));
         }else {
