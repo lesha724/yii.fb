@@ -91,6 +91,8 @@ class PortfolioFarmController extends Controller
 
         if(!$this->_checkPermission($id))
             throw new CHttpException(403, tt('Нет доступа к данному студенту'));
+
+
     }
 
     /**
@@ -115,9 +117,7 @@ class PortfolioFarmController extends Controller
             }
             $model->attributes = $params;
             Yii::app()->session['TimeTableForm']=$params;
-
         } elseif (Yii::app()->user->isStd) {
-
             $model->student = Yii::app()->user->dbModel->st1;
         } else
             throw new CHttpException(404, 'You don\'t have an access to this service');
