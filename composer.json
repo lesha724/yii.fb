@@ -1,16 +1,17 @@
 {
     "require": {
-        "php": ">=5.3.0",
+        "php": ">=5.6.0",
         "ext-curl": "*",
         "ext-bcmath": "*",
-        "ext-calendar": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-PDO": "*",
         "ext-PDO_Firebird": "*",
+        "ext-gd": "*",
         "yiisoft/yii": "*",
         "phpoffice/phpword": "^0.16.0",
-        "phpoffice/phpexcel": "^1.8"
+        "phpoffice/phpexcel": "^1.8",
+        "mpdf/mpdf": "^8.0"
     },
     "autoload": {
         "files": [
