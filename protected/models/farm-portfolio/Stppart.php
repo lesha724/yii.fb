@@ -75,10 +75,10 @@ class Stppart extends CActiveRecord
 			'stppart7' => 'Форма участі',
 			'stppart8' => 'Результат',
 			'stppart9' => 'Файл',
-			'stppart10' => 'Stppart10',
-			'stppart11' => 'Stppart11',
-			'stppart12' => 'Stppart12',
-			'stppart13' => 'Stppart13',
+			'stppart10' => tt('Редактировал'),
+			'stppart11' => tt('Дата редактирования'),
+			'stppart12' => tt('Подтвердил'),
+			'stppart13' => tt('Дата подтверждения'),
 		);
 	}
 

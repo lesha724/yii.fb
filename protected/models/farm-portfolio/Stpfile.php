@@ -16,12 +16,19 @@
  * @property Users $stpfile30
  * @property St $stpfile50
  * @property Stportfolio[] $stportfolios
+ *
+ * @property Stppart $stppart
+ * @property Stpeduwork $stpeduwork
  */
 class Stpfile extends CActiveRecord
 {
     const TYPE_STPORTFOLIO = 0;
 
     const TYPE_OTHERS = -1;
+
+    const TYPE_STPPART = 1;
+
+    const TYPE_STPEDUWORK = 2;
 
 	/**
 	 * @return string the associated database table name
@@ -56,6 +63,8 @@ class Stpfile extends CActiveRecord
 			'stpfile30' => array(self::BELONGS_TO, 'Users', 'stpfile3'),
 			'stpfile50' => array(self::BELONGS_TO, 'St', 'stpfile5'),
 			'stportfolios' => array(self::HAS_MANY, 'Stportfolio', 'stportfolio6'),
+            'stppart' => array(self::HAS_ONE, 'Stppart', 'stppart9'),
+            'stpeduwork' => array(self::HAS_ONE, 'Stpeduwork', 'stpeduwork10'),
 		);
 	}
 

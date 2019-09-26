@@ -89,15 +89,12 @@ class DefaultController extends AdminController
         if(isset($_POST['GenerateUserForm']))
             $model->attributes=$_POST['GenerateUserForm'];
 
-        //var_dump($model->users);
-
         if(empty($model->users))
             throw new CHttpException(400,'Invalid request. Empty params.');
 
         $users = explode(',',$model->users);
 
-        Yii::import('ext.phpexcel.XPHPExcel');
-        $objPHPExcel= XPHPExcel::createPHPExcel();
+        $objPHPExcel= new PHPExcel();
         $objPHPExcel->getProperties()->setCreator("ACY")
             ->setLastModifiedBy("ACY ".date('Y-m-d H-i'))
             ->setTitle("GENERATE_USER ".date('Y-m-d H-i'))

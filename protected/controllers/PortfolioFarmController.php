@@ -30,7 +30,11 @@ class PortfolioFarmController extends Controller
                     'deleteStpwork',
                     'addStppart',
                     'updateStppart',
-                    'deleteStppart'
+                    'deleteStppart',
+                    'addStpeduwork',
+                    'updateStpeduwork',
+                    'deleteStpeduwork',
+                    'print'
                 ),
                 'expression' => 'Yii::app()->user->isTch ||Yii::app()->user->isStd || Yii::app()->user->isAdmin',
             ),
@@ -73,6 +77,20 @@ class PortfolioFarmController extends Controller
             throw new CHttpException(403, tt('Неверные настройки, обратитесь к администратору.'));
 
         $filterChain->run();
+    }
+
+    /**
+     * @param $id int
+     * @throws CException
+     * @throws CHttpException
+     */
+    public function actionPrint($id){
+        $student = St::model()->findByPk($id);
+        if(empty($student))
+            throw new CHttpException(400, tt('Не найден студент'));
+
+        if(!$this->_checkPermission($id))
+            throw new CHttpException(403, tt('Нет доступа к данному студенту'));
     }
 
     /**
@@ -307,6 +325,19 @@ class PortfolioFarmController extends Controller
                     if(!empty($stportfolio->stportfolio7))
                         throw new CHttpException(403, tt('Элемент к которому привязан файл уже подтвержден'));
                 }
+            } elseif($file->stpfile6 == Stpfile::TYPE_STPPART) {
+                if (empty($file->stppart))
+                    throw new CHttpException(400, tt('Не найден елемент'));
+
+                if(!empty($file->stppart->stppart12))
+                    throw new CHttpException(403, tt('Элемент к которому привязан файл уже подтвержден'));
+
+            } elseif($file->stpfile6 == Stpfile::TYPE_STPEDUWORK) {
+                if (empty($file->stpeduwork))
+                    throw new CHttpException(400, tt('Не найден елемент'));
+
+                if(!empty($file->stpeduwork->stpeduwork8))
+                    throw new CHttpException(403, tt('Элемент к которому привязан файл уже подтвержден'));
             }
 
         }
@@ -614,7 +645,124 @@ class PortfolioFarmController extends Controller
             'stppart12 is null'
         );
 
+        Stpeduwork::model()->updateAll(
+            array(
+                'stpeduwork8' => Yii::app()->user->id,
+                'stpeduwork9' => date('Y-m-d H:i:s')
+            ),
+            'stpeduwork8 is null'
+        );
+
 
         $this->redirect(array('index'));
+    }
+
+
+    /**
+     * Загрзка модели Stpeduwork по id
+     * @param $id
+     * @return Stpeduwork
+     * @throws CHttpException
+     */
+    private function _loadStpeduworkModel($id)
+    {
+        $model=Stpeduwork::model()->findByPk($id);
+        if($model===null)
+            throw new CHttpException(404,'The requested page does not exist.');
+        if(!empty($model->stpeduwork8))
+            throw new CHttpException(403, tt('Элемент уже подтвержден'));
+
+        return $model;
+    }
+
+    /**
+     * Удаление елемента
+     * @param $id
+     * @throws CException
+     * @throws CHttpException
+     */
+    public function actionDeleteStpeduwork($id){
+        if (!Yii::app()->request->isPostRequest)
+            throw new CHttpException(405, 'Invalid request. Please do not repeat this request again.');
+
+        $model = $this->_loadStpeduworkModel($id);
+
+        if(!$this->_checkPermission($model->stpeduwork2))
+            throw new CHttpException(403, tt('Нет доступа к данному студенту'));
+
+        if ($model->delete()) {
+            Yii::app()->user->setFlash('success', tt('Успешно удалено'));
+        } else {
+            Yii::app()->user->setFlash('error', tt('Ошибка удаления'));
+        }
+
+        $this->redirect(array('index'));
+    }
+
+    /**
+     * @param $id
+     * @throws CException
+     * @throws CHttpException
+     */
+    public function actionAddStpeduwork($id)
+    {
+        $student = St::model()->findByPk($id);
+        if(empty($student))
+            throw new CHttpException(400, tt('Не найден студент'));
+
+        if(!$this->_checkPermission($id))
+            throw new CHttpException(403, tt('Нет доступа к данному студенту'));
+
+        $model=new Stpeduwork;
+        $model->unsetAttributes();
+
+        if(isset($_POST['Stpeduwork']))
+        {
+            $model->attributes=$_POST['Stpeduwork'];
+            if($model->validate())
+            {
+                $model->stpeduwork2 = $id;
+                $model->stpeduwork1 = new CDbExpression('GEN_ID(GEN_Stpeduwork, 1)');
+                $model->stpeduwork6 = Yii::app()->user->id;
+                $model->stpeduwork7 = date('Y-m-d H:i:s');
+                $model->stpeduwork8 = $model->stpeduwork9 = null;
+                if($model->save())
+                    $this->redirect(array('index'));
+            }
+        }
+
+        $this->render('stpeduwork/add-stpeduwork',array(
+            'model'=>$model,
+        ));
+    }
+
+    /**
+     * @param $id
+     * @throws CHttpException
+     * @throws CException
+     */
+    public function actionUpdateStpeduwork($id)
+    {
+        $model=$this->_loadStpeduworkModel($id);
+
+        $studentId = $model->stpeduwork2;
+
+        if(!$this->_checkPermission($model->stpeduwork2))
+            throw new CHttpException(403, tt('Нет доступа к данному студенту'));
+
+        if(isset($_POST['Stpeduwork']))
+        {
+            $model->attributes=$_POST['Stpeduwork'];
+            $model->stpeduwork2 = $studentId;
+            $model->stpeduwork6 = Yii::app()->user->id;
+            $model->stpeduwork7 = date('Y-m-d H:i:s');
+            $model->stpeduwork8 = $model->stpeduwork9 = null;
+            if($model->save())
+                $this->redirect(array('index'));
+        }
+
+        $this->render('stpeduwork/update-stpeduwork',array(
+            'model'=>$model,
+        ));
     }
 }

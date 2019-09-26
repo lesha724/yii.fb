@@ -195,12 +195,12 @@ Yii::app()->clientScript->registerCss('portfolioBottom', <<<CSS
         border-bottom-width: 2px;
     }
 
-    .btn-create-file, .btn-add-field, .btn-add-stpwork, .btn-add-stppart {
+    .btn-create-file, .btn-add-field, .btn-add-stpwork, .btn-add-stppart, .btn-add-stpeduwork {
         min-width: 100px;
         font-size: 15px!important;
     }
 
-    .btn-add-stpwork, .btn-add-stppart{
+    .btn-add-stpwork, .btn-add-stppart, .btn-add-stpeduwork{
         margin-bottom: 5px!important;
     }
 
@@ -265,6 +265,12 @@ if(Yii::app()->user->isTch){
         'label'=>tt('Подтвердить')
     ));
 }
+$this->widget('bootstrap.widgets.TbButton', array(
+    'url'=>Yii::app()->createUrl('/portfolioFarm/print', array('id'=>$model->student)),
+    'type'=>'primary',
+    'icon'=>'print',
+    'label'=>tt('Печать')
+));
 
 echo '<div class="page-header">
   <h3>1. РЕЗЮМЕ</h3>
@@ -497,7 +503,84 @@ echo '<div class="page-header">
   <h3>3. ПОРТФОЛІО РОБІТ</h3>
 </div>';
 
+Yii::app()->controller->widget('bootstrap.widgets.TbGridView', array(
+    'dataProvider' => Stpeduwork::model()->search($model->student),
+    'filter' => null,
+    'type' => 'striped bordered',
+    'columns' => array(
+        array(
+            'name' => 'stpeduwork3',
+            'header' => Stpeduwork::model()->getAttributeLabel('stpeduwork3'),
+            'value' => '$data->getStpeduwork3Type()',
+        ),
+        'stpeduwork4',
+        'stpeduwork5',
+        array(
+            'name' => 'stpeduwork10',
+            'header' => tt('Файл'),
+            'type'   => 'raw',
+            'value' => function($data){
+                /**
+                 * @var $data Stpeduwork
+                 */
+                if(empty($data->stpeduwork10))
+                    return CHtml::link(tt('Добавить файл'), Yii::app()->createUrl('/portfolioFarm/uploadFile', array('st1'=> $data->stpeduwork2, 'type' => 'type3', 'idField'=>$data->stpeduwork1)), array(
+                        'class' => 'text-success'
+                    ));
 
+                return CHtml::link(
+                        $data->stpeduwork100->stpfile2,
+                        array(
+                            '/portfolioFarm/file','id'=>$data->stpeduwork10)
+                    ). ' ('.CHtml::link(tt('удалить'), '#', array('submit'=>array('/portfolioFarm/deleteFile','id'=>$data->stpeduwork10), 'class' => 'text-error')).')';
+            },
+        ),
+        array(
+            'name' => 'stpeduwork8',
+            'header' => tt('Подтвердил'),
+            'value' => function($data){
+                /**
+                 * @var $data Stpeduwork
+                 */
+                if(empty($data->stpeduwork8))
+                    return '';
+
+                return $data->stpeduwork80->getName();
+            },
+        ),
+        array(
+            'name' => 'stpeduwork9',
+            'header' => tt('Дата подтверждения'),
+            'value' => function($data){
+                /**
+                 * @var $data Stpeduwork
+                 */
+                if(empty($data->stpeduwork9))
+                    return '';
+
+                return $data->stpeduwork9;
+            },
+        ),
+        array(
+            'class'=>'bootstrap.widgets.TbButtonColumn',
+            'template'=>'{update} {delete}',
+            'buttons'=>array(
+                'delete' => array
+                (
+                    'url'=>'array("/portfolioFarm/deleteStpeduwork","id"=>$data->stpeduwork1)',
+                    'options'=>array(
+                        'class' => 'text-error'
+                    )
+                ),
+                'update' => array
+                (
+                    'url'=>'array("/portfolioFarm/updateStpeduwork","id"=>$data->stpeduwork1)',
+                ),
+            ),
+        ),
+    )
+));
+echo CHtml::link(tt('Добавить'), Yii::app()->createUrl('/portfolioFarm/addStpeduwork', array( 'id'=> $model->student)), array('class'=>'btn-mini btn btn-primary btn-add-stpeduwork'));
 
 echo '<div class="page-header">
   <h3>4. ПОРТФОЛІО ВІДГУКІВ</h3>

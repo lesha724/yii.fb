@@ -381,10 +381,20 @@ class TimeTableController extends Controller
 
     }
 
+    /**
+     * @param $timeTable
+     * @param $minMax
+     * @param $maxLessons
+     * @param $rz
+     * @param $model
+     * @param $title
+     * @throws PHPExcel_Exception
+     * @throws PHPExcel_Reader_Exception
+     * @throws PHPExcel_Writer_Exception
+     */
     private function generateExcel($timeTable,$minMax,$maxLessons,$rz,$model,$title)
     {
-        Yii::import('ext.phpexcel.XPHPExcel');
-        $objPHPExcel= XPHPExcel::createPHPExcel();
+        $objPHPExcel= new PHPExcel();
         $objPHPExcel->getProperties()->setCreator("ACY")
             ->setLastModifiedBy("ACY ".date('Y-m-d H-i'))
             ->setTitle("timeTable ".date('Y-m-d H-i'))
