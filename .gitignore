@@ -7,10 +7,6 @@
 !/protected/runtime/cache
 /protected/runtime/cache/*
 !/protected/runtime/cache/.gitkeep
-/uploads/*
-!/uploads/.gitkeep
-/uploads/docs/*
-!/uploads/docs/.gitkeep
 /images/uploads/*
 !/images/uploads/.gitkeep
 /css/user/*
@@ -35,10 +31,8 @@ Thumbs.db
 
 /protected/data/*
 !/protected/data/.gitkeep
-/kiosk
 /protected/config/params.inc
 /protected/config/paramsEAuth.inc
 protected/config/mail.inc
-css/user.css
 html/*
 /favicon.ico
