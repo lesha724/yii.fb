@@ -46,7 +46,7 @@ class Stportfolio extends CActiveRecord
 
     const FIELD_EDUCATION_SCHOOL = 12;
 
-    const FIELD_EDUCATION_DATE_END = 13;
+    //const FIELD_EDUCATION_DATE_END = 13;
 
 	/**
 	 * @return string the associated database table name
@@ -141,8 +141,26 @@ class Stportfolio extends CActiveRecord
             self::FIELD_VOLONTER,
             self::FIELD_GROMADSKE,
             self::FIELD_EDUCATION_SCHOOL,
-            self::FIELD_EDUCATION_DATE_END
+            //self::FIELD_EDUCATION_DATE_END
         );
+    }
+
+    /**
+     * Поулчить конечный результат для печати
+     * @param $st1 int
+     * @param $id int
+     * @return mixed
+     * @throws CException
+     */
+    public function getPrintValue($st1, $id){
+        $sql = <<<SQL
+            SELECT list(stportfolio3, '; ') FROM stportfolio WHERE  stportfolio7 is not null and stportfolio2=:st1 and stportfolio1=:id
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':st1', $st1);
+        $command->bindValue(':id', $id);
+
+        return $command->queryScalar();
     }
 
     /**
@@ -219,16 +237,16 @@ class Stportfolio extends CActiveRecord
             ),
             self::FIELD_EDUCATION_SCHOOL => array(
                 'code' => self::FIELD_EDUCATION_SCHOOL,
-                'text' => 'Поперядня освіта (Навчальний заклад)',
+                'text' => 'Поперядня освіта (Навчальний заклад, коли закінчив)',
                 'needFile' => false,
                 'inputType' => 'textField'
             ),
-            self::FIELD_EDUCATION_DATE_END => array(
+            /*self::FIELD_EDUCATION_DATE_END => array(
                 'code' => self::FIELD_EDUCATION_DATE_END,
                 'text' => 'Поперядня освіта (дата закінчення)',
                 'needFile' => false,
                 'inputType' => 'dateField'
-            ),
+            ),*/
         );
     }
 }

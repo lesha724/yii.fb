@@ -58,7 +58,7 @@ echo sprintf($infoHtml,
     tt('ФИО'),$student->fullName,
     tt('Дата рождения'),date( 'd.m.Y', strtotime($student->st7)),
 
-    tt('Образовательная программа'), '',
+    tt('Образовательная программа'),  $studentInfo['spc4'],
 
     tt('Шифр'), $studentInfo['sp4'],
     tt('Специальность'), $studentInfo['pnsp2']

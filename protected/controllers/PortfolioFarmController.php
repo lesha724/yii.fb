@@ -92,7 +92,32 @@ class PortfolioFarmController extends Controller
         if(!$this->_checkPermission($id))
             throw new CHttpException(403, tt('Нет доступа к данному студенту'));
 
+        $html = $this->renderPartial('print', [
+            'student' => $student
+        ], true);
 
+        $mPDF1 = new Mpdf\Mpdf(array(
+            'format' => 'A4-P',
+        ));
+        $css = <<<CSS
+    .label-field{
+        font-weight: bold;
+    }
+
+    .ul-fields .table thead tr{
+        color: #000;
+    }
+    
+    h3 {
+        font-weight: bold!Important;
+    }
+    table, th, td {
+      border: 1px solid black;
+    }
+CSS;
+        $mPDF1->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
+        $mPDF1->WriteHTML($html);
+        $mPDF1->Output($student->getShortName().'.pdf', \Mpdf\Output\Destination::DOWNLOAD);
     }
 
     /**
@@ -172,6 +197,7 @@ class PortfolioFarmController extends Controller
      * @throws CDbException
      * @throws CException
      * @throws CHttpException
+     * @throws Exception
      */
     public function actionDeleteField($id){
         if (!Yii::app()->request->isPostRequest)

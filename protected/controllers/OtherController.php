@@ -788,7 +788,7 @@ SQL;
                         $nkrs5=$spkr->spkr3;
                     }
 
-                    $mPDF1 = new Mpdf();
+                    $mPDF1 = new Mpdf\Mpdf();
 
                     $patternTitle = <<<HTML
                         <style>

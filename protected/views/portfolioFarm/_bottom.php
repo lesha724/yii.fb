@@ -287,8 +287,8 @@ echo CHtml::openTag('ul', array(
 $field = $fields[Stportfolio::FIELD_EDUCATION_SCHOOL];
 echo renderField('',$student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType']);
 
-$field = $fields[Stportfolio::FIELD_EDUCATION_DATE_END];
-echo renderField('',$student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType']);
+/*$field = $fields[Stportfolio::FIELD_EDUCATION_DATE_END];
+echo renderField('',$student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType']);*/
 
 $field = $fields[Stportfolio::FIELD_EXTRA_EDUCATION];
 echo renderField('',$student->st1, $field['code'], $field['text'], $field['needFile'], $field['inputType']);
