@@ -1150,6 +1150,8 @@ SQL;
 		$command->bindValue(':UO19', $uo19);
 		$command->bindValue(':YEAR', $year);
 		$command->bindValue(':SEM', $sem);
+        $command->bindValue(':YEAR1', $year);
+        $command->bindValue(':SEM1', $sem);
 		$row = $command->queryRow();
 
 
