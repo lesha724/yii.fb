@@ -531,7 +531,7 @@ class SH extends ShortCodes
                 return new EdxDistEducation($url, $apiKey);
                 break;
 
-            case U_NMU:
+            case U_HTEI:
                 return new MoodleDistEducation($url, $apiKey);
                 break;
 
@@ -559,7 +559,7 @@ class SH extends ShortCodes
                 return new EdxSignUpOldForm($universityCode);
                 break;
 
-            case U_NMU:
+            case U_HTEI:
                 return new MoodleSignUpOldForm($universityCode);
                 break;
 
