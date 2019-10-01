@@ -40,8 +40,7 @@ class UsersHistory extends CActiveRecord
 			array('uh4,login,name', 'length', 'max'=>200),
 			array('uh5', 'length', 'max'=>200),
 			array('uh6', 'length', 'max'=>200),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
+
 			array('uh1, uh2, uh3, uh4, uh5, uh6,type,login,name,adm', 'safe', 'on'=>'search'),
 		);
 	}
@@ -91,14 +90,13 @@ class UsersHistory extends CActiveRecord
 	 */
 	public function search()
 	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
-		$criteria=new CDbCriteria;
+	    $criteria=new CDbCriteria;
 		$criteria->select = 't.*,u2 as login,u5 as type,u7 as adm,
-							st2 as st_name1,st3 as st_name2,st4 as st_name3,
+							pe2 as st_name1,pe3 as st_name2,pe4 as st_name3,
 							p3 as p_name1,p4 as p_name2,p5 as p_name3';
 		$criteria->join = 'JOIN users ON (t.uh2=users.u1) ';
 		$criteria->join .= 'LEFT JOIN st ON (users.u6=st.st1) ';
+        $criteria->join .= 'LEFT JOIN pe ON (st.st200 = pe.pe1) ';
 		$criteria->join .= 'LEFT JOIN p ON (users.u6=p.p1) ';
 		$criteria->compare('uh1',$this->uh1);
 		$criteria->compare('uh2',$this->uh2);
@@ -110,15 +108,15 @@ class UsersHistory extends CActiveRecord
 		$criteria->compare('u7',$this->adm);
 		$criteria->compare('u2',$this->login,true);
 		if(!empty($this->name))
-			$criteria->addCondition("(st2 CONTAINING '".$this->name."'or p3 CONTAINING '".$this->name."')");
+			$criteria->addCondition("(pe2 CONTAINING '".$this->name."'or p3 CONTAINING '".$this->name."')");
 
 		$sort = new CSort();
 		$sort->sortVar = 'sort';
 		$sort->defaultOrder = 'uh5 desc';
 		$sort->attributes = array(
 				'name'=>array(
-						'asc'=>'st2 ASC, p3 ASC',
-						'desc'=>'st2 DESC, p3 DESC',
+						'asc'=>'pe2 ASC, p3 ASC',
+						'desc'=>'pe2 DESC, p3 DESC',
 						'default'=>'ASC',
 				),
 				'login'=>array(

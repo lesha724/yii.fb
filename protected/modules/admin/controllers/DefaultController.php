@@ -144,8 +144,7 @@ class DefaultController extends AdminController
                 /* @var $_card St*/
                 $_card = St::model()->findByPk($id);
                 if(!empty($_card)) {
-                    //$name = SH::getShortName($_card->st2, $_card->st3, $_card->st4);
-                    $name = $_card->st2 .' '. $_card->st3 .' '. $_card->st4;
+                    $name = $_card->getFullName();
                     $bDate = $_card->st7;;
                 }
             }

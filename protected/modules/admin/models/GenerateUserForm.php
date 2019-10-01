@@ -64,24 +64,23 @@ class GenerateUserForm extends CFormModel
 
         $params = array();
 
-        //list($year, $sem) = SH::getCurrentYearAndSem();
-
         $where = '';
         $sqlSt = '
-            SELECT st1 as id, st2 as last_name, st3 as first_name, st4 as second_name, 
-              0 as type, st7 as b_date, std20 as course, 
+            SELECT st1 as id, pe2 as last_name, pe3 as first_name, pe4 as second_name, 
+              0 as type, pe9 as b_date, std20 as course, 
               f1 as faculty, sp1 as speciality, null as chair, null as chair_name, f2 as faculty_name, sp2 as speciality_name from f
                inner join sp on (f.f1 = sp.sp5)
                inner join sg on (sp.sp1 = sg.sg2)
                inner join gr on (sg.sg1 = gr.gr2)
                inner join std on (gr.gr1 = std.std3)
                inner join st on (std.std2 = st.st1)
+               inner join pe on (st.st200 = pe.pe1)
             WHERE  std11 in (0,5,6,8) and std7 is null  {{%where}}
-            GROUP by st1, st2, st3, st4, st7, std20, f1, sp1, f2, sp2
+            GROUP by st1, pe2, pe3, pe4, pe9, std20, f1, sp1, f2, sp2
         ';
         $sqlPrnt = '
-            SELECT st1 as id, st2 as last_name, st3 as first_name, st4 as second_name, 
-              2 as type, st7 as b_date, std20 as course, 
+            SELECT st1 as id, pe2 as last_name, pe3 as first_name, pe4 as second_name, 
+              2 as type, pe9 as b_date, std20 as course, 
               f1 as faculty, sp1 as speciality, 
               null as chair, null as chair_name, f2 as faculty_name, sp2 as speciality_name from f
                inner join sp on (f.f1 = sp.sp5)
@@ -89,8 +88,9 @@ class GenerateUserForm extends CFormModel
                inner join gr on (sg.sg1 = gr.gr2)
                inner join std on (gr.gr1 = std.std3)
                inner join st on (std.std2 = st.st1)
+               inner join pe on (st.st200 = pe.pe1)
             WHERE  std11 in (0,5,6,8) and std7 is null  {{%where}}
-            GROUP by st1, st2, st3, st4, st7, std20, f1, sp1,  f2, sp2
+            GROUP by st1,  pe2, pe3, pe4, pe9, std20, f1, sp1,  f2, sp2
         ';
 
         $wherePrnt =$whereSt = $whereTch = '';
@@ -155,18 +155,12 @@ class GenerateUserForm extends CFormModel
         {
             $where.=" AND faculty = :faculty";
             $params[':faculty'] = $this->faculty;
-
-            /*$wherePrnt.=" AND F1 = :faculty1";
-            $params[':faculty1'] = $this->faculty;*/
         }
 
         if(!empty($this->speciality))
         {
             $where.=" AND speciality = :speciality";
             $params[':speciality'] = $this->speciality;
-
-            /*$wherePrnt.=" AND sp1 = :speciality1";
-            $params[':speciality1'] = $this->speciality;*/
         }
 
         $sql = str_replace('{{%where}}', $whereSt, $sqlSt);
@@ -177,23 +171,9 @@ class GenerateUserForm extends CFormModel
         $sql = 'SELECT * FROM ('.$sql.') t WHERE last_name<>\'\' AND (SELECT COUNT(*) FROM USERS WHERE u6=t.id and u5=t.type)=0 '.$where;
         $rawData = Yii::app()->db->createCommand($sql); //or use ->queryAll(); in CArrayDataProvider
 
-        //$countData = Yii::app()->db->createCommand('SELECT COUNT(*) FROM (' . $sql . ') as count_record'); //the count
-        /*foreach ($params as $key=>$value) {
-            $rawData->bindParam($key, $value);
-        }*/
-
         $rawData->bindValues($params);
-        //$countData->bindValues($params);
-
-        //$count = $countData->queryScalar();
-
-        /*print_r($sql);
-
-        var_dump($params);*/
 
         $provider = new CArrayDataProvider($rawData->queryAll(), array(
-            //'keyField' => 'id',
-            //'totalItemCount' => $count,
             'sort' => array(
                 'attributes' => array(
                     'type',

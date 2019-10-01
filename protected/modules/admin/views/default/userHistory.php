@@ -6,6 +6,10 @@
  * Time: 18:52
  */
 
+/**
+ * @var $model UsersHistory
+ */
+
     $this->pageHeader=tt('История авторизации');
     $this->breadcrumbs=array(
         tt('История авторизации'),
