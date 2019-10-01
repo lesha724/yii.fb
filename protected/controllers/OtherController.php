@@ -1052,7 +1052,7 @@ HTML;
                         $st_info['sem4'],
                         $st_info['name'],
                         $st_info['f3'],
-                        SH::getShortName($student->st2,$student->st3,$student->st4),
+                        $student->getShortName(),
                         $nkrs4,
                         $nkrs5,
                         $nkrs6
