@@ -205,7 +205,7 @@ CSS;
 
         $field = Stportfolio::model()->findByPk(array('stportfolio0' => $id));
         if(empty($field))
-            throw new CHttpException(500, tt('Ошибка сохранения'));
+            throw new CHttpException(500, tt('Элемент не найден'));
 
         if(!$this->_checkPermission($field->stportfolio2))
             throw new CHttpException(403, tt('Нет доступа к данному студенту'));
@@ -216,7 +216,7 @@ CSS;
         if(!$field->delete())
             throw new CHttpException(500, tt('Ошибка удаления'));
 
-        if(!empty($field->stportfolio60)){
+        if(!empty($field->stportfolio6)){
             if ($field->stportfolio60->delete()) {
                 $fileName = PortalSettings::model()->getSettingFor(PortalSettings::PORTFOLIO_PATH).'/'.$field->stportfolio60->stpfile7;
                 unlink($fileName);

@@ -36,7 +36,7 @@ class CreateStpfileForm extends CFormModel
             array('st1, id', 'numerical', 'integerOnly'=>true),
             array('file', 'validateForm'),
             array('file', 'file',
-                'types'=> 'jpeg, jpg, png',
+                'types'=> 'jpeg, jpg, png, doc, docx, pdf',
                 'maxSize' => 1024 * 1024 * 8,
             )
 		);
