@@ -243,7 +243,7 @@ SQL;
 
         $sql = <<<SQL
        select t.st1,pe2,pe3,pe4,st.st45,std.std23,st.st163,st.st167, elgvst2, elgvst3
-        from (select listst.st1,listst.std1,listst.gr1,listst.std11,ucx1 from listst(:DATE_1,:YEAR,:SEM,0,0,0,0,0,0) where (listst.gr1=:GR1 or listst.gr1_virt=:GR1_VIRT) and listst.std11 in (0,6,8) ) t
+        from (select listst.st1,listst.gr1,listst.std11,ucx1 from listst(:DATE_1,:YEAR,:SEM,0,0,0,0,0,0) where (listst.gr1=:GR1 or listst.gr1_virt=:GR1_VIRT) and listst.std11 in (0,6,8) ) t
             inner join st on (t.st1 = st.st1)
             inner join std on (t.std1 = std.std1)
             inner join pe on (st.st200 = pe.pe1)
