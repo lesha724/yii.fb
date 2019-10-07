@@ -52,9 +52,9 @@ function getMarsForElgz3($nom,$marks){
 }
 function table2Tr($date,$gr1,$st,$marks,$permLesson,$read_only,$type_lesson,$ps20,$ps55,$ps56,$sem7,$ps60,$min,$ps65,$show,$moduleNom,$ps88, $isStd)
 {
-    if (($st['std23']!=$sem7&&$st['std23']!=$sem7+1) &&$ps60==1) {
+    /*if (($st['std23']!=$sem7&&$st['std23']!=$sem7+1) &&$ps60==1) {
         $read_only = true;
-    }
+    }*/
 
     if ($st['st167']==1) {
         $read_only = true;
