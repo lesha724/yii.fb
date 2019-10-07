@@ -222,8 +222,12 @@ SQL;
 
 		foreach($dates as $key=>$date){
 
-			$disabled = Elgz::model()->checkLesson($date,$permLesson,$ps78,$date1,$ps27);
-			$a = '';
+            $date2 = new DateTime($date['r2']);
+            if($date2 >= $date1)
+                $disabled = false;
+            else
+			    $disabled = Elgz::model()->checkLesson($date,$permLesson,$ps78,$date1,$ps27);
+
 			if($ps90==1&&!$disabled){
 				$rows[$key] = $date;
 				$row = Elgzu::model()->getUstemFromElgzuByElgz1AndGroup($date['elgz1'],$gr1);
@@ -234,9 +238,6 @@ SQL;
 					$rows[$key]['ustem7']=$row['ustem7'];
 				}
 			}
-
-
-
 		}
 		return $rows;
 	}
