@@ -2,7 +2,6 @@
 
 /**
  * @var St[] $students
- * @var int $type_statistic
  */
 
 $pattern = <<<HTML
@@ -28,10 +27,7 @@ HTML;
 $tr = '';
 foreach($students as $key => $st) {
     $name = $st->fullName;
-	if($type_statistic==0)
-		$name = '<a href="#" class="student-statistic" data-st1="'.$st->st1.'">'.mb_strimwidth($name, 0, 15, '...').'</a>';
-	else
-		$name = mb_strimwidth($name, 0, 15, '...');
+	$name = '<a href="#" class="student-statistic" data-st1="'.$st->st1.'">'.mb_strimwidth($name, 0, 15, '...').'</a>';
     $num  = $key+1;
 
     $tr .= sprintf($pattern, $num, $name);

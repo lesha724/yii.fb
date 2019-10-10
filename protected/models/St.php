@@ -694,7 +694,7 @@ SQL;
                 FROM gr
                   INNER JOIN std on (gr.gr1 = std.std3)
                   INNER JOIN st on (std.std2 = st.st1)
-                WHERE st1=:ST1 and (std7 is null or (std7>current_timestamp) ) and std11 in (0,5,6,8)
+                WHERE st1=:ST1 and (std7 is null or (std7>current_timestamp) ) and std11 in (0,5,6,8) and std24=0
 SQL;
 		$command= Yii::app()->db->createCommand($sql);
 		$command->bindValue(':ST1', $st1);
@@ -710,7 +710,7 @@ SQL;
             INNER JOIN std on (gr.gr1 = std.std3)
             INNER JOIN st on (std.std2 = st.st1)
             INNER JOIN sg on (gr2 = sg1)
-            WHERE st1=:ST1 and std7 is null and std11 in (0,5,6,8) and sg38<=current_timestamp and sg39>=current_timestamp
+            WHERE st1=:ST1 and std7 is null and std11 in (0,5,6,8) and sg38<=current_timestamp and sg39>=current_timestamp and std24=0
 SQL;
         $command  = Yii::app()->db->createCommand($sql);
         $command->bindValue(':ST1', $this->st1);
@@ -742,7 +742,7 @@ SQL;
 			inner join gr on (std.std3 = gr.gr1)
 			inner join sg on (gr.gr2 = sg.sg1)
 			inner join sem on (sg.sg1 = sem.sem2)
-		where std7 is null and std11 in (0, 5, 6, 8) and sem3=:YEAR1 and sem5=:SEM1 and std2=:st1
+		where std7 is null and std11 in (0, 5, 6, 8) and sem3=:YEAR1 and sem5=:SEM1 and std2=:st1 and std24=0
 		GROUP BY sg1
 SQL;
         $command = Yii::app()->db->createCommand($sql);
@@ -817,14 +817,15 @@ SQL;
      */
     public function getStudentsBySpeciality($sp1,$course,$year, $sem){
         $sql=<<<SQL
-            SELECT st1,st2,st3,st4,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28
+            SELECT st1,pe2,pe3,pe4,gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28
 			 FROM ST
+			   inner join pe on (st200 = pe1)
 			   INNER JOIN STD ON (ST.ST1 = STD.STD2)
 			   INNER JOIN gr on (std.std3 = gr.gr1)
 			   INNER JOIN sg on (gr.gr2 = sg.sg1)  
                inner join sem on (sg.sg1 = sem.sem2)
-			 WHERE gr13=0 and sg2=:sp1 and sem4=:sem4 and sem3=:YEAR and sem5=:SEM and std7 is null and std11 in (0,5,6,8) and st101!=7
-			 ORDER BY gr3 ASC,st2 collate UNICODE
+			 WHERE gr13=0 and sg2=:sp1 and sem4=:sem4 and sem3=:YEAR and sem5=:SEM and std7 is null and std11 in (0,5,6,8) and st101!=7 and std24=0
+			 ORDER BY gr3 ASC,pe2 collate UNICODE
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
@@ -1063,7 +1064,7 @@ SQL;
     public function findUsersByStudentName($query, $faculty)
     {
         $sql = <<<SQL
-            select u1, st1,st2,st3,st4,st20, std3, gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28
+            select u1, st1,pe2,pe3,pe4,std20, std3, gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28
 			FROM st
 			    INNER JOIN users on (u6 = st1 and u5 =0)
 				INNER JOIN std ON(st1=std2)
@@ -1071,7 +1072,7 @@ SQL;
 				INNER JOIN sg ON(sg1=gr2)
 				INNER JOIN sp ON(sp1=sg2)
 				INNER JOIN f ON(sp5=f1)
-				where st2<>'' and sp5=:f1 and std11 in (0,5,6,8) and std7 is null and f32=0
+				where st2<>'' and sp5=:f1 and std11 in (0,5,6,8) and std7 is null and f32=0 and std24=0
 				and
 				(
 					st2 CONTAINING :QUERY1
@@ -1080,7 +1081,7 @@ SQL;
 					or st120 CONTAINING :QUERY4
 					or st123 CONTAINING :QUERY5
 				)
-            group by u1,st1,st2,st3,st4,st20, std3, gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28
+            group by u1,st1,pe2,pe3,pe4,std20, std3, gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28
 			order by st2 collate UNICODE,st3,st4
 SQL;
         $command = Yii::app()->db->createCommand($sql);

@@ -34,8 +34,8 @@ class MoodleDistEducation extends DistEducation
 
         return array(
             'username'=>mb_strtolower($user->u2),
-            'firstname'=>CHtml::encode($model->st3),
-            'lastname'=>CHtml::encode($model->st2),
+            'firstname'=>CHtml::encode($model->person->pe3),
+            'lastname'=>CHtml::encode($model->person->pe2),
             'email'=>$user->u4,
             'idnumber'=>'student'.$user->u6,
             'password'=>'St_'.$this->_randomKey(),

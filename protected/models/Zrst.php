@@ -248,7 +248,7 @@ SQL;
      */
     public  function getTable1DataTeacher($p1, $us1){
         $sql=<<<SQL
-        select st2,st3,st4,std3,st1,us1,sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28,gr3,
+        select pe2,pe3,pe4,std3,st1,us1,sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28,gr3,
                (select first 1 zrst1 from zrst where zrst6=1 and zrst2=st.st1 and zrst3=us.us1 order by zrst1 desc) as recenziya
         from uo
            inner join us on (uo.uo1 = us.us2)
@@ -258,13 +258,14 @@ SQL;
            inner join gr on (ug.ug2 = gr.gr1)
            inner join std on (gr.gr1 = std.std3)
            inner join st on (std.std2 =st.st1)
+           inner join pe on (st200 = pe1)
            inner join ucx on (uo.uo19 = ucx.ucx1)
            inner join d on (uo.uo3 = d.d1)
            inner join sem on (us.us3 = sem.sem1)
-        where us1=:us1_ and pd2=:p1_ and std7 is null and std11<>1 and ucx5<2 and (us4 in (7,8) or (d8 in (2,6) and us4=0))
-        group by st2,st3,st4,std3,st1,us1,sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28,gr3
+        where us1=:us1_ and pd2=:p1_ and std7 is null and std24=0 and std11<>1 and ucx5<2 and (us4 in (7,8) or (d8 in (2,6) and us4=0))
+        group by pe2,pe3,pe4,std3,st1,us1,sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28,gr3
         UNION
-        select st2,st3,st4,std3,st1,us1,sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28,gr3,
+        select pe2,pe3,pe4,std3,st1,us1,sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28,gr3,
                (select first 1 zrst1 from zrst where zrst6=1 and zrst2=st.st1 and zrst3=us.us1 order by zrst1 desc) as recenziya
         from ucgn
            inner join ucxg on (ucgn.ucgn1 = ucxg.ucxg2)
@@ -272,6 +273,7 @@ SQL;
            inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
            inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
            inner join st on (ucsn.ucsn2 =st.st1)
+           inner join pe on (st200 = pe1)
            inner join std on (st.st1 = std.std2)
            inner join gr on (std.std3 = gr.gr1)
            inner join uo on (ucx.ucx1 = uo.uo19)
@@ -280,8 +282,8 @@ SQL;
            inner join pd on (nr.nr6 = pd.pd1)
            inner join d on (uo.uo3 = d.d1)
            inner join sem on (us.us3 = sem.sem1)
-        where us1=:us1 and pd2=:p1 and std7 is null and std11<>1 and ucx5>1 and (us4 in (7,8))
-        group by st2,st3,st4,std3,st1,us1,sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28,gr3
+        where us1=:us1 and pd2=:p1 and std7 is null and std24=0 and std11<>1 and ucx5>1 and (us4 in (7,8))
+        group by pe2,pe3,pe4,std3,st1,us1,sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28,gr3
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);

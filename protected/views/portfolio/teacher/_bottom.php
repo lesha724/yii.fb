@@ -27,7 +27,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         array(
             'header'=>tt('Студент'),
             'value'=>function($data){
-                return sprintf('%s %s %s', $data['st2'], $data['st3'], $data['st4']);
+                return sprintf('%s %s %s', $data['pe2'], $data['pe3'], $data['pe4']);
             },
         ),
         array(

@@ -384,7 +384,7 @@ SQL;
     public function getInfoByElgzst0($uo1,$sem1,$gr1,$elg4)
     {
         $sql=<<<SQL
-             SELECT d2,d3,st2,st3,st4,elgz3
+             SELECT d2,d3,pe2,pe3,pe4,elgz3
                 FROM elgzst
                     LEFT JOIN elgp on (elgzst.elgzst0 = elgp.elgp1)
                     INNER JOIN elgz on (elgzst.elgzst2 = elgz.elgz1)
@@ -392,6 +392,7 @@ SQL;
                     INNER JOIN uo on (elg.elg2 = uo.uo1)
                     INNER JOIN d on (d.d1 = uo.uo3)
                     INNER JOIN st on (elgzst.elgzst1 = st.st1)
+                    INNER JOIN pe on (st200 = pe1)
                 WHERE elgzst0=:ELGZST0 and d1 in (select d1 FROM  EL_GURNAL(:P1,:YEAR,:SEM,0,0,0,0,2,0))
 SQL;
 

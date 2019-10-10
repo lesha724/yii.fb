@@ -51,7 +51,7 @@ if($model->scenario == AttendanceStatisticForm::SCENARIO_GROUP){
 
 foreach ($students as $student){
 
-    $name = $student['st2'].' '.$student['st3'].' '.$student['st4'];
+    $name = $student['pe2'].' '.$student['pe3'].' '.$student['pe4'];
     $group = $model->scenario == AttendanceStatisticForm::SCENARIO_GROUP ? $groupName : Gr::model()->getGroupName($model->course, $student);
     list($respectful,$disrespectful,$count,  $respectfulHours,$disrespectfulHours,$countHours) = Elg::model()->getAttendanceStatisticInfoByDateWithHours($firstDay, $lastDay, $student['st1']);
     $countProp = $respectful + $disrespectful;

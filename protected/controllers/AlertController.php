@@ -176,10 +176,10 @@ class AlertController extends Controller
                 $suggestions[] = array(
                     'value' => strtr('{lastName} {firstName} {secondName} ({group})',
                         array(
-                            '{lastName}' => $st['st2'],
-                            '{firstName}' => $st['st3'],
-                            '{secondName}' => $st['st4'],
-                            '{group}' => Gr::model()->getGroupName($st['st20'], $st)
+                            '{lastName}' => $st['pe2'],
+                            '{firstName}' => $st['pe3'],
+                            '{secondName}' => $st['pe4'],
+                            '{group}' => Gr::model()->getGroupName($st['std20'], $st)
                         )
                     ),
                     'id'    => $st['u1']

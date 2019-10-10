@@ -565,13 +565,15 @@ UPDATE ucgns SET
         ucgns3=(SELECT  count( *) as BUDGET
               FROM UCSN
                  INNER JOIN ST ON (UCSN2 = ST1)
-                 INNER JOIN SK ON (ST1 = SK2)
-              WHERE sk3=0 and sk5 is null and ucsn1=:UCGNS1_VIB1)
+                 INNER JOIN STD on (st1=std2)
+                 INNER JOIN SK ON (std26 = sk1)
+              WHERE sk3=0 and std7 is null and std24=0 and std11 in (0, 5, 6, 8) and ucsn1=:UCGNS1_VIB1)
         ,ucgns4=(SELECT count( *) as KONTR
               FROM UCSN
                  INNER JOIN ST ON (UCSN2 = ST1)
-                 INNER JOIN SK ON (ST1 = SK2)
-              WHERE sk3=1 and sk5 is null and ucsn1=:UCGNS1_VIB2)
+                 INNER JOIN STD on (st1=std2)
+                 INNER JOIN SK ON (std26 = sk1)
+              WHERE sk3=1 and std7 is null and std24=0 and std11 in (0, 5, 6, 8) and ucsn1=:UCGNS1_VIB2)
       WHERE ucgns1=:UCGNS1_VIB3
 SQL;
             $params = array(
@@ -627,13 +629,15 @@ UPDATE ucgns SET
       ucgns3=(SELECT  count( *) as BUDGET
             FROM UCSN
                INNER JOIN ST ON (UCSN2 = ST1)
-               INNER JOIN SK ON (ST1 = SK2)
-            WHERE sk3=0 and sk5 is null and ucsn1=:UCGNS1_VIB1)
+               INNER JOIN STD on (st1=std2)
+               INNER JOIN SK ON (std26 = sk1)
+            WHERE sk3=0 and std7 is null and std24=0 and std11 in (0, 5, 6, 8) and ucsn1=:UCGNS1_VIB1)
       ,ucgns4=(SELECT count( *) as KONTR
             FROM UCSN
                INNER JOIN ST ON (UCSN2 = ST1)
-               INNER JOIN SK ON (ST1 = SK2)
-            WHERE sk3=1 and sk5 is null and ucsn1=:UCGNS1_VIB2)
+               INNER JOIN STD on (st1=std2)
+              INNER JOIN SK ON (std26 = sk1)
+            WHERE sk3=1 and std7 is null and std24=0 and std11 in (0, 5, 6, 8) and ucsn1=:UCGNS1_VIB2)
      WHERE ucgns1=:UCGNS1_VIB3
 SQL;
 

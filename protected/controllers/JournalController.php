@@ -1491,7 +1491,7 @@ SQL;
                         $info=$elgzst->getInfoByElgzst0($elg['elg2'],$elg['elg2'],$gr1,$elg['elg4']);
 
                         if(!empty($info))
-                            $title.=' '.SH::getShortName($info['st2'],$info['st3'],$info['st4']).' '.date('d.m.Y', strtotime($info['r2'])).' '.$info['d3'];
+                            $title.=' '.SH::getShortName($info['pe2'],$info['pe3'],$info['pe4']).' '.date('d.m.Y', strtotime($info['r2'])).' '.$info['d3'];
 
                         $ps67 = PortalSettings::model()->findByPk(67)->ps2;
 
@@ -1995,7 +1995,7 @@ SQL;
             foreach($otr as $val)
             {
                 $sheet->setCellValueByColumnAndRow(0,$i, $i-3);
-                $sheet->setCellValueByColumnAndRow(1,$i,SH::getShortName($val['st2'],$val['st3'],$val['st4']));
+                $sheet->setCellValueByColumnAndRow(1,$i,SH::getShortName($val['pe2'],$val['pe3'],$val['pe4']));
                 $sheet->setCellValueByColumnAndRow(2,$i,$val['elgz3']);
                 $sheet->setCellValueByColumnAndRow(3,$i,$val['elgp3']);
                 switch ($val['elgzst3']){
@@ -2217,7 +2217,7 @@ SQL;
             foreach($students as $st) {
 
                 $sheet->mergeCellsByColumnAndRow(1, $i+ $rowStart, 3, $i+ $rowStart);
-                $name = $st['st2'].' '.$st['st3'].' '.$st['st4'];
+                $name = $st['pe2'].' '.$st['pe3'].' '.$st['pe4'];
 
                 $sheet->setCellValueByColumnAndRow(0,$i+ $rowStart,$i+1);
                 $sheet->setCellValueByColumnAndRow(1,$i+ $rowStart,$name);
@@ -2577,7 +2577,7 @@ SQL;
                 $info=$elgzst->getInfoByElgzst0($elg['elg2'],$sem1,$gr1,$elg['elg4']);
                 if(!empty($info))
                 {
-                    $title.=' '.SH::getShortName($info['st2'],$info['st3'],$info['st4']).' '.date('d.m.Y', strtotime($info['r2'])).' '.$info['d3'];
+                    $title.=' '.SH::getShortName($info['pe2'],$info['pe3'],$info['pe4']).' '.date('d.m.Y', strtotime($info['r2'])).' '.$info['d3'];
                 }
                 $model=new Elgotr();
                 $model->unsetAttributes();
@@ -2640,7 +2640,7 @@ SQL;
             $info=$elgzst->getInfoByElgzst0($elg['elg2'],$sem1,$gr1,$elg['elg4']);
             if(!empty($info))
             {
-                $title.=' '.SH::getShortName($info['st2'],$info['st3'],$info['st4']).' '.date('d.m.Y', strtotime($info['r2'])).' '.$info['d3'];
+                $title.=' '.SH::getShortName($info['pe2'],$info['pe3'],$info['pe4']).' '.date('d.m.Y', strtotime($info['r2'])).' '.$info['d3'];
             }
 
             $html = $this->renderPartial('retake/_show_retake', array(
@@ -3451,7 +3451,7 @@ SQL;
         foreach ($students as $student){
 
             $sheet->setCellValueByColumnAndRow(0,$i,$i-6);
-            $sheet->setCellValueByColumnAndRow(1,$i,SH::getShortName($student['st2'],$student['st3'],$student['st4']));
+            $sheet->setCellValueByColumnAndRow(1,$i,SH::getShortName($student['pe2'],$student['pe3'],$student['pe4']));
             $sheet->setCellValueByColumnAndRow(2,$i,Gr::model()->getGroupName( $model->course,$student));
             list($respectful,$disrespectful,$count) = Elg::model()->getAttendanceStatisticInfoByDate($model->date1, $model->date2, $student['st1']);
             $sheet->setCellValueByColumnAndRow(3,$i, $count);
