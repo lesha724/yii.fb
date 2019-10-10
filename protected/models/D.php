@@ -929,25 +929,6 @@ SQL;
 SQL;
             $id  = $model->group;
         } elseif ($type == WorkPlanController::STUDENT) {
-             /*$sql = <<<SQL
-                SELECT d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1, k19
-                       from nr
-                           inner join us on (nr.nr2 = us.us1)
-                           inner join uo on (us.us2 = uo.uo1)
-                           inner join u on (uo.uo22 = u.u1)
-                           inner join d on (uo.uo3 = d.d1)
-                           inner join k on (uo.uo4 = k.k1)
-                           inner join ug on (nr.nr1 = ug.ug1)
-                           inner join ucgn on (ug.ug4 = ucgn.ucgn1)
-                           inner join ucxg on (ucgn.ucgn1 = ucxg.ucxg2)
-                           inner join ucx on (ucxg.ucxg1 = ucx.ucx1)
-                           inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
-                           inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
-                    WHERE us4<>13 and ucxg3=0 and ucsn2=:ID and us3=:SEM1 and us6<>0 and us4<>17 and us4<>18
-
-                    group by d2,us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,uo1, k19
-                    ORDER BY d2,us4,uo3,d27
-SQL;*/
             $sql = <<<SQL
             SELECT d2,LISTST.us4,us6,k2,uo3,u16,u1,d1,d27,d32,d34,d36,LISTST.uo1, k19
                 from LISTST(current_timestamp,0,0,3,0,:ID,:SEM1,0,0)
