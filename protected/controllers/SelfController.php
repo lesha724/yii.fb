@@ -117,10 +117,6 @@ class SelfController extends Controller
         $html .= $this->_getScoreHtml($setting, 'SeventyPercent', $spo->spo2 / 2 * 0.7, $sk['sk6'], $sk['sk7']);
         $html .= $this->_getScoreHtml($setting, 'ThirtyPercent', $spo->spo2 / 2 * 0.3, $sk['sk6'], $sk['sk7']);
         $html.= '</tbody></table>';
-        //$pdf->SetDisplayMode('fullpage');
-        //$this->renderText($html);
-
-        //$html=iconv("UTF-8","CP1251", $html);
 
         $pdf->writeHTML($html);
 
