@@ -400,7 +400,7 @@ CSS;
 
                 try {
                     if (!$model->save()) {
-                        throw new CException(tt('Ошибка сохранения1'));
+                        throw new CException(tt('Ошибка сохранения'));
                     }
                 } catch (CException $error) {
                     throw new CHttpException(500, tt('Ошибка добавления файла: {error}', array(

@@ -98,7 +98,7 @@ class OtherController extends Controller
                 '{date}'=> date("d.m.Y",strtotime($model->zsno2))
             )));
         }else{
-            Yii::app()->user->setFlash('success', tt('Ошибка удаления заявки на оплату №{number} от {date}', array(
+            Yii::app()->user->setFlash('success', tt('Ошибка удаления заявления на оплату №{number} от {date}', array(
                 '{number}' => $model->zsno0,
                 '{date}'=> date("d.m.Y",strtotime($model->zsno2))
             )));
@@ -135,7 +135,7 @@ class OtherController extends Controller
         try{
 
             if(!$model->save()){
-                throw new Exception(tt('Ошибка создания заявки на оплату'));
+                throw new Exception(tt('Ошибка создания заявления на оплату'));
             }
 
             foreach ( $form->lessons as $lesson) {
@@ -157,7 +157,7 @@ class OtherController extends Controller
         }catch (Exception $error){
             $trans->rollback();
 
-            throw new CHttpException(400,tt('Ошибка создания заявки на оплату №{number} от {date}: {error}', array(
+            throw new CHttpException(400,tt('Ошибка создания заявления на оплату №{number} от {date}: {error}', array(
                 '{number}' => $model->zsno0,
                 '{date}'=> date("d.m.Y",strtotime($model->zsno2)),
                 '{error}' => $error->getMessage()
