@@ -20,9 +20,7 @@ $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array());
 echo CHtml::errorSummary($model);
 echo $form->dropDownListRow($model, 'stppart3', $model->getStppart3Types());
 echo $form->textFieldRow($model, 'stppart4');
-echo $form->textFieldRow($model, 'stppart5', array(
-    'type' => 'number'
-));
+echo $form->dropDownListRow($model, 'stppart5', Stportfolio::getYears());
 echo $form->dropDownListRow($model, 'stppart6', $model->getStppart6Types());
 echo $form->dropDownListRow($model, 'stppart7', $model->getStppart7Types());
 echo $form->dropDownListRow($model, 'stppart8', $model->getStppart8Types());

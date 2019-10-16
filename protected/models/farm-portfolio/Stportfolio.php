@@ -201,7 +201,7 @@ SQL;
             ),
             self::FIELD_OLIMPIADS => array(
                 'code' => self::FIELD_OLIMPIADS,
-                'text' => 'Олімпіади, конкурси за навчальними дисциплінами (навчальний рік, назва дисципліни, результат',
+                'text' => 'Олімпіади, конкурси за навчальними дисциплінами (навчальний рік, назва дисципліни, результат)',
                 'needFile' => true,
                 'inputType' => 'textArea'
             ),
@@ -237,7 +237,7 @@ SQL;
             ),
             self::FIELD_EDUCATION_SCHOOL => array(
                 'code' => self::FIELD_EDUCATION_SCHOOL,
-                'text' => 'Поперядня освіта (Навчальний заклад, коли закінчив)',
+                'text' => 'Поперядня освіта (навчальний заклад, коли закінчив)',
                 'needFile' => false,
                 'inputType' => 'textField'
             ),
@@ -248,5 +248,22 @@ SQL;
                 'inputType' => 'dateField'
             ),*/
         );
+    }
+
+    /**
+     * Список годов
+     * @return array
+     */
+    public static function getYears(){
+        $list = array();
+
+        $currentYear = date('Y');
+
+        for($i = 0; $i<5; $i++){
+            $year = $currentYear - $i;
+            $list[$year] = $year.'/'.($year +1);
+        }
+
+        return $list;
     }
 }

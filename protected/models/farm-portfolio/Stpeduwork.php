@@ -39,6 +39,7 @@ class Stpeduwork extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+            array('stpeduwork3, stpeduwork4, stpeduwork5', 'required'),
 			array('stpeduwork2, stpeduwork3, stpeduwork5, stpeduwork6, stpeduwork8, stpeduwork10', 'numerical', 'integerOnly'=>true),
 			array('stpeduwork4', 'length', 'max'=>200),
 			array('stpeduwork7, stpeduwork9', 'length', 'max'=>20),

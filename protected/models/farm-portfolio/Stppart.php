@@ -40,6 +40,7 @@ class Stppart extends CActiveRecord
 	public function rules()
 	{
 		return array(
+		    array('stppart3, stppart4, stppart5, stppart6, stppart7, stppart8', 'required'),
 			array('stppart2, stppart3, stppart5, stppart6, stppart7, stppart8, stppart9, stppart10, stppart12', 'numerical', 'integerOnly'=>true),
 			array('stppart4', 'length', 'max'=>200),
 			array('stppart11, stppart13', 'length', 'max'=>20),

@@ -37,10 +37,11 @@ $fieldList = Stportfolio::model()->getFieldsList();
 echo '<h3>1. РЕЗЮМЕ</h3>';
 
 echo CHtml::image(Yii::app()->createUrl('site/userPhoto',array( '_id'=>$student->st1, 'type'=>1)), $student->getShortName(), array(
-    //'style' => 'float:right'
+    'style' => 'float:right;height: 200px;'
 ));
 echo CHtml::openTag('ul', array(
-    'class' => 'ul-fields'
+    'class' => 'ul-fields',
+    'style' => 'margin-top:200px'
 ));
 
 echo CHtml::openTag('ol');

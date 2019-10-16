@@ -93,7 +93,7 @@ class OtherController extends Controller
             throw new CHttpException(403, 'Invalid request. You don\'t have access to the service.');
 
         if($model->delete()){
-            Yii::app()->user->setFlash('success', tt('Заявка на оплату №{number} от {date} успешно удалена', array(
+            Yii::app()->user->setFlash('success', tt('Заявление на оплату №{number} от {date} успешно удалено', array(
                 '{number}' => $model->zsno0,
                 '{date}'=> date("d.m.Y",strtotime($model->zsno2))
             )));
@@ -144,12 +144,12 @@ class OtherController extends Controller
                 $zsnop->zsnop1 = $lesson;
 
                 if(!$zsnop->save())
-                    throw new Exception('Ошибка добавления занятия в заявку на оплату');
+                    throw new Exception('Ошибка добавления занятия в заявление на оплату');
             }
 
             $trans->commit();
 
-            Yii::app()->user->setFlash('success', tt('Заявка на оплату №{number} от {date} успешно создана', array(
+            Yii::app()->user->setFlash('success', tt('Заявление на оплату №{number} от {date} успешно создано', array(
                 '{number}' => $model->zsno0,
                 '{date}'=> date("d.m.Y",strtotime($model->zsno2))
             )));

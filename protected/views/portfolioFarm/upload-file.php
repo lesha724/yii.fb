@@ -16,10 +16,10 @@
  * @var $id string
  */
 
-$this->pageHeader=tt('Додавання файлу');
+$this->pageHeader=tt('Добавление файла');
 $this->breadcrumbs=array(
     tt('Портфолио')=> array('/portfolioFarm/index'),
-    tt('Додавання'),
+    tt('Добавление'),
 );
 
 

@@ -20,9 +20,7 @@ $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array());
 echo CHtml::errorSummary($model);
 echo $form->dropDownListRow($model, 'stpeduwork3', $model->getStpeduwork3Types());
 echo $form->textFieldRow($model, 'stpeduwork4');
-echo $form->textFieldRow($model, 'stpeduwork5', array(
-    'type' => 'number'
-));
+echo $form->dropDownListRow($model, 'stpeduwork5', Stportfolio::getYears());
 ?>
 <div class="buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? tt('Добавить') : tt('Изменить'), array(

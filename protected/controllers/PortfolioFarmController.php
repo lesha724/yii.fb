@@ -21,7 +21,8 @@ class PortfolioFarmController extends Controller
             array('allow',
                 'actions' => array(
                     'index',
-                    'changeField',
+                    'addField',
+                    'deleteField',
                     'deleteFile',
                     'file',
                     'uploadFile',
@@ -43,12 +44,6 @@ class PortfolioFarmController extends Controller
                     'accept',
                 ),
                 'expression' => 'Yii::app()->user->isTch || Yii::app()->user->isAdmin',
-            ),
-            array('allow',
-                'actions' => array(
-
-                ),
-                'users' => array('@'),
             ),
             array('deny',
                 'users' => array('*'),
@@ -225,7 +220,8 @@ CSS;
             }
         }
 
-        $this->redirect(array('index'));
+        $this->_redirect(0,$field->stportfolio1 );
+        //$this->redirect(Yii::app()->createUrl('/portfolioFarm/index').'#'.$field->stportfolio1);
     }
 
     /**
@@ -243,6 +239,9 @@ CSS;
 
         if(empty($id) || empty($st1))
             throw new CHttpException(400, tt('Не все данные переданны'));
+
+        if(empty($value))
+            throw new CHttpException(400, tt('Введите значение'));
 
         if(!in_array($id, Stportfolio::model()->getFieldsIdList()))
             throw new CHttpException(400, tt('Неверные входящие данные'));
@@ -401,7 +400,7 @@ CSS;
 
                 try {
                     if (!$model->save()) {
-                        throw new CException(tt('Ошибка сохранения'));
+                        throw new CException(tt('Ошибка сохранения1'));
                     }
                 } catch (CException $error) {
                     throw new CHttpException(500, tt('Ошибка добавления файла: {error}', array(
@@ -409,7 +408,17 @@ CSS;
                     )));
                 }
                 Yii::app()->user->setFlash('success', 'Файл успешно добавлен');
-                $this->redirect(array('index'));
+
+                if($type == $model::TYPE_FIELD)
+                    $this->_redirect(0, $id);
+                elseif($type == $model::TYPE_FIELD23)
+                    $this->_redirect(1);
+                elseif($type == $model::TYPE_FIELD3)
+                    $this->_redirect(2);
+                elseif($type == $model::TYPE_OTHERS)
+                    $this->_redirect(3);
+                else
+                    $this->redirect(array('index'));
             }
         }
 
@@ -418,6 +427,22 @@ CSS;
             'type' => $type,
             'id' => $id
         ));
+    }
+
+    private function _redirect($type, $id = null){
+        $url = Yii::app()->createUrl('/portfolioFarm/index');
+        if($type ==0)
+            $url.='#field-'.$id;
+        elseif($type == 1)
+            $url.='#field-block23';
+        elseif($type == 2)
+            $url.='#field-block3';
+        elseif($type == 3)
+            $url.='#field-block4';
+        elseif($type == 4)
+            $url.='#field-block21';
+
+        $this->redirect($url);
     }
 
     /**
@@ -441,7 +466,7 @@ CSS;
             Yii::app()->user->setFlash('error', tt('Ошибка удаления'));
         }
 
-        $this->redirect(array('index'));
+        $this->_redirect(4);
     }
 
     /**
@@ -472,7 +497,7 @@ CSS;
                 $model->stpwork8 = date('Y-m-d H:i:s');
                 $model->stpwork9 = $model->stpwork10 = null;
                 if($model->save())
-                    $this->redirect(array('index'));
+                    $this->_redirect(4);
             }
         }
 
@@ -503,7 +528,7 @@ CSS;
             $model->stpwork8 = date('Y-m-d H:i:s');
             $model->stpwork9 = $model->stpwork10 = null;
             if($model->save())
-                $this->redirect(array('index'));
+                $this->_redirect(4);
         }
 
         $this->render('stpwork/update-stpwork',array(
@@ -575,7 +600,7 @@ CSS;
                 $model->stppart11 = date('Y-m-d H:i:s');
                 $model->stppart12 = $model->stppart13 = null;
                 if($model->save())
-                    $this->redirect(array('index'));
+                    $this->_redirect(1);
             }
         }
 
@@ -606,7 +631,7 @@ CSS;
             $model->stppart11 = date('Y-m-d H:i:s');
             $model->stppart12 = $model->stppart13 = null;
             if($model->save())
-                $this->redirect(array('index'));
+                $this->_redirect(1);
         }
 
         $this->render('stppart/update-stppart',array(
@@ -635,7 +660,7 @@ CSS;
             Yii::app()->user->setFlash('error', tt('Ошибка удаления'));
         }
 
-        $this->redirect(array('index'));
+        $this->_redirect(1);
     }
 
     /**
@@ -722,7 +747,7 @@ CSS;
             Yii::app()->user->setFlash('error', tt('Ошибка удаления'));
         }
 
-        $this->redirect(array('index'));
+        $this->_redirect(2);
     }
 
     /**
@@ -753,7 +778,7 @@ CSS;
                 $model->stpeduwork7 = date('Y-m-d H:i:s');
                 $model->stpeduwork8 = $model->stpeduwork9 = null;
                 if($model->save())
-                    $this->redirect(array('index'));
+                    $this->_redirect(2);
             }
         }
 
@@ -784,7 +809,7 @@ CSS;
             $model->stpeduwork7 = date('Y-m-d H:i:s');
             $model->stpeduwork8 = $model->stpeduwork9 = null;
             if($model->save())
-                $this->redirect(array('index'));
+                $this->_redirect(2);
         }
 
         $this->render('stpeduwork/update-stpeduwork',array(

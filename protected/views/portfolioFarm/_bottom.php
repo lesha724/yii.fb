@@ -38,6 +38,7 @@ function gridFiles($code, $st1){
     $html = Yii::app()->controller->widget('bootstrap.widgets.TbGridView', array(
         'dataProvider' => $dataProvider,
         'filter' => null,
+        'id' => 'field-block4',
         'type' => 'striped bordered',
         'columns' => array(
             array(
@@ -116,16 +117,27 @@ function renderField($number, $st1, $code, $name, $needFile, $inputType){
                      */
                     if(!$needFile)
                         return '';
-                    if(empty($data->stportfolio6))
-                        return CHtml::link(tt('Добавить файл'), Yii::app()->createUrl('/portfolioFarm/uploadFile', array('st1'=> $data->stportfolio2, 'type' => 'field', 'idField'=>$data->stportfolio0)), array(
-                            'class' => 'text-success'
-                        ));
 
-                    return CHtml::link(
-                        $data->stportfolio60->stpfile2,
-                        array(
-                            '/portfolioFarm/file','id'=>$data->stportfolio6)
-                        ). ' ('.CHtml::link(tt('удалить'), '#', array('submit'=>array('/portfolioFarm/deleteFile','id'=>$data->stportfolio6), 'class' => 'text-error')).')';
+                    if(empty($data->stportfolio6))
+                        if(!empty($data->stportfolio7))
+                            return '';
+                        else
+                            return CHtml::link(tt('Добавить файл'), Yii::app()->createUrl('/portfolioFarm/uploadFile', array('st1'=> $data->stportfolio2, 'type' => 'field', 'idField'=>$data->stportfolio0)), array(
+                                'class' => 'text-success'
+                            ));
+
+                    if(!empty($data->stportfolio7))
+                        return CHtml::link(
+                            $data->stportfolio60->stpfile2,
+                            array(
+                                '/portfolioFarm/file','id'=>$data->stportfolio6)
+                        );
+                    else
+                        return CHtml::link(
+                            $data->stportfolio60->stpfile2,
+                            array(
+                                '/portfolioFarm/file','id'=>$data->stportfolio6)
+                            ). ' ('.CHtml::link(tt('удалить'), '#', array('submit'=>array('/portfolioFarm/deleteFile','id'=>$data->stportfolio6), 'class' => 'text-error')).')';
                 },
                 'visible' => $needFile
             ),
@@ -265,12 +277,15 @@ if(Yii::app()->user->isTch){
         'label'=>tt('Подтвердить')
     ));
 }
+
 $this->widget('bootstrap.widgets.TbButton', array(
     'url'=>Yii::app()->createUrl('/portfolioFarm/print', array('id'=>$model->student)),
     'type'=>'primary',
     'icon'=>'print',
     'label'=>tt('Печать')
 ));
+
+echo '<div class="alert alert-info">'.tt('Внимание! На печать выводятся только подтвержденные куратором или деканом данные.').'</div>';
 
 echo '<div class="page-header">
   <h3>1. РЕЗЮМЕ</h3>
@@ -321,6 +336,7 @@ echo CHtml::label('2.1'.'&nbsp;'.'Навчально-професійна дія
 Yii::app()->controller->widget('bootstrap.widgets.TbGridView', array(
     'dataProvider' => Stpwork::model()->search($model->student),
     'filter' => null,
+    'id' => 'field-block21',
     'type' => 'striped bordered',
     'columns' => array(
         'stpwork3',
@@ -385,6 +401,7 @@ echo CHtml::label('2.3'.'&nbsp;'.'Дані щодо участі у захода
 Yii::app()->controller->widget('bootstrap.widgets.TbGridView', array(
     'dataProvider' => Stppart::model()->search($model->student),
     'filter' => null,
+    'id' => 'field-block23',
     'type' => 'striped bordered',
     'columns' => array(
         array(
@@ -393,7 +410,11 @@ Yii::app()->controller->widget('bootstrap.widgets.TbGridView', array(
             'value' => '$data->getStppart3Type()',
         ),
         'stppart4',
-        'stppart5',
+        array(
+            'name' => 'stppart5',
+            'header' => Stppart::model()->getAttributeLabel('stppart5'),
+            'value' => '$data->stppart5."/".($data->stppart5+1)',
+        ),
         array(
             'name' => 'stppart6',
             'header' => Stppart::model()->getAttributeLabel('stppart6'),
@@ -506,6 +527,7 @@ echo '<div class="page-header">
 Yii::app()->controller->widget('bootstrap.widgets.TbGridView', array(
     'dataProvider' => Stpeduwork::model()->search($model->student),
     'filter' => null,
+    'id' => 'field-block3',
     'type' => 'striped bordered',
     'columns' => array(
         array(
@@ -514,7 +536,11 @@ Yii::app()->controller->widget('bootstrap.widgets.TbGridView', array(
             'value' => '$data->getStpeduwork3Type()',
         ),
         'stpeduwork4',
-        'stpeduwork5',
+        array(
+            'name' => 'stpeduwork5',
+            'header' => Stpeduwork::model()->getAttributeLabel('stpeduwork5'),
+            'value' => '$data->stpeduwork5."/".($data->stpeduwork5+1)',
+        ),
         array(
             'name' => 'stpeduwork10',
             'header' => tt('Файл'),
