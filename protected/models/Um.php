@@ -66,7 +66,7 @@ class Um extends CActiveRecord
 	{
 		return array(
 			'um1' => '#',
-			'um2' => tt('Оправитель'),
+			'um2' => tt('Отправитель'),
 			'um3' => tt('Дата'),
 			'um4' => tt('Уведомление'),
 			'um5' => tt('Текст'),
