@@ -61,8 +61,6 @@ class Sdp extends CActiveRecord
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('sdp1', 'required'),
             array('sdp31', 'email'),
@@ -81,21 +79,7 @@ class Sdp extends CActiveRecord
 			array('sdp31', 'length', 'max'=>300),
 			array('sdp34', 'length', 'max'=>4000),
 			array('sdp44', 'length', 'max'=>1000),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
-			array('sdp1, sdp4, sdp5, sdp6, sdp7, sdp8, sdp10, sdp13, sdp14, sdp15, sdp16, sdp17, sdp18, sdp19, sdp20, sdp21, sdp22, sdp23, sdp24, sdp25, sdp26, sdp27, sdp28, sdp30, sdp31, sdp32, sdp33, sdp34, sdp35, sdp36, sdp37, sdp38, sdp39, sdp40, sdp41, sdp42, sdp43, sdp44, sdp45, sdp46, sdp47', 'safe', 'on'=>'search'),
-		);
-	}
-
-	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-		);
+        );
 	}
 
 	/**
@@ -146,71 +130,6 @@ class Sdp extends CActiveRecord
 			'sdp46' => 'Sdp46',
 			'sdp47' => 'Sdp47',
 		);
-	}
-
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
-		$criteria=new CDbCriteria;
-
-		$criteria->compare('sdp1',$this->sdp1);
-		$criteria->compare('sdp4',$this->sdp4,true);
-		$criteria->compare('sdp5',$this->sdp5,true);
-		$criteria->compare('sdp6',$this->sdp6);
-		$criteria->compare('sdp7',$this->sdp7,true);
-		$criteria->compare('sdp8',$this->sdp8,true);
-		$criteria->compare('sdp10',$this->sdp10,true);
-		$criteria->compare('sdp13',$this->sdp13,true);
-		$criteria->compare('sdp14',$this->sdp14);
-		$criteria->compare('sdp15',$this->sdp15);
-		$criteria->compare('sdp16',$this->sdp16,true);
-		$criteria->compare('sdp17',$this->sdp17,true);
-		$criteria->compare('sdp18',$this->sdp18,true);
-		$criteria->compare('sdp19',$this->sdp19,true);
-		$criteria->compare('sdp20',$this->sdp20,true);
-		$criteria->compare('sdp21',$this->sdp21,true);
-		$criteria->compare('sdp22',$this->sdp22,true);
-		$criteria->compare('sdp23',$this->sdp23,true);
-		$criteria->compare('sdp24',$this->sdp24,true);
-		$criteria->compare('sdp25',$this->sdp25,true);
-		$criteria->compare('sdp26',$this->sdp26,true);
-		$criteria->compare('sdp27',$this->sdp27,true);
-		$criteria->compare('sdp28',$this->sdp28,true);
-		$criteria->compare('sdp30',$this->sdp30,true);
-		$criteria->compare('sdp31',$this->sdp31,true);
-		$criteria->compare('sdp32',$this->sdp32);
-		$criteria->compare('sdp33',$this->sdp33);
-		$criteria->compare('sdp34',$this->sdp34,true);
-		$criteria->compare('sdp35',$this->sdp35,true);
-		$criteria->compare('sdp36',$this->sdp36,true);
-		$criteria->compare('sdp37',$this->sdp37,true);
-		$criteria->compare('sdp38',$this->sdp38,true);
-		$criteria->compare('sdp39',$this->sdp39);
-		$criteria->compare('sdp40',$this->sdp40);
-		$criteria->compare('sdp41',$this->sdp41);
-		$criteria->compare('sdp42',$this->sdp42);
-		$criteria->compare('sdp43',$this->sdp43);
-		$criteria->compare('sdp44',$this->sdp44,true);
-		$criteria->compare('sdp45',$this->sdp45);
-		$criteria->compare('sdp46',$this->sdp46,true);
-		$criteria->compare('sdp47',$this->sdp47);
-
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
 	}
 
 	/**

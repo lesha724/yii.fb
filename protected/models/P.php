@@ -536,10 +536,9 @@ SQL;
         $criteria->addSearchCondition('p13', $this->p13);
         if(!empty($this->p9))
             $criteria->addCondition("p9 CONTAINING '".date_format(date_create_from_format('d-m-Y', trim($this->p9)), 'Y-m-d')."'");
-            //$criteria->addSearchCondition('p9', date_format(date_create_from_format('d-m-Y', $this->p9), 'Y-m-d H:i:s'));
+
 
         $criteria->addSearchCondition('account.u2', Yii::app()->request->getParam('login'));
-        //$criteria->addCondition('account.u5 = 1');
         $criteria->addSearchCondition('account.u3', Yii::app()->request->getParam('password'));
         $criteria->addSearchCondition('account.u4', Yii::app()->request->getParam('email'));
         $criteria->addSearchCondition('account.u7', Yii::app()->request->getParam('status'));
@@ -550,7 +549,6 @@ SQL;
             'criteria'=>$criteria,
 			'pagination'=>array(
                 'pageSize'=> Yii::app()->user->getState('pageSize',10),
-				'currentPage'=> Yii::app()->user->getState('CurrentPageP',null),
             ),
             'sort' => array(
                 'defaultOrder' => 'p3 collate UNICODE',
@@ -601,10 +599,8 @@ SQL;
         $criteria->addSearchCondition('p13', $this->p13);
         if(!empty($this->p9))
             $criteria->addCondition("p9 CONTAINING '".date_format(date_create_from_format('d-m-Y', trim($this->p9)), 'Y-m-d')."'");
-        //$criteria->addSearchCondition('p9', date_format(date_create_from_format('d-m-Y', $this->p9), 'Y-m-d H:i:s'));
 
         $criteria->addSearchCondition('accountDoctor.u2', Yii::app()->request->getParam('login'));
-        //$criteria->addCondition('accountDoctor.u5 = 3');
         $criteria->addSearchCondition('accountDoctor.u3', Yii::app()->request->getParam('password'));
         $criteria->addSearchCondition('accountDoctor.u4', Yii::app()->request->getParam('email'));
         $criteria->addSearchCondition('accountDoctor.u7', Yii::app()->request->getParam('status'));
@@ -615,7 +611,6 @@ SQL;
             'criteria'=>$criteria,
             'pagination'=>array(
                 'pageSize'=> Yii::app()->user->getState('pageSize',10),
-                'currentPage'=> Yii::app()->user->getState('CurrentPageD',null),
             ),
             'sort' => array(
                 'defaultOrder' => 'p3 collate UNICODE',
@@ -636,7 +631,6 @@ SQL;
 	
 	public function getP9String()
 	{
-		//return date("d-m-Y", strtotime($this->p9));
 		return date_format(date_create_from_format('Y-m-d H:i:s', $this->p9), 'd-m-Y');
 	}
 	
@@ -652,7 +646,7 @@ SQL;
                 INNER JOIN PD ON (P1=PD2)
                 INNER JOIN DOL ON (PD45 = DOL1)
                 INNER JOIN K on (PD4=K1)
-            WHERE PD4 = {$chairId} and PD28 in (0,2,5,9) and PD3=0 and pd11<='{$today}'and (PD13 IS NULL or PD13>'{$today}') and k20=0
+            WHERE PD4 = {$chairId} and PD28 in (0,2,5,9) and PD3=0 and pd11<='{$today}' and (PD13 IS NULL or PD13>'{$today}') and k20=0
             group by P1,P3,P4,P5,pd7,DOL2,PD1, p76, p77, p78, dol13
             ORDER BY P3 collate UNICODE, pd7 desc
 SQL;
@@ -1106,5 +1100,52 @@ SQL;
         $count = $command->queryScalar();
 
         return empty($count) || $count==0;
+    }
+
+    /**
+     * Являеться ли текущий преподователь куратором студента
+     * @param $st1
+     * @return bool
+     * @throws CException
+     */
+    public function isKuratorForStudent($st1){
+        if(empty($st1))
+            return false;
+
+        $sql = <<<SQL
+              SELECT COUNT(*) FROM kgrp
+                INNER JOIN std on (std2=:st1 and std3=kgrp2)
+              where kgrp1=:p1 and STD11 in (0,5,6,8) and (STD7 is null)
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':p1', $this->p1);
+        $command->bindValue(':st1', $st1);
+        return ((int)$command->queryScalar()) > 0;
+    }
+
+    /**
+     * @param $st1
+     * @return bool
+     * @throws CException
+     */
+    public function isDekanForStudent($st1){
+        if(empty($st1))
+            return false;
+
+        $sql = <<<SQL
+              SELECT COUNT(*) FROM st
+                INNER JOIN std on (st1 = std3)
+                INNER JOIN gr on (std2 = gr1)
+                INNER join sg on (sg1 = gr2)
+                INNER join sp on (sp1 = sg2)
+                INNER join f on (f1 = f5)
+              where st1=:st1 and f37=:p1 and f32=0 and f19 is null and STD11 in (0,5,6,8) and (STD7 is null)
+SQL;
+
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':p1', $this->p1);
+        $command->bindValue(':st1', $st1);
+        return ((int)$command->queryScalar()) > 0;
     }
 }
