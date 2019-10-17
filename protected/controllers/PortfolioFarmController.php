@@ -410,7 +410,7 @@ CSS;
                 Yii::app()->user->setFlash('success', 'Файл успешно добавлен');
 
                 if($type == $model::TYPE_FIELD)
-                    $this->_redirect(0, $id);
+                    $this->_redirect(0, Stportfolio::model()->findByPk($id)->stportfolio1);
                 elseif($type == $model::TYPE_FIELD23)
                     $this->_redirect(1);
                 elseif($type == $model::TYPE_FIELD3)
@@ -432,15 +432,15 @@ CSS;
     private function _redirect($type, $id = null){
         $url = Yii::app()->createUrl('/portfolioFarm/index');
         if($type ==0)
-            $url.='#field-'.$id;
+            $url.='#label-field-'.$id;
         elseif($type == 1)
-            $url.='#field-block23';
+            $url.='#label-field-block23';
         elseif($type == 2)
-            $url.='#field-block3';
+            $url.='#label-field-block3';
         elseif($type == 3)
-            $url.='#field-block4';
+            $url.='#label-field-block4';
         elseif($type == 4)
-            $url.='#field-block21';
+            $url.='#label-field-block21';
 
         $this->redirect($url);
     }

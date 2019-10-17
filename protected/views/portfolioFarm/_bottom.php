@@ -94,7 +94,8 @@ function renderField($number, $st1, $code, $name, $needFile, $inputType){
         'class' => 'control-group'
     ));
     $html .= CHtml::label($number.'&nbsp;'. $name,'field-'.$code, array(
-        'class' => 'control-label label-field'
+        'class' => 'control-label label-field',
+        'id' => 'label-field-'.$code
     ));
     $html .= CHtml::$inputType('field-'.$code, '', array(
         'class' => 'field-input'
@@ -331,7 +332,8 @@ echo CHtml::openTag('ul', array(
 
 echo CHtml::openTag('ol');
 echo CHtml::label('2.1'.'&nbsp;'.'Навчально-професійна діяльність', '', array(
-    'class' => 'label-field'
+    'class' => 'label-field',
+    'id' => 'label-field-block21'
 ));
 Yii::app()->controller->widget('bootstrap.widgets.TbGridView', array(
     'dataProvider' => Stpwork::model()->search($model->student),
@@ -396,7 +398,8 @@ echo renderField('2.2', $student->st1, $field['code'], $field['text'], $field['n
 
 echo CHtml::openTag('ol');
 echo CHtml::label('2.3'.'&nbsp;'.'Дані щодо участі у заходах', '', array(
-    'class' => 'label-field'
+    'class' => 'label-field',
+    'id' => 'label-field-block23'
 ));
 Yii::app()->controller->widget('bootstrap.widgets.TbGridView', array(
     'dataProvider' => Stppart::model()->search($model->student),
@@ -521,7 +524,7 @@ echo CHtml::closeTag('ul');
 
 
 echo '<div class="page-header">
-  <h3>3. ПОРТФОЛІО РОБІТ</h3>
+  <h3 id="label-field-block3">3. ПОРТФОЛІО РОБІТ</h3>
 </div>';
 
 Yii::app()->controller->widget('bootstrap.widgets.TbGridView', array(
@@ -609,7 +612,7 @@ Yii::app()->controller->widget('bootstrap.widgets.TbGridView', array(
 echo CHtml::link(tt('Добавить'), Yii::app()->createUrl('/portfolioFarm/addStpeduwork', array( 'id'=> $model->student)), array('class'=>'btn-mini btn btn-primary btn-add-stpeduwork'));
 
 echo '<div class="page-header">
-  <h3>4. ПОРТФОЛІО ВІДГУКІВ</h3>
+  <h3 id="label-field-block4">4. ПОРТФОЛІО ВІДГУКІВ</h3>
 </div>';
 
 echo '<div class="alert alert-info">
