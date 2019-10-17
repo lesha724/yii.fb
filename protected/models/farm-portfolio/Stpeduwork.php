@@ -14,6 +14,7 @@
  * @property integer $stpeduwork8
  * @property string $stpeduwork9
  * @property integer $stpeduwork10
+ * @property string $stpeduwork11
  *
  * The followings are the available model relations:
  * @property St $stpeduwork20
@@ -42,17 +43,29 @@ class Stpeduwork extends CActiveRecord
             array('stpeduwork3, stpeduwork4, stpeduwork5', 'required'),
 			array('stpeduwork2, stpeduwork3, stpeduwork5, stpeduwork6, stpeduwork8, stpeduwork10', 'numerical', 'integerOnly'=>true),
 			array('stpeduwork4', 'length', 'max'=>200),
+            array('stpeduwork11', 'length', 'max'=>30),
+			array('stpeduwork11', 'validateStpeduwork11'),
 			array('stpeduwork7, stpeduwork9', 'length', 'max'=>20),
         );
 	}
 
-	/**
+    /**
+     *
+     */
+	public function validateStpeduwork11()
+    {
+        if($this->stpeduwork3 != 4)
+            return;
+
+        if(empty($this->stpeduwork11))
+            $this->addError('stpeduwork11', tt('Введите свой вариант.'));
+    }
+
+    /**
 	 * @return array relational rules.
 	 */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
 		return array(
 			'stpeduwork20' => array(self::BELONGS_TO, 'St', 'stpeduwork2'),
 			'stpeduwork60' => array(self::BELONGS_TO, 'Users', 'stpeduwork6'),
@@ -71,12 +84,13 @@ class Stpeduwork extends CActiveRecord
 			'stpeduwork2' => tt('Студент'),
 			'stpeduwork3' => 'Вид науково-дослідницької роботи',
 			'stpeduwork4' => 'Назва роботи',
-			'stpeduwork5' => 'Рік',
+			'stpeduwork5' => tt('Уч. год'),
 			'stpeduwork6' => tt('Редактировал'),
 			'stpeduwork7' => tt('Дата редактирования'),
 			'stpeduwork8' => tt('Подтвердил'),
 			'stpeduwork9' => tt('Дата подтверждения'),
-			'stpeduwork10' => 'Файл',
+			'stpeduwork10' => tt('Файл'),
+            'stpeduwork11' => tt('Вид работи (свой вариант)'),
 		);
 	}
 
@@ -129,6 +143,8 @@ class Stpeduwork extends CActiveRecord
      * @return string
      */
     public function getStpeduwork3Type(){
+        if($this->stpeduwork3 == 4)
+            return $this->stpeduwork11;
         $types = static::getStpeduwork3Types();
         if(isset($types[$this->stpeduwork3]))
             return $types[$this->stpeduwork3];

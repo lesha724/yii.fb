@@ -17,6 +17,8 @@
  * @property string $stppart11
  * @property integer $stppart12
  * @property string $stppart13
+ * @property string $stppart14
+ * @property string $stppart15
  *
  * The followings are the available model relations:
  * @property St $stppart20
@@ -43,6 +45,7 @@ class Stppart extends CActiveRecord
 		    array('stppart3, stppart4, stppart5, stppart6, stppart7, stppart8', 'required'),
 			array('stppart2, stppart3, stppart5, stppart6, stppart7, stppart8, stppart9, stppart10, stppart12', 'numerical', 'integerOnly'=>true),
 			array('stppart4', 'length', 'max'=>200),
+            array('stppart14, stppart15', 'length', 'max'=>30),
 			array('stppart11, stppart13', 'length', 'max'=>20),
             array('stppart9', 'safe'),
 		);
@@ -67,19 +70,21 @@ class Stppart extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'stppart1' => 'Stppart1',
+			'stppart1' => '#',
 			'stppart2' => tt('Студент'),
 			'stppart3' => 'Вид заходу',
 			'stppart4' => 'Назва заходу',
 			'stppart5' => 'Навчальний рік',
 			'stppart6' => 'Рівень',
 			'stppart7' => 'Форма участі',
-			'stppart8' => 'Результат',
-			'stppart9' => 'Файл',
+			'stppart8' => tt('Результат'),
+			'stppart9' => tt('Файл'),
 			'stppart10' => tt('Редактировал'),
 			'stppart11' => tt('Дата редактирования'),
 			'stppart12' => tt('Подтвердил'),
 			'stppart13' => tt('Дата подтверждения'),
+            'stppart14' => tt('Форма участия (свой вариант)'),
+            'stppart15' => tt('Результат (свой вариант)'),
 		);
 	}
 
@@ -175,6 +180,8 @@ class Stppart extends CActiveRecord
      * @return string
      */
     public function getStppart7Type(){
+        if($this->stppart7 == 3)
+            return $this->stppart14;
         $types = static::getStppart7Types();
         if(isset($types[$this->stppart7]))
             return $types[$this->stppart7];
@@ -199,6 +206,8 @@ class Stppart extends CActiveRecord
      * @return string
      */
     public function getStppart8Type(){
+        if($this->stppart8 == 3)
+            return $this->stppart15;
         $types = static::getStppart8Types();
         if(isset($types[$this->stppart8]))
             return $types[$this->stppart8];

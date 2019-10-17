@@ -18,7 +18,7 @@ $this->breadcrumbs=array(
 Yii::app()->clientScript->registerPackage('gritter');
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/timetable/timetable.js', CClientScript::POS_HEAD);
 
-if(Yii::app()->user->isAdmin) {
+if(Yii::app()->user->isTch) {
     $this->renderPartial('_student', array(
         'model' => $model
     ));
