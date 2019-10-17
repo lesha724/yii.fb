@@ -9,8 +9,7 @@
 !/protected/runtime/cache/.gitkeep
 /images/uploads/*
 !/images/uploads/.gitkeep
-/css/user/*
-!/css/user/.gitkeep
+css/user.css
 # Local config file
 /protected/config/main-local.php
 # Svn files
