@@ -51,7 +51,7 @@ class StFinBlockSearch extends Stbl
 							p3 as tch_lname,p4 as tch_fname,p5 as tch_sname,
 							gr3 as gr_name';
         $criteria->join = 'INNER JOIN st ON (stbl2=st.st1) ';
-        $criteria->join = 'LEFT JOIN pe ON (st.st200=pe.pe1) ';
+        $criteria->join .= 'LEFT JOIN pe ON (st.st200=pe.pe1) ';
         $criteria->join .= 'INNER JOIN std ON (st1 = std.std2) ';
         $criteria->join .= 'INNER JOIN gr ON (std.std3 = gr1) ';
         $criteria->join .= 'INNER JOIN sg ON (gr.gr2 = sg1) ';

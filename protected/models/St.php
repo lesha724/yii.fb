@@ -208,7 +208,7 @@ SQL;
      */
     public function getStudentInfoForPortfolio(){
         $sql = <<<SQL
-		 select first 1 sg1,sg2,sg4,gr1,gr3,sp1,sp2,sem4,f2,f3,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28,sgr2,spc4,sp4, st56, pnsp2, pnsp3, napr2
+		 select first 1 sg1,sg2,sg4,gr1,gr3,sp1,sp2,sem4,f2,f3,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28,sgr2,spc4,sp4, st56, pnsp2, pnsp3, napr2, STD20
 		   from sem
 			   inner join sg on (sem.sem2 = sg.sg1)
 			   inner join gr on (sg.sg1 = gr.gr2)
