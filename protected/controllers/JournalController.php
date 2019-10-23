@@ -254,10 +254,6 @@ class JournalController extends Controller
                 $error = true;
                 $errorType=2;
             }else{
-<<<<<<< HEAD
-
-=======
->>>>>>> master
                 $students = St::model()->getStudentsForJournal($gr1, $uo1);
                 if(empty($students)){
                     $error = true;
@@ -2156,12 +2152,8 @@ SQL;
             if(empty($elg))
                 throw new CHttpException(404, 'Elg empty.');
 
-<<<<<<< HEAD
             $ps45 = PortalSettings::model()->getSettingFor(45);//вуз
 
-=======
-            $ps45 = PortalSettings::model()->findByPk(45)->ps2;//вуз
->>>>>>> master
             $year=(int)Yii::app()->session['year'];
 
             $objPHPExcel=new PHPExcel();

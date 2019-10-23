@@ -37,11 +37,7 @@ class Oprrez extends CActiveRecord
 		return array(
 			array('oprrez2, oprrez3, oprrez5, oprrez6', 'numerical', 'integerOnly'=>true),
 			array('oprrez4', 'length', 'max'=>20),
-<<<<<<< HEAD
             array('oprrez7', 'length', 'max'=>15),
-=======
-			array('oprrez1, oprrez2, oprrez3, oprrez4, oprrez5', 'safe', 'on'=>'search'),
->>>>>>> master
 		);
 	}
 
@@ -70,11 +66,8 @@ class Oprrez extends CActiveRecord
 			'oprrez3' => tt('Вариант ответа'),
 			'oprrez4' => tt('Дата'),
 			'oprrez5' => tt('Кто проставил'),
-<<<<<<< HEAD
             'oprrez6' => tt('Оценка'),
             'oprrez7' => tt('IP'),
-=======
->>>>>>> master
 		);
 	}
 

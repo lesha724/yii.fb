@@ -155,10 +155,6 @@ SQL;
 	}
 
 	public function getDispBySt($st1){
-<<<<<<< HEAD
-=======
-
->>>>>>> master
 		$sql = <<<SQL
             SELECT d2,
                     (CASE us.us4

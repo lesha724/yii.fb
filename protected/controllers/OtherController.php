@@ -786,28 +786,14 @@ SQL;
                     $k2=$kav['k3'];
                     $st_info=St::model()->getInfoForStudentInfoExcel($model->student);
                     $zav_name=Sh::getShortName($zav['p3'],$zav['p4'],$zav['p5']);
-<<<<<<< HEAD
-                    /*if(empty($nkrs4))
-                    {*/
-                        $spkr=Spkr::model()->findByPk($nkrs7);
-                        if(!empty($spkr))
-                        {
-                            $nkrs4=$spkr->spkr2;
-                            $nkrs5=$spkr->spkr3;
-                        }
-                    //}
-                    $mPDF1 = new Mpdf\Mpdf();
-                    //$mPDF1->showImageErrors = true;
-=======
+
                     $spkr=Spkr::model()->findByPk($nkrs7);
                     if(!empty($spkr))
                     {
                         $nkrs4=$spkr->spkr2;
                         $nkrs5=$spkr->spkr3;
                     }
-
                     $mPDF1 = new Mpdf\Mpdf();
->>>>>>> master
 
                     $patternTitle = <<<HTML
                         <style>

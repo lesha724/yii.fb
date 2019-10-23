@@ -40,10 +40,6 @@ class UsersHistory extends CActiveRecord
 			array('uh4,login,name', 'length', 'max'=>200),
 			array('uh5', 'length', 'max'=>200),
 			array('uh6', 'length', 'max'=>200),
-<<<<<<< HEAD
-
-=======
->>>>>>> master
 			array('uh1, uh2, uh3, uh4, uh5, uh6,type,login,name,adm', 'safe', 'on'=>'search'),
 		);
 	}
@@ -93,11 +89,7 @@ class UsersHistory extends CActiveRecord
 	 */
 	public function search()
 	{
-<<<<<<< HEAD
 	    $criteria=new CDbCriteria;
-=======
-		$criteria=new CDbCriteria;
->>>>>>> master
 		$criteria->select = 't.*,u2 as login,u5 as type,u7 as adm,
 							pe2 as st_name1,pe3 as st_name2,pe4 as st_name3,
 							p3 as p_name1,p4 as p_name2,p5 as p_name3';
@@ -210,23 +202,10 @@ class UsersHistory extends CActiveRecord
 		$model->uh5 = date('Y-m-d H:i:s');
 		$model->uh6 = SH::user_browser(Yii::app()->request->getUserAgent());
 		$model->save();
-			//print_r($model->getErrors());
 	}
 
 	private static function getRealIp()
 	{
-		/*if (!empty($_SERVER['HTTP_CLIENT_IP']))   //check ip from share internet
-		{
-			$ip=$_SERVER['HTTP_CLIENT_IP'];
-		}
-		elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))   //to check ip is pass from proxy
-		{
-			$ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
-		}
-		else
-		{
-
-		}*/
 		$ip=$_SERVER['REMOTE_ADDR'];
 
 		return $ip;

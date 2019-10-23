@@ -34,29 +34,6 @@ class R extends CActiveRecord
 		return array(
 			array('r1, r3, r5, r6, r7, r9, r10', 'numerical', 'integerOnly'=>true),
 			array('r2, r11', 'length', 'max'=>8),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
-			array('r1, r2, r3, r5, r6, r7, r9, r11, r10', 'safe', 'on'=>'search'),
-		);
-	}
-
-
-
-	/**
-	 * @return array customized attribute labels (name=>label)
-	 */
-	public function attributeLabels()
-	{
-		return array(
-			'r1' => 'R1',
-			'r2' => 'R2',
-			'r3' => 'R3',
-			'r5' => 'R5',
-			'r6' => 'R6',
-			'r7' => 'R7',
-			'r9' => 'R9',
-			'r11' => 'R11',
-			'r10' => 'R10',
 		);
 	}
 
@@ -86,10 +63,7 @@ class R extends CActiveRecord
             group by elgz2,elgz3,r2,r1,ustem5,us4,ustem7,ustem6,elgz4,elgz1,elgz5,elgz6,nr30,k2,k3,rz9,rz10, rz11,rz12
                order by elgz3
 SQL;
-<<<<<<< HEAD
 
-=======
->>>>>>> master
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':UO1', $uo1);
         $command->bindValue(':GR1', $gr1);

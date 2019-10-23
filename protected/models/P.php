@@ -323,10 +323,6 @@ SQL;
         $criteria->addSearchCondition('p13', $this->p13);
         if(!empty($this->p9))
             $criteria->addCondition("p9 CONTAINING '".date_format(date_create_from_format('d-m-Y', trim($this->p9)), 'Y-m-d')."'");
-<<<<<<< HEAD
-=======
-
->>>>>>> master
 
         $criteria->addSearchCondition('account.u2', Yii::app()->request->getParam('login'));
         $criteria->addSearchCondition('account.u3', Yii::app()->request->getParam('password'));

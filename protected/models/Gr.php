@@ -162,10 +162,6 @@ SQL;
     {
         if (empty($st1))
             return array();
-<<<<<<< HEAD
-
-=======
->>>>>>> master
         $sql = /** @lang text */
             <<<SQL
             select LISTST.sem4, gr13,gr.gr1, gr3, gr7,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28

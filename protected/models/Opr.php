@@ -31,11 +31,7 @@ class Opr extends CActiveRecord
 		return array(
 			array('opr1', 'numerical', 'integerOnly'=>true),
 			array('opr2', 'length', 'max'=>400),
-<<<<<<< HEAD
             array('opr3, opr4, opr5', 'length', 'max'=>50),
-=======
-			array('opr1, opr2', 'safe', 'on'=>'search'),
->>>>>>> master
 		);
 	}
 
@@ -52,7 +48,6 @@ class Opr extends CActiveRecord
 	}
 
 	/**
-<<<<<<< HEAD
 	 * @return array customized attribute labels (name=>label)
 	 */
 	public function attributeLabels()
@@ -67,8 +62,6 @@ class Opr extends CActiveRecord
 	}
 
 	/**
-=======
->>>>>>> master
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.

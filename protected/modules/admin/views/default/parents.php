@@ -64,7 +64,6 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                                 ? $data->parentsAccount->u2
                                 : ""',
         ),
-<<<<<<< HEAD
         array(
             'header' => 'Email',
             'filter' => CHtml::textField('email', Yii::app()->request->getParam('email')),
@@ -83,8 +82,6 @@ $this->widget('bootstrap.widgets.TbGridView', array(
             ),
             'value'=>' !in_array($data["st_status"],array(4,2)) ? "<label class=\'label label-success\'>".tt("Активный")."</label>" : "<label class=\'label\'>".tt("Выпущен")."</label>"'
         ),
-=======
->>>>>>> master
         array(
             'class'=>'CButtonColumn',
             'template'=>'{grants} {enter} {delete}',

@@ -99,15 +99,11 @@ echo '<div id="studentCard">';
     </div>
 HTML;
 
-<<<<<<< HEAD
     $fioTranslate = Pefio::model()->findByAttributes(array('pefio1'=>$st->st200, 'pefio2'=>1, 'pefio3' =>0));
     if(empty($fioTranslate))
         $fioTranslate = new Pefio();
 
     $uCode = Yii::app()->core->universityCode;
-=======
-    $uCode = $this->universityCode;
->>>>>>> master
 
     $isFarm = $uCode == U_FARM;
 
