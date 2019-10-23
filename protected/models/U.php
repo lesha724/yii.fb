@@ -529,7 +529,7 @@ SQL;
                 continue;
 
             if($enableDistEducation==1&&$enableInSubscriptionDistEducation==1){
-                list($result, $error) = $connector->subscribeToCourse(Yii::app()->user->model, $code['ucgns1_vib']);
+                list($result, $error) = $connector->subscribeToCourse(Yii::app()->user->dbModel, $code['ucgns1_vib']);
                 Yii::app()->user->setFlash($result ? 'success' : 'error' , $error);
                 if(!$result)
                     throw new CHttpException('400',tt('Ошибка записи {error}', array(
@@ -636,7 +636,7 @@ SQL;
             Yii::app()->db->createCommand($sql)->execute($params);
 
             if($enableDistEducation==1&&$enableInSubscriptionDistEducation==1){
-                list($result, $error) = $connector->unsubscribeToCourse(Yii::app()->user->model, $code);
+                list($result, $error) = $connector->unsubscribeToCourse(Yii::app()->user->dbModel, $code);
                 Yii::app()->user->setFlash($result ? 'success' : 'error' , $error);
             }
         }
