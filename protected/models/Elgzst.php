@@ -66,14 +66,7 @@ class Elgzst extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'elgzst0' => 'Elgzst0',
-			'elgzst1' => 'Elgzst1',
-			'elgzst2' => 'Elgzst2',
 			'elgzst3' => tt('Тип'),
-			'elgzst4' => 'Elgzst4',
-			'elgzst5' => 'Elgzst5',
-			'elgzst6' => 'Elgzst6',
-			'elgzst7' => 'Elgzst7',
             'elgp2' => tt('Тип пропуска'),
             'elgp3' => tt('Номер справки'),
             'r2'=>tt('Дата занятия'),

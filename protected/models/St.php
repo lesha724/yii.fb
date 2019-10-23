@@ -89,7 +89,11 @@ class St extends CActiveRecord implements IPerson
 			array('st66', 'length', 'max'=>4),
 			array('st145, st146, st147', 'length', 'max'=>8),
 			array('st126', 'length', 'max'=>24),
+<<<<<<< HEAD
         );
+=======
+		);
+>>>>>>> master
 	}
 
 	/**
@@ -119,10 +123,21 @@ class St extends CActiveRecord implements IPerson
 	public function attributeLabels()
 	{
 		return array(
+<<<<<<< HEAD
 			'st1' => 'St1'
 		);
 	}
 
+=======
+			'st2' => tt('Фамилия'),
+			'st3' => tt('Имя'),
+			'st4' => tt('Отчество'),
+			'st15' => tt('ИНН'),
+		);
+	}
+
+
+>>>>>>> master
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
@@ -168,12 +183,124 @@ SQL;
         return $res;
     }
 
+<<<<<<< HEAD
     /**
      * получить данные по студенту для карточки
      * @return mixed
      * @throws CException
      */
     public function getStudentInfoForCard(){
+=======
+        $criteria->select = array( 't.st2', 't.st3', 't.st4', 't.st15','std11 as st_status');
+        $with = array(
+            'account' => array(
+                'select' => 'u2, u3, u4'
+            ),
+        );
+
+        $criteria->addCondition("st1 > 0");
+        $criteria->addCondition("st2 <> ''");
+		$criteria->addCondition("st101 != 7");
+
+		$criteria->addCondition("std11 != 1"); //std11 = 4,2 закончил
+
+        if(!empty($this->st2))
+		    $criteria->addCondition('st2 CONTAINING :ST2');
+        if(!empty($this->st3))
+		    $criteria->addCondition('st3 CONTAINING :ST3');
+        if(!empty($this->st4))
+		    $criteria->addCondition('st4 CONTAINING :ST4');
+        if(!empty($this->st15))
+            $criteria->addCondition('st15 = :ST15');
+
+        if($this->st_status>0) {
+            if($this->st_status==1)
+                $criteria->addCondition('std11!=4 and std11!=2');
+            if($this->st_status==2)
+                $criteria->addCondition(' ( std11=4 or std11=2)');
+        }
+		
+        $login = Yii::app()->request->getParam('login');
+        $email = Yii::app()->request->getParam('email');
+
+        if(!empty($login))
+            $criteria->addCondition('account.u2 CONTAINING :LOGIN');
+        if(!empty($email))
+            $criteria->addCondition('account.u4 CONTAINING :EMAIL');
+
+        $criteria->with = $with;
+
+        $criteria->params = array(
+            ':ST2'=>$this->st2,
+            ':ST3'=>$this->st3,
+            ':ST4'=>$this->st4,
+            ':ST15'=>$this->st15,
+            ':LOGIN' => $login,
+            ':EMAIL' => $email
+        );
+
+        return new CActiveDataProvider($this, array(
+            'criteria'=>$criteria,
+            'pagination'=>array(
+                'pageSize'=> Yii::app()->user->getState('pageSize',10),
+            ),
+            'sort' => array(
+                'defaultOrder' => 'st2 collate UNICODE,st3 collate UNICODE,st4 collate UNICODE',
+                'attributes' => array(
+                    'st2',
+                    'st3',
+                    'st4',
+                    'st15',
+                    'account.u2',
+                    'account.u3',
+                    'account.u4',
+                ),
+            )
+        ));
+    }
+
+    public function getParentsForAdmin()
+    {
+        $criteria=new CDbCriteria;
+
+        $criteria->select = 't.st1, t.st2, t.st3, t.st4';
+
+        $with = array(
+            'parentsAccount' => array(
+                'select' => 'u2, u3, u4'
+            )
+        );
+
+        $criteria->addCondition("st1 > 0");
+        $criteria->addCondition("st2 <> ''");
+
+
+        $criteria->addSearchCondition('st2', $this->st2);
+        $criteria->addSearchCondition('st3', $this->st3);
+        $criteria->addSearchCondition('st4', $this->st4);
+
+        $criteria->addSearchCondition('parentsAccount.u2', Yii::app()->request->getParam('login'));
+        $criteria->addSearchCondition('parentsAccount.u3', Yii::app()->request->getParam('password'));
+        $criteria->addSearchCondition('parentsAccount.u4', Yii::app()->request->getParam('email'));
+
+        $criteria->with = $with;
+
+        return new CActiveDataProvider($this, array(
+            'criteria'=>$criteria,
+            'sort' => array(
+                'defaultOrder' => 'st2 collate UNICODE',
+                'attributes' => array(
+                    'st2',
+                    'st3',
+                    'st4',
+                    'parentsAccount.u2',
+                    'parentsAccount.u3',
+                    'parentsAccount.u4',
+                ),
+            )
+        ));
+    }
+>>>>>>> master
 
 	    $sql = /** @lang text */
 	    <<<SQL
@@ -205,9 +332,14 @@ SQL;
      * @throws CException
      */
     public function getStudentInfoForPortfolio(){
+<<<<<<< HEAD
         $sql = /** @lang text */
             <<<SQL
 		 select first 1 sg1,sg2,sg4,gr1,gr3,sp1,sp2,sem4,f2,f3,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28,sgr2,spc4,sp4, std20
+=======
+        $sql = <<<SQL
+		 select first 1 sg1,sg2,sg4,gr1,gr3,sp1,sp2,sem4,f2,f3,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,gr28,sgr2,spc4,sp4, st56, pnsp2, pnsp3, napr2
+>>>>>>> master
 		   from sem
 			   inner join sg on (sem.sem2 = sg.sg1)
 			   inner join gr on (sg.sg1 = gr.gr2)
@@ -216,6 +348,8 @@ SQL;
 			   inner join pe on (st.st200 = pe.pe1)
 			   inner join sgr on (pe.pe30 = sgr.sgr1)
 			   inner join sp on (sg.sg2 = sp.sp1)
+			   inner join pnsp on (sp.sp11 = pnsp.pnsp1)
+			   inner join napr on (pnsp.pnsp5 = napr.napr1)
 			   INNER JOIN spc on (gr.gr8=spc.spc1)
 			   INNER JOIN f on (sp.sp5 = f.f1)
 		   where st1=:ST1 and std11 in (0,5,6,8) and std7 is null
@@ -715,16 +849,7 @@ SQL;
         $command  = Yii::app()->db->createCommand($sql);
         $command->bindValue(':ST1', $this->st1);
         $params = $command->queryRow();
-		//$params['SEMESTER']=0;
         return $params;
-    }
-
-    private function sortByAvg($a, $b)
-    {
-        if ($a['avg'] == $b['avg']) {
-            return 0;
-        }
-        return ($a['avg'] > $b['avg']) ? -1 : 1;
     }
 
     /**

@@ -40,16 +40,7 @@ class R extends CActiveRecord
 		);
 	}
 
-	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-		);
-	}
+
 
 	/**
 	 * @return array customized attribute labels (name=>label)
@@ -67,39 +58,6 @@ class R extends CActiveRecord
 			'r11' => 'R11',
 			'r10' => 'R10',
 		);
-	}
-
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
-		$criteria=new CDbCriteria;
-
-		$criteria->compare('r1',$this->r1);
-		$criteria->compare('r2',$this->r2,true);
-		$criteria->compare('r3',$this->r3);
-		$criteria->compare('r5',$this->r5);
-		$criteria->compare('r6',$this->r6);
-		$criteria->compare('r7',$this->r7);
-		$criteria->compare('r9',$this->r9);
-		$criteria->compare('r11',$this->r11,true);
-		$criteria->compare('r10',$this->r10);
-
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
 	}
 
 	/**
@@ -128,7 +86,10 @@ class R extends CActiveRecord
             group by elgz2,elgz3,r2,r1,ustem5,us4,ustem7,ustem6,elgz4,elgz1,elgz5,elgz6,nr30,k2,k3,rz9,rz10, rz11,rz12
                order by elgz3
 SQL;
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':UO1', $uo1);
         $command->bindValue(':GR1', $gr1);

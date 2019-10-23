@@ -10,7 +10,6 @@
  * @property CHttpSession $session
  * @property CFormatter $format
  * @property PHPMailer $Smtpmail
- * @property ShortCodes $shortcodes
  * @property MobileDetect $mobileDetect
  * @property Core $core
  * @property CFirebirdConnection $db
