@@ -44,53 +44,6 @@ class Vmp extends CActiveRecord
 		return parent::model($className);
 	}
 
-    public function getMarksForStudent($st1, $vvmp1)
-    {
-        $rows = Yii::app()->db->createCommand()
-                ->select('*')
-                ->from('vmp')
-                ->where('vmp1 = :VVMP1 and vmp2 = :ST1', array(
-                    ':VVMP1' => $vvmp1,
-                    ':ST1' => $st1,
-                ))
-                ->queryAll();
-
-        $res = array();
-        foreach($rows as $row) {
-            $key = $row['vmp3'];
-            $res[$key] = $row;
-        }
-
-        return $res;
-    }
-
-    public function recalculateVmp4()
-    {
-        $array = array(
-            $this->vmp5,
-            $this->vmp6,
-            $this->vmp7
-        );
-
-        $this->saveAttributes(array(
-            'vmp4' => array_sum($array)
-        ));
-    }
-
-    public function isModuleExtended($vvmp1, $module)
-    {
-        $isExtended = Yii::app()->db->createCommand()
-                        ->select('count(*)')
-                        ->from('vmp')
-                        ->where('vmp1 = :VVMP1 AND vmp3 = :MODULE_NUM and (vmp5 <> 0 OR vmp6 <> 0 OR vmp7 <> 0)', array(
-                            ':VVMP1' => $vvmp1,
-                            ':MODULE_NUM' => $module,
-                        ))
-                        ->queryScalar();
-
-        return (bool)$isExtended;
-    }
-
     public function getMarks($vvmp1,$st1,$gr1)
     {
         if(empty($vvmp1)||empty($st1))

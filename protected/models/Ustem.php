@@ -44,16 +44,12 @@ class Ustem extends CActiveRecord
 		);
 	}
 
-
-
 	/**
 	 * @return array customized attribute labels (name=>label)
 	 */
 	public function attributeLabels()
 	{
 		return array(
-			'ustem1' => 'Ustem1',
-			'ustem2' => 'Ustem2',
             'ustem3' => tt('№ темы'),
             'ustem4' => tt('№ занятия'),
             'ustem5' => tt('Тема'),

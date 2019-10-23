@@ -43,12 +43,8 @@ class Spkr extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'spkr1' => 'Spkr1',
 			'spkr2' => tt('Оригинальное название'),
 			'spkr3' => tt('Название на английском'),
-			'spkr4' => 'Spkr4',
-			'spkr5' => 'Spkr5',
-			'spkr6' => 'Spkr6',
 		);
 	}
 

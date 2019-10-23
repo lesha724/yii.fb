@@ -53,11 +53,6 @@ class Ks extends CActiveRecord
 	public static function getFieldByLanguage($short){
 		switch(Yii::app()->language){
 			case 'uk':
-				if(!$short)
-					return 'ks2';
-				else
-					return 'ks3';
-				break;
 			case 'ru':
 				if(!$short)
 					return 'ks2';

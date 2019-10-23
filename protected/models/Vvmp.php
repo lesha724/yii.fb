@@ -60,82 +60,6 @@ class Vvmp extends CActiveRecord
 		return parent::model($className);
 	}
 
-    public function loadBillBy($nr1, $students)
-    {
-        $sql=<<<SQL
-                select uo.uo1,uo.uo3,sem.sem7,ug.ug2
-                from ug
-                   inner join nr on (ug.ug3 = nr.nr1)
-                   inner join us on (nr.nr2 = us.us1)
-                   inner join uo on (us.us2 = uo.uo1)
-                   inner join sem on (us.us3 = sem.sem1)
-                where ug3=:NR1
-SQL;
-        $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':NR1', $nr1);
-        $data = $command->queryRow();
-
-        if (empty($data))
-            return false;
-
-        $gr1  = $data['ug2'];
-		$uo1 = $data['uo1']; 
-        $d1   = $data['uo3'];
-        //$k1   = $data['nr30'];
-        $sem7 = $data['sem7'];
-
-        $params = array(
-            'vvmp2'=>$uo1,
-            'vvmp3'=>$d1,
-            'vvmp4'=>$sem7,
-            'vvmp5'=>0,
-        );
-        $vvmp = $this->findByAttributes($params);
-
-        if (! empty($vvmp))
-            return $vvmp;
-
-        $newModules = 5;
-
-        $vvmp = new Vvmp;
-        $vvmp->attributes = $params + array(
-            'vvmp1' => new CDbExpression('GEN_ID(GEN_VVMP, 1)'),
-            'vvmp6' => $newModules
-        );
-        $vvmp->save();
-        $vvmp = $this->findByAttributes($params);
-
-        // fill table vmp
-        foreach($students as $st) {
-            for($i=-1;$i<=$newModules;$i++) {
-                $vmp = new Vmp();
-                $vmp->attributes = array(
-                    'vmp1' => $vvmp->vvmp1,
-                    'vmp2' => $st['st1'],
-                    'vmp3' => $i,
-                );
-               $vmp->save(false);
-            }
-        }
-
-        return $vvmp;
-    }
-
-    public function fillDataForGroup($gr1, $d1, $year, $sem)
-    {
-        $sql = <<<SQL
-        SELECT * FROM PROC_MODULI(:GR1, :D1, :YEAR, :SEM);
-SQL;
-
-        $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':GR1', $gr1);
-        $command->bindValue(':D1', $d1);
-        $command->bindValue(':YEAR', $year);
-        $command->bindValue(':SEM', $sem);
-        $res = $command->queryRow();
-        return $res;
-    }
-
 	public function getModuleBySt($st1)
 	{
 		$sql = <<<SQL
@@ -302,25 +226,6 @@ SQL;
             and vvmp25=(SELECT  gr2 from gr where gr1={$gr1})
 SQL;
 
-		/*$sql = <<<SQL
-			SELECT vvmp1,vmpv1,vmpv4,vmpv3,vmpv5,vvmp6,vmpv6 from vvmp
-			INNER JOIN vmpv on (vvmp1=vmpv2)
-			WHERE vvmp3=(
-			SELECT  uo3 from uo where uo1=:UO1
-			)
-			and vmpv6 is null
-			AND vvmp6=:NOM
-			and vmpv7=:GR1 and vvmp4 = (
-			select
-			   first 1 sem7
-				from sem
-				   inner join sg on (sem.sem2 = sg.sg1)
-				   inner join gr on (sg.sg1 = gr.gr2)
-				WHERE gr1={$gr1} and sem3=:YEAR and sem5=:SEM
-			) and vvmp25=(
-			SELECT  gr2 from gr where gr1={$gr1}
-			)
-SQL;*/
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':GR1', $gr1);
 		$command->bindValue(':UO1', $uo1);

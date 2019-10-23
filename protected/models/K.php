@@ -123,8 +123,6 @@ SQL;
 			$res[$key]['name'] = (isset($name)&&!empty($name)&&$name!="")?$name:$chair['k3'];
 		}
 		return CHtml::listData($res, 'k1', 'name');
-
-        //return $chairs;
     }
 
     public function getChairByUo1($uo1)
@@ -143,85 +141,6 @@ SQL;
         $chair = $command->queryScalar();
 
         return $chair;
-    }
-
-    public function getChairByPd1($pd1)
-    {
-        $sql=<<<SQL
-            SELECT pd4
-				FROM pd
-			WHERE pd1=:PD1
-SQL;
-
-        $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':PD1', $pd1);
-        $chair = $command->queryScalar();
-
-        return $chair;
-    }
-
-    public function findChairsByName($query)
-    {
-        $query = mb_strimwidth($query, 0, 50);
-        $sql = <<<SQL
-            SELECT K1,K2,K3,K15,K16,K17,K10, K18
-                FROM F
-                inner join k on (f.f1 = k.k7)
-            WHERE f12='1' and k11<>'2' and (k9 is null) and K1>0 and k20=0
-            and
-				(
-					K2 CONTAINING :QUERY1 OR
-					K3 CONTAINING :QUERY2
-				)
-            ORDER BY K3 collate UNICODE
-SQL;
-        $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':QUERY1', $query);
-        $command->bindValue(':QUERY2', $query);
-        $chairs = $command->queryAll();
-
-        foreach ($chairs as $key => $chair) {
-            $chairs[$key]['id']   = $chair['k1'];
-            $chairs[$key]['name'] = $chair['k3'];
-        }
-
-        return $chairs;
-    }
-
-    public function getChairsForGostem()
-    {
-        $sql = <<<SQL
-           SELECT d1,k1,k3,d2,nr1,uo3
-           FROM sem
-             INNER JOIN us on (sem1 = us3)
-             INNER JOIN nr on (us1 = nr2)
-             INNER JOIN ug on (nr1 = ug3)
-             INNER JOIN gr on (ug2 = gr1)
-             INNER JOIN uo on (us2 = uo1)
-             INNER JOIN d on (uo3 = d1)
-             INNER JOIN u on (uo22 = u1)
-             INNER JOIN c on (u15 = c1)
-             INNER JOIN k on (nr30 = k1)
-             INNER JOIN std on (gr1 = std3)
-           WHERE  c8=3 and sem3=:YEAR and std2=:ST1 and std11 in (0,6,8) and std7 is null
-           GROUP BY d1,k1,k3 collate UNICODE, d2 collate UNICODE,nr1,uo3
-SQL;
-        list($year, ) = SH::getCurrentYearAndSem();
-        $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':ST1', Yii::app()->user->dbModel->st1);
-        $command->bindValue(':YEAR', $year);
-        $chairs = $command->queryAll();
-
-        foreach ($chairs as $key => $chair) {
-            $chairs[$key]['name'] = $chair['k3'].' ('.$chair['d2'].')';
-        }
-
-        $dataAttrs = array();
-        foreach ($chairs as $chair) {
-            $dataAttrs[$chair['nr1']] = array('data-k1' => $chair['k1'], 'data-d1' => $chair['uo3']);
-        }
-
-        return array($chairs, $dataAttrs);
     }
 
 }

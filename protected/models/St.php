@@ -162,9 +162,6 @@ class St extends CActiveRecord implements IPerson
 			array('st68', 'length', 'max'=>600),
 			array('st106', 'length', 'max'=>180),
 			array('st126', 'length', 'max'=>24),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
-			array('st1, st2, st3, st4, st5, st6, st7, st8, st9, st10, st11, st12, st13, st14, st15, st16, st17, st18, st19, st20, st21, st22, st23, st24, st25, st28, st29, st30, st31, st32, st33, st34, st35, st38, st39, st40, st41, st42, st43, st44, st45, st56, st57, st63, st64, st65, st66, st67, st68, st69, st70, st71, st72, st73, st74, st75, st76, st77, st78, st101, st102, st103, st104, st105, st106, st107, st108, st109, st110, st111, st112, st113, st114, st115, st116, st117, st118, st119, st120, st121, st122, st123, st124, st125, st100, st99, st126, st127, st128, st129, st130, st131, st132, st133, st134, st135, st136, st137, st138, st139, st140, st141, st142, st143, st144, st145, st146, st147, st148', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -941,16 +938,7 @@ SQL;
         $command  = Yii::app()->db->createCommand($sql);
         $command->bindValue(':ST1', $this->st1);
         $params = $command->queryRow();
-		//$params['SEMESTER']=0;
         return $params;
-    }
-
-    private function sortByAvg($a, $b)
-    {
-        if ($a['avg'] == $b['avg']) {
-            return 0;
-        }
-        return ($a['avg'] > $b['avg']) ? -1 : 1;
     }
 
     /**

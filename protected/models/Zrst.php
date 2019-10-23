@@ -61,11 +61,11 @@ class Zrst extends CActiveRecord
 	{
 		return array(
 			'zrst1' => '#',
-			'zrst2' => 'Студент',
+			'zrst2' => tt('Студент'),
 			'zrst3' => 'Us1',
-			'zrst4' => 'Тип1',
-			'zrst5' => 'Сортировка',
-			'zrst6' => 'Тип',
+			'zrst4' => tt('Тип1'),
+			'zrst5' => tt('Сортировка'),
+			'zrst6' => tt('Тип'),
 		);
 	}
 
