@@ -647,6 +647,12 @@ $this->widget('zii.widgets.CMenu', array(
                     'visible' => _ch('portfolio', 'teacher') && ($isTch||$isAdmin),
                     'active'  => $_c=='portfolio' && stristr($_a, 'teacher')
                 ),
+                array(
+                    'label'   => $_l2.tt('Статистика'),
+                    'url'     => _u('/portfolio/statistic'),
+                    'visible' => _ch('portfolio', 'statistic') && ($isAdmin),
+                    'active'  => $_c=='portfolio' && stristr($_a, 'statistic')
+                ),
             ),
             'visible' => _ch('portfolio', 'main') && ($isTch||$isAdmin||$isStd) && PortalSettings::model()->getSettingFor(PortalSettings::USE_PORTFOLIO) == 1 && Yii::app()->core->universityCode!=U_FARM,
         ),
