@@ -6,6 +6,9 @@
  * Time: 10:33
  */
 
+/**
+ * Class PortfolioController
+ */
 class PortfolioController extends Controller
 {
     public function filters() {
@@ -86,6 +89,40 @@ class PortfolioController extends Controller
         $sheet=$objPHPExcel->getActiveSheet();
         $sheet->setTitle('statistic '.date('Y-m-d H-i'));
 
+        $statistic = Zrst::model()->getListFilesForStatistic();
+        $sheet->getColumnDimensionByColumn(0)->setWidth(6);
+        $sheet->getColumnDimensionByColumn(1)->setWidth(40);
+        $sheet->getColumnDimensionByColumn(2)->setWidth(30);
+        $sheet->getColumnDimensionByColumn(3)->setWidth(6);
+        $sheet->getColumnDimensionByColumn(4)->setWidth(15);
+        $sheet->getColumnDimensionByColumn(5)->setWidth(40);
+        $sheet->getColumnDimensionByColumn(6)->setWidth(80);
+        $sheet->getColumnDimensionByColumn(7)->setWidth(30);
+
+        $sheet->setCellValueByColumnAndRow(0,2, '№ п/п');
+        $sheet->setCellValueByColumnAndRow(1,2,tt('ФИО'));
+        $sheet->setCellValueByColumnAndRow(2,2,tt('Факультет'));
+        $sheet->setCellValueByColumnAndRow(3,2,tt('Курс'));
+        $sheet->setCellValueByColumnAndRow(4,2,tt('Группа'));
+        $sheet->setCellValueByColumnAndRow(5,2,tt('Файл'));
+        $sheet->setCellValueByColumnAndRow(6,2,tt('Тип'));
+        $sheet->setCellValueByColumnAndRow(7,2,tt('Пояснение'));
+
+        $i=3;
+        foreach ($statistic as $file) {
+            $sheet->setCellValueByColumnAndRow(0,$i, $i-2);
+            $sheet->setCellValueByColumnAndRow(1,$i, $file['pe2'] .' '. $file['pe3'] . ' '. $file['pe4']);
+            $sheet->setCellValueByColumnAndRow(2,$i,$file['f3']);
+            $sheet->setCellValueByColumnAndRow(3,$i,$file['std20']);
+            $sheet->setCellValueByColumnAndRow(4,$i,$file['gr3']);
+            $sheet->setCellValueByColumnAndRow(5,$i,Yii::app()->createAbsoluteUrl('/portfolio/showFile/'.$file['zrst1']));
+            $sheet->setCellValueByColumnAndRow(6,$i,$file['zrst4'] == 4 ? 'Участие в спортивных, творческих и культурно-массовых мероприятиях' : 'Документы, подтверждающие участие в научно-исследовательской деятельности');
+            $sheet->setCellValueByColumnAndRow(7,$i,$file['zrst7']);
+            $i++;
+        }
+
+        $sheet->getStyleByColumnAndRow(0,2,8,$i-1)->getBorders()->getAllBorders()->applyFromArray(array('style'=>PHPExcel_Style_Border::BORDER_THIN,'color' => array('rgb' => '000000')));
+
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
         $objPHPExcel->setActiveSheetIndex(0);
 
@@ -118,15 +155,15 @@ class PortfolioController extends Controller
         if (Yii::app()->user->isAdmin) {
             $params = array();
             if (!isset($_REQUEST['TimeTableForm'])) {
-                if (isset(Yii::app()->session['TimeTableForm'])){
-                    $params=Yii::app()->session['TimeTableForm'];
+                if (isset(Yii::app()->session['portfolio-filter'])){
+                    $params=Yii::app()->session['portfolio-filter'];
                 }
             }
             else{
                 $params = $_REQUEST['TimeTableForm'];
             }
             $model->attributes = $params;
-            Yii::app()->session['TimeTableForm']=$params;
+            Yii::app()->session['portfolio-filter']=$params;
 
         } elseif (Yii::app()->user->isStd) {
 
@@ -135,7 +172,7 @@ class PortfolioController extends Controller
             throw new CHttpException(404, 'You don\'t have an access to this service');
 
         $this->render('student', array(
-            'model'=>$model
+            'model'=>$model,
         ));
     }
 
@@ -149,15 +186,15 @@ class PortfolioController extends Controller
 
         $params = array();
         if (!isset($_REQUEST['FilterForm'])) {
-            if (isset(Yii::app()->session['FilterForm'])){
-                $params=Yii::app()->session['FilterForm'];
+            if (isset(Yii::app()->session['portfolio-teacher-filter'])){
+                $params=Yii::app()->session['portfolio-teacher-filter'];
             }
         }
         else{
             $params = $_REQUEST['FilterForm'];
         }
         $model->attributes = $params;
-        Yii::app()->session['FilterForm']=$params;
+        Yii::app()->session['portfolio-teacher-filter']=$params;
 
         if (Yii::app()->user->isAdmin) {
 

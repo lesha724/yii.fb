@@ -9,8 +9,8 @@
 /**
  * @var St $student
  * @var TimeTableForm $model
+ * @var $this PortfolioController
  */
-
 $studentInfo = $student->getStudentInfoForPortfolio();
 
 $infoHtml = <<<HTML

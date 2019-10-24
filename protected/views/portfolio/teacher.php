@@ -8,6 +8,7 @@
 
 /**
  * @var $model FilterForm
+ * @var $this PortfolioController
  */
 
 $this->pageHeader=tt('Преподаватель');

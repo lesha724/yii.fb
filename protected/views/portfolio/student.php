@@ -6,6 +6,10 @@
  * Time: 15:31
  */
 
+/**
+ * @var $this PortfolioController
+ * @var $model TimeTableForm
+ */
 
 $this->pageHeader=tt('Студент');
 $this->breadcrumbs=array(

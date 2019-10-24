@@ -1,8 +1,9 @@
 <?php
 /**
  *
- * @var TimeTableForm || FilterForm $model
+ * @var TimeTableForm $model
  * @var CActiveForm $form
+ * @var PortfolioController $this
  */
 $options = array('class'=>'chosen-select', 'autocomplete' => 'off', 'empty' => '&nbsp;');
 $form=$this->beginWidget('CActiveForm', array(

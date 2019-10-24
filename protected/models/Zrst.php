@@ -86,7 +86,7 @@ class Zrst extends CActiveRecord
      * @throws CException
      */
 	public  function getTable1Data($st1){
-        $sql=<<<SQL
+        $sql=/** @lang text */<<<SQL
             select sem4,sem3,sem5,d2,us1,us4,us6,d8,ucx5,st1,iif(d8=6,'отчет по практике',
                    iif(d8=2,'выпускная квалификационная работа',
                    iif(us4=8,'курсовая',
@@ -142,7 +142,7 @@ SQL;
      * @throws CException
      */
     public  function getTable1Data1($st1){
-        $sql=<<<SQL
+        $sql=/** @lang text */<<<SQL
             select sem4,sem3,sem5,d2,us1,us4,us6,d8,ucx5,st1,iif(d8=6,'отчет по практике',
                    iif(d8=2,'выпускная квалификационная работа',
                    iif(us4=8,'курсовая',
@@ -178,7 +178,7 @@ SQL;
      * @throws CException
      */
     public  function getTable1Data2($st1){
-        $sql=<<<SQL
+        $sql=/** @lang text */<<<SQL
             select sem4,sem3,sem5,d2,us1,us4,us6,d8,ucx5,st1,iif(d8=6,'отчет по практике',
                    iif(d8=2,'выпускная квалификационная работа',
                    iif(us4=8,'курсовая',
@@ -210,11 +210,12 @@ SQL;
 
     /**
      * @param $p1
+     * @param $us1
      * @return array
      * @throws CException
      */
     public  function getTable1DataTeacher($p1, $us1){
-        $sql=<<<SQL
+        $sql=/** @lang text */<<<SQL
         select pe2,pe3,pe4,std3,st1,us1,sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28,gr3,
                (select first 1 zrst1 from zrst where zrst6=1 and zrst2=st.st1 and zrst3=us.us1 order by zrst1 desc) as recenziya
         from uo
@@ -265,6 +266,7 @@ SQL;
 
     /**
      * @param $st1
+     * @param $zrst4
      * @return static[]
      */
     public  function getTableData($st1, $zrst4){
@@ -279,12 +281,14 @@ SQL;
     }
 
     /**
-     *
+     * @param $p1
+     * @return array
+     * @throws CException
      */
     public function getSemesterData($p1){
         if(empty($p1))
             return array();
-        $sql = <<<SQL
+        $sql = /** @lang text */<<<SQL
           select sem3,sem5
                 from uo
                    inner join us on (uo.uo1 = us.us2)
@@ -322,7 +326,12 @@ SQL;
         return $semesters;
     }
 
-
+    /**
+     * @param $p1
+     * @param $semData
+     * @return array
+     * @throws CException
+     */
     public function getDisciplinesData($p1, $semData){
         if(empty($p1))
             return array();
@@ -330,7 +339,7 @@ SQL;
             return array();
         list($year, $sem) = explode('/', $semData);
 
-        $sql = <<<SQL
+        $sql = /** @lang text */<<<SQL
         select * from (
         select d2,us1,iif(d8=6,'отчет по практике',
                    iif(d8=2,'выпускная квалификационная работа',
@@ -381,9 +390,10 @@ SQL;
      * Проверка на редактирование
      * @param $p1
      * @return bool
+     * @throws CException
      */
     public function checkAccessForTeacher($p1){
-        $sql = <<<SQL
+        $sql = /** @lang text */<<<SQL
         Select count(*) from (
               select us1
                 from uo
@@ -415,5 +425,29 @@ SQL;
         $command->bindValue(':us1', $this->zrst3);
         $command->bindValue(':us1_', $this->zrst3);
         return ((int)$command->queryScalar()) > 0;
+    }
+
+    /**
+     * @return array
+     * @throws CException
+     */
+    public function getListFilesForStatistic(){
+        $sql = /** @lang text */
+            <<<SQL
+            select 
+                zrst.*,
+                pe2, pe3, pe4, std20, f3, gr3
+            from sg
+               inner join sp on (sg.sg2 = sp.sp1)
+               inner join f on (sp.sp5 = f.f1)
+               inner join gr on (sg.sg1 = gr.gr2)
+               inner join std on (gr.gr1 = std.std3)
+               inner join st on (std.std2 = st.st1)
+               inner join pe on (st.st200 = pe.pe1)
+               inner join zrst on (st.st1 = zrst.zrst2)
+            where std7 is null and std11 <> 1 and zrst6=0 and zrst4 in (1,4)
+            ORDER BY f2, gr3, pe2
+SQL;
+        return Yii::app()->db->createCommand($sql)->queryAll();
     }
 }
