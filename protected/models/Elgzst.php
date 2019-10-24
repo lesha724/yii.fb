@@ -41,7 +41,6 @@ class Elgzst extends CActiveRecord
 			array('elgzst1, elgzst2, elgzst3, elgzst7', 'numerical', 'integerOnly'=>true),
 			array('elgzst4, elgzst5', 'numerical'),
 			array('elgzst6', 'length', 'max'=>25),
-			// The following rule is used by search().
 			array('st2,group_st,status,nom,r2,elgp2,type_lesson,elgp3,count_elgotr,tema,elgzst0, elgzst1, elgzst2, elgzst3, elgzst4, elgzst5, elgzst6, elgzst7', 'safe', 'on'=>'search'),
 		);
 	}
