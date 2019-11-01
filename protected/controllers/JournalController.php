@@ -2224,37 +2224,48 @@ SQL;
                 $st1 = $st['st1'];
                 $marks = $elg->getMarksForStudent($st1);
                 $total = 0;
-                $countTotal = 0;
+                $countTotal =  0;
                 foreach ($marks as $mark) {
                     $m = $mark['elgzst5'] != 0
                         ? $mark['elgzst5']
                         : $mark['elgzst4'];
                     $total += $m;
-                    if($m>0)
+                    if($m>0 || $mark['elgzst3'] > 0)
                         $countTotal++;
                 }
 
                 $value = '';
                 $count_dates = count($dates);
+                $precision = Yii::app()->core->universityCode == U_TNMU ? 2 : 0;
                 switch($ps44){
                     case 0:
                         $value = $total;
                         break;
                     case 1:
                         if($count_dates!=0)
-                            $value = round($total/$count_dates * 12);
+                            $value = round($total/$countTotal * 12, $precision);
                         else
                             $value=0;
                         break;
                     case 2:
                         if($count_dates!=0)
-                            $value = round($total/$count_dates);
+                            $value = round($total/$countTotal, $precision);
+                        else
+                            $value=0;
+                        break;
+                    case 3:
+                        if($count_dates!=0) {
+                            $value = round(($total / ($count_dates * 5 * 0.66)) * 50, $precision);
+                            if ($value > 50)
+                                $value = 50;
+                        }
                         else
                             $value=0;
                         break;
                 }
 
                 $sheet->setCellValueByColumnAndRow(4,$i+ $rowStart,$value);
+                $value = round($value);
 
                 $elgdCount1=0;
                 $marksDop=Elgdst::model()->getMarksForStudent($st1,$elg1);

@@ -559,7 +559,9 @@ HTML;
         ));
     }
 
-    return sprintf($pattern,$date['elgz3'],$time.'<br>'.$date['k2'].'<br>'.$date['ustem5'], $name, $a);
+    $content = $time.'<br>'.$date['k2'].'<br>'.$date['ustem5']. '<br>'. $date['p3']. ' '. $date['p4']. ' '. $date['p5'];
+
+    return sprintf($pattern,$date['elgz3'],$content, $name, $a);
 }
 
 function countMarkTotal($marks)
@@ -571,7 +573,7 @@ function countMarkTotal($marks)
             ? $mark['elgzst5']
             : $mark['elgzst4'];
         $total += $m;
-        if($m>0)
+        if($m>0 || $mark['elgzst3'] > 0)
             $count++;
     }
     return array($total,$count);

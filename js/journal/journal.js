@@ -944,6 +944,7 @@ function recalculateBothTotal(st1,ps84)
         var table_3 = 'div.journal_div_table3 tr[data-st1=' + st1 + ']';
 
         var totalCount = 0;
+        var totalAllCount = 0;
         $(table_2 + ' td').each(function () {
 
             var mark = calculateMarkFor(this);
@@ -952,6 +953,7 @@ function recalculateBothTotal(st1,ps84)
                 total_1 += mark;
                 totalCount++;
             }
+            totalAllCount++;
         });
 
         var bal = 0;
@@ -962,8 +964,15 @@ function recalculateBothTotal(st1,ps84)
         }
 
         if (ps44 == 2) {
-            bal = (total_1 / totalCount).toFixed(2);
-            total_1 = Math.round(total_1 / totalCount);
+            bal = (total_1 / totalCount);
+            total_1 = Math.round(total_1 / totalCount).toFixed(2);
+        }
+
+        if (ps44 == 3) {
+            bal = total_1;
+            total_1 = ((total_1 / (totalAllCount*5 * 0.66))*50).toFixed(2);
+            if(total_1 > 50)
+                total_1 = 50;
         }
 
         $(table_3 + ' td').each(function () {
@@ -977,6 +986,9 @@ function recalculateBothTotal(st1,ps84)
             sr = '(' + bal + ')'
         }
         if (ps44 == 2) {
+            sr = '(' + bal + ')'
+        }
+        if (ps44 == 3) {
             sr = '(' + bal + ')'
         }
         $(table_3 + ' td[data-total=1]').text(total_1 + sr);
