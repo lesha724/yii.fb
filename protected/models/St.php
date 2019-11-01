@@ -159,7 +159,7 @@ class St extends CActiveRecord implements IPerson
 			inner join sp on (sg.sg2 = sp.sp1)
 			inner join f on (sp.sp5= f.f1)
 			inner join sem on (sg.sg1 = sem.sem2)
-		where std7 is null and std11 in (0, 5, 6, 8) and sem3=:YEAR1 and sem5=:SEM1 and std2=:st1
+		where std7 is null and std11 in (0, 5, 6, 8) and sem3=:YEAR1 and sem5=:SEM1 and std2=:st1 and std24=0
 		GROUP BY gr1,gr3,sem4,sg4,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26,f2,f3
 SQL;
         $command = Yii::app()->db->createCommand($sql);
@@ -189,7 +189,7 @@ SQL;
 			   inner join sgr on (pe.pe30 = sgr.sgr1)
 			   inner join sp on (sg.sg2 = sp.sp1)
 			   INNER JOIN f on (sp.sp5 = f.f1)
-		   where st1=:ST1 AND sem3=:YEAR and sem5=:SEM and std11 in (0,5,6,8) and std7 is null
+		   where st1=:ST1 AND sem3=:YEAR and sem5=:SEM and std11 in (0,5,6,8) and std7 is null and std24=0
 SQL;
 
 		$command = Yii::app()->db->createCommand($sql);
@@ -221,7 +221,7 @@ SQL;
 			   inner join napr on (pnsp.pnsp5 = napr.napr1)
 			   INNER JOIN spc on (gr.gr8=spc.spc1)
 			   INNER JOIN f on (sp.sp5 = f.f1)
-		   where st1=:ST1 and std11 in (0,5,6,8) and std7 is null
+		   where st1=:ST1 and std11 in (0,5,6,8) and std7 is null and std24=0
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
@@ -320,7 +320,7 @@ SQL;
             FROM st
             inner join pe on (st.st200 = pe.pe1)
             INNER JOIN std on (st.st1 = std.std2)
-            WHERE st101<>7 and STD3=:GR1 and STD11 in (0,4,5,6,8) and (STD7 is null)
+            WHERE st101<>7 and STD3=:GR1 and STD11 in (0,4,5,6,8) and (STD7 is null) and std24=0
             ORDER BY ST2 collate UNICODE
 SQL;
 
@@ -345,7 +345,7 @@ SQL;
 			 FROM ST
 			   INNER JOIN STD ON (ST.ST1 = STD.STD2)
 			   INNER JOIN SK ON (SK.SK1 = STD.STD26)
-			 WHERE std7 is null and std11 in (0,5,6,8) and std3=:gr1 and st101!=7
+			 WHERE std7 is null and std11 in (0,5,6,8) and std3=:gr1 and st101!=7 and std24=0
 			 ORDER BY st2 collate UNICODE
 SQL;
         return static::findAllBySql($sql, array(':gr1'=>$gr1));
@@ -365,7 +365,7 @@ SQL;
             FROM st
             INNER JOIN std on (st.st1 = std.std2)
             LEFT JOIN stdist on (st1 = STDIST1)
-            WHERE st101<>7 and STD3=:GR1 and STD11 in (0,5,6,8) and (STD7 is null)
+            WHERE st101<>7 and STD3=:GR1 and STD11 in (0,5,6,8) and (STD7 is null) and std24=0
             ORDER BY ST2 collate UNICODE
 SQL;
 
@@ -395,7 +395,7 @@ SQL;
             INNER JOIN STDIST on (st1 = STDIST1)
             INNER JOIN GR ON (STD.STD3 = GR.GR1)
             INNER JOIN SEM on (SEM.SEM3 = :YEAR and SEM.SEM5 = :SEM and sem.SEM2 = gr.gr2)
-            WHERE st101<>7 and STDISTSUB2=:COURSE and STD11 in (0,5,6,8) and (STD7 is null)
+            WHERE st101<>7 and STDISTSUB2=:COURSE and STD11 in (0,5,6,8) and (STD7 is null) and std24=0
             ORDER BY ST2 collate UNICODE
 SQL;
 
@@ -424,7 +424,7 @@ SQL;
 				FROM st
 				inner join pe on (st.st200 = pe.pe1)
 				INNER JOIN std on (st.st1 = std.std2)
-				WHERE st101<>7 and STD3=:GR1 and STD11 in (0,5,6,8) and (STD7 is null) and st66=1
+				WHERE st101<>7 and STD3=:GR1 and STD11 in (0,5,6,8) and (STD7 is null) and st66=1 and std24=0
 				ORDER BY ST2 collate UNICODE
 SQL;
 		}else{//оючучение
@@ -434,7 +434,7 @@ SQL;
 				inner join pe on (st.st200 = pe.pe1)
 				INNER JOIN std on (st.st1 = std.std2)
 				LEFT JOIN SK ON (SK.SK1 = STD.STD26)
-				WHERE st101<>7 and STD3=:GR1 and STD11 in (0,5,6,8) and (STD7 is null) and sk3=1
+				WHERE st101<>7 and STD3=:GR1 and STD11 in (0,5,6,8) and (STD7 is null) and sk3=1 and std24=0
 				ORDER BY ST2 collate UNICODE
 SQL;
 
@@ -465,7 +465,7 @@ SQL;
 			   INNER JOIN STD ON (ST.ST1 = STD.STD2)
 			   INNER JOIN SK ON (SK.SK1 = STD.STD26)
 			   INNER JOIN GR ON (STD.STD3 = GR.GR1)
-			 WHERE std7 is null and std11 in (0,5,6,8) and gr2=:SG1 and st101!=7
+			 WHERE std7 is null and std11 in (0,5,6,8) and gr2=:SG1 and st101!=7 and std24=0
 			 ORDER BY pe2 collate UNICODE
 SQL;
 
@@ -490,7 +490,7 @@ SQL;
 			   INNER JOIN pe on (st200 = pe1)
 			   INNER JOIN STD ON (ST.ST1 = STD.STD2)
 			   INNER JOIN SK ON (SK.SK1 = STD.STD26)
-			 WHERE std7 is null and std11 in (0,5,6,8) and std3=:gr1 and st101!=7
+			 WHERE std7 is null and std11 in (0,5,6,8) and std3=:gr1 and st101!=7 and std24=0
 			 ORDER BY pe2 collate UNICODE
 SQL;
         $command = Yii::app()->db->createCommand($sql);
@@ -540,7 +540,7 @@ SQL
                inner join std on (st.st1 = std.std2)
                inner join gr on (std.std3 = gr.gr1)
                inner JOIN SK ON (SK.SK1 = std.std26)
-            where ucgns5=:YEAR and ucgns6=:SEM and ucgn2=:GR1 and UCXG3=0 and std11<>1 and std4<=current_timestamp and (std7 is null or std7>=current_timestamp)
+            where ucgns5=:YEAR and ucgns6=:SEM and ucgn2=:GR1 and UCXG3=0 and std11<>1 and std4<=current_timestamp and (std7 is null or std7>=current_timestamp) and std24=0
             group by st1,pe1,pe2,pe3,pe4,st5,sk3,gr3, gr19,gr20,gr21,gr22,gr23,gr24,gr28
             order by pe2 collate UNICODE
 SQL;
@@ -886,7 +886,7 @@ SQL;
 
         $sql = <<<SQL
               SELECT COUNT(*) FROM STD 
-              WHERE std11 in (0,3,5,6,8) and std7 is null and STD2=:ST1
+              WHERE std11 in (0,3,5,6,8) and std7 is null and STD2=:ST1 and std24=0
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
@@ -1117,7 +1117,7 @@ SQL;
                       select first 1 sg1 from sg 
                       inner join gr on (sg.sg1 = gr.gr2)
                       inner join std on (gr.gr1 = std.std3)
-                      where std2=:st1_ and std7 is null and std11 in (0,5,6,8)
+                      where std2=:st1_ and std7 is null and std11 in (0,5,6,8) and std24=0
                    )
                 )
                 WHERE st1=:st1 and BAL_5>=0
@@ -1137,7 +1137,7 @@ SQL;
 			 FROM ST
 			   INNER JOIN STD ON (ST.ST1 = STD.STD2)
 			   INNER JOIN SK ON (STD.STD26 = SK.SK1)
-			 WHERE std7 is null and std11 in (0,5,6,8) and st1=:st1
+			 WHERE std7 is null and std11 in (0,5,6,8) and st1=:st1 and std24=0
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
