@@ -400,9 +400,6 @@ HTML;
      * @throws CHttpException
      */
     public function actionUploadFile(){
-
-        $model = new CreateStpfileForm();
-
         $st1 = Yii::app()->request->getParam('st1', null);
         $id = Yii::app()->request->getParam('idField', null);
         $type = Yii::app()->request->getParam('type', null);
@@ -412,6 +409,8 @@ HTML;
 
         if(!$this->_checkPermission($st1))
             throw new CHttpException(403, tt('Нет доступа к данному студенту'));
+
+        $model = new CreateStpfileForm($type);
 
         if(isset($_POST['CreateStpfileForm'])) {
             $model->attributes = $_POST['CreateStpfileForm'];
