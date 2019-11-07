@@ -42,7 +42,8 @@ switch ($type){
         $extension = 'doc, docx, pdf';
         break;
     case CreateStpfileForm::TYPE_FIELD23:
-        $extension = 'jpeg, jpg, png, pdf ';
+    case CreateStpfileForm::TYPE_FIELD:
+        $extension = 'jpeg, jpg, png, pdf';
         break;
 }
 echo $form->fileFieldRow($model, 'file', array( 'labelOptions' => array('label' => tt('Разрешены файлы размером не более 8МБ и расширением: {extension}', array(

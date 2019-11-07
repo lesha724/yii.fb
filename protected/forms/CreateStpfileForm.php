@@ -51,7 +51,7 @@ class CreateStpfileForm extends CFormModel
                 'on' => self::TYPE_FIELD23
             ),
             array('file', 'file',
-                'types'=> 'jpeg, jpg, png, doc, docx, pdf',
+                'types'=> 'jpeg, jpg, png, pdf',
                 'maxSize' => 1024 * 1024 * 8,
                 'on' => self::TYPE_FIELD
             ),
