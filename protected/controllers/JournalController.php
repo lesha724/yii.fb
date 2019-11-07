@@ -1320,8 +1320,9 @@ SQL;
                         throw new CHttpException(403, 'Нет доступа на редактирования данной колонки.');
                     //проверка на возможность редактирвония для ирпеня
                     if($elgsd->elgsd4 == 1 && $this->universityCode == U_IRPEN){
-                        if(!$elgd->checkAccessIndForIrpen($gr1))
-                            throw new CHttpException(403, 'Прошло более 4-х дней с последнего занятия.');
+                        if(!Yii::app()->user->isAdmin)
+                            if(!$elgd->checkAccessIndForIrpen($gr1))
+                                throw new CHttpException(403, 'Прошло более 4-х дней с последнего занятия.');
                     }
                     $elgdst = Elgdst::model()->findByAttributes(array('elgdst1' => $st1, 'elgdst2' => $elgd->elgd0));
                     //print_r($elgdst->elgdst0);
