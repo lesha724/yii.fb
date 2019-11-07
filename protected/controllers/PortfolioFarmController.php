@@ -93,10 +93,10 @@ class PortfolioFarmController extends Controller
 
         $mPDF1 = new Mpdf\Mpdf(array(
             'format' => 'A4-P',
-            'margin_left' => 25,
-            'margin_right' => 5,
-            'margin_top' => 15,
-            'margin_bottom' => 15,
+            'margin_left' => 30,
+            'margin_right' => 10,
+            'margin_top' => 20,
+            'margin_bottom' => 20,
         ));
         $mPDF1->falseBoldWeight = 8;
         $css = <<<HTML
@@ -125,9 +125,6 @@ HTML;
         $mPDF1->WriteHTML($css);
         $mPDF1->WriteHTML($html);
         $mPDF1->Output($student->getShortName().'.pdf', \Mpdf\Output\Destination::DOWNLOAD);
-
-        //echo $css;
-        //echo $html;
     }
 
     /**
