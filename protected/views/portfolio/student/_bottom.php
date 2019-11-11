@@ -66,6 +66,7 @@ echo '</div>';
 $this->renderPartial('student/_table1', array(
     'student' => $student,
     'model' => $model,
+    'showType' => true,
     'dataProvider' => new CArrayDataProvider(Zrst::model()->getTable1Data($student->st1),array(
         'sort'=>false,
         'pagination'=>false,
@@ -80,6 +81,7 @@ echo '</div>';
 $this->renderPartial('student/_table1', array(
     'student' => $student,
     'model' => $model,
+    'showType' => false,
     'dataProvider' => new CArrayDataProvider(Zrst::model()->getTable1Data1($student->st1),array(
         'sort'=>false,
         'pagination'=>false,
@@ -94,6 +96,7 @@ echo '</div>';
 $this->renderPartial('student/_table1', array(
     'student' => $student,
     'model' => $model,
+    'showType' => false,
     'dataProvider' => new CArrayDataProvider(Zrst::model()->getTable1Data2($student->st1),array(
         'sort'=>false,
         'pagination'=>false,

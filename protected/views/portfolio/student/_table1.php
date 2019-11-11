@@ -8,6 +8,7 @@
 
 /**
  * @var St $student
+ * @var bool $showType
  * @var TimeTableForm $model
  * @var $dataProvider CArrayDataProvider
  */
@@ -31,7 +32,8 @@ $this->widget('bootstrap.widgets.TbGridView', array(
         ),
         array(
             'header'=>tt('Вид работы'),
-            'value'=>'$data["vid"]'
+            'value'=>'$data["vid"]',
+            'visible' => $showType
         ),
         array(
             'header'=>tt('Оценка'),
