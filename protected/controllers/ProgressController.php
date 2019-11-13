@@ -14,28 +14,13 @@ class ProgressController extends Controller
         return array(
             array('allow',
                 'actions' => array(
-                    'getGroups',
-                    'insertMejModule',
-                    'deleteMejModule',
-                    'module',
-                    'updateVvmp',
-                    'insertVmpMark',
-                    'updateStus',
-                    'closeModule',
-                    'renderExtendedModule',
-                    'examSession',
-                    'insertStus',
-                    //'insertVmp',
-
-                    'modules',
-                    'insertJpvd',
-                    'getCxmb'
+                    'module'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
 
             array('allow',
-                'actions' => array('attendanceStatistic','rating','ratingExcel', 'ratingStudent')
+                'actions' => array('rating','ratingExcel', 'ratingStudent')
             ),
             array('deny',
                 'users' => array('*'),
@@ -45,7 +30,6 @@ class ProgressController extends Controller
     
     public function actionRating()
     {
-        //throw new CHttpException(400, 'Сервис времено недоступен по техническим причинам. В близжайшее время работа возобновиться.');
         $model = new RatingForm();
         $model->scenario = 'rating-group';
         if (isset($_REQUEST['RatingForm']))
@@ -196,5 +180,17 @@ class ProgressController extends Controller
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
         Yii::app()->end();
+    }
+
+    /**
+     *
+     */
+    public function actionModule(){
+        $form = new ModuleForm(Yii::app()->user->dbModel->p1);
+        if (isset($_POST['ModuleForm']))
+            $form->attributes=$_POST['ModuleForm'];
+        $this->render('module', array(
+            'model' => $form,
+        ));
     }
 }
