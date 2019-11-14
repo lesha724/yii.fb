@@ -24,7 +24,7 @@ echo <<<HTML
 HTML;
 
 
-if (!empty($model->group))
+if ($model->validate())
     $this->renderPartial('module/_bottom', array(
         'model' => $model
     ));

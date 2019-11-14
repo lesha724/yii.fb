@@ -26,6 +26,8 @@ $html .= $form->label($model, 'group');
 $html .= $form->dropDownList($model, 'group', $groups, $options);
 $html .= '</div>';
 
+$html .= $form->hiddenField($model, 'module');
+
 $html .= '</fieldset>';
 
 $html .= '</div>';

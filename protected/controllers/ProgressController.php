@@ -187,8 +187,21 @@ class ProgressController extends Controller
      */
     public function actionModule(){
         $form = new ModuleForm(Yii::app()->user->dbModel->p1);
-        if (isset($_POST['ModuleForm']))
-            $form->attributes=$_POST['ModuleForm'];
+        if (isset($_REQUEST['ModuleForm']))
+            $form->attributes=$_REQUEST['ModuleForm'];
+
+        if($form->validate()){
+            if(!$form->checkAccess())
+                throw new CHttpException(403, tt('Доступ запрещен'));
+
+            $count = $form->getCountModules();
+            if($count > 0)
+                $form->countModules = $count;
+            else if($form->countModules > 0) {
+                $form->createModules();
+            }
+        }
+
         $this->render('module', array(
             'model' => $form,
         ));

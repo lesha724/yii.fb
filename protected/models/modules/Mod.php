@@ -35,7 +35,7 @@ class Mod extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('mod1, mod2, mod3, mod4, mod6', 'numerical', 'integerOnly'=>true),
+			array('mod2, mod3, mod4, mod6', 'numerical', 'integerOnly'=>true),
 			array('mod5', 'length', 'max'=>400),
 			array('mod7, mod8', 'length', 'max'=>20),
 		);

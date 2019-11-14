@@ -15,6 +15,20 @@ class ModuleForm extends CFormModel
      */
     public $group;
 
+    /**
+     * @var int
+     */
+    public $module;
+
+    /**
+     * @var int
+     */
+    public $countModules = 0;
+
+    /**
+     * Код преподователя
+     * @var int
+     */
     protected $_teacherId;
 
     /**
@@ -23,8 +37,10 @@ class ModuleForm extends CFormModel
     public function rules()
     {
         return array(
-            array('discipline, group', 'numerical'),
+            array('discipline, countModules, module', 'numerical'),
+            array('module', 'exist', 'className'=>'Mod', 'attributeName'=>'mod1'),
             array('discipline, group', 'required'),
+            array('group', 'validateGroup')
         );
     }
 
@@ -40,6 +56,28 @@ class ModuleForm extends CFormModel
     }
 
     /**
+     *
+     */
+    public function validateGroup(){
+        try{
+            list($us1, $group) = $this->getGroupParams();
+        }catch (Exception $error){
+            $this->addError('group', tt('Не верное значение'));
+            return false;
+        }
+
+        if(empty(Us::model()->findByPk($us1))) {
+            $this->addError('group', tt('Не верное значение'));
+            return false;
+        }
+
+        if(empty(Gr::model()->findByPk($group))) {
+            $this->addError('group', tt('Не верное значение'));
+            return false;
+        }
+    }
+
+    /**
      * attribute labels
      * @return array
      */
@@ -47,7 +85,9 @@ class ModuleForm extends CFormModel
     {
         return array(
             'discipline'=>tt('Дисциплина'),
-            'group'=>tt('Группа')
+            'group'=>tt('Группа'),
+            'module'=>tt('Модуль'),
+            'countModules'=>tt('Количество модулей'),
         );
     }
 
@@ -112,5 +152,132 @@ SQL;
             $result[$row['us1'].'/'.$row['gr1']] = $row['gr3'];
         }
         return $result;
+    }
+
+    /**
+     * Проверка доступа к ведомостям
+     * @return bool
+     */
+    public function checkAccess(){
+        list($us1, $group) = $this->getGroupParams();
+        if(empty($us1) || empty($group))
+            return false;
+        $sql = <<<SQL
+            select count(*)
+            from sg
+               inner join gr on (sg.sg1 = gr.gr2)
+               inner join ug on (gr.gr1 = ug.ug2)
+               inner join nr on (ug.ug1 = nr.nr1)
+               inner join us on (nr.nr2 = us.us1)
+               inner join sem on (us.us3 = sem.sem1)
+               inner join uo on (us.us2 = uo.uo1)
+               inner join pd on (nr.nr6 = pd.pd1 and pd2=:P1)
+            where us4 in (5,6,8) and sem3=:YEAR and sem5=:SEM and uo3=:D1 and us1=:US1 and gr1=:GR1
+            group by sg4,gr7,gr3,gr1,us1,uo1
+SQL;
+        $command = Yii::app()->db->createCommand($sql);
+        $command->bindValue(':P1', $this->_teacherId);
+        $command->bindValue(':D1', $this->discipline);
+        $command->bindValue(':GR1', $group);
+        $command->bindValue(':US1', $us1);
+        $command->bindValue(':YEAR', Yii::app()->session['year']);
+        $command->bindValue(':SEM', Yii::app()->session['sem']);
+        return (int)$command->queryScalar()>0;
+    }
+
+    /**
+     * Количество модулей
+     * @return int
+     * @throws CException
+     */
+    public function getCountModules()
+    {
+        if(empty($this->group))
+            return 0;
+
+        list($us1, $group) = $this->getGroupParams();
+
+        $sql = <<<SQL
+            SELECT COUNT(*) FROM MOD INNER JOIN MODGR on (MODGR2 = MOD1) WHERE MOD2 = :US1 and MODGR3 = :GR1
+SQL;
+        return (int) Yii::app()->db->createCommand($sql)->queryScalar(array(
+            ':US1' => $us1,
+            ':GR1' => $group
+        ));
+    }
+
+    /**
+     *
+     * @return array
+     */
+    private function getGroupParams(){
+        if(empty($this->group))
+            return array(null, null);
+        return explode('/', $this->group);
+    }
+
+    /**
+     * Список модулей
+     * @return array
+     */
+    public function getModules(){
+        if(empty($this->group))
+            return array();
+
+        list($us1, $group) = $this->getGroupParams();
+
+        $modules = Mod::model()->findAllByAttributes(array('mod2' =>$us1));
+
+        $result = [];
+        foreach ($modules as $module){
+            $result[$module->mod1] = $module;
+        }
+        return $result;
+    }
+
+    public function createModules()
+    {
+        if(empty($this->group))
+            throw new CHttpException(400);
+
+        list($us1, $group) = $this->getGroupParams();
+
+        $modules = Mod::model()->findAllByAttributes(array('mod2' =>$us1));
+
+        $trans = Yii::app()->db->beginTransaction();
+
+        try {
+            if (empty($modules)) {
+                $modules = array();
+                for ($i = 1; $i <= $this->countModules; $i++) {
+                    $mod = new Mod();
+                    $mod->mod1 = new CDbExpression('GEN_ID(GEN_MOD, 1)');
+                    $mod->mod2 = $us1;
+                    $mod->mod3 = $i == $this->countModules ? 1 : 0;
+                    $mod->mod4 = $i;
+                    $mod->mod5 = 'Модуль №'.$i;
+                    if(!$mod->save())
+                        throw new Exception('Ошибка добавления модуля');
+                    $modules[] = $mod;
+                }
+            }
+
+            foreach ($modules as $module){
+                $modgr = new Modgr();
+                $modgr->modgr1 = new CDbExpression('GEN_ID(GEN_MODGR, 1)');
+                $modgr->modgr2 = $module->mod1;
+                $modgr->modgr3 = $group;
+                $modgr->modgr4 = 0;
+                $modgr->modgr5 = 0;
+
+                if(!$modgr->save())
+                    throw new Exception('Ошибка добавления модуля');
+            }
+
+            $trans->commit();
+        }catch (Exception $error){
+            $trans->rollback();
+            throw $error;
+        }
     }
 }
