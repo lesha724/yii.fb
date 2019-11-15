@@ -35,6 +35,7 @@ class Mod extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+		    array('mod1', 'required'),
 			array('mod2, mod3, mod4, mod6', 'numerical', 'integerOnly'=>true),
 			array('mod5', 'length', 'max'=>400),
 			array('mod7, mod8', 'length', 'max'=>20),
@@ -60,14 +61,14 @@ class Mod extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'mod1' => 'Mod1',
-			'mod2' => 'Mod2',
-			'mod3' => 'Mod3',
-			'mod4' => 'Mod4',
-			'mod5' => 'Mod5',
-			'mod6' => 'Mod6',
-			'mod7' => 'Mod7',
-			'mod8' => 'Mod8',
+			'mod1' => '#',
+			'mod2' => 'US',
+			'mod3' => tt('Тип'),
+			'mod4' => tt('Сортировка'),
+			'mod5' => tt('Название модуля'),
+			'mod6' => tt('Максимум баллов'),
+			'mod7' => tt('Дата начала'),
+			'mod8' => tt('Дата окончания'),
 		);
 	}
 

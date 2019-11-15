@@ -2,5 +2,5 @@
 /**
  * @var ProgressController $this
  * @var ModuleForm $model
- * @var Mod $module
+ * @var Modgr $module
  */

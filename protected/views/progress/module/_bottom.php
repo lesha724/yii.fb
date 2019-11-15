@@ -4,7 +4,7 @@
  * @var ModuleForm $model
  */
 
-$html  = '<div class="row-fluid" style="margin-bottom:2%">';
+$html  = '<div class="row-fluid">';
 $html .= '<div class="span3 ace-select">';
 $html .= CHtml::activeLabel($model, 'countModules');
 $html .= CHtml::activeNumberField($model, 'countModules', [

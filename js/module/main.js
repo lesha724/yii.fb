@@ -4,8 +4,7 @@ $(document).ready(function(){
 
     initFilterForm($spinner1);
 
-    $('#ModuleForm_countModules').change(function(){
-        alert(1);
+    $('#ModuleForm_countModules').change(function(){aw
         submitForm();
     });
 
@@ -19,4 +18,11 @@ $(document).ready(function(){
         $form.append($field);
         $form.submit();
     }
+
+    $('.btn-select-module').click(function(e){
+        e.preventDefault();
+        var $tr = $(this).parents('tr');
+        $('#ModuleForm_module').val($tr.data('id'));
+        $('#filter-form').submit();
+    });
 });

@@ -11,7 +11,7 @@
  * @property integer $modgr5
  *
  * The followings are the available model relations:
- * @property Mod $modgr20
+ * @property Mod $module
  * @property Gr $modgr30
  * @property Pd $modgr40
  * @property Pd $modgr50
@@ -35,7 +35,7 @@ class Modgr extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('modgr1, modgr2, modgr3, modgr4, modgr5', 'numerical', 'integerOnly'=>true),
+			array('modgr2, modgr3, modgr4, modgr5', 'numerical', 'integerOnly'=>true),
 		);
 	}
 
@@ -47,7 +47,7 @@ class Modgr extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'modgr20' => array(self::BELONGS_TO, 'Mod', 'modgr2'),
+			'module' => array(self::BELONGS_TO, 'Mod', 'modgr2'),
 			'modgr30' => array(self::BELONGS_TO, 'Gr', 'modgr3'),
 			'modgr40' => array(self::BELONGS_TO, 'Pd', 'modgr4'),
 			'modgr50' => array(self::BELONGS_TO, 'Pd', 'modgr5'),
@@ -61,11 +61,11 @@ class Modgr extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'modgr1' => 'Modgr1',
-			'modgr2' => 'Modgr2',
-			'modgr3' => 'Modgr3',
-			'modgr4' => 'Modgr4',
-			'modgr5' => 'Modgr5',
+			'modgr1' => '#',
+			'modgr2' => tt('Модуль'),
+			'modgr3' => tt('Группа'),
+			'modgr4' => tt('Преподаватель 1'),
+			'modgr5' => tt('Преподаватель 2'),
 		);
 	}
 

@@ -38,7 +38,7 @@ class ModuleForm extends CFormModel
     {
         return array(
             array('discipline, countModules, module', 'numerical'),
-            array('module', 'exist', 'className'=>'Mod', 'attributeName'=>'mod1'),
+            array('module', 'exist', 'className'=>'Modgr', 'attributeName'=>'modgr1'),
             array('discipline, group', 'required'),
             array('group', 'validateGroup')
         );
@@ -218,7 +218,7 @@ SQL;
 
     /**
      * Список модулей
-     * @return array
+     * @return Modgr[]
      */
     public function getModules(){
         if(empty($this->group))
@@ -226,11 +226,17 @@ SQL;
 
         list($us1, $group) = $this->getGroupParams();
 
-        $modules = Mod::model()->findAllByAttributes(array('mod2' =>$us1));
+        $modules = Modgr::model()->findAllBySql(<<<SQL
+            SELECT modgr.* from modgr join mod on (modgr2 = mod1) where mod2=:US1 and modgr3=:GR1
+SQL
+        , array(
+            ':US1' => $us1,
+            ':GR1' => $group
+        ));
 
         $result = [];
         foreach ($modules as $module){
-            $result[$module->mod1] = $module;
+            $result[$module->modgr1] = $module;
         }
         return $result;
     }
@@ -251,7 +257,7 @@ SQL;
                 $modules = array();
                 for ($i = 1; $i <= $this->countModules; $i++) {
                     $mod = new Mod();
-                    $mod->mod1 = new CDbExpression('GEN_ID(GEN_MOD, 1)');
+                    $mod->mod1 = Yii::app()->db->createCommand('select gen_id(GEN_MOD, 1) from rdb$database')->queryScalar();
                     $mod->mod2 = $us1;
                     $mod->mod3 = $i == $this->countModules ? 1 : 0;
                     $mod->mod4 = $i;
@@ -263,15 +269,18 @@ SQL;
             }
 
             foreach ($modules as $module){
+                if(!empty(Modgr::model()->findByAttributes(array('modgr2'=> $us1, 'modgr3' => $group))))
+                    continue;
+
                 $modgr = new Modgr();
-                $modgr->modgr1 = new CDbExpression('GEN_ID(GEN_MODGR, 1)');
+                $modgr->modgr1 = Yii::app()->db->createCommand('select gen_id(GEN_MODGR, 1) from rdb$database')->queryScalar();
                 $modgr->modgr2 = $module->mod1;
                 $modgr->modgr3 = $group;
-                $modgr->modgr4 = 0;
+                $modgr->modgr4 = $this->_getPd1();
                 $modgr->modgr5 = 0;
 
                 if(!$modgr->save())
-                    throw new Exception('Ошибка добавления модуля');
+                    throw new Exception('Ошибка добавления модуля #'.$module->mod1);
             }
 
             $trans->commit();
@@ -279,5 +288,35 @@ SQL;
             $trans->rollback();
             throw $error;
         }
+    }
+
+    /**
+     * @return int
+     * @throws CException
+     */
+    private function _getPd1(){
+        list($us1, $group) = $this->getGroupParams();
+
+        $sql = <<<SQL
+            select first 1 nr6
+            from sg
+               inner join gr on (sg.sg1 = gr.gr2)
+               inner join ug on (gr.gr1 = ug.ug2)
+               inner join nr on (ug.ug1 = nr.nr1)
+               inner join us on (nr.nr2 = us.us1)
+               inner join sem on (us.us3 = sem.sem1)
+               inner join uo on (us.us2 = uo.uo1)
+               inner join pd on (nr.nr6 = pd.pd1 and pd2=:P1)
+            where us4 in (5,6,8) and sem3=:YEAR and sem5=:SEM and uo3=:D1 and us1=:US1 and gr1=:GR1
+SQL;
+
+        return (int) Yii::app()->db->createCommand($sql)->queryScalar(array(
+            ':US1' => $us1,
+            ':GR1' => $group,
+            ':P1' => $this->_teacherId,
+            ':D1' => $this->discipline,
+            ':SEM' => Yii::app()->session['sem'],
+            ':YEAR' => Yii::app()->session['year']
+        ));
     }
 }
