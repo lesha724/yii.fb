@@ -36,6 +36,10 @@ class Modgr extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('modgr2, modgr3, modgr4, modgr5', 'numerical', 'integerOnly'=>true),
+            array('modgr5', 'exist', 'className'=>'Pd', 'attributeName'=>'pd1'),
+            array('modgr4', 'exist', 'className'=>'Pd', 'attributeName'=>'pd1'),
+            array('modgr3', 'exist', 'className'=>'Gr', 'attributeName'=>'gr1'),
+            array('modgr2', 'exist', 'className'=>'Mod', 'attributeName'=>'mod1'),
 		);
 	}
 

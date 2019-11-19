@@ -10,25 +10,28 @@ $students = $model->getStudents();
 echo CHtml::openTag('table', array(
     'id' => 'marks',
     'class' => 'table table-hover table-condensed table-bordered',
-    'data-url' => Yii::app()->createUrl('progress/changeMark')
+    'data-url' => Yii::app()->createUrl('progress/changeMark'),
+    'style' => 'width: 900px'
 ));
 
 $itog = null;
-echo CHtml::openTag('tbody');
+echo CHtml::openTag('thead');
 echo CHtml::openTag('tr');
-echo '<th>'.tt('№').'</th>';
-echo '<th>'.tt('ФИО').'</th>';
-echo '<th>'.tt('Номер зачетки').'</th>';
+echo '<th style="width: 25px">'.tt('№').'</th>';
+echo '<th style="width: 200px">'.tt('ФИО').'</th>';
+echo '<th style="width: 90px">'.tt('Номер зачетки').'</th>';
 foreach ($modules as $module) {
     if ($module->module->mod3 == 0)
-        echo '<th>' . $module->module->mod5 . '</th>';
+        echo '<th style="width: 70px">' . $module->module->mod5 . '</th>';
     else
         $itog = $module;
 }
-echo '<th>'.tt('Общее количество').'</th>';
-echo '<th>'.(empty($itog) ? tt('Экзамен') : $itog->module->mod5).'</th>';
-echo '<th>'.tt('Итог').'</th>';
+echo '<th style="width: 70px">'.tt('Общее количество').'</th>';
+echo '<th style="width: 70px">'.(empty($itog) ? tt('Экзамен') : $itog->module->mod5).'</th>';
+echo '<th style="width: 70px">'.tt('Итог').'</th>';
 echo CHtml::closeTag('tr');
+echo CHtml::closeTag('thead');
+echo CHtml::openTag('tbody');
 $i = 1;
 foreach ($students as $student){
     echo CHtml::openTag('tr');
@@ -80,3 +83,19 @@ foreach ($students as $student){
 }
 echo CHtml::closeTag('tbody');
 echo CHtml::closeTag('table');
+
+Yii::app()->clientScript->registerCss('style', <<<CSS
+    .input-mark, .input-exam-mark {
+        width: 60px;
+    }
+    #marks thead>tr {
+        background-image: linear-gradient(to bottom,#f8f8f8,#dddcdc);
+    }
+    .summ {
+        background-color: #fcf8e3;
+    }
+    .itog-summ{
+        background-color: #dff0d8;
+    }
+CSS
+);

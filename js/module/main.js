@@ -108,7 +108,7 @@ $(document).ready(function(){
 
             var mark = $(this).val();
 
-            if (!isNaN(mark))
+            if (!isNaN(mark) && mark)
                 total += parseInt(mark);
         });
         $('#marks .summ[data-st1=' + st1 + ']').text(total);
@@ -117,7 +117,7 @@ $(document).ready(function(){
 
             var mark = $(this).val();
 
-            if (!isNaN(mark))
+            if (!isNaN(mark) && mark)
                 total += parseInt(mark);
         });
         $('#marks .itog-summ[data-st1=' + st1 + ']').text(total);

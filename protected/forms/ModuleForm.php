@@ -206,7 +206,7 @@ SQL;
      *
      * @return array
      */
-    private function getGroupParams(){
+    public function getGroupParams(){
         if(empty($this->group))
             return array(null, null);
         return explode('/', $this->group);

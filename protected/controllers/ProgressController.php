@@ -14,7 +14,7 @@ class ProgressController extends Controller
         return array(
             array('allow',
                 'actions' => array(
-                    'module', 'changeField', 'changeMark'
+                    'module', 'changeField', 'changeMark', 'autocomplete', 'changeTeacher'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -306,5 +306,69 @@ class ProgressController extends Controller
        Yii::app()->end(CJSON::encode(array(
            'message' => 'ok'
        )));
+    }
+
+    /**
+     * Изменение параметров модуля
+     * @throws CHttpException
+     * @throws CException
+     */
+    public function actionChangeTeacher(){
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $id = Yii::app()->request->getParam('id', null);
+        $value = Yii::app()->request->getParam('value', null);
+
+        if($id==null || $value==null)
+            throw new CHttpException(400, tt('Не все данные переданы'));
+
+        $module = Modgr::model()->findByPk($id);
+        if(empty($module))
+            throw new CHttpException(400, tt('Не найден модуль'));
+
+        $form = new ModuleForm(Yii::app()->user->dbModel->p1);
+        if(!$form->checkAccessForMod($module->module->mod1))
+            throw new CHttpException(403, tt('Доступ запрещен'));
+
+        $module->modgr5 = $value;
+
+        if(!$module->save())
+            throw new CHttpException(500, tt('Ошибка сохранения'));
+
+        Yii::app()->end(CJSON::encode(array(
+            'message' => 'ok'
+        )));
+    }
+
+    /**
+     * Поиск преподователя
+     * @throws CHttpException
+     */
+    public function actionAutocomplete($k1)
+    {
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $query = Yii::app()->request->getParam('query', null);
+
+        $suggestions = array();
+
+        $teachers = P::model()->findTeacherChairByName($k1,$query);
+
+        foreach($teachers as $tch)
+        {
+            $suggestions[] = array(
+                'value' => SH::getShortName($tch['p3'], $tch['p4'], $tch['p5']). ' '.$tch['dol2']. ' '.round($tch['pd6'], 2).' '.tt('ст.'),
+                'id'    => $tch['pd1']
+            );
+        }
+
+        $res = array(
+            'query'       => $query,
+            'suggestions' => $suggestions,
+        );
+
+        Yii::app()->end(CJSON::encode($res));
     }
 }
