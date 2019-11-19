@@ -237,8 +237,21 @@ class ProgressController extends Controller
         if($mark < 0)
             throw new CHttpException(400, tt('Оценка должна быть больше 0'));
 
-        if($moduleModel->module->mod6 > 0 && $mark > $moduleModel->module->mod6)
+        $mod = $moduleModel->module;
+        if($mod->mod6 > 0 && $mark > $mod->mod6)
             throw new CHttpException(400, tt('Оценка должна быть ниже максимального балла'));
+
+        $currentDate = new DateTime();
+        if(!empty($mod->mod7)){
+            $date = new DateTime($mod->mod7);
+            if($date>$currentDate)
+                throw new CHttpException(400, tt('Дата начала модуля еще не наступила'));
+        }
+        if(!empty($mod->mod8)){
+            $date = new DateTime($mod->mod8);
+            if($date<$currentDate)
+                throw new CHttpException(400, tt('Дата конца модуля уже прошла'));
+        }
 
         $markModel = Mods::model()->findByAttributes(array('mods1' => $module, 'mods2' => $st1));
         if(empty($markModel))
