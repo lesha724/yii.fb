@@ -336,7 +336,7 @@ SQL;
         $us = Us::model()->findByPk($us1);
 
         $sql = <<<SQL
-            select st2, st3, st4, st.st1 from LISTST(current_timestamp,:YEAR,:SEM,5,0,0,0,:UO1,0)
+            select st2, st3, st4, st.st1, st5 from LISTST(current_timestamp,:YEAR,:SEM,5,0,0,0,:UO1,0)
                 INNER JOIN st on (st.st1 = LISTST.st1)
             WHERE gr1=:GR1 ORDER BY st2 COLLATE UNICODE
 SQL;

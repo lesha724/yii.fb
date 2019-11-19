@@ -16,6 +16,7 @@ echo CHtml::openTag('tbody');
 echo CHtml::openTag('tr');
 echo '<th>'.tt('№').'</th>';
 echo '<th>'.tt('ФИО').'</th>';
+echo '<th>'.tt('Номер зачетки').'</th>';
 foreach ($modules as $module)
     if($module->module->mod3 == 0)
         echo '<th>'.$module->module->mod5.'</th>';
@@ -28,6 +29,7 @@ foreach ($students as $student){
     echo CHtml::openTag('tr');
         echo '<td>'.$i.'</td>';
         echo '<td>'.$student->fullName.'</td>';
+        echo '<td>'.$student->st5.'</td>';
         $markAll = 0;
         $marks = $model->getModuleMarks($student->st1);
         $itog = null;
