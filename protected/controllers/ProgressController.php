@@ -274,7 +274,7 @@ class ProgressController extends Controller
         if($id==null || $field==null)
             throw new CHttpException(400, tt('Не все данные переданы'));
 
-        if(!in_array($field, array('mod5', 'mod6', 'mod7', 'mod8')) || !is_string($value))
+        if(!in_array($field, array('mod5', 'mod6')) || !is_string($value))
             throw new CHttpException(400, tt('Ошибка входящих данных'));
 
         $module = Mod::model()->findByPk($id);
@@ -282,7 +282,7 @@ class ProgressController extends Controller
             throw new CHttpException(400, tt('Не найден модуль'));
 
         $form = new ModuleForm(Yii::app()->user->dbModel->p1);
-        if(!$form->checkAccessForModule($module))
+        if(!$form->checkAccessForMod($module->mod1))
             throw new CHttpException(403, tt('Доступ запрещен'));
 
         $module->$field = $value;

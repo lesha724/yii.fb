@@ -13,6 +13,8 @@
  * @property string $mod7
  * @property string $mod8
  *
+ * @property-read string $mod3Str
+ *
  * The followings are the available model relations:
  * @property Us $mod20
  * @property Modgr[] $modgrs
@@ -82,4 +84,11 @@ class Mod extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+    /**
+     * @return string
+     */
+	public function getMod3Str(){
+	    return $this->mod3 == 1 ? tt('Итоговый модуль') : tt('Модуль');
+    }
 }

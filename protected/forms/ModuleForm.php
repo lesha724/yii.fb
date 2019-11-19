@@ -379,6 +379,35 @@ SQL;
     }
 
     /**
+     * Проверка доступа к модулю
+     * @param $mod1
+     * @return bool
+     * @throws CException
+     */
+    public function checkAccessForMod($mod1){
+        $sql = <<<SQL
+            select COUNT(*)
+            from sg
+               inner join gr on (sg.sg1 = gr.gr2)
+               inner join ug on (gr.gr1 = ug.ug2)
+               inner join nr on (ug.ug1 = nr.nr1)
+               inner join us on (nr.nr2 = us.us1)
+               inner join sem on (us.us3 = sem.sem1)
+               inner join uo on (us.us2 = uo.uo1)
+               inner join pd on (nr.nr6 = pd.pd1 and pd2=:P1)
+               inner join mod on (mod.mod2 = us.us1)
+            where us4 in (5,6,8) and sem3=:YEAR and sem5=:SEM and mod1=:MODULE
+SQL;
+
+        return (int) Yii::app()->db->createCommand($sql)->queryScalar(array(
+                ':P1' => $this->_teacherId,
+                ':MODULE' => $mod1,
+                ':SEM' => Yii::app()->session['sem'],
+                ':YEAR' => Yii::app()->session['year']
+            )) > 0;
+    }
+
+    /**
      * Оценки студента
      * @param $st1
      * @return Mods[]
