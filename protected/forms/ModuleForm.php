@@ -18,11 +18,6 @@ class ModuleForm extends CFormModel
     /**
      * @var int
      */
-    public $module;
-
-    /**
-     * @var int
-     */
     public $countModules = 0;
 
     /**
@@ -37,9 +32,11 @@ class ModuleForm extends CFormModel
     public function rules()
     {
         return array(
-            array('discipline, countModules, module', 'numerical'),
-            array('module', 'exist', 'className'=>'Modgr', 'attributeName'=>'modgr1'),
+            array('discipline, countModules', 'numerical'),
             array('discipline, group', 'required'),
+            /**
+             * @see validateGroup()
+             */
             array('group', 'validateGroup')
         );
     }
@@ -86,7 +83,6 @@ class ModuleForm extends CFormModel
         return array(
             'discipline'=>tt('Дисциплина'),
             'group'=>tt('Группа'),
-            'module'=>tt('Модуль'),
             'countModules'=>tt('Количество модулей'),
         );
     }
@@ -241,6 +237,10 @@ SQL
         return $result;
     }
 
+    /**
+     * @throws CException
+     * @throws CHttpException
+     */
     public function createModules()
     {
         if(empty($this->group))
@@ -249,6 +249,8 @@ SQL
         list($us1, $group) = $this->getGroupParams();
 
         $modules = Mod::model()->findAllByAttributes(array('mod2' =>$us1));
+
+        $pd1 = $this->_getPd1();
 
         $trans = Yii::app()->db->beginTransaction();
 
@@ -261,11 +263,15 @@ SQL
                     $mod->mod2 = $us1;
                     $mod->mod3 = $i == $this->countModules ? 1 : 0;
                     $mod->mod4 = $i;
-                    $mod->mod5 = 'Модуль №'.$i;
+                    $mod->mod5 = $i == $this->countModules ? 'Итоговый модуль' :'Модуль №'.$i;
+                    $mod->mod7 = null;
+                    $mod->mod8 = null;
                     if(!$mod->save())
                         throw new Exception('Ошибка добавления модуля');
                     $modules[] = $mod;
                 }
+
+
             }
 
             foreach ($modules as $module){
@@ -276,7 +282,7 @@ SQL
                 $modgr->modgr1 = Yii::app()->db->createCommand('select gen_id(GEN_MODGR, 1) from rdb$database')->queryScalar();
                 $modgr->modgr2 = $module->mod1;
                 $modgr->modgr3 = $group;
-                $modgr->modgr4 = $this->_getPd1();
+                $modgr->modgr4 = $pd1;
                 $modgr->modgr5 = 0;
 
                 if(!$modgr->save())
@@ -318,5 +324,91 @@ SQL;
             ':SEM' => Yii::app()->session['sem'],
             ':YEAR' => Yii::app()->session['year']
         ));
+    }
+
+    /**
+     * Список студентов
+     * @return St[]
+     */
+    public function getStudents(){
+
+        list($us1, $group) = $this->getGroupParams();
+        $us = Us::model()->findByPk($us1);
+
+        $sql = <<<SQL
+            select st2, st3, st4, st.st1 from LISTST(current_timestamp,:YEAR,:SEM,5,0,0,0,:UO1,0)
+                INNER JOIN st on (st.st1 = LISTST.st1)
+            WHERE gr1=:GR1 ORDER BY st2 COLLATE UNICODE
+SQL;
+        return St::model()->findAllBySql($sql,array(
+            ':UO1' => $us->us2,
+            ':GR1' => $group,
+            ':SEM' => Yii::app()->session['sem'],
+            ':YEAR' => Yii::app()->session['year']
+        ));
+    }
+
+    /**
+     * Проверка доступа к модулю
+     * @param $modgr1
+     * @return bool
+     * @throws CException
+     */
+    public function checkAccessForModule($modgr1){
+        $sql = <<<SQL
+            select COUNT(*)
+            from sg
+               inner join gr on (sg.sg1 = gr.gr2)
+               inner join ug on (gr.gr1 = ug.ug2)
+               inner join nr on (ug.ug1 = nr.nr1)
+               inner join us on (nr.nr2 = us.us1)
+               inner join sem on (us.us3 = sem.sem1)
+               inner join uo on (us.us2 = uo.uo1)
+               inner join pd on (nr.nr6 = pd.pd1 and pd2=:P1)
+               inner join mod on (mod.mod2 = us.us1)
+               inner join modgr on (modgr.modgr2 = mod.mod1 and modgr.modgr3=gr.gr1)
+            where us4 in (5,6,8) and sem3=:YEAR and sem5=:SEM and modgr1=:MODULE
+SQL;
+
+        return (int) Yii::app()->db->createCommand($sql)->queryScalar(array(
+            ':P1' => $this->_teacherId,
+            ':MODULE' => $modgr1,
+            ':SEM' => Yii::app()->session['sem'],
+            ':YEAR' => Yii::app()->session['year']
+        )) > 0;
+    }
+
+    /**
+     * Оценки студента
+     * @param $st1
+     * @return Mods[]
+     */
+    public function getModuleMarks($st1){
+        list($us1, $group) = $this->getGroupParams();
+
+        $sql = <<<SQL
+            select mods.*
+            from mod
+               inner join modgr on (modgr.modgr2 = mod.mod1 and modgr.modgr3=:GR1)
+               inner join mods on (mods1 = modgr1 and mods2=:ST1)
+               inner join us on (mod2 = us.us1)
+               inner join sem on (us.us3 = sem.sem1)
+            where us4 in (5,6,8) and sem3=:YEAR and sem5=:SEM and mod2=:US1
+SQL;
+        $list = Mods::model()->findAllBySql($sql,array(
+            ':US1' => $us1,
+            ':ST1' => $st1,
+            ':GR1' => $group,
+            ':SEM' => Yii::app()->session['sem'],
+            ':YEAR' => Yii::app()->session['year']
+        ));
+
+        $result = array();
+
+        foreach ($list as $mods){
+            $result[$mods->mods1] = $mods;
+        }
+
+        return $result;
     }
 }

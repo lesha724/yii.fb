@@ -2,107 +2,75 @@
 /**
  * @var ProgressController $this
  * @var ModuleForm $model
- * @var $modules Modgr[]
+ * @var Modgr[] $modules
  */
 
-$this->widget('bootstrap.widgets.TbGridView', array(
-    'dataProvider' => new CArrayDataProvider($modules, array(
-        'keyField' => 'modgr1'
-    )),
-    'rowHtmlOptionsExpression' => 'array("data-id"=>$data->modgr1, "data-module"=>$data->modgr2)',
-    'type' => 'striped bordered',
-    'columns' => array(
-        array(
-            'header' => Mod::model()->getAttributeLabel('mod5'),
-            'type' => 'raw',
-            'value' => function ($data){
-                /**
-                 * @var $data Modgr
-                 */
-                return CHtml::textField('name-'.$data->modgr1, $data->module->mod5, array(
-                    'class' => 'input-module-name'
-                ));
-            }
-        ),
-        array(
-            'header' => Mod::model()->getAttributeLabel('mod6'),
-            'type' => 'raw',
-            'value' => function ($data){
-                /**
-                 * @var $data Modgr
-                 */
-                return CHtml::numberField('max-'.$data->modgr1, $data->module->mod6, array(
-                    'class' => 'input-module-max'
-                ));
-            }
-        ),
-        array(
-            'header' => Mod::model()->getAttributeLabel('mod7'),
-            'type' => 'raw',
-            'value' => function ($data){
-                /**
-                 * @var $data Modgr
-                 */
-                return CHtml::dateField('max-'.$data->modgr1, $data->module->mod7, array(
-                    'class' => 'input-module-date-start'
-                ));
-            }
-        ),
-        array(
-            'header' => Mod::model()->getAttributeLabel('mod8'),
-            'type' => 'raw',
-            'value' => function ($data){
-                /**
-                 * @var $data Modgr
-                 */
-                return CHtml::dateField('max-'.$data->modgr1, $data->module->mod8, array(
-                    'class' => 'input-module-date-start'
-                ));
-            }
-        ),
-        array(
-            'header' => Modgr::model()->getAttributeLabel('modgr4'),
-            'value' => function ($data){
-                /**
-                 * @var $data Modgr
-                 */
-                if(empty($data->modgr4))
-                    return '';
-                $teacher = Pd::model()->getTeacherAndChairByPd1($data->modgr4);
-                if(empty($teacher))
-                    return '';
+$students = $model->getStudents();
 
-                return SH::getShortName($teacher['p3'], $teacher['p4'], $teacher['p5']);
-            }
-        ),
-        array(
-            'header' => Modgr::model()->getAttributeLabel('modgr5'),
-            'value' => function ($data){
-                /**
-                 * @var $data Modgr
-                 */
-                if(empty($data->modgr5))
-                    return '';
-                $teacher = Pd::model()->getTeacherAndChairByPd1($data->modgr5);
-                if(empty($teacher))
-                    return '';
-
-                return SH::getShortName($teacher['p3'], $teacher['p4'], $teacher['p5']);
-            }
-        ),
-        array(
-            'class'=>'bootstrap.widgets.TbButtonColumn',
-            'template'=>'{select}',
-            'buttons'=>array
-            (
-                'select' => array(
-                    'label'=>tt('Выбрать модуль'),
-                    'icon'=>'icon-check bigger-120',
-                    'url'=>'#',
-                    'options' => array(
-                        'class' => 'btn btn-mini btn-warning btn-select-module'),
-                ),
-            ),
-        )
-    )
+echo CHtml::openTag('table', array(
+    'id' => 'marks',
+    'class' => 'table table-hover table-condensed table-bordered',
+    'data-url' => Yii::app()->createUrl('progress/changeMark')
 ));
+echo CHtml::openTag('tbody');
+echo CHtml::openTag('tr');
+echo '<th>'.tt('№').'</th>';
+echo '<th>'.tt('ФИО').'</th>';
+foreach ($modules as $module)
+    if($module->module->mod3 == 0)
+        echo '<th>'.$module->module->mod5.'</th>';
+echo '<th>'.tt('Общее количество').'</th>';
+echo '<th>'.tt('Экзамен').'</th>';
+echo '<th>'.tt('Итог').'</th>';
+echo CHtml::closeTag('tr');
+$i = 1;
+foreach ($students as $student){
+    echo CHtml::openTag('tr');
+        echo '<td>'.$i.'</td>';
+        echo '<td>'.$student->fullName.'</td>';
+        $markAll = 0;
+        $marks = $model->getModuleMarks($student->st1);
+        $itog = null;
+        foreach ($modules as $module) {
+            if($module->module->mod3 == 1){
+                $itog = $module;
+                continue;
+            }
+
+            if(isset($marks[$module->modgr1])) {
+                $mark = $marks[$module->modgr1]->mods3;
+                $markAll+=$mark;
+            }
+            else
+                $mark = '';
+
+            echo '<td>' . CHtml::numberField('mark-' . $student->st1 . '-' . $module->modgr1, $mark, array(
+                    'data-st1' => $student->st1,
+                    'data-module' => $module->modgr1,
+                    'style' => 'margin-bottom:0px',
+                    'class' => 'input-mark'
+                )) . '</td>';
+        }
+        echo '<td class="summ" data-st1="'.$student->st1.'">'.$markAll.'</td>';
+        if(!empty($itog)){
+            if(isset($marks[$itog->modgr1])) {
+                $mark = $marks[$itog->modgr1]->mods3;
+                $markAll+=$mark;
+            }
+            else
+                $mark = '';
+
+            echo '<td>' . CHtml::numberField('mark-' . $student->st1 . '-' . $itog->modgr1, $mark, array(
+                    'data-st1' => $student->st1,
+                    'data-module' => $itog->modgr1,
+                    'style' => 'margin-bottom:0px',
+                    'class' => 'input-exam-mark'
+                )) . '</td>';
+        }else
+            echo '<td></td>';
+        echo '<td class="itog-summ" data-st1="'.$student->st1.'">'.$markAll.'</td>';
+    echo CHtml::closeTag('tr');
+    $i++;
+}
+echo CHtml::closeTag('tbody');
+echo CHtml::closeTag('table');

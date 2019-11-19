@@ -14,7 +14,7 @@ class ProgressController extends Controller
         return array(
             array('allow',
                 'actions' => array(
-                    'module'
+                    'module', 'changeField', 'changeMark'
                 ),
                 'expression' => 'Yii::app()->user->isAdmin || Yii::app()->user->isTch',
             ),
@@ -205,5 +205,93 @@ class ProgressController extends Controller
         $this->render('module', array(
             'model' => $form,
         ));
+    }
+
+    /**
+     * Изменение Оценки
+     * @throws CHttpException
+     * @throws CException
+     */
+    public function actionChangeMark()
+    {
+        if (!Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $st1 = Yii::app()->request->getParam('st1', null);
+        $mark = Yii::app()->request->getParam('mark', null);
+        $module = Yii::app()->request->getParam('module', null);
+
+        if($st1==null || $module==null || $mark == null)
+            throw new CHttpException(400, tt('Не все данные переданы'));
+
+        $moduleModel = Modgr::model()->findByPk($module);
+        if(empty($moduleModel))
+            throw new CHttpException(400, tt('Не найден модуль'));
+
+        //TODO: добавить проврку что студент есть в данной группе
+
+        $form = new ModuleForm(Yii::app()->user->dbModel->p1);
+        if(!$form->checkAccessForModule($module))
+            throw new CHttpException(403, tt('Доступ запрещен'));
+
+        if($mark < 0)
+            throw new CHttpException(400, tt('Оценка должна быть больше 0'));
+
+        if($moduleModel->module->mod6 > 0 && $mark > $moduleModel->module->mod6)
+            throw new CHttpException(400, tt('Оценка должна быть ниже максимального балла'));
+
+        $markModel = Mods::model()->findByAttributes(array('mods1' => $module, 'mods2' => $st1));
+        if(empty($markModel))
+        {
+            $markModel = new Mods();
+            $markModel->mods1 = $module;
+            $markModel->mods2 = $st1;
+        }
+
+        $markModel->mods3 = $mark;
+        $markModel->mods4 = date('Y-m-d H:i:s');
+        $markModel->mods5 = Yii::app()->user->id;
+
+        if(!$markModel->save())
+            throw new CHttpException(500, tt('Ошибка сохранения оценки'));
+
+        Yii::app()->end(CJSON::encode(array('message' => 'OK')));
+    }
+
+    /**
+     * Изменение параметров модуля
+     * @throws CHttpException
+     * @throws CException
+     */
+    public function actionChangeField(){
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $field = Yii::app()->request->getParam('field', null);
+        $id = Yii::app()->request->getParam('id', null);
+        $value = Yii::app()->request->getParam('value', null);
+
+        if($id==null || $field==null)
+            throw new CHttpException(400, tt('Не все данные переданы'));
+
+        if(!in_array($field, array('mod5', 'mod6', 'mod7', 'mod8')) || !is_string($value))
+            throw new CHttpException(400, tt('Ошибка входящих данных'));
+
+        $module = Mod::model()->findByPk($id);
+        if(empty($module))
+            throw new CHttpException(400, tt('Не найден модуль'));
+
+        $form = new ModuleForm(Yii::app()->user->dbModel->p1);
+        if(!$form->checkAccessForModule($module))
+            throw new CHttpException(403, tt('Доступ запрещен'));
+
+        $module->$field = $value;
+
+        if(!$module->save())
+            throw new CHttpException(500, tt('Ошибка сохранения'));
+
+       Yii::app()->end(CJSON::encode(array(
+           'message' => 'ok'
+       )));
     }
 }

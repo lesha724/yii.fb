@@ -26,7 +26,14 @@ $html .= $form->label($model, 'group');
 $html .= $form->dropDownList($model, 'group', $groups, $options);
 $html .= '</div>';
 
-$html .= $form->hiddenField($model, 'module');
+if(!empty($model->group)) {
+    $html .= '<div class="span2 ace-select">';
+    $html .= $form->label($model, 'countModules');
+    $html .= $form->numberField($model, 'countModules', [
+        'disabled' => $model->countModules > 0
+    ]);
+    $html .= '</div>';
+}
 
 $html .= '</fieldset>';
 
