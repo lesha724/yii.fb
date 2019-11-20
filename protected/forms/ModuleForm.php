@@ -194,7 +194,7 @@ SQL;
         list($us1, $group) = $this->getGroupParams();
 
         $sql = <<<SQL
-            SELECT COUNT(*) FROM MOD INNER JOIN MODGR on (MODGR2 = MOD1) WHERE MOD2 = :US1 and MODGR3 = :GR1
+            SELECT COUNT(*) FROM MOD INNER JOIN MODGR on (MODGR2 = MOD1) WHERE MOD2 = :US1 and MODGR3 = :GR1 AND MOD3=0
 SQL;
         return (int) Yii::app()->db->createCommand($sql)->queryScalar(array(
             ':US1' => $us1,
@@ -256,14 +256,15 @@ SQL
 
         try {
             if (empty($modules)) {
+                $countModules = $this->countModules+1;
                 $modules = array();
-                for ($i = 1; $i <= $this->countModules; $i++) {
+                for ($i = 1; $i <= $countModules; $i++) {
                     $mod = new Mod();
                     $mod->mod1 = Yii::app()->db->createCommand('select gen_id(GEN_MOD, 1) from rdb$database')->queryScalar();
                     $mod->mod2 = $us1;
-                    $mod->mod3 = $i == $this->countModules ? 1 : 0;
+                    $mod->mod3 = $i == $countModules ? 1 : 0;
                     $mod->mod4 = $i;
-                    $mod->mod5 = $i == $this->countModules ? 'Итоговый модуль' :'Модуль №'.$i;
+                    $mod->mod5 = $i == $countModules ? 'Итоговый модуль' :'Модуль №'.$i;
                     $mod->mod7 = null;
                     $mod->mod8 = null;
                     if(!$mod->save())

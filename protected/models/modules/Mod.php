@@ -91,4 +91,22 @@ class Mod extends CActiveRecord
 	public function getMod3Str(){
 	    return $this->mod3 == 1 ? tt('Итоговый модуль') : tt('Модуль');
     }
+
+    /**
+     * Проверка что максимальный бал не привыашет 100
+     * @param $value
+     * @return bool
+     * @throws CException
+     */
+    public function checkMaxBall($value){
+        $summ = (int) Yii::app()->db->createCommand(<<<SQL
+            SELECT SUM(MOD6) FROM mod where MOD2=:US1 and MOD1!=:MOD1
+SQL
+        )->queryScalar(array(
+            ':US1' => $this->mod2,
+            ':MOD1' => $this->mod1
+        ));
+
+        return ($summ + $value) > 100;
+    }
 }

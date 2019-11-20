@@ -4,7 +4,7 @@ $(document).ready(function(){
 
     initFilterForm($spinner1);
 
-    $('#ModuleForm_countModules').change(function(){aw
+    $('#ModuleForm_countModules').change(function(){
         submitForm();
     });
 
