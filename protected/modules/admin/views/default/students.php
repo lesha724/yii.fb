@@ -83,6 +83,10 @@ $this->widget('bootstrap.widgets.TbGridView', array(
             ),
             'value'=>' !in_array($data["st_status"],array(4,2)) ? "<label class=\'label label-success\'>".tt("Активный")."</label>" : "<label class=\'label\'>".tt("Выпущен")."</label>"'
         ),
+        'gr3'=>array(
+            'name'=>'gr3',
+            'value'=>'$data->getGroupName()'
+        ),
         array(
             'class'=>'CButtonColumn',
             'template'=>'{st165} {grants} {enter} {delete} ',
