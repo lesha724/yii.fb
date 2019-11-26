@@ -1060,6 +1060,7 @@ SQL;
         $sql = <<<SQL
             select u1, st1,pe2,pe3,pe4,std20, std3, gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28
 			FROM st
+			    INNER JOIN pe ON(st200=pe1)
 			    INNER JOIN users on (u6 = st1 and u5 =0)
 				INNER JOIN std ON(st1=std2)
 				INNER JOIN gr ON(std3=gr1)
@@ -1075,8 +1076,8 @@ SQL;
 					or st120 CONTAINING :QUERY4
 					or st123 CONTAINING :QUERY5
 				)
-            group by u1,st1,pe2,pe3,pe4,std20, std3, gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28
-			order by st2 collate UNICODE,st3,st4
+            group by u1, st1,pe2,pe3,pe4,std20, std3, gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr28
+			order by pe2 collate UNICODE,pe3,pe4
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':QUERY1', $query);
