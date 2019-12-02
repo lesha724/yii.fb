@@ -89,7 +89,7 @@ class SearchStudents extends St
         $criteria->select = 'std11 as st_status, gr3 as gr3, gr19 as gr19,gr20 as gr20,gr21 as gr21,gr22 as gr22,gr23 as gr23,gr24 as gr24,gr28 as gr28, std20 as std20';
         $with = array(
             'account' => array(
-                'select' => 'u2, u3, u4'
+                'select' => 'u2, u4'
             ),
             'person' => array(
                 'select' => 'pe2, pe3, pe4, pe20'
@@ -163,7 +163,6 @@ class SearchStudents extends St
                         'desc'=>'pe20 DESC',
                     ),
                     'account.u2',
-                    'account.u3',
                     'account.u4',
                 ),
             )
@@ -182,7 +181,7 @@ class SearchStudents extends St
         $criteria->select = array('std11 as st_status');
         $with = array(
             'parentsAccount' => array(
-                'select' => 'u2, u3, u4'
+                'select' => 'u2, u4'
             ),
             'person' => array(
                 'select' => 'pe2, pe3, pe4, pe20'
@@ -251,7 +250,6 @@ class SearchStudents extends St
                         'desc'=>'pe20 DESC',
                     ),
                     'parentsAccount.u2',
-                    'parentsAccount.u3',
                     'parentsAccount.u4',
                 ),
             )
