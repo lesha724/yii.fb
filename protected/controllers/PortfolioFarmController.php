@@ -733,7 +733,6 @@ HTML;
             'stpeduwork8 is null'
         );
 
-
         $this->redirect(array('index'));
     }
 
