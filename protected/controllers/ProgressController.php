@@ -306,7 +306,7 @@ class ProgressController extends Controller
         if(!$form->checkAccessForMod($module->mod1))
             throw new CHttpException(403, tt('Доступ запрещен'));
 
-        if($module->checkMaxBall($value))
+        if($field == 'mod6' && $module->checkMaxBall($value) )
             throw new CHttpException(400, tt('Сумма баллов по модулям не должна быть больше 100'));
 
         $module->$field = $value;
