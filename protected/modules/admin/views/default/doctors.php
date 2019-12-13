@@ -56,25 +56,25 @@ HTML;
             array(
                 'header' => 'Login',
                 'filter' => CHtml::textField('login', Yii::app()->request->getParam('login')),
-                'name'   => 'account.u2',
-                'value'  => '! empty($data->account)
-                                ? $data->account->u2
+                'name'   => 'accountDoctor.u2',
+                'value'  => '! empty($data->accountDoctor)
+                                ? $data->accountDoctor->u2
                                 : ""',
             ),
             array(
                 'header' => 'Email',
                 'filter' => CHtml::textField('email', Yii::app()->request->getParam('email')),
-                'name'   => 'account.u4',
-                'value'  => '! empty($data->account)
-                                ? $data->account->u4
+                'name'   => 'accountDoctor.u4',
+                'value'  => '! empty($data->accountDoctor)
+                                ? $data->accountDoctor->u4
                                 : ""',
             ),
             array(
                 'header' => tt('Статус'),
                 'filter' => CHtml::dropDownList('status', Yii::app()->request->getParam('status'), array(''=>'',1=>tt('Администратор'))),
-                'name'   => 'account.u7',
-                'value'  => '! empty($data->account)
-                                ? $data->account->u7 == 1 ? "<span class=\"label label-warning\">'.tt("Администратор").'</span>" : ""
+                'name'   => 'accountDoctor.u7',
+                'value'  => '! empty($data->accountDoctor)
+                                ? $data->accountDoctor->u7 == 1 ? "<span class=\"label label-warning\">'.tt("Администратор").'</span>" : ""
                                 : ""',
                 'type'   => 'raw'
             ),
@@ -101,22 +101,22 @@ HTML;
                     'enter' => array(
                         'label'=>'<i class="icon-share bigger-120"></i>',
                         'imageUrl'=>false,
-                        'url'=>'Yii::app()->createAbsoluteUrl("/admin/default/enter", array("id" => !empty($data->account)? $data->account->u1: "-1"))',
+                        'url'=>'Yii::app()->createAbsoluteUrl("/admin/default/enter", array("id" => !empty($data->accountDoctor)? $data->accountDoctor->u1: "-1"))',
                         'options' => array(
                             'class' => 'btn btn-mini btn-primary',
                             'title'=>tt('Авторизироваться'),
                         ),
-                        'visible'=>'!empty($data->account)'
+                        'visible'=>'!empty($data->accountDoctor)'
                     ),
                     'delete' => array(
                         'label'=>'<i class="icon-trash bigger-120"></i>',
                         'imageUrl'=>false,
-                        'url'=>'Yii::app()->createAbsoluteUrl("/admin/default/deleteUser", array("id" => !empty($data->account)? $data->account->u1: "-1"))',
+                        'url'=>'Yii::app()->createAbsoluteUrl("/admin/default/deleteUser", array("id" => !empty($data->accountDoctor)? $data->accountDoctor->u1: "-1"))',
                         'options' => array(
                             'class' => 'btn btn-mini btn-danger',
                             'title'=>tt('Удалить'),
                         ),
-                        'visible'=>'!empty($data->account)'
+                        'visible'=>'!empty($data->accountDoctor)'
                     ),
                 ),
             ),

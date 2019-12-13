@@ -88,16 +88,17 @@ $this->breadcrumbs=array(
             </label>
         </div>
     </div>
-
+    <?php /* if(Yii::app()->core->universityCode==U_XNMU):*/?>
     <div class="control-group">
         <?=$form->label($model, 'grants9', array('class' => 'control-label'))?>
         <div class="controls">
             <label>
                 <?php
-                echo CHtml::checkBox('Grants[grants9]', $model->grants9,
+                echo CHtml::radioButtonList('Grants[grants9]', $model->grants9,
                     array(
-                        'class' => 'ace ace-switch',
-                        'uncheckValue' => '0'
+                        0 => tt('Нет доступа'),
+                        1 => tt('Запись'),
+                        2 => tt('Чтение')
                     )
                 )
                 ?>
@@ -105,6 +106,7 @@ $this->breadcrumbs=array(
             </label>
         </div>
     </div>
+    <?php /*endif;*/ ?>
 
     <div class="form-actions">
         <button type="submit" class="btn btn-info">

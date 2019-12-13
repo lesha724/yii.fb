@@ -9,6 +9,7 @@
 /**
  * @var QuizController $this
  * @var TimeTableForm $model
+ * @var $readOnly boolean
  */
 
 $gr = Gr::model()->findByPk($model->group);
@@ -21,7 +22,8 @@ else:
         <div class="span12">
             <?=$this->renderPartial('index/_list', array(
                 'model' => $model,
-                'group' => $gr
+                'group' => $gr,
+                'readOnly' => $readOnly
             ));?>
         </div>
     </div>

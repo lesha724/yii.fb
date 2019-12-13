@@ -42,6 +42,10 @@
  * @property string $pe63
  * @property integer $pe64
  *
+ * @property string $pe65
+ * @property string $pe66
+ * @property string $pe67
+ *
  * @property string $fullName
  * @property string $shortName
  *
@@ -94,19 +98,19 @@ class Person extends CActiveRecord
 		return array(
 			array('pe1, pe8, pe12, pe21, pe30, pe32, pe33, pe50, pe54, pe59, pe64', 'numerical', 'integerOnly'=>true),
 			array('pe2, pe4, pe5', 'length', 'max'=>140),
+            array('pe67', 'length', 'max'=>150),
+            array('pe66', 'length', 'max'=>15),
+            array('pe65', 'length', 'max'=>20),
 			array('pe3, pe34, pe35, pe36, pe37', 'length', 'max'=>200),
 			array('pe6, pe7', 'length', 'max'=>80),
-			array('pe9, pe25, pe31, pe51, pe52, pe60, pe61', 'length', 'max'=>8),
+			array('pe9, pe25, pe31, pe51, pe52, pe60, pe61', 'length', 'max'=>20),
 			array('pe10, pe11', 'length', 'max'=>300),
 			array('pe20, pe63', 'length', 'max'=>60),
 			array('pe22', 'length', 'max'=>40),
 			array('pe23', 'length', 'max'=>100),
 			array('pe24', 'length', 'max'=>600),
 			array('pe53', 'length', 'max'=>400),
-			array('pe62', 'length', 'max'=>4),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
-			array('pe1, pe2, pe3, pe4, pe5, pe6, pe7, pe8, pe9, pe10, pe11, pe12, pe20, pe21, pe22, pe23, pe24, pe25, pe30, pe31, pe32, pe33, pe34, pe35, pe36, pe37, pe50, pe51, pe52, pe53, pe54, pe59, pe60, pe61, pe62, pe63, pe64', 'safe', 'on'=>'search'),
+			array('pe62', 'length', 'max'=>4)
 		);
 	}
 
@@ -134,43 +138,9 @@ class Person extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'pe1' => 'Pe1',
-			'pe2' => 'Pe2',
-			'pe3' => 'Pe3',
-			'pe4' => 'Pe4',
-			'pe5' => 'Pe5',
-			'pe6' => 'Pe6',
-			'pe7' => 'Pe7',
-			'pe8' => 'Pe8',
-			'pe9' => 'Pe9',
-			'pe10' => 'Pe10',
-			'pe11' => 'Pe11',
-			'pe12' => 'Pe12',
-			'pe20' => 'Pe20',
-			'pe21' => 'Pe21',
-			'pe22' => 'Pe22',
-			'pe23' => 'Pe23',
-			'pe24' => 'Pe24',
-			'pe25' => 'Pe25',
-			'pe30' => 'Pe30',
-			'pe31' => 'Pe31',
-			'pe32' => 'Pe32',
-			'pe33' => 'Pe33',
-			'pe34' => 'Pe34',
-			'pe35' => 'Pe35',
-			'pe36' => 'Pe36',
-			'pe37' => 'Pe37',
-			'pe50' => 'Pe50',
-			'pe51' => 'Pe51',
-			'pe52' => 'Pe52',
-			'pe53' => 'Pe53',
-			'pe54' => 'Pe54',
-			'pe59' => 'Pe59',
-			'pe60' => 'Pe60',
-			'pe61' => 'Pe61',
-			'pe62' => 'Pe62',
-			'pe63' => 'Pe63',
-			'pe64' => 'Pe64',
+			'pe65' => tt('Дата флюрографии'),
+			'pe66' => tt('№ флюрографии'),
+			'pe67' => tt('Место прохождения флюрографии'),
 		);
 	}
 

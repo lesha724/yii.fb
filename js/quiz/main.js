@@ -49,4 +49,46 @@ $(document).ready(function(){
 
         return false;
     })
+
+    $(document).on('change', '.pe-input', function(){
+
+        var $that = $(this);
+        var data  = {
+            pe1  : $that.data('pe1'),
+            field  : $that.data('field'),
+            value : $that.val()
+        };
+        var url   = $('#oprrez-list').data('pe-url');
+
+        $that.prop('disabled', 'disabled');
+
+        $.ajax({
+            type: 'POST',
+            url:  url,
+            data: data,
+            success:function(data){
+                if (data == 'ok') {
+                    addGritter( 'Удачно', 'Сохранено', 'success')
+                } else
+                    addGritter('Ошибка', '"Ошибка сохранения', 'error');
+                $that.prop('disabled', false);
+            },
+            error:function(jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status == 500) {
+                    addGritter( 'Ошибка', 'Internal error: ' + jqXHR.responseText, 'error')
+                } else {
+                    if (jqXHR.status == 403) {
+                        addGritter('Ошибка','Access error: ' + jqXHR.responseText, 'error')
+                    } else {
+                        addGritter('Ошибка','Unexpected error: ' + jqXHR.responseText, 'error')
+                    }
+                }
+                $that.prop('disabled', false);
+            },
+
+            dataType:'html'
+        });
+
+        return false;
+    })
 });

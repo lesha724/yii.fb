@@ -10,6 +10,7 @@
  * @var QuizController $this
  * @var TimeTableForm $model
  * @var Gr $group
+ * @var $readOnly boolean
  */
 $dataProvider=new CArrayDataProvider(St::model()->getOpprezByGroup($group->gr1),array(
     'sort'=>false,
@@ -25,7 +26,8 @@ $this->widget('bootstrap.widgets.TbGridView', array(
     'filter' => null,
     'type' => 'striped bordered',
     'htmlOptions'=>array(
-        'data-url' => Yii::app()->createUrl('quiz/create')
+        'data-url' => Yii::app()->createUrl('quiz/create'),
+        'data-pe-url' => Yii::app()->createUrl('quiz/updateFlur')
     ),
     'columns' => array(
         array(
@@ -37,11 +39,46 @@ $this->widget('bootstrap.widgets.TbGridView', array(
             'value'=>function($data) use (&$list){
                 $select =  empty($data["oprrez"])? null : $data["oprrez"]->oprrez30->opr1;
 
-                return CHtml::dropDownList('oprrez-student-'.$data['st1'], $select, $list, array(
+                $html = '<div>';
+
+                $html.= CHtml::dropDownList('oprrez-student-'.$data['st1'], $select, $list, array(
                     'data-st1'=>$data['st1'],
                     'class' => 'oprrez-select',
                     'prompt' => tt('--Выберите вариант--')
                 ));
+
+                $html .= '<div>';
+
+                $person = Person::model()->findByPk($data['st200']);
+
+                $html .= '<div>';
+                $html .= '<div class="span3">';
+                $html .= CHtml::label($person->getAttributeLabel('pe65'), 'pe65-student-'.$data['st1']);
+                $html .= CHtml::dateField('pe65-student-'.$data['st1'], empty($person->pe65) ? null : date('Y-m-d', strtotime($person->pe65)), array(
+                    'data-pe1'=>$data['st200'],
+                    'data-field'=>'pe65',
+                    'class' => 'pe-input'
+                ));
+                $html .= '</div>';
+                $html .= '<div class="span3">';
+                $html .= CHtml::label($person->getAttributeLabel('pe66'), 'pe65-student-'.$data['st1']);
+                $html .= CHtml::textField('pe66-student-'.$data['st1'], $person->pe66, array(
+                    'data-pe1'=>$data['st200'],
+                    'data-field'=>'pe66',
+                    'class' => 'pe-input'
+                ));
+                $html .= '</div>';
+                $html .= '<div class="span6">';
+                $html .= CHtml::label($person->getAttributeLabel('pe67'), 'pe65-student-'.$data['st1']);
+                $html .= CHtml::textField('pe67-student-'.$data['st1'], $person->pe67, array(
+                    'data-pe1'=>$data['st200'],
+                    'data-field'=>'pe67',
+                    'class' => 'pe-input'
+                ));
+                $html .= '</div>';
+                $html .= '</div>';
+
+                return $html;
             },
             'type'=>'raw',
         ),

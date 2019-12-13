@@ -1,12 +1,5 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: neffa
- * Date: 16.11.2018
- * Time: 14:27
- */
-
-/**
  * Опросы
  * Class QuizController
  */
@@ -16,7 +9,7 @@ class QuizController extends Controller
 
         return array(
             'accessControl',
-            'checkPermission +index,create',
+            'checkPermission +index,create, updateFlur',
             'postOnly +save,cancel'
         );
     }
@@ -27,9 +20,10 @@ class QuizController extends Controller
             array('allow',
                 'actions' => array(
                     'index',
-                    'create'
+                    'create',
+                    'updateFlur'
                 ),
-                'expression' => 'Yii::app()->user->isDoctor || Yii::app()->user->isTch ',
+                'expression' => 'Yii::app()->user->isDoctor || Yii::app()->user->isAdmin',
             ),
             array('allow',
                 'actions' => array(
@@ -60,7 +54,7 @@ class QuizController extends Controller
             if (empty($grants))
                 throw new CHttpException(403, 'Invalid request. You don\'t have access to the service.');
 
-            if ($grants->getGrantsFor(Grants::QUIZ) != 1)
+            if (!in_array($grants->getGrantsFor(Grants::QUIZ), array(1, 2)))
                 throw new CHttpException(403, 'Invalid request. You don\'t have access to the service.');
         }
         $filterChain->run();
@@ -68,6 +62,8 @@ class QuizController extends Controller
 
     /**
      * Опросник
+     * Отображение результатов и форма измнения
+     * ТОлько для докторов ХНМУ
      */
     public function actionIndex()
     {
@@ -78,18 +74,61 @@ class QuizController extends Controller
             $model->attributes=$_REQUEST['TimeTableForm'];
 
         $this->render('index', array(
-            'model'      => $model
+            'model'      => $model,
+            'readOnly' => Yii::app()->user->dbModel->grants->getGrantsFor(Grants::QUIZ) != 1
         ));
     }
 
     /**
      * Опросник
+     * Сохранения флюрография
+     *  ТОлько для докторов ХНМУ
+     * @throws CHttpException
+     */
+    public function actionUpdateFlur()
+    {
+        if(!Yii::app()->user->isAdmin) {
+            $grants = Yii::app()->user->dbModel->grants;
+            if ($grants->getGrantsFor(Grants::QUIZ) != 1)
+                throw new CHttpException(403, tt('Нет доступа на запись'));
+        }
+
+        $pe1 = Yii::app()->request->getParam('pe1', null);
+        $field = Yii::app()->request->getParam('field', null);
+        $value = Yii::app()->request->getParam('value', null);
+
+        if(empty($pe1) || empty($field) || empty($value))
+            throw new CHttpException(400, 'Ошибка входящих данных');
+
+        if(!in_array($field, array('pe65', 'pe66', 'pe67')))
+            throw new CHttpException(400, 'Ошибка входящих данных');
+
+        $person = Person::model()->findByPk($pe1);
+        if(empty($person))
+            throw new CHttpException(500, 'Ошибка входящих данных');
+
+        if($person->saveAttributes(array(
+            $field => $value
+        )))
+            Yii::app()->end('ok');
+        else
+            throw new CHttpException(500, 'Ошибка сохранения');
+    }
+
+    /**
+     * Опросник
+     * Сохранения результата
+     *  ТОлько для докторов ХНМУ
      * @throws CHttpException
      */
     public function actionCreate()
     {
+        if(!Yii::app()->user->isAdmin) {
+            $grants = Yii::app()->user->dbModel->grants;
+            if ($grants->getGrantsFor(Grants::QUIZ) != 1)
+                throw new CHttpException(403, tt('Нет доступа на запись'));
+        }
         $model = new CreateOprrezForm();
-
         $model->st1 = Yii::app()->request->getParam('st1', null);
         $model->opr1 = Yii::app()->request->getParam('opr1', null);
 

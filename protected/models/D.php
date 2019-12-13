@@ -606,7 +606,7 @@ SQL;
         return $disciplines;
     }
 
-    public function getAspName($nakn4)
+    /*public function getAspName($nakn4)
     {
         switch($nakn4){
             case 0:	$name = tt('Нагрузка по аспирантуре'); break;
@@ -619,7 +619,7 @@ SQL;
         }
 
         return $name;
-    }
+    }*/
 
     public function getDopForWorkLoad(FilterForm $model)
     {
@@ -872,6 +872,7 @@ SQL;
 
         return $name;
     }
+
     /*
      * группы по факультеты курсу и семестру для фильтра в списки виртуальных групп
      */
@@ -910,23 +911,6 @@ SQL;
             return;
 
         list($sg40, $sg41) = $this->getSg40Sg41($st1);
-        //$sg40=2014;
-        //$sg41=1;
-        /*$sql = <<<SQL
-			select us1,d2
-			   from u
-				  inner join uo on (u.u1 = uo.uo22)
-				  inner join us on (uo.uo1 = us.us2)
-				  inner join nr on (us.us1 = nr.nr2)
-				  inner join ug on (nr.nr1 = ug.ug3)
-				  inner join sem on (us.us3 = sem.sem1)
-				  inner join ucgn on (ug.ug4 = ucgn.ucgn1)
-				  inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
-				  inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
-				  inner join d on (uo.uo3 = d.d1)
-			   where us4 = 8 and ucsn2=:ST1 and u38<=current_timestamp and u39>=current_timestamp and sem3=:SG40
-			   group by us1,d2
-SQL;*/
 
         $sql = <<<SQL
         select LISTST.us1,d2
@@ -1033,23 +1017,9 @@ SQL;
      * @param $gr1 int
      * @param $sem1 int
      * @return mixed
+     * @throws CException
      */
     public function getDisciplinesForAttendanceStatistic($gr1, $sem1){
-        /*$sql = <<<SQL
-        SELECT d1,d2 from ucsn
-            inner join ucgns on (ucsn.ucsn1 = ucgns.ucgns1)
-            inner join ucgn on (ucgns.ucgns2 = ucgn.ucgn1)
-            inner join st on (ucsn.ucsn2 = st.st1)
-            INNER JOIN std on (st.st1 = std.std2)
-            inner join ucxg on (ucgn.ucgn1 = ucxg.ucxg2)
-            inner join ucx on (ucxg.ucxg1 = ucx.ucx1)
-            inner join uo on (ucx.ucx1 = uo.uo19)
-            inner join elg on (uo.uo1 = elg.elg2)
-            inner join d on (uo.uo3 = d.d1)
-        WHERE std3 = :GR1 and elg3 = :SEM1 and STD11 in (0,5,6,8) and (STD7 is null)
-        GROUP BY d1,d2 order by d2 collate UNICODE
-SQL;*/
-
         $sql = <<<SQL
         SELECT d1,d2
             from LISTST(current_timestamp,0,0,2,:GR1,0,:SEM1,0,0)
@@ -1074,6 +1044,7 @@ SQL;
      * @param $table
      * @param $us6
      * @return string
+     * @throws CException
      */
     public function getConvertByUs6($table, $us6){
         $sql = <<<SQL

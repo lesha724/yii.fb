@@ -485,7 +485,7 @@ SQL;
 	public function getListGroup($gr1)
     {
         $sql=<<<SQL
-            SELECT st1,pe2,pe3,pe4,st5,sk3
+            SELECT st1,pe2,pe3,pe4,st5,sk3, st200
 			 FROM ST
 			   INNER JOIN pe on (st200 = pe1)
 			   INNER JOIN STD ON (ST.ST1 = STD.STD2)

@@ -701,6 +701,9 @@ class DefaultController extends AdminController
 
     public function actionDGrants($id)
     {
+        if($this->universityCode!=U_XNMU)
+            throw new CHttpException(403, 'Access denied');
+
         if (empty($id))
             throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
@@ -720,7 +723,7 @@ class DefaultController extends AdminController
         if (isset($_REQUEST['Users'])) {
             $user->attributes = $_REQUEST['Users'];
 
-            $user->u7 = isset($_REQUEST['role']) ? (int)$_REQUEST['role'] : 0;
+            $user->u7 = 0;
 
             if($user->save())
                 $this->redirect(array('doctors'));

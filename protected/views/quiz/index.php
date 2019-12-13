@@ -9,6 +9,7 @@
 /**
  * @var QuizController $this
  * @var TimeTableForm $model
+ * @var $readOnly boolean
  */
 $this->pageHeader=tt('Опрос');
 $this->breadcrumbs=array(
@@ -31,5 +32,6 @@ HTML;
 
 if (! empty($model->group))
     $this->renderPartial('index/_bottom', array(
-        'model' => $model
+        'model' => $model,
+        'readOnly' => $readOnly
     ));
