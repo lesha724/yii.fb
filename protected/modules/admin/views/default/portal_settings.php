@@ -524,5 +524,43 @@ Yii::app()->clientScript->registerScript('sem-start', $js);
         </div>
     </div>
 
+    <div class="span6">
+        <div class="widget-box">
+            <div class="widget-header">
+                <h4><?=tt('Запись на дисциплины')?></h4>
+                <span class="widget-toolbar">
+                <a data-action="collapse" href="#">
+                    <i class="icon-chevron-up"></i>
+                </a>
+            </span>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <?php
+                    $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+                        'id'=>'ps-alert',
+                        'htmlOptions' => array('class' => 'form-horizontal'),
+                        'action' => '#'
+                    ));
+                    ?>
+
+                    <div class="control-group">
+                        <?=CHtml::checkBox('', PortalSettings::model()->getSettingFor(PortalSettings::BLOCK_SUBSCRIPTION_CANCEL), $checkboxStyle)?>
+                        <span class="lbl"> <?=tt('Запрет отмены записи')?></span>
+                        <?=CHtml::hiddenField('settings['.PortalSettings::BLOCK_SUBSCRIPTION_CANCEL.']', PortalSettings::model()->getSettingFor(PortalSettings::BLOCK_SUBSCRIPTION_CANCEL))?>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-info btn-small">
+                            <i class="icon-ok bigger-110"></i>
+                            <?=tt('Сохранить')?>
+                        </button>
+                    </div>
+
+                    <?php $this->endWidget();?>
+                </div>
+            </div>
+        </div>
+    </div>
 <?php
 

@@ -319,6 +319,9 @@ class OtherController extends Controller
 
     public function actionCancelSubscription()
     {
+        if(PortalSettings::model()->getSettingFor(PortalSettings::BLOCK_SUBSCRIPTION_CANCEL) == 1)
+            throw new CHttpException(403, tt('Отмена записи запрещена'));
+
         if(St::model()->enableSubcription(Yii::app()->user->dbModel->st1)) {
             $model = St::model()->findByPk(Yii::app()->user->dbModel->st1);
             if(!empty($model)) {

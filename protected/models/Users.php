@@ -38,6 +38,11 @@ class Users extends CActiveRecord
     const FOTO_ST1  = 1;
     const FOTO_P1   = 0;
 
+    /**
+     * @var bool нужно ли отправлять сообщенеи об измненении пароля
+     */
+    public $sendChangePasswordMail = true;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -278,7 +283,8 @@ class Users extends CActiveRecord
 		$password = $this->u3;
 		$this->u3 = crypt($this->u3,$this->u9);
 
-		$this->sendChangePasswordMail($password);
+		if($this->sendChangePasswordMail)
+		    $this->sendChangePasswordMail($password);
 	}
 
 	private function sendChangePasswordMail($password){

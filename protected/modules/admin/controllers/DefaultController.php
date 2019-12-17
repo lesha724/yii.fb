@@ -658,7 +658,9 @@ class DefaultController extends AdminController
 
         if (isset($_REQUEST['Users'])) {
             $user->attributes = $_REQUEST['Users'];
-            $user->save();
+            $user->sendChangePasswordMail = false;
+            if($user->save())
+                $this->redirect(array('students'));
         }
 
         $this->render('stGrants', array(
@@ -688,6 +690,7 @@ class DefaultController extends AdminController
             $user->attributes = $_REQUEST['Users'];
 
             $user->u7 = isset($_REQUEST['role']) ? (int)$_REQUEST['role'] : 0;
+            $user->sendChangePasswordMail = false;
 
             if($user->save())
                 $this->redirect(array('teachers'));

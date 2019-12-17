@@ -118,6 +118,11 @@ class PortalSettings extends CActiveRecord
      */
     const MAX_MARK_QUIZ = 144;
 
+    /**
+     * @var int запрет отмены в записи
+     */
+    const BLOCK_SUBSCRIPTION_CANCEL = 145;
+
 
     /**
      * Для хранения настро
