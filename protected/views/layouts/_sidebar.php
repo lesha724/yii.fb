@@ -57,7 +57,8 @@
                 U_KNU,
                 U_HTEI,
                 U_SUM_AGR,
-                U_ODUVS
+                U_ODUVS,
+                U_KNUBA
             ));
         ?>
         <?php if($newMobile): ?>
