@@ -155,7 +155,28 @@ class ShortCodes extends CApplicationComponent
                 case 16: $type = tt('КнЧ'); break;
                 case 17: $type = tt('Конс'); break;
                 case 18: $type = tt('Пер'); break;
-                default: $type='';
+                case 30:
+                case 31:
+                case 32:
+                case 33:
+                case 34:
+                case 35:
+                case 36:
+                case 37:
+                case 38:
+                case 39:
+                case 40:
+                case 41:
+                case 42:
+                case 43:
+                case 44:
+                    $type = Yii::app()->db->createCommand(<<<SQL
+                        SELECT slo3 FROM slo WHERE slo1=:VAL
+SQL
+                    )->queryScalar(array(':VAL' => 'Гр'.$us4));
+                break;
+                default:
+                    $type='';
             }
         else
             $type = '-';
