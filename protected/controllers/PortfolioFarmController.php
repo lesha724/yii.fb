@@ -706,7 +706,10 @@ HTML;
                 'stportfolio7' => Yii::app()->user->id,
                 'stportfolio8' => date('Y-m-d H:i:s')
             ),
-            'stportfolio7 is null'
+            'stportfolio7 is null and stportfolio2=:ID',
+            array (
+                ':ID' => $id
+            )
         );
 
         Stpwork::model()->updateAll(
@@ -714,7 +717,10 @@ HTML;
                 'stpwork9' => Yii::app()->user->id,
                 'stpwork10' => date('Y-m-d H:i:s')
             ),
-            'stpwork9 is null'
+            'stpwork9 is null and stpwork2=:ID',
+            array (
+                ':ID' => $id
+            )
         );
 
         Stppart::model()->updateAll(
@@ -722,7 +728,10 @@ HTML;
                 'stppart12' => Yii::app()->user->id,
                 'stppart13' => date('Y-m-d H:i:s')
             ),
-            'stppart12 is null'
+            'stppart12 is null and stppart2=:ID',
+            array (
+                ':ID' => $id
+            )
         );
 
         Stpeduwork::model()->updateAll(
@@ -730,9 +739,11 @@ HTML;
                 'stpeduwork8' => Yii::app()->user->id,
                 'stpeduwork9' => date('Y-m-d H:i:s')
             ),
-            'stpeduwork8 is null'
+            'stpeduwork8 is null and stpeduwork2=:ID',
+            array (
+                ':ID' => $id
+            )
         );
-
 
         $this->redirect(array('index'));
     }
