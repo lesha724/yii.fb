@@ -1,4 +1,9 @@
 <?php
+/**
+ * @var $this Controller
+ * @var $model FilterForm
+ */
+
     Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/filter_form/default/discipline_group_type.js', CClientScript::POS_HEAD);
 
     $getGroupUrl = Yii::app()->createAbsoluteUrl('/progress/getGroups');
