@@ -298,7 +298,7 @@ SQL;
 
     public function getUstem7Arr()
     {
-        if(Yii::app()->core->universityCode == U_NMU)
+        if(in_array(Yii::app()->core->universityCode, [U_NMU, 60]))
             $sql = <<<SQL
                 select rz8 from rz group by rz8
 SQL;
