@@ -298,6 +298,10 @@ Yii::app()->clientScript->registerScript('portfolioFarm', <<<JS
             }
         });
     });
+    
+    $(document).on('change', '#AcceptProgressDataForm_accept', function(){
+        $(this).closest('form').submit();
+    });
 JS
    , CClientScript::POS_END );
 
@@ -312,14 +316,24 @@ if(Yii::app()->user->isTch){
     ));
 }
 
+if(Yii::app()->user->isStd && empty(Yii::app()->user->model->u16)){
+    $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', [
+        'action' => ['acceptEnter']
+    ]);
+
+    echo $form->checkBoxRow(new AcceptProgressDataForm(Yii::app()->user->model), 'accept');
+
+    $this->endWidget();
+}
+
 $this->widget('bootstrap.widgets.TbButton', array(
     'url'=>Yii::app()->createUrl('/portfolioFarm/print', array('id'=>$model->student)),
     'type'=>'primary',
     'icon'=>'print',
     'label'=>tt('Печать')
 ));
-
 echo '<div class="alert alert-info">'.tt('Внимание! На печать выводятся только подтвержденные куратором или деканом данные.').'</div>';
+
 
 echo '<div class="page-header">
   <h3>1. '.tt('Резюме').'</h3>
@@ -650,7 +664,7 @@ echo tt('<div class="alert alert-info"><ul>Здесь можно размест�
 echo gridFiles(-1, $model->student);
 
 echo '<div class="page-header">
-  <h3 id="label-field-block5">5. '.tt('Портфолио професcиональной реализации').'</h3>
+  <h3 id="label-field-block5">5. '.tt('Портфолио профессиональной реализации').'</h3>
 </div>';
 
 $stpfwork = $student->getStpfwork();

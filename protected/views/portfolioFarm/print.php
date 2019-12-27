@@ -274,7 +274,7 @@ echo Yii::app()->controller->widget('zii.widgets.grid.CGridView', array(
     )
 ), true);
 
-echo '<h3>5. '.tt('Портфолио професcиональной реализации').'</h3>';
+echo '<h3>5. '.tt('Портфолио профессиональной реализации').'</h3>';
 
 $stpfwork = $student->getStpfwork();
 

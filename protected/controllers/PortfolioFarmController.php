@@ -11,7 +11,8 @@ class PortfolioFarmController extends Controller
     public function filters() {
         return array(
             'accessControl',
-            'checkPermission'
+            'checkPermission',
+            'u16 -index, accept, acceptEnter'
         );
     }
 
@@ -59,17 +60,16 @@ class PortfolioFarmController extends Controller
     }
 
     /**
-     * @return bool
+     * @param $filterChain
+     * @throws CHttpException
      */
-    public function beforeAction($action)
-    {
+    public function filterU16($filterChain){
         if (Yii::app()->user->isStd && empty(Yii::app()->user->model->u16))
         {
-            if($action->id != 'acceptEnter')
-                $this->redirect(['acceptEnter']);
-
+            throw new CHttpException(403, tt('Необходимо дать согласие на обработку персональных данных.'));
         }
-        return parent::beforeAction($action);
+
+        $filterChain->run();
     }
 
     /**
@@ -112,7 +112,7 @@ class PortfolioFarmController extends Controller
                 $this->redirect('index');
             }
         }
-        $this->render('acceptEnter',array('model'=>$model));
+        throw new CHttpException(403, tt('Необходимо дать согласие на обработку персональных данных.'));
     }
 
     /**

@@ -25,6 +25,8 @@ class AcceptProgressDataForm extends CFormModel
     {
         parent::__construct($scenario);
         $this->_user = $user;
+
+        $this->accept = !empty($user->u16);
     }
 
     /**
