@@ -1132,7 +1132,8 @@ SQL;
     /**
      * получить данные контракта
      */
-    public function getSk(){
+    public function getSk()
+    {
         $sql = <<<SQL
           SELECT first 1 sk.*
 			 FROM ST
@@ -1142,8 +1143,22 @@ SQL;
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':st1',  $this->st1);
+        $command->bindValue(':st1', $this->st1);
         return $command->queryRow();
+    }
 
+    /*
+     * Данные о будущем трудоустройестве для портфолио фарма
+     * @return Stpfwork
+     */
+    public function getStpfwork(){
+        $model = Stpfwork::model()->findByPk($this->st1);
+        if(empty($model)) {
+            $model = new Stpfwork();
+            $model->stpfwork1 = $this->st1;
+            $model->stpfwork2 = $model->stpfwork3 = '';
+        }
+
+        return $model;
     }
 }
