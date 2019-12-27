@@ -169,7 +169,7 @@ SQL;
             INNER JOIN ucgns on (ucgn1 = ucgns2)
             INNER JOIN (select ucsn1,ucsn2 from ucsn where ucsn2={$st1} and ucsn6=0) on (ucgns1 = ucsn1)
             WHERE
-                ucsn2 is not null and (
+                ucsn2 is not null and ucsn6=0 and (
                 (u1 in ({$subSql}))or
                 (u1 in (select u1 from u where u17 in ({$subSql})))or
                 (u1 in (select u1 from u where u17 in (select u1 from u where u17 in ({$subSql})))) or 
@@ -288,7 +288,7 @@ SQL;
             inner join ucgn on (ucxg2 = ucgn1)
             inner join ucgns on (ucgn1 = ucgns2)
             inner join ucsn on (ucgns1 = ucsn1)
-            where (uo22 = :U1_VIB_DISC) and (sem3 = :UCH_GOD1) and (sem5 = :SEMESTER1) and (ucgns5  = :UCH_GOD2) and (ucgns6 = :SEMESTER2) and (ucsn2=:ST1)
+            where (uo22 = :U1_VIB_DISC) and (sem3 = :UCH_GOD1) and (sem5 = :SEMESTER1) and (ucgns5  = :UCH_GOD2) and (ucgns6 = :SEMESTER2) and (ucsn2=:ST1) and ucsn6=0
             group by us2)
 SQL;
 
@@ -380,7 +380,7 @@ SQL;
                    inner join ucgn on (ucxg2 = ucgn1)
                    inner join ucgns on (ucgn1 = ucgns2)
                    inner join ucsn on (ucgns1 = ucsn1)
-                where (uo3=:d1) and (uo22 = :U1_VIB_DISC) and (sem3 = '{$uch_god}') and (sem5 = '{$semester}') and (ucgns5  = '{$uch_god}') and (ucgns6 = '{$semester}')
+                where (uo3=:d1) and (uo22 = :U1_VIB_DISC) and (sem3 = '{$uch_god}') and (sem5 = '{$semester}') and (ucgns5  = '{$uch_god}') and (ucgns6 = '{$semester}') and ucsn6=0
                 group by ucsn2)
 SQL;
         $command = Yii::app()->db->createCommand($sql);
@@ -405,7 +405,7 @@ SQL;
             inner join ucgn on (ucxg.ucxg2 = ucgn.ucgn1)
             inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
             inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
-            where (uo22 = (:U1_VIB_DISC)) and (sem3 = :UCH_GOD1) and (sem5 = :SEMESTER1) and (ucgns5  = :UCH_GOD2) and (ucgns6 = :SEMESTER2) and (ucsn2=:ST1)
+            where (uo22 = (:U1_VIB_DISC)) and (sem3 = :UCH_GOD1) and (sem5 = :SEMESTER1) and (ucgns5  = :UCH_GOD2) and (ucgns6 = :SEMESTER2) and (ucsn2=:ST1) and ucsn6=0
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
@@ -488,13 +488,13 @@ UPDATE ucgns SET
                  INNER JOIN ST ON (UCSN2 = ST1)
                  INNER JOIN STD on (st1=std2)
                  INNER JOIN SK ON (std26 = sk1)
-              WHERE sk3=0 and std7 is null and std24=0 and std11 in (0, 5, 6, 8) and ucsn1=:UCGNS1_VIB1)
+              WHERE sk3=0 and std7 is null and std24=0 and std11 in (0, 5, 6, 8) and ucsn1=:UCGNS1_VIB1 and ucsn6=0)
         ,ucgns4=(SELECT count( *) as KONTR
               FROM UCSN
                  INNER JOIN ST ON (UCSN2 = ST1)
                  INNER JOIN STD on (st1=std2)
                  INNER JOIN SK ON (std26 = sk1)
-              WHERE sk3=1 and std7 is null and std24=0 and std11 in (0, 5, 6, 8) and ucsn1=:UCGNS1_VIB2)
+              WHERE sk3=1 and std7 is null and std24=0 and std11 in (0, 5, 6, 8) and ucsn1=:UCGNS1_VIB2 and ucsn6=0)
       WHERE ucgns1=:UCGNS1_VIB3
 SQL;
             $params = array(
@@ -517,7 +517,7 @@ SQL;
         $sql = <<<SQL
             SELECT ucsn1 as KOD_UCGNS1
             FROM ucsn
-            WHERE ucsn2=:ST1 and ucsn4>=:DATA_NACHALA and ucsn5=0
+            WHERE ucsn2=:ST1 and ucsn4>=:DATA_NACHALA and ucsn5=0 and ucsn6=0
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
@@ -526,7 +526,7 @@ SQL;
         $codes  = $command->queryColumn();
 
         $sql = <<<SQL
-        DELETE FROM ucsn WHERE ucsn2=:ST1 and ucsn4>=:DATA_NACHALA and ucsn5=0
+        DELETE FROM ucsn WHERE ucsn2=:ST1 and ucsn4>=:DATA_NACHALA and ucsn5=0 and ucsn6=0
 SQL;
         $params = array(
             ':ST1' => $st1,
@@ -552,13 +552,13 @@ UPDATE ucgns SET
                INNER JOIN ST ON (UCSN2 = ST1)
                INNER JOIN STD on (st1=std2)
                INNER JOIN SK ON (std26 = sk1)
-            WHERE sk3=0 and std7 is null and std24=0 and std11 in (0, 5, 6, 8) and ucsn1=:UCGNS1_VIB1)
+            WHERE sk3=0 and std7 is null and std24=0 and std11 in (0, 5, 6, 8) and ucsn1=:UCGNS1_VIB1 and ucsn6=0)
       ,ucgns4=(SELECT count( *) as KONTR
             FROM UCSN
                INNER JOIN ST ON (UCSN2 = ST1)
                INNER JOIN STD on (st1=std2)
               INNER JOIN SK ON (std26 = sk1)
-            WHERE sk3=1 and std7 is null and std24=0 and std11 in (0, 5, 6, 8) and ucsn1=:UCGNS1_VIB2)
+            WHERE sk3=1 and std7 is null and std24=0 and std11 in (0, 5, 6, 8) and ucsn1=:UCGNS1_VIB2 and ucsn6=0)
      WHERE ucgns1=:UCGNS1_VIB3
 SQL;
 
@@ -587,7 +587,7 @@ SQL;
             inner join ucgn on (ucxg.ucxg2 = ucgn.ucgn1)
             inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
             inner join ucsn on (ucgns.ucgns1 = ucsn.ucsn1)
-            where ucsn2=:ST1 and ucsn4>=:DATA_NACHALA and ucx5=2
+            where ucsn2=:ST1 and ucsn4>=:DATA_NACHALA and ucx5=2 and ucsn6=0
             group by d2
             order by d2 collate UNICODE
 SQL;

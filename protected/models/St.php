@@ -540,7 +540,7 @@ SQL
                inner join std on (st.st1 = std.std2)
                inner join gr on (std.std3 = gr.gr1)
                inner JOIN SK ON (SK.SK1 = std.std26)
-            where ucgns5=:YEAR and ucgns6=:SEM and ucgn2=:GR1 and UCXG3=0 and std11<>1 and std4<=current_timestamp and (std7 is null or std7>=current_timestamp) and std24=0
+            where ucgns5=:YEAR and ucgns6=:SEM and ucgn2=:GR1 and UCXG3=0 and std11<>1 and std4<=current_timestamp and (std7 is null or std7>=current_timestamp) and std24=0 
             group by st1,pe1,pe2,pe3,pe4,st5,sk3,gr3, gr19,gr20,gr21,gr22,gr23,gr24,gr28
             order by pe2 collate UNICODE
 SQL;
