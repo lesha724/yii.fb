@@ -30,7 +30,7 @@ if(!empty($model->group)) {
     $html .= '<div class="span2 ace-select">';
     $html .= $form->label($model, 'countModules');
     $html .= $form->numberField($model, 'countModules', [
-        'disabled' => $model->countModules > 0,
+        //'disabled' => $model->countModules > 0,
         'style' => 'width:60px'
     ]);
     $html .= '</div>';

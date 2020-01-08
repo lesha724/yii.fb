@@ -195,6 +195,7 @@ class ProgressController extends Controller
      */
     public function actionModule(){
         $form = new ModuleForm(Yii::app()->user->dbModel->p1);
+        $form->unsetAttributes();
         if (isset($_REQUEST['ModuleForm']))
             $form->attributes=$_REQUEST['ModuleForm'];
 
@@ -203,8 +204,13 @@ class ProgressController extends Controller
                 throw new CHttpException(403, tt('Доступ запрещен'));
 
             $count = $form->getCountModules();
-            if($count > 0)
+            if($count > 0) {
                 $form->countModules = $count;
+
+                if($form->countModules > $count){
+                    $form->updateModules();
+                }
+            }
             else if($form->countModules > 0) {
                 $form->createModules();
             }
