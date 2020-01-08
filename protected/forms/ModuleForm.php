@@ -223,7 +223,7 @@ SQL;
         list($us1, $group) = $this->getGroupParams();
 
         $modules = Modgr::model()->findAllBySql(<<<SQL
-            SELECT modgr.* from modgr join mod on (modgr2 = mod1) where mod2=:US1 and modgr3=:GR1
+            SELECT modgr.* from modgr join mod on (modgr2 = mod1) where mod2=:US1 and modgr3=:GR1 order by mod4
 SQL
         , array(
             ':US1' => $us1,
@@ -238,6 +238,7 @@ SQL
     }
 
     /**
+     * Создание модулей
      * @throws CException
      * @throws CHttpException
      */
@@ -289,6 +290,75 @@ SQL
                 if(!$modgr->save())
                     throw new Exception('Ошибка добавления модуля #'.$module->mod1);
             }
+
+            $trans->commit();
+        }catch (Exception $error){
+            $trans->rollback();
+            throw $error;
+        }
+    }
+
+    /**
+     * Добавление модулей
+     * @throws CHttpException
+     * @throws CException
+     */
+    public function updateModules(){
+        if(empty($this->group))
+            throw new CHttpException(400);
+
+        list($us1, $group) = $this->getGroupParams();
+
+        $modules = Mod::model()->findAllByAttributes(array('mod2' =>$us1, 'mod3' => 0));
+
+        $count = count($modules);
+        if($this->countModules< $count)
+            throw new CHttpException(400, tt('Количество модулей нельзя уменьшить.'));
+
+        $pd1 = $this->_getPd1();
+
+        $trans = Yii::app()->db->beginTransaction();
+        try {
+            $newModules = [];
+            for ($i = $count + 1; $i <= $this->countModules; $i++){
+                $mod = new Mod();
+                $mod->mod1 = Yii::app()->db->createCommand('select gen_id(GEN_MOD, 1) from rdb$database')->queryScalar();
+                $mod->mod2 = $us1;
+                $mod->mod3 = 0;
+                $mod->mod4 = $i;
+                $mod->mod5 = 'Модуль №'.$i;
+                $mod->mod7 = null;
+                $mod->mod8 = null;
+                if(!$mod->save())
+                    throw new Exception('Ошибка добавления модуля');
+
+                $newModules[] = $mod;
+            }
+
+            foreach ($newModules as $module){
+                if(!empty(Modgr::model()->findByAttributes(array('modgr2'=> $us1, 'modgr3' => $group))))
+                    continue;
+
+                $modgr = new Modgr();
+                $modgr->modgr1 = Yii::app()->db->createCommand('select gen_id(GEN_MODGR, 1) from rdb$database')->queryScalar();
+                $modgr->modgr2 = $module->mod1;
+                $modgr->modgr3 = $group;
+                $modgr->modgr4 = $pd1;
+                $modgr->modgr5 = 0;
+
+                if(!$modgr->save())
+                    throw new Exception('Ошибка добавления модуля #'.$module->mod1);
+            }
+
+            Mod::model()->updateAll(
+                [
+                    'mod4' => $this->countModules + 1
+                ],
+                'mod2 = :us1 and mod3=1',
+                [
+                    ':us1' => $us1
+                ]
+            );
 
             $trans->commit();
         }catch (Exception $error){

@@ -205,8 +205,6 @@ class ProgressController extends Controller
 
             $count = $form->getCountModules();
             if($count > 0) {
-                $form->countModules = $count;
-
                 if($form->countModules > $count){
                     $form->updateModules();
                 }
