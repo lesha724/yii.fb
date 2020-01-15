@@ -32,7 +32,8 @@ class ModuleForm extends CFormModel
     public function rules()
     {
         return array(
-            array('discipline, countModules', 'numerical'),
+            array('discipline', 'numerical'),
+            array('countModules', 'numerical', 'min'=> 0),
             array('discipline, group', 'required'),
             /**
              * @see validateGroup()

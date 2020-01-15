@@ -207,10 +207,16 @@ class ProgressController extends Controller
             if($count > 0) {
                 if($form->countModules > $count){
                     $form->updateModules();
+                }else{
+                    $form->countModules = $count;
                 }
             }
-            else if($form->countModules > 0) {
-                $form->createModules();
+            else {
+                if ($form->countModules > 0 && $count == 0) {
+                    $form->createModules();
+                } else {
+                    $form->countModules = $count;
+                }
             }
         }
 
