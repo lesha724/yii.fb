@@ -118,6 +118,12 @@ Yii::app()->clientScript->registerScript('sem-start', $js);
                 </div>
 
                 <div class="control-group">
+                    <?=CHtml::checkBox('', PortalSettings::model()->getSettingFor(PortalSettings::ACCEPT_CANCEL_REGISTRATION), $checkboxStyle)?>
+                    <span class="lbl"> <?=tt('Разрешить скидывать регистрацию')?></span>
+                    <?=CHtml::hiddenField('settings['.PortalSettings::ACCEPT_CANCEL_REGISTRATION.']', PortalSettings::model()->getSettingFor(PortalSettings::ACCEPT_CANCEL_REGISTRATION))?>
+                </div>
+
+                <div class="control-group">
                     <?=CHtml::checkBox('', PortalSettings::model()->findByPk(101)->ps2, $checkboxStyle)?>
                     <span class="lbl"> <?=tt('Скрывать выбор языка')?></span>
                     <?=CHtml::hiddenField('settings[101]', PortalSettings::model()->findByPk(101)->ps2)?>

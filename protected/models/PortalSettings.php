@@ -123,7 +123,10 @@ class PortalSettings extends CActiveRecord
      */
     const BLOCK_SUBSCRIPTION_CANCEL = 145;
 
-
+    /**
+     * @var int разрешить зброс регистрации
+     */
+    const ACCEPT_CANCEL_REGISTRATION = 147;
     /**
      * Для хранения настро
      * @var array

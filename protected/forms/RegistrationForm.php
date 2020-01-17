@@ -49,8 +49,7 @@ class RegistrationForm extends CFormModel
             //'username' => tt('Имя пользователя'),
             'username' => tt('Логин (регистрозависимый)'),
             'password' => tt('Пароль'),
-            'password2' => tt('Повторите пароль'),
-            'verifyCode'=>'Verification Code',
+            'password2' => tt('Повторите пароль')
 		);
 	}
 

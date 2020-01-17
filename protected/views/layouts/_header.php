@@ -70,9 +70,8 @@
                                 </a>
                             </li>
                             <?php
-                            $ps102= PortalSettings::model()->findByPk(102)->ps2;
-                            if($ps102==0) {
-                            ?>
+                            if(PortalSettings::model()->getSettingFor(102)==0) {
+                                ?>
                                 <li>
                                     <a href="<?= Yii::app()->createUrl('site/registration') ?>" id="registration">
                                         <i class="icon-user"></i>
@@ -81,27 +80,37 @@
                                 </li>
                                 <?php
                             }
-                             $ps98 = PortalSettings::model()->findByPk(98)->ps2;
-                             if($ps98==0){
-                             ?>
-                                <li>
-                                    <a href="<?=Yii::app()->createUrl('site/registrationInternational')?>" id="registration-international">
-                                        <i class="icon-user"></i>
-                                        <?=tt('Регистрация иностр. граждан')?>
-                                    </a>
-                                </li>
-                             <?php
+                             if(PortalSettings::model()->getSettingFor(98)==0){
+                                 ?>
+                                    <li>
+                                        <a href="<?=Yii::app()->createUrl('site/registrationInternational')?>" id="registration-international">
+                                            <i class="icon-user"></i>
+                                            <?=tt('Регистрация иностр. граждан')?>
+                                        </a>
+                                    </li>
+                                <?php
                              }
-                             $ps103= PortalSettings::model()->findByPk(103)->ps2;
-                             if($ps103==0) {
-                             ?>
+                             if(PortalSettings::model()->getSettingFor(103)==0) {
+                                 ?>
+                                    <li>
+                                        <a href="<?=Yii::app()->createUrl('site/forgotPassword')?>" id="forgot-password">
+                                            <i class="icon-envelope"></i>
+                                            <?=tt('Забыл пароль')?>
+                                        </a>
+                                    </li>
+                                <?php
+                             }
+                             if(PortalSettings::model()->getSettingFor(PortalSettings::ACCEPT_CANCEL_REGISTRATION)==1) {
+                                 ?>
                                 <li>
-                                    <a href="<?=Yii::app()->createUrl('site/forgotPassword')?>" id="forgot-password">
-                                        <i class="icon-envelope"></i>
-                                        <?=tt('Забыл пароль')?>
+                                    <a href="<?=Yii::app()->createUrl('site/cancelRegistration')?>">
+                                        <i class="icon-remove"></i>
+                                        <?=tt('Отменить регистрацию')?>
                                     </a>
                                 </li>
-                             <?php }?>
+                                <?php
+                             }
+                             ?>
 
                         <?php else: ?>
 

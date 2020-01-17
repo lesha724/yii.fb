@@ -30,7 +30,8 @@ class SiteController extends Controller
                     'forgotPassword',
                     'login',
                     'registrationInternational',
-                    'registration'
+                    'registration',
+                    'cancelRegistration'
                 ),
                 'users'=>array('?'),
             ),
@@ -202,6 +203,7 @@ class SiteController extends Controller
     /**
      * @param $model UsersEmail
      * @throws CHttpException
+     * @throws CDbException
      */
     public function _sendCheckEmail($model){
         $url = Yii::app()->createAbsoluteUrl('site/acceptEmail', array('_token' => $model->ue3));
@@ -239,6 +241,7 @@ HTML
     /**
      * Акшен для подтверждения
      * @throws CHttpException
+     * @throws CDbException
      */
     public function actionResendCheckEmail(){
         //ищем токен
@@ -396,8 +399,6 @@ HTML
 
 	public function actionIndex()
 	{
-		// renders the view file 'protected/views/site/index.php'
-		// using the default layout 'protected/views/layouts/main.php'
 		if(Yii::app()->user->isPrnt)
 			$this->redirect("/other/studentCard");
 		else
@@ -551,7 +552,32 @@ HTML
 	}
 
     /**
-     * Displays the login page
+     * Отмена регистрации
+     * @throws CHttpException
+     * @throws CException
+     */
+    public function actionCancelRegistration()
+    {
+        if (PortalSettings::model()->getSettingFor(PortalSettings::ACCEPT_CANCEL_REGISTRATION)!=1)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+
+        $model=new CancelRegistrationForm();
+
+        if(isset($_POST['CancelRegistrationForm']))
+        {
+            $model->attributes=$_POST['CancelRegistrationForm'];
+
+            if ($model->validate() && $model->cancelRegister()) {
+                Yii::app()->user->setFlash('success', '<strong>'.tt('Внимание!').'</strong> '. tt('Регистрация отменена успешно!'));
+                $this->redirect('index');
+            }
+        }
+
+        $this->render('cancelRegistration',array('model'=>$model));
+    }
+
+    /**
+     * Displays the registration page
      */
     public function actionRegistration()
     {
