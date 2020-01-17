@@ -22,7 +22,7 @@ class CancelRegistrationForm extends CFormModel
 			array('inn, lastName, firstName, secondName, passportNumber', 'required'),
             array('inn, lastName, firstName, secondName, passportNumber', 'length', 'max'=>100),
             array('verifyCode', 'captcha', 'allowEmpty'=>!CCaptcha::checkRequirements()),
-            array('identityCode', 'checkExistence'),
+            array('inn', 'checkExistence'),
 		);
 	}
 
