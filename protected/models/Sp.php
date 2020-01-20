@@ -111,7 +111,7 @@ SQL;
             FROM SP
             INNER JOIN SG ON (SP.SP1 = SG.SG2)
             INNER JOIN SEM ON (SG.SG1 = SEM.SEM2)
-            WHERE sp5=:FACULTY and sem3=:YEAR and sem5=:SEM {$extraCondition}
+            WHERE sp5=:FACULTY and sem3=:YEAR /*and sem5=:SEM*/ {$extraCondition}
             GROUP BY sem4
 SQL;
 
@@ -120,7 +120,7 @@ SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':FACULTY', $faculty);
         $command->bindValue(':YEAR', $year);
-        $command->bindValue(':SEM', $sem);
+        //$command->bindValue(':SEM', $sem);
         $courses = $command->queryAll();
 
         $res = array();

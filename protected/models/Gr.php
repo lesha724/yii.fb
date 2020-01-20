@@ -607,7 +607,7 @@ SQL;
 			   inner join ucgns on (ucgn.ucgn1 = ucgns.ucgns2)
 			   inner join ucxg on (ucgn.ucgn1 = ucxg.ucxg2)
 			WHERE ucxg1<30000 and gr13=0 and gr6 is null
-				 and sp5=:FACULTY and sem3=:YEAR1 and sem5=:SEM1 and ucgns5=:YEAR2 and ucgns6=:SEM2 and sem4=:COURSE
+				 and sp5=:FACULTY and sem3=:YEAR1 /*and sem5=SEM1*/ and ucgns5=:YEAR2 /*and ucgns6=SEM2*/ and sem4=:COURSE
 			GROUP BY sg4, sem4, gr7,gr3,gr1, gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26
 			ORDER BY gr7,gr3
 SQL;
@@ -619,8 +619,8 @@ SQL;
         $command->bindValue(':COURSE', $course);
         $command->bindValue(':YEAR1', $year);
         $command->bindValue(':YEAR2', $year);
-        $command->bindValue(':SEM1', $sem);
-        $command->bindValue(':SEM2', $sem);
+        //$command->bindValue(':SEM1', $sem);
+        //$command->bindValue(':SEM2', $sem);
         $groups = $command->queryAll();
 
         foreach($groups as $key => $group) {
