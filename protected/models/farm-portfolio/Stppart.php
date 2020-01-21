@@ -88,7 +88,10 @@ class Stppart extends CActiveRecord
 		);
 	}
 
-
+    /**
+     * @param $st1
+     * @return CActiveDataProvider
+     */
 	public function search($st1)
 	{
 		$criteria=new CDbCriteria;
