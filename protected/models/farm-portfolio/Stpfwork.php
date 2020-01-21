@@ -23,7 +23,7 @@ class Stpfwork extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'stpfworknew';
+		return 'stpfwork';
 	}
 
 	/**
