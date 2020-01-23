@@ -100,9 +100,11 @@ class F extends CActiveRecord
 
 		return 'f3';
 	}
+
     /**
      * @param int $type тип если 1 то нужно блокировать для юрки факультет номер 5
      * @return array
+     * @throws CException
      */
     public function getFacultiesFor($filial, $type=0)
     {
