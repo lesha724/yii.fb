@@ -330,7 +330,7 @@ HTML;
         $a2  = $day['a2'];
 
         $class = tt('ауд');
-        $fio = $day['fio_full'];
+        $fio = CHtml::encode($day['fio_full']);
         $time='';
         $pos=stripos($day['d3'],"(!)");
         if($pos!==false)
@@ -372,9 +372,9 @@ TEXT;
         $added = date('d.m.Y H:i', strtotime($day['r11']));
         $fio = '';
         if (isset($day['fio_full']))
-            $fio = $day['fio_full'];
+            $fio = CHtml::encode($day['fio_full']);
         else if($type == 3 && isset($day['fio']))
-            $fio = $day['fio'];
+            $fio = CHtml::encode($day['fio']);
         $time='';
         $pos=stripos($d3,"(!)");
         if($pos!==false)
