@@ -106,7 +106,7 @@ $form=$this->beginWidget('CActiveForm', array(
         <?php } ?>
 
         <div class="control-group" data-autocompleteUrl="<?= $url1?>" data-updateNkrs="<?= $url2?>">
-            <?= CHtml::label(tt('Тема курсовой'), '', array('class' => 'control-label')) ?>
+            <?= CHtml::label(tt('Тема'), '', array('class' => 'control-label')) ?>
             <div class="controls">
                 <?php
                     $discipline = D::model()->getDisciplineForCourseWork($model->student);
@@ -143,7 +143,7 @@ $form=$this->beginWidget('CActiveForm', array(
         </div>
 
         <div class="control-group">
-            <?= CHtml::label(tt('Тема курсовой (англ.)'), '', array('class' => 'control-label')) ?>
+            <?= CHtml::label(tt('Тема (англ.)'), '', array('class' => 'control-label')) ?>
             <div class="controls">
                 <?php
                     if ($discipline) {

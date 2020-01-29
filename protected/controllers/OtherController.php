@@ -803,9 +803,15 @@ SQL;
 
                     $diplome = '';
                     $magisterTeacher = '';
-                    $typeWork = '';
+                    $zavKafPodpis = <<<HTML
+                        <p>
+                            <div style="float: left; width: 30%">«не возражаю»</div><div style="float: left; text-align: center;width: 30%">_____________</div><div style="float: right;text-align: right; width: 30%">Заведующий кафедрой</div>
+                        </p>
+HTML;
+
                     if(($st_info['sem4'] < 4 && $st_info['sp14']!=3 && $st_info['sg4'] == 0) || ($st_info['sem4'] < 3 && $st_info['sp14']!=3 && $st_info['sg4'] == 2)){
                         $typeWork = tt('курсовой работы');
+                        $zavKafPodpis = '';
                         //курсовая
                     }else if (($st_info['sem4'] == 4 && $st_info['sp14']!=3 && $st_info['sg4'] == 0) || ($st_info['sem4'] == 3 && $st_info['sp14']!=3 && $st_info['sg4'] == 2)){
                         //Дипломная
@@ -852,10 +858,9 @@ HTML;
                         $typeWork = tt('выпускной квалификационной работы магистра');
                         $magisterTeacher = <<<HTML
                         <p>
-                            <div style="float: left; width: 30%">«не возражаю»</div><div style="float: left; text-align: center;width: 30%">_____________</div><div style="float: right;text-align: right; width: 30%"> _________________</div>
+                            <div style="float: left; width: 30%">«не возражаю»</div><div style="float: left; text-align: center;width: 30%">_____________</div><div style="float: right;text-align: right; width: 30%">Руководитель программы</div>
                         </p>
 HTML;
-
                     }
 
                     $patternTitle = <<<HTML
@@ -900,9 +905,7 @@ HTML;
                             <div style="float: left; width: 30%%">«не возражаю»</div><div style="float: left; text-align: center;width: 30%%">_____________</div><div style="float: right;text-align: right; width: 30%%">Научный руководитель</div>
                         </p>
                         %s
-                        <p>
-                            <div style="float: left; width: 30%%">«не возражаю»</div><div style="float: left; text-align: center;width: 30%%">_____________</div><div style="float: right;text-align: right; width: 30%%">Заведующий кафедрой</div>
-                        </p>
+                        %s
                         %s
 HTML;
 
@@ -919,6 +922,7 @@ HTML;
                         $nkrs5,
                         $nkrs6,
                         $magisterTeacher,
+                        $zavKafPodpis,
                         $diplome
                     ));
 
