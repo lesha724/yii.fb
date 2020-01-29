@@ -803,31 +803,43 @@ SQL;
 
                     $diplome = '';
                     $magisterTeacher = '';
+                    $typeWork = '';
                     if(($st_info['sem4'] < 4 && $st_info['sp14']!=3 && $st_info['sg4'] == 0) || ($st_info['sem4'] < 3 && $st_info['sp14']!=3 && $st_info['sg4'] == 2)){
+                        $typeWork = tt('курсовой работы');
                         //курсовая
                     }else if (($st_info['sem4'] == 4 && $st_info['sp14']!=3 && $st_info['sg4'] == 0) || ($st_info['sem4'] == 3 && $st_info['sp14']!=3 && $st_info['sg4'] == 2)){
                         //Дипломная
+                        $typeWork = tt('дипломной работы');
                         $course = tt('Курс');
                         $themeRus = tt('Тема на русском');
                         $curator = tt('Научный руководитель');
+                        $popdis = tt('Подпись студента');
                         $rows = '';
-                        foreach ($student->getNkrsList() as $item){
+                        $i = 0;
+                        $nkrs = $student->getNkrsList();
+                        foreach ($nkrs as $item){
+                            if($i == count($nkrs))
+                                continue;
                             $curatorName = SH::getShortName($item['p3'], $item['p4'],$item['p5']);
                             $rows.=<<<HTML
                             <tr>
                                 <td>{$item['sem4']}</td>
                                 <td>{$item['spkr2']}</td>
                                 <td>{$curatorName}</td>
+                                <td></td>
                             </tr>
 HTML;
+                            $i++;
                         }
                         $diplome = <<<HTML
+                            <br>
                             <table>
                                 <thead>
                                     <tr>
                                         <th>{$course}</th>
                                         <th>{$themeRus}</th>
                                         <th>{$curator}</th>
+                                        <th>{$popdis}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -837,9 +849,10 @@ HTML;
 HTML;
                     }else {
                         //Магистраская
+                        $typeWork = tt('выпускной квалификационной работы магистра');
                         $magisterTeacher = <<<HTML
                         <p>
-                            <div style="float: left; width: 30%%">«не возражаю»</div><div style="float: left; text-align: center;width: 30%%">_____________</div><div style="float: right;text-align: right; width: 30%%">  _________________</div>
+                            <div style="float: left; width: 30%%">«не возражаю»</div><div style="float: left; text-align: center;width: 30%%">_____________</div><div style="float: right;text-align: right; width: 30%%"> _________________</div>
                         </p>
 HTML;
 
@@ -866,7 +879,7 @@ HTML;
                         </div>
                         <h2 style="text-align: center">Заявление</h2>
 
-                        <p>Прошу утвердить тему моей курсовой/дипломной работы</p>
+                        <p>Прошу утвердить тему моей %s</p>
                         <table>
                             <tbody>
                                 <tr>
@@ -883,17 +896,13 @@ HTML;
                         <p>
                             <div style="float: left; width: 40%%">« ___ » __________ 20__г.</div><div style="float: right;text-align: right; width: 40%%">_____________</div>
                         </p>
-
                         <p>
                             <div style="float: left; width: 30%%">«не возражаю»</div><div style="float: left; text-align: center;width: 30%%">_____________</div><div style="float: right;text-align: right; width: 30%%">Научный руководитель</div>
                         </p>
                         %s
                         <p>
                             <div style="float: left; width: 30%%">«не возражаю»</div><div style="float: left; text-align: center;width: 30%%">_____________</div><div style="float: right;text-align: right; width: 30%%">Заведующий кафедрой</div>
-                            <br>
-                            <div style="float: left; width: 30%%">(только для дипломных работ)</div>
                         </p>
-
                         %s
 HTML;
 
@@ -905,6 +914,7 @@ HTML;
                         $st_info['name'],
                         $st_info['f3'],
                         $student->getShortName(),
+                        $typeWork,
                         $nkrs4,
                         $nkrs5,
                         $nkrs6,
