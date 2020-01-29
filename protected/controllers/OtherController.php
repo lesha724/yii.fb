@@ -815,7 +815,7 @@ SQL;
                         $curator = tt('Научный руководитель');
                         $popdis = tt('Подпись студента');
                         $rows = '';
-                        $i = 0;
+                        $i = 1;
                         $nkrs = $student->getNkrsList();
                         foreach ($nkrs as $item){
                             if($i == count($nkrs))
@@ -852,7 +852,7 @@ HTML;
                         $typeWork = tt('выпускной квалификационной работы магистра');
                         $magisterTeacher = <<<HTML
                         <p>
-                            <div style="float: left; width: 30%%">«не возражаю»</div><div style="float: left; text-align: center;width: 30%%">_____________</div><div style="float: right;text-align: right; width: 30%%"> _________________</div>
+                            <div style="float: left; width: 30%">«не возражаю»</div><div style="float: left; text-align: center;width: 30%">_____________</div><div style="float: right;text-align: right; width: 30%"> _________________</div>
                         </p>
 HTML;
 
