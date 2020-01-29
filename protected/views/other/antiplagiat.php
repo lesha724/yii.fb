@@ -1,12 +1,5 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Neff
- * Date: 30.08.2017
- * Time: 11:08
- */
-
-/**
  * @var OtherController $this
  * @var $student St
  * @var $nkrsList mixed

@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class OtherController
+ */
 class OtherController extends Controller
 {
     public function filters() {
@@ -798,6 +801,50 @@ SQL;
                     }
                     $mPDF1 = new Mpdf\Mpdf();
 
+                    $diplome = '';
+                    $magisterTeacher = '';
+                    if(($st_info['sem4'] < 4 && $st_info['sp14']!=3 && $st_info['sg4'] == 0) || ($st_info['sem4'] < 3 && $st_info['sp14']!=3 && $st_info['sg4'] == 2)){
+                        //курсовая
+                    }else if (($st_info['sem4'] == 4 && $st_info['sp14']!=3 && $st_info['sg4'] == 0) || ($st_info['sem4'] == 3 && $st_info['sp14']!=3 && $st_info['sg4'] == 2)){
+                        //Дипломная
+                        $course = tt('Курс');
+                        $themeRus = tt('Тема на русском');
+                        $curator = tt('Научный руководитель');
+                        $rows = '';
+                        foreach ($student->getNkrsList() as $item){
+                            $curatorName = SH::getShortName($item['p3'], $item['p4'],$item['p5']);
+                            $rows.=<<<HTML
+                            <tr>
+                                <td>{$item['sem4']}</td>
+                                <td>{$item['spkr2']}</td>
+                                <td>{$curatorName}</td>
+                            </tr>
+HTML;
+                        }
+                        $diplome = <<<HTML
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>{$course}</th>
+                                        <th>{$themeRus}</th>
+                                        <th>{$curator}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {$rows}
+                                </tbody>
+                            </table> 
+HTML;
+                    }else {
+                        //Магистраская
+                        $magisterTeacher = <<<HTML
+                        <p>
+                            <div style="float: left; width: 30%%">«не возражаю»</div><div style="float: left; text-align: center;width: 30%%">_____________</div><div style="float: right;text-align: right; width: 30%%">  _________________</div>
+                        </p>
+HTML;
+
+                    }
+
                     $patternTitle = <<<HTML
                         <style>
                         p {
@@ -840,12 +887,14 @@ SQL;
                         <p>
                             <div style="float: left; width: 30%%">«не возражаю»</div><div style="float: left; text-align: center;width: 30%%">_____________</div><div style="float: right;text-align: right; width: 30%%">Научный руководитель</div>
                         </p>
-
+                        %s
                         <p>
                             <div style="float: left; width: 30%%">«не возражаю»</div><div style="float: left; text-align: center;width: 30%%">_____________</div><div style="float: right;text-align: right; width: 30%%">Заведующий кафедрой</div>
                             <br>
                             <div style="float: left; width: 30%%">(только для дипломных работ)</div>
                         </p>
+
+                        %s
 HTML;
 
                     $mPDF1->WriteHTML(sprintf(
@@ -858,7 +907,9 @@ HTML;
                         $student->getShortName(),
                         $nkrs4,
                         $nkrs5,
-                        $nkrs6
+                        $nkrs6,
+                        $magisterTeacher,
+                        $diplome
                     ));
 
                     $data=Foto::getStudentFoto($model->student);
