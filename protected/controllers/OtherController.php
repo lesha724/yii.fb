@@ -861,6 +861,7 @@ HTML;
                             <div style="float: left; width: 30%">«не возражаю»</div><div style="float: left; text-align: center;width: 30%">_____________</div><div style="float: right;text-align: right; width: 30%">Руководитель программы</div>
                         </p>
 HTML;
+                        $zavKafPodpis = '';
                     }
 
                     $patternTitle = <<<HTML
@@ -899,7 +900,7 @@ HTML;
                         </table>
                         <p>Научный руководитель %s</p>
                         <p>
-                            <div style="float: left; width: 40%%">« ___ » __________ 20__г.</div><div style="float: right;text-align: right; width: 40%%">_____________</div>
+                            <div style="float: left; width: 40%%">« ___ » __________ 20__г.</div><div style="float: right;text-align: right; width: 40%%">%s</div>
                         </p>
                         <p>
                             <div style="float: left; width: 30%%">«не возражаю»</div><div style="float: left; text-align: center;width: 30%%">_____________</div><div style="float: right;text-align: right; width: 30%%">Научный руководитель</div>
@@ -921,6 +922,7 @@ HTML;
                         $nkrs4,
                         $nkrs5,
                         $nkrs6,
+                        $student->getShortName(),
                         $magisterTeacher,
                         $zavKafPodpis,
                         $diplome
