@@ -36,6 +36,7 @@ class Stpfwork extends CActiveRecord
 		return array(
 			array('stpfwork2, stpfwork6', 'numerical', 'integerOnly'=>true),
 			array('stpfwork3, stpfwork4, stpfwork5', 'length', 'max'=>400),
+            array('stpfwork3, stpfwork4, stpfwork5','filter','filter'=>array($obj=new CHtmlPurifier(),'purify')),
 			array('stpfwork7', 'length', 'max'=>20),
 		);
 	}

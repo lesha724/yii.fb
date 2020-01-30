@@ -63,6 +63,7 @@ class Stportfolio extends CActiveRecord
 			array('stportfolio1, stportfolio2, stportfolio4, stportfolio6, stportfolio7', 'numerical', 'integerOnly'=>true),
 			array('stportfolio3', 'length', 'max'=>1400),
 			array('stportfolio5, stportfolio8', 'length', 'max'=>20),
+            array('stportfolio3','filter','filter'=>array($obj=new CHtmlPurifier(),'purify')),
 		);
 	}
 
