@@ -13,7 +13,7 @@ $this->breadcrumbs=array(
 Yii::app()->clientScript->registerPackage('dataTables');
 Yii::app()->clientScript->registerPackage('gritter');
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/list/group.js', CClientScript::POS_HEAD);
-
+/*
 $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id'=>'search-form',
     'htmlOptions' => array('class' => 'form-inline noprint'),
@@ -33,7 +33,7 @@ $form=$this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     )
 )); ?>
 <?php
-$this->endWidget();
+$this->endWidget();*/
 
 $this->renderPartial('/filter_form/timeTable/group', array(
     'model' => $model,

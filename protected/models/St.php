@@ -242,7 +242,7 @@ SQL;
     {
         $year = Yii::app()->session['year'];
         $sem = Yii::app()->session['sem'];
-        $date = $sem == 1 ? '31.05.'.($year+1) : '20.01.'.($year+1);
+        $date = $sem == 1 ? '31.05.'.($year+1) : '31.01.'.($year+1);
 
         $sql = <<<SQL
        select t.st1,pe2,pe3,pe4,st.st45,st.st163,st.st167, elgvst2, elgvst3

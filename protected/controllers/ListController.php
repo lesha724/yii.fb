@@ -14,7 +14,7 @@ class ListController extends Controller
         return array(
             array('allow',
                 'actions' => array(
-                    'stream','group','chair','searchStudent','virtualGroup',
+                    'stream','group','chair'/*,'searchStudent'*/,'virtualGroup',
                     'virtualGroupExcel','groupExcel', 'streamExcel',
                     'contactStudents', 'contactTeachers'
                 )
@@ -25,6 +25,9 @@ class ListController extends Controller
         );
     }
 
+    /**
+     *
+     */
     public function actionStream()
     {
         $model = new FilterForm();
@@ -37,7 +40,10 @@ class ListController extends Controller
             'model' => $model,
         ));
     }
-	
+
+    /**
+     *
+     */
     public function actionGroup()
     {
         $model = new TimeTableForm();
@@ -57,7 +63,7 @@ class ListController extends Controller
     }
 
     /**
-     * //Контакты студентов
+     * Контакты студентов
      */
     public function actionContactStudents()
     {
@@ -532,15 +538,15 @@ class ListController extends Controller
         ));
     }
 
-    public function actionSearchStudent()
+    /*public function actionSearchStudent()
     {
-        $model = new St;
+        $model = new SearchStudentsForm;
         $model->unsetAttributes();
-        if (isset($_REQUEST['St']))
-            $model->attributes = $_REQUEST['St'];
+        if (isset($_REQUEST['SearchStudentsForm']))
+            $model->attributes = $_REQUEST['SearchStudentsForm'];
 
         $this->render('/filter_form/default/search_student', array(
             'model' => $model,
         ));
-    }
+    }*/
 }

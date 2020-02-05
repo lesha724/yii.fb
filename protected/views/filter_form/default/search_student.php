@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * @var OtherController $this
  * @var SearchStudentsForm $model
  * @var string $type
