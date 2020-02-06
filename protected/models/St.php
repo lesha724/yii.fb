@@ -459,7 +459,7 @@ SQL;
      */
     public function getListStream($sg1){
         $sql=<<<SQL
-            SELECT st1,pe2,pe3,pe4,st5,sk3 gr1, gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26
+            SELECT st1,pe2,pe3,pe4,st5,sk3, gr1, gr3,gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26
 			 FROM ST
 			  INNER JOIN pe on (st200 = pe1)
 			   INNER JOIN STD ON (ST.ST1 = STD.STD2)
