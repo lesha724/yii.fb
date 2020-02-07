@@ -65,34 +65,6 @@ class ShortCodes extends CApplicationComponent
         return $color;
     }
 
-    public static  function convertStus19($stus19){
-        if($stus19!==null)
-            switch($stus19){
-                case 5:	$type = tt('Экз.'); break;
-                case 6:	$type = tt('Зач.'); break;
-                case 7:	$type = tt('Диф.зач.'); break;
-                case 8:	$type = tt('Курсов.'); break;
-                default: $type='';
-            }
-        else
-            $type = '-';
-        return $type;
-    }
-
-    public static  function getColorByStus19($stus19){
-        if($stus19!==null)
-            switch($stus19){
-                case 5:	$color = '#ffe1e1'; break;
-                case 6:	$color = '#ddffdd'; break;
-                case 7:	$color = '#d6d6bd'; break;
-                case 8:	$color = '#d3ffff'; break;
-                default: $color='';
-            }
-        else
-            $color = '-';
-        return $color;
-    }
-
     public static function formatDate($patternFrom, $patternTo, $value)
     {
         if (empty($value))
@@ -181,44 +153,6 @@ SQL
         else
             $type = '-';
         return $type;
-    }
-    
-    public static function getSel1ForRating($i)
-    {
-         $sel_1 = array(
-            0 => tt('Младший специалист'),
-            1 => tt('Бакалавр'),
-            2 => tt('Специалист'),
-            3 => tt('Магистр'),
-        );
-        if(isset($sel_1[$i]))
-            return $sel_1[$i];
-        else {
-            return '-';
-        }
-    }
-    
-    public static function getSel2ForRating($i)
-    {
-        if(!in_array(Yii::app()->core->universityCode, array(3,U_URFAK,U_FGU,U_RGIIS,31,34,U_SEM_MGU)))
-            $sel_2 = array(
-                0 => tt('Дневная'),
-                1 => tt('Заочная'),
-                2 => tt('Вечерняя'),
-                3 => tt('Экстернат')
-            );
-        else
-            $sel_2 = array(
-                0 => tt('Очная'),
-                1 => tt('Заочная'),
-                2 => tt('Вечерняя'),
-                3 => tt('Экстернат')
-            );
-        if(isset($sel_2[$i]))
-            return $sel_2[$i];
-        else {
-            return '-';
-        }
     }
     
     public static function getLessonColor($type)
@@ -503,8 +437,6 @@ class SH extends ShortCodes
 
     const MOBILE_URL_APPLE = 'https://itunes.apple.com/us/app/%D1%80%D0%B0%D1%81%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5-%D0%B7%D0%B0%D0%BD%D1%8F%D1%82%D0%B8%D0%B9-%D0%BC%D0%BA%D1%80/id1382175045?l=uk&ls=1&mt=8';
 
-    const MOBILE_URL_INSTRUCTION = 'https://new.mkr.org.ua/mobile-instruction.html';
-
     protected static $_instance;
 
     private function __construct(){}
@@ -545,25 +477,20 @@ class SH extends ShortCodes
      * @param string $url
      * @param string $apiKey
      * @return DistEducation|null
+     * @throws Exception
      */
     private static function _getDiscEducation($universityCode, $url, $apiKey){
         switch ($universityCode){
             case U_ZSMU:
                 return new EdxDistEducation($url, $apiKey);
                 break;
-
             case U_HTEI:
-                return new MoodleDistEducation($url, $apiKey);
-                break;
-
             case U_KNAME:
                 return new MoodleDistEducation($url, $apiKey);
                 break;
-
             case U_IRPEN:
                 return new IrpenMoodleDistEducation($url, $apiKey);
                 break;
-
             default:
                 return null;
         }
@@ -573,25 +500,20 @@ class SH extends ShortCodes
      * Создать форму к привязки к существующей учетке
      * @param int $universityCode
      * @return SingUpOldDistEducationForm|null
+     * @throws CHttpException
      */
     public static function getSingUpOldDistEducationForm($universityCode){
         switch ($universityCode){
             case U_ZSMU:
                 return new EdxSignUpOldForm($universityCode);
                 break;
-
             case U_HTEI:
-                return new MoodleSignUpOldForm($universityCode);
-                break;
-
             case U_KNAME:
                 return new MoodleSignUpOldForm($universityCode);
                 break;
-
             case U_IRPEN:
                 return new MoodleSignUpOldForm($universityCode);
                 break;
-
             default:
                 return null;
         }
@@ -602,6 +524,7 @@ class SH extends ShortCodes
      * @param $universityCode int
      * @return DistEducation|null
      * @throws CHttpException if connector == null
+     * @throws Exception
      */
     public static function getDistEducationConnector($universityCode)
     {
