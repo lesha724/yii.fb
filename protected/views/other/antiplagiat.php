@@ -71,34 +71,34 @@ HTML;
 ?>
 
 <div class="span4">
-        <div class="widget-box">
-            <div class="widget-header">
-                <h4><?=tt('Антиплагиат')?></h4>
-            </div>
+    <div class="widget-box">
+        <div class="widget-header">
+            <h4><?=tt('Антиплагиат')?></h4>
+        </div>
 
-            <div class="widget-body">
-                <div class="widget-main no-padding">
-                    <?php
-                    $form=$this->beginWidget('CActiveForm', array(
-                        'id'=>'attach-file-form',
-                        'htmlOptions' => array(
-                            'enctype' => 'multipart/form-data',
-                        )
-                    ));
-                    ?>
+        <div class="widget-body">
+            <div class="widget-main no-padding">
+                <?php
+                $form=$this->beginWidget('CActiveForm', array(
+                    'id'=>'attach-file-form',
+                    'htmlOptions' => array(
+                        'enctype' => 'multipart/form-data',
+                    )
+                ));
+                ?>
 
-                    <fieldset>
-                        <?= CHtml::fileField('document', '') ?>
-                    </fieldset>
+                <fieldset>
+                    <?= CHtml::fileField('document', '') ?>
+                </fieldset>
 
-                    <div class="form-actions center">
-                        <button class="btn btn-small btn-success">
-                            <?=tt('Отправить')?>
-                            <i class="icon-arrow-right icon-on-right bigger-110"></i>
-                        </button>
-                    </div>
-                    <?php $this->endWidget(); ?>
+                <div class="form-actions center">
+                    <button class="btn btn-small btn-success">
+                        <?=tt('Отправить')?>
+                        <i class="icon-arrow-right icon-on-right bigger-110"></i>
+                    </button>
                 </div>
+                <?php $this->endWidget(); ?>
             </div>
+        </div>
     </div>
 </div>
