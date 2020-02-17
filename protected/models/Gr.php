@@ -912,7 +912,7 @@ SQL;
     public function getGroupsBySg1ForWorkPlan($sg1, $year, $sem)
     {
         $sql= <<<SQL
-				SELECT gr1,sem4, gr19,gr20,gr21,gr22,gr23,gr24,gr28
+				SELECT gr1,sem4, gr3, gr19,gr20,gr21,gr22,gr23,gr24,gr28
 				 from ucgns
 				   inner join ucgn on (ucgns2 = ucgn1)
 				   inner join ucxg on (ucgn1 = ucxg2)
@@ -920,7 +920,7 @@ SQL;
 				   inner join sg on (gr2 = sg1)
 				   INNER JOIN sem on (sg.sg1 = sem.sem2)
 				WHERE ucxg3=0 and gr2 = :SG1 and UCGNS5 = :YEAR1 and UCGNS6 = :SEM1 and sem3 = :YEAR2 and sem5 = :SEM2
-				GROUP BY gr1,sem4, gr19,gr20,gr21,gr22,gr23,gr24,gr28
+				GROUP BY gr1,sem4, gr3, gr19,gr20,gr21,gr22,gr23,gr24,gr28
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
