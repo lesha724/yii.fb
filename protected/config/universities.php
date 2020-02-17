@@ -31,3 +31,4 @@ define('U_SUM_AGR',  1);
 define('U_ODUVS',  43);
 define('U_TNMU', 52);
 define('U_KNUBA', 62);
+define('U_PM',  31); //правительство москвы

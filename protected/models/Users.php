@@ -269,11 +269,7 @@ class Users extends CActiveRecord
 	}
 
 	private function generateSalt(){
-		$salt = openssl_random_pseudo_bytes(12);
-		$hex   = bin2hex($salt);
-		$salt = '$1$' .$hex;
-
-		$this->u9 = $salt;
+        $this->u9 = '$1$' .bin2hex(openssl_random_pseudo_bytes(12));
 	}
 
 	private function setPassword(){
@@ -365,11 +361,12 @@ HTML;
 		return $key===md5(crypt($uCod.'mkp'.$uCod.$this->u2.'mkr',$this->u1.$uCod.$this->u10));
 	}
 
-	/**
-	 * Количество неудачных попыток авторизаций за последнии $countMin минут
-	 * @param $countMin int количетво минут
-	 * @return int
-	 */
+    /**
+     * Количество неудачных попыток авторизаций за последнии $countMin минут
+     * @param $countMin int количетво минут
+     * @return int
+     * @throws CException
+     */
 	public function getCountFail($countMin){
 		$date = new DateTime();
 		$date->modify("-{$countMin} minutes");
