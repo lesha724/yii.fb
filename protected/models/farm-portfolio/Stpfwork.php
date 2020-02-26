@@ -37,6 +37,9 @@ class Stpfwork extends CActiveRecord
 			array('stpfwork2, stpfwork6', 'numerical', 'integerOnly'=>true),
 			array('stpfwork3, stpfwork4, stpfwork5', 'length', 'max'=>400),
             array('stpfwork3, stpfwork4, stpfwork5','filter','filter'=>array($obj=new CHtmlPurifier(),'purify')),
+            array('stpfwork3, stpfwork4, stpfwork5','filter','filter'=>function($value){
+                return preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $value);
+            }),
 			array('stpfwork7', 'length', 'max'=>20),
 		);
 	}
