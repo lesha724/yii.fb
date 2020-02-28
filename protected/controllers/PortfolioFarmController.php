@@ -315,7 +315,6 @@ HTML;
 
         $p = new CHtmlPurifier();
         $value = $p->purify($value);
-        $value = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $value);
 
         $model->stportfolio0 = new CDbExpression('GEN_ID(GEN_Stpwork, 1)');
         $model->stportfolio1 = $id;
