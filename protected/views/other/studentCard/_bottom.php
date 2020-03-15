@@ -128,7 +128,7 @@ HTML;
         tt('Курс'), $studentInfo['sem4'],
 
         tt('Группа'), Gr::model()->getGroupName($studentInfo['sem4'], $studentInfo),
-        tt('Email'),$st->st107,
+        tt('Email'), $st->person->pe36,
 
         $isFarm ? tt('ИНН') : '', $isFarm ? $st->person->pe20 : ''
     );

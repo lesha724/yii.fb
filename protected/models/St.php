@@ -15,7 +15,6 @@
  * @property integer $st101
  * @property integer $st103
  * @property integer $st104
- * @property string $st107
  * @property integer $st114
  * @property string $st126
  * @property string $st131

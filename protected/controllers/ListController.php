@@ -62,48 +62,6 @@ class ListController extends Controller
         ));
     }
 
-    /**
-     * Контакты студентов
-     */
-    public function actionContactStudents()
-    {
-        if($this->universityCode!= U_RGIIS)
-            throw new CHttpException(403, tt('Доступ запрещен'));
-
-        $model = new TimeTableForm();
-        $model->scenario = 'list-group';
-
-        if (isset($_REQUEST['TimeTableForm']))
-            $model->attributes=$_REQUEST['TimeTableForm'];
-
-        $student = new St;
-        $student->unsetAttributes();
-
-        $this->render('contact-students', array(
-            'model' => $model,
-            'student'=>$student
-        ));
-    }
-
-    /**
-     * Контакты преподователей
-     */
-    public function actionContactTeachers()
-    {
-        if($this->universityCode!= U_RGIIS)
-            throw new CHttpException(403, tt('Доступ запрещен'));
-
-        $model = new TimeTableForm();
-        $model->scenario = 'list-chair';
-
-        if (isset($_REQUEST['TimeTableForm']))
-            $model->attributes=$_REQUEST['TimeTableForm'];
-
-        $this->render('contact-teachers', array(
-            'model' => $model,
-        ));
-    }
-
     public function actionVirtualGroup()
     {
         $model = new FilterForm();

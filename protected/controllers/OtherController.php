@@ -630,6 +630,8 @@ SQL;
     
     public function actionStudentInfo()
     {
+        throw new CHttpException(403);
+
         $model = new TimeTableForm;
         $model->scenario = 'student';
         if (isset($_REQUEST['TimeTableForm']))

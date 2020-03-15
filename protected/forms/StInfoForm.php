@@ -6,7 +6,7 @@ class StInfoForm extends CFormModel
 	public $st74;
 	public $st75;
 	public $st76;
-	public $st107;
+	public $email;
     public $st131;
     public $st132;
 
@@ -24,7 +24,7 @@ class StInfoForm extends CFormModel
 		return array(
 			array('st74', 'length', 'max'=>35),
 			array('st75, st76,st131,st132', 'length', 'max'=>20),
-			array('st107', 'email'),
+			array('email', 'email'),
 			array('speciality, st34', 'safe'),
 		);
 	}
@@ -36,7 +36,7 @@ class StInfoForm extends CFormModel
 			'st74'=> tt('Фамилия (англ.)'),
 			'st75'=> tt('Имя (англ.)'),
 			'st76'=> tt('Отчество (англ.)'),
-			'st107'=> 'Email',
+			'email'=> 'Email',
             'st131'=> tt('ИНН (текст)'),
             'st132'=> tt('СНИЛС (текст)'),
             'passport'=> tt('Паспорт'),
@@ -57,13 +57,13 @@ class StInfoForm extends CFormModel
             'st74' => $this->st74,
             'st75' => $this->st75,
             'st76' => $this->st76,
-            'st107' => $this->st107,
+            'pe36' => $this->email,
             'st131' => $this->st131,
             'st132' => $this->st132,
         ));
 
         $res2 = Users::model()->updateAll(array(
-            'u4' => $this->st107
+            'u4' => $this->email
         ), 'u5 =0 and u6 = '.$model->student);
 
         return $res1 && $res2;
@@ -80,7 +80,7 @@ class StInfoForm extends CFormModel
         $this->st74 = $st->st74;
         $this->st75 = $st->st75;
         $this->st76 = $st->st76;
-        $this->st107 = $st->st107;
+        $this->email = $st->person->pe36;
         $this->st131 = $st->st131;
         $this->st132 = $st->st132;
         $this->speciality = Pnsp::model()->getSpecialityFor($st->st1);
