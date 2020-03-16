@@ -685,6 +685,8 @@ SQL;
     }
 
     public  function actionAntiplagiat(){
+        if(Yii::app()->core->universityCode != U_URFAK)
+            throw new CHttpException(403);
 
         $student = St::model()->findByPk(Yii::app()->user->dbModel->st1);
 
@@ -721,6 +723,7 @@ SQL;
      * @param $student int студент
      * @param $nkrs1 int
      * @param $nkrs6 mixed
+     * @return bool
      */
     private function proccessAntiplagiat($student, $nkrs1, $nkrs6){
         $st = St::model()->findByPk($student);
@@ -975,14 +978,15 @@ HTML;
                 )));
 
 
-// Используется для получения ссылок на отчеты
+        // Используется для получения ссылок на отчеты
         $ANTIPLAGIAT_URI = "http://$COMPANY_NAME.antiplagiat.ru";///конец
 
         // Описание загружаемого файла
         $data = array(
             "Data"     => file_get_contents($tmpName),
             "FileName" => $document->name,
-            "FileType" => '.'.$document->extensionName
+            "FileType" => '.'.$document->extensionName,
+            "ExternalUserID" => Yii::app()->user->dbModel->person->pe20
         );
 
         // Загрузка файла
@@ -1008,7 +1012,7 @@ HTML;
         if ($status->GetCheckStatusResult->Status === "Failed")
         {
             echo("При проверке документа произошла ошибка:" . $status->GetCheckStatusResult->FailDetails);
-            return;
+            return false;
         }
 
         $url = $ANTIPLAGIAT_URI.$status->GetCheckStatusResult->Summary->ReportWebId;
