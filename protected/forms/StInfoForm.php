@@ -3,10 +3,10 @@
 class StInfoForm extends CFormModel
 {
     public $st34;
-	public $st74;
-	public $st75;
-	public $st76;
-	public $email;
+    /*public $st74;
+    public $st75;
+    public $st76;
+    public $email;*/
     public $st131;
     public $st132;
 
@@ -22,9 +22,9 @@ class StInfoForm extends CFormModel
 	public function rules()
 	{
 		return array(
-			array('st74', 'length', 'max'=>35),
-			array('st75, st76,st131,st132', 'length', 'max'=>20),
-			array('email', 'email'),
+			//array('st74', 'length', 'max'=>35),
+			array('st131,st132', 'length', 'max'=>20),
+			//array('email', 'email'),
 			array('speciality, st34', 'safe'),
 		);
 	}
@@ -33,10 +33,10 @@ class StInfoForm extends CFormModel
 	{
 		return array(
 			'st34'=> tt('Специализация'),
-			'st74'=> tt('Фамилия (англ.)'),
-			'st75'=> tt('Имя (англ.)'),
-			'st76'=> tt('Отчество (англ.)'),
-			'email'=> 'Email',
+            /*'st74'=> tt('Фамилия (англ.)'),
+            'st75'=> tt('Имя (англ.)'),
+            'st76'=> tt('Отчество (англ.)'),
+            'email'=> 'Email',*/
             'st131'=> tt('ИНН (текст)'),
             'st132'=> tt('СНИЛС (текст)'),
             'passport'=> tt('Паспорт'),
@@ -49,24 +49,24 @@ class StInfoForm extends CFormModel
     public function customSave(TimeTableForm $model)
     {
         if (! $model->student)
-            return;
+            return false;
         if($this->st34==null)
             $this->st34=0;
         $res1 = St::model()->updateByPk($model->student, array(
             'st34' => $this->st34,
-            'st74' => $this->st74,
+            /*'st74' => $this->st74,
             'st75' => $this->st75,
             'st76' => $this->st76,
-            'pe36' => $this->email,
+            'pe36' => $this->email,*/
             'st131' => $this->st131,
             'st132' => $this->st132,
         ));
 
-        $res2 = Users::model()->updateAll(array(
+        /*$res2 = Users::model()->updateAll(array(
             'u4' => $this->email
-        ), 'u5 =0 and u6 = '.$model->student);
+        ), 'u5 =0 and u6 = '.$model->student);*/
 
-        return $res1 && $res2;
+        return $res1 /*&& $res2*/;
     }
 
     public function fillData(TimeTableForm $model)
@@ -77,10 +77,10 @@ class StInfoForm extends CFormModel
         $st = St::model()->findByPk($model->student);
 
         $this->st34 = $st->st34;
-        $this->st74 = $st->st74;
+        /*$this->st74 = $st->st74;
         $this->st75 = $st->st75;
         $this->st76 = $st->st76;
-        $this->email = $st->person->pe36;
+        $this->email = $st->person->pe36;*/
         $this->st131 = $st->st131;
         $this->st132 = $st->st132;
         $this->speciality = Pnsp::model()->getSpecialityFor($st->st1);

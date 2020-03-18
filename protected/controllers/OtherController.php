@@ -630,8 +630,6 @@ SQL;
     
     public function actionStudentInfo()
     {
-        throw new CHttpException(403);
-
         $model = new TimeTableForm;
         $model->scenario = 'student';
         if (isset($_REQUEST['TimeTableForm']))
@@ -658,13 +656,6 @@ SQL;
 
         } else
             throw new CHttpException(404, 'You don\'t have an access to this service');
-
-        /*if (! empty($_FILES)) {
-            $nkrs1 = Yii::app()->request->getParam('nkrs1', null);
-            $nkrs6 = Yii::app()->request->getParam('nkrs6', null);
-
-            $this->proccessAntiplagiat($model->student, $nkrs1, $nkrs6);
-        }*/
 
         $stInfoForm = new StInfoForm();
         $stInfoForm->fillData($model);

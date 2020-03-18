@@ -25,33 +25,6 @@ $form=$this->beginWidget('CActiveForm', array(
 ?>
     <?= $form->errorSummary($stInfoForm) ?>
 
-    <div class="control-group">
-        <?= $form->label($stInfoForm, 'st74', array('class' => 'control-label'))?>
-        <div class="controls">
-            <?= $form->textField($stInfoForm, 'st74', array('autocomplete'=>'off'))?>
-        </div>
-    </div>
-
-    <div class="control-group">
-        <?= $form->label($stInfoForm, 'st75', array('class' => 'control-label'))?>
-        <div class="controls">
-            <?= $form->textField($stInfoForm, 'st75', array('autocomplete'=>'off'))?>
-        </div>
-    </div>
-
-    <div class="control-group">
-        <?= $form->label($stInfoForm, 'st76', array('class' => 'control-label'))?>
-        <div class="controls">
-            <?= $form->textField($stInfoForm, 'st76', array('autocomplete'=>'off'))?>
-        </div>
-    </div>
-
-    <div class="control-group">
-        <?= $form->label($stInfoForm, 'st107', array('class' => 'control-label'))?>
-        <div class="controls">
-            <?= $form->textField($stInfoForm, 'st107', array('autocomplete'=>'off'))?>
-        </div>
-    </div>
 
     <div class="control-group">
         <?= $form->label($stInfoForm, 'st131', array('class' => 'control-label'))?>
