@@ -195,9 +195,7 @@ SQL;
 		$command->bindValue(':ST1', $this->st1);
 		$command->bindValue(':YEAR', Yii::app()->session['year']);
 		$command->bindValue(':SEM', Yii::app()->session['sem']);
-		$info = $command->queryRow();
-
-		return $info;
+        return $command->queryRow();
 	}
 
     /**
@@ -225,9 +223,7 @@ SQL;
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':ST1', $this->st1);
-        $info = $command->queryRow();
-
-        return $info;
+        return $command->queryRow();
     }
 
     /**
@@ -262,9 +258,7 @@ SQL;
         $command->bindValue(':YEAR', $year);
         $command->bindValue(':SEM', $sem);
         $command->bindValue(':DATE_1', $date);
-        $students = $command->queryAll();
-
-        return $students;
+        return $command->queryAll();
     }
 
     /**
@@ -323,7 +317,7 @@ SQL;
             ORDER BY ST2 collate UNICODE
 SQL;
 
-        return St::findAllBySql($sql, array(
+        return $this->with('person')->findAllBySql($sql, array(
             ':GR1' => $gr1
         ));
     }
@@ -344,10 +338,10 @@ SQL;
 			 FROM ST
 			   INNER JOIN STD ON (ST.ST1 = STD.STD2)
 			   INNER JOIN SK ON (SK.SK1 = STD.STD26)
-			 WHERE std7 is null and std11 in (0,5,6,8) and std3=:gr1 and st101!=7 and std24=0
+			 WHERE std7 is null and std11 in (0,5,6,8) and std3=:gr1 and std24=0
 			 ORDER BY st2 collate UNICODE
 SQL;
-        return static::findAllBySql($sql, array(':gr1'=>$gr1));
+        return $this->with('person')->findAllBySql($sql, array(':gr1'=>$gr1));
     }
 
     /**
@@ -364,21 +358,20 @@ SQL;
             FROM st
             INNER JOIN std on (st.st1 = std.std2)
             LEFT JOIN stdist on (st1 = STDIST1)
-            WHERE st101<>7 and STD3=:GR1 and STD11 in (0,5,6,8) and (STD7 is null) and std24=0
+            WHERE STD3=:GR1 and STD11 in (0,5,6,8) and (STD7 is null) and std24=0
             ORDER BY ST2 collate UNICODE
 SQL;
 
-        $students = self::findAllBySql($sql, array(
+        return $this->with('person')->findAllBySql($sql, array(
            ':GR1' => $gr1
         ));
-
-        return $students;
     }
 
     /**
      * СТуденты записаные на курс
      * @param $gr1
      * @return array|St[]
+     * @throws CException
      */
     public function getStudentsForDistEducationCourse($courseId)
     {
@@ -394,7 +387,7 @@ SQL;
             INNER JOIN STDIST on (st1 = STDIST1)
             INNER JOIN GR ON (STD.STD3 = GR.GR1)
             INNER JOIN SEM on (SEM.SEM3 = :YEAR and SEM.SEM5 = :SEM and sem.SEM2 = gr.gr2)
-            WHERE st101<>7 and STDISTSUB2=:COURSE and STD11 in (0,5,6,8) and (STD7 is null) and std24=0
+            WHERE STDISTSUB2=:COURSE and STD11 in (0,5,6,8) and (STD7 is null) and std24=0
             ORDER BY ST2 collate UNICODE
 SQL;
 
@@ -402,9 +395,7 @@ SQL;
         $command->bindValue(':COURSE', $courseId);
         $command->bindValue(':YEAR',  Yii::app()->session['year']);
         $command->bindValue(':SEM', Yii::app()->session['sem']);
-        $students = $command->queryAll();
-
-        return $students;
+        return $command->queryAll();
     }
 
     /**
@@ -470,9 +461,7 @@ SQL;
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':SG1', $sg1);
-        $students = $command->queryAll();
-
-        return $students;
+        return $command->queryAll();
     }
 
     /**
@@ -494,8 +483,7 @@ SQL;
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':gr1', $gr1);
-        $students = $command->queryAll();
-        return $students;
+        return $command->queryAll();
     }
 
     /**
@@ -548,9 +536,7 @@ SQL;
 		$command->bindValue(':GR1', $gr1);
 		$command->bindValue(':YEAR', Yii::app()->session['year']);
 		$command->bindValue(':SEM', Yii::app()->session['sem']);
-		$students = $command->queryAll();
-
-		return $students;
+        return $command->queryAll();
 	}
 
 	public function getStudentsOfUo($uo1,$year,$sem)
@@ -574,9 +560,7 @@ SQL;
 		$command->bindValue(':uo1', $uo1);
 		$command->bindValue(':sem3', $year);
 		$command->bindValue(':sem5', $sem);
-		$students = $command->queryAll();
-
-		return $students;
+        return $command->queryAll();
 	}
 
 	public function getStudentsOfNr($nr1)
@@ -597,9 +581,7 @@ SQL;
 
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':nr1', $nr1);
-        $students = $command->queryAll();
-
-        return $students;
+        return $command->queryAll();
     }
 
     /**
@@ -645,9 +627,7 @@ SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':GR1', $gr1);
         $command->bindValue(':NR1', $nr1);
-        $amount = $command->queryScalar();
-
-        return $amount;
+        return $command->queryScalar();
     }
 
     /**
@@ -700,8 +680,7 @@ SQL;
 SQL;
 		$command= Yii::app()->db->createCommand($sql);
 		$command->bindValue(':ST1', $st1);
-		$gr1 = $command->queryScalar();
-		return $gr1;
+        return $command->queryScalar();
 	}
 
     public function getSubscriptionParams()
@@ -716,14 +695,14 @@ SQL;
 SQL;
         $command  = Yii::app()->db->createCommand($sql);
         $command->bindValue(':ST1', $this->st1);
-        $params = $command->queryRow();
-        return $params;
+        return $command->queryRow();
     }
 
     /**
      * получить код потока по студенту
      * @param $st1
      * @return int
+     * @throws CException
      */
     public function getSg1BySt1($st1){
         if (empty($st1))
@@ -742,8 +721,7 @@ SQL;
         $command->bindValue(':st1', $st1);
         $command->bindValue(':YEAR1', $sg40);
         $command->bindValue(':SEM1', $sg41);
-        $res= $command->queryScalar();
-        return $res;
+        return $command->queryScalar();
     }
 
 	public function enableSubcription($st1){
@@ -773,9 +751,7 @@ SQL;
 SQL;
 		$command = Yii::app()->db->createCommand($sql);
 		$command->bindValue(':ST1', $this->st1);
-		$row = $command->queryRow();
-
-		return $row;
+        return $command->queryRow();
 	}
 
 
@@ -783,6 +759,7 @@ SQL;
      * являеться ли текущий студент старостой для группы(возможн овиртуальной)
      * @param $gr1 int код группы
      * @return bool
+     * @throws CException
      */
     public function isSstByGroup($gr1){
         $sql = <<<SQL
@@ -826,9 +803,7 @@ SQL;
         $command->bindValue(':sem4', $course);
         $command->bindValue(':YEAR', $year);
         $command->bindValue(':SEM', $sem);
-        $students = $command->queryAll();
-
-        return $students;
+        return $command->queryAll();
     }
 
     /**
@@ -869,14 +844,13 @@ SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':ST1', $this->st1);
         $command->bindValue(':ST1_1', $this->st1);
-        $students = $command->queryAll();
-
-        return $students;
+        return $command->queryAll();
     }
 
     /**
      * Проверка заблокирован ли преподаватель
      * @return bool
+     * @throws CException
      */
     public function checkBlocked()
     {
@@ -972,7 +946,7 @@ SQL;
     /**
      * Пропуски студента (для расширеной регитсрации пропусков / карточка студента)
      * @return array
-     * @throws CHttpException
+     * @throws CException
      */
     public function getPass(){
         if(empty($this->st1))
@@ -986,9 +960,7 @@ SQL;
         $command->bindValue(':st1', $this->st1);
         $command->bindValue(':year', Yii::app()->session['year']);
         $command->bindValue(':sem', Yii::app()->session['sem']);
-        $passes = $command->queryAll();
-
-        return $passes;
+        return $command->queryAll();
     }
 
     /**
