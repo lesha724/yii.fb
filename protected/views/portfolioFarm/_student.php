@@ -49,7 +49,7 @@ $form=$this->beginWidget('CActiveForm', array(
     $html .= '</div>';
 
 
-    $students = CHtml::listData(St::model()->getStudentsOfGroupForPortfolio($model->group), 'st1', 'name');
+    $students = CHtml::listData(St::model()->getStudentsOfGroupForPortfolio($model->group), 'st1', 'fullName');
     $html .= '<div class="span2 ace-select">';
     $html .= $form->label($model, 'student');
     $html .= $form->dropDownList($model, 'student', $students, $options);
