@@ -117,7 +117,7 @@ SQL;
         $command = Yii::app()->db->createCommand($sql);
         $id=$command->queryScalar();
         if(!empty($id))
-            return $id;
+            return intval($id);
         else
             return 0;
     }
