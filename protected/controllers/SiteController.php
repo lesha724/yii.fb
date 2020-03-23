@@ -327,10 +327,11 @@ HTML
     /**
      * Регитсрация в дистанционном образовании
      * Вопрос есть уже акаунт или нет
+     * @throws CHttpException
      */
     public function actionSignUpOldDistEducation(){
 
-        if(in_array($this->universityCode, array(U_NMU, U_KNAME)) ){
+        if(in_array($this->universityCode, array(U_KNAME)) ){
             throw new CHttpException('Access denied');
         }
         /**
