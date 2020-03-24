@@ -46,7 +46,7 @@ HTML;
         ),
         'template' => $template,
         'type' => 'striped bordered',
-        'ajaxUrl' => Yii::app()->createAbsoluteUrl('/admin/default/teachers'),
+        'ajaxUrl' => Yii::app()->createUrl('/admin/default/teachers'),
         'columns' => array(
             'p3',
             'p4',

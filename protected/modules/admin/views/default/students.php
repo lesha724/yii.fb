@@ -39,7 +39,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
     ),
     'template' => $template,
     'type' => 'striped bordered',
-    'ajaxUrl' => Yii::app()->createAbsoluteUrl('/admin/default/students'),
+    'ajaxUrl' => Yii::app()->createUrl('/admin/default/students'),
     'columns' => array(
         array(
             'name' => 'st2',
