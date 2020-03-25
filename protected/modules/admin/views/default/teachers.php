@@ -98,7 +98,7 @@ HTML;
                     'grants' => array(
                         'label'=>'<i class="icon-check bigger-120"></i>',
                         'imageUrl'=>false,
-                        'url'=>'Yii::app()->createAbsoluteUrl("/admin/default/PGrants", array("id" => $data->p1))',
+                        'url'=>'Yii::app()->createUrl("/admin/default/PGrants", array("id" => $data->p1))',
                         'options' => array(
                             'class' => 'btn btn-mini btn-success',
                             'title'=>tt('Редактировать'),
@@ -107,7 +107,7 @@ HTML;
                     'enter' => array(
                         'label'=>'<i class="icon-share bigger-120"></i>',
                         'imageUrl'=>false,
-                        'url'=>'Yii::app()->createAbsoluteUrl("/admin/default/enter", array("id" => !empty($data->account)? $data->account->u1: "-1"))',
+                        'url'=>'Yii::app()->createUrl("/admin/default/enter", array("id" => !empty($data->account)? $data->account->u1: "-1"))',
                         'options' => array(
                             'class' => 'btn btn-mini btn-primary',
                             'title'=>tt('Авторизироваться'),
@@ -117,7 +117,7 @@ HTML;
                     'delete' => array(
                         'label'=>'<i class="icon-trash bigger-120"></i>',
                         'imageUrl'=>false,
-                        'url'=>'Yii::app()->createAbsoluteUrl("/admin/default/deleteUser", array("id" => !empty($data->account)? $data->account->u1: "-1"))',
+                        'url'=>'Yii::app()->createUrl("/admin/default/deleteUser", array("id" => !empty($data->account)? $data->account->u1: "-1"))',
                         'options' => array(
                             'class' => 'btn btn-mini btn-danger',
                             'title'=>tt('Удалить'),

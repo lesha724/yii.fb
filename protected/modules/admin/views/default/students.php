@@ -103,7 +103,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                     'label'=>'<i class="icon-info-sign bigger-120"></i>',
 
                     'imageUrl'=>false,
-                    'url'=>'Yii::app()->createAbsoluteUrl("/admin/default/st165", array("id" => $data->st1))',
+                    'url'=>'Yii::app()->createUrl("/admin/default/st165", array("id" => $data->st1))',
                     'options' => array(
                         'class' => 'btn btn-mini btn-info',
                         'title'=>tt('Добавить общую информацию'),
@@ -113,7 +113,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                     'label'=>'<i class="icon-check bigger-120"></i>',
 
                     'imageUrl'=>false,
-                    'url'=>'Yii::app()->createAbsoluteUrl("/admin/default/StGrants", array("id" => $data->st1))',
+                    'url'=>'Yii::app()->createUrl("/admin/default/StGrants", array("id" => $data->st1))',
                     'options' => array(
                         'class' => 'btn btn-mini btn-success',
                         'title'=>tt('Редактировать'),
@@ -122,7 +122,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                 'enter' => array(
                     'label'=>'<i class="icon-share bigger-120"></i>',
                     'imageUrl'=>false,
-                    'url'=>'Yii::app()->createAbsoluteUrl("/admin/default/enter", array("id" => !empty($data->account)? $data->account->u1: "-1"))',
+                    'url'=>'Yii::app()->createUrl("/admin/default/enter", array("id" => !empty($data->account)? $data->account->u1: "-1"))',
                     'options' => array(
                         'class' => 'btn btn-mini btn-primary',
                         'title'=>tt('Авторизироваться'),
@@ -133,7 +133,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                 'delete' => array(
                     'label'=>'<i class="icon-trash bigger-120"></i>',
                     'imageUrl'=>false,
-                    'url'=>'Yii::app()->createAbsoluteUrl("/admin/default/deleteUser", array("id" => !empty($data->account)? $data->account->u1: "-1"))',
+                    'url'=>'Yii::app()->createUrl("/admin/default/deleteUser", array("id" => !empty($data->account)? $data->account->u1: "-1"))',
                     'options' => array(
                         'class' => 'btn btn-mini btn-danger',
                         'title'=>tt('Удалить'),
