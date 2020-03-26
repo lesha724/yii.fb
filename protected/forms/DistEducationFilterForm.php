@@ -184,6 +184,7 @@ class DistEducationFilterForm extends CFormModel
      * Список дисциплин для зарупеления с дист образование для кафедры
      * @param $subscription bool true если нужні уже привязаніе дсициплині
      * @return CSqlDataProvider|null
+     * @throws CException
      */
     public function getDispListForDistEducation($subscription = false){
 

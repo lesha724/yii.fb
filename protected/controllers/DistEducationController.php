@@ -592,9 +592,9 @@ class DistEducationController extends Controller
 
         $model = new DistEducationFilterForm(Yii::app()->user);
 
-        if(!$model->isAdminDistEducation){
+        /*if(!$model->isAdminDistEducation){
             throw new CHttpException(400, tt('Нет доступа'));
-        }
+        }*/
 
         $chairId = Yii::app()->request->getParam('chairId', null);
         $gr1 = Yii::app()->request->getParam('gr1', null);
@@ -703,9 +703,9 @@ class DistEducationController extends Controller
 
         $model = new DistEducationFilterForm(Yii::app()->user);
 
-        if(!$model->isAdminDistEducation){
+        /*if(!$model->isAdminDistEducation){
             throw new CHttpException(400, tt('Нет доступа'));
-        }
+        }*/
 
         $chairId = Yii::app()->request->getParam('chairId', null);
         $gr1 = Yii::app()->request->getParam('gr1', null);
@@ -775,9 +775,9 @@ class DistEducationController extends Controller
 
         $model = new DistEducationFilterForm(Yii::app()->user);
 
-        if(!$model->isAdminDistEducation){
+        /*if(!$model->isAdminDistEducation){
             throw new CHttpException(400, tt('Нет доступа'));
-        }
+        }*/
 
         $chairId = Yii::app()->request->getParam('chairId', null);
         //$gr1 = Yii::app()->request->getParam('gr1', null);
@@ -858,9 +858,9 @@ class DistEducationController extends Controller
 
         $model = new DistEducationFilterForm(Yii::app()->user);
 
-        if(!$model->isAdminDistEducation){
+        /*if(!$model->isAdminDistEducation){
             throw new CHttpException(400, tt('Нет доступа 11'));
-        }
+        }*/
 
         $chairId = Yii::app()->request->getParam('chairId', null);
         $st1 = Yii::app()->request->getParam('st1', null);
