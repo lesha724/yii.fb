@@ -526,9 +526,9 @@ class DistEducationController extends Controller
         $model = new DistEducationFilterForm(Yii::app()->user);
         $model->unsetAttributes();
 
-        if(!$model->isAdminDistEducation){
+        /*if(!$model->isAdminDistEducation){
             throw new CHttpException(400, tt('Нет доступа'));
-        }
+        }*/
 
         if (isset($_GET['pageSize'])) {
             Yii::app()->user->setState('pageSize',(int)$_GET['pageSize']);
