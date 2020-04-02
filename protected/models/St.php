@@ -9,7 +9,6 @@
  * @property integer $st29
  * @property integer $st34
  * @property string $st38
- * @property integer $st63
  * @property string $st66
  * @property integer $st99
  * @property integer $st101
@@ -82,7 +81,7 @@ class St extends CActiveRecord implements IPerson
 	{
 		return array(
 			array('st1', 'required'),
-			array('st1, st29, st34, st63, st101, st103, st104, st114, st115, st99, st139, st144, st167, 168', 'numerical', 'integerOnly'=>true),
+			array('st1, st29, st34, st101, st103, st104, st114, st115, st99, st139, st144, st167, 168', 'numerical', 'integerOnly'=>true),
 			array('st131, st132', 'length', 'max'=>80),
 			array('st5, st148', 'length', 'max'=>60),
 			array('st66', 'length', 'max'=>4),

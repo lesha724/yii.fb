@@ -63,7 +63,7 @@ class RegistrationInternationalForm extends CFormModel
     {
         $count = St::model()->with('person')->count(new CDbCriteria(array
         (
-            'condition' => 'pe23 = :NUMBER and st63 > 0',
+            'condition' => 'pe23 = :NUMBER and pe59=1',
             'params' => array(':NUMBER'=>$this->number)
         )));
 
@@ -78,7 +78,7 @@ class RegistrationInternationalForm extends CFormModel
 
         $students = St::model()->with('person')->findAll(new CDbCriteria(array
         (
-            'condition' => 'pe23 = :NUMBER AND  pe22 =:SERIAL and st63 > 0',
+            'condition' => 'pe23 = :NUMBER AND  pe22 =:SERIAL and pe59=1',
             'params' => array(
                 ':NUMBER'=>$this->number,
                 ':SERIAL'=>!empty($this->emptySerial)? '' :$this->serial
