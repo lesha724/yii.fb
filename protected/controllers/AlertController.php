@@ -128,19 +128,6 @@ class AlertController extends Controller
         $this->redirect(array('alert/index'), false, 301);
     }
 
-    /**
-     * Performs the AJAX validation.
-     * @param CModel the model to be validated
-     */
-    protected function performAjaxValidation($model)
-    {
-        if(isset($_POST['ajax']) && $_POST['ajax']==='create-message-form')
-        {
-            echo CActiveForm::validate($model);
-            Yii::app()->end();
-        }
-    }
-
     public function actionAutocomplete($type, $faculty)
     {
         //if (! Yii::app()->request->isAjaxRequest)

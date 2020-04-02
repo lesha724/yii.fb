@@ -454,7 +454,7 @@ SQL;
             gr23 CONTAINING :QUERY5 or 
             gr24 CONTAINING :QUERY6)';
         $sql=<<<SQL
-           SELECT  sem4, sp2, t2.sg4, gr7,gr3,gr1, gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26, t2.sg1
+            SELECT  sem4, sp2, t2.sg4, gr7,gr3,gr1, gr19,gr20,gr21,gr22,gr23,gr24,gr25,gr26, t2.sg1
 			from sp
 			   inner join sg t2 on (sp.sp1 = t2.sg2)
 			   inner join sem on (t2.sg1 = sem.sem2)
@@ -1188,9 +1188,7 @@ SQL;
         $command->bindValue(':YEAR', Yii::app()->session['year']);
         $command->bindValue(':SEM', Yii::app()->session['sem']);
         $command->bindValue(':DATE_SEM', $date);
-        $course = $command->queryScalar();
-
-        return $course;
+        return $command->queryScalar();
     }
 
     public function getGroupsByChair($chair, $date1, $date2){
@@ -1247,9 +1245,7 @@ SQL;
         $command->bindValue(':GR1', $gr1);
         $command->bindValue(':YEAR', $year);
         $command->bindValue(':SEM', $sem);
-        $sem1 = $command->queryScalar();
-
-        return $sem1;
+        return $command->queryScalar();
     }
 
     /**
@@ -1272,9 +1268,7 @@ SQL;
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':GR1', $gr1);
-        $row = $command->queryRow();
-
-        return $row;
+        return $command->queryRow();
     }
 
     /**
@@ -1296,9 +1290,7 @@ SQL;
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':SG1', $sg1);
-        $row = $command->queryRow();
-
-        return $row;
+        return $command->queryRow();
     }
 
     public function getNameByDate($gr1,$date)
