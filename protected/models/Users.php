@@ -36,6 +36,7 @@ class Users extends CActiveRecord
     const PRNT = 2;
     const DOCTOR = 3;
 
+    const FOTO_PE1  = 2;
     const FOTO_ST1  = 1;
     const FOTO_P1   = 0;
 

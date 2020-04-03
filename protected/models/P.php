@@ -654,8 +654,8 @@ SQL;
 			order by P3 collate UNICODE,P4,P5,PD7
 SQL;
         $command = Yii::app()->db->createCommand($sql);
-        $command->bindValue(':DATE1', date('d.m.Y 00:00', strtotime('+20 days')));
-        $command->bindValue(':DATE2', date('d.m.Y 00:00'));
+        $command->bindValue(':DATE1', );
+        $command->bindValue(':DATE2', );
         $command->bindValue(':QUERY1', $query);
         $command->bindValue(':QUERY2', $query);
         $command->bindValue(':QUERY3', $query);

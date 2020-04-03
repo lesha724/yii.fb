@@ -33,9 +33,7 @@ else {
 echo '<div id="studentCard">';
     echo '<div class="top-block"></div>';
 
-    $id   = $st->st1;
-    $type = Users::FOTO_ST1;
-    $url = $this->createUrl('/site/userPhoto', array('_id' => $id, 'type' => $type));
+    $url = $this->createUrl('/site/userPhoto', array('_id' =>  $st->st200, 'type' => Users::FOTO_PE1));
 
     $class='img-circle';
     //img-polaroid

@@ -46,8 +46,8 @@
                                     $type = Users::FOTO_P1;
                                     $url = $this->createUrl('/site/userPhoto', array('_id' => $id, 'type' => $type));
                                 } elseif (Yii::app()->user->isStd) {
-                                    $id   = Yii::app()->user->dbModel->st1;
-                                    $type = Users::FOTO_ST1;
+                                    $id   = Yii::app()->user->dbModel->st200;
+                                    $type = Users::FOTO_PE1;
                                     $url = $this->createUrl('/site/userPhoto', array('_id' => $id, 'type' => $type));
                                 } else
                                     $url = '/theme/ace/assets/avatars/avatar2.png';

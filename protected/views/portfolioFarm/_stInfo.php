@@ -20,7 +20,7 @@ CSS
     );
 
 $studentInfo = $student->getStudentInfoForPortfolio();
-$url = $this->createUrl('/site/userPhoto', array('_id' => $student->st1, 'type' => Users::FOTO_ST1));
+$url = $this->createUrl('/site/userPhoto', array('_id' => $student->st200, 'type' => Users::FOTO_PE1));
 $class='img-circle';
 $infoHtml = <<<HTML
     <div class="student-info row">

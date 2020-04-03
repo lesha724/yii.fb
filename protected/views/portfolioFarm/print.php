@@ -38,7 +38,7 @@ echo CHtml::image('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALcAAAC+CAYAAAB
 echo '<h2>'.tt('Портфолио').'</h2>';
 echo '<h3 style="text-align: center">1. '.tt('Резюме').'</h3>';
 
-echo CHtml::image(Yii::app()->createUrl('site/userPhoto',array( '_id'=>$student->st1, 'type'=>1)), $student->getShortName(), array(
+echo CHtml::image(Yii::app()->createUrl('site/userPhoto',array( '_id'=>$student->st200, 'type'=>Users::FOTO_PE1)), $student->getShortName(), array(
     'style' => 'float:right;height: 200px;'
 ));
 echo CHtml::openTag('div', array(

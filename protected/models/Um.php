@@ -102,8 +102,8 @@ class Um extends CActiveRecord
                 $name = '-';
             }else{
                 $url = Yii::app()->createUrl('/site/userPhoto', array(
-                    '_id' => $user->u6,
-                    'type' => $user->u5 == 1 ? 0 : 1
+                    '_id' => $user->u5 == 1 ? $user->u6 : St::model()->findByPk($user->u6)->st200,
+                    'type' => $user->u5 == 1 ? Users::FOTO_P1 : Users::FOTO_PE1
                 ));
                 $name = $user->getNameWithDept();
             }
