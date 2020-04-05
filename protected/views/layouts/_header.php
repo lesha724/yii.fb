@@ -42,13 +42,9 @@
                             <i class="icon-user"></i><?=tt('Войти')?>
                         <?php else:
                                 if (Yii::app()->user->isTch) {
-                                    $id   = Yii::app()->user->dbModel->p1;
-                                    $type = Users::FOTO_P1;
-                                    $url = $this->createUrl('/site/userPhoto', array('_id' => $id, 'type' => $type));
+                                    $url = $this->createUrl('/site/userPhoto', array('_id' => Yii::app()->user->dbModel->p1, 'type' => Users::FOTO_P1));
                                 } elseif (Yii::app()->user->isStd) {
-                                    $id   = Yii::app()->user->dbModel->st200;
-                                    $type = Users::FOTO_PE1;
-                                    $url = $this->createUrl('/site/userPhoto', array('_id' => $id, 'type' => $type));
+                                    $url = $this->createUrl('/site/userPhoto', array('_id' => Yii::app()->user->dbModel->st200, 'type' => Users::FOTO_PE1));
                                 } else
                                     $url = '/theme/ace/assets/avatars/avatar2.png';
                             ?>

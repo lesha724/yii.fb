@@ -195,16 +195,6 @@ class CreateMessageForm extends CFormModel
         }
     }
 
-    /**
-     * @param null $attributes
-     * @param bool $clearErrors
-     * @return bool
-     */
-    public function validate($attributes = null, $clearErrors = true)
-    {
-        return parent::validate($attributes, $clearErrors);
-    }
-
     public function getErrorString($delimiter = '<br>'){
         if(is_array($this->errors)){
             $errors = '';
