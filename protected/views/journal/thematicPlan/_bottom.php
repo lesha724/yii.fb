@@ -16,9 +16,9 @@ if (!empty($model->group)) {
     $groups = Us::model()->getGroups($us1);
 
     $hours = Ustem::model()->getHours($us1,0);
-    $urlDelete = Yii::app()->controller->createAbsoluteUrl("journal/deleteUstemTheme", array("ustem1" => ''));
-    $urlPaste = Yii::app()->controller->createAbsoluteUrl("journal/pasteUstemTheme",array('us1' => $us1));
-    $urlEdit   = Yii::app()->controller->createAbsoluteUrl("journal/renderUstemTheme", array('d1' => $model->discipline,"ustem1" =>''));
+    $urlDelete = Yii::app()->controller->createUrl("journal/deleteUstemTheme", array("ustem1" => ''));
+    $urlPaste = Yii::app()->controller->createUrl("journal/pasteUstemTheme",array('us1' => $us1));
+    $urlEdit   = Yii::app()->controller->createUrl("journal/renderUstemTheme", array('d1' => $model->discipline,"ustem1" =>''));
     $res = CHtml::listData(Ustem::model()->getUstem7Arr(),'rz8','rz8_');
     $selectUstem7= str_replace("\n", ' ', CHtml::dropDownList('',0,$res,array('class'=>'ustem7 select-new-ustem7')));
     $selectUstem6= str_replace("\n", ' ', CHtml::dropDownList('',0,Ustem::model()->getUstem6Arr($us1),array('class'=>'ustem6')));
@@ -93,7 +93,7 @@ JS
             echo '<h5 class="blue">'.tt('Группы').': '.$groups_name.'</h5>';
         }
     ?>
-    <?php $urlInsert   = Yii::app()->controller->createAbsoluteUrl("journal/insertUstemTheme");?>
+    <?php $urlInsert   = Yii::app()->controller->createUrl("journal/insertUstemTheme");?>
     <table id="themes" data-us1="<?=$us1?>" data-url="<?=$urlInsert?>" class="table table-striped table-bordered table-hover">
         <thead>
         <tr>
@@ -115,8 +115,8 @@ JS
                 foreach ($themes as $theme) {
 
                     $tip = Ustem::model()->getUstem6($theme['ustem6']);
-                    $urlDelete = Yii::app()->controller->createAbsoluteUrl("journal/deleteUstemTheme", array("ustem1" => $theme['ustem1']));
-                    $urlEdit   = Yii::app()->controller->createAbsoluteUrl("journal/renderUstemTheme", array("ustem1" => $theme['ustem1'], 'd1' => $model->discipline));
+                    $urlDelete = Yii::app()->controller->createUrl("journal/deleteUstemTheme", array("ustem1" => $theme['ustem1']));
+                    $urlEdit   = Yii::app()->controller->createUrl("journal/renderUstemTheme", array("ustem1" => $theme['ustem1'], 'd1' => $model->discipline));
                     $ustem7=round($theme['ustem7'],2);
 
                     $html .= <<<HTML
@@ -190,7 +190,7 @@ HTML;
     </p>
 </div><!-- #dialog-confirm -->
 
-<div id="dialog-confirm-add" data-action="<?= Yii::app()->controller->createAbsoluteUrl("journal/addUstemTheme")?>" class="hide" title="Empty the recycle bin?">
+<div id="dialog-confirm-add" data-action="<?= Yii::app()->controller->createUrl("journal/addUstemTheme")?>" class="hide" title="Empty the recycle bin?">
 	<div class="control-group count-rows-group">
 	  <label class="control-label" for="count-rows"><?=tt('Количество занятий')?></label>
 	  <div class="controls">
@@ -210,9 +210,9 @@ HTML;
     </div>
 </div><!-- #dialog-confirm-add -->
 
-<div id="dialog-confirm-copy" class="hide" data-us1="<?=$us1?>" data-action="<?= Yii::app()->controller->createAbsoluteUrl("journal/copyUstemTheme")?>" title="Empty the recycle bin?">
+<div id="dialog-confirm-copy" class="hide" data-us1="<?=$us1?>" data-action="<?= Yii::app()->controller->createUrl("journal/copyUstemTheme")?>" title="Empty the recycle bin?">
     <span id="spinner2"></span>
-    <div id="copy-theme" data-d1="<?=$model->discipline?>" data-action="<?= Yii::app()->controller->createAbsoluteUrl("journal/copyThemePlanSg")?>">
+    <div id="copy-theme" data-d1="<?=$model->discipline?>" data-action="<?= Yii::app()->controller->createUrl("journal/copyThemePlanSg")?>">
         <?php
             $this->renderPartial('thematicPlan/_copy', array(
                 'discipline'=>$model->discipline,

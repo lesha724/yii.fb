@@ -12,7 +12,7 @@
     'filter' => $model,
     'type' => 'striped bordered',
     'afterAjaxUpdate' => 'function(id) { $(\'[data-toggle="tooltip"]\').tooltip();}',
-    'ajaxUrl' => Yii::app()->createAbsoluteUrl('/journal/searchRetake',array('uo1'=>$model->uo1,'us1'=>$us1)),
+    'ajaxUrl' => Yii::app()->createUrl('/journal/searchRetake',array('uo1'=>$model->uo1,'us1'=>$us1)),
     'columns' => array(
         'st2'=>array(
             'header'=>tt('Студент'),
