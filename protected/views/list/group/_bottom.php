@@ -138,7 +138,7 @@ function getPassportLabel($id,$type, $pattern, $patternAdmin){
                 ))
             ;
 
-            echo '<td class="action-td">'.$button.'</td>';
+            echo '<td class="action-td">'.$button.(!empty($stDist) ? ' UserID:'.$stDist->stdist3 : '').'</td>';
         }
 
 		echo '</tr>';
