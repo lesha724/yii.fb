@@ -454,7 +454,7 @@ SQL;
 			   INNER JOIN STD ON (ST.ST1 = STD.STD2)
 			   INNER JOIN SK ON (SK.SK1 = STD.STD26)
 			   INNER JOIN GR ON (STD.STD3 = GR.GR1)
-			 WHERE std7 is null and std11 in (0,5,6,8) and gr2=:SG1 and st101!=7 and std24=0
+			 WHERE std7 is null and std11 in (0,5,6,8) and gr2=:SG1 and st101!=7 and std24=0 and gr13=0
 			 ORDER BY pe2 collate UNICODE
 SQL;
 

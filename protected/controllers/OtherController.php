@@ -913,7 +913,7 @@ HTML;
                         $st_info['sem4'],
                         $st_info['name'],
                         $st_info['f3'],
-                        $student->getShortName(),
+                        $student->getShortName(),//
                         $typeWork,
                         $nkrs4,
                         $nkrs5,
