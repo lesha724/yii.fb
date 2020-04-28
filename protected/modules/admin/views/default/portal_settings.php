@@ -151,6 +151,13 @@ Yii::app()->clientScript->registerScript('sem-start', $js);
                     <?=CHtml::textField('settings[53]', PortalSettings::model()->findByPk(53)->ps2,array('class' => 'sem-start datepicker','date-format'=>'mm-dd'))?>
                 </div>
 
+                <?php if(Yii::app()->core->universityCode == U_URFAK):?>
+                    <div class="control-group">
+                        <span class="lbl"> <?=tt('Сообщение для выпускников')?>:</span>
+                        <?=CHtml::textArea('settings[38]', PortalSettings::model()->getSettingFor(PortalSettings::ID_URFAK_MESSAGE), array('rows'=>6, 'cols'=>50))?>
+                    </div>
+                <?php endif;?>
+
                 <div class="control-group">
                     <span class="lbl"> <?=tt('Текст на главной(Ua)')?>:</span>
                     <?php $this->widget('application.extensions.elFinderTinyMce.TinyMce',

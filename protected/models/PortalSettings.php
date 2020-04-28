@@ -126,6 +126,10 @@ class PortalSettings extends CActiveRecord
      */
     const ACCEPT_CANCEL_REGISTRATION = 147;
     /**
+     * времменое сообщение для юрфака
+     */
+    const ID_URFAK_MESSAGE = 38;
+    /**
      * Для хранения настро
      * @var array
      */

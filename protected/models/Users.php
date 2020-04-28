@@ -410,11 +410,39 @@ HTML;
             Yii::app()->user->setFlash('info', $message);
 
         $universityCode = Yii::app()->core->universityCode;
+        if($universityCode == U_URFAK && $this->isStudent){
+            $message = PortalSettings::model()->getSettingFor(PortalSettings::ID_URFAK_MESSAGE);
+            if(!empty($message) && $this->_checkUrfakMessage())
+                Yii::app()->user->setFlash('success', '<strong>' . tt('Внимание!') . '</strong> ' . $message);
+        }
 
         if(empty($this->u4)) {
             Yii::app()->user->setFlash('warning', '<strong>' . tt('Внимание!') . '</strong> ' . tt('Заполните Email!'));
         }
 	}
+
+    /**
+     * Проверка нужно ли отображать временное сообщение
+     * @return bool
+     */
+	private function _checkUrfakMessage(){
+	    if(!$this->isStudent)
+	        return false;
+        if(empty($this->u6))
+            return false;
+        $sql = <<<SQL
+            select first 1 std2 from sg
+                inner join gr on (sg.sg1 = gr.gr2 and gr13=0)
+                inner join std on (gr.gr1 = std.std3 and std7 is null and std24=0 and std11!=1 and std2=:ST1)
+                inner join sem on (sem2 = sg1)
+                inner join sp on (sg.sg2 = sp.sp1)
+            where ((sem4=4 and SP14=1) or (sem4=2 and SP14=3) or (sem4=3 and SP5=9)) and sem3=:YEAR
+SQL;
+
+	    $data = Yii::app()->db->createCommand($sql)->bindValue(':ST1', $this->u6)->bindValue(':YEAR', Yii::app()->core->currentYear)->queryScalar();
+
+	    return !empty($data);
+    }
 
 	public function validateLogin(){
 		return true;

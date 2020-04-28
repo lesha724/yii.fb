@@ -765,9 +765,7 @@ SQL;
         $command->bindValue(':D1', $discipline);
         $command->bindValue(':YEAR', Yii::app()->session['year']);
         $command->bindValue(':SEM', Yii::app()->session['sem']);
-        $groups = $command->queryAll();
-
-        return $groups;
+        return $command->queryAll();
     }
 
     public static function getTimeTable($id, $date1, $date2,$type)
