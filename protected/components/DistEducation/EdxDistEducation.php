@@ -1,14 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: NEFF
- * Date: 06.11.2017
- * Time: 16:23
- */
-
-/**
  * Class EdxDistEducation
- * Конектор для edx
+ * Коннектор для edx
  * @property string $apiKey
  */
 class EdxDistEducation extends DistEducation implements IEdxDistEducation
@@ -25,7 +18,6 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
      */
     protected function getParamsForSignUp($user)
     {
-        // TODO: Implement getParamsForSignUp() method.
         return array();
     }
 
@@ -37,7 +29,6 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
     /**
      * отправка запроса для регистрации
      * @param $user Users
-     * @return array
      * @throws Exception empty apikey
      */
     protected function sendSignUp($user, $params)
@@ -105,11 +96,6 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
                 'header'=>tt('Изображение'),
                 'name'=>'image',
                 'value'=>function($course) use (&$url){
-                    /*if(!isset($course->media))
-                        return '';*/
-
-                    /*if(empty($course->media))
-                        return '';*/
 
                     if(!isset($course->media->course_image))
                         return '';
@@ -207,20 +193,10 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
 
         $client = new EHttpClient( $this->host.$method, $config);
 
-        //var_dump($this->host.$method);
-
         $client->setHeaders($header);
-
-        //var_dump($header);
 
         if($rawData!=null)
             $client->setRawData($rawData);
-
-        //var_dump($rawData);
-
-        //var_dump($type);
-
-
 
         if($type == EHttpClient::GET){
             if(!empty($params)) {
@@ -233,18 +209,6 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
         }
 
         $response = $client->request($type);
-
-        /*var_dump($client);
-
-        echo '<br>';
-
-        var_dump($response);
-
-        echo '<br>';
-
-        //var_dump($response->getRawBody());
-
-        var_dump($response->getBody());*/
 
         if($response->isSuccessful())
         {
@@ -319,14 +283,14 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
 
 
     /**
-     * @param $st Users
+     * @param $st St
      * @return array
      */
     private function _studentToCourse($st, $ucgns1, $subscribe = true){
-        if(!$st->isStudent)
-            return array(false, 'DistEducation:'.tt('Пользователь не студент'));
+        /*if(!$st->isStudent)
+            return array(false, 'DistEducation:'.tt('Пользователь не студент'));*/
 
-        $stDist = Stdist::model()->findByPk($st->u6);
+        $stDist = Stdist::model()->findByPk($st->st1);
         if($stDist==null) {
             return array(false, 'DistEducation:'.tt('Студент не зарегистрирован в дистанционном обучении'));
         }
@@ -360,7 +324,7 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
             }else{
                 $log.= $subscribe ? 'Вы успешно записались на курс: ' : 'Вы успешно выписались с курса:  ';
 
-                if(!$this->stDistSub($uo1['uo1'], $st->u6, $subscribe)){
+                if(!$this->stDistSub($uo1['uo1'], $st->st1, $subscribe)){
                     $log .= ' Ошибка создания записи-лога';
                     $globalResult = false;
                 }
@@ -374,7 +338,7 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
 
     /**
      * Записать студента на курс по дисциплине
-     * @param Users $st
+     * @param St $st
      * @param int $ucgns1
      * @return array
      */
@@ -385,7 +349,7 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
 
     /**
      * Записать студента на курс
-     * @param Users $st
+     * @param St $st
      * @param int $ucgns1
      * @return array
      */
