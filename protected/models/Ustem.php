@@ -351,20 +351,4 @@ SQL;
         }
         return $hours;
     }
-
-    public function getLessonByRasp()
-    {
-        $sql = <<<SQL
-             select r2,rz8 as dlitelnost
-            from rz
-               inner join r on (rz.rz1 = r.r4)
-               inner join nr on (r.r1 = nr.nr1)
-               inner join us on (nr.nr2 = us.us1)
-               inner join ug on (nr.nr1 = ug.ug3)
-            where us1=:us1 and ug2=:gr1
-            order by r2,rz2
-SQL;
-
-    }
-
 }

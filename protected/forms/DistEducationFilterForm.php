@@ -373,7 +373,7 @@ SQL;
             inner join ucx on (ucxg.ucxg1 = ucx.ucx1)
             inner join uo on (ucx.ucx1 = uo.uo19)
             inner join us on (UO.UO1 = US.US2)
-			INNER JOIN sem ON (Us.us3 = sem.sem1)
+			INNER JOIN sem ON (Us.us3 = sem.sem1 and sem3=:YEAR_ and sem5=:SEM_)
           WHERE uo1=:UO1 and gr13=0 and UCGNS5=:YEAR and UCGNS6=:SEM  $where
           GROUP BY gr1, gr3, sem4,gr19,gr20,gr21,gr22,gr23,gr24,gr28
 SQL;
@@ -381,7 +381,9 @@ SQL;
         $params = array(
             ':UO1' => $uo1,
             ':YEAR'=>Yii::app()->session['year'],
-            ':SEM'=>Yii::app()->session['sem']
+            ':SEM'=>Yii::app()->session['sem'],
+            ':YEAR_'=>Yii::app()->session['year'],
+            ':SEM_'=>Yii::app()->session['sem']
         );
 
         if(!empty($gr1))
