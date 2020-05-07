@@ -368,17 +368,13 @@ SQL;
     private function calculateFarm($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks)
     {
         $sym = 0;
-
-        $count=0;
         foreach ($marks as $mark) {
-            $bal = 0;
             if ($mark['elgzst3'] > 0) {
                 $bal = $mark['elgzst5'];
             } else {
                 $bal = ($mark['elgzst5'] > 0) ? $mark['elgzst5'] : $mark['elgzst4'];
             }
             $sym += $bal;
-            //$count++;
         }
 
         $elgsdSumm = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::SUM_TYPE));
@@ -446,6 +442,97 @@ SQL;
             return true;
         }
         //}
+        return false;
+    }
+
+    /**
+     * расчет оценок ирпени
+     * @param $st1 int Код студента
+     * @param $gr1 int Код группа
+     * @param $sem7 int номер семестра
+     * @param $elg Elg
+     * @param $idUniversity int код вуза
+     * @param $stusv Stusv ведомость
+     * @param $marks mixed оценки
+     * @return bool
+     */
+    private function calculateZachOneu($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks)
+    {
+        $sym = 0;
+        foreach ($marks as $mark) {
+            if ($mark['elgzst3'] > 0) {
+                $bal = $mark['elgzst5'];
+            } else {
+                $bal = ($mark['elgzst5'] > 0) ? $mark['elgzst5'] : $mark['elgzst4'];
+            }
+            $sym += $bal;
+        }
+
+        $elgsdSumm = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::SUM_TYPE));
+
+        $elgsdInd = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::IND_TYPE));
+        $elgsdExam = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::EXAM_TYPE));
+
+        $balInd = $balExam = null;
+
+        if($elgsdInd!=null) {
+            $elgdInd = Elgd::model()->findByAttributes(array('elgd1' => $elg->elg1, 'elgd2' => $elgsdInd->elgsd1));
+            if($elgdInd!=null)
+                $balInd = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdInd->elgd0));
+        }
+
+        if($elgsdExam!=null) {
+            $elgdExam = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdExam->elgsd1));
+            if($elgdExam!=null)
+                $balExam = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdExam->elgd0));
+        }
+
+
+        if($balInd==null)
+        {
+            $balInd = new Elgdst();
+            $balInd->elgdst3 = 0;
+        }
+
+        if($balExam==null)
+        {
+            $balExam = new Elgdst();
+            $balExam->elgdst3 = 0;
+        }
+
+        $elgdSumm=null;
+        if($elgsdSumm!=null)
+            $elgdSumm= Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdSumm->elgsd1));
+
+        if($elgsdSumm!=null) {
+            if ($elgdSumm != null) {
+                $balSumm = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdSumm->elgd0));
+                if (empty($balSumm)) {
+                    $balSumm = new Elgdst();
+                    $balSumm->elgdst0 = new CDbExpression('GEN_ID(GEN_elgdst, 1)');
+                    $balSumm->elgdst1 = $st1;
+                    $balSumm->elgdst2 = $elgdSumm->elgd0;
+                }
+
+                $balSumm->elgdst3 = $sym;
+                $balSumm->elgdst5 = Yii::app()->user->dbModel->p1;
+                $balSumm->elgdst4 = date('Y-m-d H:i:s');
+                $balSumm->save();
+            }
+        }
+
+        $sym=$sym+$balInd->elgdst3+$balExam->elgdst3;
+
+        $bal_itog = round($sym);
+
+        $arr = Cxmb::model()->getMark($bal_itog);
+        $cxmb3 = $arr['cxmb3'];
+        $cxmb2 = $bal_itog>= 50?-1:0;
+
+        if($stusv->saveNewStusMark($st1, $bal_itog,$cxmb3 ,$cxmb2)){
+            return true;
+        }
+
         return false;
     }
 
@@ -628,8 +715,8 @@ SQL;
 		return false;
 	}
 
-	/**
-     * расчет оценок ирпени
+    /**
+     * расчет оценок ONEU
      * @param $st1 int Код студента
      * @param $gr1 int Код группа
      * @param $sem7 int номер семестра
@@ -639,20 +726,16 @@ SQL;
      * @param $marks mixed оценки
      * @return bool
      */
-    private function calculateIrpen($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks)
+    private function calculateOneu($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks)
     {
         $sym = 0;
-
-        $count=0;
         foreach ($marks as $mark) {
-            $bal = 0;
             if ($mark['elgzst3'] > 0) {
                 $bal = $mark['elgzst5'];
             } else {
                 $bal = ($mark['elgzst5'] > 0) ? $mark['elgzst5'] : $mark['elgzst4'];
             }
             $sym += $bal;
-            //$count++;
         }
 
         $elgsdSumm = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::SUM_TYPE));
@@ -720,7 +803,97 @@ SQL;
         if($stusv->saveNewStusMark($st1, $bal_itog,$cxmb3 ,$cxmb2)){
             return true;
         }
-        //}
+        return false;
+    }
+
+	/**
+     * расчет оценок ирпени
+     * @param $st1 int Код студента
+     * @param $gr1 int Код группа
+     * @param $sem7 int номер семестра
+     * @param $elg Elg
+     * @param $idUniversity int код вуза
+     * @param $stusv Stusv ведомость
+     * @param $marks mixed оценки
+     * @return bool
+     */
+    private function calculateIrpen($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks)
+    {
+        $sym = 0;
+        foreach ($marks as $mark) {
+            if ($mark['elgzst3'] > 0) {
+                $bal = $mark['elgzst5'];
+            } else {
+                $bal = ($mark['elgzst5'] > 0) ? $mark['elgzst5'] : $mark['elgzst4'];
+            }
+            $sym += $bal;
+        }
+
+        $elgsdSumm = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::SUM_TYPE));
+
+        $elgsdInd = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::IND_TYPE));
+        $elgsdExam = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::EXAM_TYPE));
+
+        $balInd = $balExam = null;
+
+        if($elgsdInd!=null) {
+            $elgdInd = Elgd::model()->findByAttributes(array('elgd1' => $elg->elg1, 'elgd2' => $elgsdInd->elgsd1));
+            if($elgdInd!=null)
+                $balInd = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdInd->elgd0));
+        }
+
+        if($elgsdExam!=null) {
+            $elgdExam = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdExam->elgsd1));
+            if($elgdExam!=null)
+                $balExam = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdExam->elgd0));
+        }
+
+
+        if($balInd==null)
+        {
+            $balInd = new Elgdst();
+            $balInd->elgdst3 = 0;
+        }
+
+        if($balExam==null)
+        {
+            $balExam = new Elgdst();
+            $balExam->elgdst3 = 0;
+        }
+
+
+        $elgdSumm=null;
+        if($elgsdSumm!=null)
+            $elgdSumm= Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdSumm->elgsd1));
+
+        if($elgsdSumm!=null) {
+            if ($elgdSumm != null) {
+                $balSumm = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdSumm->elgd0));
+                if (empty($balSumm)) {
+                    $balSumm = new Elgdst();
+                    $balSumm->elgdst0 = new CDbExpression('GEN_ID(GEN_elgdst, 1)');
+                    $balSumm->elgdst1 = $st1;
+                    $balSumm->elgdst2 = $elgdSumm->elgd0;
+                }
+
+                $balSumm->elgdst3 = $sym;
+                $balSumm->elgdst5 = Yii::app()->user->dbModel->p1;
+                $balSumm->elgdst4 = date('Y-m-d H:i:s');
+                $balSumm->save();
+            }
+        }
+
+        $sym=$sym+$balInd->elgdst3+$balExam->elgdst3;
+
+        $bal_itog = round($sym);
+
+        $arr = Cxmb::model()->getMark($bal_itog);
+        $cxmb3 = $arr['cxmb3'];
+        $cxmb2= $arr['cxmb2'];
+
+        if($stusv->saveNewStusMark($st1, $bal_itog,$cxmb3 ,$cxmb2)){
+            return true;
+        }
         return false;
     }
     /**
@@ -1065,7 +1238,6 @@ SQL;
 			/*эКЗАМЕН*/
 			case 5:
 				return $this->calculateExamXarkovMed($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
-				break;
 			/*ЗАЧЕТ ИЛИ ДИФЗАЧЕТ*/
 			case 6:
                 if($us->us6==1)//ЗАЧЕТ
@@ -1096,7 +1268,6 @@ SQL;
             /*эКЗАМЕН*/
             case 5:
                 return $this->calculateIrpen($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
-                break;
             /*ЗАЧЕТ ИЛИ ДИФЗАЧЕТ*/
             case 6:
                 if($us->us6==1)//ЗАЧЕТ
@@ -1105,6 +1276,35 @@ SQL;
                 }	//return $this->calculateZachXarkovMed($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
                 elseif($us->us6==2)//ДИФЗАЧЕТ
                     return $this->calculateIrpen($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
+                break;
+        }
+        return false;
+    }
+    /**
+     * Пересчет для Oneu
+     * @param $st1 int Код студента
+     * @param $gr1 int Код группы
+     * @param $sem7 int номер семстра
+     * @param $elg Elg
+     * @param $idUniversity int еод университета
+     * @param $stusv Stusv
+     * @param $marks mixed оценки
+     * @return bool
+     */
+    private function recalculateOneu($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks){
+        $us = Us::model()->getUsByStusvFromJournal($elg);
+        if(empty($us))
+            return false;
+        switch($us->us4){
+            /*эКЗАМЕН*/
+            case 5:
+                return $this->calculateOneu($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
+            /*ЗАЧЕТ ИЛИ ДИФЗАЧЕТ*/
+            case 6:
+                if($us->us6==1)//ЗАЧЕТ
+                    return $this->calculateZachOneu($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
+                elseif($us->us6==2)//ДИФЗАЧЕТ
+                    return $this->calculateOneu($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
                 break;
         }
         return false;
@@ -1167,9 +1367,7 @@ SQL;
             /*ЗАЧЕТ ИЛИ ДИФЗАЧЕТ*/
             case 6:
                 if($us->us6==1)//ЗАЧЕТ
-                {
                     return $this->calculateZachFarm($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
-                }	//return $this->calculateZachXarkovMed($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
                 elseif($us->us6==2)//ДИФЗАЧЕТ
                     return $this->calculateFarm($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
                 break;
@@ -1177,25 +1375,24 @@ SQL;
         return false;
     }
 
-	/**
-	 * пересчет итоговой оценки
-	 * @param $st1 int код студента
-	 * @param $gr1 int код группы
-	 * @param $sem7 int  номре семетсра
-	 * @param $elg Elg
-	 * @return bool
-	 */
+    /**
+     * пересчет итоговой оценки
+     * @param $st1 int код студента
+     * @param $gr1 int код группы
+     * @param $sem7 int  номре семетсра
+     * @param $elg Elg
+     * @return bool
+     * @throws Exception
+     */
 	public function recalculateStusMark($st1,$gr1,$sem7,$elg){
 
 	    if($elg->elg4!=1)
 	        return false;
 
 		$idUniversity = Yii::app()->core->universityCode;
-		//var_dump($idUniversity);
 		if($idUniversity===null)
 			return false;
 
-		//$stusv = Stusv::model()->getStusvByJournal($elg, $gr1);
         $stusv = Stusv::model()->getStusvByJournalAndStudent($elg, $st1);
 		if($stusv == null)
 		    return false;
@@ -1242,9 +1439,12 @@ SQL;
                 case U_FARM:
                     return $this->recalculateFarm($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
                     break;
-				case 1:
+				case U_SUM_AGR:
 					return $this->recalculateSymAgr($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
 					break;
+                case U_ONEU:
+                    return $this->recalculateOneu($st1,$gr1,$sem7,$elg,$idUniversity,$stusv,$marks);
+                    break;
 			}
 		}
 

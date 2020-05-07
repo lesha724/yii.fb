@@ -352,9 +352,7 @@ SQL;
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':US1', $us1);
-        $res = $command->queryAll();
-
-        return $res;
+        return $command->queryAll();
     }
 
     public function getHoursByUo1Sem1($uo1,$sem1,$type)
