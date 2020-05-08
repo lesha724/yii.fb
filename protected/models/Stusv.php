@@ -146,9 +146,6 @@ SQL;
 				'stusvst1'=>$this->stusv0,
 				'stusvst3'=>$st1
 		));
-
-		//var_dump($stusvst);
-
 		if(empty($stusvst))
 			return false;
 
@@ -158,11 +155,7 @@ SQL;
 
 		$stusvst->stusvst7=date('Y-m-d H:i:s');
 		$stusvst->stusvst8=0;
-		$result = $stusvst->save();
-		/*if(!$result){
-			var_dump($stusvst->getErrors());
-		}*/
-		return $result;
+        return $stusvst->save();
 	}
 
 
@@ -468,68 +461,28 @@ SQL;
             $sym += $bal;
         }
 
-        $elgsdSumm = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::SUM_TYPE));
-
-        $elgsdInd = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::IND_TYPE));
-        $elgsdExam = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::EXAM_TYPE));
-
-        $balInd = $balExam = null;
-
-        if($elgsdInd!=null) {
-            $elgdInd = Elgd::model()->findByAttributes(array('elgd1' => $elg->elg1, 'elgd2' => $elgsdInd->elgsd1));
-            if($elgdInd!=null)
-                $balInd = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdInd->elgd0));
-        }
-
-        if($elgsdExam!=null) {
-            $elgdExam = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdExam->elgsd1));
-            if($elgdExam!=null)
-                $balExam = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdExam->elgd0));
-        }
-
-
-        if($balInd==null)
-        {
-            $balInd = new Elgdst();
-            $balInd->elgdst3 = 0;
-        }
-
-        if($balExam==null)
-        {
-            $balExam = new Elgdst();
-            $balExam->elgdst3 = 0;
-        }
-
-        $elgdSumm=null;
-        if($elgsdSumm!=null)
-            $elgdSumm= Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdSumm->elgsd1));
-
-        if($elgsdSumm!=null) {
-            if ($elgdSumm != null) {
-                $balSumm = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdSumm->elgd0));
-                if (empty($balSumm)) {
-                    $balSumm = new Elgdst();
-                    $balSumm->elgdst0 = new CDbExpression('GEN_ID(GEN_elgdst, 1)');
-                    $balSumm->elgdst1 = $st1;
-                    $balSumm->elgdst2 = $elgdSumm->elgd0;
-                }
-
-                $balSumm->elgdst3 = $sym;
-                $balSumm->elgdst5 = Yii::app()->user->dbModel->p1;
-                $balSumm->elgdst4 = date('Y-m-d H:i:s');
-                $balSumm->save();
+        $extraColumn = Elgdst::model()->findAllBySql(<<<SQL
+            SELECT elgdst.* from elgdst
+                inner join elgd on (elgdst2 = elgd0 and elgd1=:ELGD1)
+                WHERE elgdst1 = :ST1
+SQL
+            , [
+                ':ELGD1' => $elg->elg1,
+                ':ST1' => $st1
+            ]
+        );
+        if(!empty($extraColumn))
+            foreach ($extraColumn as $column){
+                $sym+=$column->elgdst3;
             }
-        }
 
-        $sym=$sym+$balInd->elgdst3+$balExam->elgdst3;
+        $sym = round($sym);
 
-        $bal_itog = round($sym);
-
-        $arr = Cxmb::model()->getMark($bal_itog);
+        $arr = Cxmb::model()->getMark($sym);
         $cxmb3 = $arr['cxmb3'];
-        $cxmb2 = $bal_itog>= 50?-1:0;
+        $cxmb2 = $sym>= 50?-1:0;
 
-        if($stusv->saveNewStusMark($st1, $bal_itog,$cxmb3 ,$cxmb2)){
+        if($stusv->saveNewStusMark($st1, $sym,$cxmb3 ,$cxmb2)){
             return true;
         }
 
@@ -738,69 +691,30 @@ SQL;
             $sym += $bal;
         }
 
-        $elgsdSumm = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::SUM_TYPE));
-
-        $elgsdInd = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::IND_TYPE));
-        $elgsdExam = Elgsd::model()->findByAttributes(array('elgsd4'=>Elgsd::EXAM_TYPE));
-
-        $balInd = $balExam = null;
-
-        if($elgsdInd!=null) {
-            $elgdInd = Elgd::model()->findByAttributes(array('elgd1' => $elg->elg1, 'elgd2' => $elgsdInd->elgsd1));
-            if($elgdInd!=null)
-                $balInd = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdInd->elgd0));
-        }
-
-        if($elgsdExam!=null) {
-            $elgdExam = Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdExam->elgsd1));
-            if($elgdExam!=null)
-                $balExam = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdExam->elgd0));
-        }
-
-
-        if($balInd==null)
-        {
-            $balInd = new Elgdst();
-            $balInd->elgdst3 = 0;
-        }
-
-        if($balExam==null)
-        {
-            $balExam = new Elgdst();
-            $balExam->elgdst3 = 0;
-        }
-
-
-        $elgdSumm=null;
-        if($elgsdSumm!=null)
-            $elgdSumm= Elgd::model()->findByAttributes(array('elgd1'=>$elg->elg1,'elgd2'=>$elgsdSumm->elgsd1));
-
-        if($elgsdSumm!=null) {
-            if ($elgdSumm != null) {
-                $balSumm = Elgdst::model()->findByAttributes(array('elgdst1'=>$st1,'elgdst2'=>$elgdSumm->elgd0));
-                if (empty($balSumm)) {
-                    $balSumm = new Elgdst();
-                    $balSumm->elgdst0 = new CDbExpression('GEN_ID(GEN_elgdst, 1)');
-                    $balSumm->elgdst1 = $st1;
-                    $balSumm->elgdst2 = $elgdSumm->elgd0;
-                }
-
-                $balSumm->elgdst3 = $sym;
-                $balSumm->elgdst5 = Yii::app()->user->dbModel->p1;
-                $balSumm->elgdst4 = date('Y-m-d H:i:s');
-                $balSumm->save();
+        $extraColumn = Elgdst::model()->findAllBySql(<<<SQL
+            SELECT elgdst.* from elgdst
+                inner join elgd on (elgdst2 = elgd0 and elgd1=:ELGD1)
+                WHERE elgdst1 = :ST1
+SQL
+            , [
+                ':ELGD1' => $elg->elg1,
+                ':ST1' => $st1
+            ]
+        );
+        if(!empty($extraColumn))
+            foreach ($extraColumn as $column){
+                $sym+=$column->elgdst3;
             }
-        }
 
-        $sym=$sym+$balInd->elgdst3+$balExam->elgdst3;
+        $sym = round($sym);
+        if($sym > 100)
+            $sym = 100;
 
-        $bal_itog = round($sym);
-
-        $arr = Cxmb::model()->getMark($bal_itog);
+        $arr = Cxmb::model()->getMark($sym);
         $cxmb3 = $arr['cxmb3'];
         $cxmb2= $arr['cxmb2'];
 
-        if($stusv->saveNewStusMark($st1, $bal_itog,$cxmb3 ,$cxmb2)){
+        if($stusv->saveNewStusMark($st1, $sym,$cxmb3 ,$cxmb2)){
             return true;
         }
         return false;
