@@ -480,7 +480,7 @@ SQL
 
         $arr = Cxmb::model()->getMark($sym);
         $cxmb3 = $arr['cxmb3'];
-        $cxmb2 = $sym>= 50?-1:0;
+        $cxmb2 = $sym>= 60?-1:0;
 
         if($stusv->saveNewStusMark($st1, $sym,$cxmb3 ,$cxmb2)){
             return true;
