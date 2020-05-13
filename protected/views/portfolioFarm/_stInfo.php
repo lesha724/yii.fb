@@ -1,12 +1,5 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Lesha
- * Date: 04.09.2019
- * Time: 17:08
- */
-
-/**
  * @var St $student
  * @var TimeTableForm $model
  */
@@ -52,7 +45,7 @@ HTML;
 
 echo sprintf($infoHtml,
     tt('ФИО'),$student->fullName,
-    tt('Дата рождения'),date( 'd.m.Y', strtotime($student->st7)),
+    tt('Дата рождения'),date( 'd.m.Y', strtotime($student->person->pe9)),
     tt('Образовательная программа'),  $studentInfo['spc4'],
     tt('Специальность'), $studentInfo['pnsp2']
 );

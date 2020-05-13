@@ -1,12 +1,5 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Neff
- * Date: 26.11.2015
- * Time: 15:31
- */
-
-/**
  * @var $this PortfolioFarmController
  * @var TimeTableForm $model
  */

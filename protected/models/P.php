@@ -960,13 +960,13 @@ SQL;
             return false;
 
         $sql = <<<SQL
-              SELECT COUNT(*) FROM st
+            SELECT COUNT(*) FROM st
                 INNER JOIN std on (st1 = std2)
                 INNER JOIN gr on (std3 = gr1)
                 INNER join sg on (sg1 = gr2)
                 INNER join sp on (sp1 = sg2)
                 INNER join f on (f1 = sp5)
-              where st1=:st1 and f37=:p1 and f32=0 and f19 is null and STD11 in (0,5,6,8) and (STD7 is null)
+            where st1=:st1 and f37=:p1 and f32=0 and f19 is null and STD11 in (0,5,6,8) and (STD7 is null)
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
@@ -984,9 +984,9 @@ SQL;
         $today = date('Y-m-d 00:00');
 
         $sql = <<<SQL
-              SELECT COUNT(*) FROM pd
+            SELECT COUNT(*) FROM pd
                 INNER JOIN b on (pd5 = b1)
-              where  pd28 in (0,2,5,9) and pd11<='{$today}' and (pd13 is null or pd13>='{$today}') and pd2=:P1 and b10>0
+            where  pd28 in (0,2,5,9) and pd11<='{$today}' and (pd13 is null or pd13>='{$today}') and pd2=:P1 and b10>0
 SQL;
 
         $command = Yii::app()->db->createCommand($sql);
