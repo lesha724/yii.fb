@@ -104,7 +104,6 @@ $(document).ready(function(){
                             '<i class="icon-trash bigger-120"></i>'+
                        ' </a>'+
                     '</td>');
-                refreshPage = true;
             }
 
             $spinner1.hide();

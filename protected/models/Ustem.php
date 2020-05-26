@@ -187,8 +187,7 @@ SQL;
 SQL;
         $command = Yii::app()->db->createCommand($sql);
         $command->bindValue(':US1', $us1);
-        $uo4=$command->queryScalar();
-        return $uo4;
+        return $command->queryScalar();
     }
 
     public function addChair($us1)
@@ -292,8 +291,7 @@ SQL;
         $command->bindValue(':YEAR', Yii::app()->session['year']);
         $command->bindValue(':SEM', Yii::app()->session['sem']);
         $command->bindValue(':US1', $us1);
-        $res = $command->queryAll();
-        return $res;
+        return $command->queryAll();
     }
 
     public function getUstem7Arr()
