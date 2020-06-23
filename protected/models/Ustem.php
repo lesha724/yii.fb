@@ -14,6 +14,12 @@
  * @property string $ustem8
  * @property integer $ustem9
  * @property integer $ustem11
+ *
+ *  * @property string $ustem12
+ *  * @property integer $ustem13
+ *  * @property integer $ustem14
+ *  * @property integer $ustem15
+ *  * @property integer $ustem16
  */
 class Ustem extends CActiveRecord
 {

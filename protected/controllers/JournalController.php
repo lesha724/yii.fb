@@ -841,8 +841,8 @@ SQL;
 
     public function actionInsertStMark()
     {
-        //if (! Yii::app()->request->isAjaxRequest)
-            //throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
+        if (! Yii::app()->request->isAjaxRequest)
+            throw new CHttpException(404, 'Invalid request. Please do not repeat this request again.');
 
         $error=false;
         $errorType=0;
@@ -1149,7 +1149,7 @@ SQL;
                     $elgzst= Elgzst::model()->findByAttributes(array('elgzst1'=>$st1,'elgzst2'=>$elgz1));
                     if(!empty($elgzst))
                     {
-                        //Проверка на участие в допуске или заявке на олплату (для фарма)
+                        //Проверка на участие в допуске или заявке на оплату (для фарма)
                         if($elgzst->elgzst3>0&&$field=='elgzst3' && $this->universityCode == U_FARM) {
                             if(!$elgzst->checkAccessForFarmPass()){
                                 throw new CHttpException(403, 'Запрещено редактирование, пропуск участвует в допуске или заявлении на оплату.');
@@ -3054,6 +3054,11 @@ SQL;
         $model = new Ustem;
         $model->ustem2=$us1;
         $model->ustem4=1;
+        $model->ustem12=null;
+        $model->ustem13=0;
+        $model->ustem14=null;
+        $model->ustem15=0;
+        $model->ustem16=0;
         $typeError=0;
 
         if (isset($_REQUEST['Ustem'])) {
@@ -3254,6 +3259,11 @@ SQL;
                 $model->ustem9=Yii::app()->user->dbModel->p1;
                 $model->ustem8=date('Y-m-d H:i:s');
                 $model->ustem11=$ustem11;
+                $model->ustem12=null;
+                $model->ustem13=0;
+                $model->ustem14=null;
+                $model->ustem15=0;
+                $model->ustem16=0;
                 $error=!$model->save();
                 $ustem1=$model->ustem1;
                 if(!$error)

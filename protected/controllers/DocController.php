@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Neff
- * Date: 14.12.2016
- * Time: 20:46
- */
 
 class DocController extends Controller
 {
