@@ -1049,7 +1049,7 @@ SQL;
 	 * Пересчет для харьковского меда
 	 * @param $st1 int Код студента
 	 * @param $gr1 int Код группы
-	 * @param $sem7 int номер семстра
+	 * @param $sem7 int номер семестра
 	 * @param $elg Elg
 	 * @param $idUniversity int еод университета
 	 * @param $stusv Stusv

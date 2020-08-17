@@ -246,7 +246,7 @@ SQL;
             inner join ucx on (t.ucx1 = ucx.ucx1)
             inner join uo on (ucx.ucx1 = uo19)
             left join elgvst on (st.st1 = elgvst1)
-        where uo1=:UO1 and st101!=7
+        where uo1=:UO1 and st101!=7 and std11 in (0,5,6,8)
         group by st1,pe2,pe3,pe4,st45,st163,st167, elgvst2, elgvst3
         order by pe2 collate UNICODE
 SQL;
