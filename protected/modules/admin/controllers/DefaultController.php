@@ -142,7 +142,7 @@ class DefaultController extends AdminController
                 $_card = St::model()->findByPk($id);
                 if(!empty($_card)) {
                     $name = $_card->getFullName();
-                    $bDate = $_card->st7;;
+                    $bDate = $_card->person->pe9;
                 }
             }
             if($type==1){

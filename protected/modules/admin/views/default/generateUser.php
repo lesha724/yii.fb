@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Neff
- * Date: 20.09.2016
- * Time: 20:10
- */
 
 $this->pageHeader=tt('Генерация пользователей');
 $this->breadcrumbs=array(
@@ -12,9 +6,7 @@ $this->breadcrumbs=array(
 );
 
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/admin/generateUser.js', CClientScript::POS_HEAD);
-
 ?>
-
 <div class="span8" style="overflow: auto">
     <blockquote>
         <p><?=tt('Поиск людей')?></p>
@@ -160,40 +152,3 @@ Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/a
         </li>
     </ul>
 </div>
-
-<?php
-   /* Yii::app()->clientScript->registerScript('btn-search-users',"
-        $('#btn-search-users').click(function(event) {
-            $('#modal-search-users').modal('show');
-            event.preventDefault();
-        });
-        
-        $(document).on('submit', '#add-users-form', function(){
-            $.fn.yiiGridView.update('user-grid', {
-                data: $(this).serialize()
-            });
-             $('#modal-search-users').modal('hide');
-            return false;
-        })
-        ",CClientScript::POS_READY);
-    ?>
-
-<?php
-$this->beginWidget(
-    'bootstrap.widgets.TbModal',
-    array(
-        'id' => 'modal-search-users',
-    )
-); ?>
-
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">&times;</a>
-        <h4><?=tt('Массовое добавление')?></h4>
-    </div>
-
-    <div class="modal-body">
-        <?php
-        echo $this->renderPartial('generateUsers/_searchForm', array('model'=>$model));
-        ?>
-    </div>
-<?php $this->endWidget();*/
