@@ -223,9 +223,9 @@ class MoodleDistEducation extends DistEducation
      * @return string
      * @throws CHttpException
      */
-    private function _sendQuery($method, $type = null, $params=null){
-
-        $uri = sprintf('%s/webservice/rest/server.php',$this->host);
+    private function _sendQuery($method, $type = null, $params=null)
+    {
+        $uri = $this->host.'/webservice/rest/server.php';
 
         $params1['wstoken']=$this->apiKey;
         $params1['wsfunction']=$method;
@@ -256,31 +256,6 @@ class MoodleDistEducation extends DistEducation
             throw new CHttpException(500, 'MOODLEDistEducation: Ошибка отправки запроса. '.$resp);
     }
 
-    /**
-     * Записать студента на курс
-     * @param Stdist $st
-     * @param string $courseId
-     * @return array
-     */
-    protected function _unsubscribeToCourse($st, $courseId){
-        $body = $this->_sendQuery('enrol_manual_unenrol_users','POST', array(
-            'enrolments'=>array(
-                '0'=>array(
-                    'roleid' => $this->roleId,
-                    'courseid' => $courseId,
-                    'userid'=> $st->stdist3
-                )
-            )
-        ));
-
-        $array = json_decode($body);
-
-        if(isset($array->errorcode)){
-            return array(false, 'Ошибка '.$array->message);
-        }else {
-            return array(true, '');
-        }
-    }
 
     /**
      * Создать группу
@@ -327,6 +302,33 @@ class MoodleDistEducation extends DistEducation
 
         $body = $this->_sendQuery($isAdd ?'core_group_add_group_members' : 'core_group_delete_group_members','POST', array(
             'members'=>$members
+        ));
+
+        $array = json_decode($body);
+
+        if(isset($array->errorcode)){
+            return array(false, 'Ошибка '.$array->message);
+        }else {
+            return array(true, '');
+        }
+    }
+
+
+    /**
+     * Записать студента на курс
+     * @param Stdist $st
+     * @param string $courseId
+     * @return array
+     */
+    protected function _unsubscribeToCourse($st, $courseId){
+        $body = $this->_sendQuery('enrol_manual_unenrol_users','POST', array(
+            'enrolments'=>array(
+                '0'=>array(
+                    'roleid' => $this->roleId,
+                    'courseid' => $courseId,
+                    'userid'=> $st->stdist3
+                )
+            )
         ));
 
         $array = json_decode($body);

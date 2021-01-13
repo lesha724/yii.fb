@@ -5,8 +5,8 @@ ini_set('expose_php', 'Off');
 define('ASU_PORTAL_VERSION', '0.4.51');
 
 // Debug is on when remote address is localhost
-defined('YII_DEBUG') or $_SERVER['REMOTE_ADDR'] === '127.0.0.1' and define('YII_DEBUG', true);
-defined('YII_DEBUG') or $_SERVER['REMOTE_ADDR'] === '::1' and define('YII_DEBUG', true);
+defined('YII_DEBUG') or $_SERVER['REMOTE_ADDR'] === '127.0.0.1' and define('YII_DEBUG', false);
+defined('YII_DEBUG') or $_SERVER['REMOTE_ADDR'] === '::1' and define('YII_DEBUG', false);
 
 defined('YII_DEBUG') or define('YII_DEBUG', false);
 ini_set('display_errors',         YII_DEBUG ? 1 : 0);

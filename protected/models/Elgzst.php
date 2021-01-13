@@ -86,7 +86,7 @@ class Elgzst extends CActiveRecord
 
         $fields = ' EL_GURNAL_INFO.*, elg4, ustem5, elg2, elg3 as sem1, elgp2, elgp3, elgzst3, elgzst4, elgzst5,(select count(*) from elgotr where elgotr1=EL_GURNAL_INFO.ELGZST0) as count_elgotr ';
 
-        $from = 'FROM EL_GURNAL_INFO(%s,%s, dateadd(-2 year to current_timestamp), current_timestamp, 0,(select first 1 u2 from uo join u on (uo22 = u1) where uo1=%s), 0, 0, 0, 1)';
+        $from = 'FROM EL_GURNAL_INFO(%s,%s, dateadd(-4 year to current_timestamp), current_timestamp, 0,(select first 1 u2 from uo join u on (uo22 = u1) where uo1=%s), 0, 0, 0, 1)';
         $from = sprintf($from,Yii::app()->session['year'], Yii::app()->session['sem'], $this->uo1);
 
         $from.= ' INNER JOIN elgz on (elgz.elgz1 = EL_GURNAL_INFO.elgz1)';
