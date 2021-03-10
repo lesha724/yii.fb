@@ -52,19 +52,36 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
      */
     protected function _getCoursesList()
     {
-        $body = $this->_sendQuery('/api/courses/v1/courses/?page_size=999');
+        $courses = [];
+        $page=1;
+        $pageSize = 100;
+        $maxPage = 100;
+        while(true) {
+            if($page>$maxPage)
+                break;
 
-        $array = json_decode($body);
+            $body = $this->_sendQuery('/api/courses/v1/courses/?page_size=' . $pageSize.'&page=' . $page);
+            if(empty($body))
+                break;
+            $array = json_decode($body);
 
-        if(!isset($array->results))
-            throw new CHttpException(500, 'EdxDistEducation: Ошибка загрузки курсов. Неверный формат ответа');
-        else
-            return $array->results;
+            if(!isset($array->results))
+                throw new CHttpException(500, 'EdxDistEducation: Ошибка загрузки курсов. Неверный формат ответа');
+            else {
+                if(empty($array->results))
+                    break;
+                if(!empty($array->pagination->num_pages))
+                    $maxPage =  $array->pagination->num_pages;
+                $courses = array_merge($courses, $array->results);
+            }
+            $page++;
+        }
+        return $courses;
     }
 
     /**
      * Инфо по курсу по id
-     * Сейчас береться из @see getCoursesList
+     * Сейчас берется из @see getCoursesList
      * @param string $id
      * @return object|null|array
      * @throws CHttpException
@@ -172,7 +189,7 @@ class EdxDistEducation extends DistEducation implements IEdxDistEducation
     /**
      * @param $method
      * @param null|string $type @see EHttpClient::POST
-     * @param null|array $params парметры для запроса зависит отметода $type
+     * @param null|array $params параметры для запроса зависит от метода $type
      * @return string
      * @throws CHttpException
      */
