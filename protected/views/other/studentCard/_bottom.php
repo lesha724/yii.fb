@@ -98,8 +98,6 @@ echo '<div id="studentCard">';
 HTML;
 
     $fioTranslate = Pefio::model()->findByAttributes(array('pefio1'=>$st->st200, 'pefio2'=>1, 'pefio3' =>0));
-    if(empty($fioTranslate))
-        $fioTranslate = new Pefio();
 
     $uCode = Yii::app()->core->universityCode;
 
@@ -108,13 +106,13 @@ HTML;
     echo sprintf($infoHtml,
         //tt('ФИО'),$name,
         tt('Фамилия'),$st->person->pe2,
-        tt('Фамилия (англ.)'),$fioTranslate->pefio5,
+        tt('Фамилия (англ.)'), empty($fioTranslate->pefio5) ? '' : $fioTranslate->pefio5,
 
         tt('Имя'),$st->person->pe3,
-        tt('Имя (англ.)'),$fioTranslate->pefio6,
+        tt('Имя (англ.)'), empty($fioTranslate->pefio6) ? '' : $fioTranslate->pefio6,
 
         tt('Отчество'),$st->person->pe4,
-        tt('Отчество (англ.)'),$fioTranslate->pefio7,
+        tt('Отчество (англ.)'),empty($fioTranslate->pefio7) ? '' : $fioTranslate->pefio7,
 
         tt('Гражданство'),$studentInfo['sgr2'],
         tt('Дата рождения'),date("d.m.Y",strtotime($st->person->pe9)),
