@@ -16,7 +16,6 @@
  * @property string $u10
  * @property string $u11
  * @property string $u12
- * @property string $u13
  * @property string $u15
  * @property string $u16
  *
@@ -67,7 +66,7 @@ class Users extends CActiveRecord
 			array('u3', 'match', 'pattern'=>'/^[a-zA-Z0-9-_\.,@\/$|]{7,}$/','message'=>tt('В password могут быть только строчные и прописные латинские буквы, цифры, спецсимволы. Минимум 8 символов')),
 			array('u4', 'length', 'max'=>400),
 			array('u9, u10, u12', 'length', 'max'=>45),
-            array('u15, u13, u16', 'length', 'max'=>20),
+            array('u15, u16', 'length', 'max'=>20),
             array('u2, u4', 'checkIfUnique'),
             // Логин должен соответствовать шаблону
             array('u2', 'match', 'pattern'=>'/^[a-zA-Z][a-zA-Z0-9-_.]{7,30}$/','message'=>tt('В login могут быть только латинские символы и цифры, а так же символы "." и "_",  длиной от 8 до 30 символов. Также логин должен начинаться с латинской буквы')),
@@ -76,7 +75,7 @@ class Users extends CActiveRecord
 			array('u8', 'unsafe', 'on'=>'change-password'),
 			array('u2,u4 ,u3, password', 'required', 'on'=>'change-password'),
 			array('u3', 'compare', 'compareAttribute'=>'password', 'on'=>'change-password,admin-create,admin-update'),
-			array('u5,u6,u7,u9,u10,u11,u12, u13','unsafe')
+			array('u5,u6,u7,u9,u10,u11,u12','unsafe')
 
 		);
 	}
