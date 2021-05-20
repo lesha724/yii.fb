@@ -272,7 +272,7 @@ Yii::app()->clientScript->registerScript('portfolioFarm', <<<JS
 JS
    , CClientScript::POS_END );
 
-$fields = Stportfolio::model()->getFieldsList($student->st1);
+$fields = Stportfolio::model()->getFieldsList();
 
 if(Yii::app()->user->isTch){
     $this->widget('bootstrap.widgets.TbButton', array(
