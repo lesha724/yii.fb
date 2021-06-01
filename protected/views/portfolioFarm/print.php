@@ -50,7 +50,7 @@ echo CHtml::openTag('div');
 echo CHtml::tag('strong', array('class' =>'label-field'),tt('Фамилия, имя, отчество: ')).$student->fullName;
 echo CHtml::closeTag('div');
 echo CHtml::openTag('div');
-echo CHtml::tag('strong', array('class' =>'label-field'),tt('Дата рождения: ')).date('d.m.Y', strtotime($student->st7));
+echo CHtml::tag('strong', array('class' =>'label-field'),tt('Дата рождения: ')).date('d.m.Y', strtotime($student->person->pe9));
 echo CHtml::closeTag('div');
 echo CHtml::openTag('div');
 echo printFieldValue($fieldList, $student->st1, Stportfolio::FIELD_EDUCATION_SCHOOL);

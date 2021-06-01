@@ -25,7 +25,7 @@ $this->breadcrumbs=array(
 
 if($type == CreateStpfileForm::TYPE_FIELD)
 {
-    $fields = Stportfolio::model()->getFieldsList(null);
+    $fields = Stportfolio::model()->getFieldsList();
     if(isset($fields[$id]))
         echo CHtml::tag('h3', array(), $fields[$id]['text']);
 }
